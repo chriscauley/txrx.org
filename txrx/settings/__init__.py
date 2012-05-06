@@ -8,7 +8,7 @@ MANAGERS = ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
 
-DATABASES = {
+"""DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'txrx',
@@ -17,8 +17,14 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     }
-}
+}"""
 
+DATABASES = {
+  'default': {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': 'txrx.db',
+    }
+  }
 TIME_ZONE = 'America/Chicago'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
