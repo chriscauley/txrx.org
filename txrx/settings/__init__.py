@@ -30,7 +30,7 @@ MEDIA_URL = '/media/'
 UPLOAD_DIR = 'uploads'
 STATIC_ROOT = os.path.join(SPATH,'../static')
 STATIC_URL = '/static/'
-ADMIN_MEDIA_PREFIX = "/static/grappelli/"
+#ADMIN_MEDIA_PREFIX = STATIC_URL + "grappelli/"
 
 LOGIN_URL = "/login"
 LOGOUT_URL = "/logout"
@@ -72,7 +72,7 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-  'grappelli',
+  #'grappelli',
   'django.contrib.auth',
   'django.contrib.contenttypes',
   'django.contrib.sessions',
@@ -133,9 +133,19 @@ try:
   tmp = __import__(istr)
   mod = sys.modules[istr]
 except ImportError:
-  print "No %r module found for this machine" % istr
+  print "No %r module found for this machine." % istr
 else:
   for setting in dir(mod):
     if setting == setting.upper():
       setattr(sys.modules[__name__], setting, getattr(mod, setting))
 
+try:
+  istr = 'settings.local'
+  tmp = __import__(istr)
+  mod = sys.modules[istr]
+except ImportError:
+  print "No local settings found for this machine."
+else:
+  for setting in dir(mod):
+    if setting == setting.upper():
+      setattr(sys.modules[__name__], setting, getattr(mod, setting))

@@ -12,6 +12,7 @@
 - Show only articles in /admin/article/article/
 * Auth
   - 'public computer' and log out of google auth
+  - profile and user have inlines of each other, profile is for members, user is for officers.
 * tool
 ** clicking tool should set url
 ** check that images load for tool when modal loads

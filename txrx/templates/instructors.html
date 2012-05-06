@@ -14,22 +14,22 @@
 	</div>
       </div>
       <div>
-      Classes taught ({{ profile.get_sections|length }}):
-      {% for section in profile.get_sections %}
-      <br />
-      {{ section.course.name }}
-      {% endfor %}
+	Classes taught ({{ profile.get_sections|length }}):
+	{% for section in profile.get_sections %}
+	<br />
+	{{ section.course.name }}
+	{% endfor %}
       </div>
-{% comment %}
+      {% comment %}
       <div>
-      Projects ({{ profile.get_projects|length }}):
-      {% for project in profile.get_projects %}
-      <br />
-      {{ project.title }}
-      {% endfor %}
+	Projects ({{ profile.get_projects|length }}):
+	{% for project in profile.get_projects %}
+	<br />
+	{{ project.title }}
+	{% endfor %}
       </div>
-{% endcomment %}
-    </li>
+      {% endcomment %}
+    </li>{% endfor %}
   </ol>
 </section>
 {% endblock %}

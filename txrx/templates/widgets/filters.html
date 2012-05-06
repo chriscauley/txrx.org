@@ -10,8 +10,10 @@
 <script type="text/javascript">
 function applyFilters(that) {
   var filters = $(that).closest("form").find("select");
+console.log(filters);
   var items = $(".filterable").show();
   var subject = $("[name=subject]").val();
+console.log(subject);
   items.filter(function() {
       return $(this).data("subject").search(subject)<0;
   }).hide();
