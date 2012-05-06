@@ -6,11 +6,13 @@
 {% for item in feed %}
   <li>
     <div class="img">
-      <a href="{{ item.url }}"><img src="{{ item.first_image|thumbnail:"175x175" }}" /></a>
+      <a href="{{ item.get_absolute_url }}">
+	{#<img src="{{ item.first_image|thumbnail:"175x175" }}" />#}
+      </a>
     </div>
     <div class="text">
       <div class="label">{{ item.feed_label }}</div>
-      <h1><a href="{{ item.url }}">{{ item.title }}</a></h1>
+      <h1><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h1>
       <div class="byline">
 	by {{ item.author.username }}
 	{{ item.publish_date|date:"M d, Y" }}

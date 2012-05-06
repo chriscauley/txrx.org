@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django import forms
-from widgets import CKEditor
 from course.models import Subject, Course, Section, Session, Enrollment, Term
 
 class SubjectAdmin(admin.ModelAdmin):

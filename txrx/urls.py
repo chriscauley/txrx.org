@@ -14,6 +14,7 @@ urlpatterns = patterns(
     'views',
     (r'^$','home'),
     (r'^home%s$'%j,'home'),
+    (r'^news/',include('articles.urls')),
     (r'^(?P<model>%s)/$'%ms,'feed'),
     (r'^(?P<model>%s)/(?P<year>\d{4})/(?P<slug>[\w\-\d]*)/$'%ms,'item'),
     (r'^admin/', include(admin.site.urls)),
@@ -30,6 +31,7 @@ urlpatterns = patterns(
     (r'^(?P<name>join-us)%s'%j,'generic'),
     (r'^google_login','google_login'),
     (r'^google_return/(?P<url>.*)','google_return'),
+    (r'^grappelli/', include('grappelli.urls')),
     (r'^.*.json','comming_soon'),
 )
 
