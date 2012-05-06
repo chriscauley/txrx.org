@@ -6,7 +6,7 @@
   <li id="{{ lab.slug }}"{% if lab == current_lab %} class="current"{% endif %}>
     <a href="/tools/{{ lab.slug }}/"
        onclick="setClass('{{ lab.slug }}','current');return false;">
-      {% if lab.src %}<img src="{{ lab|thumbnail:"100x100" }}" />{% endif %}
+      <img src="{{ lab|thumbnail:"100x100" }}" />
       <div>{{ lab.name }}</div>
     </a>
     <div class="tools">
@@ -20,7 +20,7 @@
       </section>
       <section class="thumbnails pointer">{% for tool in lab.tools %}
 	<a href="javascript:slideTo($('#{{ lab.slug }} .wrapper')[0],{{ forloop.counter0 }});">
-	  {# <img src="{{ tool|thumbnail:"120x90" }}" /> #}
+	  <img src="{{ tool|thumbnail:"120x90" }}" />
 	</a>{% endfor %}
       </section>
     </div>

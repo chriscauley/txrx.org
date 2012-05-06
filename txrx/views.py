@@ -84,13 +84,12 @@ def item(request,model,year,slug):
 @jsonable
 def tools(request,lab=None,tool=None):
     labs = Lab.objects.all()
+    lab = None
     if tool:
         tool = get_object_or_404(Tool,slug=tool)
         lab = tool.lab
     if lab:
         lab = get_object_or_404(Lab,slug=lab)
-    else:
-        lab = labs[0]
     values = {
         "labs": labs,
         "current_lab": lab,
