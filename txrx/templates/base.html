@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{%block title%}{%endblock%}TX/RX Labs</title>
+  {# Remote CSS #}
+  <link href="http://fonts.googleapis.com/css?family=Josefin+Sans:400,700&v2"
+        rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=News+Cycle"
+	rel="stylesheet" type="text/css" />
+  <link rel="shortcut icon" href="{{ STATIC_URL }}favicon-1.ico" type="image/x-icon" />
+    
+  {# Local CSS #}
+  {# Site Design CSS #}
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}base.css" />
+  {#<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}themes.css" />#}
+  <!--[if IE 6]>
+  <link rel="stylesheet" type="text/css" href="/static/design/ie6.css"/>
+  <![endif]-->
+  <!--[if IE 7]>
+  <link rel="stylesheet" type="text/css" href="/static/design/ie7.css"/>
+  <![endif]-->
+  <!--[if IE 8]>
+  <link rel="stylesheet" type="text/css" href="/static/design/ie8.css"/>
+  <![endif]-->
+    
+  <script type="text/javascript" src="{{ STATIC_URL }}js/simpleCart.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.2.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.simplemodal.js"></script>
+  <script type="text/javascript">
+function loadJSON(url) { window.location = url; } // IE Fallback
+if (!!(window.history && history.pushState)) {
+    function loadJSON(url,back) {
+	var className = url.split("/").pop();
+	console.log(className);
+	$("#content").load(url+".json");
+	$("#wrapper")[0].className=className+"-wrapper";
+	$("#theme")[0].className=className+"-theme";
+	$(".current").removeClass("current");
+	$("#nav ."+className).addClass("current").removeClass("loading");
+	if (!back) {history.pushState({path:url},null,url);}	
+	return false;
+/*
+	$.get(
+	    url+".json",
+	    function(data) {
+		$("#content").html(data);
+		$("#wrapper")[0].className=className+"-wrapper";
+		$("#theme")[0].className=className+"-theme";
+		$(".current").removeClass("current");
+		$("#nav ."+className).addClass("current").removeClass("loading");
+		if (!back) {history.pushState({path:url},null,url);}
+            },
+	    "text");*/
+    }
+    history.replaceState({ path: '/{{current}}' }, '/{{current}}');
+}
+
+$(window).bind('popstate', function(event) {
+    // if the event has our history data on it, load the page fragment with AJAX
+    var state = event.originalEvent.state;
+    console.log(event.originalEvent);
+    if (state) {
+        loadJSON(state.path,true);
+    }
+});
+
+function showLogin() {
+    $("#login-dialog").addClass("login-visible");
+}
+
+
+/* simpleCart setup */
+simpleCart.email = "{{ settings.PAYPAL_EMAIL }}";
+simpleCart.merchantId = "{{ settings.GOOGLE_CHECKOUT_ID }}";
+
+simpleCart.cartHeaders = ["Name", "Price"]
+
+function showCart() {
+    $("#cart-modal").modal({width: 400, modal: true, minHight: 300});
+}
+function addItem(name,price,id) {
+    simpleCart.add('name='+name,'price='+price,'id='+id,'quantity=1');
+}
+function toggleCourses() {
+    $(".in-cart").removeClass("in-cart");
+    for (id in simpleCart.items) { $("#"+id).addClass("in-cart") }
+    simpleCart.update();
+}
+
+  </script>
+
+{% block extra_head %}{% endblock %}
+</head>
+
+<body>
+  {% include "header.html" %}
+  <div id="wrapper" class="{{ current }}-wrapper">
+    <div id="content" class="content {{ current|slugify }}">
+      {% block body %}{% endblock %}
+    </div>
+    <div id="side">
+      <iframe src="https://www.google.com/calendar/embed?showPrint=0&amp;mode=AGENDA&amp;src=e9rnjdeb9btnj1cis287be9quc%40group.calendar.google.com&amp;ctz=America/Chicago" style="border: 0; margin: auto; display: block;" width="270" height="440" frameborder="0" scrolling="no"></iframe>
+    </div>
+    <div class="clear"></div>
+    {% include "footer.html" %}
+  </div>
+  <div class="modal" id="modal" style="display: none;">
+    <div class="close" onclick="$(this).closest('.modal').dialog('close');">
+    </div>
+  </div>
+</body>
+{% block extrafooter %}
+{% endblock %}
+<script type="text/javascript">;
+  /*var logo = document.getElementsByClassName("header")[0].children[0];
+  logo.href = "javascript:loadJSON('"+logo.href+"');";
+  var links = document.getElementById("nav").children;
+  for (i=0; i<links.length; i++) {
+    links[i].href = "javascript:loadJSON('"+links[i].href+"');";
+  }*/
+</script>
+</html>

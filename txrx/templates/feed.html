@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load thumbnail photo %}
+{% block body %}
+{% include "widgets/filters.html" %}
+<ol class="feed">
+{% for item in feed %}
+  <li>
+    <div class="img">
+      <a href="{{ item.url }}"><img src="{{ item.first_image|thumbnail:"175x175" }}" /></a>
+    </div>
+    <div class="text">
+      <div class="label">{{ item.feed_label }}</div>
+      <h1><a href="{{ item.url }}">{{ item.title }}</a></h1>
+      <div class="byline">
+	by {{ item.author.username }}
+	{{ item.publish_date|date:"M d, Y" }}
+      </div>
+      <div class="description">
+	{{ item.description|safe }}
+      </div>
+    </div>
+    <div class="tags">{% for tag in item.tags.all %}
+      <a href="">{{ tag }}</a>{% endfor %}
+    </div>
+  </li>
+{% endfor %}
+</ol>
+{% endblock %}

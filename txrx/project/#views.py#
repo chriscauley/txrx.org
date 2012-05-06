@@ -1,0 +1,10 @@
+
+def article(request,year,slug):
+    """Displays a single article."""
+
+    try:
+        item = Article.objects.live(user=request.user).get(publish_date__year=year, slug=slug)
+    except Article.DoesNotExist:
+        raise Http404
+    values = {'item':item}
+    return TemplateResponse(request,"item.html",values)

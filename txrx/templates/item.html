@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load photo %}
+
+{% block body %}
+<div class="item">
+  {% if item.images.count == 1 %}
+  <img src="{{ item.first_image|nocrop_thumbnail:"500x500" }}" class="single-image" />
+  {% else %}
+  <div>
+    {% for image in item.images.all %}
+    <img src="{{ image|thumbnail:"200x200"}}"/>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <h1>{{ item.title }}</h1>
+  <div class="byline">
+    by {{ item.author.username }}
+    {{ item.publish_date|date:"M d, Y" }}
+  </div>
+  <div class="description">
+    {{ item.content|safe }}
+  </div>
+</div>
+{% endblock %}

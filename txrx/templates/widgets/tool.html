@@ -1,0 +1,62 @@
+{% load thumbnail photo %}
+<div class="tool" id="{{ tool.slug }}"
+     style="width:{{ lab.width }}px">
+  <a onclick="$('#{{ tool.slug }} .modal').addClass('active').modal({minHeight:600, maxWidth:700,padding:'10px'}); return false;">
+    <h2>{{ tool.name }}</h2>
+    <img src="{{ tool|thumbnail:lab.dimensions }}" style="float: left;"
+         width="{{ lab.width }}" height="{{ lab.height }}" />
+    <div class="after">DETAILS +</div>
+  </a>
+  <div class="modal">
+    <div class="content">
+      <h2>{{ tool.name }}</h2>
+      {% if tool.make %}<div>Make: {{ tool.make }}</div>{% endif %}
+      {% if tool.model %}<div>Model: {{ tool.model }}</div>{% endif %}
+      {% if tool.description %}
+      <div class="description">
+	{{ tool.description|safe }}
+      </div>
+      {% endif %}
+      <div class="pics">{% for s in tool.toolphoto_set.all %}
+	<img src="{{ s|thumbnail:"120x90" }}" class="pointer" />{% endfor %}
+      </div>
+      {% if tool.links %}
+      <div class="links">
+	<h2>Related Links</h2>{% for link in tool.links %}
+	<a href="{{ link.url }}">{{ link.title }}</a>{% endfor %}
+      </div>
+      {% endif %}
+      {% if tool.videos %}
+      <div class="videos">
+	<h2>Videos featuring this tool</h2>{% for video in tool.videos %}
+	<a onclick="modalContent(this,labVideos['{{ video.id }}']); return false;">
+          <img src="{{ video|thumbnail:"120x90" }}" />
+          {{ video.title }}
+	</a>{% endfor %}
+      </div>
+      {% endif %}
+      {% if tool.projects %}
+      <div class="projects">
+	<h2>Related Projects</h2>{% for project in tool.projects %}
+	<a href="{{ project.url }}">
+          <img src="{{ project.first_photo|thumbnail:"120x90" }}" />
+          {{ project.title }}
+	</a>{% endfor %}
+      </div>
+      {% endif %}
+      {% if tool.photos %}
+      <div class="photos">{% for photo in tool.photos %}
+	<a href="{{ photo.url }}">
+          <img src="{{ photo.first_photo|thumbnail:"120x90" }}" />
+          {{ photo.title }}
+	</a>{% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    <div class="pseudo-window">
+      <a href="javascript:" onclick="$(this).closest('.modal').children('div').toggle();
+				     $(this).siblings().html('');">&raquo; BACK</a>
+      <div></div>
+    </div>
+  </div>
+</div>

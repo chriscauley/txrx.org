@@ -1,0 +1,32 @@
+{% extends request.TEMPLATE %}
+{% load thumbnail photo %}
+
+{% block body %}
+{% include "widgets/filters.html" %}
+<ol class="feed">
+{% include "widgets/class-feed.html" %}
+</ol>
+<div class="modal" id="cart-modal" style="display: none;">
+  <div style="position: relative;">
+    <div class="close" onclick='$("#cart-modal").dialog("close");'></div>
+  </div>
+  <div id="cart" class="simpleCart_items"></div>
+  <div class="checkout-box">
+      Total:
+      <span class="simpleCart_finalTotal"></span>
+  </div>
+  <div class="clear"></div>
+  <a href="javascript:simpleCart.checkoutTo=PayPal;
+	   simpleCart.checkout();simpleCart.checkoutTo=GoogleCheckout;"
+     style="float:right;">
+    <img src="/static/paypal.gif">
+  </a>
+  <a href="javascript:;" class="simpleCart_checkout" style="float:right;">
+    <img src="/static/checkout.gif" />
+  </a>
+  <div class="clear"></div>
+</div>
+<script type="text/javascript">
+  simpleCart.ready(toggleCourses)
+</script>
+{% endblock %}

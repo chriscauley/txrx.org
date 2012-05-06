@@ -1,0 +1,18 @@
+* lablackey
+  - move to app folder
+  - add lablackey's static files to static.lablackey.com and adjust crawl/txrx
+  - backup all projects to chunk host until home backups can be set up
+  - setup permissions on all apps in all projects & test with dummy users
+  - move login to lablackey
+  - need a slug model and a user model for general items
+* Article
+- Look into tagging
+- Editor customization
+- Lock description method for custom description
+- Show only articles in /admin/article/article/
+* Auth
+  - 'public computer' and log out of google auth
+* tool
+** clicking tool should set url
+** check that images load for tool when modal loads
+** clicking on tool photos needs colorbox, maybe fill contents with photo or something.

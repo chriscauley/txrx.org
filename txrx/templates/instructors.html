@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load thumbnail photo %}
+
+{% block body %}
+<section>
+  <h1>Course Instructors</h1>
+  <ol class="feed">{% for profile in instructors %}
+    <li>
+      <div class="img"><img src="{{ profile|thumbnail:"150x200" }}" /></div>
+      <div class="details">
+	<h2>{{ profile.name }}</h2>
+	<div class="descripiton">
+	  {{ profile.bio|truncatewords:100 }}
+	</div>
+      </div>
+      <div>
+      Classes taught ({{ profile.get_sections|length }}):
+      {% for section in profile.get_sections %}
+      <br />
+      {{ section.course.name }}
+      {% endfor %}
+      </div>
+{% comment %}
+      <div>
+      Projects ({{ profile.get_projects|length }}):
+      {% for project in profile.get_projects %}
+      <br />
+      {{ project.title }}
+      {% endfor %}
+      </div>
+{% endcomment %}
+    </li>
+  </ol>
+</section>
+{% endblock %}

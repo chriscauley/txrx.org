@@ -1,0 +1,414 @@
+@media all and (orientation:portrait) {}
+@media all and (orientation:landscape) {}
+
+/* global settings to standardize browser behavior */
+* { border-collapse: collapse; }
+html { height: 100%;  color:#333; font-size: 15px;}
+ol, ul, h1, h2, h3 { padding: 0px; margin: 0px; }
+ol, ul { list-style: none; }
+h1 p, h2 p, h3 p { font-size: inherit !important; margin: 0 !important; }
+body { margin: 0; padding: 0; height: 100%; width: 100% }
+.body { margin: 0; padding: 10px; height: 100%; width: 100%; position: relative; }
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+a img { border: 0; }
+.hidden { display: none; }
+.no-border { border: none !important; }
+.clear { clear: both; }
+.pointer { cursor: pointer; } 
+
+.bulleted {
+    list-style: disc;
+    margin-left: 10px;
+}
+
+/* global site-specific */
+body { background: #333; }
+a { color: black; display: inline-block; }
+
+#wrapper, .header {
+    background: white;
+    border: 1px solid #333;
+    border-radius: 3px;
+    box-shadow: 0 0 20px #000;
+    min-height: 30px;
+    overflow: visible;
+    position: relative;
+    width: 980px;
+}
+
+#wrapper {
+    margin:  0 auto 30px;
+    min-height: 800px;
+}
+
+.#wrapper > * { border: 1px black solid }
+
+.header {
+    margin: 0 auto 10px;
+}
+
+.header a {
+    color: black;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.header a div {
+    display: inline-block;
+    font-family: Arial;
+}
+
+.header img {
+    height: 45px;
+}
+.header > a {
+    float: left;
+}
+
+#nav {
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    height: 25px;
+    padding: 10px;
+}
+
+#nav a {
+    border-right: 1px solid black;
+    color: #333;
+    display: inline-block;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    text-shadow: 1px 1px 1px #bbb;
+}
+
+.auth {
+    background: white;
+    border: black 1px solid;
+    border-width: 0 0 1px 1px;
+    height: 1em;
+    overflow: hidden;
+    padding: 5px 10px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+}
+
+.auth .gear {
+    background: url(gear.png) right top no-repeat white;
+    display: inline-block;
+    height: 17px;
+    padding: 3px;
+    vertical-align: top;
+    width: 17px;
+}
+
+.auth > a {
+    display: block;
+}
+
+.auth.active {
+    height: auto;
+}
+
+.login {
+    background-color: white;
+    border: 1px black solid;
+    color: #222;
+    padding: 10px;
+    position: absolute;
+    right: -1px;
+    top: -250px;
+    z-index: 1000;
+}
+
+.login label {
+    display: inline-block;
+    width: 70px;
+}
+
+.login-visible {
+    top: 25px;
+}
+
+.content {
+    float: left;
+    width: 660px;
+}
+
+.article > .item {
+    padding-top: 25px;
+}
+
+#side {
+    float: right;
+    margin: 0 10px 10px 0;
+    height: 100%;
+    width: 300px;
+}
+
+/* filters */
+.filters {
+    padding: 10px 10px 0;
+}
+
+.filters .filter {
+    display: inline-block;
+    padding-right: 20px;
+}
+
+/* feed */
+.feed {
+    list-style: none;
+    padding: 0 10px 10px;
+}
+
+.feed > li {
+    border-top: 1px #111 solid;
+    min-height: 20px;
+    padding: 10px;
+    overflow: auto;
+}
+
+.feed .label {
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.feed p {
+    margin: .5em 0;
+}
+
+.feed > li:first-child {
+    border: none;
+}
+
+.feed > li > .img {
+    float: left;
+    margin-right: 10px;
+}
+
+.feed .text {
+    float: right;
+    width: 425px;
+}
+
+.feed h1 {
+    font-size:22px;
+}
+
+/* item */
+.item {
+    margin: 0 20px 20px;
+}
+
+.item .single-image {
+    display: block;
+    margin: 0 auto 20px;
+}
+
+/* course */
+.course .details {
+}
+
+.course .byline .subjects {
+    float: right;
+}
+
+.course .description {
+    white-space: pre-line;
+}
+
+.course .fee {
+    padding: 5px 0;
+}
+
+/* modals */
+.modal {
+    background-color: white;
+    border-radius: 5px;
+}
+
+.simplemodal-close {
+    background: url(X.png) no-repeat;
+    cursor: pointer;
+    height: 27px;
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    width: 27px;
+}
+
+#simplemodal-overlay {
+    background-color: #000;
+    opacity: 0.95 !important;
+}
+
+#simplemodal-container {
+    background: white;
+    border: black 4px solid;
+    border-radius: 10px;
+    padding: 15px;
+    width: 700px;
+}
+
+/** cart **/
+.cartHeaders > div, .itemContainer > div {
+    display: inline-block;
+    padding: 3px 10px;
+}
+
+.modal .itemName {
+    width: 300px;
+}
+
+.checkout-box {
+    text-align: right;
+    padding-right: 30px;
+}
+
+.course .drop, .in-cart .add { display: none; }
+
+.in-cart .drop { display: inline-block }
+
+/* about-us */
+.about-us-wrapper h2 {
+    margin-top: 20px;
+}
+
+.membership {
+    border-radius: 5px;
+    border-width: 3px;
+    float: left;
+    margin: 0 0 15px 30px;
+    padding: 15px;
+    width: 40%;
+    min-height: 300px;
+}
+
+.membership > div {
+    font-size: 1.3em;
+}
+
+.membership ul {
+    padding: 10px 0;
+}
+
+.membership li {
+    padding: 3px 0;
+}
+
+.join-us-wrapper #content > h1 {
+    text-align: center;
+}
+
+.join-us-wrapper #content > p {
+    padding: 0 60px 10px;
+}
+
+/* slide show */
+.slide-show {
+    margin: 0 auto;
+    position: relative;
+    width: 450px;
+}
+
+.slide-show h1 {
+
+}
+
+.slide-show .slide {
+    display: none;
+}
+
+.slide-show li {
+    float: left;
+}
+
+.slide-show .caption {
+    background-color: white;
+    background-color: rgba(255,255,255,.8);
+    bottom: 0;
+    color: black;
+    left: 0;
+    padding: 3%;
+    position: absolute;
+    width: 94%;
+}
+
+/* labs and tools */
+.labs {
+    position: relative;
+    width: 100%;
+}
+
+.labs > li {
+    display: inline-block;
+    margin: 3px;
+}
+
+.labs > li > a {
+    text-align: center;
+}
+
+.labs .tools {
+    display: none;
+    margin: 10px;
+    position: absolute;
+    right: 0;
+    top: 120px;
+    width: 640px;
+}
+
+.labs li.current {
+    outline: 3px solid black;
+}
+
+.labs li.current .tools {
+    display: block;
+}
+
+.labs .slides {
+    height: 460px;
+    margin: 10px auto;
+    overflow: hidden;
+    position: relative;
+    width: 560px;
+}
+
+.labs .slides .wrapper {
+    left: 0;
+    position: absolute;
+    top: 0;
+    -webkit-transition: left 0.5s ease-out;
+}
+
+.labs .tool {
+    float: left;
+}
+
+.labs .tool a {
+    position: relative;
+}
+
+.labs .tool a > .after {
+    background-color: white;
+    bottom: 0;
+    line-height: 1em;
+    padding: 3px 10px;
+    position: absolute;
+    right: 0;
+}
+
+.modal div > a > img {
+display: block;
+}
+
+#simplemodal-container .links > a {
+    display: block;
+}
+
+.modal {
+    display: none;
+}

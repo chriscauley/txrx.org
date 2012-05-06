@@ -1,0 +1,19 @@
+<form class="filters">{% for f in filters %}
+  <div class="filter">
+    <label for="{{ f.slug }}">{{ f.name }}</label>
+  <select id="{{ f.slug }}" name="{{ f.slug }}" onchange="applyFilters(this);">
+      <option value="">All</option>{% for o in f.options %}
+      <option value="{{ o.value }}">{{ o }}</option>{% endfor %}
+    </select>
+  </div>{% endfor %}
+</form>
+<script type="text/javascript">
+function applyFilters(that) {
+  var filters = $(that).closest("form").find("select");
+  var items = $(".filterable").show();
+  var subject = $("[name=subject]").val();
+  items.filter(function() {
+      return $(this).data("subject").search(subject)<0;
+  }).hide();
+}
+</script>
