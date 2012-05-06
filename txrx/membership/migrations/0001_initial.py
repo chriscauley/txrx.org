@@ -1,13 +1,13 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
         # Adding model 'Membership'
         db.create_table('membership_membership', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -19,6 +19,13 @@ class Migration(SchemaMigration):
             ('student_rate', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
         ))
         db.send_create_signal('membership', ['Membership'])
+
+        # Adding model 'Role'
+        db.create_table('membership_role', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=64)),
+        ))
+        db.send_create_signal('membership', ['Role'])
 
         # Adding model 'Feature'
         db.create_table('membership_feature', (
@@ -35,14 +42,29 @@ class Migration(SchemaMigration):
             ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
             ('ghandle', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
             ('membership', self.gf('django.db.models.fields.related.ForeignKey')(default=1, to=orm['membership.Membership'])),
+            ('bio', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('avatar', self.gf('sorl.thumbnail.fields.ImageField')(max_length=300, null=True, blank=True)),
         ))
         db.send_create_signal('membership', ['Profile'])
 
+        # Adding model 'Survey'
+        db.create_table('membership_survey', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], unique=True)),
+            ('reasons', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('projects', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('skills', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('expertise', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('questions', self.gf('django.db.models.fields.TextField')(blank=True)),
+        ))
+        db.send_create_signal('membership', ['Survey'])
 
     def backwards(self, orm):
-        
         # Deleting model 'Membership'
         db.delete_table('membership_membership')
+
+        # Deleting model 'Role'
+        db.delete_table('membership_role')
 
         # Deleting model 'Feature'
         db.delete_table('membership_feature')
@@ -50,6 +72,8 @@ class Migration(SchemaMigration):
         # Deleting model 'Profile'
         db.delete_table('membership_profile')
 
+        # Deleting model 'Survey'
+        db.delete_table('membership_survey')
 
     models = {
         'auth.group': {
@@ -107,10 +131,27 @@ class Migration(SchemaMigration):
         },
         'membership.profile': {
             'Meta': {'object_name': 'Profile'},
+            'avatar': ('sorl.thumbnail.fields.ImageField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'}),
+            'bio': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'ghandle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'membership': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'to': "orm['membership.Membership']"}),
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True'})
+        },
+        'membership.role': {
+            'Meta': {'object_name': 'Role'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '64'})
+        },
+        'membership.survey': {
+            'Meta': {'object_name': 'Survey'},
+            'expertise': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'projects': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'questions': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'reasons': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'skills': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'unique': 'True'})
         }
     }
 

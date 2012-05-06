@@ -1,54 +1,70 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
         # Adding model 'Project'
         db.create_table('project_project', (
-            ('article_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['article.Article'], unique=True, primary_key=True)),
+            ('article_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['articles.Article'], unique=True, primary_key=True)),
         ))
         db.send_create_signal('project', ['Project'])
 
-        # Adding model 'News'
-        db.create_table('project_news', (
-            ('article_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['article.Article'], unique=True, primary_key=True)),
+        # Adding model 'NewsItem'
+        db.create_table('project_newsitem', (
+            ('article_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['articles.Article'], unique=True, primary_key=True)),
         ))
-        db.send_create_signal('project', ['News'])
-
+        db.send_create_signal('project', ['NewsItem'])
 
     def backwards(self, orm):
-        
         # Deleting model 'Project'
         db.delete_table('project_project')
 
-        # Deleting model 'News'
-        db.delete_table('project_news')
-
+        # Deleting model 'NewsItem'
+        db.delete_table('project_newsitem')
 
     models = {
-        'article.article': {
+        'articles.article': {
             'Meta': {'ordering': "('-publish_date', 'title')", 'object_name': 'Article'},
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'default': '0', 'to': "orm['auth.User']"}),
+            'addthis_use_author': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'addthis_username': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '50', 'blank': 'True'}),
+            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'auto_tag': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'content': ('django.db.models.fields.TextField', [], {}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'feed_label': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'followup_for': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'followups'", 'blank': 'True', 'to': "orm['article.Article']"}),
+            'expiration_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'followup_for': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'followups'", 'blank': 'True', 'to': "orm['articles.Article']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'images': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['photo.Photo']", 'symmetrical': 'False', 'blank': 'True'}),
-            'is_live': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'previous': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'next'", 'null': 'True', 'to': "orm['article.Article']"}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'keywords': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'login_required': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'markup': ('django.db.models.fields.CharField', [], {'default': "'h'", 'max_length': '1'}),
             'publish_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'related': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'related_rel_+'", 'blank': 'True', 'to': "orm['article.Article']"}),
-            'rendered_content': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '256', 'db_index': 'True'}),
-            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['photo.Tag']", 'symmetrical': 'False', 'blank': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '256'})
+            'related_articles': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'related_articles_rel_+'", 'blank': 'True', 'to': "orm['articles.Article']"}),
+            'rendered_content': ('django.db.models.fields.TextField', [], {}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['sites.Site']", 'symmetrical': 'False', 'blank': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
+            'status': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['articles.ArticleStatus']"}),
+            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['articles.Tag']", 'symmetrical': 'False', 'blank': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'use_addthis_button': ('django.db.models.fields.BooleanField', [], {'default': 'True'})
+        },
+        'articles.articlestatus': {
+            'Meta': {'ordering': "('ordering', 'name')", 'object_name': 'ArticleStatus'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_live': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'ordering': ('django.db.models.fields.IntegerField', [], {'default': '0'})
+        },
+        'articles.tag': {
+            'Meta': {'ordering': "('name',)", 'object_name': 'Tag'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '64'}),
+            'slug': ('django.db.models.fields.CharField', [], {'max_length': '64', 'unique': 'True', 'null': 'True', 'blank': 'True'})
         },
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -86,26 +102,19 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'photo.photo': {
-            'Meta': {'object_name': 'Photo'},
-            'caption': ('django.db.models.fields.CharField', [], {'max_length': '512', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
-            'src': ('sorl.thumbnail.fields.ImageField', [], {'max_length': '300'}),
-            'uploader': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'to': "orm['auth.User']"})
-        },
-        'photo.tag': {
-            'Meta': {'ordering': "('name',)", 'object_name': 'Tag'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '64'})
-        },
-        'project.news': {
-            'Meta': {'ordering': "('-publish_date', 'title')", 'object_name': 'News', '_ormbases': ['article.Article']},
-            'article_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['article.Article']", 'unique': 'True', 'primary_key': 'True'})
+        'project.newsitem': {
+            'Meta': {'ordering': "('-publish_date', 'title')", 'object_name': 'NewsItem', '_ormbases': ['articles.Article']},
+            'article_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['articles.Article']", 'unique': 'True', 'primary_key': 'True'})
         },
         'project.project': {
-            'Meta': {'ordering': "('-publish_date', 'title')", 'object_name': 'Project', '_ormbases': ['article.Article']},
-            'article_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['article.Article']", 'unique': 'True', 'primary_key': 'True'})
+            'Meta': {'ordering': "('-publish_date', 'title')", 'object_name': 'Project', '_ormbases': ['articles.Article']},
+            'article_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['articles.Article']", 'unique': 'True', 'primary_key': 'True'})
+        },
+        'sites.site': {
+            'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},
+            'domain': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         }
     }
 

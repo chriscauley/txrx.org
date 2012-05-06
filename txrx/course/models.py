@@ -6,7 +6,7 @@ import datetime
 
 from lablackey.geo.models import Location
 from lablackey.event.models import Event
-from lablackey.photo.models import PhotoSetModel, Tag
+from articles.models import Tag
 from tool.models import Tool
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
@@ -30,7 +30,7 @@ class SectionManager(models.Manager):
     def live(self):
         return self.filter(starttime__gte=datetime.datetime.now())
 
-class Section(UserModel,PhotoSetModel):
+class Section(UserModel):
     cancelled = models.BooleanField(default=False)
     full = models.BooleanField(default=False)
     course = models.ForeignKey(Course)

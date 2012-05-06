@@ -1,15 +1,36 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
-        # Deleting model 'ToolSlide'
-        db.delete_table('tool_toolslide')
+        # Adding model 'Lab'
+        db.create_table('tool_lab', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=128)),
+            ('slug', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
+            ('src', self.gf('sorl.thumbnail.fields.ImageField')(max_length=300, null=True, blank=True)),
+            ('order', self.gf('django.db.models.fields.IntegerField')(default=9999)),
+        ))
+        db.send_create_signal('tool', ['Lab'])
+
+        # Adding model 'Tool'
+        db.create_table('tool_tool', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=128)),
+            ('slug', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
+            ('lab', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tool.Lab'])),
+            ('make', self.gf('django.db.models.fields.CharField')(max_length=64, null=True, blank=True)),
+            ('model', self.gf('django.db.models.fields.CharField')(max_length=32, null=True, blank=True)),
+            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('order', self.gf('django.db.models.fields.IntegerField')(default=9999)),
+            ('thumbnail', self.gf('sorl.thumbnail.fields.ImageField')(max_length=300, null=True, blank=True)),
+        ))
+        db.send_create_signal('tool', ['Tool'])
 
         # Adding model 'ToolVideo'
         db.create_table('tool_toolvideo', (
@@ -23,14 +44,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('tool', ['ToolVideo'])
 
-        # Adding model 'ToolPhoto'
-        db.create_table('tool_toolphoto', (
-            ('photo_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['photo.Photo'], unique=True, primary_key=True)),
-            ('tool', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tool.Tool'])),
-            ('order', self.gf('django.db.models.fields.IntegerField')(default=9999)),
-        ))
-        db.send_create_signal('tool', ['ToolPhoto'])
-
         # Adding model 'ToolLink'
         db.create_table('tool_toollink', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -41,58 +54,68 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('tool', ['ToolLink'])
 
-        # Deleting field 'Tool.src'
-        db.delete_column('tool_tool', 'src')
-
-        # Adding field 'Tool.thumbnail'
-        db.add_column('tool_tool', 'thumbnail', self.gf('sorl.thumbnail.fields.ImageField')(max_length=300, null=True, blank=True), keep_default=False)
-
-
-    def backwards(self, orm):
-        
-        # Adding model 'ToolSlide'
-        db.create_table('tool_toolslide', (
+        # Adding model 'ToolPhoto'
+        db.create_table('tool_toolphoto', (
+            ('photo_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['photo.Photo'], unique=True, primary_key=True)),
             ('tool', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tool.Tool'])),
             ('order', self.gf('django.db.models.fields.IntegerField')(default=9999)),
-            ('photo_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['photo.Photo'], unique=True, primary_key=True)),
         ))
-        db.send_create_signal('tool', ['ToolSlide'])
+        db.send_create_signal('tool', ['ToolPhoto'])
+
+    def backwards(self, orm):
+        # Deleting model 'Lab'
+        db.delete_table('tool_lab')
+
+        # Deleting model 'Tool'
+        db.delete_table('tool_tool')
 
         # Deleting model 'ToolVideo'
         db.delete_table('tool_toolvideo')
 
-        # Deleting model 'ToolPhoto'
-        db.delete_table('tool_toolphoto')
-
         # Deleting model 'ToolLink'
         db.delete_table('tool_toollink')
 
-        # Adding field 'Tool.src'
-        db.add_column('tool_tool', 'src', self.gf('sorl.thumbnail.fields.ImageField')(max_length=300, null=True, blank=True), keep_default=False)
-
-        # Deleting field 'Tool.thumbnail'
-        db.delete_column('tool_tool', 'thumbnail')
-
+        # Deleting model 'ToolPhoto'
+        db.delete_table('tool_toolphoto')
 
     models = {
-        'article.article': {
+        'articles.article': {
             'Meta': {'ordering': "('-publish_date', 'title')", 'object_name': 'Article'},
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'default': '0', 'to': "orm['auth.User']"}),
+            'addthis_use_author': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'addthis_username': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '50', 'blank': 'True'}),
+            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'auto_tag': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'content': ('django.db.models.fields.TextField', [], {}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'feed_label': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'followup_for': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'followups'", 'blank': 'True', 'to': "orm['article.Article']"}),
+            'expiration_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'followup_for': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'followups'", 'blank': 'True', 'to': "orm['articles.Article']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'images': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['photo.Photo']", 'symmetrical': 'False', 'blank': 'True'}),
-            'is_live': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'previous': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'next'", 'null': 'True', 'to': "orm['article.Article']"}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'keywords': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'login_required': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'markup': ('django.db.models.fields.CharField', [], {'default': "'h'", 'max_length': '1'}),
             'publish_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'related': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'related_rel_+'", 'blank': 'True', 'to': "orm['article.Article']"}),
-            'rendered_content': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '256', 'db_index': 'True'}),
-            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['photo.Tag']", 'symmetrical': 'False', 'blank': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '256'})
+            'related_articles': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'related_articles_rel_+'", 'blank': 'True', 'to': "orm['articles.Article']"}),
+            'rendered_content': ('django.db.models.fields.TextField', [], {}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['sites.Site']", 'symmetrical': 'False', 'blank': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
+            'status': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['articles.ArticleStatus']"}),
+            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['articles.Tag']", 'symmetrical': 'False', 'blank': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'use_addthis_button': ('django.db.models.fields.BooleanField', [], {'default': 'True'})
+        },
+        'articles.articlestatus': {
+            'Meta': {'ordering': "('ordering', 'name')", 'object_name': 'ArticleStatus'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_live': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'ordering': ('django.db.models.fields.IntegerField', [], {'default': '0'})
+        },
+        'articles.tag': {
+            'Meta': {'ordering': "('name',)", 'object_name': 'Tag'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '64'}),
+            'slug': ('django.db.models.fields.CharField', [], {'max_length': '64', 'unique': 'True', 'null': 'True', 'blank': 'True'})
         },
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -132,28 +155,29 @@ class Migration(SchemaMigration):
         },
         'photo.photo': {
             'Meta': {'object_name': 'Photo'},
-            'caption': ('django.db.models.fields.CharField', [], {'max_length': '512', 'null': 'True', 'blank': 'True'}),
+            'caption': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'src': ('sorl.thumbnail.fields.ImageField', [], {'max_length': '300'}),
-            'uploader': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'to': "orm['auth.User']"})
-        },
-        'photo.tag': {
-            'Meta': {'ordering': "('name',)", 'object_name': 'Tag'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '64'})
+            'uploader': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'project.project': {
-            'Meta': {'ordering': "('-publish_date', 'title')", 'object_name': 'Project', '_ormbases': ['article.Article']},
-            'article_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['article.Article']", 'unique': 'True', 'primary_key': 'True'})
+            'Meta': {'ordering': "('-publish_date', 'title')", 'object_name': 'Project', '_ormbases': ['articles.Article']},
+            'article_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['articles.Article']", 'unique': 'True', 'primary_key': 'True'})
+        },
+        'sites.site': {
+            'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},
+            'domain': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
         'tool.lab': {
             'Meta': {'ordering': "('order',)", 'object_name': 'Lab'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'order': ('django.db.models.fields.IntegerField', [], {'default': '9999'}),
-            'slug': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
-            'src': ('sorl.thumbnail.fields.ImageField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'})
+            'slug': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
+            'src': ('sorl.thumbnail.fields.ImageField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '128'})
         },
         'tool.tool': {
             'Meta': {'ordering': "('order',)", 'object_name': 'Tool'},
@@ -162,10 +186,10 @@ class Migration(SchemaMigration):
             'lab': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tool.Lab']"}),
             'make': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'order': ('django.db.models.fields.IntegerField', [], {'default': '9999'}),
-            'slug': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
-            'thumbnail': ('sorl.thumbnail.fields.ImageField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'})
+            'slug': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
+            'thumbnail': ('sorl.thumbnail.fields.ImageField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '128'})
         },
         'tool.toollink': {
             'Meta': {'ordering': "('order',)", 'object_name': 'ToolLink'},

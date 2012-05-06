@@ -1,18 +1,16 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
         # Adding model 'Subject'
         db.create_table('course_subject', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=64)),
-            ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('tag_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['articles.Tag'], unique=True, primary_key=True)),
         ))
         db.send_create_signal('course', ['Subject'])
 
@@ -21,16 +19,9 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=64)),
             ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('src', self.gf('sorl.thumbnail.fields.ImageField')(max_length=300, null=True, blank=True)),
         ))
         db.send_create_signal('course', ['Course'])
-
-        # Adding M2M table for field images on 'Course'
-        db.create_table('course_course_images', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('course', models.ForeignKey(orm['course.course'], null=False)),
-            ('photo', models.ForeignKey(orm['photo.photo'], null=False))
-        ))
-        db.create_unique('course_course_images', ['course_id', 'photo_id'])
 
         # Adding M2M table for field subjects on 'Course'
         db.create_table('course_course_subjects', (
@@ -44,6 +35,8 @@ class Migration(SchemaMigration):
         db.create_table('course_section', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('cancelled', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('full', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('course', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['course.Course'])),
             ('location', self.gf('django.db.models.fields.related.ForeignKey')(default=1, to=orm['geo.Location'])),
             ('fee', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
@@ -52,16 +45,9 @@ class Migration(SchemaMigration):
             ('starttime', self.gf('django.db.models.fields.DateTimeField')()),
             ('hours', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('sessions', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('_src', self.gf('sorl.thumbnail.fields.ImageField')(max_length=300, null=True, blank=True)),
         ))
         db.send_create_signal('course', ['Section'])
-
-        # Adding M2M table for field images on 'Section'
-        db.create_table('course_section_images', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('section', models.ForeignKey(orm['course.section'], null=False)),
-            ('photo', models.ForeignKey(orm['photo.photo'], null=False))
-        ))
-        db.create_unique('course_section_images', ['section_id', 'photo_id'])
 
         # Adding M2M table for field tools on 'Section'
         db.create_table('course_section_tools', (
@@ -70,6 +56,15 @@ class Migration(SchemaMigration):
             ('tool', models.ForeignKey(orm['tool.tool'], null=False))
         ))
         db.create_unique('course_section_tools', ['section_id', 'tool_id'])
+
+        # Adding model 'Term'
+        db.create_table('course_term', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('start', self.gf('django.db.models.fields.DateField')()),
+            ('end', self.gf('django.db.models.fields.DateField')()),
+        ))
+        db.send_create_signal('course', ['Term'])
 
         # Adding model 'Session'
         db.create_table('course_session', (
@@ -86,17 +81,12 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('course', ['Enrollment'])
 
-
     def backwards(self, orm):
-        
         # Deleting model 'Subject'
         db.delete_table('course_subject')
 
         # Deleting model 'Course'
         db.delete_table('course_course')
-
-        # Removing M2M table for field images on 'Course'
-        db.delete_table('course_course_images')
 
         # Removing M2M table for field subjects on 'Course'
         db.delete_table('course_course_subjects')
@@ -104,11 +94,11 @@ class Migration(SchemaMigration):
         # Deleting model 'Section'
         db.delete_table('course_section')
 
-        # Removing M2M table for field images on 'Section'
-        db.delete_table('course_section_images')
-
         # Removing M2M table for field tools on 'Section'
         db.delete_table('course_section_tools')
+
+        # Deleting model 'Term'
+        db.delete_table('course_term')
 
         # Deleting model 'Session'
         db.delete_table('course_session')
@@ -116,8 +106,13 @@ class Migration(SchemaMigration):
         # Deleting model 'Enrollment'
         db.delete_table('course_enrollment')
 
-
     models = {
+        'articles.tag': {
+            'Meta': {'ordering': "('name',)", 'object_name': 'Tag'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '64'}),
+            'slug': ('django.db.models.fields.CharField', [], {'max_length': '64', 'unique': 'True', 'null': 'True', 'blank': 'True'})
+        },
         'auth.group': {
             'Meta': {'object_name': 'Group'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -158,8 +153,8 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Course'},
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'images': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['photo.Photo']", 'symmetrical': 'False', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
+            'src': ('sorl.thumbnail.fields.ImageField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'}),
             'subjects': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['course.Subject']", 'symmetrical': 'False'})
         },
         'course.enrollment': {
@@ -170,13 +165,15 @@ class Migration(SchemaMigration):
         },
         'course.section': {
             'Meta': {'ordering': "('starttime',)", 'object_name': 'Section'},
+            '_src': ('sorl.thumbnail.fields.ImageField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'}),
+            'cancelled': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'course': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['course.Course']"}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'fee': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'fee_notes': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
+            'full': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'hours': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'images': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['photo.Photo']", 'symmetrical': 'False', 'blank': 'True'}),
             'location': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'to': "orm['geo.Location']"}),
             'sessions': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'starttime': ('django.db.models.fields.DateTimeField', [], {}),
@@ -184,39 +181,37 @@ class Migration(SchemaMigration):
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'course.session': {
-            'Meta': {'ordering': "('starttime',)", 'object_name': 'Session', '_ormbases': ['event.Event']},
+            'Meta': {'ordering': "('-date', 'starttime')", 'object_name': 'Session', '_ormbases': ['event.Event']},
             'event_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['event.Event']", 'unique': 'True', 'primary_key': 'True'}),
             'section': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['course.Section']"})
         },
         'course.subject': {
-            'Meta': {'object_name': 'Subject'},
-            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'Meta': {'ordering': "('name',)", 'object_name': 'Subject', '_ormbases': ['articles.Tag']},
+            'tag_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['articles.Tag']", 'unique': 'True', 'primary_key': 'True'})
+        },
+        'course.term': {
+            'Meta': {'object_name': 'Term'},
+            'end': ('django.db.models.fields.DateField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '64'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'start': ('django.db.models.fields.DateField', [], {})
         },
         'event.event': {
-            'Meta': {'ordering': "('starttime',)", 'object_name': 'Event'},
+            'Meta': {'ordering': "('-date', 'starttime')", 'object_name': 'Event'},
+            'date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'endtime': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'endtime': ('django.db.models.fields.TimeField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'location': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'to': "orm['geo.Location']"}),
+            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['geo.Location']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
-            'repeat': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['event.RepeatEvent']", 'null': 'True', 'blank': 'True'}),
             'schedule': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['event.Schedule']", 'null': 'True', 'blank': 'True'}),
-            'starttime': ('django.db.models.fields.DateTimeField', [], {})
-        },
-        'event.repeatevent': {
-            'Meta': {'object_name': 'RepeatEvent'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
-            'repeat': ('django.db.models.fields.FloatField', [], {'default': '0'})
+            'starttime': ('django.db.models.fields.TimeField', [], {})
         },
         'event.schedule': {
-            'Meta': {'ordering': "('-starttime',)", 'object_name': 'Schedule'},
-            'endtime': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'Meta': {'ordering': "('-date',)", 'object_name': 'Schedule'},
+            'date': ('django.db.models.fields.DateField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
-            'starttime': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'})
         },
         'geo.city': {
             'Meta': {'object_name': 'City'},
@@ -235,20 +230,25 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'zip_code': ('django.db.models.fields.IntegerField', [], {'default': '77007'})
         },
-        'photo.photo': {
-            'Meta': {'object_name': 'Photo'},
-            'caption': ('django.db.models.fields.CharField', [], {'max_length': '512', 'null': 'True', 'blank': 'True'}),
+        'tool.lab': {
+            'Meta': {'ordering': "('order',)", 'object_name': 'Lab'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
-            'src': ('sorl.thumbnail.fields.ImageField', [], {'max_length': '300'}),
-            'uploader': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'to': "orm['auth.User']"})
+            'order': ('django.db.models.fields.IntegerField', [], {'default': '9999'}),
+            'slug': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
+            'src': ('sorl.thumbnail.fields.ImageField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '128'})
         },
         'tool.tool': {
-            'Meta': {'object_name': 'Tool'},
+            'Meta': {'ordering': "('order',)", 'object_name': 'Tool'},
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
-            'slug': ('django.db.models.fields.CharField', [], {'max_length': '64'})
+            'lab': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tool.Lab']"}),
+            'make': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
+            'model': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
+            'order': ('django.db.models.fields.IntegerField', [], {'default': '9999'}),
+            'slug': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
+            'thumbnail': ('sorl.thumbnail.fields.ImageField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '128'})
         }
     }
 

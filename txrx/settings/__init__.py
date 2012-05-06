@@ -1,6 +1,6 @@
 import os, sys
-SFILE = __file__
-SPATH = os.path.normpath(os.path.join(os.path.dirname(SFILE), '..'))
+SPATH = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0,os.path.normpath(os.path.join(SPATH,'..')))
 
 DEBUG = True; TEMPLATE_DEBUG = DEBUG
 

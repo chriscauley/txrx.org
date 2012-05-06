@@ -1,18 +1,12 @@
 from django.contrib import admin
 from django import forms
 from widgets import CKEditor
-from course.models import Subject, Course, Section, Session, Enrollment,Term
-from lablackey.photo.admin_mixins import PhotoManyToManyForm
+from course.models import Subject, Course, Section, Session, Enrollment, Term
 
 class SubjectAdmin(admin.ModelAdmin):
     pass
 
-class SectionForm(PhotoManyToManyForm):
-    model = Section
-    fields = ("course",)
-
 class SectionInline(admin.TabularInline):
-    #form = SectionForm
     extra = 0
     model = Section
     exclude = ("description","images",'location',"tools")
