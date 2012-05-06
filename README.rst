@@ -4,9 +4,8 @@ TXRX Labs Website
 
 Depends on the LabLackey git repository. After cloning, cd into txrx.org and run:
 
-```
-$ git submodule update --init --recursive
-```
+    $ git submodule update --init --recursive
+
 
 Then install all python requirements with:
 
