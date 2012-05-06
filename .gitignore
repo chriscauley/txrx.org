@@ -4,3 +4,4 @@
 media/*
 scripts/backups
 txrx/txrx.db
+txrx/settings/local.py

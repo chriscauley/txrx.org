@@ -41,9 +41,6 @@ EZGAUTH_KEY = 'monkeybutlersleepsatmidnight@5z9thx92%^=e_)$jly7mc'
 JANRAIN_RPX_API_KEY = 'd8811e4889d480b090343b70e374ebeb7be05339'
 MAPS_API_KEY = 'ABQIAAAAeppD1h9lB7H61ozR18SeZRS_YqHDtehKcRTrrAGjc25rDMjatxT8nvoX4-jJXcRPaT4I-RdMYv3fJA'
 
-CALENDAR_EMAIL = "chris@lablackey.com"
-#CALENDAR_PASSWORD = ""
-
 TEMPLATE_LOADERS = (
   'django.template.loaders.filesystem.Loader',
   'django.template.loaders.app_directories.Loader',
