@@ -1,11 +1,13 @@
-{% load thumbnail photo %}
+{% load thumbnail %}
 <div class="tool" id="{{ tool.slug }}"
      style="width:{{ lab.width }}px">
   <a onclick="$('#{{ tool.slug }} .modal').addClass('active').modal({minHeight:600, maxWidth:700,padding:'10px'}); return false;">
     <h2>{{ tool.name }}</h2>
-    <img src="{{ tool|thumbnail:lab.dimensions }}" style="float: left;"
-         width="{{ lab.width }}" height="{{ lab.height }}" />
+    {% thumbnail tool.src lab.dimensions as im %}
+    <img src="{{ im.url }}" style="float: left;" width="{{ im.width }}"
+	 height="{{ im.height }}" />
     <div class="after">DETAILS +</div>
+    {% endthumbnail %}
   </a>
   <div class="modal">
     <div class="content">
@@ -18,7 +20,10 @@
       </div>
       {% endif %}
       <div class="pics">{% for s in tool.toolphoto_set.all %}
-	<img src="{{ s|thumbnail:"120x90" }}" class="pointer" />{% endfor %}
+	{% thumbnail s.src "120x90" as im %}
+	<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"
+	     class="pointer" />
+	{% endthumbnail %}{% endfor %}
       </div>
       {% if tool.links %}
       <div class="links">
@@ -30,7 +35,9 @@
       <div class="videos">
 	<h2>Videos featuring this tool</h2>{% for video in tool.videos %}
 	<a onclick="modalContent(this,labVideos['{{ video.id }}']); return false;">
-          <img src="{{ video|thumbnail:"120x90" }}" />
+	  {% thumbnail video.src "120x90" as im %}
+          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+	  {% endthumbnail %}
           {{ video.title }}
 	</a>{% endfor %}
       </div>
@@ -39,7 +46,9 @@
       <div class="projects">
 	<h2>Related Projects</h2>{% for project in tool.projects %}
 	<a href="{{ project.url }}">
-          <img src="{{ project.first_photo|thumbnail:"120x90" }}" />
+	  {% thumbnail project.src "120x90" as im %}
+          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+	  {% endthumbnail %}
           {{ project.title }}
 	</a>{% endfor %}
       </div>
@@ -47,7 +56,9 @@
       {% if tool.photos %}
       <div class="photos">{% for photo in tool.photos %}
 	<a href="{{ photo.url }}">
-          <img src="{{ photo.first_photo|thumbnail:"120x90" }}" />
+	  {% thumbnail photo.first_photo.src "120x90" as im %}
+          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+	  {% endthumbnail %}
           {{ photo.title }}
 	</a>{% endfor %}
       </div>
