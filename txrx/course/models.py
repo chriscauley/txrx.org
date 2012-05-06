@@ -74,10 +74,13 @@ class Section(UserModel):
     if self.starttime != s.starttime:
       s.startime = self.starttime
       s.save()
-  def get_description(self):
-    return self.description or self.course.description
-  def __unicode__(self):
-    return "%s"%(self.course.name)
+
+    # git issue #3
+    # this is very hackey, user profile should be made when a user joins.
+    from membership.models import Profile
+    Profile.objects.get_or_create(user=self.user)
+  get_description = lambda self: self.description or self.course.description
+  __unicode__ = lambda self: "%s"%(self.course.name)
   class Meta:
     ordering = ("starttime",)
 
