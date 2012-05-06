@@ -44,7 +44,7 @@ if settings.DEBUG:
         #     'show_indexes': True}),
         url(r'^media/(?P<path>.*)$',
             'django.views.static.serve',
-            {'document_root': os.path.join(settings.SPATH, 'media'),
+            {'document_root': settings.MEDIA_ROOT,
              'show_indexes': True}),
         )
 

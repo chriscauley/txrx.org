@@ -28,6 +28,7 @@
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.simplemodal.js"></script>
   <script type="text/javascript">
 function loadJSON(url) { window.location = url; } // IE Fallback
+{% comment %} {# ajax functionality temporarily disabled #}
 if (!!(window.history && history.pushState)) {
     function loadJSON(url,back) {
 	var className = url.split("/").pop();
@@ -53,7 +54,6 @@ if (!!(window.history && history.pushState)) {
     }
     history.replaceState({ path: '/{{current}}' }, '/{{current}}');
 }
-
 $(window).bind('popstate', function(event) {
     // if the event has our history data on it, load the page fragment with AJAX
     var state = event.originalEvent.state;
@@ -61,6 +61,7 @@ $(window).bind('popstate', function(event) {
         loadJSON(state.path,true);
     }
 });
+{% endcomment %}
 
 function showLogin() {
     $("#login-dialog").addClass("login-visible");

@@ -3,8 +3,10 @@
      style="width:{{ lab.width }}px">
   <a onclick="$('#{{ tool.slug }} .modal').addClass('active').modal({minHeight:600, maxWidth:700,padding:'10px'}); return false;">
     <h2>{{ tool.name }}</h2>
+    {% comment %}
     <img src="{{ tool|thumbnail:lab.dimensions }}" style="float: left;"
          width="{{ lab.width }}" height="{{ lab.height }}" />
+    {% endcomment %}
     <div class="after">DETAILS +</div>
   </a>
   <div class="modal">
@@ -18,7 +20,7 @@
       </div>
       {% endif %}
       <div class="pics">{% for s in tool.toolphoto_set.all %}
-	<img src="{{ s|thumbnail:"120x90" }}" class="pointer" />{% endfor %}
+	{# <img src="{{ s|thumbnail:"120x90" }}" class="pointer" /> #}{% endfor %}
       </div>
       {% if tool.links %}
       <div class="links">
@@ -30,7 +32,7 @@
       <div class="videos">
 	<h2>Videos featuring this tool</h2>{% for video in tool.videos %}
 	<a onclick="modalContent(this,labVideos['{{ video.id }}']); return false;">
-          <img src="{{ video|thumbnail:"120x90" }}" />
+          {# <img src="{{ video|thumbnail:"120x90" }}" /> #}
           {{ video.title }}
 	</a>{% endfor %}
       </div>
@@ -39,7 +41,7 @@
       <div class="projects">
 	<h2>Related Projects</h2>{% for project in tool.projects %}
 	<a href="{{ project.url }}">
-          <img src="{{ project.first_photo|thumbnail:"120x90" }}" />
+          {# <img src="{{ project.first_photo|thumbnail:"120x90" }}" /> #}
           {{ project.title }}
 	</a>{% endfor %}
       </div>
@@ -47,7 +49,7 @@
       {% if tool.photos %}
       <div class="photos">{% for photo in tool.photos %}
 	<a href="{{ photo.url }}">
-          <img src="{{ photo.first_photo|thumbnail:"120x90" }}" />
+          {# <img src="{{ photo.first_photo|thumbnail:"120x90" }}" /> #}
           {{ photo.title }}
 	</a>{% endfor %}
       </div>

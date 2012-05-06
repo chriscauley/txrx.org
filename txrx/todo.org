@@ -17,3 +17,6 @@
 ** clicking tool should set url
 ** check that images load for tool when modal loads
 ** clicking on tool photos needs colorbox, maybe fill contents with photo or something.
+* broken from migration
+** photo thumbnails need to be standardized, maybe move away from template tag
+** ajax page loading disabled, see comment in base.html
