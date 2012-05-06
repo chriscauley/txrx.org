@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load photo %}
 
-{% block body %}
+{% block content %}
 <div class="item">
   {% if item.images.count == 1 %}
   <img src="{{ item.first_image|nocrop_thumbnail:"500x500" }}" class="single-image" />

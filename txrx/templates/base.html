@@ -94,7 +94,7 @@ function toggleCourses() {
   {% include "header.html" %}
   <div id="wrapper" class="{{ current }}-wrapper">
     <div id="content" class="content {{ current|slugify }}">
-      {% block body %}{% endblock %}
+      {% block content %}{% endblock %}
     </div>
     <div id="side">
       <iframe src="https://www.google.com/calendar/embed?showPrint=0&amp;mode=AGENDA&amp;src=e9rnjdeb9btnj1cis287be9quc%40group.calendar.google.com&amp;ctz=America/Chicago" style="border: 0; margin: auto; display: block;" width="270" height="440" frameborder="0" scrolling="no"></iframe>

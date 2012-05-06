@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load thumbnail photo %}
 
-{% block body %}
+{% block content %}
 <ol class="labs">{% for lab in labs %}
   <li id="{{ lab.slug }}"{% if lab == current_lab %} class="current"{% endif %}>
     <a href="/tools/{{ lab.slug }}/"
