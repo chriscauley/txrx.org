@@ -30,6 +30,7 @@ MEDIA_URL = '/media/'
 UPLOAD_DIR = 'uploads'
 STATIC_ROOT = os.path.join(SPATH,'../static')
 STATIC_URL = '/static/'
+ADMIN_MEDIA_PREFIX = "/static/grappelli/"
 
 LOGIN_URL = "/login"
 LOGOUT_URL = "/logout"
@@ -41,7 +42,7 @@ JANRAIN_RPX_API_KEY = 'd8811e4889d480b090343b70e374ebeb7be05339'
 MAPS_API_KEY = 'ABQIAAAAeppD1h9lB7H61ozR18SeZRS_YqHDtehKcRTrrAGjc25rDMjatxT8nvoX4-jJXcRPaT4I-RdMYv3fJA'
 
 CALENDAR_EMAIL = "chris@lablackey.com"
-CALENDAR_PASSWORD = "F!refly23"
+#CALENDAR_PASSWORD = ""
 
 TEMPLATE_LOADERS = (
   'django.template.loaders.filesystem.Loader',
@@ -74,6 +75,7 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+  'grappelli',
   'django.contrib.auth',
   'django.contrib.contenttypes',
   'django.contrib.sessions',
@@ -94,12 +96,14 @@ INSTALLED_APPS = (
   'lablackey.geo',
   'lablackey.profile',
   'lablackey.djangogcal',
+  'lablackey.main',
 
   # this project
   'tool',
   'course',
   'project',
   'membership',
+  'txrx.main',
   'lablackey.event',
 )
 
@@ -136,3 +140,4 @@ else:
   for setting in dir(mod):
     if setting == setting.upper():
       setattr(sys.modules[__name__], setting, getattr(mod, setting))
+

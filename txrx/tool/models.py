@@ -38,7 +38,6 @@ class Tool(SlugModel):
     slides = lambda self: self.toolslide_set.all()
     videos = lambda self: self.toolvideo_set.all()
     project = lambda self: self.project_set.all()
-    __unicode__ = lambda self: self.name
     class Meta:
         ordering = ("order",)
 
@@ -74,4 +73,4 @@ class ToolPhoto(Photo):
     order = models.IntegerField(default=_order_default)
     class Meta:
         ordering = ("order",)
-    __unicode__ = lambda self: self.name    
+    __unicode__ = lambda self: self.title   

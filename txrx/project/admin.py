@@ -1,5 +1,5 @@
 from django.contrib import admin
-from lablackey.article.admin import ArticleAdmin
+from articles.admin import ArticleAdmin
 from models import Project, NewsItem
 
 class NewsItemAdmin(ArticleAdmin):

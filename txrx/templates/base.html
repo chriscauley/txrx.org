@@ -24,14 +24,13 @@
   <![endif]-->
     
   <script type="text/javascript" src="{{ STATIC_URL }}js/simpleCart.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.2.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.simplemodal.js"></script>
   <script type="text/javascript">
 function loadJSON(url) { window.location = url; } // IE Fallback
 if (!!(window.history && history.pushState)) {
     function loadJSON(url,back) {
 	var className = url.split("/").pop();
-	console.log(className);
 	$("#content").load(url+".json");
 	$("#wrapper")[0].className=className+"-wrapper";
 	$("#theme")[0].className=className+"-theme";
@@ -58,7 +57,6 @@ if (!!(window.history && history.pushState)) {
 $(window).bind('popstate', function(event) {
     // if the event has our history data on it, load the page fragment with AJAX
     var state = event.originalEvent.state;
-    console.log(event.originalEvent);
     if (state) {
         loadJSON(state.path,true);
     }

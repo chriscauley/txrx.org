@@ -16,7 +16,6 @@ urlpatterns = patterns(
     (r'^home%s$'%j,'home'),
     (r'^(?P<model>%s)/$'%ms,'feed'),
     (r'^(?P<model>%s)/(?P<year>\d{4})/(?P<slug>[\w\-\d]*)/$'%ms,'item'),
-    (r'^ajax_select/', include('ajax_select.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^members/$','members'),
     (r'^member/(?P<username>.*)/$','member'),
@@ -37,10 +36,10 @@ urlpatterns = patterns(
 if settings.DEBUG:
     urlpatterns += patterns(
         '',
-        url(r'^static/(?P<path>.*)$',
-            'django.views.static.serve',
-            {'document_root': os.path.join(settings.SPATH, 'static'),
-             'show_indexes': True}),
+        #url(r'^static/(?P<path>.*)$',
+        #    'django.views.static.serve',
+        #    {'document_root': os.path.join(settings.SPATH, 'static'),
+        #     'show_indexes': True}),
         url(r'^media/(?P<path>.*)$',
             'django.views.static.serve',
             {'document_root': os.path.join(settings.SPATH, 'media'),

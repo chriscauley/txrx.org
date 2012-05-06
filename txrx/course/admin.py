@@ -9,7 +9,7 @@ class SubjectAdmin(admin.ModelAdmin):
 class SectionInline(admin.TabularInline):
     extra = 0
     model = Section
-    exclude = ("description","images",'location',"tools")
+    exclude = ("description",'location',"tools")
 
 class CourseAdmin(admin.ModelAdmin):
     list_display = ("name",)

@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
-from lablackey.article.models import Article
-from lablackey.utils import get_or_404
+from articles.models import Article
+from django.shortcuts import get_object_or_404
 from project.models import Project
 from course.models import Course, Section, Term, Subject
 from membership.models import Membership, Profile
@@ -85,10 +85,10 @@ def item(request,model,year,slug):
 def tools(request,lab=None,tool=None):
     labs = Lab.objects.all()
     if tool:
-        tool = get_or_404(Tool,slug=tool)
+        tool = get_object_or_404(Tool,slug=tool)
         lab = tool.lab
     if lab:
-        lab = get_or_404(Lab,slug=lab)
+        lab = get_object_or_404(Lab,slug=lab)
     else:
         lab = labs[0]
     values = {
