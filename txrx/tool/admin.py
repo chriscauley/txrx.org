@@ -3,11 +3,11 @@ from django.contrib import admin
 from models import Tool, ToolPhoto, ToolLink, ToolVideo, Lab
 from lablackey.content.mixins import CKEditorMixin
 from lablackey.photo.admin import PhotoAdmin
-from lablackey.main.admin import SlugAdmin
 
-class LabAdmin(SlugAdmin):
+class LabAdmin(admin.ModelAdmin):
     list_display = ("__unicode__","order")
     list_editable = ("order",)
+    exclude = ("slug",)
 
 class ToolPhotoInline(admin.TabularInline):
     extra = 0
@@ -39,10 +39,11 @@ class ToolVideoInline(admin.StackedInline):
                  (None, {'fields': ("embed_code",)})
                  )
 
-class ToolAdmin(CKEditorMixin, SlugAdmin):
+class ToolAdmin(CKEditorMixin, admin.ModelAdmin):
     list_display = ("__unicode__","order")
     list_editable = ("order",)
     inlines = (ToolLinkInline,ToolPhotoInline,ToolVideoInline)
+    exclude = ("slug",)
 
 admin.site.register(Lab,LabAdmin)
 admin.site.register(Tool,ToolAdmin)
