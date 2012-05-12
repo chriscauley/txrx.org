@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% load compress %}
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}{{ SITE_NAME }}</title>
+    <link href="http://fonts.googleapis.com/css?family=Montserrat"
+	  rel="stylesheet" type="text/css" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/less"
+	  href="{{ STATIC_URL }}less/global.less" />
+    {% if extraless %}
+    <link rel="stylesheet" type="text/less"
+	  href="{{ STATIC_URL }}{{ extraless }}" />{% endif %}
+    <link type="text/css" rel="stylesheet"
+          href="{{ STATIC_URL }}Font-Awesome/css/font-awesome.css" />
+    
+    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}colorbox/colorbox.css" />
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/less.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/base.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}colorbox/jquery.colorbox.js"></script>
+
+    <!--[if IE 7]>
+      <link rel="stylesheet" type="text/css" href="/static/design/ie7.css"/>
+    <![endif]-->
+    <!--[if IE 8]>
+      <link rel="stylesheet" type="text/css" href="/static/design/ie8.css"/>
+    <![endif]-->
+
+
+    {% block extrahead %}{% endblock %}
+    {% block extra-head %}{# compromise =D #}{% endblock %}
+  </head>
+
+  <body>
+    <span class="before"></span>
+    <span class="after"></span>
+    <div id="wrapper">
+      {% include "header.html" %}
+      {% block content %}{% endblock %}
+      {% include "footer.html" %}
+      <span class="before"></span>
+      <span class="after"></span>
+    </div>
+    {{ google_analytics_noscript|safe }}
+  </body>
+</html>
+
+{% compress js %}
+  {{ google_analytics_script|safe }}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/default_text.js"></script>
+{% endcompress %}
