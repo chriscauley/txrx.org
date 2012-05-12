@@ -36,7 +36,6 @@ MEDIA_URL = '/media/'
 UPLOAD_DIR = 'uploads'
 STATIC_ROOT = os.path.join(SPATH,'../static')
 STATIC_URL = '/static/'
-#ADMIN_MEDIA_PREFIX = STATIC_URL + "grappelli/"
 
 LOGIN_URL = "/login"
 LOGOUT_URL = "/logout"
@@ -67,7 +66,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   "django.core.context_processors.media",
   "django.core.context_processors.request",
   "django.contrib.messages.context_processors.messages",
-  'context_processors.nav',
+  'context.nav',
 )
 
 ROOT_URLCONF = 'txrx.urls'
@@ -78,7 +77,7 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-  #'grappelli',
+  'grappelli',
   'django.contrib.auth',
   'django.contrib.contenttypes',
   'django.contrib.sessions',
@@ -99,8 +98,8 @@ INSTALLED_APPS = (
   'lablackey.content',
   'lablackey.geo',
   'lablackey.profile',
-  'lablackey.djangogcal',
-  'lablackey.main',
+  #'lablackey.djangogcal',
+  'lablackey.db',
 
   # this project
   'tool',

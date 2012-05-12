@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from lablackey.photo.models import Photo
-from lablackey.main.models import SlugModel,OrderedModel
+from lablackey.db.models import SlugModel,OrderedModel
 from lablackey.utils import cached_method
 from sorl.thumbnail import ImageField
 
