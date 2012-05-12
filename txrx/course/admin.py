@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django import forms
 from course.models import Subject, Course, Section, Session, Enrollment, Term
+from lablackey.content.mixins import CKEditorMixin
 
 class SubjectAdmin(admin.ModelAdmin):
     pass
@@ -8,17 +9,16 @@ class SubjectAdmin(admin.ModelAdmin):
 class SectionInline(admin.TabularInline):
     extra = 0
     model = Section
-    exclude = ("description",'location',"tools")
+    exclude = ("description",'location',"tools","fee_notes")
 
-class CourseAdmin(admin.ModelAdmin):
+class CourseAdmin(CKEditorMixin, admin.ModelAdmin):
     list_display = ("name",)
     filter_horizontal = ("subjects",)
     inlines = (SectionInline,)
 
 class SectionAdmin(admin.ModelAdmin):
-    list_display = ("course","user","starttime","hours","sessions","full","cancelled")
-    list_editable = ("user","starttime","hours","sessions","full","cancelled")
-    
+    list_display = ("course","user","date","starttime","hours","sessions","full","cancelled")
+    list_editable = ("full","cancelled")
 
 class SessionAdmin(admin.ModelAdmin):
     pass

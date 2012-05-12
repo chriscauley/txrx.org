@@ -28,8 +28,7 @@ class SectionManager(models.Manager):
   def from_get(self,get):
     if not get:
       return self.all()
-  def live(self):
-    return self.filter(starttime__gte=datetime.datetime.now())
+  live = lambda self: self.filter(starttime__gte=datetime.datetime.now())
 
 class Section(UserModel):
   cancelled = models.BooleanField(default=False)
