@@ -33,7 +33,7 @@ SITE_NAME = 'TXRX gold star board'
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': os.path.join(SPATH, 'goldstar.db')
+    'NAME': os.path.join(SPATH, '../txrx.db')
     }
   }
 

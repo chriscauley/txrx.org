@@ -1,0 +1,11 @@
+{% load url from future %}
+<div>{{ occ }}</div>
+<div class="details">
+  <p>{{ occ.task.description }}</p>
+  {% if not occ.assignment_set.count %}
+  <a class="add" href="{% url "chore:assign" occ.id %}">sign up</a>
+  {% endif %}
+  {% if user in occ.assignment.users %}
+  <a class="complete" href="{% url "chore:complete" occ.id %}">complete</a>
+  {% endif %}
+</div>

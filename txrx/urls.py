@@ -30,7 +30,8 @@ urlpatterns = patterns(
   (r'^google_return/(?P<url>.*)','google_return'),
   (r'^grappelli/', include('grappelli.urls')),
   (r'^.*.json','comming_soon'),
-  url(r'^content/', include('lablackey.content.urls', namespace='content', app_name='content'))
+  url(r'^content/', include('lablackey.content.urls', namespace='content', app_name='content')),
+  url(r'^chore/', include('chore.urls', namespace='chore', app_name='chore'))
 )
 
 # hardcoded urls for content pages. Will be created when a super user hits the address.

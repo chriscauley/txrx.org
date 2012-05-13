@@ -1,64 +1,84 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
-        # Deleting model 'TaskOccurrence'
-        db.delete_table('chores_taskoccurrence')
+        # Adding model 'Tag'
+        db.create_table('chore_tag', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=64)),
+            ('slug', self.gf('django.db.models.fields.CharField')(max_length=64, unique=True, null=True, blank=True)),
+        ))
+        db.send_create_signal('chore', ['Tag'])
 
-        # Removing M2M table for field users on 'TaskOccurrence'
-        db.delete_table('chores_taskoccurrence_users')
+        # Adding model 'Task'
+        db.create_table('chore_task', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=64)),
+            ('description', self.gf('django.db.models.fields.TextField')()),
+            ('repeat', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('first_date', self.gf('django.db.models.fields.DateTimeField')()),
+        ))
+        db.send_create_signal('chore', ['Task'])
+
+        # Adding M2M table for field tags on 'Task'
+        db.create_table('chore_task_tags', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('task', models.ForeignKey(orm['chore.task'], null=False)),
+            ('tag', models.ForeignKey(orm['chore.tag'], null=False))
+        ))
+        db.create_unique('chore_task_tags', ['task_id', 'tag_id'])
 
         # Adding model 'Occurrence'
-        db.create_table('chores_occurrence', (
+        db.create_table('chore_occurrence', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('task', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chores.Task'])),
-            ('due_date', self.gf('django.db.models.fields.DateTimeField')()),
+            ('task', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chore.Task'])),
+            ('datetime', self.gf('django.db.models.fields.DateTimeField')()),
             ('comments', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
             ('complete', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
-        db.send_create_signal('chores', ['Occurrence'])
+        db.send_create_signal('chore', ['Occurrence'])
 
-        # Adding M2M table for field users on 'Occurrence'
-        db.create_table('chores_occurrence_users', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('occurrence', models.ForeignKey(orm['chores.occurrence'], null=False)),
-            ('user', models.ForeignKey(orm['auth.user'], null=False))
+        # Adding model 'Assignment'
+        db.create_table('chore_assignment', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('occurrence', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chore.Occurrence'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
         ))
-        db.create_unique('chores_occurrence_users', ['occurrence_id', 'user_id'])
+        db.send_create_signal('chore', ['Assignment'])
 
+        # Adding model 'Completion'
+        db.create_table('chore_completion', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('occurrence', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chore.Occurrence'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('datetime', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+        ))
+        db.send_create_signal('chore', ['Completion'])
 
     def backwards(self, orm):
-        
-        # Adding model 'TaskOccurrence'
-        db.create_table('chores_taskoccurrence', (
-            ('due_date', self.gf('django.db.models.fields.DateTimeField')()),
-            ('task', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chores.Task'])),
-            ('complete', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('comments', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        ))
-        db.send_create_signal('chores', ['TaskOccurrence'])
+        # Deleting model 'Tag'
+        db.delete_table('chore_tag')
 
-        # Adding M2M table for field users on 'TaskOccurrence'
-        db.create_table('chores_taskoccurrence_users', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('taskoccurrence', models.ForeignKey(orm['chores.taskoccurrence'], null=False)),
-            ('user', models.ForeignKey(orm['auth.user'], null=False))
-        ))
-        db.create_unique('chores_taskoccurrence_users', ['taskoccurrence_id', 'user_id'])
+        # Deleting model 'Task'
+        db.delete_table('chore_task')
+
+        # Removing M2M table for field tags on 'Task'
+        db.delete_table('chore_task_tags')
 
         # Deleting model 'Occurrence'
-        db.delete_table('chores_occurrence')
+        db.delete_table('chore_occurrence')
 
-        # Removing M2M table for field users on 'Occurrence'
-        db.delete_table('chores_occurrence_users')
+        # Deleting model 'Assignment'
+        db.delete_table('chore_assignment')
 
+        # Deleting model 'Completion'
+        db.delete_table('chore_completion')
 
     models = {
         'auth.group': {
@@ -90,29 +110,41 @@ class Migration(SchemaMigration):
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
-        'chores.occurrence': {
-            'Meta': {'ordering': "('due_date',)", 'object_name': 'Occurrence'},
+        'chore.assignment': {
+            'Meta': {'object_name': 'Assignment'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'occurrence': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chore.Occurrence']"}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+        },
+        'chore.completion': {
+            'Meta': {'object_name': 'Completion'},
+            'datetime': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'occurrence': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chore.Occurrence']"}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+        },
+        'chore.occurrence': {
+            'Meta': {'ordering': "('datetime',)", 'object_name': 'Occurrence'},
             'comments': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'complete': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'due_date': ('django.db.models.fields.DateTimeField', [], {}),
+            'datetime': ('django.db.models.fields.DateTimeField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'task': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chores.Task']"}),
-            'users': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
+            'task': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chore.Task']"})
         },
-        'chores.tag': {
+        'chore.tag': {
             'Meta': {'object_name': 'Tag'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '64'}),
             'slug': ('django.db.models.fields.CharField', [], {'max_length': '64', 'unique': 'True', 'null': 'True', 'blank': 'True'})
         },
-        'chores.task': {
+        'chore.task': {
             'Meta': {'object_name': 'Task'},
             'description': ('django.db.models.fields.TextField', [], {}),
             'first_date': ('django.db.models.fields.DateTimeField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'repeat': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['chores.Tag']", 'symmetrical': 'False', 'blank': 'True'})
+            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['chore.Tag']", 'symmetrical': 'False', 'blank': 'True'})
         },
         'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
@@ -123,4 +155,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['chores']
+    complete_apps = ['chore']

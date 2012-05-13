@@ -8,7 +8,8 @@ MANAGERS = ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
 
-"""DATABASES = {
+""" # example of the live database
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'txrx',
@@ -25,6 +26,7 @@ DATABASES = {
     'NAME': 'txrx.db',
     }
   }
+
 TIME_ZONE = 'America/Chicago'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
@@ -108,6 +110,7 @@ INSTALLED_APPS = (
   'membership',
   'txrx.main',
   'lablackey.event',
+  'chore',
 )
 
 LOGGING = {
