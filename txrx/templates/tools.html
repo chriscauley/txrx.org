@@ -6,8 +6,8 @@
   <li id="{{ lab.slug }}"{% if lab == current_lab %} class="current"{% endif %}>
     <a href="/tools/{{ lab.slug }}/"
        onclick="setClass('{{ lab.slug }}','current');return false;">
-      <img src="{{ lab|thumbnail:"100x100" }}" />
-      <div>{{ lab.name }}</div>
+      <img src="{{ lab|thumbnail:"100x100" }}" width="100" height="100" alt="{{ lab.title }}" />
+      <div>{{ lab.title }}</div>
     </a>
     <div class="tools">
       <section class="slides pointer">

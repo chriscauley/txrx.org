@@ -84,7 +84,6 @@ def item(request,model,year,slug):
 @jsonable
 def tools(request,lab=None,tool=None):
     labs = Lab.objects.all()
-    lab = None
     if tool:
         tool = get_object_or_404(Tool,slug=tool)
         lab = tool.lab

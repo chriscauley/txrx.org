@@ -7,3 +7,5 @@ static/*
 scripts/backups
 txrx/txrx.db
 txrx/settings/local.py
+ # I'm merging this project into txrx.rog/txrx as chores
+goldstar/*

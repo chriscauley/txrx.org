@@ -3,8 +3,8 @@ from django.contrib.auth.forms import AuthenticationForm
 _nav = [
   "instructors",
   "classes",
-  #"projects",
-  #"tools",
+  "projects",
+  "tools",
   "about us",
   "join us"
   ]
