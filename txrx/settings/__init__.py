@@ -104,13 +104,13 @@ INSTALLED_APPS = (
   'lablackey.db',
 
   # this project
-  'tool',
-  'course',
-  'project',
-  'membership',
+  'txrx.tool',
+  'txrx.course',
+  'txrx.project',
+  'txrx.membership',
   'txrx.main',
   'lablackey.event',
-  'chore',
+  'txrx.chore',
 )
 
 LOGGING = {

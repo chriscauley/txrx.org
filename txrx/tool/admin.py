@@ -11,8 +11,7 @@ class LabAdmin(SlugAdmin):
 
 class ToolPhotoInline(admin.TabularInline):
   extra = 0
-  exclude = ("uploader",)
-  fields = ("title","caption","src","thumbnail_")
+  fields = ("caption_override","photo","thumbnail_")
   readonly_fields = ("thumbnail_",)
   model = ToolPhoto
   def save_model(self, request, obj, form, change):
