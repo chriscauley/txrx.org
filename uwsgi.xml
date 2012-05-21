@@ -1,0 +1,6 @@
+<uwsgi>
+    <pythonpath>/home/chriscauley/txrx.org/</pythonpath>
+    <app mountpoint="/">
+        <script>django_uwsgi</script>
+    </app>
+</uwsgi>

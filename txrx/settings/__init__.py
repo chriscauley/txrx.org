@@ -8,22 +8,10 @@ MANAGERS = ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
 
-""" # example of the live database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'txrx',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': '',
-        'PORT': '',
-    }
-}"""
-
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': 'txrx.db',
+    'NAME': os.path.join(SPATH,'txrx.db'),
     }
   }
 
@@ -68,7 +56,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   "django.core.context_processors.media",
   "django.core.context_processors.request",
   "django.contrib.messages.context_processors.messages",
-  'context.nav',
+  'txrx.context.nav',
 )
 
 ROOT_URLCONF = 'txrx.urls'
@@ -104,14 +92,17 @@ INSTALLED_APPS = (
   'lablackey.db',
 
   # this project
+  'txrx.project',
   'txrx.tool',
   'txrx.course',
-  'txrx.project',
   'txrx.membership',
   'txrx.main',
   'lablackey.event',
   'txrx.chore',
 )
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
 
 LOGGING = {
   'version': 1,
@@ -137,7 +128,7 @@ import socket
 machine = re.sub('[^A-z0-9._]', '_', socket.gethostname())
 
 try:
-  istr = 'settings.' + machine
+  istr = 'txrx.settings.' + machine
   tmp = __import__(istr)
   mod = sys.modules[istr]
 except ImportError:
@@ -148,7 +139,7 @@ else:
       setattr(sys.modules[__name__], setting, getattr(mod, setting))
 
 try:
-  istr = 'settings.local'
+  istr = 'txrx.settings.local'
   tmp = __import__(istr)
   mod = sys.modules[istr]
 except ImportError:

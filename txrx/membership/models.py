@@ -5,8 +5,8 @@ from sorl.thumbnail import ImageField
 
 from lablackey.utils import cached_method
 from lablackey.profile.models import ProfileModel, UserModel
-from course.models import Section
-from project.models import Project
+from txrx.course.models import Section
+from txrx.project.models import Project
 
 class MembershipManager(models.Manager):
     def active(self):
@@ -39,7 +39,7 @@ class Feature(models.Model):
 
 class ProfileManager(models.Manager):
     def list_instructors(self,**kwargs):
-        from course.models import Section
+        from txrx.course.models import Section
         return set([s.user.profile for s in Section.objects.filter(**kwargs)])
 
 class Profile(ProfileModel):

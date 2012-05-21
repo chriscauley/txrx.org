@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from course.models import Subject, Course, Section, Session, Enrollment, Term
+from txrx.course.models import Subject, Course, Section, Session, Enrollment, Term
 from lablackey.content.mixins import CKEditorMixin
 
 class SubjectAdmin(admin.ModelAdmin):

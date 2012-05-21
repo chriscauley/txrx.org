@@ -4,5 +4,5 @@ south==0.7.4
 # PIL==1.1.7 #install me with apt-get!
 -e git+https://github.com/sehmaschine/django-grappelli.git@grappelli_2_4#egg=django-grappelli
 simplejson==2.1.2
-sorl-thumbnail==11.04
+sorl-thumbnail==11.12
 django-devserver==0.3.2

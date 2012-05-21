@@ -10,7 +10,7 @@ j = "(?:.json)?"
 
 ms = "article|project"
 urlpatterns = patterns(
-  'views',
+  'txrx.views',
   (r'^$','home'),
   (r'^news/',include('articles.urls')),
   (r'^(?P<model>%s)/$'%ms,'feed'),
@@ -31,7 +31,7 @@ urlpatterns = patterns(
   (r'^grappelli/', include('grappelli.urls')),
   (r'^.*.json','comming_soon'),
   url(r'^content/', include('lablackey.content.urls', namespace='content', app_name='content')),
-  url(r'^chore/', include('chore.urls', namespace='chore', app_name='chore'))
+  url(r'^chore/', include('txrx.chore.urls', namespace='chore', app_name='chore'))
 )
 
 # hardcoded urls for content pages. Will be created when a super user hits the address.

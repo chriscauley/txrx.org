@@ -7,7 +7,7 @@ import datetime
 from lablackey.geo.models import Location
 from lablackey.event.models import Event
 from articles.models import Tag
-from tool.models import Tool
+from txrx.tool.models import Tool
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
@@ -76,7 +76,7 @@ class Section(UserModel):
 
     # git issue #3
     # this is very hackey, user profile should be made when a user joins.
-    from membership.models import Profile
+    from txrx.membership.models import Profile
     Profile.objects.get_or_create(user=self.user)
   get_description = lambda self: self.description or self.course.description
   __unicode__ = lambda self: "%s"%(self.course.name)

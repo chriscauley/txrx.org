@@ -56,9 +56,11 @@ class Migration(SchemaMigration):
 
         # Adding model 'ToolPhoto'
         db.create_table('tool_toolphoto', (
-            ('photo_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['photo.Photo'], unique=True, primary_key=True)),
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('order', self.gf('django.db.models.fields.PositiveIntegerField')(default=9999)),
             ('tool', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tool.Tool'])),
-            ('order', self.gf('django.db.models.fields.IntegerField')(default=9999)),
+            ('photo', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['photo.Photo'])),
+            ('caption_override', self.gf('django.db.models.fields.CharField')(max_length=512, null=True, blank=True)),
         ))
         db.send_create_signal('tool', ['ToolPhoto'])
 
@@ -99,7 +101,7 @@ class Migration(SchemaMigration):
             'rendered_content': ('django.db.models.fields.TextField', [], {}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['sites.Site']", 'symmetrical': 'False', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
-            'status': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['articles.ArticleStatus']"}),
+            'status': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['articles.ArticleStatus']"}),
             'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['articles.Tag']", 'symmetrical': 'False', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'use_addthis_button': ('django.db.models.fields.BooleanField', [], {'default': 'True'})
@@ -157,8 +159,8 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Photo'},
             'caption': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'src': ('sorl.thumbnail.fields.ImageField', [], {'max_length': '300'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'uploader': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'project.project': {
@@ -200,9 +202,11 @@ class Migration(SchemaMigration):
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200'})
         },
         'tool.toolphoto': {
-            'Meta': {'ordering': "('order',)", 'object_name': 'ToolPhoto', '_ormbases': ['photo.Photo']},
-            'order': ('django.db.models.fields.IntegerField', [], {'default': '9999'}),
-            'photo_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['photo.Photo']", 'unique': 'True', 'primary_key': 'True'}),
+            'Meta': {'ordering': "('order',)", 'object_name': 'ToolPhoto'},
+            'caption_override': ('django.db.models.fields.CharField', [], {'max_length': '512', 'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'order': ('django.db.models.fields.PositiveIntegerField', [], {'default': '9999'}),
+            'photo': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['photo.Photo']"}),
             'tool': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tool.Tool']"})
         },
         'tool.toolvideo': {

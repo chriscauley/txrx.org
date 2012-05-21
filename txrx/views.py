@@ -8,10 +8,10 @@ from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
 from articles.models import Article
 from django.shortcuts import get_object_or_404
-from project.models import Project
-from course.models import Course, Section, Term, Subject
-from membership.models import Membership, Profile
-from tool.models import Tool, Lab
+from txrx.project.models import Project
+from txrx.course.models import Course, Section, Term, Subject
+from txrx.membership.models import Membership, Profile
+from txrx.tool.models import Tool, Lab
 
 import os,urllib, re
 
@@ -172,8 +172,8 @@ def google_return (request, url=None):
 
 @login_required
 def survey(request):
-    from membership.models import Survey
-    from membership.forms import SurveyForm
+    from txrx.membership.models import Survey
+    from txrx.membership.forms import SurveyForm
     form = SurveyForm(request.POST)
     values = {"form": form}
     if request.method == "POST":
