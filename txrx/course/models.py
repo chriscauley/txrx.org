@@ -39,8 +39,8 @@ class Section(UserModel):
   fee_notes = models.CharField(max_length=256,null=True,blank=True)
   description = models.TextField(null=True,blank=True,help_text=_desc_help)
   starttime = models.TimeField("Time")
+  endtime = models.TimeField("End Time",null=True,blank=True)
   date = models.DateField("First Date")
-  hours = models.IntegerField(null=True,blank=True)
   sessions = models.IntegerField(null=True,blank=True)
   closed = lambda self: self.cancelled or self.full or self.starttime>datetime.datetime.now()
   _folder = settings.UPLOAD_DIR+'/course/%Y-%m'

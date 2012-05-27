@@ -9,7 +9,7 @@ class SubjectAdmin(admin.ModelAdmin):
 class SectionInline(admin.TabularInline):
     extra = 0
     model = Section
-    exclude = ("description",'location',"tools","fee_notes")
+    exclude = ("description",'location',"tools","fee_notes","full","_src","cancelled")
 
 class CourseAdmin(CKEditorMixin, admin.ModelAdmin):
     list_display = ("name",)
@@ -17,7 +17,7 @@ class CourseAdmin(CKEditorMixin, admin.ModelAdmin):
     inlines = (SectionInline,)
 
 class SectionAdmin(admin.ModelAdmin):
-    list_display = ("course","user","date","starttime","hours","sessions","full","cancelled")
+    list_display = ("course","user","date","starttime","sessions","full","cancelled")
     list_editable = ("full","cancelled")
 
 class SessionAdmin(admin.ModelAdmin):
