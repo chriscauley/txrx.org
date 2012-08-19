@@ -22,6 +22,7 @@ class SectionAdmin(admin.ModelAdmin):
   save_as = True
 
 class SessionAdmin(admin.ModelAdmin):
+  extra = 0
   inlines = (ClassTimeInline,)
 
 class EnrollmentAdmin(admin.ModelAdmin):

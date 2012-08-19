@@ -32,8 +32,9 @@ class Course(models.Model):
   subjects = models.ManyToManyField(Subject)
   _folder = settings.UPLOAD_DIR+'/course/%Y-%m'
   src = ImageField("Logo",max_length=300,upload_to=_folder,null=True,blank=True)
-
   __unicode__ = lambda self: self.name
+  class Meta:
+    ordering = ("name",)
 
 class Section(models.Model):
   course = models.ForeignKey(Course)
@@ -57,7 +58,7 @@ class Section(models.Model):
 class Session(UserModel):
   section = models.ForeignKey(Section)
   ts_help = "Only used to set dates on creation."
-  time_string = models.CharField(max_length=128,help_text=ts_help)
+  time_string = models.CharField(max_length=128,help_text=ts_help,default='not implimented')
   __unicode__ = lambda self: "%s (%s)"%(self.section, self.user)
 
 class ClassTime(models.Model):
