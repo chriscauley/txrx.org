@@ -42,7 +42,7 @@ class Tool(SlugModel):
     ordering = ("order",)
 
 class ToolVideo(models.Model):
-  from txrx.project.models import Project
+  from project.models import Project
   tool = models.ForeignKey(Tool)
   order = models.IntegerField(default=_order_default)
   title = models.CharField(max_length=64)

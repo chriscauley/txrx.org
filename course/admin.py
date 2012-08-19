@@ -1,34 +1,35 @@
 from django.contrib import admin
 from django import forms
-from txrx.course.models import Subject, Course, Section, Session, Enrollment, Term
+from course.models import Subject, Course, Section, Session, Enrollment, Term, ClassTime
 from lablackey.content.mixins import CKEditorMixin
 
 class SubjectAdmin(admin.ModelAdmin):
-    pass
+  pass
 
 class SectionInline(admin.TabularInline):
-    extra = 0
-    model = Section
-    exclude = ("description",'location',"tools","fee_notes","full","_src","cancelled")
+  extra = 0
+  model = Section
 
 class CourseAdmin(CKEditorMixin, admin.ModelAdmin):
-    list_display = ("name",)
-    filter_horizontal = ("subjects",)
-    inlines = (SectionInline,)
+  list_display = ("name",)
+  filter_horizontal = ("subjects",)
+  #inlines = (SectionInline,)
+
+class ClassTimeInline(admin.TabularInline):
+  model = ClassTime
 
 class SectionAdmin(admin.ModelAdmin):
-    list_display = ("course","user","date","starttime","sessions","full","cancelled")
-    list_editable = ("full","cancelled")
+  save_as = True
 
 class SessionAdmin(admin.ModelAdmin):
-    pass
+  inlines = (ClassTimeInline,)
 
 class EnrollmentAdmin(admin.ModelAdmin):
-    pass
+  pass
 
 admin.site.register(Subject,SubjectAdmin)
 admin.site.register(Course,CourseAdmin)
 admin.site.register(Section,SectionAdmin)
 #admin.site.register(Enrollment,EnrollmentAdmin)
-#admin.site.register(Session,SessionAdmin)
+admin.site.register(Session,SessionAdmin)
 admin.site.register(Term)

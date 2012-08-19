@@ -8,27 +8,11 @@ from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
 from articles.models import Article
 from django.shortcuts import get_object_or_404
-from txrx.project.models import Project
-from txrx.course.models import Course, Section, Term, Subject
-from txrx.membership.models import Membership, Profile
-from txrx.tool.models import Tool, Lab
+from project.models import Project
+from membership.models import Membership, Profile
+from tool.models import Tool, Lab
 
 import os,urllib, re
-
-filters = {
-    "term": lambda: {
-        "model": Term,
-        "options": Term.objects.all(),
-        "name": "Term",
-        "slug": "term"
-        },
-    "subject": lambda: {
-        "model": Subject,
-        "options": Subject.objects.all(),
-        "name": "Subject",
-        "slug": "subject"
-        }
-    }
 
 RC = lambda r: dict(context_instance=RequestContext(r))
 _models = {"article": Article,
@@ -49,12 +33,6 @@ def jsonable(f):
 def home(request):
     values = {'feed': Article.objects.live()[:10]}
     return render_to_response("feed.html",values, **RC(request))
-
-@jsonable
-def classes(request):
-    values = {'feed': Section.objects.from_get(None),
-              'filters': [filters['term'],filters['subject']]}
-    return render_to_response("classes.html",values, **RC(request))
 
 @jsonable
 def comming_soon(request):
@@ -100,11 +78,6 @@ def projects(request,slug=None):
     values = {"feed": Project.objects.all(),
               }
     return TemplateResponse(request,"feed.html",values)
-
-def instructors(request,username=None):
-    instructors = Profile.objects.list_instructors()
-    values = {'instructors':instructors}
-    return TemplateResponse(request,"instructors.html",values)
 
 def members(request,username=None):
     memberships = Membership.objects.active()[::-1]
@@ -172,8 +145,8 @@ def google_return (request, url=None):
 
 @login_required
 def survey(request):
-    from txrx.membership.models import Survey
-    from txrx.membership.forms import SurveyForm
+    from membership.models import Survey
+    from membership.forms import SurveyForm
     form = SurveyForm(request.POST)
     values = {"form": form}
     if request.method == "POST":

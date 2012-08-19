@@ -1,6 +1,6 @@
 import os, sys
 SPATH = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0,os.path.normpath(os.path.join(SPATH,'..')))
+sys.path.insert(0,os.path.normpath(SPATH))
 
 DEBUG = True; TEMPLATE_DEBUG = DEBUG
 
@@ -90,15 +90,14 @@ INSTALLED_APPS = (
   'lablackey.profile',
   #'lablackey.djangogcal',
   'lablackey.db',
+  'lablackey.event',
 
   # this project
-  'txrx.project',
-  'txrx.tool',
-  'txrx.course',
-  'txrx.membership',
-  'txrx.main',
-  'lablackey.event',
-  'txrx.chore',
+  'project',
+  'tool',
+  'course',
+  'membership',
+  'main',
 )
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load photo thumbnail %}
+
+{% block content %}
+{% include "widgets/filters.html" %}
+<ol class="feed">
+  {% for section in sections %}
+  <li id="c{{section.id}}" class="course filterable"
+      data-subject="{% for subject in section.course.subjects.all %}{{ subject }},{% endfor %}"
+      {%if not section.course.closed%}data-open{%endif%}
+      data-date="{{ section.starttime|date:"Ymd" }}">
+    <div class="details">
+      <h1>{{ section }}</h1>
+      <div class="byline">
+	by {% for user in section.get_instructors %}
+	<a href="">{{ user.first_name }} {{ user.last_name }}</a>{% if not forloop.last %}, {% endif %}
+	{% if forloop.last and not forloop.first %} and {% endif %}
+	{% endfor %}
+	<div class="subjects">{% for subject in section.course.subjects.all %}
+	  <a href="javascript:$('[name=subject]').val('{{subject}}').change();">
+	    {{ subject }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+	</div>
+      </div>
+      <ol class="dates">{% for session in section.session_set.all %}
+	<li>{% for classtime in session.classtime_set.all %}
+	  {{ classtime.start|date:"D m/d G:i" }}
+	  -
+	  {{ classtime.end_time|time:"G:i" }}{% if not forloop.last %}, {% endif %}{% endfor%}
+	</li>{% endfor %}
+      <div class="description">
+	{{ section.description|linebreaksbr }}
+      </div>
+      <div class="fee">
+	Course Fee: $<span class="item_price">{{ section.fee }}</span>
+	{% if section.fee_notes %}<span class="notes">({{ section.fee_notes }})</span>{% endif %}
+      </div>
+      <a class="add" href="javascript:addItem('{{ section }}',{{ section.fee }},'c{{ section.id }}'); toggleCourses();">Enroll</a>
+      <div class="drop">
+	<a href="javascript:simpleCart.remove('c{{ section.id }}'); toggleCourses();">Drop</a>
+	/
+	<a href="javascript:showCart();">View Cart</a>
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+</ol>
+<div class="modal" id="cart-modal" style="display: none;">
+  <div style="position: relative;">
+    <div class="close" onclick='$("#cart-modal").dialog("close");'></div>
+  </div>
+  <div id="cart" class="simpleCart_items"></div>
+  <div class="checkout-box">
+    Total: <span class="simpleCart_finalTotal"></span>
+  </div>
+  <div class="clear"></div>
+  <a href="javascript:simpleCart.checkoutTo=PayPal;
+	   simpleCart.checkout();simpleCart.checkoutTo=GoogleCheckout;"
+     style="float:right;">
+    <img src="/static/paypal.gif">
+  </a>
+  <a href="javascript:;" class="simpleCart_checkout" style="float:right;">
+    <img src="/static/checkout.gif" />
+  </a>
+  <div class="clear"></div>
+</div>
+<script type="text/javascript">
+  simpleCart.ready(toggleCourses)
+</script>
+{% endblock %}

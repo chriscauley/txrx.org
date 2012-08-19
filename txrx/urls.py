@@ -18,8 +18,7 @@ urlpatterns = patterns(
   (r'^admin/', include(admin.site.urls)),
   (r'^members/$','members'),
   (r'^member/(?P<username>.*)/$','member'),
-  (r'^instructors/$','instructors'),
-  (r'^classes%s'%j, 'classes'),
+  (r'^classes/', include('course.urls')),
   (r'^projects/(?P<slug>[\w\d\-]*)/?$','projects'),
   (r'^survey/$','survey'),
   (r'^login','login'),
@@ -31,14 +30,18 @@ urlpatterns = patterns(
   (r'^grappelli/', include('grappelli.urls')),
   (r'^.*.json','comming_soon'),
   url(r'^content/', include('lablackey.content.urls', namespace='content', app_name='content')),
-  url(r'^chore/', include('txrx.chore.urls', namespace='chore', app_name='chore'))
+  #url(r'^chore/', include('txrx.chore.urls', namespace='chore', app_name='chore'))
 )
 
-# hardcoded urls for content pages. Will be created when a super user hits the address.
 urlpatterns += patterns(
   '',
-  url(r'^(about-us)','lablackey.content.views.page',name='about_us'),
+  (r'^instructors/$','course.views.instructors'),
 )
+# hardcoded urls for content pages. Will be created when a super user hits the address.
+#urlpatterns += patterns(
+#  '',
+#  url(r'^(about-us)','lablackey.content.views.page',name='about_us'),
+#)
 if settings.DEBUG:
   urlpatterns += patterns(
     '',
