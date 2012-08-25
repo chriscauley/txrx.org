@@ -50,7 +50,7 @@ class Section(models.Model):
   closed = lambda self: self.cancelled or self.starttime>datetime.datetime.now()
 
   get_instructors = lambda self: set([s.user for s in self.session_set.all()])
-      
+
   __unicode__ = lambda self: "%s - %s"%(self.course.name,self.term)
   class Meta:
     ordering = ("term","course")
@@ -60,6 +60,10 @@ class Session(UserModel):
   ts_help = "Only used to set dates on creation."
   time_string = models.CharField(max_length=128,help_text=ts_help,default='not implimented')
   __unicode__ = lambda self: "%s (%s)"%(self.section, self.user)
+  def first_date(self):
+    if self.classtime_set.count():
+      return self.classtime_set.all()[0].start
+    return 0
 
 class ClassTime(models.Model):
   session = models.ForeignKey(Session)

@@ -43,8 +43,6 @@ a { color: black; display: inline-block; }
   min-height: 800px;
 }
 
-.#wrapper > * { border: 1px black solid }
-
 .header {
   margin: 0 auto 10px;
 }
@@ -210,19 +208,33 @@ a { color: black; display: inline-block; }
 }
 
 /* course */
-.course .details {
+#courses .feed {
+  width: 100%;
 }
 
-.course .byline .subjects {
-  float: right;
+#courses .feed {
+  th { text-align: left; }
+  tr { border-bottom: 1px black solid; }
 }
 
-.course .description {
-  white-space: pre-line;
+#courses .showDetails {
+  text-align: center;
+  a:before {
+    content: "+";
+  }
 }
 
-.course .fee {
-  padding: 5px 0;
+#courses tr.course.expanded {
+  .showDetails a:before { content: "-"; }
+  + tr.details {
+    border-bottom: 1px black solid;
+    .box { height: auto; }
+  }
+}
+
+#courses tr.details {
+  border-bottom: 0;
+  .box { height: 0; overflow: hidden; }
 }
 
 /* modals */

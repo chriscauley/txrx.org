@@ -22,6 +22,7 @@ class SectionAdmin(admin.ModelAdmin):
   save_as = True
 
 class SessionAdmin(admin.ModelAdmin):
+  exclude = ('time_string',)
   extra = 0
   inlines = (ClassTimeInline,)
 

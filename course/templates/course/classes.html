@@ -2,48 +2,73 @@
 {% load photo thumbnail %}
 
 {% block content %}
-{% include "widgets/filters.html" %}
-<ol class="feed">
-  {% for section in sections %}
-  <li id="c{{section.id}}" class="course filterable"
-      data-subject="{% for subject in section.course.subjects.all %}{{ subject }},{% endfor %}"
-      {%if not section.course.closed%}data-open{%endif%}
-      data-date="{{ section.starttime|date:"Ymd" }}">
-    <div class="details">
-      <h1>{{ section }}</h1>
-      <div class="byline">
-	by {% for user in section.get_instructors %}
-	<a href="">{{ user.first_name }} {{ user.last_name }}</a>{% if not forloop.last %}, {% endif %}
-	{% if forloop.last and not forloop.first %} and {% endif %}
-	{% endfor %}
-	<div class="subjects">{% for subject in section.course.subjects.all %}
-	  <a href="javascript:$('[name=subject]').val('{{subject}}').change();">
-	    {{ subject }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+{#{% include "widgets/filters.html" %}#}
+<dic id="courses">
+  <table class="feed">
+    <tr>
+      <th>Details</th>
+      <th>Class Name</th>
+      <th>Instructor</th>
+      <th>First Date</th>
+      <th>Days</th>
+      <th>Cost</th>
+      <th></th>
+    </tr>
+    {% for session in sessions %}
+    <tr id="c{{session.id}}" class="course filterable"
+	data-subject="{% for subject in session.course.subjects.all %}{{ subject }},{% endfor %}"
+	{%if not session.course.closed%}data-open{%endif%}
+	data-date="{{ session.starttime|date:"Ymd" }}">
+      <td class="showDetails">
+	<a href="javascript:;" onclick="$(this).closest('tr').toggleClass('expanded'); return false;"></a>
+      </td>
+      <td>{{ session.section }}</td>
+      <td>{% if session.user.first_name %}
+	{{ session.user.first_name }} {{ session.user.last_name }}{% else %}
+	{{ session.user.username }}{% endif %}
+      </td>
+      <td>{{ session.classtime_set.all.0.start|date:"m/d/Y" }}</td>
+      <td>{{ session.classtime_set.count }}</td>
+      <td class="fee">
+	<span class="item_price">
+	  {{ session.section.fee }}{% if session.section.fee_notes %}*{% endif %}
+	</span>
+      </td>
+      <td>
+	<a class="add" href="javascript:addItem('{{ session }}',{{ session.fee }},'c{{ session.id }}'); toggleCourses();">Enroll</a>
+	<a class="drop" href="javascript:simpleCart.remove('c{{ session.id }}'); toggleCourses();">Drop</a>
+      </td>
+    </tr>
+    <tr class="details">
+      <td colspan="7">
+	<div class="box">
+	  <div class="byline">
+	    by {% for user in session.get_instructors %}
+	    <a href="">{{ user.first_name }} {{ user.last_name }}</a>{% if not forloop.last %}, {% endif %}
+	    {% if forloop.last and not forloop.first %} and {% endif %}
+	    {% endfor %}
+	    <div class="subjects">{% for subject in session.section.course.subjects.all %}
+	      <a href="javascript:$('[name=subject]').val('{{subject}}').change();">
+		{{ subject }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+	    </div>
+	  </div>
+	  <ol class="dates">{% for session in session.classtime_set.all %}
+	    <li>
+	      {{ classtime.start|date:"D m/d G:i" }}
+	      -
+	      {{ classtime.end_time|time:"G:i" }}
+	    </li>{% endfor %}
+	  </ol>
+	  <div class="description">
+	    {{ session.description|linebreaksbr }}
+	  </div>
+	  {% if session.fee_notes %}<span class="notes">* {{ session.fee_notes }}</span>{% endif %}
 	</div>
-      </div>
-      <ol class="dates">{% for session in section.session_set.all %}
-	<li>{% for classtime in session.classtime_set.all %}
-	  {{ classtime.start|date:"D m/d G:i" }}
-	  -
-	  {{ classtime.end_time|time:"G:i" }}{% if not forloop.last %}, {% endif %}{% endfor%}
-	</li>{% endfor %}
-      <div class="description">
-	{{ section.description|linebreaksbr }}
-      </div>
-      <div class="fee">
-	Course Fee: $<span class="item_price">{{ section.fee }}</span>
-	{% if section.fee_notes %}<span class="notes">({{ section.fee_notes }})</span>{% endif %}
-      </div>
-      <a class="add" href="javascript:addItem('{{ section }}',{{ section.fee }},'c{{ section.id }}'); toggleCourses();">Enroll</a>
-      <div class="drop">
-	<a href="javascript:simpleCart.remove('c{{ section.id }}'); toggleCourses();">Drop</a>
-	/
-	<a href="javascript:showCart();">View Cart</a>
-      </div>
-    </div>
-  </li>
-  {% endfor %}
-</ol>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
 <div class="modal" id="cart-modal" style="display: none;">
   <div style="position: relative;">
     <div class="close" onclick='$("#cart-modal").dialog("close");'></div>
