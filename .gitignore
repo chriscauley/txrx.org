@@ -9,3 +9,15 @@ txrx/txrx.db
 txrx/settings/local.py
  # I'm merging this project into txrx.rog/txrx as chores
 goldstar/*
+bin
+bin/*
+lib
+lib/*
+src
+src/*
+.pydev
+.pydevproject
+.project
+include
+include/*
+
