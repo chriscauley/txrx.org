@@ -1,4 +1,4 @@
-{% load photo thumbnail %}<ol class="feed">
+{% load thumbnail %}<ol class="feed">
 {% for f in feed %}
 <li id="c{{f.id}}" class="course filterable"
     data-subject="{% for subject in f.course.subjects.all %}{{ subject }},{% endfor %}"
