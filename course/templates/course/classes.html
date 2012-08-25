@@ -43,10 +43,8 @@
       <td colspan="7">
 	<div class="box">
 	  <div class="byline">
-	    by {% for user in session.get_instructors %}
-	    <a href="">{{ user.first_name }} {{ user.last_name }}</a>{% if not forloop.last %}, {% endif %}
-	    {% if forloop.last and not forloop.first %} and {% endif %}
-	    {% endfor %}
+	    by 
+	    <a href="">{{ session.user.first_name }} {{ session.user.last_name }}</a>
 	    <div class="subjects">{% for subject in session.section.course.subjects.all %}
 	      <a href="javascript:$('[name=subject]').val('{{subject}}').change();">
 		{{ subject }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
