@@ -22,7 +22,8 @@ def index(request):
   sessions = sorted(list(Session.objects.filter(section__term=term)),key=lambda s: s.first_date())
   values = {
     'sessions': sessions,
-    'filters': [filters['term'],filters['subject']]
+    'filters': [filters['term'],filters['subject']],
+    'term': term,
     }
   return TemplateResponse(request,"course/classes.html",values)
 
