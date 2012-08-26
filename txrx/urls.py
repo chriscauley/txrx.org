@@ -29,6 +29,7 @@ urlpatterns = patterns(
   (r'^google_return/(?P<url>.*)','google_return'),
   (r'^grappelli/', include('grappelli.urls')),
   (r'^.*.json','comming_soon'),
+  (r'^accounts/', include('registration.backends.default.urls')),
   #url(r'^content/', include('lablackey.content.urls', namespace='content', app_name='content')),
   #url(r'^chore/', include('txrx.chore.urls', namespace='chore', app_name='chore'))
 )

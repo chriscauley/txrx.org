@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 
-{% block content %}
+{% block main %}
 {#{% include "widgets/filters.html" %}#}
 <dic id="courses">
   <table class="feed">
@@ -22,12 +22,12 @@
       <td class="showDetails">
 	<a href="javascript:;" onclick="$(this).closest('tr').toggleClass('expanded'); return false;"></a>
       </td>
-      <td>{{ session.section }}</td>
+      <td>{{ session.section.course }}</td>
       <td>{% if session.user.first_name %}
-	{{ session.user.first_name }} {{ session.user.last_name }}{% else %}
+	{{ session.user.first_name }} {{ session.user.last_name|slice:":1" }}.{% else %}
 	{{ session.user.username }}{% endif %}
       </td>
-      <td>{{ session.classtime_set.all.0.start|date:"m/d/Y" }}</td>
+      <td>{{ session.classtime_set.all.0.start|date:"m/d" }}</td>
       <td>{{ session.classtime_set.count }}</td>
       <td class="fee">
 	<span class="item_price">
@@ -35,22 +35,20 @@
 	</span>
       </td>
       <td>
-	<a class="add" href="javascript:addItem('{{ session }}',{{ session.fee }},'c{{ session.id }}'); toggleCourses();">Enroll</a>
+	<a class="add" href="javascript:addItem('{{ session.section.course }} ({{ session.classtime_set.all.0.start|date:"m/d/Y" }})',{{ session.section.fee }},'c{{ session.id }}'); toggleCourses();">Enroll</a>
 	<a class="drop" href="javascript:simpleCart.remove('c{{ session.id }}'); toggleCourses();">Drop</a>
       </td>
     </tr>
     <tr class="details">
       <td colspan="7">
 	<div class="box">
-	  <div class="byline">
-	    by 
-	    <a href="">{{ session.user.first_name }} {{ session.user.last_name }}</a>
-	    <div class="subjects">{% for subject in session.section.course.subjects.all %}
-	      <a href="javascript:$('[name=subject]').val('{{subject}}').change();">
-		{{ subject }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
-	    </div>
+	  <div class="subjects">
+	    <b>Subject{% if session.section.course.subjects.count > 1 %}s{% endif %}</b>:
+	    {% for subject in session.section.course.subjects.all %}
+	    {{ subject }}{% if not forloop.last %}, {% endif %}
+	    {% endfor %}
 	  </div>
-	  <ol class="dates">{% for session in session.classtime_set.all %}
+	  <ol class="dates">{% for classtime in session.classtime_set.all %}
 	    <li>
 	      {{ classtime.start|date:"D m/d G:i" }}
 	      -
@@ -60,12 +58,24 @@
 	  <div class="description">
 	    {{ session.description|linebreaksbr }}
 	  </div>
-	  {% if session.fee_notes %}<span class="notes">* {{ session.fee_notes }}</span>{% endif %}
+	  {% if session.fee_notes %}
+	  <span class="notes">* {{ session.fee_notes }}</span>
+	  {% endif %}
 	</div>
       </td>
     </tr>
     {% endfor %}
   </table>
+</div>
+<div id="checkout-box">
+  <div>
+    Classes: <span class="simpleCart_quantity"></span>
+  </div>
+  <div>
+    Total: <span class="simpleCart_finalTotal"></span>
+  </div>
+  <div>
+    <a href="javascript:$('#cart-modal').modal();">Checkout</a>
 </div>
 <div class="modal" id="cart-modal" style="display: none;">
   <div style="position: relative;">
@@ -81,9 +91,11 @@
      style="float:right;">
     <img src="/static/paypal.gif">
   </a>
+  {% comment %}
   <a href="javascript:;" class="simpleCart_checkout" style="float:right;">
     <img src="/static/checkout.gif" />
   </a>
+  {% endcomment %}
   <div class="clear"></div>
 </div>
 <script type="text/javascript">

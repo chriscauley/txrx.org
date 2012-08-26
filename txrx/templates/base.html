@@ -69,8 +69,7 @@ function showLogin() {
 
 
 /* simpleCart setup */
-simpleCart.email = "{{ settings.PAYPAL_EMAIL }}";
-simpleCart.merchantId = "{{ settings.GOOGLE_CHECKOUT_ID }}";
+simpleCart.email = "txrxlabs@gmail.com";
 
 simpleCart.cartHeaders = ["Name", "Price"]
 
@@ -94,12 +93,14 @@ function toggleCourses() {
 <body>
   {% include "header.html" %}
   <div id="wrapper" class="{{ current }}-wrapper">
+    {% block main %}
     <div id="content" class="content {{ current|slugify }}">
       {% block content %}{% endblock %}
     </div>
     <div id="side">
       <iframe src="https://www.google.com/calendar/embed?showPrint=0&amp;mode=AGENDA&amp;src=e9rnjdeb9btnj1cis287be9quc%40group.calendar.google.com&amp;ctz=America/Chicago" style="border: 0; margin: auto; display: block;" width="300" height="440" frameborder="0" scrolling="no"></iframe>
     </div>
+    {% endblock %}
     <div class="clear"></div>
     {% include "footer.html" %}
   </div>

@@ -86,6 +86,7 @@ INSTALLED_APPS = (
   'devserver',
   'articles',
   'sorl.thumbnail',
+  'registration',
 
   # lablackey
   'lablackey.photo',
@@ -104,8 +105,9 @@ INSTALLED_APPS = (
   'main',
 )
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+ACCOUNT_ACTIVATION_DAYS = 7
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 LOGGING = {
   'version': 1,

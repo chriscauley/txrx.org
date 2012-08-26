@@ -8,3 +8,4 @@ sorl-thumbnail==11.12
 django-devserver==0.3.2
 psycopg2==2.4.1
 -e git+https://github.com/pizzapanther/Django-Crop-Override-Field.git#egg=django-crop-override
+django-registration==0.8

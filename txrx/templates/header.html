@@ -18,5 +18,10 @@
   </div>
   <div id="login-dialog" class="login">
     {% with form=auth_form %}{% include "widgets/login-form.html" %}{% endwith %}
+    {% if not request.user.is_authenticated %}
+    <div>
+      <a href="/accounts/register/">Register</a>
+    </div>
+    {% endif %}
   </div>
 </div>
