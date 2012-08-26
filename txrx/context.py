@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 _nav = [
-  #"instructors",
+  "instructors",
   "classes",
   #"projects",
   #"tools",

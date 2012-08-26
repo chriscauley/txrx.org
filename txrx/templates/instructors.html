@@ -6,7 +6,9 @@
   <h1>Course Instructors</h1>
   <ol class="feed">{% for profile in instructors %}
     <li>
-      <div class="img"><img src="{{ profile|thumbnail:"150x200" }}" /></div>
+      {% thumbnail profile.src "150x200" crop="center" as im %}
+      <div class="img"><img src="{{ im.url }}" /></div>
+      {% endthumbnail %}
       <div class="details">
 	<h2>{{ profile.name }}</h2>
 	<div class="descripiton">
@@ -14,10 +16,12 @@
 	</div>
       </div>
       <div>
-	Classes taught ({{ profile.get_sections|length }}):
-	{% for section in profile.get_sections %}
+	Classes taught ({{ profile.get_sessions|length }}):
+	{% for session in profile.get_sessions %}
+	{% ifchanged session.section %}
 	<br />
-	{{ section.course.name }}
+	{{ session.section.course.name }} ({{ session.section.term }})
+	{% endifchanged %}
 	{% endfor %}
       </div>
       {% comment %}

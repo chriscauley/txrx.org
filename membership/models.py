@@ -5,7 +5,7 @@ from sorl.thumbnail import ImageField
 
 from lablackey.utils import cached_method
 from lablackey.profile.models import ProfileModel, UserModel
-from course.models import Section
+from course.models import Session
 from project.models import Project
 
 class MembershipManager(models.Manager):
@@ -39,8 +39,8 @@ class Feature(models.Model):
 
 class ProfileManager(models.Manager):
     def list_instructors(self,**kwargs):
-        from course.models import Section
-        return set([s.user.profile for s in Section.objects.filter(**kwargs)])
+        from course.models import Session
+        return set([s.user.profile for s in Session.objects.filter(**kwargs)])
 
 class Profile(ProfileModel):
     membership = models.ForeignKey(Membership,default=1)
@@ -52,8 +52,8 @@ class Profile(ProfileModel):
     name = lambda self: self.user.username
     objects = ProfileManager()
     @cached_method
-    def get_sections(self):
-        return Section.objects.filter(user=self.user)
+    def get_sessions(self):
+        return Session.objects.filter(user=self.user)
     @cached_method
     def get_projects(self):
         return Project.objects.filter(author=self.user)

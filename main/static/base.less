@@ -25,6 +25,7 @@ a img { border: 0; }
 /* global site-specific */
 body { background: #333; }
 a { display: inline-block; }
+.blue { color: blue !important; }
 
 #wrapper, .header {
   background: white;
@@ -220,14 +221,14 @@ a { display: inline-block; }
 
 #courses .showDetails {
   text-align: center;
-  width: 50px;
+  width: 60px;
   a:before {
-    content: "+";
+    content: "+ expand";
   }
 }
 
 #courses tr.course.expanded {
-  .showDetails a:before { content: "-"; }
+  .showDetails a:before { content: "- hide"; }
   + tr.details {
     border-bottom: 1px black solid;
     .box { height: auto; }
@@ -237,6 +238,9 @@ a { display: inline-block; }
 #courses tr.details {
   border-bottom: 0;
   .box { height: 0; overflow: hidden; }
+  .left { float: left; width: 200px; }
+  .right { float: left; width: 700px; }
+  .left, .right { padding: 10px 0; }
 }
 
 #checkout-box {

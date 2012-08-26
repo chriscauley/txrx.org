@@ -22,6 +22,8 @@ class SectionAdmin(admin.ModelAdmin):
   save_as = True
 
 class SessionAdmin(admin.ModelAdmin):
+  list_display = ("__unicode__","user")
+  list_editable = ("user",)
   exclude = ('time_string',)
   extra = 0
   inlines = (ClassTimeInline,)

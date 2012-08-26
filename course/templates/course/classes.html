@@ -2,10 +2,10 @@
 {% load thumbnail %}
 
 {% block main %}
-{#{% include "widgets/filters.html" %}#}
+{% include "widgets/filters.html" %}
 <h1>Classes for {{ term.name }}</h1>
 <div id="courses">
-  <table class="feed">
+  <table class="feed" rowspacing="0">
     <tr>
       <th>Details</th>
       <th>Class Name</th>
@@ -17,7 +17,7 @@
     </tr>
     {% for session in sessions %}
     <tr id="c{{session.id}}" class="course filterable"
-	data-subject="{% for subject in session.course.subjects.all %}{{ subject }},{% endfor %}"
+	data-subject="{% for subject in session.section.course.subjects.all %}{{ subject }},{% endfor %}"
 	{%if not session.course.closed%}data-open{%endif%}
 	data-date="{{ session.starttime|date:"Ymd" }}">
       <td class="showDetails">
@@ -43,25 +43,41 @@
     <tr class="details">
       <td colspan="7">
 	<div class="box">
-	  <div class="subjects">
-	    <b>Subject{% if session.section.course.subjects.count > 1 %}s{% endif %}</b>:
-	    {% for subject in session.section.course.subjects.all %}
-	    {{ subject }}{% if not forloop.last %}, {% endif %}
-	    {% endfor %}
+	  <div class="left">
+	    <div class="subjects">
+	      <b>Subject{% if session.section.course.subjects.count > 1 %}s{% endif %}</b>:
+	      {% for subject in session.section.course.subjects.all %}
+	      {{ subject }}{% if not forloop.last %}, {% endif %}
+	      {% endfor %}
+	    </div>
+	    <ol class="dates">{% for classtime in session.classtime_set.all %}
+	      <li>
+		{{ classtime.start|date:"D m/d G:i" }}
+		-
+		{{ classtime.end_time|time:"G:i" }}
+	      </li>{% endfor %}
+	    </ol>
 	  </div>
-	  <ol class="dates">{% for classtime in session.classtime_set.all %}
-	    <li>
-	      {{ classtime.start|date:"D m/d G:i" }}
-	      -
-	      {{ classtime.end_time|time:"G:i" }}
-	    </li>{% endfor %}
-	  </ol>
-	  <div class="description">
-	    {{ session.description|linebreaksbr }}
+	  <div class="right">
+	    <div class="description">
+	      {{ session.section.description|linebreaksbr }}
+	    </div>
+	    {% if session.fee_notes %}
+	    <span class="notes">* {{ session.section.fee_notes }}</span>
+	    {% endif %}
+	    {% if session.requirements %}
+	    <span class="notes">
+	      <b>Requirements:</b> {{ session.section.requirements }}
+	    </span>
+	    {% endif %}
+	    {% if session.prerequisites %}
+	    <span class="notes">
+	      <b>Prerequisites</b>
+	      {{ session.section.prerequisites }}
+	    </span>
+	    {% endif %}
 	  </div>
-	  {% if session.fee_notes %}
-	  <span class="notes">* {{ session.fee_notes }}</span>
-	  {% endif %}
+	  <div style="clear: both;"></div>
 	</div>
       </td>
     </tr>

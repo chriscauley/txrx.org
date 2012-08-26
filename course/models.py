@@ -13,6 +13,7 @@ _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
 class Subject(models.Model):
   name = models.CharField(max_length=32)
+  value = lambda self: self.name
   __unicode__ = lambda self: self.name
   class Meta:
     ordering = ('name',)
@@ -41,6 +42,8 @@ class Section(models.Model):
   term = models.ForeignKey("Term")
   fee = models.IntegerField(null=True,blank=True)
   fee_notes = models.CharField(max_length=256,null=True,blank=True)
+  requirements = models.CharField(max_length=256,null=True,blank=True)
+  prerequisites = models.CharField(max_length=256,null=True,blank=True)
   description = models.TextField(null=True,blank=True)
   location = models.ForeignKey(Location,default=1)
   src = ImageField("Logo",max_length=300,upload_to='course/%Y-%m',null=True,blank=True)
@@ -60,6 +63,10 @@ class Session(UserModel):
   ts_help = "Only used to set dates on creation."
   time_string = models.CharField(max_length=128,help_text=ts_help,default='not implimented')
   __unicode__ = lambda self: "%s (%s)"%(self.section, self.user)
+  def save(self,*args,**kwargs):
+    from membership.models import Profile
+    profile,new = Profile.objects.get_or_create(user=self.user)
+    return super(Session,self).save(*args,**kwargs)
   def first_date(self):
     if self.classtime_set.count():
       return self.classtime_set.all()[0].start
