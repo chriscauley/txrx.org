@@ -28,7 +28,7 @@
 	{{ session.user.first_name }} {{ session.user.last_name|slice:":1" }}.{% else %}
 	{{ session.user.username }}{% endif %}
       </td>
-      <td>{{ session.classtime_set.all.0.start|date:"m/d" }}</td>
+      <td>{{ session.classtime_set.all.0.start|date:"F j" }}</td>
       <td>{{ session.classtime_set.count }}</td>
       <td class="fee">
 	<span class="item_price">
