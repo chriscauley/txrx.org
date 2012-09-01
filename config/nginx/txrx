@@ -1,7 +1,7 @@
 
 
 server {
-	listen 80 443;
+	listen 80;
 	root /home/website/txrx.org;
 	server_name classes.txrxlabs.com;
 	access_log  /home/website/txrx.org/logs/access.log;
