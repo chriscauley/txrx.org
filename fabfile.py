@@ -111,7 +111,7 @@ def update_config():
         
 def make_gunicorn_executable():
     with cd(env.source_dir):
-        run("chmod +x config/gunicorn/%(project)s.sh" % env)
+        run("chmod +x config/gunicorn/txrx.sh" % env)
         
 def restart_gunicorn():
     run("sudo /usr/bin/supervisorctl restart %(project)s" % env)
