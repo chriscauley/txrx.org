@@ -149,7 +149,8 @@ def git_pull(branch='master'):
 
 def collectstatic():
     with cd(env.source_dir):
-        run("./manage.py collectstatic -v0 --noinput")
+        with run("source ../env/bin/activate"):
+            run("./manage.py collectstatic -v0 --noinput")
         
 def deploy():
     git_pull()
