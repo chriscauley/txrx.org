@@ -66,8 +66,8 @@ def setup_project():
 
     with settings(warn_only=True):
         sudo("mkdir /var/log/gunicorn")
-    sudo("chgrp website /var/log/gunicorn")
-    sudo("chmod 775 /var/log/gunicorn")
+        sudo("chgrp website /var/log/gunicorn")
+        sudo("chmod 775 /var/log/gunicorn")
     
     with settings(warn_only=True):
         run("mkdir %(project)s" % env)
@@ -79,7 +79,7 @@ def setup_project():
 
     
     
-    run("virtualenv --no-site-packages %(virtualenv)s" % env)
+    #run("virtualenv --no-site-packages %(virtualenv)s" % env)
     run("git clone git://%(git_server)s/chriscauley/%(project)s.git %(source_dir)s" % env)
     
     update_environment()
@@ -87,8 +87,7 @@ def setup_project():
     
 def update_environment():
     git_pull()
-    with("source %(virtualenv)s/bin/activate" % env):
-        run("pip install -r %(source_dir)s/requirements.txt" % env)
+    run("pip install -r %(source_dir)s/requirements.txt" % env)
     
 def setup_database():
     "You've got to do some stuff on your own here, but once that's done, run this"
@@ -117,13 +116,13 @@ def restart_gunicorn():
     run("sudo /usr/bin/supervisorctl restart txrx" % env)
         
 def update_gunicorn():
-    sudo("supervisorctl stop txrx" % env)
+    run("sudo /usr/bin/supervisorctl stop txrx" % env)
     
     with cd(env.source_dir):
         sudo("cp config/supervisor/txrx.conf /etc/supervisor/conf.d/txrx.conf" % env)
         
-    sudo("supervisorctl update")
-    sudo("supervisorctl start txrx" % env)
+    run("sudo /usr/bin/supervisorctl update")
+    run("sudo /usr/bin/supervisorctl start txrx" % env)
         
 def restart_nginx():
     sudo("/etc/init.d/nginx restart")
@@ -148,8 +147,7 @@ def git_pull(branch='master'):
         run("git pull origin %s" % (branch, )) 
 
 def collectstatic():
-    with cd(env.source_dir):
-        run("./manage.py collectstatic -v0 --noinput")
+    run("cd txrx.org/src && ./manage.py collectstatic -v0 --noinput")
         
 def deploy():
     git_pull()
