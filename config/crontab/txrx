@@ -1,0 +1,7 @@
+SHELL=/bin/bash
+
+#*/2 * * * * sandford (cd /home/website/txrx.org; source env/bin/activate; cd usgm_apps/; python manage.py send_mail >> ../logs/cron_mail.log )
+#0,20,40 * * * * sandford (cd /home/website/txrx.org; source env/bin/activate; cd usgm_apps/; python manage.py retry_deferred >> ../logs/cron_mail_deferred.log )
+
+MAILTO=mike@usglobalmail.com
+0 22 * * * sandford (cd /home/website/txrx.org; source env/bin/activate; cd usgm_apps/daemons/; source get_settings; cd ../; fab production db_dump )

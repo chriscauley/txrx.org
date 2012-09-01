@@ -1,0 +1,1437 @@
+Downloading/unpacking postgres-psycopg2
+  Getting page http://pypi.python.org/simple/postgres_psycopg2
+  Could not fetch URL http://pypi.python.org/simple/postgres_psycopg2: HTTP Error 404: Not Found (postgres_psycopg2 does not have any releases)
+  Will skip URL http://pypi.python.org/simple/postgres_psycopg2 when looking for download links for postgres-psycopg2
+  Getting page http://pypi.python.org/simple/
+  URLs to search for versions for postgres-psycopg2:
+  * http://pypi.python.org/simple/postgres_psycopg2/
+  Getting page http://pypi.python.org/simple/postgres_psycopg2/
+  Could not fetch URL http://pypi.python.org/simple/postgres_psycopg2/: HTTP Error 404: Not Found (postgres_psycopg2 does not have any releases)
+  Will skip URL http://pypi.python.org/simple/postgres_psycopg2/ when looking for download links for postgres-psycopg2
+  Could not find any downloads that satisfy the requirement postgres-psycopg2
+No distributions at all found for postgres-psycopg2
+Exception information:
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.6/dist-packages/pip-0.6-py2.6.egg/pip.py", line 482, in main
+    self.run(options, args)
+  File "/usr/local/lib/python2.6/dist-packages/pip-0.6-py2.6.egg/pip.py", line 675, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/local/lib/python2.6/dist-packages/pip-0.6-py2.6.egg/pip.py", line 2421, in install_files
+    url = finder.find_requirement(req_to_install, upgrade=self.upgrade)
+  File "/usr/local/lib/python2.6/dist-packages/pip-0.6-py2.6.egg/pip.py", line 1485, in find_requirement
+    raise DistributionNotFound('No distributions at all found for %s' % req)
+DistributionNotFound: No distributions at all found for postgres-psycopg2
+------------------------------------------------------------
+/usr/local/bin/pip run on Sat Aug 25 17:26:39 2012
+Downloading/unpacking psycopg2
+  Getting page http://pypi.python.org/simple/psycopg2
+  URLs to search for versions for psycopg2:
+  * http://pypi.python.org/simple/psycopg2/
+  Getting page http://initd.org/psycopg/
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.1.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.4.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Getting page http://initd.org/projects/psycopg2
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.12.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-3/psycopg2-2.3.0.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.3.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-3/psycopg2-2.3.1.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.10.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.7.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-2/psycopg2-2.2.1.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-3/psycopg2-2.3.2.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.11.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.2.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.2.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-2/psycopg2-2.2.2.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.8.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.14.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.13.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-2/psycopg2-2.2.0.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.3.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.4.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.5.1.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Skipping page http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.6.tar.gz (from http://pypi.python.org/simple/psycopg2/) because of Content-Type: application/x-gzip
+  Analyzing links from page http://pypi.python.org/simple/psycopg2/
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.2.0.tar.gz#md5=4a69436dc8efbfe2859ae3aeed85d03e (from http://pypi.python.org/simple/psycopg2/), version: 2.2.0
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.0.14.tar.gz#md5=30136c7753acc9cbdc36cc5c2448fdee (from http://pypi.python.org/simple/psycopg2/), version: 2.0.14
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.2.2.tar.gz#md5=571af2ad9dfeb522ee5f8553278a4c38 (from http://pypi.python.org/simple/psycopg2/), version: 2.2.2
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.4.5.tar.gz#md5=075e4df465e9a863f288d5bdf6e6887e (from http://pypi.python.org/simple/psycopg2/), version: 2.4.5
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.4.2.tar.gz#md5=58cfd294d28b7e8ef059d72085d71ac2 (from http://pypi.python.org/simple/psycopg2/), version: 2.4.2
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.4.tar.gz#md5=24f4368e2cfdc1a2b03282ddda814160 (from http://pypi.python.org/simple/psycopg2/), version: 2.4
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.3.1.tar.gz#md5=15d1c7f821f3a0306955d6cde3e762af (from http://pypi.python.org/simple/psycopg2/), version: 2.3.1
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.0.11.tar.gz#md5=eec2a45bcea75a00cbf20a15ab1b8bae (from http://pypi.python.org/simple/psycopg2/), version: 2.0.11
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.4.1.tar.gz#md5=4e79c822ab75dd89d931ee627c66032f (from http://pypi.python.org/simple/psycopg2/), version: 2.4.1
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.2.1.tar.gz#md5=70b50773aefe5fb371ff4a018382012f (from http://pypi.python.org/simple/psycopg2/), version: 2.2.1
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.4.4.tar.gz#md5=639e014ea9ce3aa3306724f12d16d79b (from http://pypi.python.org/simple/psycopg2/), version: 2.4.4
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.0.12.tar.gz#md5=5c8080d0d0568479f041bb8534caf1f8 (from http://pypi.python.org/simple/psycopg2/), version: 2.0.12
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.3.0.tar.gz#md5=0b52101b47f1e73001c6412d9a476222 (from http://pypi.python.org/simple/psycopg2/), version: 2.3.0
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.4.3.tar.gz#md5=5f67ca0c8b6c1ac5c4afd82811e0facc (from http://pypi.python.org/simple/psycopg2/), version: 2.4.3
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.3.2.tar.gz#md5=11e8021a4fda49faa15495f8bea65f4d (from http://pypi.python.org/simple/psycopg2/), version: 2.3.2
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.0.13.tar.gz#md5=f520260595f4fcf035d26cfd57a75f19 (from http://pypi.python.org/simple/psycopg2/), version: 2.0.13
+    Found link http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.0.10.tar.gz#md5=2dc60d0fd90ad681e1e9106edef34e97 (from http://pypi.python.org/simple/psycopg2/), version: 2.0.10
+    Skipping link http://initd.org/psycopg/ (from http://pypi.python.org/simple/psycopg2/); not a file
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.1.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.4.1
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.4.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.4.4
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.4.5
+    Skipping link http://initd.org/projects/psycopg2 (from http://pypi.python.org/simple/psycopg2/); not a file
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.12.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.0.12
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-3/psycopg2-2.3.0.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.3.0
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.3.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.4.3
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-3/psycopg2-2.3.1.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.3.1
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.10.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.0.10
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.7.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.0.7
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-2/psycopg2-2.2.1.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.2.1
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-3/psycopg2-2.3.2.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.3.2
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.4
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.11.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.0.11
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.2.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.0.2
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.2.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.4.2
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-2/psycopg2-2.2.2.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.2.2
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.8.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.0.8
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.14.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.0.14
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.13.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.0.13
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-2/psycopg2-2.2.0.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.2.0
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.3.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.0.3
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.4.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.0.4
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.5.1.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.0.5.1
+    Found link http://initd.org/psycopg/tarballs/PSYCOPG-2-0/psycopg2-2.0.6.tar.gz (from http://pypi.python.org/simple/psycopg2/), version: 2.0.6
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Analyzing links from page http://initd.org/psycopg/
+    Skipping link http://initd.org/psycopg/media/css/psycopg.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/media/css/syntax.css (from http://initd.org/psycopg/); unknown archive format: .css
+    Skipping link http://initd.org/psycopg/articles/feeds/tag/news/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/feeds/atom/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/download/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/install/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/news/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/development/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.postgresql.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.python.org/dev/peps/pep-0249/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/license/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/features/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/docs/faq.html (from http://initd.org/psycopg/); unknown archive format: .html
+    Skipping link http://initd.org/psycopg/articles/2012/03/29/psycopg-245-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/author/piro/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/release/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/19/psycopg-244-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/12/12/psycopg-243-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/2011/06/05/psycopg-windows-mingw/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/build/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/articles/tag/windows/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://www.psycopg.org/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://flattr.com/thing/390575/psycopg (from http://initd.org/psycopg/); not a file
+    Found link http://www.psycopg.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.5.tar.gz (from http://initd.org/psycopg/), version: 2.4.5
+    Skipping link http://www.stickpeople.com/projects/python/win-psycopg/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://initd.org/psycopg/tracker/ (from http://initd.org/psycopg/); not a file
+    Skipping link http://mail.postgresql.org/mj/mj_wwwusr/domain=postgresql.org?func=lists-long-full&extra=psycopg (from http://initd.org/psycopg/); unknown archive format: .org
+    Skipping link http://twitter.com/psycopg (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/hardlifeofapo (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/3pLgoSxf (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/MtvgjxJ2 (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/voidspace (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/HxOK6XsH (from http://initd.org/psycopg/); not a file
+    Skipping link http://search.twitter.com/search?q=%23python (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/eMYRG6JW (from http://initd.org/psycopg/); not a file
+    Skipping link http://twitter.com/selfmadepsyche (from http://initd.org/psycopg/); not a file
+    Skipping link http://t.co/s0Jd1ngz (from http://initd.org/psycopg/); not a file
+  Using version 2.4.5 (newest of versions: 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.5, 2.4.4, 2.4.4, 2.4.3, 2.4.3, 2.4.2, 2.4.2, 2.4.1, 2.4.1, 2.4, 2.4, 2.3.2, 2.3.2, 2.3.1, 2.3.1, 2.3.0, 2.3.0, 2.2.2, 2.2.2, 2.2.1, 2.2.1, 2.2.0, 2.2.0, 2.0.14, 2.0.14, 2.0.13, 2.0.13, 2.0.12, 2.0.12, 2.0.11, 2.0.11, 2.0.10, 2.0.10, 2.0.8, 2.0.7, 2.0.6, 2.0.5.1, 2.0.4, 2.0.3, 2.0.2)
+  Downloading from URL http://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.4.5.tar.gz#md5=075e4df465e9a863f288d5bdf6e6887e (from http://pypi.python.org/simple/psycopg2/)
+  Running setup.py egg_info for package psycopg2
+    running egg_info
+    creating pip-egg-info/psycopg2.egg-info
+    writing pip-egg-info/psycopg2.egg-info/PKG-INFO
+    writing top-level names to pip-egg-info/psycopg2.egg-info/top_level.txt
+    writing dependency_links to pip-egg-info/psycopg2.egg-info/dependency_links.txt
+    writing manifest file 'pip-egg-info/psycopg2.egg-info/SOURCES.txt'
+    warning: manifest_maker: standard file '-c' not found
+    Error: pg_config executable not found.
+    
+    Please add the directory containing pg_config to the PATH
+    or specify the full executable path with the option:
+    
+        python setup.py build_ext --pg-config /path/to/pg_config build ...
+    
+    or with the pg_config option in 'setup.cfg'.
+    Complete output from command python setup.py egg_info:
+    running egg_info
+
+creating pip-egg-info/psycopg2.egg-info
+
+writing pip-egg-info/psycopg2.egg-info/PKG-INFO
+
+writing top-level names to pip-egg-info/psycopg2.egg-info/top_level.txt
+
+writing dependency_links to pip-egg-info/psycopg2.egg-info/dependency_links.txt
+
+writing manifest file 'pip-egg-info/psycopg2.egg-info/SOURCES.txt'
+
+warning: manifest_maker: standard file '-c' not found
+
+Error: pg_config executable not found.
+
+
+
+Please add the directory containing pg_config to the PATH
+
+or specify the full executable path with the option:
+
+
+
+    python setup.py build_ext --pg-config /path/to/pg_config build ...
+
+
+
+or with the pg_config option in 'setup.cfg'.
+
+----------------------------------------
+Command python setup.py egg_info failed with error code 1
+Exception information:
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.6/dist-packages/pip-0.6-py2.6.egg/pip.py", line 482, in main
+    self.run(options, args)
+  File "/usr/local/lib/python2.6/dist-packages/pip-0.6-py2.6.egg/pip.py", line 675, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/local/lib/python2.6/dist-packages/pip-0.6-py2.6.egg/pip.py", line 2452, in install_files
+    req_to_install.run_egg_info()
+  File "/usr/local/lib/python2.6/dist-packages/pip-0.6-py2.6.egg/pip.py", line 1827, in run_egg_info
+    command_desc='python setup.py egg_info')
+  File "/usr/local/lib/python2.6/dist-packages/pip-0.6-py2.6.egg/pip.py", line 4347, in call_subprocess
+    % (command_desc, proc.returncode))
+InstallationError: Command python setup.py egg_info failed with error code 1
+------------------------------------------------------------
+/usr/local/bin/pip run on Sat Aug 25 17:28:42 2012
+Downloading/unpacking psycopg2
+  Running setup.py egg_info for package psycopg2
+    running egg_info
+    writing pip-egg-info/psycopg2.egg-info/PKG-INFO
+    writing top-level names to pip-egg-info/psycopg2.egg-info/top_level.txt
+    writing dependency_links to pip-egg-info/psycopg2.egg-info/dependency_links.txt
+    warning: manifest_maker: standard file '-c' not found
+    reading manifest file 'pip-egg-info/psycopg2.egg-info/SOURCES.txt'
+    reading manifest template 'MANIFEST.in'
+    no previously-included directories found matching 'doc/src/_build'
+    writing manifest file 'pip-egg-info/psycopg2.egg-info/SOURCES.txt'
+Installing collected packages: psycopg2
+  Running setup.py install for psycopg2
+    Running command /usr/bin/python -c "import setuptools; __file__='/home/sandford/workspace/txrx.org/build/psycopg2/setup.py'; execfile('/home/sandford/workspace/txrx.org/build/psycopg2/setup.py')" install --single-version-externally-managed --record /tmp/pip-lJN0iv-record/install-record.txt --install-headers /home/sandford/workspace/txrx.org/lib/include
+    running install
+    running build
+    running build_py
+    creating build
+    creating build/lib.linux-i686-2.6
+    creating build/lib.linux-i686-2.6/psycopg2
+    copying lib/pool.py -> build/lib.linux-i686-2.6/psycopg2
+    copying lib/__init__.py -> build/lib.linux-i686-2.6/psycopg2
+    copying lib/extras.py -> build/lib.linux-i686-2.6/psycopg2
+    copying lib/tz.py -> build/lib.linux-i686-2.6/psycopg2
+    copying lib/psycopg1.py -> build/lib.linux-i686-2.6/psycopg2
+    copying lib/extensions.py -> build/lib.linux-i686-2.6/psycopg2
+    copying lib/errorcodes.py -> build/lib.linux-i686-2.6/psycopg2
+    creating build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_lobject.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_green.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_transaction.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/dbapi20_tpc.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_extras_dictcursor.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_types_basic.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_cursor.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/__init__.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_module.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_bugX000.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_connection.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_bug_gc.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_cancel.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/testconfig.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_notify.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/dbapi20.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_psycopg2_dbapi20.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_async.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_quote.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_copy.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_types_extras.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/testutils.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    copying tests/test_dates.py -> build/lib.linux-i686-2.6/psycopg2/tests
+    running build_ext
+    building 'psycopg2._psycopg' extension
+    creating build/temp.linux-i686-2.6
+    creating build/temp.linux-i686-2.6/psycopg
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/psycopgmodule.c -o build/temp.linux-i686-2.6/psycopg/psycopgmodule.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/green.c -o build/temp.linux-i686-2.6/psycopg/green.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/pqpath.c -o build/temp.linux-i686-2.6/psycopg/pqpath.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/utils.c -o build/temp.linux-i686-2.6/psycopg/utils.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/bytes_format.c -o build/temp.linux-i686-2.6/psycopg/bytes_format.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/connection_int.c -o build/temp.linux-i686-2.6/psycopg/connection_int.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/connection_type.c -o build/temp.linux-i686-2.6/psycopg/connection_type.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/cursor_int.c -o build/temp.linux-i686-2.6/psycopg/cursor_int.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/cursor_type.c -o build/temp.linux-i686-2.6/psycopg/cursor_type.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/lobject_int.c -o build/temp.linux-i686-2.6/psycopg/lobject_int.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/lobject_type.c -o build/temp.linux-i686-2.6/psycopg/lobject_type.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/notify_type.c -o build/temp.linux-i686-2.6/psycopg/notify_type.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/xid_type.c -o build/temp.linux-i686-2.6/psycopg/xid_type.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_asis.c -o build/temp.linux-i686-2.6/psycopg/adapter_asis.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_binary.c -o build/temp.linux-i686-2.6/psycopg/adapter_binary.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_datetime.c -o build/temp.linux-i686-2.6/psycopg/adapter_datetime.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_list.c -o build/temp.linux-i686-2.6/psycopg/adapter_list.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_pboolean.c -o build/temp.linux-i686-2.6/psycopg/adapter_pboolean.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_pdecimal.c -o build/temp.linux-i686-2.6/psycopg/adapter_pdecimal.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_pint.c -o build/temp.linux-i686-2.6/psycopg/adapter_pint.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_pfloat.c -o build/temp.linux-i686-2.6/psycopg/adapter_pfloat.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_qstring.c -o build/temp.linux-i686-2.6/psycopg/adapter_qstring.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/microprotocols.c -o build/temp.linux-i686-2.6/psycopg/microprotocols.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/microprotocols_proto.c -o build/temp.linux-i686-2.6/psycopg/microprotocols_proto.o -Wdeclaration-after-statement
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/typecast.c -o build/temp.linux-i686-2.6/psycopg/typecast.o -Wdeclaration-after-statement
+    gcc -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions build/temp.linux-i686-2.6/psycopg/psycopgmodule.o build/temp.linux-i686-2.6/psycopg/green.o build/temp.linux-i686-2.6/psycopg/pqpath.o build/temp.linux-i686-2.6/psycopg/utils.o build/temp.linux-i686-2.6/psycopg/bytes_format.o build/temp.linux-i686-2.6/psycopg/connection_int.o build/temp.linux-i686-2.6/psycopg/connection_type.o build/temp.linux-i686-2.6/psycopg/cursor_int.o build/temp.linux-i686-2.6/psycopg/cursor_type.o build/temp.linux-i686-2.6/psycopg/lobject_int.o build/temp.linux-i686-2.6/psycopg/lobject_type.o build/temp.linux-i686-2.6/psycopg/notify_type.o build/temp.linux-i686-2.6/psycopg/xid_type.o build/temp.linux-i686-2.6/psycopg/adapter_asis.o build/temp.linux-i686-2.6/psycopg/adapter_binary.o build/temp.linux-i686-2.6/psycopg/adapter_datetime.o build/temp.linux-i686-2.6/psycopg/adapter_list.o build/temp.linux-i686-2.6/psycopg/adapter_pboolean.o build/temp.linux-i686-2.6/psycopg/adapter_pdecimal.o build/temp.linux-i686-2.6/psycopg/adapter_pint.o build/temp.linux-i686-2.6/psycopg/adapter_pfloat.o build/temp.linux-i686-2.6/psycopg/adapter_qstring.o build/temp.linux-i686-2.6/psycopg/microprotocols.o build/temp.linux-i686-2.6/psycopg/microprotocols_proto.o build/temp.linux-i686-2.6/psycopg/typecast.o -lpq -o build/lib.linux-i686-2.6/psycopg2/_psycopg.so
+    running install_lib
+    creating /usr/local/lib/python2.6/dist-packages/psycopg2
+    error: could not create '/usr/local/lib/python2.6/dist-packages/psycopg2': Permission denied
+    Complete output from command /usr/bin/python -c "import setuptools; __file__='/home/sandford/workspace/txrx.org/build/psycopg2/setup.py'; execfile('/home/sandford/workspace/txrx.org/build/psycopg2/setup.py')" install --single-version-externally-managed --record /tmp/pip-lJN0iv-record/install-record.txt --install-headers /home/sandford/workspace/txrx.org/lib/include:
+    running install
+
+running build
+
+running build_py
+
+creating build
+
+creating build/lib.linux-i686-2.6
+
+creating build/lib.linux-i686-2.6/psycopg2
+
+copying lib/pool.py -> build/lib.linux-i686-2.6/psycopg2
+
+copying lib/__init__.py -> build/lib.linux-i686-2.6/psycopg2
+
+copying lib/extras.py -> build/lib.linux-i686-2.6/psycopg2
+
+copying lib/tz.py -> build/lib.linux-i686-2.6/psycopg2
+
+copying lib/psycopg1.py -> build/lib.linux-i686-2.6/psycopg2
+
+copying lib/extensions.py -> build/lib.linux-i686-2.6/psycopg2
+
+copying lib/errorcodes.py -> build/lib.linux-i686-2.6/psycopg2
+
+creating build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_lobject.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_green.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_transaction.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/dbapi20_tpc.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_extras_dictcursor.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_types_basic.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_cursor.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/__init__.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_module.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_bugX000.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_connection.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_bug_gc.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_cancel.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/testconfig.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_notify.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/dbapi20.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_psycopg2_dbapi20.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_async.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_quote.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_copy.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_types_extras.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/testutils.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+copying tests/test_dates.py -> build/lib.linux-i686-2.6/psycopg2/tests
+
+running build_ext
+
+building 'psycopg2._psycopg' extension
+
+creating build/temp.linux-i686-2.6
+
+creating build/temp.linux-i686-2.6/psycopg
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/psycopgmodule.c -o build/temp.linux-i686-2.6/psycopg/psycopgmodule.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/green.c -o build/temp.linux-i686-2.6/psycopg/green.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/pqpath.c -o build/temp.linux-i686-2.6/psycopg/pqpath.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/utils.c -o build/temp.linux-i686-2.6/psycopg/utils.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/bytes_format.c -o build/temp.linux-i686-2.6/psycopg/bytes_format.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/connection_int.c -o build/temp.linux-i686-2.6/psycopg/connection_int.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/connection_type.c -o build/temp.linux-i686-2.6/psycopg/connection_type.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/cursor_int.c -o build/temp.linux-i686-2.6/psycopg/cursor_int.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/cursor_type.c -o build/temp.linux-i686-2.6/psycopg/cursor_type.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/lobject_int.c -o build/temp.linux-i686-2.6/psycopg/lobject_int.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/lobject_type.c -o build/temp.linux-i686-2.6/psycopg/lobject_type.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/notify_type.c -o build/temp.linux-i686-2.6/psycopg/notify_type.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/xid_type.c -o build/temp.linux-i686-2.6/psycopg/xid_type.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_asis.c -o build/temp.linux-i686-2.6/psycopg/adapter_asis.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_binary.c -o build/temp.linux-i686-2.6/psycopg/adapter_binary.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_datetime.c -o build/temp.linux-i686-2.6/psycopg/adapter_datetime.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_list.c -o build/temp.linux-i686-2.6/psycopg/adapter_list.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_pboolean.c -o build/temp.linux-i686-2.6/psycopg/adapter_pboolean.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_pdecimal.c -o build/temp.linux-i686-2.6/psycopg/adapter_pdecimal.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_pint.c -o build/temp.linux-i686-2.6/psycopg/adapter_pint.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_pfloat.c -o build/temp.linux-i686-2.6/psycopg/adapter_pfloat.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/adapter_qstring.c -o build/temp.linux-i686-2.6/psycopg/adapter_qstring.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/microprotocols.c -o build/temp.linux-i686-2.6/psycopg/microprotocols.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/microprotocols_proto.c -o build/temp.linux-i686-2.6/psycopg/microprotocols_proto.o -Wdeclaration-after-statement
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -DPSYCOPG_DEFAULT_PYDATETIME=1 -DPSYCOPG_VERSION="2.4.5 (dt dec pq3 ext)" -DPG_VERSION_HEX=0x08040D -DPSYCOPG_EXTENSIONS=1 -DPSYCOPG_NEW_BOOLEAN=1 -DHAVE_PQFREEMEM=1 -I/usr/include/python2.6 -I. -I/usr/include/postgresql -I/usr/include/postgresql/8.4/server -c psycopg/typecast.c -o build/temp.linux-i686-2.6/psycopg/typecast.o -Wdeclaration-after-statement
+
+gcc -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions build/temp.linux-i686-2.6/psycopg/psycopgmodule.o build/temp.linux-i686-2.6/psycopg/green.o build/temp.linux-i686-2.6/psycopg/pqpath.o build/temp.linux-i686-2.6/psycopg/utils.o build/temp.linux-i686-2.6/psycopg/bytes_format.o build/temp.linux-i686-2.6/psycopg/connection_int.o build/temp.linux-i686-2.6/psycopg/connection_type.o build/temp.linux-i686-2.6/psycopg/cursor_int.o build/temp.linux-i686-2.6/psycopg/cursor_type.o build/temp.linux-i686-2.6/psycopg/lobject_int.o build/temp.linux-i686-2.6/psycopg/lobject_type.o build/temp.linux-i686-2.6/psycopg/notify_type.o build/temp.linux-i686-2.6/psycopg/xid_type.o build/temp.linux-i686-2.6/psycopg/adapter_asis.o build/temp.linux-i686-2.6/psycopg/adapter_binary.o build/temp.linux-i686-2.6/psycopg/adapter_datetime.o build/temp.linux-i686-2.6/psycopg/adapter_list.o build/temp.linux-i686-2.6/psycopg/adapter_pboolean.o build/temp.linux-i686-2.6/psycopg/adapter_pdecimal.o build/temp.linux-i686-2.6/psycopg/adapter_pint.o build/temp.linux-i686-2.6/psycopg/adapter_pfloat.o build/temp.linux-i686-2.6/psycopg/adapter_qstring.o build/temp.linux-i686-2.6/psycopg/microprotocols.o build/temp.linux-i686-2.6/psycopg/microprotocols_proto.o build/temp.linux-i686-2.6/psycopg/typecast.o -lpq -o build/lib.linux-i686-2.6/psycopg2/_psycopg.so
+
+running install_lib
+
+creating /usr/local/lib/python2.6/dist-packages/psycopg2
+
+error: could not create '/usr/local/lib/python2.6/dist-packages/psycopg2': Permission denied
+
+----------------------------------------
+Command /usr/bin/python -c "import setuptools; __file__='/home/sandford/workspace/txrx.org/build/psycopg2/setup.py'; execfile('/home/sandford/workspace/txrx.org/build/psycopg2/setup.py')" install --single-version-externally-managed --record /tmp/pip-lJN0iv-record/install-record.txt --install-headers /home/sandford/workspace/txrx.org/lib/include failed with error code 1
+Exception information:
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.6/dist-packages/pip-0.6-py2.6.egg/pip.py", line 482, in main
+    self.run(options, args)
+  File "/usr/local/lib/python2.6/dist-packages/pip-0.6-py2.6.egg/pip.py", line 677, in run
+    requirement_set.install(install_options)
+  File "/usr/local/lib/python2.6/dist-packages/pip-0.6-py2.6.egg/pip.py", line 2748, in install
+    requirement.install(install_options)
+  File "/usr/local/lib/python2.6/dist-packages/pip-0.6-py2.6.egg/pip.py", line 2139, in install
+    cwd=self.source_dir, filter_stdout=self._filter_install, show_stdout=False)
+  File "/usr/local/lib/python2.6/dist-packages/pip-0.6-py2.6.egg/pip.py", line 4347, in call_subprocess
+    % (command_desc, proc.returncode))
+InstallationError: Command /usr/bin/python -c "import setuptools; __file__='/home/sandford/workspace/txrx.org/build/psycopg2/setup.py'; execfile('/home/sandford/workspace/txrx.org/build/psycopg2/setup.py')" install --single-version-externally-managed --record /tmp/pip-lJN0iv-record/install-record.txt --install-headers /home/sandford/workspace/txrx.org/lib/include failed with error code 1
