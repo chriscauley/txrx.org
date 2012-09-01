@@ -11,7 +11,6 @@ j = "(?:.json)?"
 ms = "article|project"
 urlpatterns = patterns(
   'txrx.views',
-  (r'^$','home'),
   (r'^news/',include('articles.urls')),
   (r'^(?P<model>%s)/$'%ms,'feed'),
   (r'^(?P<model>%s)/(?P<year>\d{4})/(?P<slug>[\w\-\d]*)/$'%ms,'item'),
@@ -30,13 +29,13 @@ urlpatterns = patterns(
   (r'^grappelli/', include('grappelli.urls')),
   (r'^.*.json','comming_soon'),
   (r'^accounts/', include('registration.backends.default.urls')),
-  #url(r'^content/', include('lablackey.content.urls', namespace='content', app_name='content')),
-  #url(r'^chore/', include('txrx.chore.urls', namespace='chore', app_name='chore'))
 )
 
 urlpatterns += patterns(
   '',
-  (r'^instructors/$','course.views.instructors'),
+  url(r'^instructors/$','course.views.instructors',name='instructor_detail'),
+  url(r'^instructors/([^/]+)/$','course.views.instructor_detail',name='instructor_detail'),
+  (r'^$','course.views.index'),
 )
 # hardcoded urls for content pages. Will be created when a super user hits the address.
 #urlpatterns += patterns(

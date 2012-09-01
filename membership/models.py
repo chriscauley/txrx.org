@@ -48,8 +48,9 @@ class Profile(ProfileModel):
     bio = models.TextField(null=True,blank=True)
     _folder = settings.UPLOAD_DIR+'/avatars/%Y-%m'
     avatar = ImageField(max_length=300,upload_to=_folder,null=True,blank=True)
+    by_line = models.CharField(max_length=50,null=True,blank=True,help_text="50 characters max")
     src = property(lambda self: self.avatar)
-    name = lambda self: self.user.username
+    name = lambda self: "%s %s"%(self.user.first_name,self.user.last_name)
     objects = ProfileManager()
     @cached_method
     def get_sessions(self):

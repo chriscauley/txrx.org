@@ -1,5 +1,5 @@
 <div class="header">
-  <a href="/">
+  <a href="/" class="logo">
     <img src="/static/bw-logo.png" />
   </a>
   <div class="nav" id="nav">{% for n in nav %}<a href="/{{ n|slugify }}" class="{{ n|slugify}}{% if n == current %} current{% endif %}{% if forloop.last %} no-border {% endif %}">{{ n|upper }}</a>{% endfor %}</div>

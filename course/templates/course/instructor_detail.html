@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block content %}
+<section>
+  <h1>Bio: {{ profile.name }}</h1>
+  {% thumbnail profile.src "150x200" crop="center" as im %}
+  <div class="img"><img src="{{ im.url }}" /></div>
+  {% endthumbnail %}
+  <div class="details">
+    <div class="descripiton">
+      {{ profile.bio }}
+    </div>
+  </div>
+  <div>
+    Classes taught ({{ profile.get_sessions|length }}):
+    {% for session in profile.get_sessions %}
+    {% ifchanged session.section %}
+    <br />
+    {{ session.section.course.name }} ({{ session.section.term }})
+    {% endifchanged %}
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

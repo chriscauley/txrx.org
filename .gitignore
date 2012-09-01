@@ -14,4 +14,4 @@ env/*
 .pydev
 .pydevproject
 .project
-
+log/*

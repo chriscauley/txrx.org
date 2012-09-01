@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load url from future %}
+{% block content %}
+<section id="instructors">
+  <h1>Current Instructors ({{ active_term }})</h1>
+  <ol>
+    {% for profile in instructors %}
+    <li>
+      <a href="{% url "instructor_detail" profile.user.username %}">
+	{% comment %}
+	{% thumbnail profile.src "100x150" crop="Center" as im %}
+	<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+	{% endthumbnail %}
+	{% endcomment %}
+	<div class="name">{{ profile.name }}</div>
+	{% if profile.by_line %}
+	<div class="byline">{{ profile.by_line }}</div>
+	{% endif %}
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+{% endblock %}

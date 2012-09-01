@@ -34,36 +34,38 @@ a { display: inline-block; }
   box-shadow: 0 0 20px #000;
   min-height: 30px;
   overflow: visible;
-  padding: 2px;
   position: relative;
-  width: 980px;
 }
 
 #wrapper {
   margin:  0 auto 30px;
   min-height: 800px;
+  padding: 15px;
+  width: 950px;
 }
 
 .header {
   margin: 0 auto 10px;
-}
-
-.header a {
-  color: black;
-  display: inline-block;
-  text-decoration: none;
-}
-
-.header a div {
-  display: inline-block;
-  font-family: Arial;
-}
-
-.header img {
-  height: 45px;
-}
-.header > a {
-  float: left;
+  min-height: 25px;
+  overflow: hidden;
+  width: 980px;
+  a {
+    color: black;
+    display: inline-block;
+    text-decoration: none;
+    div {
+      display: inline-block;
+      font-family: Arial;
+    }
+  }
+  img {
+    height: 45px;
+  }
+  .logo {
+    float: left;
+    height: 45px;
+    padding: 2px 5px;
+  }
 }
 
 #nav {
@@ -209,6 +211,9 @@ a { display: inline-block; }
 }
 
 /* course */
+#courses {
+  margin-bottom: 75px;
+}
 #courses .feed {
   margin: 15px;
   width: 950px;

@@ -30,4 +30,11 @@ def index(request):
 def instructors(request,username=None):
   instructors = Profile.objects.list_instructors()
   values = {'instructors':instructors}
-  return TemplateResponse(request,"instructors.html",values)
+  return TemplateResponse(request,"course/instructors.html",values)
+
+def instructor_detail(request,username=None):
+  profile = Profile.objects.get(user__username=username)
+  values = {
+    'profile': profile
+    }
+  return TemplateResponse(request,"course/instructor_detail.html",values)
