@@ -148,8 +148,7 @@ def git_pull(branch='master'):
         run("git pull origin %s" % (branch, )) 
 
 def collectstatic():
-    with run("cd txrx.org/src"):
-        run("source /home/website/txrx.org/env/bin/activate && ./manage.py collectstatic -v0 --noinput")
+    run("cd txrx.org/src && source /home/website/txrx.org/env/bin/activate && ./manage.py collectstatic -v0 --noinput")
         
 def deploy():
     git_pull()
