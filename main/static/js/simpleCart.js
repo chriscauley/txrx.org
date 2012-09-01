@@ -57,7 +57,7 @@ function Cart(){
 	me.MAX_COOKIE_SIZE = 4000;
 	me.cartHeaders = ['Name','Price','Quantity','Total'];
 	me.events = {};
-	me.sandbox = false;
+	me.sandbox = true;
 	me.paypalHTTPMethod = "GET";
 	/*
 		cart headers:
