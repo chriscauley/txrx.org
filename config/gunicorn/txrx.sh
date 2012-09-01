@@ -12,4 +12,6 @@ source ../env/bin/activate
 #exec gunicorn_django -b $ADDRESS -w $NUM_WORKERS \
 #  --user $USER --group $GROUP --timeout $TIMEOUT \
 #  --log-level debug --log-file $LOGFILE 2>>$LOGFILE
-gunicorn txrx.wsgi:application
+gunicorn txrx.wsgi:application -b $ADDRESS -w $NUM_WORKERS \
+  --user $USER --group $GROUP --timeout $TIMEOUT \
+  --log-level debug --log-file $LOGFILE 2>>$LOGFILE
