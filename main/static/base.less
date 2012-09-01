@@ -23,7 +23,7 @@ a img { border: 0; }
 }
 
 /* global site-specific */
-body { background: #333; }
+body { background: #333; padding-bottom: 30px}
 a { display: inline-block; }
 .blue { color: blue !important; }
 
@@ -38,7 +38,7 @@ a { display: inline-block; }
 }
 
 #wrapper {
-  margin:  0 auto 30px;
+  margin:  0 auto;
   min-height: 800px;
   padding: 15px;
   width: 950px;
@@ -213,20 +213,18 @@ a { display: inline-block; }
 /* course */
 #courses {
   margin-bottom: 75px;
-}
-#courses .feed {
-  margin: 15px;
-  width: 950px;
-}
-
-#courses .feed {
-  th { text-align: left; }
-  tr { border-bottom: 1px black solid; }
+  .feed {
+    width: 950px;
+    th { text-align: left; }
+    tr { border-bottom: 1px black solid; }
+    tr.course { height: 38px; }
+    .row1 { background: #d8d8d0; }
+  }
 }
 
 #courses .showDetails {
   text-align: center;
-  width: 60px;
+  width: 70px;
   a:before {
     content: "+ expand";
   }

@@ -5,6 +5,7 @@ from sorl.thumbnail import ImageField
 
 from lablackey.utils import cached_method
 from lablackey.profile.models import ProfileModel, UserModel
+from lablackey.photo.models import Photo
 from course.models import Session
 from project.models import Project
 
@@ -45,9 +46,9 @@ class ProfileManager(models.Manager):
 class Profile(ProfileModel):
     membership = models.ForeignKey(Membership,default=1)
     #roles = models.ManyToManyField(Role,null=True,blank=True)
+    photo = models.ForeignKey(Photo)
     bio = models.TextField(null=True,blank=True)
     _folder = settings.UPLOAD_DIR+'/avatars/%Y-%m'
-    avatar = ImageField(max_length=300,upload_to=_folder,null=True,blank=True)
     by_line = models.CharField(max_length=50,null=True,blank=True,help_text="50 characters max")
     src = property(lambda self: self.avatar)
     name = lambda self: "%s %s"%(self.user.first_name,self.user.last_name)

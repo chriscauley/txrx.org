@@ -5,18 +5,19 @@
 {% include "widgets/filters.html" %}
 <h1>Classes for {{ term.name }}</h1>
 <div id="courses">
-  <table class="feed" rowspacing="0">
-    <tr>
-      <th>Details</th>
+  <table class="feed" rowspacing="0" cellpadding="0">
+    <tr style="height: 35px;">
+      <th></th>
       <th>Class Name</th>
       <th>Instructor</th>
       <th>First Date</th>
+      <th>Into Level?</th>
       <th>Days</th>
       <th>Cost</th>
       <th></th>
     </tr>
     {% for session in sessions %}
-    <tr id="c{{session.id}}" class="course filterable"
+    <tr id="c{{session.id}}" class="course filterable {% cycle row1,row2 %}"
 	data-subject="{% for subject in session.section.course.subjects.all %}{{ subject }},{% endfor %}"
 	{%if not session.course.closed%}data-open{%endif%}
 	data-date="{{ session.starttime|date:"Ymd" }}">
@@ -29,6 +30,15 @@
 	{{ session.user.username }}{% endif %}
       </td>
       <td>{{ session.classtime_set.all.0.start|date:"F j" }}</td>
+      <td>
+	{% if session.section.prerequisites or session.section.requirements %}
+	<a href="javascript:;" onclick="$(this).closest('tr').toggleClass('expanded'); return false;">
+	  see description
+	</a>
+	{% else %}
+	Yes
+	{% endif %}
+      </td>
       <td>{{ session.classtime_set.count }}</td>
       <td class="fee">
 	<span class="item_price">
@@ -40,8 +50,8 @@
 	<a class="drop" href="javascript:simpleCart.remove('c{{ session.id }}'); toggleCourses();">Drop</a>
       </td>
     </tr>
-    <tr class="details">
-      <td colspan="7">
+    <tr class="details {% cycle row1,row2 %}">
+      <td colspan="8">
 	<div class="box">
 	  <div class="left">
 	    <div class="subjects">
@@ -62,17 +72,17 @@
 	    <div class="description">
 	      {{ session.section.description|linebreaksbr }}
 	    </div>
-	    {% if session.fee_notes %}
+	    {% if session.section.fee_notes %}
 	    <span class="notes">* {{ session.section.fee_notes }}</span>
 	    {% endif %}
-	    {% if session.requirements %}
+	    {% if session.section.requirements %}
 	    <span class="notes">
 	      <b>Requirements:</b> {{ session.section.requirements }}
 	    </span>
 	    {% endif %}
-	    {% if session.prerequisites %}
+	    {% if session.section.prerequisites %}
 	    <span class="notes">
-	      <b>Prerequisites</b>
+	      <b>Prerequisites:</b>
 	      {{ session.section.prerequisites }}
 	    </span>
 	    {% endif %}
