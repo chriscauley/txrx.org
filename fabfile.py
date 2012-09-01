@@ -114,16 +114,16 @@ def make_gunicorn_executable():
         run("chmod +x config/gunicorn/txrx.sh" % env)
         
 def restart_gunicorn():
-    run("sudo /usr/bin/supervisorctl restart %(project)s" % env)
+    run("sudo /usr/bin/supervisorctl restart txrx" % env)
         
 def update_gunicorn():
-    sudo("supervisorctl stop %(project)s" % env)
+    sudo("supervisorctl stop txrx" % env)
     
     with cd(env.source_dir):
-        sudo("cp config/supervisor/%(project)s.conf /etc/supervisor/conf.d/%(project)s.conf" % env)
+        sudo("cp config/supervisor/%(project)s.conf /etc/supervisor/conf.d/txrx.conf" % env)
         
     sudo("supervisorctl update")
-    sudo("supervisorctl start %(project)s" % env)
+    sudo("supervisorctl start txrx" % env)
         
 def restart_nginx():
     sudo("/etc/init.d/nginx restart")
@@ -132,15 +132,15 @@ def update_nginx():
     with cd(env.source_dir):
         sudo("cp config/nginx/%(project)s /etc/nginx/sites-available" % env)
         
-        if not exists("/etc/nginx/sites-enabled/%(project)s" % env):
-            sudo("ln -s /etc/nginx/sites-available/%(project)s /etc/nginx/sites-enabled/%(project)s" % env)
+        if not exists("/etc/nginx/sites-enabled/txrx" % env):
+            sudo("ln -s /etc/nginx/sites-available/txrx /etc/nginx/sites-enabled/txrx" % env)
         
     restart_nginx()
     
 def update_cron():
     with cd(env.source_dir):
-        sudo("cp config/crontab/%(project)s /etc/cron.d/%(project)s" % env)
-        sudo("chown root /etc/cron.d/%(project)s" % env)
+        sudo("cp config/crontab/txrx /etc/cron.d/txrxs" % env)
+        sudo("chown root /etc/cron.d/txrx" % env)
         sudo("touch /etc/cron.d/")
         
 def git_pull(branch='master'):
