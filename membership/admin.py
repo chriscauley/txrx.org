@@ -10,5 +10,11 @@ class MembershipAdmin(admin.ModelAdmin):
     list_editable = ("order",)
     inlines = (FeatureInline,)
 
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ("__unicode__",'photo')
+    list_editable = ('photo',)
+    exclude = ("ghandle",) #gmail email address from ProfileModel
+
+
 admin.site.register(Membership,MembershipAdmin)
-admin.site.register(Profile)
+admin.site.register(Profile,ProfileAdmin)
