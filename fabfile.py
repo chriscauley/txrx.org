@@ -130,7 +130,7 @@ def restart_nginx():
         
 def update_nginx():
     with cd(env.source_dir):
-        sudo("cp config/nginx/%(project)s /etc/nginx/sites-available" % env)
+        sudo("cp config/nginx/txrx /etc/nginx/sites-available" % env)
         
         if not exists("/etc/nginx/sites-enabled/txrx" % env):
             sudo("ln -s /etc/nginx/sites-available/txrx /etc/nginx/sites-enabled/txrx" % env)
@@ -139,7 +139,7 @@ def update_nginx():
     
 def update_cron():
     with cd(env.source_dir):
-        sudo("cp config/crontab/txrx /etc/cron.d/txrxs" % env)
+        sudo("cp config/crontab/txrx /etc/cron.d/txrx" % env)
         sudo("chown root /etc/cron.d/txrx" % env)
         sudo("touch /etc/cron.d/")
         
