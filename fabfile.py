@@ -120,7 +120,7 @@ def update_gunicorn():
     sudo("supervisorctl stop txrx" % env)
     
     with cd(env.source_dir):
-        sudo("cp config/supervisor/%(project)s.conf /etc/supervisor/conf.d/txrx.conf" % env)
+        sudo("cp config/supervisor/txrx.conf /etc/supervisor/conf.d/txrx.conf" % env)
         
     sudo("supervisorctl update")
     sudo("supervisorctl start txrx" % env)
