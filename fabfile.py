@@ -66,8 +66,8 @@ def setup_project():
 
     with settings(warn_only=True):
         sudo("mkdir /var/log/gunicorn")
-    sudo("chgrp website /var/log/gunicorn")
-    sudo("chmod 775 /var/log/gunicorn")
+        sudo("chgrp website /var/log/gunicorn")
+        sudo("chmod 775 /var/log/gunicorn")
     
     with settings(warn_only=True):
         run("mkdir %(project)s" % env)
@@ -79,7 +79,7 @@ def setup_project():
 
     
     
-    run("virtualenv --no-site-packages %(virtualenv)s" % env)
+    #run("virtualenv --no-site-packages %(virtualenv)s" % env)
     run("git clone git://%(git_server)s/chriscauley/%(project)s.git %(source_dir)s" % env)
     
     update_environment()
