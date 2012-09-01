@@ -87,8 +87,7 @@ def setup_project():
     
 def update_environment():
     git_pull()
-    with("source %(virtualenv)s/bin/activate" % env):
-        run("pip install -r %(source_dir)s/requirements.txt" % env)
+    run("pip install -r %(source_dir)s/requirements.txt" % env)
     
 def setup_database():
     "You've got to do some stuff on your own here, but once that's done, run this"
@@ -117,13 +116,13 @@ def restart_gunicorn():
     run("sudo /usr/bin/supervisorctl restart txrx" % env)
         
 def update_gunicorn():
-    sudo("supervisorctl stop txrx" % env)
+    run("sudo /usr/bin/supervisorctl stop txrx" % env)
     
     with cd(env.source_dir):
         sudo("cp config/supervisor/txrx.conf /etc/supervisor/conf.d/txrx.conf" % env)
         
-    sudo("supervisorctl update")
-    sudo("supervisorctl start txrx" % env)
+    run("sudo /usr/bin/supervisorctl update")
+    run("sudo /usr/bin/supervisorctl start txrx" % env)
         
 def restart_nginx():
     sudo("/etc/init.d/nginx restart")
