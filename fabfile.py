@@ -87,7 +87,7 @@ def setup_project():
     
 def update_environment():
     git_pull()
-    run("pip install -r %(source_dir)s/requirements.txt" % env)
+    sudo("pip install -r %(source_dir)s/requirements.txt" % env)
     
 def setup_database():
     "You've got to do some stuff on your own here, but once that's done, run this"
