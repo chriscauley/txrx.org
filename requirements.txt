@@ -9,4 +9,4 @@ django-devserver==0.3.2
 psycopg2==2.4.1
 django-registration==0.8
 -e git+https://github.com/chriscauley/Django-Crop-Override-Field.git#egg=django-crop-override-field
--e git+https://github.com/johnboxall/django-paypal.git#egg=django-paypal
+-e git+https://github.com/dcramer/django-paypal.git#egg=django-paypal
