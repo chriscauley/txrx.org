@@ -71,7 +71,7 @@ function showLogin() {
 /* simpleCart setup */
 simpleCart.email = "txrxlabs@gmail.com";
 
-simpleCart.cartHeaders = ["Name", "Price"]
+simpleCart.cartHeaders = ["Name", "Price","Remove"]
 
 function showCart() {
     $("#cart-modal").modal({width: 400, modal: true, minHight: 300});
@@ -81,7 +81,7 @@ function addItem(name,price,id) {
 }
 function toggleCourses() {
     $(".in-cart").removeClass("in-cart");
-    for (id in simpleCart.items) { $("#"+id).addClass("in-cart") }
+    for (id in simpleCart.items) { $("#c"+id).addClass("in-cart") }
     simpleCart.update();
 }
 

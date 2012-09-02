@@ -46,8 +46,8 @@
 	</span>
       </td>
       <td>
-	<a class="add" href="javascript:addItem('{{ session.section.course }} ({{ session.classtime_set.all.0.start|date:"m/d/Y" }})',{{ session.section.fee }},'c{{ session.id }}'); toggleCourses();">Enroll</a>
-	<a class="drop" href="javascript:simpleCart.remove('c{{ session.id }}'); toggleCourses();">Drop</a>
+	<a class="add" href="javascript:addItem('{{ session.section.course }} ({{ session.classtime_set.all.0.start|date:"m/d/Y" }})',{{ session.section.fee }},'{{ session.id }}'); toggleCourses();">Enroll</a>
+	<a class="drop" href="javascript:simpleCart.remove('{{ session.id }}'); toggleCourses();">Drop</a>
       </td>
     </tr>
     <tr class="details {% cycle row1,row2 %}">
@@ -93,7 +93,6 @@
     </tr>
     {% endfor %}
   </table>
-<p><br /><br /><br /><br /></p>
 </div>
 <div id="checkout-box">
   <div>
