@@ -29,6 +29,7 @@ urlpatterns = patterns(
   (r'^grappelli/', include('grappelli.urls')),
   (r'^.*.json','comming_soon'),
   (r'^accounts/', include('registration.backends.default.urls')),
+  (r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
 )
 
 urlpatterns += patterns(

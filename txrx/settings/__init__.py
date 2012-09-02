@@ -87,6 +87,7 @@ INSTALLED_APPS = (
   'articles',
   'sorl.thumbnail',
   'registration',
+  'paypal.standard.ipn',
 
   # lablackey
   'lablackey.photo',
@@ -126,6 +127,9 @@ LOGGING = {
       },
     }
   }
+
+
+PAYPAL_RECEIVER_EMAIL = "seller_1346532499_biz@ufl.edu"
 
 import re
 import socket

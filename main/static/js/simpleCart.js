@@ -277,6 +277,7 @@ function Cart(){
 		form.appendChild(me.createHiddenElement("upload", "1"));
 		form.appendChild(me.createHiddenElement("business", me.email ));
 		form.appendChild(me.createHiddenElement("currency_code", "me.currency"));
+        form.appendChild(me.createHiddenElement("notify_url", "http://classes.txrxlabs.org/tx/rx/ipn/handler/"));
 		
 		if( me.taxRate ){
 			form.appendChild(me.createHiddenElement("tax_cart",me.taxCost ));
