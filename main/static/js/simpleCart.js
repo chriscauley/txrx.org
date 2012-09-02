@@ -304,7 +304,7 @@ function Cart(){
 			form.appendChild( me.createHiddenElement( "item_name_"		+ counter, item.name		) );
 			form.appendChild( me.createHiddenElement( "quantity_"		+ counter, item.quantity	) );
 			form.appendChild( me.createHiddenElement( "amount_"			+ counter, item.price		) );
-			form.appendChild( me.createHiddenElement( "item_number"	+ counter, item.id			) );
+			form.appendChild( me.createHiddenElement( "item_number_"	+ counter, item.id			) );
 			
 			var option_count = 0;
 
