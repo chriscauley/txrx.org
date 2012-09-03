@@ -44,7 +44,7 @@ def instructor_detail(request,username=None):
 
 
 def debug_parsing(request, id):
-    ipn = PayPalIPN(id=id)
+    ipn = PayPalIPN.objects.get(id=id)
 
     query = ipn.query
     #add them to the classes they're enrolled in
