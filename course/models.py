@@ -61,7 +61,7 @@ class Section(models.Model):
 class Session(UserModel):
   section = models.ForeignKey(Section)
   ts_help = "Only used to set dates on creation."
-  time_string = models.CharField(max_length=128,help_text=ts_help,default='not implimented')
+  time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
   __unicode__ = lambda self: "%s (%s)"%(self.section, self.user)
   def save(self,*args,**kwargs):
     from membership.models import Profile
