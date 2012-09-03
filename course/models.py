@@ -118,8 +118,8 @@ def handle_successful_payment(sender, **kwargs):
     class_count = int(params['num_cart_items'])
 
     for i in range(1, class_count+1):
-        session_id = params['item_number%d' % i]
-        section_cost = int(params['mc_gross_%d' % i])
+        session_id = int(params['item_number%d' % (i, )])
+        #section_cost = int(float(params['mc_gross_%d' % (i, )]))
 
         session = Session.objects.get(id=session_id)
 
