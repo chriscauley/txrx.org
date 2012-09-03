@@ -2,6 +2,8 @@ from django.template.response import TemplateResponse
 from course.models import Course, Section, Term, Subject, Session
 from membership.models import Profile
 
+from paypal.standard.ipn.models import *
+
 filters = {
   "term": lambda: {
     "model": Term,
@@ -38,3 +40,23 @@ def instructor_detail(request,username=None):
     'profile': profile
     }
   return TemplateResponse(request,"course/instructor_detail.html",values)
+
+
+def debug_parsing(request, id):
+    ipn = PayPalIPN(id=id)
+
+    #add them to the classes they're enrolled in
+    params = QueryDict(ipn.query)
+    class_count = int(params['num_cart_items'])
+
+    course_info = []
+
+    for i in range(1, class_count+1):
+        session_id = int(params['item_number%d' % (i, )])
+        #section_cost = int(float(params['mc_gross_%d' % (i, )]))
+
+        session = Session.objects.get(id=session_id)
+
+        course_info.append(session_id)
+
+    return TemplateResponse(request,"course/debug.html",locals())
