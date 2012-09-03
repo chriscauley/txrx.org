@@ -88,6 +88,7 @@ INSTALLED_APPS = (
   'sorl.thumbnail',
   'registration',
   'paypal.standard.ipn',
+  'password_reset',
 
   # lablackey
   'lablackey.photo',

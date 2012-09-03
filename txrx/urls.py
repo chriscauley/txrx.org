@@ -30,6 +30,7 @@ urlpatterns = patterns(
   (r'^.*.json','comming_soon'),
   (r'^accounts/', include('registration.backends.default.urls')),
   (r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
+  (r'^password-reset/', include('password_reset.urls')),
 )
 
 urlpatterns += patterns(
