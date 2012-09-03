@@ -86,7 +86,7 @@ class Enrollment(UserModel):
 
 
 
-from paypal.ipn.signals import payment_was_successful, payment_was_flagged
+from paypal.standard.ipn.signals import payment_was_successful, payment_was_flagged
 from django.dispatch import receiver
 from django.http import QueryDict
 from django.contrib.auth.models import User
