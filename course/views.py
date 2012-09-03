@@ -56,11 +56,11 @@ def debug_parsing(request, id):
 
     for i in range(1, class_count+1):
         session_id = int(params['item_number%d' % (i, )])
-        #section_cost = int(float(params['mc_gross_%d' % (i, )]))
+        section_cost = int(float(params['mc_gross_%d' % (i, )]))
 
         session = Session.objects.get(id=session_id)
 
-        course_info.append(session_id)
-    
+        course_info.append((session_id, section_cost))
+
 
     return TemplateResponse(request,"course/debug.html",locals())

@@ -6,8 +6,8 @@
 <p>Class Count: {{ class_count }}</p>
 
 <ul>
-{% for session_id in course_info %}
-  <li>Session ID: {{ session_id }}</li>
+{% for session_id, course_cost in course_info %}
+  <li>Session ID: {{ session_id }}, {{ course_cost }}</li>
 {% endfor %}
 
 </ul>
