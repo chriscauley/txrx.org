@@ -1,6 +1,7 @@
 from django.template.response import TemplateResponse
 from course.models import Course, Section, Term, Subject, Session
 from membership.models import Profile
+from django.http import QueryDict
 
 from paypal.standard.ipn.models import *
 
