@@ -123,6 +123,11 @@ def handle_successful_payment(sender, **kwargs):
 
         session = Session.objects.get(id=session_id)
 
+        #we're trusting during testing
+        enrollment = Enrollment(user=user, session=session)
+        enrollment.save()
+
+        """
         #make sure they didn't spoof things to paypal
         if section_cost == session.section.fee:
             #everything is groovy
@@ -133,7 +138,7 @@ def handle_successful_payment(sender, **kwargs):
             #they tried to cheat us
             #email the admins
             pass
-
+        """
 
 
 
