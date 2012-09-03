@@ -49,7 +49,7 @@ def debug_parsing(request, id):
     query = ipn.query
     #add them to the classes they're enrolled in
     params = QueryDict(ipn.query)
-    """
+
     class_count = int(params['num_cart_items'])
 
     course_info = []
@@ -61,6 +61,6 @@ def debug_parsing(request, id):
         session = Session.objects.get(id=session_id)
 
         course_info.append(session_id)
-    """
+    
 
     return TemplateResponse(request,"course/debug.html",locals())
