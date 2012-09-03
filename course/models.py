@@ -115,7 +115,7 @@ def handle_successful_payment(sender, **kwargs):
 
     #add them to the classes they're enrolled in
     params = QueryDict(sender.query)
-    class_count = int(params['cart_items']
+    class_count = int(params['cart_items'])
 
     for i in range(1, class_count+1):
         session_id = params['item_number%d' % i]
