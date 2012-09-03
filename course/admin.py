@@ -31,11 +31,11 @@ class SessionAdmin(admin.ModelAdmin):
   inlines = (ClassTimeInline,)
 
 class EnrollmentAdmin(admin.ModelAdmin):
-  pass
+  list_display = ('user', 'session', )
 
 admin.site.register(Subject,SubjectAdmin)
 admin.site.register(Course,CourseAdmin)
 admin.site.register(Section,SectionAdmin)
-#admin.site.register(Enrollment,EnrollmentAdmin)
+admin.site.register(Enrollment,EnrollmentAdmin)
 admin.site.register(Session,SessionAdmin)
 admin.site.register(Term)
