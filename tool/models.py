@@ -4,6 +4,7 @@ from lablackey.photo.models import Photo
 from lablackey.db.models import SlugModel,OrderedModel
 from lablackey.utils import cached_method
 from sorl.thumbnail import ImageField
+from project.models import Project
 
 _order_default = 9999
 
