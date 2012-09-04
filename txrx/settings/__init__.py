@@ -5,7 +5,7 @@ sys.path.insert(0,os.path.normpath(SPATH))
 DEBUG = True; TEMPLATE_DEBUG = DEBUG
 
 MANAGERS = ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+  ('chris cauley','chris@lablackey.com'),
 )
 
 DATABASES = {
