@@ -150,8 +150,5 @@ def handle_successful_payment(sender, **kwargs):
 @receiver(payment_was_flagged, dispatch_uid='course.signals.handle_flagged_payment')
 def handle_flagged_payment(sender, **kwargs):
     print 'Got payment!'
-    try:
-        handle_payment_success(sender, **kwargs)
-    except:
-       send_mail('resetting password','arst','chris@lablackey.com',['chris@lablackey.com'])
     #email people to let them intervene manually
+    handle_payment_success(sender, **kwargs)
