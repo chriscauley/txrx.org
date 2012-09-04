@@ -2,7 +2,8 @@ import os, sys
 SPATH = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0,os.path.normpath(SPATH))
 
-DEBUG = True; TEMPLATE_DEBUG = DEBUG
+DEBUG = False
+TEMPLATE_DEBUG = DEBUG
 
 MANAGERS = ADMINS = (
   ('chris cauley','chris@lablackey.com'),
