@@ -91,6 +91,7 @@ from django.dispatch import receiver
 from django.http import QueryDict
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordResetForm
+from django.core.mail import send_mail
 
 @receiver(payment_was_successful, dispatch_uid='course.signals.handle_successful_payment')
 def handle_successful_payment(sender, **kwargs):
@@ -100,7 +101,9 @@ def handle_successful_payment(sender, **kwargs):
     email = sender.payer_email
     users = User.objects.filter(email=email)
     user_count = users.count()
+    send_mail('creating user','arst','chris@lablackey.com',['chris@lablackey.com'])
     if user_count == 0:
+        send_mail('resetting password','arst','chris@lablackey.com',['chris@lablackey.com'])
         #create them
         user = User.objects.create_user(username=email, email=email)
         user.save()
