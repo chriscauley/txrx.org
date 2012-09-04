@@ -105,6 +105,7 @@ INSTALLED_APPS = (
   'course',
   'membership',
   'main',
+  'password_reset',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7

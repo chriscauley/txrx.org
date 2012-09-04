@@ -90,7 +90,7 @@ from paypal.standard.ipn.signals import payment_was_successful, payment_was_flag
 from django.dispatch import receiver
 from django.http import QueryDict
 from django.contrib.auth.models import User
-
+from django.contrib.auth.forms import PasswordResetForm
 
 @receiver(payment_was_successful, dispatch_uid='course.signals.handle_successful_payment')
 def handle_successful_payment(sender, **kwargs):
@@ -104,7 +104,11 @@ def handle_successful_payment(sender, **kwargs):
         #create them
         user = User.objects.create_user(username=email, email=email)
         user.save()
-        #TODO: send them a welcome message / password reset email
+
+        # reset the users email and email them
+        f = PasswordResetForm({'email':user.email})
+        if f.is_valid():
+          f.save()
         #TODO: also subscribe them to the TX/RX announcements mailing list
     elif user_count == 1:
         #get them
@@ -147,4 +151,3 @@ def handle_flagged_payment(sender, **kwargs):
     print 'Got payment!'
 
     #email people to let them intervene manually
-
