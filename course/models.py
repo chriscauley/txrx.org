@@ -151,4 +151,4 @@ def handle_successful_payment(sender, **kwargs):
 def handle_flagged_payment(sender, **kwargs):
     print 'Got payment!'
     #email people to let them intervene manually
-    handle_payment_success(sender, **kwargs)
+    handle_successful_payment(sender, **kwargs)
