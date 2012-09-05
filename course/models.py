@@ -105,7 +105,7 @@ def handle_successful_payment(sender, **kwargs):
         #create them
         user = User.objects.create_user(username=email, email=email)
         user.save()
-
+        user.set_unusable_password()
         # reset the users email and email them
         f = PasswordResetForm({'email':user.email})
         if f.is_valid():
