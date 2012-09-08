@@ -48,29 +48,42 @@ class Section(models.Model):
   location = models.ForeignKey(Location,default=1)
   src = ImageField("Logo",max_length=300,upload_to='course/%Y-%m',null=True,blank=True)
   tools = models.ManyToManyField(Tool,blank=True)
-  cancelled = models.BooleanField(default=False)
   max_students = models.IntegerField(default=40)
-  closed = lambda self: self.cancelled or self.starttime>datetime.datetime.now()
-
   get_instructors = lambda self: set([s.user for s in self.session_set.all()])
-
   __unicode__ = lambda self: "%s - %s"%(self.course.name,self.term)
   class Meta:
     ordering = ("term","course")
 
 class Session(UserModel):
   section = models.ForeignKey(Section)
+  cancelled = models.BooleanField(default=False)
   ts_help = "Only used to set dates on creation."
   time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
   __unicode__ = lambda self: "%s (%s)"%(self.section, self.user)
+
+  closed = lambda self: self.cancelled or self.archived or self.full
+  full = property(lambda self: self.enrollment_set.count() >= self.section.max_students)
+  archived = property(lambda self: self.first_date<datetime.datetime.now())
+  @property
+  def week(self):
+    sunday = self.first_date.date()-datetime.timedelta(self.first_date.weekday()+1)
+    return (sunday,sunday+datetime.timedelta(6))
+  @property
+  def closed_string(self):
+    if self.cancelled:
+      return "cancelled"
+    if self.archived:
+      return "closed"
+    return "full"
   def save(self,*args,**kwargs):
     from membership.models import Profile
     profile,new = Profile.objects.get_or_create(user=self.user)
     return super(Session,self).save(*args,**kwargs)
+  @property
   def first_date(self):
     if self.classtime_set.count():
       return self.classtime_set.all()[0].start
-    return 0
+    return datetime.datetime(2000,1,1)
 
 class ClassTime(models.Model):
   session = models.ForeignKey(Session)
@@ -82,9 +95,6 @@ class ClassTime(models.Model):
 
 class Enrollment(UserModel):
   session = models.ForeignKey(Session)
-
-
-
 
 from paypal.standard.ipn.signals import payment_was_successful, payment_was_flagged
 from django.dispatch import receiver

@@ -20,8 +20,8 @@ class ClassTimeInline(admin.TabularInline):
 
 class SectionAdmin(admin.ModelAdmin):
   save_as = True
-  list_display = ("__unicode__","prerequisites","requirements")
-  list_editable = ("prerequisites","requirements")
+  list_display = ("__unicode__","prerequisites","requirements","max_students")
+  list_editable = ("prerequisites","requirements","max_students")
 
 class SessionAdmin(admin.ModelAdmin):
   list_display = ("__unicode__","user")

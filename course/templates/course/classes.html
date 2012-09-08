@@ -17,6 +17,13 @@
       <th></th>
     </tr>
     {% for session in sessions %}
+    {% ifchanged session.week %}
+    <tr>
+      <td colspan="8" style="padding: 5px 0;">
+	Classes starting {{ session.week.0 }} - {{ session.week.1 }}
+      </td>
+    </tr>
+    {% endifchanged %}
     <tr id="c{{session.id}}" class="course filterable {% cycle row1,row2 %}"
 	data-subject="{% for subject in session.section.course.subjects.all %}{{ subject }},{% endfor %}"
 	{%if not session.course.closed%}data-open{%endif%}
@@ -46,8 +53,14 @@
 	</span>
       </td>
       <td>
+	{% if session in user_sessions %}
+	enrolled
+	{% elif session.closed %}
+	{{ session.closed_string }}
+	{% else %}
 	<a class="add" href="javascript:addItem('{{ session.section.course }} ({{ session.classtime_set.all.0.start|date:"m/d/Y" }})',{{ session.section.fee }},'{{ session.id }}'); toggleCourses();">Enroll</a>
 	<a class="drop" href="javascript:simpleCart.remove('{{ session.id }}'); toggleCourses();">Drop</a>
+	{% endif %}
       </td>
     </tr>
     <tr class="details {% cycle row1,row2 %}">

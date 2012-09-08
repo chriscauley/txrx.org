@@ -22,11 +22,15 @@ filters = {
 
 def index(request):
   term = Term.objects.all()[0]
-  sessions = sorted(list(Session.objects.filter(section__term=term)),key=lambda s: s.first_date())
+  sessions = sorted(list(Session.objects.filter(section__term=term)),key=lambda s: s.first_date)
+  user_sessions = []
+  if request.user.is_authenticated():
+    user_sessions = Session.objects.filter(enrollment__user=request.user.id)
   values = {
     'sessions': sessions,
     'filters': [filters['term'],filters['subject']],
     'term': term,
+    'user_sessions': user_sessions
     }
   return TemplateResponse(request,"course/classes.html",values)
 
