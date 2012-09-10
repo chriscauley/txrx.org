@@ -213,34 +213,37 @@ a { display: inline-block; }
 /* course */
 #courses {
   margin-bottom: 75px;
-  .feed {
-    width: 950px;
-    th { text-align: left; }
-    tr { border-bottom: 1px black solid; }
-    tr.course { height: 38px; }
-    .row1 { background: #d8d8d0; }
+  .row { border-bottom: 1px black solid; padding: 5px;}
+  .row1 { background: #d8d8d0; }
+}
+
+#courses .row>div {
+  display: inline-block;
+  vertical-align: top;
+  padding-right:5px;
+}
+
+#courses .row .name { width: 400px; }
+#courses .row .instructor { width: 95px; }
+#courses .row .first_date { width: 110px; }
+#courses .row .intro { width: 120px; }
+#courses .row .days { width: 45px; }
+#courses .row .fee { width: 45px; }
+
+#courses .course .details { display: none; }
+
+#courses .name .showDetails:before {
+  content: "(show details)";
+}
+
+#courses .course.expanded {
+  .name .showDetails:before { content: "(hide details)"; }
+  .details {
+    display: block;
   }
 }
 
-#courses .showDetails {
-  text-align: center;
-  width: 70px;
-  a:before {
-    content: "+ expand";
-  }
-}
-
-#courses tr.course.expanded {
-  .showDetails a:before { content: "- hide"; }
-  + tr.details {
-    border-bottom: 1px black solid;
-    .box { height: auto; }
-  }
-}
-
-#courses tr.details {
-  border-bottom: 0;
-  .box { height: 0; overflow: hidden; }
+#courses .course .details {
   .left { float: left; width: 200px; }
   .right { float: left; width: 600px; }
   .left, .right { padding: 10px; }

@@ -22,7 +22,8 @@ filters = {
 
 def index(request):
   term = Term.objects.all()[0]
-  sessions = sorted(list(Session.objects.filter(section__term=term)),key=lambda s: s.first_date)
+  sessions = Session.objects.filter(section__term=term).select_related(depth=2)
+  sessions = sorted(list(sessions),key=lambda s: s.first_date)
   user_sessions = []
   if request.user.is_authenticated():
     user_sessions = Session.objects.filter(enrollment__user=request.user.id)

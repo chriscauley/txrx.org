@@ -68,6 +68,7 @@ class Session(UserModel):
   def week(self):
     sunday = self.first_date.date()-datetime.timedelta(self.first_date.weekday()+1)
     return (sunday,sunday+datetime.timedelta(6))
+  subjects = property(lambda self: self.section.course.subjects.all())
   @property
   def closed_string(self):
     if self.cancelled:

@@ -90,6 +90,7 @@ INSTALLED_APPS = (
   'registration',
   'paypal.standard.ipn',
   'password_reset',
+  'less',
 
   # lablackey
   'lablackey.photo',
