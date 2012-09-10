@@ -1,4 +1,4 @@
-{% load less %}
+{% load compress %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,8 +12,9 @@
     
   {# Local CSS #}
   {# Site Design CSS #}
-  {# <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}{% less "/home/chriscauley/django-projects/txrx.org/main/static/base.less" %}" />#}
+  {% compress css %}
   <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}base.less" />
+  {% endcompress %}
   <!--[if IE 6]>
   <link rel="stylesheet" type="text/css" href="/static/design/ie6.css"/>
   <![endif]-->
@@ -24,25 +25,9 @@
   <link rel="stylesheet" type="text/css" href="/static/design/ie8.css"/>
   <![endif]-->
     
-  <script type="text/javascript" src="{{ STATIC_URL }}js/less.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/simpleCart.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.simplemodal.js"></script>
-  <style>
-      {% inlineless %}
-          #header {
-            h1 {
-              font-size: 26px;
-              font-weight: bold;
-            }
-            p { font-size: 12px;
-              a { text-decoration: none;
-                &:hover { border-width: 1px }
-              }
-            }
-          }
-        {% endinlineless %}
-      </style>
   <script type="text/javascript">
 function loadJSON(url) { window.location = url; } // IE Fallback
 {% comment %} {# ajax functionality temporarily disabled #}

@@ -71,6 +71,19 @@ TEMPLATE_DIRS = (
   os.path.join(SPATH,"../lablackey/templates"),
 )
 
+STATICFILES_FINDERS = (
+  'django.contrib.staticfiles.finders.FileSystemFinder',
+  'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+  # other finders..
+  'compressor.finders.CompressorFinder',
+  )
+
+COMPRESS_ENABLED = True
+
+COMPRESS_PRECOMPILERS = (
+  ('text/less', 'lessc {infile} {outfile}'),
+  )
+
 INSTALLED_APPS = (
   'grappelli',
   'django.contrib.auth',
@@ -90,7 +103,7 @@ INSTALLED_APPS = (
   'registration',
   'paypal.standard.ipn',
   'password_reset',
-  'less',
+  'compressor',
 
   # lablackey
   'lablackey.photo',
