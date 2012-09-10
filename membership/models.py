@@ -46,7 +46,7 @@ class ProfileManager(models.Manager):
 class Profile(ProfileModel):
     membership = models.ForeignKey(Membership,default=1)
     #roles = models.ManyToManyField(Role,null=True,blank=True)
-    photo = models.ForeignKey(Photo)
+    photo = models.ForeignKey(Photo,null=True,blank=True)
     bio = models.TextField(null=True,blank=True)
     _folder = settings.UPLOAD_DIR+'/avatars/%Y-%m'
     by_line = models.CharField(max_length=50,null=True,blank=True,help_text="50 characters max")
