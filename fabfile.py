@@ -113,7 +113,8 @@ def make_gunicorn_executable():
         run("chmod +x config/gunicorn/txrx.sh" % env)
         
 def restart_gunicorn():
-    run("sudo /usr/bin/supervisorctl restart txrx" % env)
+    run("sudo killall gunicorn" % env)
+    run("sudo /usr/bin/supervisorctl start txrx" % env)
         
 def update_gunicorn():
     run("sudo /usr/bin/supervisorctl stop txrx" % env)
