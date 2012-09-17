@@ -36,7 +36,7 @@ function expand(that) {
   <div id="c{{session.id}}" class="row course filterable {% cycle row1,row2 %}"
        data-subject="{% for subject in session.subjects %}{{ subject }},{% endfor %}"
        {%if not session.course.closed%}data-open{%endif%}
-       data-date="{{ session.starttime|date:"Ymd" }}"{% if session.section.course.name == "test" and not request.user.is_superuser %} style="display:none"{% endif %}>
+       data-date="{{ session.starttime|date:"Ymd" }}">
     <div class="name">
       {{ session.section.course }}
       <a href="javascript:;" onclick="return expand(this);" class="showDetails"></a>

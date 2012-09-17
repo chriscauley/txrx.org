@@ -4,29 +4,14 @@ from django.http import QueryDict
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordResetForm
 from django.core.mail import send_mail
+from .utils import get_or_create_student
 
 @receiver(payment_was_successful, dispatch_uid='course.signals.handle_successful_payment')
 def handle_successful_payment(sender, **kwargs):
     from course.models import Enrollment, Session
     print 'Got payment!'
 
-    #see if the user exists
-    email = sender.payer_email
-    users = User.objects.filter(email=email)
-    user_count = users.count()
-    if user_count == 0:
-        #create them
-        user = User.objects.create_user(username=email, email=email)
-        user.save()
-        print "reseting password!"
-        reset_password(user,email_template_name="email/welcome_classes.html")
-        #TODO: also subscribe them to the TX/RX announcements mailing list
-    elif user_count == 1:
-        #get them
-        user = users[0]
-    elif user_count > 1:
-        #WE GOT PROBLEMS
-        user = None
+    user = get_or_create_student(sender.payer_email)
 
     #add them to the classes they're enrolled in
     params = QueryDict(sender.query)

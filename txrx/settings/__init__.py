@@ -174,12 +174,6 @@ else:
   for setting in dir(mod):
     if setting == setting.upper():
       setattr(sys.modules[__name__], setting, getattr(mod, setting))
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = 'smtp.mandrillapp.com'
-EMAIL_PORT = 587
-EMAIL_USER = 'chris@lablackey.com'
-EMAIL_HOST_USER = 'chris@lablackey.com'
-EMAIL_HOST_PASSWORD = 'ee0ec710-7374-4a22-a726-703befff68f2'
-EMAIL_PASSWORD = 'ee0ec710-7374-4a22-a726-703befff68f2'
 EMAIL_SUBJECT_PREFIX = "[TXRX]"
 DEFAULT_FROM_EMAIL = "noreply@txrxlabs.org"
+NEW_STUDENT_PASSWORD = "I am a new student, reset my passwrod asap"
