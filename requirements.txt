@@ -13,4 +13,4 @@ django-registration==0.8
 -e git+https://github.com/dcramer/django-paypal.git#egg=django-paypal
 django-password-reset
 "BeautifulSoup<4.0"
-django_compressor
+django_compressor==1.2

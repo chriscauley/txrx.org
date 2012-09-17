@@ -59,7 +59,7 @@ class Session(UserModel):
   cancelled = models.BooleanField(default=False)
   ts_help = "Only used to set dates on creation."
   time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
-  __unicode__ = lambda self: "%s (%s)"%(self.section, self.user)
+  __unicode__ = lambda self: "%s (%s - %s)"%(self.section, self.user,self.first_date.date())
 
   closed = lambda self: self.cancelled or self.archived or self.full
   full = property(lambda self: self.enrollment_set.count() >= self.section.max_students)
