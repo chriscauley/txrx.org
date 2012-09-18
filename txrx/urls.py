@@ -40,6 +40,7 @@ urlpatterns += patterns(
   (r'^$','course.views.index'),
   (r'^new-classes$','course.views.index'),
   (r'^new_classes$','course.views.index'),
+  (r'^main','course.views.index'),
   (r'^latest$','course.views.index'),
   (r'^accounts/password/reset/$', 'django.contrib.auth.views.password_reset',
    {'post_reset_redirect' : '/accounts/password/reset/done/'}),
