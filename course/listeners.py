@@ -26,6 +26,7 @@ def handle_successful_payment(sender, **kwargs):
             session = Session.objects.get(id=session_id)
         except Session.DoesNotExist:
             mail_admins("Session not found",traceback.format_exc())
+            continue
             
         #we're trusting during testing
         #enrollment = Enrollment(user=user, session=session)
