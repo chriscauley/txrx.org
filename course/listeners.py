@@ -3,8 +3,9 @@ from django.dispatch import receiver
 from django.http import QueryDict
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordResetForm
-from django.core.mail import send_mail
+from django.core.mail import send_mail, mail_admins
 from .utils import get_or_create_student
+import traceback
 
 @receiver(payment_was_successful, dispatch_uid='course.signals.handle_successful_payment')
 def handle_successful_payment(sender, **kwargs):
@@ -21,8 +22,11 @@ def handle_successful_payment(sender, **kwargs):
         session_id = int(params['item_number%d' % (i, )])
         section_cost = int(float(params['mc_gross_%d' % (i, )]))
 
-        session = Session.objects.get(id=session_id)
-
+        try:
+            session = Session.objects.get(id=session_id)
+        except Session.DoesNotExist:
+            mail_admins("Session not found",traceback.format_exc())
+            
         #we're trusting during testing
         #enrollment = Enrollment(user=user, session=session)
         #enrollment.save()
