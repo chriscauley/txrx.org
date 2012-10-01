@@ -70,7 +70,7 @@ def all_sessions(request):
   total_fees = 0
   total_enrollments = 0
   for session in sessions:
-      enrollments = session.enrollments_set.count()
+      enrollments = session.enrollment_set.count()
       class_price = session.section.fee
       total_enrollments += enrollments
       total_fees += enrollments * class_price
