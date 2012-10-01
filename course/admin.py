@@ -26,13 +26,13 @@ class SectionAdmin(admin.ModelAdmin):
 class SessionAdmin(admin.ModelAdmin):
   list_display = ("__unicode__","user")
   list_editable = ("user",)
-  list_filter = ("section", "user", )
   exclude = ('time_string',)
   extra = 0
   inlines = (ClassTimeInline,)
 
 class EnrollmentAdmin(admin.ModelAdmin):
   list_display = ('user', 'session', )
+  list_filter = ("session", "user", )
 
 admin.site.register(Subject,SubjectAdmin)
 admin.site.register(Course,CourseAdmin)
