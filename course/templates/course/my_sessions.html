@@ -1,21 +1,34 @@
 {% extends "base.html" %}
 {% load url from future %}
-{% block content %}
 
+{% block main%}
+{% if sessions %}
+<section>
+  <h1>Classes You are Teaching ({{ current_term }})</h1>
 
-<h1>My Sessions ({{ current_term }})</h1>
-
-{% for session in sessions %}
-<h3>{{ session.section.course.name }} - {{ session.enrollment_set.count }} students</h3>
-<ol>
-  {% for enrollment in session.enrollment_set.all %}
-  <li>
-    {{ enrollment.user.email }} - {{ enrollment.user.get_full_name }}
-  </li>
+  {% for session in sessions %}
+  <h3>{{ session.section.course.name }} - {{ session.enrollment_set.count }} students</h3>
+  <ol>
+    {% for enrollment in session.enrollment_set.all %}
+    <li>
+      {{ enrollment.user.email }} - {{ enrollment.user.get_full_name }}
+    </li>
+    {% empty %}
+    <li>This class is currently empty</li>
+    {% endfor %}
+  </ol>
   {% endfor %}
-</ol>
-{% empty %}
-<h3>You aren't teaching any classes this semester</h3>
-{% endfor %}
+</section>
+{% endif %}
 
+<section>
+  <h1>Classes You are Taking</h1>
+  <ol>
+    {% for enrollment in enrollments %}
+    <li>{{ enrollment.session }}</li>
+    {% empty %}
+    <li>You are not signed up for any classes</li>
+    {% endfor %}
+  </ol>
+</section>
 {% endblock %}
