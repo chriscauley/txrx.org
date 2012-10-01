@@ -1,5 +1,6 @@
 # Create your views here.
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 def redirect(redirect_url):
     return HttpResponseRedirect(redirect_url)
