@@ -13,7 +13,7 @@
       {{ user.username }}
       <div class="gear"></div>
     </a>
-    <a href="/logout?next={{ request.path }}">logout</a>
+    <a href="/accounts/logout?next={{ request.path }}">logout</a>
     {% if user.is_staff %}<a href="/admin/">admin</a>{% endif %}
     {#<a href="#" onclick="$.modal('<iframe src=\'/survey/\' width=\'700\' height=\'550\' style=\'border: 0; overflow: hidden;\'>'); return false;">Survey</a>#}
     {% else %}
