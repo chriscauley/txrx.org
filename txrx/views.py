@@ -1,11 +1,12 @@
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from articles.models import Article
 from django.shortcuts import get_object_or_404
 from project.models import Project
@@ -144,3 +145,13 @@ def survey(request):
     if request.method == "POST":
         pass
     return TemplateResponse(request,"survey.html",values)
+
+@staff_member_required
+def force_login(request,uid):
+    if not request.user.is_authenticated and not request.user.is_superuser:
+        raise Http404()
+    u = User.objects.get(id=uid)
+    from django.contrib.auth import login
+    u.backend='django.contrib.auth.backends.ModelBackend'
+    login(request,u)
+    return HttpResponseRedirect('/')
