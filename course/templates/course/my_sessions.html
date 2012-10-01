@@ -8,9 +8,9 @@
 {% for session in sessions %}
 <h3>{{ session.section.course.name }} - {{ session.enrollment_set.count }} students</h3>
 <ol>
-  {% for student in session.enrollment_set.all %}
+  {% for enrollment in session.enrollment_set.all %}
   <li>
-    {{ student.username }} - {{ student.get_full_name }}
+    {{ enrollment.user.email }} - {{ enrollment.user.get_full_name }}
   </li>
   {% endfor %}
 </ol>

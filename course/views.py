@@ -1,7 +1,8 @@
 from django.template.response import TemplateResponse
+from django.contrib.auth.decorators import login_required
+from django.http import QueryDict
 from course.models import Course, Section, Term, Subject, Session
 from membership.models import Profile
-from django.http import QueryDict
 
 from paypal.standard.ipn.models import *
 
@@ -47,7 +48,7 @@ def instructor_detail(request,username=None):
     }
   return TemplateResponse(request,"course/instructor_detail.html",values)
 
-
+@login_required
 def my_sessions(request):
   instructor = request.user
   #need to filter this to show only future classes (not done yet) and show it soonest class first
