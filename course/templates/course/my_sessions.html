@@ -3,7 +3,7 @@
 {% block content %}
 
 
-<h1>My Sessions ({{ active_term }})</h1>
+<h1>My Sessions ({{ current_term }})</h1>
 
 {% for session in sessions %}
 <h3>{{ session.section.course.name }} - {{ session.enrollment_set.count }} students</h3>

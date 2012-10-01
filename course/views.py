@@ -53,9 +53,11 @@ def my_sessions(request):
   instructor = request.user
   #need to filter this to show only future classes (not done yet) and show it soonest class first
   sessions = Session.objects.filter(user=instructor)
+  current_term = Term.objects.all()[0]
   values = {
     'instructor': instructor,
     'sessions': sessions,
+    'current_term': current_term,
     }
   return TemplateResponse(request,"course/my_sessions.html",values)
 
