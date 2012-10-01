@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% block content %}
+
+
+<h1>All Sessions ({{ current_term }})</h1>
+<h2>Total Enrollments of {{ total_enrollments }} for ${{ total_fees }}</h2>
+
+{% for session in sessions %}
+<h3>{{ session.section.course.name }} - {{ session.enrollment_set.count }} students</h3>
+<ol>
+  {% for enrollment in session.enrollment_set.all %}
+  <li>
+    {{ enrollment.user.email }} - {{ enrollment.user.get_full_name }}
+  </li>
+  {% endfor %}
+</ol>
+{% empty %}
+<h3>There aren't any classes this semester</h3>
+{% endfor %}
+
+{% endblock %}
