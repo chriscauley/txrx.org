@@ -1,5 +1,6 @@
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.http import QueryDict
 from course.models import Course, Section, Term, Subject, Session
 from membership.models import Profile
@@ -60,6 +61,30 @@ def my_sessions(request):
     'current_term': current_term,
     }
   return TemplateResponse(request,"course/my_sessions.html",values)
+  
+@staff_member_required
+def all_sessions(request):
+  instructor = request.user
+  #need to filter this to show only future classes (not done yet) and show it soonest class first
+  current_term = Term.objects.all()[0]
+  
+  sessions = Session.objects.filter(section__term=current_term)
+  
+  total_fees = 0.00
+  total_enrollments = 0
+  for session in sessions:
+      enrollments = session.enrollments_set.count()
+      class_price = session.section.fee
+      total_enrollments += enrollments
+      total_fees += enrollments * class_price
+  
+  values = {
+    'sessions': sessions,
+    'current_term': current_term,
+    'total_enrollments': total_enrollments,
+    'total_fees': total_fees,
+    }
+  return TemplateResponse(request,"course/all_sessions.html",values)
 
 def debug_parsing(request, id):
     ipn = PayPalIPN.objects.get(id=id)
