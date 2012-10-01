@@ -64,16 +64,13 @@ def my_sessions(request):
   
 @staff_member_required
 def all_sessions(request):
-  instructor = request.user
-  #need to filter this to show only future classes (not done yet) and show it soonest class first
   current_term = Term.objects.all()[0]
-  
   sessions = Session.objects.filter(section__term=current_term)
   
-  total_fees = 0.00
+  total_fees = 0
   total_enrollments = 0
   for session in sessions:
-      enrollments = session.enrollments_set.count()
+      enrollments = session.enrollment_set.count()
       class_price = session.section.fee
       total_enrollments += enrollments
       total_fees += enrollments * class_price

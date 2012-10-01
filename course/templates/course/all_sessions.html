@@ -4,7 +4,8 @@
 
 
 <h1>All Sessions ({{ current_term }})</h1>
-<h2>Total Enrollments of {{ total_enrollments }} for ${{ total_fees }}</h2>
+<h2>Total Enrollments of {{ total_enrollments }} students for ${{ total_fees }}</h2>
+<br />
 
 {% for session in sessions %}
 <h3>{{ session.section.course.name }} - {{ session.enrollment_set.count }} students</h3>
@@ -15,6 +16,7 @@
   </li>
   {% endfor %}
 </ol>
+<br />
 {% empty %}
 <h3>There aren't any classes this semester</h3>
 {% endfor %}
