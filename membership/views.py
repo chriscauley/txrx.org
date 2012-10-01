@@ -10,15 +10,10 @@ def login_redirect(request):
     
     #staff bounce right away
     if request.user.is_staff:
-        
         return redirect("/admin/")
     
-        """
-        if request.user.has_perm("timecard.add_entry"):
-            return redirect("/timecard/my-time/")
-        else:
-            return redirect("/")
-        """
-        
+    elif request.user.has_perm("course.change_session"):
+        return redirect("/classes/my-sessions/")
+    
     else:
         return redirect("/")
