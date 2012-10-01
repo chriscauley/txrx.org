@@ -32,8 +32,8 @@ UPLOAD_DIR = 'uploads'
 STATIC_ROOT = os.path.join(SPATH,'../../static')
 STATIC_URL = '/static/'
 
-LOGIN_URL = "/login"
-LOGOUT_URL = "/logout"
+LOGIN_URL = "/accounts/login/"
+LOGOUT_URL = "/accounts/logout/"
 ROOT_URL = "http://txrxlabs.org/"
 
 LOGIN_REDIRECT_URL = '/membership/redirect/'

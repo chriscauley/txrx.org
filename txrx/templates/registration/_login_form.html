@@ -9,7 +9,7 @@
     {% if not form.this_is_the_login_form.errors %}{{ form.password.errors }}{% endif %}
     <label for="id_password" class="required">Password:</label> {{ form.password }}
     <input type="hidden" name="this_is_the_login_form" value="1" />
-    <input type="hidden" name="next" value="{{ next }}" />
+    <input type="hidden" name="next" value="{% if request.GET.next %}{{ request.GET.next }}{% else %}/{% endif %}" />
   </div>
   {% if bad_password %}
   <div class="form-row">
