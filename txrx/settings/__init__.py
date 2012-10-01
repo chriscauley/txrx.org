@@ -36,6 +36,8 @@ LOGIN_URL = "/login"
 LOGOUT_URL = "/logout"
 ROOT_URL = "http://txrxlabs.org/"
 
+LOGIN_REDIRECT_URL = '/membership/redirect/'
+
 SECRET_KEY = '^f_fn6)^e5^)+p-rjcrcdf(7iwz4@5z9thx92%^=e_)$jly7mc'
 EZGAUTH_KEY = 'monkeybutlersleepsatmidnight@5z9thx92%^=e_)$jly7mc'
 JANRAIN_RPX_API_KEY = 'd8811e4889d480b090343b70e374ebeb7be05339'

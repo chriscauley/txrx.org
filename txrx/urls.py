@@ -11,12 +11,13 @@ j = "(?:.json)?"
 ms = "article|project"
 urlpatterns = patterns(
   'txrx.views',
-  (r'^news/',include('articles.urls')),
+  (r'^news/', include('articles.urls')),
   (r'^(?P<model>%s)/$'%ms,'feed'),
   (r'^(?P<model>%s)/(?P<year>\d{4})/(?P<slug>[\w\-\d]*)/$'%ms,'item'),
   (r'^admin/', include(admin.site.urls)),
   (r'^members/$','members'),
   (r'^member/(?P<username>.*)/$','member'),
+  (r'^membership/$', include('membership.urls')),
   (r'^classes/', include('course.urls')),
   (r'^projects/(?P<slug>[\w\d\-]*)/?$','projects'),
   (r'^survey/$','survey'),
