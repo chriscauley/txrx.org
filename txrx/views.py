@@ -89,14 +89,6 @@ def member(request,username=None):
     values = {'member':member}
     return TemplateResponse(request,"member.html",values)
 
-def login(request):
-    return HttpResponseRedirect(getattr(request.GET,"next","/"))
-
-def logout(request):
-    from django.contrib.auth import logout
-    logout(request)
-    return HttpResponseRedirect(getattr(request.GET,"next","/"))
-
 def google_login (request):
     from google_login import GoogleLogin
     #ocsession = Session(request)

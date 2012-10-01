@@ -21,8 +21,6 @@ urlpatterns = patterns(
   (r'^classes/', include('course.urls')),
   (r'^projects/(?P<slug>[\w\d\-]*)/?$','projects'),
   (r'^survey/$','survey'),
-  (r'^login','login'),
-  (r'^logout','logout'),
   (r'^tools/?(?P<lab>[\w\d\-]*)/?(?P<tool>[\w\d\-]*)/','tools'),
   (r'^(?P<name>join-us)%s'%j,'generic'),
   (r'^google_login','google_login'),
