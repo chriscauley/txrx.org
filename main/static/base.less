@@ -223,13 +223,24 @@ a { display: inline-block; }
   padding-right:5px;
 }
 
-#courses .row .name { width: 400px; }
-#courses .row .instructor { width: 95px; }
-#courses .row .first_date { width: 110px; }
-#courses .row .intro { width: 120px; }
-#courses .row .days { width: 45px; }
-#courses .row .fee { width: 45px; }
+#courses .row {
+  .name { width: 400px; }
+  .instructor { width: 95px; }
+  .first_date { width: 110px; }
+  .intro { width: 120px; }
+  .days { width: 45px; }
+  .fee { width: 45px; }
+}
 
+#courses .course {
+  .anchor {
+    background: none;
+    float: left;
+    height: 20px;
+    width: 20px;
+  }
+  &:hover .anchor { background: url(/static/link_icon.jpg) no-repeat; }
+}
 #courses .course .details { display: none; }
 
 #courses .name .showDetails:before {
@@ -238,6 +249,14 @@ a { display: inline-block; }
 
 #courses .course.expanded {
   .name .showDetails:before { content: "(hide details)"; }
+  .details {
+    display: block;
+  }
+}
+
+#courses .course:target {
+  outline: black 3px dashed;
+  .name .showDetails:before { content: ""; }
   .details {
     display: block;
   }

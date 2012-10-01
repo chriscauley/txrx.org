@@ -37,6 +37,9 @@ function expand(that) {
        data-subject="{% for subject in session.subjects %}{{ subject }},{% endfor %}"
        {%if not session.course.closed%}data-open{%endif%}
        data-date="{{ session.starttime|date:"Ymd" }}">
+    {% if request.user.is_superuser %}
+    <a href="{{ request.path }}#c{{ session.id }}" class="anchor"></a>
+    {% endif %}
     <div class="name">
       {{ session.section.course }}
       <a href="javascript:;" onclick="return expand(this);" class="showDetails"></a>
