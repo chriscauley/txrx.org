@@ -48,6 +48,15 @@ def instructor_detail(request,username=None):
   return TemplateResponse(request,"course/instructor_detail.html",values)
 
 
+def my_sessions(request):
+  instructor = request.user
+  sessions = Session.objects.filter(user=instructor)
+  values = {
+    'instructor': instructor,
+    'sessions': sessions,
+    }
+  return TemplateResponse(request,"course/my_sessions.html",values)
+
 def debug_parsing(request, id):
     ipn = PayPalIPN.objects.get(id=id)
 

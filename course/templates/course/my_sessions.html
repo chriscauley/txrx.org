@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% block content %}
+
+
+<h1>My Sessions ({{ active_term }})</h1>
+
+{% for session in sessions %}
+<h3>{{ session.section.course.name }} - {{ session.enrollment_set.count }} students</h3>
+<ol>
+  {% for student in session.enrollment_set.all %}
+  <li>
+    {{ student.username }} - {{ student.get_full_name }}
+  </li>
+  {% endfor %}
+</ol>
+{% endfor %}
+
+{% endblock %}
