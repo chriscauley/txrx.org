@@ -17,7 +17,7 @@
     {% endif %}
   </div>
   <div id="login-dialog" class="login">
-    {% with form=auth_form %}{% include "widgets/login-form.html" %}{% endwith %}
+    {% with form=auth_form %}{% include "registration/_login_form.html" %}{% endwith %}
     {% if not request.user.is_authenticated %}
     <div>
       <a class="blue" href="/accounts/register/">Register</a>

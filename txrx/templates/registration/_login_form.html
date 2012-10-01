@@ -1,0 +1,30 @@
+<form action="/accounts/login/" method="post" id="login-form">
+  {% csrf_token %}
+  {% if form.errors %}Username and password did not match.{% endif %}
+  <div class="form-row">
+    {% if not form.this_is_the_login_form.errors %}{{ form.username.errors }}{% endif %}
+    <label for="id_username" class="required">Username:</label> {{ form.username }}
+  </div>
+  <div class="form-row">
+    {% if not form.this_is_the_login_form.errors %}{{ form.password.errors }}{% endif %}
+    <label for="id_password" class="required">Password:</label> {{ form.password }}
+    <input type="hidden" name="this_is_the_login_form" value="1" />
+    <input type="hidden" name="next" value="{{ next }}" />
+  </div>
+  {% if bad_password %}
+  <div class="form-row">
+    Incorrect username/password, try again.
+  </div>
+  {% endif %}
+  <div class="submit-row">
+    <label>&nbsp;</label><input type="submit" value="Log in" />
+  </div>
+  {% comment %}
+  <div>
+    <a href="/google_login?next={{ next }}" style="vertical-align: botton; display: inline-block; height: 25px; padding-left: 30px">
+      <img src="{{ STATIC_URL }}google_login.png" />
+    </a>
+    Login/register with google 
+  </div>
+  {% endcomment %}
+</form>
