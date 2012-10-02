@@ -52,6 +52,7 @@ class Profile(ProfileModel):
     by_line = models.CharField(max_length=50,null=True,blank=True,help_text="50 characters max")
     src = property(lambda self: self.avatar)
     name = lambda self: "%s %s"%(self.user.first_name,self.user.last_name)
+    paypal_email = models.EmailField(null=True,blank=True)
     objects = ProfileManager()
     @cached_method
     def get_sessions(self):

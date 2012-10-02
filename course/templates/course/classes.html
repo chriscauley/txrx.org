@@ -135,6 +135,7 @@ function expand(that) {
   </div>
   <div>
     <a class="blue" href="javascript:;" onclick="$('#cart-modal').modal();return false;">Checkout</a>
+  </div>
 </div>
 <div class="modal" id="cart-modal" style="display: none;">
   <div style="position: relative;">
@@ -145,9 +146,8 @@ function expand(that) {
     Total: <span class="simpleCart_finalTotal"></span>
   </div>
   <div class="clear"></div>
-  <a href="javascript:simpleCart.checkoutTo=PayPal;
-	   simpleCart.checkout();simpleCart.checkoutTo=GoogleCheckout;"
-     style="float:right;">
+  <a href="javascript:;" style="float:right;"
+     onclick="createCookie('checkout_initiated','yes!',10);simpleCart.checkout(); return false">
     <img src="/static/paypal.gif">
   </a>
   {% comment %}
@@ -158,10 +158,35 @@ function expand(that) {
   <div class="clear"></div>
 </div>
 <script type="text/javascript">
-  function simple_cart_ready() {
-    {% if "success" in request.GET %}simpleCart.empty();{% endif %}
-    toggleCourses();
-  };
-  simpleCart.ready(simple_cart_ready)
+function createCookie(name,value,days) {
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime()+(days*24*60*60*1000));
+    var expires = "; expires="+date.toGMTString();
+  }
+  else var expires = "";
+  document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0;i < ca.length;i++) {
+    var c = ca[i];
+    while (c.charAt(0)==' ') c = c.substring(1,c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+  }
+  return null;
+}
+
+function eraseCookie(name) {
+  createCookie(name,"",-1);
+}
+function simple_cart_ready() {
+  {% if "success" in request.GET %}simpleCart.empty();{% endif %}
+  if (!!readCookie("checkout_initiated")) {simpleCart.empty(); eraseCookie("checkout_initiated");}
+  toggleCourses();
+};
+simpleCart.ready(simple_cart_ready)
 </script>
 {% endblock %}
