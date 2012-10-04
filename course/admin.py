@@ -31,8 +31,9 @@ class SessionAdmin(admin.ModelAdmin):
   inlines = (ClassTimeInline,)
 
 class EnrollmentAdmin(admin.ModelAdmin):
-  list_display = ('user', 'session', )
-  list_filter = ("session", "user", )
+  list_display = ("id",'user', 'session', )
+  list_filter = ("session", "user",)
+  list_edit = ("user",)
 
 admin.site.register(Subject,SubjectAdmin)
 admin.site.register(Course,CourseAdmin)
