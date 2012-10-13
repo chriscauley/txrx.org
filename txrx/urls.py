@@ -19,6 +19,8 @@ urlpatterns = patterns(
   (r'^member/(?P<username>.*)/$','member'),
   (r'^membership/$', include('membership.urls')),
   (r'^classes/', include('course.urls')),
+  (r'^weblog/', include('zinnia.urls')),
+  (r'^comments/', include('django.contrib.comments.urls')),
   (r'^projects/(?P<slug>[\w\d\-]*)/?$','projects'),
   (r'^survey/$','survey'),
   (r'^tools/?(?P<lab>[\w\d\-]*)/?(?P<tool>[\w\d\-]*)/','tools'),
