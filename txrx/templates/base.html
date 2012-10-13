@@ -14,10 +14,12 @@
   {# Site Design CSS #}
   {% if settings.DEBUG %}
   <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}base.less" />
+  <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}zinnia.less" />
   <script type="text/javascript" src="{{ STATIC_URL }}js/less.js"></script>
   {% else %}
   {% compress css %}
   <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}base.less" />
+  <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}zinnia.less" />
   {% endcompress %}
   {% endif %}
   <!--[if IE 6]>
@@ -104,9 +106,9 @@ function toggleCourses() {
 
 <body>
   {% include "header.html" %}
-  <div id="wrapper" class="{{ current }}-wrapper">
+  <div id="wrapper" class="{{ current|slugify }}">
     {% block main %}
-    <div id="content" class="content {{ current|slugify }}">
+    <div id="content">
       {% block content %}{% endblock %}
     </div>
     <div id="side">
