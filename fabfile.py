@@ -92,13 +92,8 @@ def update_environment():
 def setup_database():
     "You've got to do some stuff on your own here, but once that's done, run this"
     with cd(env.source_dir):
-        with("source %(virtualenv)s/bin/activate" % env):
+        with run("source %(virtualenv)s/bin/activate" % env):
             run("./manage.py syncdb")
-            run("./manage.py migrate")
-
-def migrate():
-    with cd(env.source_dir):
-        with("source %(virtualenv)s/bin/activate" % env):
             run("./manage.py migrate")
         
 def import_data(data='dbdump.json'):
@@ -159,7 +154,7 @@ def collectstatic():
 def deploy():
     git_pull()
     collectstatic()
-    migrate()
+    setup_database()
     restart_gunicorn()
     
 def db_overwrite(database_file):

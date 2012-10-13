@@ -106,7 +106,6 @@ INSTALLED_APPS = (
   'paypal.standard.ipn',
   'password_reset',
   'compressor',
-  'zinnia',
 
   # lablackey
   'lablackey.photo',
