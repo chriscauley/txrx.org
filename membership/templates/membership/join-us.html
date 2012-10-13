@@ -1,8 +1,8 @@
-{% extends request.TEMPLATE %}{% load content_tags %}
+{% extends "base.html" %}{% load content_tags %}
 
 {% block main %}
 <h1>Become a Member of TX/RX Labs</h1>
-{{ "join_us-top"|print_copy }}
+{{ "join_us-top"|print_text }}
 <div class="clear"></div>
 {% for m in memberships %}
 <div class="membership outlined">

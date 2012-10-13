@@ -30,16 +30,13 @@ def jsonable(f):
     wrap.__doc__ = f.__doc__; wrap.__name__ = f.__name__
     return wrap
 
-@jsonable
 def home(request):
     values = {'feed': Article.objects.live()[:10]}
     return render_to_response("feed.html",values, **RC(request))
 
-@jsonable
 def comming_soon(request):
     return render_to_response("comming_soon.html",{},**RC(request))
 
-@jsonable
 def generic(request,name):
     values = {'memberships':Membership.objects.active()}
     return TemplateResponse(request,name+".html",values)
@@ -60,7 +57,6 @@ def item(request,model,year,slug):
     values = {'item':item}
     return TemplateResponse(request,"item.html",values)
 
-@jsonable
 def tools(request,lab=None,tool=None):
     labs = Lab.objects.all()
     if tool:

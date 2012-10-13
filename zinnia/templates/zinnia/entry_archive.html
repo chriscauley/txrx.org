@@ -1,0 +1,12 @@
+{% extends "zinnia/entry_list.html" %}
+{% load i18n zinnia_tags %}
+
+{% block meta-description %}{% trans "Latest entries" %}{% endblock %}
+
+{% block title %}{% trans "Latest entries" %}{% endblock %}
+
+{% block body-class %}{{ block.super }} archive home{% endblock %}
+
+{% block slider %}
+{% get_featured_entries template="zinnia/tags/slider_entries.html" %}
+{% endblock %}

@@ -1,0 +1,1327 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Dries Desmet <dries@urga.be>, 2011, 2012.
+# go2people <admin@go2people.nl>, 2011.
+# Julien Fache <fantomas42@gmail.com>, 2011.
+#   <vande.ryse.steven@gmail.com>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: django-blog-zinnia\n"
+"Report-Msgid-Bugs-To: https://github.com/Fantomas42/django-blog-zinnia/issues\n"
+"POT-Creation-Date: 2012-07-12 05:31-0500\n"
+"PO-Revision-Date: 2012-07-12 10:31+0000\n"
+"Last-Translator: Julien Fache <fantomas42@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: feeds.py:113 templates/zinnia/entry_archive.html:4
+#: templates/zinnia/entry_archive.html:6 templates/zinnia/entry_list.html:20
+msgid "Latest entries"
+msgstr "Nieuwste berichten"
+
+#: feeds.py:117
+#, python-format
+msgid "The latest entries for the site %s"
+msgstr "Het nieuwste bericht op de site %s"
+
+#: feeds.py:137
+#, python-format
+msgid "Entries for the category %s"
+msgstr "Berichten in de categorie %s"
+
+#: feeds.py:141
+#, python-format
+msgid "The latest entries for the category %s"
+msgstr "De nieuwste berichten in de category %s"
+
+#: feeds.py:161
+#, python-format
+msgid "Entries for author %s"
+msgstr "Berichten van auteur %s"
+
+#: feeds.py:165
+#, python-format
+msgid "The latest entries by %s"
+msgstr "De nieuwste berichten van %s"
+
+#: feeds.py:186
+#, python-format
+msgid "Entries for the tag %s"
+msgstr "Berichten voor het label %s"
+
+#: feeds.py:190
+#, python-format
+msgid "The latest entries for the tag %s"
+msgstr "De nieuwste berichten voor het label %s"
+
+#: feeds.py:213
+#, python-format
+msgid "Results of the search for '%s'"
+msgstr "zoekresultaten voor '%s'"
+
+#: feeds.py:217
+#, python-format
+msgid "The entries containing the pattern '%s'"
+msgstr "Berichten die het patroon '%s' bevatten"
+
+#: feeds.py:262
+msgid "Latest discussions"
+msgstr "Laatste discussies"
+
+#: feeds.py:266
+#, python-format
+msgid "The latest discussions for the site %s"
+msgstr "De laatste conversaties voor de site %s"
+
+#: feeds.py:289
+#, python-format
+msgid "Discussions on %s"
+msgstr "Discussies over %s"
+
+#: feeds.py:293
+#, python-format
+msgid "The latest discussions for the entry %s"
+msgstr "De nieuwste discussies voor het bericht %s"
+
+#: feeds.py:311
+#, python-format
+msgid "Comments on %s"
+msgstr "Commentaren op %s"
+
+#: feeds.py:315
+#, python-format
+msgid "The latest comments for the entry %s"
+msgstr "De nieuwste commentaren op het bericht %s"
+
+#: feeds.py:345
+#, python-format
+msgid "Pingbacks on %s"
+msgstr "Pingbacks op %s"
+
+#: feeds.py:349
+#, python-format
+msgid "The latest pingbacks for the entry %s"
+msgstr "De nieuwste pingbacks voor het bericht %s"
+
+#: feeds.py:367
+#, python-format
+msgid "Trackbacks on %s"
+msgstr "Trackbacks voor %s"
+
+#: feeds.py:371
+#, python-format
+msgid "The latest trackbacks for the entry %s"
+msgstr "De nieuwste trackbacks voor het bericht %s"
+
+#: models.py:71 models.py:116 admin/entry.py:82
+msgid "title"
+msgstr "Titel"
+
+#: models.py:72 models.py:131
+msgid "used for publication"
+msgstr "gebruikt voor publicatie"
+
+#: models.py:74
+msgid "description"
+msgstr "omschrijving"
+
+#: models.py:77 admin/forms.py:19
+msgid "parent category"
+msgstr "bovenliggende categorie"
+
+#: models.py:102
+msgid "category"
+msgstr "categorie"
+
+#: models.py:103 models.py:125 admin/forms.py:47
+msgid "categories"
+msgstr "categorieën"
+
+#: models.py:112
+msgid "draft"
+msgstr "concept"
+
+#: models.py:113
+msgid "hidden"
+msgstr "verborgen"
+
+#: models.py:114
+msgid "published"
+msgstr "gepubliceerd"
+
+#: models.py:118
+msgid "image"
+msgstr "afbeelding"
+
+#: models.py:119
+msgid "used for illustration"
+msgstr "gebruikt als illustratie"
+
+#: models.py:120
+msgid "content"
+msgstr "inhoud"
+
+#: models.py:121
+msgid "excerpt"
+msgstr "uittreksel"
+
+#: models.py:122
+msgid "optional element"
+msgstr "optioneel element"
+
+#: models.py:124
+msgid "tags"
+msgstr "labels"
+
+#: models.py:128
+msgid "related entries"
+msgstr "gerelateerde berichten"
+
+#: models.py:135
+msgid "authors"
+msgstr "auteurs"
+
+#: models.py:139
+msgid "featured"
+msgstr "in de kijker"
+
+#: models.py:140 admin/entry.py:134
+msgid "comment enabled"
+msgstr "commentaar geactiveerd"
+
+#: models.py:141
+msgid "linkback enabled"
+msgstr "linkback geactiveerd"
+
+#: models.py:143
+msgid "creation date"
+msgstr "aanmaakdatum"
+
+#: models.py:145
+msgid "last update"
+msgstr "Letzte Änderung"
+
+#: models.py:146
+msgid "start publication"
+msgstr "begin publicatie"
+
+#: models.py:148
+msgid "date start publish"
+msgstr "publicatiedatum"
+
+#: models.py:149
+msgid "end publication"
+msgstr "eind publicatie"
+
+#: models.py:151
+msgid "date end publish"
+msgstr "einddatum publicatie"
+
+#: models.py:153
+msgid "sites publication"
+msgstr "publicatie op site"
+
+#: models.py:157
+msgid "login required"
+msgstr "inloggen vereist"
+
+#: models.py:158
+msgid "only authenticated users can view the entry"
+msgstr "alleen geauthenticeerde gebruikers kunnen dit bericht zien"
+
+#: models.py:160
+msgid "password"
+msgstr "wachtwoord"
+
+#: models.py:161
+msgid "protect the entry with a password"
+msgstr "beveilig het bericht met een wachtwoord"
+
+#: models.py:164
+msgid "template"
+msgstr "template"
+
+#: models.py:166
+msgid "Default template"
+msgstr "Stardaard template"
+
+#: models.py:168
+msgid "template used to display the entry"
+msgstr "gebruikte template om het bericht te tonen"
+
+#: models.py:281
+msgid "entry"
+msgstr "bericht"
+
+#: models.py:282
+msgid "entries"
+msgstr "berichten"
+
+#: moderator.py:61 moderator.py:83 moderator.py:108
+#, python-format
+msgid "[%(site)s] New comment posted on \"%(title)s\""
+msgstr "[%(site)s] Nieuwe reactie op \"%(title)s\""
+
+#: admin/category.py:30
+msgid "tree path"
+msgstr "boomstructuur"
+
+#: admin/entry.py:33 templates/admin/zinnia/widgets/quickpost.html:18
+msgid "Content"
+msgstr "Inhoud"
+
+#: admin/entry.py:35
+msgid "Options"
+msgstr "Opties"
+
+#: admin/entry.py:41
+msgid "Privacy"
+msgstr "Privacy"
+
+#: admin/entry.py:43
+msgid "Discussion"
+msgstr "Discussie"
+
+#: admin/entry.py:45
+msgid "Publication"
+msgstr "Publicatie"
+
+#: admin/entry.py:73
+#, python-format
+msgid "%(title)s (%(word_count)i words)"
+msgstr "%(title)s (%(word_count)i woorden)"
+
+#: admin/entry.py:77
+#, python-format
+msgid "%(title)s (%(comments)i comment)"
+msgid_plural "%(title)s (%(comments)i comments)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/entry.py:95
+msgid "author(s)"
+msgstr "auteur(s)"
+
+#: admin/entry.py:108
+msgid "category(s)"
+msgstr "Categorie(ën)"
+
+#: admin/entry.py:120
+msgid "tag(s)"
+msgstr "label(s)"
+
+#: admin/entry.py:128
+msgid "site(s)"
+msgstr "site(s)"
+
+#: admin/entry.py:140
+msgid "is actual"
+msgstr "is actueel"
+
+#: admin/entry.py:146
+msgid "is visible"
+msgstr "is zichtbaar"
+
+#: admin/entry.py:151
+msgid "View"
+msgstr "Bekijk"
+
+#: admin/entry.py:153
+msgid "View on site"
+msgstr "Op site bekijken"
+
+#: admin/entry.py:159
+msgid "Unavailable"
+msgstr "Niet beschikbaar"
+
+#: admin/entry.py:163
+msgid "short url"
+msgstr "korte url"
+
+#: admin/entry.py:230
+msgid "The selected entries now belong to you."
+msgstr "De geselecteerde berichten zijn aan u toegewezen."
+
+#: admin/entry.py:231
+msgid "Set the entries to the user"
+msgstr "Wijs de berichten toe aan de gebruiker"
+
+#: admin/entry.py:238
+msgid "The selected entries are now marked as published."
+msgstr "De geselecteerde berichten zijn gepubliceerd."
+
+#: admin/entry.py:239
+msgid "Set entries selected as published"
+msgstr "Geselecteerde berichten markeren als gepubliceerd"
+
+#: admin/entry.py:245
+msgid "The selected entries are now marked as hidden."
+msgstr "De geselecteerde berichten zijn verborgen."
+
+#: admin/entry.py:246
+msgid "Set entries selected as hidden"
+msgstr "Geselecteerde berichten markeren als verborgen"
+
+#: admin/entry.py:261
+msgid "The selected entries have been tweeted."
+msgstr "De geselecteerde berichten zijn getweet."
+
+#: admin/entry.py:262
+msgid "Tweet entries selected"
+msgstr "Geselecteerde berichten tweeten"
+
+#: admin/entry.py:268
+msgid "Comments are now closed for selected entries."
+msgstr "Reacties zijn niet meer mogelijk voor de geselecteerde berichten."
+
+#: admin/entry.py:269
+msgid "Close the comments for selected entries"
+msgstr "Commentaren sluiten voor geselecteerde berichten"
+
+#: admin/entry.py:276
+msgid "Linkbacks are now closed for selected entries."
+msgstr "Linkbacks zijn nu afgesloten voor de geselecteerde berichten."
+
+#: admin/entry.py:278
+msgid "Close the linkbacks for selected entries"
+msgstr "Linkbacks sluiten voor geselecteerde berichten"
+
+#: admin/entry.py:285
+msgid "The selected entries are now set at the current date."
+msgstr "De geselecteerde berichten zijn op de huidige datum ingesteld."
+
+#: admin/entry.py:287
+msgid "Put the selected entries on top at the current date"
+msgstr "Plaats de geselecteerde berichten bovenaan voor de huidige datum"
+
+#: admin/entry.py:306
+#, python-format
+msgid "%(directory)s directory succesfully pinged %(success)d entries."
+msgstr "%(directory)s map heeft succesvol %(success)d berichten gepingd."
+
+#: admin/entry.py:310
+msgid "Ping Directories for selected entries"
+msgstr "Mappen pingen voor de geselecteerde berichten"
+
+#: admin/filters.py:13
+msgid "author"
+msgstr ""
+
+#: admin/filters.py:22
+#, python-format
+msgid "%(author)s (%(count)i entry)"
+msgid_plural "%(author)s (%(count)i entries)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/forms.py:20
+msgid "No parent category"
+msgstr "Geen bovenliggende categorie"
+
+#: admin/forms.py:34
+msgid "A category cannot be parent of itself."
+msgstr "Een categorie kan zichzelf niet bevatten"
+
+#: admin/forms.py:45 templates/zinnia/base.html:30
+#: templates/zinnia/category_list.html:6 templates/zinnia/sitemap.html:52
+#: templatetags/zbreadcrumbs.py:53
+msgid "Categories"
+msgstr "Categorieën"
+
+#: templates/403.html:6
+msgid "Error 403"
+msgstr "Fout 403"
+
+#: templates/403.html:10 templates/403.html.py:15
+msgid "Permission denied"
+msgstr "Toelating verboden"
+
+#: templates/403.html:17
+msgid "Sorry but you don't have the permission to do this action."
+msgstr "Het spijt ons, maar je hebt geen toelating voor deze actie."
+
+#: templates/404.html:6
+msgid "Error 404"
+msgstr "Fout 404"
+
+#: templates/404.html:10 templates/404.html.py:15
+msgid "Page not found"
+msgstr "Pagina niet gevonden"
+
+#: templates/404.html:17
+msgid "Sorry, but the requested page could not be found."
+msgstr "Sorry, maar de opgevraagde pagina is niet gevonden"
+
+#: templates/500.html:6
+msgid "Error 500"
+msgstr "Fout 500"
+
+#: templates/500.html:10 templates/500.html.py:15
+msgid "Server error"
+msgstr "Server fout"
+
+#: templates/500.html:17
+msgid ""
+"There's been an error. It's been reported to the site administrators via "
+"e-mail and should be fixed shortly. Thanks for your patience."
+msgstr "Er is een fout opgetreden. De site administrators zijn via e-mail op de hoogte gesteld, en het zou binnenkort opgelost moeten zijn. Bedankt voor uw geduld"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:4
+msgid "Contents"
+msgstr "Inhoud"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:5
+#: templates/zinnia/_entry_detail.html:84
+msgid "Discussions"
+msgstr "Discussies"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:10
+#: templates/zinnia/author_list.html:20 templates/zinnia/category_list.html:17
+#: templates/zinnia/sitemap.html:57 templates/zinnia/tag_list.html:19
+#: templates/zinnia/tags/authors.html:9
+#: templates/zinnia/tags/categories.html:6
+#: templates/zinnia/tags/statistics.html:7
+#, python-format
+msgid "%(entry_count)s entry"
+msgid_plural "%(entry_count)s entries"
+msgstr[0] "%(entry_count)s bericht"
+msgstr[1] "%(entry_count)s berichten"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:15
+#: templates/zinnia/_entry_detail.html:89
+#: templates/zinnia/tags/popular_entries.html:8
+#: templates/zinnia/tags/statistics.html:16
+#, python-format
+msgid "%(comment_count)s comment"
+msgid_plural "%(comment_count)s comments"
+msgstr[0] "%(comment_count)s reactie"
+msgstr[1] "%(comment_count)s reacties"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:22
+#: templates/zinnia/tags/statistics.html:13
+#, python-format
+msgid "%(category_count)s category"
+msgid_plural "%(category_count)s categories"
+msgstr[0] "%(category_count)s categorie"
+msgstr[1] "%(category_count)s categorieën"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:25
+#: templates/zinnia/_entry_detail.html:105
+#: templates/zinnia/tags/statistics.html:19
+#, python-format
+msgid "%(pingback_count)s pingback"
+msgid_plural "%(pingback_count)s pingbacks"
+msgstr[0] "%(pingback_count)s pingback"
+msgstr[1] "%(pingback_count)s pingbacks"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:30
+#: templates/zinnia/tags/statistics.html:10
+#, python-format
+msgid "%(tag_count)s tag"
+msgid_plural "%(tag_count)s tags"
+msgstr[0] "%(tag_count)s tag"
+msgstr[1] "%(tag_count)s tags"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:33
+#: templates/zinnia/_entry_detail.html:112
+#: templates/zinnia/tags/statistics.html:22
+#, python-format
+msgid "%(trackback_count)s trackback"
+msgid_plural "%(trackback_count)s trackbacks"
+msgstr[0] "%(trackback_count)s trackback"
+msgstr[1] "%(trackback_count)s trackbacks"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:38
+#: templates/zinnia/tags/statistics.html:4
+#, python-format
+msgid "%(author_count)s author"
+msgid_plural "%(author_count)s authors"
+msgstr[0] "%(author_count)s auteur"
+msgstr[1] "%(author_count)s auteurs"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:43
+#: templates/zinnia/tags/statistics.html:25
+#, python-format
+msgid "%(reject_count)s rejected item"
+msgid_plural "%(reject_count)s rejected items"
+msgstr[0] "%(reject_count)s verworpen item"
+msgstr[1] "%(reject_count)s verworpen items"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:48
+msgid "Statistics"
+msgstr "Statistieken"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:50
+#: templates/zinnia/tags/statistics.html:28
+#, python-format
+msgid "%(entries_per_month)s entries per month"
+msgstr "%(entries_per_month)s berichten per maand"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:55
+#: templates/zinnia/tags/statistics.html:31
+#, python-format
+msgid "%(words_per_entry)s words per entry"
+msgstr "%(words_per_entry)s woorden per bericht"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:58
+#: templates/zinnia/tags/statistics.html:34
+#, python-format
+msgid "%(words_per_comment)s words per comment"
+msgstr "%(words_per_comment)s words per comment"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:63
+#: templates/zinnia/tags/statistics.html:37
+#, python-format
+msgid "%(comments_per_entry)s comments per entry"
+msgstr "%(comments_per_entry)s commentaren per bericht"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:66
+#: templates/zinnia/tags/statistics.html:40
+#, python-format
+msgid "%(linkbacks_per_entry)s linkbacks per entry"
+msgstr "%(linkbacks_per_entry)s linkbacks per bericht"
+
+#: templates/admin/zinnia/widgets/_draft_entries.html:7
+#: templates/zinnia/entry_detail_base.html:212
+#: templates/zinnia/entry_detail_base.html:213
+msgid "Edit the entry"
+msgstr "Wijzig bericht"
+
+#: templates/admin/zinnia/widgets/_draft_entries.html:10
+#: templates/comments/zinnia_entry_preview.html:23
+#: templates/feeds/comment_title.html:2
+#: templates/feeds/discussion_title.html:2
+#: templates/feeds/pingback_title.html:2
+#: templates/feeds/trackback_title.html:2
+#: templates/zinnia/_entry_detail.html:19
+#: templates/zinnia/entry_detail_base.html:105
+#: templates/zinnia/entry_detail_base.html:141
+#: templates/zinnia/entry_detail_base.html:176
+msgid "on"
+msgstr "op"
+
+#: templates/admin/zinnia/widgets/_draft_entries.html:16
+#: templates/comments/zinnia/entry/form.html:19
+msgid "Preview"
+msgstr "Voorbeeld"
+
+#: templates/admin/zinnia/widgets/_draft_entries.html:23
+#: templates/zinnia/tags/draft_entries.html:9
+msgid "No draft entries."
+msgstr "Geen kladberichten"
+
+#: templates/admin/zinnia/widgets/_draft_entries.html:32
+#: templates/admin/zinnia/widgets/_draft_entries.html:33
+msgid "View all draft entries"
+msgstr "Bekijk alle kladberichten"
+
+#: templates/admin/zinnia/widgets/_recent_comments.html:11
+#: templates/zinnia/_entry_detail.html:25
+#: templates/zinnia/tags/recent_comments.html:6
+#: templates/zinnia/tags/recent_linkbacks.html:7
+msgid "in"
+msgstr "in"
+
+#: templates/admin/zinnia/widgets/_recent_comments.html:14
+#: templates/zinnia/tags/recent_comments.html:8
+msgid "Comment on"
+msgstr "Commentaar op"
+
+#: templates/admin/zinnia/widgets/_recent_comments.html:23
+msgid "Edit the comment"
+msgstr "Wijzig de reactie"
+
+#: templates/admin/zinnia/widgets/_recent_comments.html:24
+#: templates/admin/zinnia/widgets/_recent_linkbacks.html:19
+msgid "Edit"
+msgstr "Wijzig"
+
+#: templates/admin/zinnia/widgets/_recent_comments.html:31
+#: templates/zinnia/_entry_detail.html:93
+#: templates/zinnia/entry_detail_base.html:121
+#: templates/zinnia/tags/recent_comments.html:15
+msgid "No comments yet."
+msgstr "Nog geen commentaren"
+
+#: templates/admin/zinnia/widgets/_recent_comments.html:40
+#: templates/admin/zinnia/widgets/_recent_comments.html:41
+msgid "Manage the comments"
+msgstr "Beheer commentaren"
+
+#: templates/admin/zinnia/widgets/_recent_linkbacks.html:8
+msgid "made a linkback on"
+msgstr "maak een linkback op"
+
+#: templates/admin/zinnia/widgets/_recent_linkbacks.html:18
+msgid "Edit the linkback"
+msgstr "wijzig linkback"
+
+#: templates/admin/zinnia/widgets/_recent_linkbacks.html:26
+#: templates/zinnia/tags/recent_linkbacks.html:16
+msgid "No linkbacks yet."
+msgstr "Nog geen linkbacks"
+
+#: templates/admin/zinnia/widgets/content_stats.html:6
+#: templates/admin/zinnia/widgets/content_stats.html:8
+msgid "Today"
+msgstr "Vandaag"
+
+#: templates/admin/zinnia/widgets/draft_entries.html:6
+#: templates/admin/zinnia/widgets/draft_entries.html:8
+msgid "Draft entries"
+msgstr "Kladberichten"
+
+#: templates/admin/zinnia/widgets/quickpost.html:6
+#: templates/admin/zinnia/widgets/quickpost.html:7
+msgid "Quick publishing"
+msgstr "Snel publiceren"
+
+#: templates/admin/zinnia/widgets/quickpost.html:10
+msgid "Title"
+msgstr "Titel"
+
+#: templates/admin/zinnia/widgets/quickpost.html:26
+#: templates/zinnia/_entry_detail.html:63 templates/zinnia/base.html:42
+#: templates/zinnia/tag_list.html:7 templatetags/zbreadcrumbs.py:46
+msgid "Tags"
+msgstr "Labels"
+
+#: templates/admin/zinnia/widgets/quickpost.html:34
+msgid "Save as draft"
+msgstr "Bewaar als klad"
+
+#: templates/admin/zinnia/widgets/quickpost.html:35
+msgid "Reset"
+msgstr "Reset"
+
+#: templates/admin/zinnia/widgets/quickpost.html:36
+msgid "Publish"
+msgstr "Publiceer"
+
+#: templates/admin/zinnia/widgets/recent_comments.html:6
+#: templates/admin/zinnia/widgets/recent_comments.html:8
+#: templates/zinnia/base.html:50
+msgid "Recent comments"
+msgstr "Nieuwste commentaren"
+
+#: templates/admin/zinnia/widgets/recent_linkbacks.html:6
+#: templates/admin/zinnia/widgets/recent_linkbacks.html:8
+#: templates/zinnia/base.html:54
+msgid "Recent linkbacks"
+msgstr "Recente linkbacks"
+
+#: templates/comments/comment_authors_email.txt:1
+#: templates/comments/comment_notification_email.txt:1
+#: templates/comments/comment_reply_email.txt:1
+#: templates/zinnia/entry_list.html:20
+msgid "Author"
+msgstr "Auteur"
+
+#: templates/comments/comment_authors_email.txt:3
+#: templates/comments/comment_notification_email.txt:5
+#: templates/comments/comment_reply_email.txt:3
+msgid "Comment"
+msgstr "Reactie"
+
+#: templates/comments/comment_authors_email.txt:6
+#: templates/comments/comment_notification_email.txt:8
+#: templates/comments/comment_reply_email.txt:6
+msgid "View this comment"
+msgstr "Bekijk deze reactie"
+
+#: templates/comments/comment_notification_email.txt:2
+msgid "Email"
+msgstr "Email"
+
+#: templates/comments/comment_notification_email.txt:3
+msgid "IP"
+msgstr "IP"
+
+#: templates/comments/comment_notification_email.txt:10
+msgid "Flag this comment"
+msgstr "Markeer deze reactie"
+
+#: templates/comments/comment_notification_email.txt:12
+msgid "Delete this comment"
+msgstr "Verwijder deze reactie"
+
+#: templates/comments/comment_notification_email.txt:14
+msgid "Approve this comment"
+msgstr "Keur deze reactie goed"
+
+#: templates/comments/zinnia_entry_preview.html:4
+msgid "Comment preview"
+msgstr "Commentaarvoorbeeld"
+
+#: templates/comments/zinnia_entry_preview.html:10
+msgid "Please correct following error."
+msgid_plural "Please correct following errors."
+msgstr[0] "Verbeter de volgende fout."
+msgstr[1] "Verbeter de volgende fouten."
+
+#: templates/comments/zinnia_entry_preview.html:12
+msgid "Preview of the comment"
+msgstr "Commentaarvoorbeeld"
+
+#: templates/comments/zinnia/entry/form.html:6
+msgid "Post your comment"
+msgstr "Verzend uw bericht"
+
+#: templates/comments/zinnia/entry/form.html:18
+msgid "Post"
+msgstr "Verzend"
+
+#: templates/comments/zinnia/entry/posted.html:5
+#: templates/comments/zinnia/entry/posted.html:10
+msgid "Thanks for your comment"
+msgstr "Bedankt voor uw reactie"
+
+#: templates/comments/zinnia/entry/posted.html:12
+#: templates/comments/zinnia/entry/posted.html:13
+msgid "Return to entry list"
+msgstr "Terug naar de berichtenlijst"
+
+#: templates/zinnia/_entry_detail.html:12
+msgid "Written by"
+msgstr "Geschreven door"
+
+#: templates/zinnia/_entry_detail.html:16 templates/zinnia/author_list.html:18
+#: templates/zinnia/tags/authors.html:7
+#, python-format
+msgid "Show all %(author)s's entries"
+msgstr "Toon alle berichten van %(author)s"
+
+#: templates/zinnia/_entry_detail.html:21
+msgid "Written on"
+msgstr "Gepost op"
+
+#: templates/zinnia/_entry_detail.html:28
+#: templates/zinnia/category_list.html:16
+#: templates/zinnia/tags/categories.html:5
+#, python-format
+msgid "Show all entries in %(category)s"
+msgstr "Toon alle berichten in %(category)s"
+
+#: templates/zinnia/_entry_detail.html:53
+#, python-format
+msgid "Continue reading %(object)s"
+msgstr "Lees meer %(object)s"
+
+#: templates/zinnia/_entry_detail.html:55
+msgid "Continue reading"
+msgstr "Lees meer"
+
+#: templates/zinnia/_entry_detail.html:67 templates/zinnia/tag_list.html:18
+#, python-format
+msgid "Show all entries tagged by %(tag)s"
+msgstr "Toon alle berichten met label %(tag)s"
+
+#: templates/zinnia/_entry_detail.html:70
+msgid "No tags"
+msgstr "Geen labels"
+
+#: templates/zinnia/_entry_detail.html:75
+msgid "Short url"
+msgstr "Korte URL"
+
+#: templates/zinnia/_entry_detail.html:77
+#, python-format
+msgid "Short URL to %(object)s"
+msgstr "Korte URL naar %(object)s"
+
+#: templates/zinnia/_entry_detail.html:88
+#: templates/zinnia/tags/popular_entries.html:7
+#, python-format
+msgid "Comments on %(object)s"
+msgstr "Commentaren op %(object)s"
+
+#: templates/zinnia/_entry_detail.html:94
+#, python-format
+msgid "Leave a comment on %(object)s"
+msgstr "Reageer op %(object)s"
+
+#: templates/zinnia/_entry_detail.html:95
+msgid "Be first to comment!"
+msgstr "Schrijf als eerste een reactie!"
+
+#: templates/zinnia/_entry_detail.html:98
+#: templates/zinnia/entry_detail_base.html:117
+#: templates/zinnia/entry_detail_base.html:123
+msgid "Comments are closed."
+msgstr "Reageren niet mogelijk."
+
+#: templates/zinnia/_entry_detail.html:104
+#, python-format
+msgid "Pingbacks on %(object)s"
+msgstr "Pingbacks op %(object)s"
+
+#: templates/zinnia/_entry_detail.html:111
+#, python-format
+msgid "Trackbacks on %(object)s"
+msgstr "Trackbacks op %(object)s"
+
+#: templates/zinnia/author_list.html:5 templates/zinnia/author_list.html:12
+msgid "Author list"
+msgstr "Auteurslijst"
+
+#: templates/zinnia/author_list.html:7 templates/zinnia/base.html:34
+#: templatetags/zbreadcrumbs.py:49
+msgid "Authors"
+msgstr "auteurs"
+
+#: templates/zinnia/author_list.html:24 templates/zinnia/tags/authors.html:13
+msgid "No authors yet."
+msgstr "Nog geen autheurs"
+
+#: templates/zinnia/base.html:15 templates/zinnia/skeleton.html:38
+msgid "RSS Feed of latest entries"
+msgstr "RSS-Feed van de nieuwste berichten"
+
+#: templates/zinnia/base.html:16
+msgid "RSS Feed of latest discussions"
+msgstr "RSS Feed van laatste discussies"
+
+#: templates/zinnia/base.html:26 templates/zinnia/skeleton.html:76
+msgid "Search"
+msgstr "Zoek"
+
+#: templates/zinnia/base.html:38
+msgid "Calendar"
+msgstr "Kalender"
+
+#: templates/zinnia/base.html:46 templates/zinnia/skeleton.html:72
+msgid "Recent entries"
+msgstr "Nieuwste berichten"
+
+#: templates/zinnia/base.html:58
+msgid "Random entries"
+msgstr "Willekeurige berichten"
+
+#: templates/zinnia/base.html:62
+msgid "Popular entries"
+msgstr "Populaire berichten"
+
+#: templates/zinnia/base.html:66 templates/zinnia/entry_archive_day.html:5
+#: templates/zinnia/entry_archive_day.html:7
+#: templates/zinnia/entry_archive_day.html:12
+#: templates/zinnia/entry_archive_day.html:29
+#: templates/zinnia/entry_archive_month.html:5
+#: templates/zinnia/entry_archive_month.html:7
+#: templates/zinnia/entry_archive_month.html:12
+#: templates/zinnia/entry_archive_month.html:37
+#: templates/zinnia/entry_archive_today.html:23
+#: templates/zinnia/entry_archive_week.html:17
+#: templates/zinnia/entry_archive_year.html:5
+#: templates/zinnia/entry_archive_year.html:7
+#: templates/zinnia/entry_archive_year.html:12
+#: templates/zinnia/tags/archives_entries.html:6
+#: templates/zinnia/tags/archives_entries_link.html:2
+#: templates/zinnia/tags/archives_entries_tree.html:7
+#: templates/zinnia/tags/archives_entries_tree.html:14
+#: templates/zinnia/tags/archives_entries_tree.html:24
+msgid "Archives"
+msgstr "Archief"
+
+#: templates/zinnia/base.html:71
+msgid "Tools"
+msgstr "Hulpmiddelen"
+
+#: templates/zinnia/base.html:75 templates/zinnia/base.html.py:76
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: templates/zinnia/base.html:82 templates/zinnia/base.html.py:83
+msgid "Post an entry"
+msgstr "Plaats een bericht"
+
+#: templates/zinnia/base.html:90 templates/zinnia/base.html.py:91
+msgid "Log out"
+msgstr "Log uit"
+
+#: templates/zinnia/category_list.html:4
+#: templates/zinnia/category_list.html:11
+msgid "Category list"
+msgstr "Categorieënlijst"
+
+#: templates/zinnia/category_list.html:28 templates/zinnia/sitemap.html:62
+#: templates/zinnia/tags/categories.html:16
+msgid "No categories yet."
+msgstr "Nog geen categorieën"
+
+#: templates/zinnia/entry_archive_day.html:17
+#: templates/zinnia/entry_archive_today.html:17
+msgid "Previous day"
+msgstr "vorige dag"
+
+#: templates/zinnia/entry_archive_day.html:23
+msgid "Next day"
+msgstr "volgende dag"
+
+#: templates/zinnia/entry_archive_month.html:16
+msgid "Daily archives"
+msgstr "dagarchieven"
+
+#: templates/zinnia/entry_archive_month.html:26
+msgid "Previous month"
+msgstr "vorige maand"
+
+#: templates/zinnia/entry_archive_month.html:32
+msgid "Next month"
+msgstr "volgende maand"
+
+#: templates/zinnia/entry_archive_today.html:5
+#: templates/zinnia/entry_archive_today.html:7
+#: templates/zinnia/entry_archive_today.html:12
+msgid "Today archives"
+msgstr "Archief vandaag"
+
+#: templates/zinnia/entry_archive_week.html:5
+#: templates/zinnia/entry_archive_week.html:7
+#: templates/zinnia/entry_archive_week.html:12
+#, python-format
+msgid "Archives week %(week_number)s of %(year)s"
+msgstr "Archief week %(week_number)s van %(year)s"
+
+#: templates/zinnia/entry_archive_year.html:16
+#: templates/zinnia/sitemap.html:69
+msgid "Monthly archives"
+msgstr "Maandelijkse archieven"
+
+#: templates/zinnia/entry_detail_base.html:22
+msgid "RSS Feed of discussions on"
+msgstr "RSS-Feed van discussies voor"
+
+#: templates/zinnia/entry_detail_base.html:24
+msgid "RSS Feed of comments on"
+msgstr "RSS-Feed van commentaren voor"
+
+#: templates/zinnia/entry_detail_base.html:26
+msgid "RSS Feed of pingbacks on"
+msgstr "RSS-Feed van pingbacks voor"
+
+#: templates/zinnia/entry_detail_base.html:28
+msgid "RSS Feed of trackbacks on"
+msgstr "RSS-Feed van trackbacks voor"
+
+#: templates/zinnia/entry_detail_base.html:48
+msgid "Next entry"
+msgstr "Volgend bericht"
+
+#: templates/zinnia/entry_detail_base.html:60
+msgid "Previous entry"
+msgstr "Vorig bericht"
+
+#: templates/zinnia/entry_detail_base.html:71
+msgid "Related entries"
+msgstr "Gerelateerde berichten"
+
+#: templates/zinnia/entry_detail_base.html:82
+msgid "Similar entries"
+msgstr "Vergelijkbare berichten"
+
+#: templates/zinnia/entry_detail_base.html:90
+msgid "Comments"
+msgstr "Reacties"
+
+#: templates/zinnia/entry_detail_base.html:110
+msgid "Direct link to this comment"
+msgstr ""
+
+#: templates/zinnia/entry_detail_base.html:132
+msgid "Pingbacks"
+msgstr "Pingbacks"
+
+#: templates/zinnia/entry_detail_base.html:146
+msgid "Direct link to this pingback"
+msgstr ""
+
+#: templates/zinnia/entry_detail_base.html:156
+msgid "Pingbacks are open."
+msgstr "Pingbacks beschikbaar."
+
+#: templates/zinnia/entry_detail_base.html:158
+msgid "Pingbacks are closed."
+msgstr "Pingbacks niet beschikbaar."
+
+#: templates/zinnia/entry_detail_base.html:168
+msgid "Trackbacks"
+msgstr "Trackbacks"
+
+#: templates/zinnia/entry_detail_base.html:181
+msgid "Direct link to this trackback"
+msgstr ""
+
+#: templates/zinnia/entry_detail_base.html:193
+msgid "Trackback URL"
+msgstr "Trackback URL"
+
+#: templates/zinnia/entry_list.html:5
+msgid "Latest entries for"
+msgstr "Laatste berichten van"
+
+#: templates/zinnia/entry_list.html:5
+msgid "the category"
+msgstr "de categorie"
+
+#: templates/zinnia/entry_list.html:5
+msgid "the tag"
+msgstr "het label"
+
+#: templates/zinnia/entry_list.html:5
+msgid "the author"
+msgstr "de auteur"
+
+#: templates/zinnia/entry_list.html:5 templates/zinnia/entry_search.html:7
+msgid "page"
+msgstr "pagina"
+
+#: templates/zinnia/entry_list.html:10 templates/zinnia/entry_list.html:13
+#: templates/zinnia/entry_list.html:16 templates/zinnia/skeleton.html:39
+msgid "RSS Feed"
+msgstr "RSS-Feed"
+
+#: templates/zinnia/entry_list.html:20
+msgid "Category"
+msgstr "Categorie"
+
+#: templates/zinnia/entry_list.html:20
+msgid "Tag"
+msgstr "Label"
+
+#: templates/zinnia/entry_list.html:20 templates/zinnia/entry_search.html:5
+msgid "Page"
+msgstr "Pagina"
+
+#: templates/zinnia/entry_list.html:28
+#, python-format
+msgid "Category archives: %(category)s"
+msgstr "Archief in categorie: %(category)s"
+
+#: templates/zinnia/entry_list.html:35
+#, python-format
+msgid "Tag archives: %(tag)s"
+msgstr "Archief met label: %(tag)s"
+
+#: templates/zinnia/entry_list.html:39
+#, python-format
+msgid "Author archives: %(author)s"
+msgstr "Archief door auteur: %(author)s"
+
+#: templates/zinnia/entry_list.html:50 templates/zinnia/sitemap.html:25
+#: templates/zinnia/sitemap.html.py:45
+#: templates/zinnia/tags/featured_entries.html:9
+#: templates/zinnia/tags/popular_entries.html:12
+#: templates/zinnia/tags/random_entries.html:9
+#: templates/zinnia/tags/recent_entries.html:9
+msgid "No entries yet."
+msgstr "Nog geen berichten."
+
+#: templates/zinnia/entry_list.html:69 templates/zinnia/entry_list.html:70
+msgid "Edit the category"
+msgstr "Wijzig de categorie"
+
+#: templates/zinnia/entry_list.html:76 templates/zinnia/entry_list.html:77
+msgid "Edit the tag"
+msgstr "Wijzig het label"
+
+#: templates/zinnia/entry_list.html:83 templates/zinnia/entry_list.html:84
+msgid "Edit the author"
+msgstr "Wijzig de auteur"
+
+#: templates/zinnia/entry_search.html:5 templates/zinnia/entry_search.html:7
+#: templates/zinnia/entry_search.html:17
+msgid "Search results for"
+msgstr "zoekresultaten voor"
+
+#: templates/zinnia/entry_search.html:11
+msgid "RSS Feed of search result of"
+msgstr "RSS-Feed met zoekresultaten van"
+
+#: templates/zinnia/entry_search.html:25
+#, python-format
+msgid "%(entry_count)s entry found"
+msgid_plural "%(entry_count)s entries found"
+msgstr[0] "%(entry_count)s bericht gevonden"
+msgstr[1] "%(entry_count)s berichten gevonden"
+
+#: templates/zinnia/entry_search.html:36
+msgid "Nothing found."
+msgstr "Niks gevonden."
+
+#: templates/zinnia/entry_search.html:46
+msgid ""
+"You can use - to exclude words or phrases, &quot;double quotes&quot; for "
+"exact phrases and the AND/OR boolean operators combined with parenthesis for"
+" complex searchs."
+msgstr "Gebruik - om woorden of zinnen uit te sluiten, ' of \" voor exacte woorden en AND of OR gecombineerd met () voor complexe zoekopdrachten."
+
+#: templates/zinnia/login.html:4 templates/zinnia/login.html.py:9
+msgid "Login required"
+msgstr "Login verplicht"
+
+#: templates/zinnia/login.html:13
+msgid "Your username and password didn't match. Please try again."
+msgstr "Uw gebruikersnaam of wachtwoord is niet correct. Probeer opnieuw."
+
+#: templates/zinnia/login.html:17
+msgid "You need to be connected to view this entry."
+msgstr "U moet verbonden zijn om dit bericht te kunnen zien"
+
+#: templates/zinnia/login.html:34
+msgid "Login"
+msgstr "Inloggen"
+
+#: templates/zinnia/password.html:4 templates/zinnia/password.html.py:9
+msgid "Password required"
+msgstr "Wachtwoord vereist"
+
+#: templates/zinnia/password.html:13
+msgid "The password provided is not valid. Please try again."
+msgstr "Het opgegeven wachtwoord is niet geldig. Probeer opnieuw."
+
+#: templates/zinnia/password.html:17
+msgid "You need to provide a password to view this entry."
+msgstr "U moet een wachtwoord opgeven om dit bericht te kunnen zien"
+
+#: templates/zinnia/password.html:24
+msgid "Password"
+msgstr "Wachtwoord"
+
+#: templates/zinnia/password.html:29
+msgid "Valid"
+msgstr "Geldig"
+
+#: templates/zinnia/sitemap.html:4 templates/zinnia/sitemap.html.py:9
+#: templates/zinnia/skeleton.html:33 templates/zinnia/skeleton.html.py:34
+#: templates/zinnia/skeleton.html:65 templates/zinnia/skeleton.html.py:66
+msgid "Sitemap"
+msgstr "Sitemap"
+
+#: templates/zinnia/sitemap.html:12
+msgid "Entries per categories"
+msgstr "Berichten per categorieën"
+
+#: templates/zinnia/sitemap.html:20 templates/zinnia/sitemap.html.py:40
+msgid "comment"
+msgstr "reactie"
+
+#: templates/zinnia/sitemap.html:33
+msgid "All the entries"
+msgstr "Alle berichten"
+
+#: templates/zinnia/skeleton.html:57
+msgid "Useful links"
+msgstr "Handige links"
+
+#: templates/zinnia/skeleton.html:60 templates/zinnia/skeleton.html.py:61
+msgid "Blog index"
+msgstr "Blog-index"
+
+#: templates/zinnia/tag_list.html:5 templates/zinnia/tag_list.html.py:12
+msgid "Tag list"
+msgstr "labellijst"
+
+#: templates/zinnia/tag_list.html:23 templates/zinnia/tags/tag_cloud.html:12
+msgid "No tags yet."
+msgstr "Nog geen labels."
+
+#: templates/zinnia/tags/archives_entries.html:13
+#: templates/zinnia/tags/archives_entries_tree.html:38
+msgid "No archives yet."
+msgstr "Nog geen archieven"
+
+#: templates/zinnia/tags/pagination.html:4
+#, python-format
+msgid "Page %(current_page)s of %(total_page)s"
+msgstr "Pagina %(current_page)s van %(total_page)s"
+
+#: templates/zinnia/tags/pagination.html:10
+msgid "More recent entries"
+msgstr "Meer nieuwste berichten"
+
+#: templates/zinnia/tags/pagination.html:20
+#: templates/zinnia/tags/pagination.html:33
+#: templates/zinnia/tags/pagination.html:47
+msgid "Entries page"
+msgstr "Berichtenpagina"
+
+#: templates/zinnia/tags/pagination.html:56
+msgid "More old entries"
+msgstr "Meer oude berichten"
+
+#: templates/zinnia/tags/recent_linkbacks.html:9
+msgid "Linkback on"
+msgstr "Linkback voor"
+
+#: templates/zinnia/tags/search_form.html:5
+msgid "Keywords..."
+msgstr "Zoektermen..."
+
+#: templates/zinnia/tags/search_form.html:7
+msgid ""
+"You can use - to exclude words or phrases, &quot;double quotes&quot; for "
+"exact phrases and the AND/OR boolean operators combined with parenthesis for"
+" complex queries."
+msgstr "Je kan - gebruiken om woorden of zinnen uit te sluiten, \"dubbele quotes\" voor exacte zinnen en de AND/OR boolean operatoren gecombineerd met haakje voor complexe queries."
+
+#: templates/zinnia/tags/similar_entries.html:9
+msgid "No similar entries."
+msgstr "Geen vergelijkbare berichten."
+
+#: templates/zinnia/tags/tag_cloud.html:7
+#, python-format
+msgid "%(entry_count)s entry tagged by %(tag)s"
+msgid_plural "%(entry_count)s entries tagged by %(tag)s"
+msgstr[0] "%(entry_count)s bericht gelabeld met %(tag)s"
+msgstr[1] "%(entry_count)s berichten gelabeld met %(tag)s"
+
+#: templatetags/zbreadcrumbs.py:82
+#, python-format
+msgid "Page %s"
+msgstr "Pagina %s"
+
+#: templatetags/zbreadcrumbs.py:108
+#, python-format
+msgid "Week %s"
+msgstr "Week %s"
+
+#: tests/views.py:399 views/search.py:24
+msgid "The pattern is too short"
+msgstr "De zoekterm is te kort"
+
+#: tests/views.py:403 views/search.py:28
+msgid "No pattern to search found"
+msgstr "Geen zoekterm gevonden"
+
+#: views/tags.py:44
+#, python-format
+msgid "No Tag found matching \"%s\"."
+msgstr "Geen label gevonden \"%s\"."
+
+#: xmlrpc/metaweblog.py:36
+msgid "Username is incorrect."
+msgstr "Gebruikersnaam is incorrect"
+
+#: xmlrpc/metaweblog.py:38
+msgid "Password is invalid."
+msgstr "Wachtwoord is ongeldig"
+
+#: xmlrpc/metaweblog.py:40
+msgid "User account unavailable."
+msgstr "Gebruiker is niet beschikbaar"
+
+#: xmlrpc/metaweblog.py:43
+#, python-format
+msgid "User cannot %s."
+msgstr "Gebruiker kan niet %s."
+
+#: xmlrpc/pingback.py:97
+msgid "No title"
+msgstr "Geen titel"

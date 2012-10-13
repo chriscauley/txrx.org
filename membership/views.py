@@ -1,6 +1,9 @@
 # Create your views here.
-from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.template.response import TemplateResponse
+
+from .models import Membership
 
 def redirect(redirect_url):
     return HttpResponseRedirect(redirect_url)
@@ -17,3 +20,7 @@ def login_redirect(request):
     
     else:
         return redirect("/")
+
+def join_us(request):
+    values = {'memberships': Membership.objects.active()}
+    return TemplateResponse(request,"membership/join-us.html",values)

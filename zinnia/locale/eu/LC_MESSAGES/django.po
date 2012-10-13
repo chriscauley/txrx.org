@@ -1,0 +1,1325 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Ales Zabala Alava <shagi@gisa-elkartea.org>, 2012.
+# Ales Zabala Alava (Shagi) <shagi@gisa-elkartea.org>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: django-blog-zinnia\n"
+"Report-Msgid-Bugs-To: https://github.com/Fantomas42/django-blog-zinnia/issues\n"
+"POT-Creation-Date: 2012-07-12 05:31-0500\n"
+"PO-Revision-Date: 2012-07-12 10:31+0000\n"
+"Last-Translator: Julien Fache <fantomas42@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: eu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: feeds.py:113 templates/zinnia/entry_archive.html:4
+#: templates/zinnia/entry_archive.html:6 templates/zinnia/entry_list.html:20
+msgid "Latest entries"
+msgstr "Azken sarrerak"
+
+#: feeds.py:117
+#, python-format
+msgid "The latest entries for the site %s"
+msgstr "%s guneko azken sarrerak"
+
+#: feeds.py:137
+#, python-format
+msgid "Entries for the category %s"
+msgstr "%s kategoriako sarrerak"
+
+#: feeds.py:141
+#, python-format
+msgid "The latest entries for the category %s"
+msgstr "%s kategoriako azken sarrerak"
+
+#: feeds.py:161
+#, python-format
+msgid "Entries for author %s"
+msgstr "%s egilearen sarrerak"
+
+#: feeds.py:165
+#, python-format
+msgid "The latest entries by %s"
+msgstr "%s egilearen azken sarrerak"
+
+#: feeds.py:186
+#, python-format
+msgid "Entries for the tag %s"
+msgstr "%s etiketadun sarrerak"
+
+#: feeds.py:190
+#, python-format
+msgid "The latest entries for the tag %s"
+msgstr "%s etiketadun azken sarrerak"
+
+#: feeds.py:213
+#, python-format
+msgid "Results of the search for '%s'"
+msgstr "'%s' bilaketaren emaitzak"
+
+#: feeds.py:217
+#, python-format
+msgid "The entries containing the pattern '%s'"
+msgstr "'%s' eredua duten sarrerak"
+
+#: feeds.py:262
+msgid "Latest discussions"
+msgstr ""
+
+#: feeds.py:266
+#, python-format
+msgid "The latest discussions for the site %s"
+msgstr ""
+
+#: feeds.py:289
+#, python-format
+msgid "Discussions on %s"
+msgstr "%s sarreraren eztabaidak"
+
+#: feeds.py:293
+#, python-format
+msgid "The latest discussions for the entry %s"
+msgstr "%s sarreraren azken eztabaidak"
+
+#: feeds.py:311
+#, python-format
+msgid "Comments on %s"
+msgstr "%s sarreraren iruzkinak"
+
+#: feeds.py:315
+#, python-format
+msgid "The latest comments for the entry %s"
+msgstr "%s sarreraren azken iruzkinak"
+
+#: feeds.py:345
+#, python-format
+msgid "Pingbacks on %s"
+msgstr "%s sarerraren pingback-ak"
+
+#: feeds.py:349
+#, python-format
+msgid "The latest pingbacks for the entry %s"
+msgstr "%s sarerraren azken pingback-ak"
+
+#: feeds.py:367
+#, python-format
+msgid "Trackbacks on %s"
+msgstr "%s sarerraren trackback-ak"
+
+#: feeds.py:371
+#, python-format
+msgid "The latest trackbacks for the entry %s"
+msgstr "%s sarerraren azken trackback-ak"
+
+#: models.py:71 models.py:116 admin/entry.py:82
+msgid "title"
+msgstr "izenburua"
+
+#: models.py:72 models.py:131
+msgid "used for publication"
+msgstr "agitalpererako erabiltzen da"
+
+#: models.py:74
+msgid "description"
+msgstr "deskribapena"
+
+#: models.py:77 admin/forms.py:19
+msgid "parent category"
+msgstr "kategoria gurasoa"
+
+#: models.py:102
+msgid "category"
+msgstr "kategoria"
+
+#: models.py:103 models.py:125 admin/forms.py:47
+msgid "categories"
+msgstr "kategoriak"
+
+#: models.py:112
+msgid "draft"
+msgstr "zirriborroa"
+
+#: models.py:113
+msgid "hidden"
+msgstr "ezkutatuta"
+
+#: models.py:114
+msgid "published"
+msgstr "argitaratuta"
+
+#: models.py:118
+msgid "image"
+msgstr "irudia"
+
+#: models.py:119
+msgid "used for illustration"
+msgstr "irudirako erabiltzen da"
+
+#: models.py:120
+msgid "content"
+msgstr "edukia"
+
+#: models.py:121
+msgid "excerpt"
+msgstr "laburpena"
+
+#: models.py:122
+msgid "optional element"
+msgstr "aukerazko elementua"
+
+#: models.py:124
+msgid "tags"
+msgstr "etiketak"
+
+#: models.py:128
+msgid "related entries"
+msgstr "erlazionatutako sarrerak"
+
+#: models.py:135
+msgid "authors"
+msgstr "egileak"
+
+#: models.py:139
+msgid "featured"
+msgstr "nabarmendua"
+
+#: models.py:140 admin/entry.py:134
+msgid "comment enabled"
+msgstr "iruzkinak gaituta"
+
+#: models.py:141
+msgid "linkback enabled"
+msgstr "linkback gaituta"
+
+#: models.py:143
+msgid "creation date"
+msgstr "sorrera data"
+
+#: models.py:145
+msgid "last update"
+msgstr "azken eguneraketa"
+
+#: models.py:146
+msgid "start publication"
+msgstr "argitaratu"
+
+#: models.py:148
+msgid "date start publish"
+msgstr "argitaratze data"
+
+#: models.py:149
+msgid "end publication"
+msgstr "ez-argitaratu"
+
+#: models.py:151
+msgid "date end publish"
+msgstr "argitaratuta egoteko muga"
+
+#: models.py:153
+msgid "sites publication"
+msgstr "argitaratze guneak"
+
+#: models.py:157
+msgid "login required"
+msgstr "pasahitza beharrezkoa"
+
+#: models.py:158
+msgid "only authenticated users can view the entry"
+msgstr "pasahitza dakitenek bakarrik ikus dezakete"
+
+#: models.py:160
+msgid "password"
+msgstr "pasahitza"
+
+#: models.py:161
+msgid "protect the entry with a password"
+msgstr "sarrera pasahitzarekin babestu"
+
+#: models.py:164
+msgid "template"
+msgstr "txantiloia"
+
+#: models.py:166
+msgid "Default template"
+msgstr "Lehenetsitako txantiloia"
+
+#: models.py:168
+msgid "template used to display the entry"
+msgstr "sarrera ikustean erabiliko den txantiloia"
+
+#: models.py:281
+msgid "entry"
+msgstr "sarrera"
+
+#: models.py:282
+msgid "entries"
+msgstr "sarrerak"
+
+#: moderator.py:61 moderator.py:83 moderator.py:108
+#, python-format
+msgid "[%(site)s] New comment posted on \"%(title)s\""
+msgstr "[%(site)s] Iruzkin berria \"%(title)s\" sarreran"
+
+#: admin/category.py:30
+msgid "tree path"
+msgstr "bidea"
+
+#: admin/entry.py:33 templates/admin/zinnia/widgets/quickpost.html:18
+msgid "Content"
+msgstr "Edukia"
+
+#: admin/entry.py:35
+msgid "Options"
+msgstr "Aukerak"
+
+#: admin/entry.py:41
+msgid "Privacy"
+msgstr "Pribatutasuna"
+
+#: admin/entry.py:43
+msgid "Discussion"
+msgstr "Eztabaida"
+
+#: admin/entry.py:45
+msgid "Publication"
+msgstr "Argitalpena"
+
+#: admin/entry.py:73
+#, python-format
+msgid "%(title)s (%(word_count)i words)"
+msgstr "%(title)s (%(word_count)i hitz)"
+
+#: admin/entry.py:77
+#, python-format
+msgid "%(title)s (%(comments)i comment)"
+msgid_plural "%(title)s (%(comments)i comments)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/entry.py:95
+msgid "author(s)"
+msgstr "egilea(k)"
+
+#: admin/entry.py:108
+msgid "category(s)"
+msgstr "kategoria(k)"
+
+#: admin/entry.py:120
+msgid "tag(s)"
+msgstr "etiketa(k)"
+
+#: admin/entry.py:128
+msgid "site(s)"
+msgstr "gunea(k)"
+
+#: admin/entry.py:140
+msgid "is actual"
+msgstr "epe barruan"
+
+#: admin/entry.py:146
+msgid "is visible"
+msgstr "ikus daiteke"
+
+#: admin/entry.py:151
+msgid "View"
+msgstr "Ikusi"
+
+#: admin/entry.py:153
+msgid "View on site"
+msgstr "Gunean ikusi"
+
+#: admin/entry.py:159
+msgid "Unavailable"
+msgstr "Eskuraezina"
+
+#: admin/entry.py:163
+msgid "short url"
+msgstr "url motza"
+
+#: admin/entry.py:230
+msgid "The selected entries now belong to you."
+msgstr "Hautatutako sarreren egile zara orain."
+
+#: admin/entry.py:231
+msgid "Set the entries to the user"
+msgstr "Hautatutako sarreren egile bihurtu"
+
+#: admin/entry.py:238
+msgid "The selected entries are now marked as published."
+msgstr "Hautatutako sarrerak argitaratu dira."
+
+#: admin/entry.py:239
+msgid "Set entries selected as published"
+msgstr "Hautatutako sarrerak argitaratu"
+
+#: admin/entry.py:245
+msgid "The selected entries are now marked as hidden."
+msgstr "Hautatutako sarrerak ezkutatu dira"
+
+#: admin/entry.py:246
+msgid "Set entries selected as hidden"
+msgstr "Hautatutako sarrerak ezkutatu"
+
+#: admin/entry.py:261
+msgid "The selected entries have been tweeted."
+msgstr "Hautatutako sarrerak tweeteatu dira."
+
+#: admin/entry.py:262
+msgid "Tweet entries selected"
+msgstr "Hautatutako sarrerak tweeteatu"
+
+#: admin/entry.py:268
+msgid "Comments are now closed for selected entries."
+msgstr "Hautatutako sarreretan iruzkinak itxita daude."
+
+#: admin/entry.py:269
+msgid "Close the comments for selected entries"
+msgstr "Hautatutako sarreren iruzkinak itxi"
+
+#: admin/entry.py:276
+msgid "Linkbacks are now closed for selected entries."
+msgstr "Hautatutako sarreren linkback-ak itxita daude."
+
+#: admin/entry.py:278
+msgid "Close the linkbacks for selected entries"
+msgstr "Hautatutako sarreren linkback-ak itxi"
+
+#: admin/entry.py:285
+msgid "The selected entries are now set at the current date."
+msgstr "Hautatutako sarrerak oraingo datara eguneratu dira."
+
+#: admin/entry.py:287
+msgid "Put the selected entries on top at the current date"
+msgstr "Hautatutako sarrerak goratu eta oraingo data jarri"
+
+#: admin/entry.py:306
+#, python-format
+msgid "%(directory)s directory succesfully pinged %(success)d entries."
+msgstr "%(directory)s direktorioan %(success)d sarrerei ping-a ongi bidalita."
+
+#: admin/entry.py:310
+msgid "Ping Directories for selected entries"
+msgstr "Hautatutako sarreren ping-a direktoroetara bidali."
+
+#: admin/filters.py:13
+msgid "author"
+msgstr ""
+
+#: admin/filters.py:22
+#, python-format
+msgid "%(author)s (%(count)i entry)"
+msgid_plural "%(author)s (%(count)i entries)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/forms.py:20
+msgid "No parent category"
+msgstr "Gurasorik ez"
+
+#: admin/forms.py:34
+msgid "A category cannot be parent of itself."
+msgstr "Kategoriak ezin dira nor bere gurazo izan."
+
+#: admin/forms.py:45 templates/zinnia/base.html:30
+#: templates/zinnia/category_list.html:6 templates/zinnia/sitemap.html:52
+#: templatetags/zbreadcrumbs.py:53
+msgid "Categories"
+msgstr "Kategoriak"
+
+#: templates/403.html:6
+msgid "Error 403"
+msgstr ""
+
+#: templates/403.html:10 templates/403.html.py:15
+msgid "Permission denied"
+msgstr ""
+
+#: templates/403.html:17
+msgid "Sorry but you don't have the permission to do this action."
+msgstr ""
+
+#: templates/404.html:6
+msgid "Error 404"
+msgstr "404 errorea"
+
+#: templates/404.html:10 templates/404.html.py:15
+msgid "Page not found"
+msgstr "Ez da orrialdea aurkitu"
+
+#: templates/404.html:17
+msgid "Sorry, but the requested page could not be found."
+msgstr "Barkatu baina eskatutako orrialdea ezin da topatu."
+
+#: templates/500.html:6
+msgid "Error 500"
+msgstr "500 errorea"
+
+#: templates/500.html:10 templates/500.html.py:15
+msgid "Server error"
+msgstr "Errorea zerbitzarian"
+
+#: templates/500.html:17
+msgid ""
+"There's been an error. It's been reported to the site administrators via "
+"e-mail and should be fixed shortly. Thanks for your patience."
+msgstr "Errore bat egon da. Kudeatzaileari email bat bidali zaio eta gutxi barru konponduta beharko luke. Ezkerrik asko zure pazientziarengatik."
+
+#: templates/admin/zinnia/widgets/_content_stats.html:4
+msgid "Contents"
+msgstr "Edukiak"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:5
+#: templates/zinnia/_entry_detail.html:84
+msgid "Discussions"
+msgstr "Eztabaidak"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:10
+#: templates/zinnia/author_list.html:20 templates/zinnia/category_list.html:17
+#: templates/zinnia/sitemap.html:57 templates/zinnia/tag_list.html:19
+#: templates/zinnia/tags/authors.html:9
+#: templates/zinnia/tags/categories.html:6
+#: templates/zinnia/tags/statistics.html:7
+#, python-format
+msgid "%(entry_count)s entry"
+msgid_plural "%(entry_count)s entries"
+msgstr[0] "sarrera bat"
+msgstr[1] "%(entry_count)s sarrera"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:15
+#: templates/zinnia/_entry_detail.html:89
+#: templates/zinnia/tags/popular_entries.html:8
+#: templates/zinnia/tags/statistics.html:16
+#, python-format
+msgid "%(comment_count)s comment"
+msgid_plural "%(comment_count)s comments"
+msgstr[0] "iruzkin bat"
+msgstr[1] "%(comment_count)s iruzkin"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:22
+#: templates/zinnia/tags/statistics.html:13
+#, python-format
+msgid "%(category_count)s category"
+msgid_plural "%(category_count)s categories"
+msgstr[0] "kategoria bat"
+msgstr[1] "%(category_count)s kategoria"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:25
+#: templates/zinnia/_entry_detail.html:105
+#: templates/zinnia/tags/statistics.html:19
+#, python-format
+msgid "%(pingback_count)s pingback"
+msgid_plural "%(pingback_count)s pingbacks"
+msgstr[0] "pingback bat"
+msgstr[1] "%(pingback_count)s pingback"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:30
+#: templates/zinnia/tags/statistics.html:10
+#, python-format
+msgid "%(tag_count)s tag"
+msgid_plural "%(tag_count)s tags"
+msgstr[0] "etiketa bat"
+msgstr[1] "%(tag_count)s etiketa"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:33
+#: templates/zinnia/_entry_detail.html:112
+#: templates/zinnia/tags/statistics.html:22
+#, python-format
+msgid "%(trackback_count)s trackback"
+msgid_plural "%(trackback_count)s trackbacks"
+msgstr[0] "trackback bat"
+msgstr[1] "%(trackback_count)s trackback"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:38
+#: templates/zinnia/tags/statistics.html:4
+#, python-format
+msgid "%(author_count)s author"
+msgid_plural "%(author_count)s authors"
+msgstr[0] "egile bat"
+msgstr[1] "%(author_count)s author"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:43
+#: templates/zinnia/tags/statistics.html:25
+#, python-format
+msgid "%(reject_count)s rejected item"
+msgid_plural "%(reject_count)s rejected items"
+msgstr[0] "Elementu bat baztertuta"
+msgstr[1] "%(reject_count)s elementu baztertuta"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:48
+msgid "Statistics"
+msgstr "Estatistikak"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:50
+#: templates/zinnia/tags/statistics.html:28
+#, python-format
+msgid "%(entries_per_month)s entries per month"
+msgstr "%(entries_per_month)s sarrera hilabetero"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:55
+#: templates/zinnia/tags/statistics.html:31
+#, python-format
+msgid "%(words_per_entry)s words per entry"
+msgstr "%(words_per_entry)s hitz sarrerako"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:58
+#: templates/zinnia/tags/statistics.html:34
+#, python-format
+msgid "%(words_per_comment)s words per comment"
+msgstr "%(words_per_comment)s hitz iruzkineko"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:63
+#: templates/zinnia/tags/statistics.html:37
+#, python-format
+msgid "%(comments_per_entry)s comments per entry"
+msgstr "%(comments_per_entry)s iruzkin sarrerako"
+
+#: templates/admin/zinnia/widgets/_content_stats.html:66
+#: templates/zinnia/tags/statistics.html:40
+#, python-format
+msgid "%(linkbacks_per_entry)s linkbacks per entry"
+msgstr "%(linkbacks_per_entry)s linkback sarrerako"
+
+#: templates/admin/zinnia/widgets/_draft_entries.html:7
+#: templates/zinnia/entry_detail_base.html:212
+#: templates/zinnia/entry_detail_base.html:213
+msgid "Edit the entry"
+msgstr "Sarrera editatu"
+
+#: templates/admin/zinnia/widgets/_draft_entries.html:10
+#: templates/comments/zinnia_entry_preview.html:23
+#: templates/feeds/comment_title.html:2
+#: templates/feeds/discussion_title.html:2
+#: templates/feeds/pingback_title.html:2
+#: templates/feeds/trackback_title.html:2
+#: templates/zinnia/_entry_detail.html:19
+#: templates/zinnia/entry_detail_base.html:105
+#: templates/zinnia/entry_detail_base.html:141
+#: templates/zinnia/entry_detail_base.html:176
+msgid "on"
+msgstr "data honetan"
+
+#: templates/admin/zinnia/widgets/_draft_entries.html:16
+#: templates/comments/zinnia/entry/form.html:19
+msgid "Preview"
+msgstr "Aurreikusi"
+
+#: templates/admin/zinnia/widgets/_draft_entries.html:23
+#: templates/zinnia/tags/draft_entries.html:9
+msgid "No draft entries."
+msgstr "Ez dago zirriborrorik."
+
+#: templates/admin/zinnia/widgets/_draft_entries.html:32
+#: templates/admin/zinnia/widgets/_draft_entries.html:33
+msgid "View all draft entries"
+msgstr "Zirriborro guztiak ikusi"
+
+#: templates/admin/zinnia/widgets/_recent_comments.html:11
+#: templates/zinnia/_entry_detail.html:25
+#: templates/zinnia/tags/recent_comments.html:6
+#: templates/zinnia/tags/recent_linkbacks.html:7
+msgid "in"
+msgstr "non:"
+
+#: templates/admin/zinnia/widgets/_recent_comments.html:14
+#: templates/zinnia/tags/recent_comments.html:8
+msgid "Comment on"
+msgstr "Sarrera honi iruzkina gehitu:"
+
+#: templates/admin/zinnia/widgets/_recent_comments.html:23
+msgid "Edit the comment"
+msgstr "Iruzkina editatu"
+
+#: templates/admin/zinnia/widgets/_recent_comments.html:24
+#: templates/admin/zinnia/widgets/_recent_linkbacks.html:19
+msgid "Edit"
+msgstr "Editatu"
+
+#: templates/admin/zinnia/widgets/_recent_comments.html:31
+#: templates/zinnia/_entry_detail.html:93
+#: templates/zinnia/entry_detail_base.html:121
+#: templates/zinnia/tags/recent_comments.html:15
+msgid "No comments yet."
+msgstr "Iruzkinik ez."
+
+#: templates/admin/zinnia/widgets/_recent_comments.html:40
+#: templates/admin/zinnia/widgets/_recent_comments.html:41
+msgid "Manage the comments"
+msgstr "Iruzkinak kudeatu"
+
+#: templates/admin/zinnia/widgets/_recent_linkbacks.html:8
+msgid "made a linkback on"
+msgstr "-(e)k linkback-a egin du sarrera honetan:"
+
+#: templates/admin/zinnia/widgets/_recent_linkbacks.html:18
+msgid "Edit the linkback"
+msgstr "Linkback-a editatu"
+
+#: templates/admin/zinnia/widgets/_recent_linkbacks.html:26
+#: templates/zinnia/tags/recent_linkbacks.html:16
+msgid "No linkbacks yet."
+msgstr "Linkback-ik ez."
+
+#: templates/admin/zinnia/widgets/content_stats.html:6
+#: templates/admin/zinnia/widgets/content_stats.html:8
+msgid "Today"
+msgstr "Gaur"
+
+#: templates/admin/zinnia/widgets/draft_entries.html:6
+#: templates/admin/zinnia/widgets/draft_entries.html:8
+msgid "Draft entries"
+msgstr "Zirriborroak"
+
+#: templates/admin/zinnia/widgets/quickpost.html:6
+#: templates/admin/zinnia/widgets/quickpost.html:7
+msgid "Quick publishing"
+msgstr "Argitalpen azkarra"
+
+#: templates/admin/zinnia/widgets/quickpost.html:10
+msgid "Title"
+msgstr "Izenburua"
+
+#: templates/admin/zinnia/widgets/quickpost.html:26
+#: templates/zinnia/_entry_detail.html:63 templates/zinnia/base.html:42
+#: templates/zinnia/tag_list.html:7 templatetags/zbreadcrumbs.py:46
+msgid "Tags"
+msgstr "Etiketak"
+
+#: templates/admin/zinnia/widgets/quickpost.html:34
+msgid "Save as draft"
+msgstr "Zirriborroa"
+
+#: templates/admin/zinnia/widgets/quickpost.html:35
+msgid "Reset"
+msgstr "Berrezarri"
+
+#: templates/admin/zinnia/widgets/quickpost.html:36
+msgid "Publish"
+msgstr "Argitaratu"
+
+#: templates/admin/zinnia/widgets/recent_comments.html:6
+#: templates/admin/zinnia/widgets/recent_comments.html:8
+#: templates/zinnia/base.html:50
+msgid "Recent comments"
+msgstr "Azken iruzkinak"
+
+#: templates/admin/zinnia/widgets/recent_linkbacks.html:6
+#: templates/admin/zinnia/widgets/recent_linkbacks.html:8
+#: templates/zinnia/base.html:54
+msgid "Recent linkbacks"
+msgstr "Azken linkback-ak"
+
+#: templates/comments/comment_authors_email.txt:1
+#: templates/comments/comment_notification_email.txt:1
+#: templates/comments/comment_reply_email.txt:1
+#: templates/zinnia/entry_list.html:20
+msgid "Author"
+msgstr "Egilea"
+
+#: templates/comments/comment_authors_email.txt:3
+#: templates/comments/comment_notification_email.txt:5
+#: templates/comments/comment_reply_email.txt:3
+msgid "Comment"
+msgstr "Iruzkina"
+
+#: templates/comments/comment_authors_email.txt:6
+#: templates/comments/comment_notification_email.txt:8
+#: templates/comments/comment_reply_email.txt:6
+msgid "View this comment"
+msgstr "Iruzkin hau ikusi"
+
+#: templates/comments/comment_notification_email.txt:2
+msgid "Email"
+msgstr "Eposta"
+
+#: templates/comments/comment_notification_email.txt:3
+msgid "IP"
+msgstr "IP"
+
+#: templates/comments/comment_notification_email.txt:10
+msgid "Flag this comment"
+msgstr "Iruzkin hau markatu"
+
+#: templates/comments/comment_notification_email.txt:12
+msgid "Delete this comment"
+msgstr "Iruzkin hau ezabatu"
+
+#: templates/comments/comment_notification_email.txt:14
+msgid "Approve this comment"
+msgstr "Irunkin hau onartu"
+
+#: templates/comments/zinnia_entry_preview.html:4
+msgid "Comment preview"
+msgstr "Iruzkina aurreikusi"
+
+#: templates/comments/zinnia_entry_preview.html:10
+msgid "Please correct following error."
+msgid_plural "Please correct following errors."
+msgstr[0] "Ondorengo errorea konpondu mesedez."
+msgstr[1] "Ondorengo erroreak konpondu mesedez."
+
+#: templates/comments/zinnia_entry_preview.html:12
+msgid "Preview of the comment"
+msgstr "Iruzkinaren aurrebista"
+
+#: templates/comments/zinnia/entry/form.html:6
+msgid "Post your comment"
+msgstr "Zure iruzkina bidali"
+
+#: templates/comments/zinnia/entry/form.html:18
+msgid "Post"
+msgstr "Bidali"
+
+#: templates/comments/zinnia/entry/posted.html:5
+#: templates/comments/zinnia/entry/posted.html:10
+msgid "Thanks for your comment"
+msgstr "Eskerrik asko iruzkinarengatik"
+
+#: templates/comments/zinnia/entry/posted.html:12
+#: templates/comments/zinnia/entry/posted.html:13
+msgid "Return to entry list"
+msgstr "Sarrera zerrendara itzuli"
+
+#: templates/zinnia/_entry_detail.html:12
+msgid "Written by"
+msgstr "Idazlea(k):"
+
+#: templates/zinnia/_entry_detail.html:16 templates/zinnia/author_list.html:18
+#: templates/zinnia/tags/authors.html:7
+#, python-format
+msgid "Show all %(author)s's entries"
+msgstr "%(author)s-(r)en sarrera guztiak ikusi"
+
+#: templates/zinnia/_entry_detail.html:21
+msgid "Written on"
+msgstr "Data honetan:"
+
+#: templates/zinnia/_entry_detail.html:28
+#: templates/zinnia/category_list.html:16
+#: templates/zinnia/tags/categories.html:5
+#, python-format
+msgid "Show all entries in %(category)s"
+msgstr "%(category)s kategoriako sarrera guztiak ikusi"
+
+#: templates/zinnia/_entry_detail.html:53
+#, python-format
+msgid "Continue reading %(object)s"
+msgstr "%(object)s irakurtzen jarraitu"
+
+#: templates/zinnia/_entry_detail.html:55
+msgid "Continue reading"
+msgstr "Irakurtzen jarraitu"
+
+#: templates/zinnia/_entry_detail.html:67 templates/zinnia/tag_list.html:18
+#, python-format
+msgid "Show all entries tagged by %(tag)s"
+msgstr "%(tag)s etiketadun sarrera guztiak ikusi"
+
+#: templates/zinnia/_entry_detail.html:70
+msgid "No tags"
+msgstr "Etiketarik ez"
+
+#: templates/zinnia/_entry_detail.html:75
+msgid "Short url"
+msgstr "URL motza"
+
+#: templates/zinnia/_entry_detail.html:77
+#, python-format
+msgid "Short URL to %(object)s"
+msgstr "%(object)s sarrerara URL motza"
+
+#: templates/zinnia/_entry_detail.html:88
+#: templates/zinnia/tags/popular_entries.html:7
+#, python-format
+msgid "Comments on %(object)s"
+msgstr "%(object)s sarreraren iruzkinak"
+
+#: templates/zinnia/_entry_detail.html:94
+#, python-format
+msgid "Leave a comment on %(object)s"
+msgstr "%(object)s sarreran iruzkina gehitu"
+
+#: templates/zinnia/_entry_detail.html:95
+msgid "Be first to comment!"
+msgstr "Iruzkina gehitzen lehena izan zaitez!"
+
+#: templates/zinnia/_entry_detail.html:98
+#: templates/zinnia/entry_detail_base.html:117
+#: templates/zinnia/entry_detail_base.html:123
+msgid "Comments are closed."
+msgstr "Iruzkinak itxita daude."
+
+#: templates/zinnia/_entry_detail.html:104
+#, python-format
+msgid "Pingbacks on %(object)s"
+msgstr "%(object)s sarreraren pingback-ak"
+
+#: templates/zinnia/_entry_detail.html:111
+#, python-format
+msgid "Trackbacks on %(object)s"
+msgstr "%(object)s sarreraren trackback-ak"
+
+#: templates/zinnia/author_list.html:5 templates/zinnia/author_list.html:12
+msgid "Author list"
+msgstr "Egileen zerrenda"
+
+#: templates/zinnia/author_list.html:7 templates/zinnia/base.html:34
+#: templatetags/zbreadcrumbs.py:49
+msgid "Authors"
+msgstr "Egileak"
+
+#: templates/zinnia/author_list.html:24 templates/zinnia/tags/authors.html:13
+msgid "No authors yet."
+msgstr "Egilerik ez."
+
+#: templates/zinnia/base.html:15 templates/zinnia/skeleton.html:38
+msgid "RSS Feed of latest entries"
+msgstr "Azken sarreren RSS jarioa"
+
+#: templates/zinnia/base.html:16
+msgid "RSS Feed of latest discussions"
+msgstr ""
+
+#: templates/zinnia/base.html:26 templates/zinnia/skeleton.html:76
+msgid "Search"
+msgstr "Bilatu"
+
+#: templates/zinnia/base.html:38
+msgid "Calendar"
+msgstr "Egutegia"
+
+#: templates/zinnia/base.html:46 templates/zinnia/skeleton.html:72
+msgid "Recent entries"
+msgstr "Azken sarrerak"
+
+#: templates/zinnia/base.html:58
+msgid "Random entries"
+msgstr "Ausazko sarrerak"
+
+#: templates/zinnia/base.html:62
+msgid "Popular entries"
+msgstr "Sarrera eztabaidatuenak"
+
+#: templates/zinnia/base.html:66 templates/zinnia/entry_archive_day.html:5
+#: templates/zinnia/entry_archive_day.html:7
+#: templates/zinnia/entry_archive_day.html:12
+#: templates/zinnia/entry_archive_day.html:29
+#: templates/zinnia/entry_archive_month.html:5
+#: templates/zinnia/entry_archive_month.html:7
+#: templates/zinnia/entry_archive_month.html:12
+#: templates/zinnia/entry_archive_month.html:37
+#: templates/zinnia/entry_archive_today.html:23
+#: templates/zinnia/entry_archive_week.html:17
+#: templates/zinnia/entry_archive_year.html:5
+#: templates/zinnia/entry_archive_year.html:7
+#: templates/zinnia/entry_archive_year.html:12
+#: templates/zinnia/tags/archives_entries.html:6
+#: templates/zinnia/tags/archives_entries_link.html:2
+#: templates/zinnia/tags/archives_entries_tree.html:7
+#: templates/zinnia/tags/archives_entries_tree.html:14
+#: templates/zinnia/tags/archives_entries_tree.html:24
+msgid "Archives"
+msgstr "Artxiboak"
+
+#: templates/zinnia/base.html:71
+msgid "Tools"
+msgstr "Tresnak"
+
+#: templates/zinnia/base.html:75 templates/zinnia/base.html.py:76
+msgid "Dashboard"
+msgstr "Arbela"
+
+#: templates/zinnia/base.html:82 templates/zinnia/base.html.py:83
+msgid "Post an entry"
+msgstr "Sarrera gehitu"
+
+#: templates/zinnia/base.html:90 templates/zinnia/base.html.py:91
+msgid "Log out"
+msgstr "Irten"
+
+#: templates/zinnia/category_list.html:4
+#: templates/zinnia/category_list.html:11
+msgid "Category list"
+msgstr "Kategoria zerrenda"
+
+#: templates/zinnia/category_list.html:28 templates/zinnia/sitemap.html:62
+#: templates/zinnia/tags/categories.html:16
+msgid "No categories yet."
+msgstr "Kategoriarik ez."
+
+#: templates/zinnia/entry_archive_day.html:17
+#: templates/zinnia/entry_archive_today.html:17
+msgid "Previous day"
+msgstr ""
+
+#: templates/zinnia/entry_archive_day.html:23
+msgid "Next day"
+msgstr ""
+
+#: templates/zinnia/entry_archive_month.html:16
+msgid "Daily archives"
+msgstr "Eguneko artxiboak"
+
+#: templates/zinnia/entry_archive_month.html:26
+msgid "Previous month"
+msgstr ""
+
+#: templates/zinnia/entry_archive_month.html:32
+msgid "Next month"
+msgstr ""
+
+#: templates/zinnia/entry_archive_today.html:5
+#: templates/zinnia/entry_archive_today.html:7
+#: templates/zinnia/entry_archive_today.html:12
+msgid "Today archives"
+msgstr ""
+
+#: templates/zinnia/entry_archive_week.html:5
+#: templates/zinnia/entry_archive_week.html:7
+#: templates/zinnia/entry_archive_week.html:12
+#, python-format
+msgid "Archives week %(week_number)s of %(year)s"
+msgstr ""
+
+#: templates/zinnia/entry_archive_year.html:16
+#: templates/zinnia/sitemap.html:69
+msgid "Monthly archives"
+msgstr "Hilabeteko artxiboak"
+
+#: templates/zinnia/entry_detail_base.html:22
+msgid "RSS Feed of discussions on"
+msgstr "Eztabaiden RSS jarioa sarrera honetarako: "
+
+#: templates/zinnia/entry_detail_base.html:24
+msgid "RSS Feed of comments on"
+msgstr "Iruzkinen RSS jarioa sarrera honetarako: "
+
+#: templates/zinnia/entry_detail_base.html:26
+msgid "RSS Feed of pingbacks on"
+msgstr "Pingback-en RSS jarioa sarrera honetarako: "
+
+#: templates/zinnia/entry_detail_base.html:28
+msgid "RSS Feed of trackbacks on"
+msgstr "Trackback-en RSS jarioa sarrera honetarako: "
+
+#: templates/zinnia/entry_detail_base.html:48
+msgid "Next entry"
+msgstr "Hurrengo sarrea"
+
+#: templates/zinnia/entry_detail_base.html:60
+msgid "Previous entry"
+msgstr "Aurreko sarrera"
+
+#: templates/zinnia/entry_detail_base.html:71
+msgid "Related entries"
+msgstr "Erlazionatutako sarrerak"
+
+#: templates/zinnia/entry_detail_base.html:82
+msgid "Similar entries"
+msgstr "Antzeko sarrerak"
+
+#: templates/zinnia/entry_detail_base.html:90
+msgid "Comments"
+msgstr "Iruzkinak"
+
+#: templates/zinnia/entry_detail_base.html:110
+msgid "Direct link to this comment"
+msgstr ""
+
+#: templates/zinnia/entry_detail_base.html:132
+msgid "Pingbacks"
+msgstr "Pingback-ak"
+
+#: templates/zinnia/entry_detail_base.html:146
+msgid "Direct link to this pingback"
+msgstr ""
+
+#: templates/zinnia/entry_detail_base.html:156
+msgid "Pingbacks are open."
+msgstr "Pingback-ak irekita daude."
+
+#: templates/zinnia/entry_detail_base.html:158
+msgid "Pingbacks are closed."
+msgstr "Pingback-ak itxita daude."
+
+#: templates/zinnia/entry_detail_base.html:168
+msgid "Trackbacks"
+msgstr "Trackback-ak"
+
+#: templates/zinnia/entry_detail_base.html:181
+msgid "Direct link to this trackback"
+msgstr ""
+
+#: templates/zinnia/entry_detail_base.html:193
+msgid "Trackback URL"
+msgstr "Trackback URL"
+
+#: templates/zinnia/entry_list.html:5
+msgid "Latest entries for"
+msgstr "Azken sarrerak"
+
+#: templates/zinnia/entry_list.html:5
+msgid "the category"
+msgstr "kategoria honenak:"
+
+#: templates/zinnia/entry_list.html:5
+msgid "the tag"
+msgstr "etiketa honenak:"
+
+#: templates/zinnia/entry_list.html:5
+msgid "the author"
+msgstr "egilea honenak:"
+
+#: templates/zinnia/entry_list.html:5 templates/zinnia/entry_search.html:7
+msgid "page"
+msgstr "orrialde"
+
+#: templates/zinnia/entry_list.html:10 templates/zinnia/entry_list.html:13
+#: templates/zinnia/entry_list.html:16 templates/zinnia/skeleton.html:39
+msgid "RSS Feed"
+msgstr "RSS jarioa"
+
+#: templates/zinnia/entry_list.html:20
+msgid "Category"
+msgstr "Kategoria"
+
+#: templates/zinnia/entry_list.html:20
+msgid "Tag"
+msgstr "Etiketa"
+
+#: templates/zinnia/entry_list.html:20 templates/zinnia/entry_search.html:5
+msgid "Page"
+msgstr "Orria"
+
+#: templates/zinnia/entry_list.html:28
+#, python-format
+msgid "Category archives: %(category)s"
+msgstr "Kategoria artxiboak: %(category)s"
+
+#: templates/zinnia/entry_list.html:35
+#, python-format
+msgid "Tag archives: %(tag)s"
+msgstr "Etiketa artxiboak: %(tag)s"
+
+#: templates/zinnia/entry_list.html:39
+#, python-format
+msgid "Author archives: %(author)s"
+msgstr "Egile artxiboak: %(author)s"
+
+#: templates/zinnia/entry_list.html:50 templates/zinnia/sitemap.html:25
+#: templates/zinnia/sitemap.html.py:45
+#: templates/zinnia/tags/featured_entries.html:9
+#: templates/zinnia/tags/popular_entries.html:12
+#: templates/zinnia/tags/random_entries.html:9
+#: templates/zinnia/tags/recent_entries.html:9
+msgid "No entries yet."
+msgstr "Sarrerarik ez."
+
+#: templates/zinnia/entry_list.html:69 templates/zinnia/entry_list.html:70
+msgid "Edit the category"
+msgstr "Sarrera editatu"
+
+#: templates/zinnia/entry_list.html:76 templates/zinnia/entry_list.html:77
+msgid "Edit the tag"
+msgstr "Etiketa editatu"
+
+#: templates/zinnia/entry_list.html:83 templates/zinnia/entry_list.html:84
+msgid "Edit the author"
+msgstr "Egilea editatu"
+
+#: templates/zinnia/entry_search.html:5 templates/zinnia/entry_search.html:7
+#: templates/zinnia/entry_search.html:17
+msgid "Search results for"
+msgstr "Hau bilatzearen emaitzak:"
+
+#: templates/zinnia/entry_search.html:11
+msgid "RSS Feed of search result of"
+msgstr "Hau bilatzearen emaitzen RSS jarioa"
+
+#: templates/zinnia/entry_search.html:25
+#, python-format
+msgid "%(entry_count)s entry found"
+msgid_plural "%(entry_count)s entries found"
+msgstr[0] "sarrera bat topatuta"
+msgstr[1] "%(entry_count)s sarrera topatuta"
+
+#: templates/zinnia/entry_search.html:36
+msgid "Nothing found."
+msgstr "Ez da ezer aurkitu."
+
+#: templates/zinnia/entry_search.html:46
+msgid ""
+"You can use - to exclude words or phrases, &quot;double quotes&quot; for "
+"exact phrases and the AND/OR boolean operators combined with parenthesis for"
+" complex searchs."
+msgstr "Bilaketa konplexuak egiteko &quot;-&quot; erabili dezakezu hitz edo esaldiak kentzeko, &quot;komatxo bikoitzak&quot; esaldi zehatzetarako eta AND/OR eragileak parentesiekin konbinatu."
+
+#: templates/zinnia/login.html:4 templates/zinnia/login.html.py:9
+msgid "Login required"
+msgstr "Saioa hasi behar da"
+
+#: templates/zinnia/login.html:13
+msgid "Your username and password didn't match. Please try again."
+msgstr "Zure erabiltzailea eta pasahitza ez datoz bat. Saiatu berriro mesedez."
+
+#: templates/zinnia/login.html:17
+msgid "You need to be connected to view this entry."
+msgstr "Sarrera hau ikusteko saioa hasi behar duzu."
+
+#: templates/zinnia/login.html:34
+msgid "Login"
+msgstr "Saioa hasi"
+
+#: templates/zinnia/password.html:4 templates/zinnia/password.html.py:9
+msgid "Password required"
+msgstr "Pasahitza behar da"
+
+#: templates/zinnia/password.html:13
+msgid "The password provided is not valid. Please try again."
+msgstr "Emandako pasahitza ez da egokia. Saiatu berriro mesedez."
+
+#: templates/zinnia/password.html:17
+msgid "You need to provide a password to view this entry."
+msgstr "Sarrera hau ikusteko pasahitza behar da."
+
+#: templates/zinnia/password.html:24
+msgid "Password"
+msgstr "Pasahitza"
+
+#: templates/zinnia/password.html:29
+msgid "Valid"
+msgstr "Egiaztatu"
+
+#: templates/zinnia/sitemap.html:4 templates/zinnia/sitemap.html.py:9
+#: templates/zinnia/skeleton.html:33 templates/zinnia/skeleton.html.py:34
+#: templates/zinnia/skeleton.html:65 templates/zinnia/skeleton.html.py:66
+msgid "Sitemap"
+msgstr "Web mapa"
+
+#: templates/zinnia/sitemap.html:12
+msgid "Entries per categories"
+msgstr "Sarrerak kategoriatan"
+
+#: templates/zinnia/sitemap.html:20 templates/zinnia/sitemap.html.py:40
+msgid "comment"
+msgstr "iruzkin"
+
+#: templates/zinnia/sitemap.html:33
+msgid "All the entries"
+msgstr "Sarrera guztiak"
+
+#: templates/zinnia/skeleton.html:57
+msgid "Useful links"
+msgstr "Esteka interesgarriak"
+
+#: templates/zinnia/skeleton.html:60 templates/zinnia/skeleton.html.py:61
+msgid "Blog index"
+msgstr "Blogaren hasiera"
+
+#: templates/zinnia/tag_list.html:5 templates/zinnia/tag_list.html.py:12
+msgid "Tag list"
+msgstr "Etiketa zerrenda"
+
+#: templates/zinnia/tag_list.html:23 templates/zinnia/tags/tag_cloud.html:12
+msgid "No tags yet."
+msgstr "Etiketarik ez dago oraindik."
+
+#: templates/zinnia/tags/archives_entries.html:13
+#: templates/zinnia/tags/archives_entries_tree.html:38
+msgid "No archives yet."
+msgstr "Ez dago artxiborik oraindik."
+
+#: templates/zinnia/tags/pagination.html:4
+#, python-format
+msgid "Page %(current_page)s of %(total_page)s"
+msgstr "Orria: %(current_page)s. Totalean: %(total_page)s"
+
+#: templates/zinnia/tags/pagination.html:10
+msgid "More recent entries"
+msgstr "Azkenetariko sarrera gehiago"
+
+#: templates/zinnia/tags/pagination.html:20
+#: templates/zinnia/tags/pagination.html:33
+#: templates/zinnia/tags/pagination.html:47
+msgid "Entries page"
+msgstr "Sarrera orrialdea:"
+
+#: templates/zinnia/tags/pagination.html:56
+msgid "More old entries"
+msgstr "Sarrera zahar gehiago"
+
+#: templates/zinnia/tags/recent_linkbacks.html:9
+msgid "Linkback on"
+msgstr "Linkback gaituta"
+
+#: templates/zinnia/tags/search_form.html:5
+msgid "Keywords..."
+msgstr "Gako-hitzak..."
+
+#: templates/zinnia/tags/search_form.html:7
+msgid ""
+"You can use - to exclude words or phrases, &quot;double quotes&quot; for "
+"exact phrases and the AND/OR boolean operators combined with parenthesis for"
+" complex queries."
+msgstr ""
+
+#: templates/zinnia/tags/similar_entries.html:9
+msgid "No similar entries."
+msgstr "Ez dago antzerako sarrerarik."
+
+#: templates/zinnia/tags/tag_cloud.html:7
+#, python-format
+msgid "%(entry_count)s entry tagged by %(tag)s"
+msgid_plural "%(entry_count)s entries tagged by %(tag)s"
+msgstr[0] "Sarrera bati %(tag)s etiketa ezarrita"
+msgstr[1] "%(entry_count)s sarrerei %(tag)s etiketa ezarrita"
+
+#: templatetags/zbreadcrumbs.py:82
+#, python-format
+msgid "Page %s"
+msgstr ""
+
+#: templatetags/zbreadcrumbs.py:108
+#, python-format
+msgid "Week %s"
+msgstr ""
+
+#: tests/views.py:399 views/search.py:24
+msgid "The pattern is too short"
+msgstr "Eredua laburregia da"
+
+#: tests/views.py:403 views/search.py:28
+msgid "No pattern to search found"
+msgstr "Ez da bilaketarako eredurik topatu"
+
+#: views/tags.py:44
+#, python-format
+msgid "No Tag found matching \"%s\"."
+msgstr ""
+
+#: xmlrpc/metaweblog.py:36
+msgid "Username is incorrect."
+msgstr "Erabiltzaile izen ezegokia"
+
+#: xmlrpc/metaweblog.py:38
+msgid "Password is invalid."
+msgstr "Pasahitz ezegokia"
+
+#: xmlrpc/metaweblog.py:40
+msgid "User account unavailable."
+msgstr "Erabiltzaile kontua ez dago erabilgarri."
+
+#: xmlrpc/metaweblog.py:43
+#, python-format
+msgid "User cannot %s."
+msgstr "Erabiltzaileak ezin du %s."
+
+#: xmlrpc/pingback.py:97
+msgid "No title"
+msgstr "Izenbururik ez"
