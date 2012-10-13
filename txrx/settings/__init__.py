@@ -105,6 +105,7 @@ INSTALLED_APPS = (
   'paypal.standard.ipn',
   'password_reset',
   'compressor',
+  'articles',
 
   # lablackey
   'lablackey.photo',
@@ -116,8 +117,8 @@ INSTALLED_APPS = (
   'lablackey.event',
 
   # this project
-  'project',
-  'tool',
+  #'project',
+  #'tool',
   'course',
   'membership',
   'main',

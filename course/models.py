@@ -7,7 +7,7 @@ import datetime
 from lablackey.geo.models import Location
 from lablackey.event.models import Event
 from articles.models import Tag
-from tool.models import Tool
+#from tool.models import Tool
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
@@ -47,7 +47,7 @@ class Section(models.Model):
   description = models.TextField(null=True,blank=True)
   location = models.ForeignKey(Location,default=1)
   src = ImageField("Logo",max_length=300,upload_to='course/%Y-%m',null=True,blank=True)
-  tools = models.ManyToManyField(Tool,blank=True)
+  #tools = models.ManyToManyField(Tool,blank=True)
   max_students = models.IntegerField(default=40)
   get_instructors = lambda self: set([s.user for s in self.session_set.all()])
   __unicode__ = lambda self: "%s - %s"%(self.course.name,self.term)
