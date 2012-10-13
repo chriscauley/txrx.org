@@ -8,12 +8,8 @@ admin.autodiscover()
 _urls = lambda *ns: [url(r'^%s/'%n, include('%s.urls'%n, namespace=n, app_name=n)) for n in ns]
 j = "(?:.json)?"
 
-ms = "article|project"
 urlpatterns = patterns(
   'txrx.views',
-  (r'^news/', include('articles.urls')),
-  (r'^(?P<model>%s)/$'%ms,'feed'),
-  (r'^(?P<model>%s)/(?P<year>\d{4})/(?P<slug>[\w\-\d]*)/$'%ms,'item'),
   (r'^admin/', include(admin.site.urls)),
   (r'^members/$','members'),
   (r'^member/(?P<username>.*)/$','member'),
@@ -25,7 +21,6 @@ urlpatterns = patterns(
   (r'^google_login','google_login'),
   (r'^google_return/(?P<url>.*)','google_return'),
   (r'^grappelli/', include('grappelli.urls')),
-  (r'^.*.json','comming_soon'),
   (r'^accounts/', include('registration.backends.default.urls')),
   (r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
   (r'^password-reset/', include('password_reset.urls')),
