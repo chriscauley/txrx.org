@@ -33,7 +33,6 @@ class SessionAdmin(admin.ModelAdmin):
 class EnrollmentAdmin(admin.ModelAdmin):
   list_display = ("id",'user', 'session', )
   list_filter = ("session", "user",)
-  list_editable = ("user",)
 
 admin.site.register(Subject,SubjectAdmin)
 admin.site.register(Course,CourseAdmin)
