@@ -103,7 +103,6 @@ INSTALLED_APPS = (
   # 3rd party
   'south',
   'devserver',
-  'articles',
   'sorl.thumbnail',
   'registration',
   'paypal.standard.ipn',
@@ -123,8 +122,8 @@ INSTALLED_APPS = (
   'lablackey.event',
 
   # this project
-  'project',
-  'tool',
+  #'project',
+  #'tool',
   'course',
   'membership',
   'main',
