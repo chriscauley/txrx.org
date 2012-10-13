@@ -95,6 +95,11 @@ def setup_database():
         with("source %(virtualenv)s/bin/activate" % env):
             run("./manage.py syncdb")
             run("./manage.py migrate")
+
+def migrate():
+    with cd(env.source_dir):
+        with("source %(virtualenv)s/bin/activate" % env):
+            run("./manage.py migrate")
         
 def import_data(data='dbdump.json'):
     "Between setup_database() and here you'll have to TRUNCATE CASCADED the django_content_types table"
@@ -154,6 +159,7 @@ def collectstatic():
 def deploy():
     git_pull()
     collectstatic()
+    migrate()
     restart_gunicorn()
     
 def db_overwrite(database_file):
