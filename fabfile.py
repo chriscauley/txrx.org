@@ -92,9 +92,8 @@ def update_environment():
 def setup_database():
     "You've got to do some stuff on your own here, but once that's done, run this"
     with cd(env.source_dir):
-        with run("source %(virtualenv)s/bin/activate" % env):
-            run("./manage.py syncdb")
-            run("./manage.py migrate")
+        run("./manage.py syncdb")
+        run("./manage.py migrate")
         
 def import_data(data='dbdump.json'):
     "Between setup_database() and here you'll have to TRUNCATE CASCADED the django_content_types table"
