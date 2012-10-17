@@ -19,13 +19,15 @@ def handle_successful_payment(sender, **kwargs):
     class_count = int(params['num_cart_items'])
 
     for i in range(1, class_count+1):
-        session_id = int(params['item_number%d' % (i, )])
         section_cost = int(float(params['mc_gross_%d' % (i, )]))
 
         try:
-            session = Session.objects.get(id=session_id)
+            session = Session.objects.get(id=int(params['item_number%d' % (i, )]))
         except Session.DoesNotExist:
             mail_admins("Session not found",traceback.format_exc())
+            continue
+        except ValueError:
+            mail_admins("Non-integer session number",traceback.format_exc())
             continue
             
         #we're trusting during testing
