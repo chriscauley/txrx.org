@@ -16,7 +16,10 @@ def handle_successful_payment(sender, **kwargs):
 
     #add them to the classes they're enrolled in
     params = QueryDict(sender.query)
-    class_count = int(params['num_cart_items'])
+    try:
+        class_count = int(params['num_cart_items'])
+    except:
+        class_count = 1
 
     for i in range(1, class_count+1):
         section_cost = int(float(params['mc_gross_%d' % (i, )]))
