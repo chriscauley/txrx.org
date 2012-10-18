@@ -4,10 +4,10 @@ _nav = [
   {"name": "all classes",
    "url": "/classes/",
    'sublinks': [
-      {"name": "my classes", "url": "/classes/my-sessions/"},
       ]
    },
-  {"name": "blog", "url": "/weblog/"}
+  {"name": "my classes", "url": "/classes/my-sessions/"},
+  #{"name": "blog", "url": "/weblog/"}
   ]
 
 def nav(request):
