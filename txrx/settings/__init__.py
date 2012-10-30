@@ -94,11 +94,13 @@ INSTALLED_APPS = (
   'django.contrib.contenttypes',
   'django.contrib.sessions',
   'django.contrib.sites',
+  'django.contrib.markup',
   'django.contrib.messages',
   'django.contrib.comments',
   'django.contrib.staticfiles',
   'django.contrib.humanize',
   'django.contrib.admin',
+  'template_utils',
 
   # 3rd party
   'south',
@@ -110,6 +112,7 @@ INSTALLED_APPS = (
   'compressor',
   'tagging',
   'mptt',
+  'mptt_comments',
   'zinnia',
 
   # lablackey
@@ -153,7 +156,7 @@ LOGGING = {
   }
 
 
-PAYPAL_RECEIVER_EMAIL = "seller_1346532499_biz@ufl.edu"
+PAYPAL_RECEIVER_EMAIL = "txrxlabs@gmail.com"
 
 import re
 import socket
