@@ -100,7 +100,7 @@ INSTALLED_APPS = (
   'django.contrib.staticfiles',
   'django.contrib.humanize',
   'django.contrib.admin',
-  'template_utils',
+  #'template_utils',
 
   # 3rd party
   'south',
