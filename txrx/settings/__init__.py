@@ -112,7 +112,7 @@ INSTALLED_APPS = (
   'compressor',
   'tagging',
   'mptt',
-  'mptt_comments',
+  #'mptt_comments',
   'zinnia',
 
   # lablackey
