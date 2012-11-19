@@ -27,7 +27,7 @@ urlpatterns = patterns(
   (r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
   (r'^password-reset/', include('password_reset.urls')),
   (r'^force_login/(\d+)/$', 'force_login'),
-  (r'^comments/', include('mptt_comments.urls')),
+  #(r'^comments/', include('mptt_comments.urls')),
 )
 
 urlpatterns += patterns(
