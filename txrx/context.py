@@ -1,13 +1,14 @@
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 _nav = [
-  {"name": "all classes",
+  {"name": "classes",
    "url": "/classes/",
    'sublinks': [
+      {"name": "all classes", "url": "/classes/"},
+      {"name": "my classes", "url": "/classes/my-sessions/"},
       ]
    },
-  {"name": "my classes", "url": "/classes/my-sessions/"},
-  #{"name": "blog", "url": "/weblog/"}
+  {"name": "blog", "url": "/weblog/"}
   ]
 
 def nav(request):

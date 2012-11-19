@@ -55,6 +55,18 @@ a { display: inline-block; }
   padding: 15px;
 }
 
+#content {
+  float: left;
+  width: 590px;
+}
+
+#side {
+  float: right;
+  margin: 0 10px 10px 0;
+  height: 100%;
+  width: 300px;
+}
+
 .header {
   height: 51px;
   margin: 0 0 10px;
@@ -85,14 +97,26 @@ a { display: inline-block; }
   padding: 10px;
 }
 
-#nav a {
+#nav li {
   border-right: 1px solid black;
   color: #333;
   display: inline-block;
   margin-bottom: 5px;
   padding: 5px 10px;
+  position: relative;
   text-shadow: 1px 1px 1px #bbb;
   &:last-child { border: none; }
+  &:hover div { display: block; }
+  div {
+    background: white;
+    box-shadow: 1px 1px 6px #333;
+    display: none;
+    position: absolute;
+    top: 100%;
+    width: 100px;
+    z-index: 10;
+    a { display: block; margin: 6px 6px; }
+  }
 }
 
 .auth {
@@ -152,13 +176,6 @@ a { display: inline-block; }
 
 .article > .item {
   padding-top: 25px;
-}
-
-#side {
-  float: right;
-  margin: 0 10px 10px 0;
-  height: 100%;
-  width: 300px;
 }
 
 /* filters */
@@ -258,54 +275,54 @@ a { display: inline-block; }
   position: relative;
   width: 100%;
   > li {
-  display: inline-block;
-  margin: 3px;
-}
-
-> li > a {
-  text-align: center;
-}
-
-.tools {
-  display: none;
-  margin: 10px;
-  position: absolute;
-  right: 0;
-  top: 120px;
-  width: 640px;
-}
-
-li.current {
-  outline: 3px solid black;
-}
-
-li.current {
-  .tools { display: block; }
-  .slides {
-    height: 460px;
-    margin: 10px auto;
-    overflow: hidden;
-    position: relative;
-    width: 560px;
+    display: inline-block;
+    margin: 3px;
   }
-  .slides .wrapper {
-    left: 0;
-    position: absolute;
-    top: 0;
-    -webkit-transition: left 0.5s ease-out;
+
+  > li > a {
+    text-align: center;
   }
-  .tool { float: left; }
-  .tool a { position: relative; }
-  .tool a > .after {
-    background-color: white;
-    bottom: 0;
-    line-height: 1em;
-    padding: 3px 10px;
+  
+  .tools {
+    display: none;
+    margin: 10px;
     position: absolute;
     right: 0;
+    top: 120px;
+    width: 640px;
+  }
+  
+  li.current {
+    outline: 3px solid black;
+  }
+
+  li.current {
+    .tools { display: block; }
+    .slides {
+      height: 460px;
+      margin: 10px auto;
+      overflow: hidden;
+      position: relative;
+      width: 560px;
+    }
+    .slides .wrapper {
+      left: 0;
+      position: absolute;
+      top: 0;
+      -webkit-transition: left 0.5s ease-out;
+    }
+    .tool { float: left; }
+    .tool a { position: relative; }
+    .tool a > .after {
+      background-color: white;
+      bottom: 0;
+      line-height: 1em;
+      padding: 3px 10px;
+      position: absolute;
+      right: 0;
+    }
   }
 }
-
 .modal div > a > img {
   display: block;
 }
