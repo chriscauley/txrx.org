@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load url from future %}
 {% load thumbnail content_tags %}
 
 {% block title %}Classes {{ term.name }} at {{ block.super }} {% endblock %}
@@ -55,8 +56,9 @@ function expand(that) {
     <a href="{{ request.path }}#c{{ session.id }}" class="anchor"></a>
     {% endif %}
     <div class="name">
-      {{ session.section.course }}
-      <a href="javascript:;" onclick="return expand(this);" class="showDetails"></a>
+      <a href="{% url "course:detail" session.slug %}">
+	{{ session.section.course }}
+      </a>
     </div>
     <div class="instructor">{% if session.user.first_name and session.user.last_name%}
       {{ session.user.first_name }} {{ session.user.last_name|slice:":1" }}.{% else %}
@@ -73,19 +75,10 @@ function expand(that) {
     <div class="days">{{ session.classtime_set.count }}</div>
     <div class="fee">
       <span class="item_price">
-	{{ session.section.fee }}{% if session.section.fee_notes %}*{% endif %}
+        {{ session.section.fee }}{% if session.section.fee_notes %}*{% endif %}
       </span>
     </div>
-    <div>
-      {% if session in user_sessions %}
-      enrolled
-      {% elif session.closed %}
-      {{ session.closed_string }}
-      {% else %}
-      <a class="add" href="javascript:addItem('{{ session.section.course }} ({{ session.classtime_set.all.0.start|date:"m/d/Y" }})',{{ session.section.fee }},'{{ session.id }}'); toggleCourses();">Enroll</a>
-      <a class="drop" href="javascript:simpleCart.remove('{{ session.id }}'); toggleCourses();">Drop</a>
-      {% endif %}
-    </div>
+    {% include "course/_enroll_link.html" %}
     <div class="details">
       <div class="left">
 	<div class="subjects">
@@ -126,67 +119,5 @@ function expand(that) {
   </div>
   {% endfor %}
 </div>
-<div id="checkout-box">
-  <div>
-    Classes: <span class="simpleCart_quantity"></span>
-  </div>
-  <div>
-    Total: <span class="simpleCart_finalTotal"></span>
-  </div>
-  <div>
-    <a class="blue" href="javascript:;" onclick="$('#cart-modal').modal();return false;">Checkout</a>
-  </div>
-</div>
-<div class="modal" id="cart-modal" style="display: none;">
-  <div style="position: relative;">
-    <div class="close" onclick='$("#cart-modal").dialog("close");'></div>
-  </div>
-  <div id="cart" class="simpleCart_items"></div>
-  <div class="checkout-box">
-    Total: <span class="simpleCart_finalTotal"></span>
-  </div>
-  <div class="clear"></div>
-  <a href="javascript:;" style="float:right;"
-     onclick="createCookie('checkout_initiated','yes!',10);simpleCart.checkout(); return false">
-    <img src="/static/paypal.gif">
-  </a>
-  {% comment %}
-  <a href="javascript:;" class="simpleCart_checkout" style="float:right;">
-    <img src="/static/checkout.gif" />
-  </a>
-  {% endcomment %}
-  <div class="clear"></div>
-</div>
-<script type="text/javascript">
-function createCookie(name,value,days) {
-  if (days) {
-    var date = new Date();
-    date.setTime(date.getTime()+(days*24*60*60*1000));
-    var expires = "; expires="+date.toGMTString();
-  }
-  else var expires = "";
-  document.cookie = name+"="+value+expires+"; path=/";
-}
-
-function readCookie(name) {
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(';');
-  for(var i=0;i < ca.length;i++) {
-    var c = ca[i];
-    while (c.charAt(0)==' ') c = c.substring(1,c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-  }
-  return null;
-}
-
-function eraseCookie(name) {
-  createCookie(name,"",-1);
-}
-function simple_cart_ready() {
-  {% if "success" in request.GET %}simpleCart.empty();{% endif %}
-  if (!!readCookie("checkout_initiated")) {simpleCart.empty(); eraseCookie("checkout_initiated");}
-  toggleCourses();
-};
-simpleCart.ready(simple_cart_ready)
-</script>
+{% include "course/_cart.html" %}
 {% endblock %}

@@ -1,0 +1,63 @@
+<div id="checkout-box">
+  <div>
+    Classes: <span class="simpleCart_quantity"></span>
+  </div>
+  <div>
+    Total: <span class="simpleCart_finalTotal"></span>
+  </div>
+  <div>
+    <a class="blue" href="javascript:;" onclick="$('#cart-modal').modal();return false;">Checkout</a>
+  </div>
+</div>
+<div class="modal" id="cart-modal" style="display: none;">
+  <div style="position: relative;">
+    <div class="close" onclick='$("#cart-modal").dialog("close");'></div>
+  </div>
+  <div id="cart" class="simpleCart_items"></div>
+  <div class="checkout-box">
+    Total: <span class="simpleCart_finalTotal"></span>
+  </div>
+  <div class="clear"></div>
+  <a href="javascript:;" style="float:right;"
+     onclick="createCookie('checkout_initiated','yes!',10);simpleCart.checkout(); return false">
+    <img src="/static/paypal.gif">
+  </a>
+  {% comment %}
+  <a href="javascript:;" class="simpleCart_checkout" style="float:right;">
+    <img src="/static/checkout.gif" />
+  </a>
+  {% endcomment %}
+  <div class="clear"></div>
+</div>
+<script type="text/javascript">
+function createCookie(name,value,days) {
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime()+(days*24*60*60*1000));
+    var expires = "; expires="+date.toGMTString();
+  }
+  else var expires = "";
+  document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0;i < ca.length;i++) {
+    var c = ca[i];
+    while (c.charAt(0)==' ') c = c.substring(1,c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+  }
+  return null;
+}
+
+function eraseCookie(name) {
+  createCookie(name,"",-1);
+}
+function simple_cart_ready() {
+  {% if "success" in request.GET %}simpleCart.empty();{% endif %}
+  if (!!readCookie("checkout_initiated")) {simpleCart.empty(); eraseCookie("checkout_initiated");}
+  toggleCourses();
+};
+simpleCart.ready(simple_cart_ready)
+</script>

@@ -35,7 +35,12 @@ body { background: #333; padding-bottom: 30px}
 a { display: inline-block; }
 .blue { color: blue !important; }
 
-#wrapper, .header {
+#wrapper {
+  margin: 0 auto;
+  width: 950px;
+}
+
+#main, .header {
   background: white;
   border: 1px solid #333;
   border-radius: 3px;
@@ -45,18 +50,15 @@ a { display: inline-block; }
   position: relative;
 }
 
-#wrapper {
-  margin:  0 auto;
+#main {
   min-height: 800px;
   padding: 15px;
-  width: 950px;
 }
 
 .header {
   height: 51px;
-  margin: 0 auto 10px;
+  margin: 0 0 10px;
   min-height: 25px;
-  width: 980px;
   a {
     color: black;
     display: inline-block;
@@ -161,6 +163,7 @@ a { display: inline-block; }
 
 /* filters */
 .filters {
+  float: right;
   padding: 10px 10px 0;
 }
 
@@ -233,7 +236,7 @@ a { display: inline-block; }
 }
 
 #courses .row {
-  .name { width: 400px; }
+  .name { width: 390px; }
   .instructor { width: 95px; }
   .first_date { width: 110px; }
   .intro { width: 120px; }
@@ -477,4 +480,14 @@ a { display: inline-block; }
 
 .modal {
   display: none;
+}
+
+#main > .course {
+  width: 720px;
+  position: relative;
+  .enroll-link { display: inline; }
+  .details {
+    .left { float: left; width: 200px; }
+    .right { float: right; width: 500px; }
+  }
 }

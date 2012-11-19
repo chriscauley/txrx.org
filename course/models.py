@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.template.defaultfilters import slugify
 from lablackey.profile.models import UserModel
 from sorl.thumbnail import ImageField
 import datetime
@@ -56,6 +57,7 @@ class Section(models.Model):
 
 class Session(UserModel):
   section = models.ForeignKey(Section)
+  slug = models.CharField(max_length=255)
   cancelled = models.BooleanField(default=False)
   ts_help = "Only used to set dates on creation."
   time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
@@ -79,6 +81,7 @@ class Session(UserModel):
   def save(self,*args,**kwargs):
     from membership.models import Profile
     profile,new = Profile.objects.get_or_create(user=self.user)
+    self.slug = slugify("%s_%s"%(self.section,self.id))
     return super(Session,self).save(*args,**kwargs)
   @property
   def first_date(self):

@@ -105,8 +105,9 @@ function toggleCourses() {
 </head>
 
 <body>
-  {% include "header.html" %}
-  <div id="wrapper" class="{{ current|slugify }}">
+  <div id="wrapper">
+    {% include "header.html" %}
+  <div id="main" class="{{ current|slugify }}">
     {% block main %}
     <div id="content">
       {% block content %}{% endblock %}

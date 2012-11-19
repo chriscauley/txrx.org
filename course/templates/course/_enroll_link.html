@@ -1,0 +1,10 @@
+<span class="enroll-link">
+  {% if session in user_sessions %}
+  enrolled
+  {% elif session.closed %}
+  {{ session.closed_string }}
+  {% else %}
+  <a class="add" href="javascript:addItem('{{ session.section.course }} ({{ session.classtime_set.all.0.start|date:"m/d/Y" }})',{{ session.section.fee }},'{{ session.id }}'); toggleCourses();">Enroll</a>
+  <a class="drop" href="javascript:simpleCart.remove('{{ session.id }}'); toggleCourses();">Drop</a>
+  {% endif %}
+</span>

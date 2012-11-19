@@ -1,0 +1,3 @@
+* minutes app
+** add members and timestamp them as they come
+** add minutes (timestamped at the time of adding

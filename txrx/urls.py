@@ -14,7 +14,7 @@ urlpatterns = patterns(
   (r'^members/$','members'),
   (r'^member/(?P<username>.*)/$','member'),
   (r'^membership/$', include('membership.urls')),
-  (r'^classes/', include('course.urls')),
+  (r'^classes/', include('course.urls',namespace='course',app_name='course')),
   (r'^weblog/', include('zinnia.urls')),
   (r'^comments/', include('django.contrib.comments.urls')),
   (r'^projects/(?P<slug>[\w\d\-]*)/?$','projects'),
@@ -27,6 +27,7 @@ urlpatterns = patterns(
   (r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
   (r'^password-reset/', include('password_reset.urls')),
   (r'^force_login/(\d+)/$', 'force_login'),
+  (r'^comments/', include('mptt_comments.urls')),
 )
 
 urlpatterns += patterns(

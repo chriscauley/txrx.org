@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="course" data-subject="{{ session.subjects|join:"," }}"
+     {%if not session.course.closed%}data-open{%endif%}
+     data-date="{{ session.starttime|date:"Ymd" }}">
+  <div class="name">
+    <h1>{{ session.section.course }}</h1>
+  </div>
+  <div class="instructor">
+    Taught by
+    {% if session.user.first_name and session.user.last_name %}
+    {{ session.user.first_name }} {{ session.user.last_name|slice:":1" }}.{% else %}
+    {{ session.user.username }}{% endif %}
+  </div>
+  <div class="fee">
+    {% include "course/_enroll_link.html" %}
+    (${{ session.section.fee }}{% if session.section.fee_notes %}*{% endif %})
+  </div>
+  <div class="details">
+    <div class="left">
+      <div class="subjects">
+	<b>Subject{{ session.section.course.subjects|pluralize:"s" }}</b>:
+	{{ session.section.course.subjects.all|join:"," }}
+      </div>
+      <ol class="dates">{% for classtime in session.classtime_set.all %}
+	<li>
+	  {{ classtime.start|date:"D m/d G:i" }}
+	  -
+	  {{ classtime.end_time|time:"G:i" }}
+	</li>{% endfor %}
+      </ol>
+    </div>
+    <div class="right">
+      <div class="description">
+	{{ session.section.description|linebreaksbr }}
+      </div>
+      {% if session.section.fee_notes %}
+      <span class="notes"><b>* Fee Notes:</b> {{ session.section.fee_notes }}</span>
+      {% endif %}
+      {% if session.section.requirements %}
+      <span class="notes">
+	<b>Requirements:</b> {{ session.section.requirements }}
+      </span>
+      {% endif %}
+      {% if session.section.prerequisites %}
+      <span class="notes">
+	<b>Prerequisites:</b>
+	{{ session.section.prerequisites }}
+      </span>
+      {% endif %}
+    </div>
+    <div style="clear: both;"></div>
+  </div>
+</div>
+{% include "course/_cart.html" %}
+{% endblock %}

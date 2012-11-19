@@ -1,7 +1,9 @@
-from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import QueryDict
+from django.shortcuts import get_object_or_404
+from django.template.response import TemplateResponse
+
 from course.models import Course, Section, Term, Subject, Session, Enrollment
 from membership.models import Profile
 
@@ -36,6 +38,13 @@ def index(request):
     'user_sessions': user_sessions
     }
   return TemplateResponse(request,"course/classes.html",values)
+
+def detail(request,slug):
+  session = get_object_or_404(Session,slug=slug)
+  values = {
+    'session': session
+    }
+  return TemplateResponse(request,"course/detail.html",values)
 
 def instructors(request,username=None):
   instructors = Profile.objects.list_instructors()

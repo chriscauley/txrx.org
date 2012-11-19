@@ -26,7 +26,7 @@ class SectionAdmin(admin.ModelAdmin):
 class SessionAdmin(admin.ModelAdmin):
   list_display = ("__unicode__","user")
   list_editable = ("user",)
-  exclude = ('time_string',)
+  exclude = ('time_string','slug')
   extra = 0
   inlines = (ClassTimeInline,)
 
