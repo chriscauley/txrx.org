@@ -34,7 +34,7 @@ urlpatterns += patterns(
   '',
   url(r'^instructors/$','course.views.instructors',name='instructor_detail'),
   url(r'^instructors/([^/]+)/$','course.views.instructor_detail',name='instructor_detail'),
-  (r'^$','course.views.index'),
+  #(r'^$','course.views.index'),
   (r'^join-us/$','membership.views.join_us'),
   (r'^new-classes$','course.views.index'),
   (r'^new_classes$','course.views.index'),
@@ -47,6 +47,7 @@ urlpatterns += patterns(
    'django.contrib.auth.views.password_reset_confirm',
    {'post_reset_redirect' : '/accounts/password/done/'}),
   (r'^accounts/password/done/$', 'django.contrib.auth.views.password_reset_complete'),
+  (r'^$',include('django.contrib.flatpages.urls')),
 )
 # hardcoded urls for content pages. Will be created when a super user hits the address.
 #urlpatterns += patterns(

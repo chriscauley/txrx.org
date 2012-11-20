@@ -1,16 +1,32 @@
 {% extends "base.html" %}{% load content_tags %}
 
 {% block main %}
+<script type="text/javascript">
+
+membership_form_parameters = {}; //this is established at the bottom of every form
+
+function setHiddenFields(that) {
+  var form = $(that).closest('form');
+  var params = membership_form_parameters[$(that).val()];
+  console.log(form);
+  form.find("[name=a3]").val(params['cost']+".00");
+  form.find("[name=p3]").val(params['months']);
+}
+
+//when pages loaded, update all selects
+$(document).ready(function() {$("select").change()});
+</script>
 <h1>Become a Member of TX/RX Labs</h1>
 {{ "join_us-top"|print_text }}
 <div class="clear"></div>
+
 {% for m in memberships %}
 <div class="membership outlined">
   <div>
     <b>
     "<u>{{ m.name }}</u>"
     </b>
-    ${{ m.monthly }}/month or ${{ m.yearly }}/year
+    ${{ m.monthly_rate.cost }}/month or ${{ m.yearly_rate.cost }}/year
   </div>
   {% if m.notes %}<br />
   {{ m.notes|safe }}{% endif %}
@@ -18,26 +34,39 @@
     <li>{{ f.text }}</li>{% endfor %}
   </ul>
   {% if forloop.counter != 4 %}
-  <form action="https://www.paypal.com/cgi-bin/webscr"
-	method="post">
-    <input type="hidden" name="cmd" value="_s-xclick">
-    <input type="hidden" name="hosted_button_id"
-	   value="{% cycle ZSLPDCX4F4SRC,4FDGL2E7URJ2Y,4FDGL2E7URJ2Y %}">
-    <input type="hidden" name="on0" value="Amigotron">
-    <select name="os0">
-      <option value="{{ m.name }}">${{ m.monthly }}.00USD – monthly</option>
-      <option value="{{ m.name }}">${{ m.yearly }}.00USD – yearly</option>
+  <form name="_xclick" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+    <input type="hidden" name="cmd" value="_xclick-subscriptions">
+    <input type="hidden" name="business" value="txrxlabs@gmail.com">
+    <input type="hidden" name="no_shipping" value="1">
+    <input type="hidden" name="on0" value="{{ m.name }}">
+    <input type="" name="a3" value="">
+    <input type="" name="p3" value="">
+    <input type="hidden" name="t3" value="M">
+    <input type="hidden" name="src" value="1">
+    <input type="hidden" name="sra" value="1">
+    <select name="os0" onchange="setHiddenFields(this);">
+      {% for rate in m.membershiprate_set.all %}
+      <option value="{{ m.name }} - {{ rate.description }}">{{ rate.description }}</option>
+      {% endfor %}
     </select>
     <input type="hidden" name="currency_code" value="USD">
     <input type="hidden" name="RETURNURL" value="{{ settings.ROOT_URL }}joined/{{ user.id }}/">
-    <input type="image" name="submit"
-	   src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif"
-	   alt="PayPal - The safer, easier way to pay online!">
-    <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt=""
-	 width="1" height="1" border="0">
+    <input type="image" name="submit" alt="PayPal - The safer, easier way to pay online!"
+	   src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif">
+    <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="" width="1" height="1" border="0">
   </form>
   {% endif %}
 </div>
+
+<script type="text/javascript">
+{% for rate in m.membershiprate_set.all %}
+membership_form_parameters['{{ m.name }} - {{ rate.description }}'] = {
+  'cost': {{ rate.cost }},
+  'months': {{ rate.months }}, // "wait this many months between billings"
+}
 {% endfor %}
+</script>
+{% endfor %}
+
 <div class="clear"></div>
 {% endblock %}

@@ -8,7 +8,8 @@ _nav = [
       {"name": "my classes", "url": "/classes/my-sessions/"},
       ]
    },
-  {"name": "blog", "url": "/weblog/"}
+  #{"name": "blog", "url": "/weblog/"},
+  #{'name': "join us", "url": "/join-us/"},
   ]
 
 def nav(request):

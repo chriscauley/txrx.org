@@ -99,6 +99,7 @@ INSTALLED_APPS = (
   'django.contrib.comments',
   'django.contrib.staticfiles',
   'django.contrib.humanize',
+  'django.contrib.flatpages',
   'django.contrib.admin',
   #'template_utils',
 

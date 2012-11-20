@@ -11,22 +11,28 @@ from project.models import Project
 
 class MembershipManager(models.Manager):
     def active(self):
-        return self.filter(monthly__gt=0)
+        # only show paying memberships
+        return self.filter(membershiprate__isnull=False).distinct()
 
 class Membership(models.Model):
     name = models.CharField(max_length=64)
-    notes = models.CharField(max_length=256,null=True,blank=True)
     order = models.IntegerField("Level")
-    monthly = models.IntegerField("Monthly")
-    yearly = models.IntegerField("Yearly")
-    student_rate = models.IntegerField("Student Rate",null=True,blank=True)
     objects = MembershipManager()
+    monthly_rate = lambda self: self.membershiprate_set.filter(months=1)[0]
+    yearly_rate = lambda self: self.membershiprate_set.filter(months=12)[0]
     def profiles(self):
         return self.profile_set.all()
     class Meta:
         verbose_name = "Membership Level"
         ordering = ("order",)
     __unicode__ = lambda self: self.name
+
+class MembershipRate(models.Model):
+    membership = models.ForeignKey(Membership)
+    cost = models.IntegerField()
+    months = models.IntegerField(default=1)
+    description = models.CharField(max_length=128)
+    order = models.IntegerField(default=0)
 
 class Role(models.Model):
     name = models.CharField(max_length=64)
