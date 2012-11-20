@@ -33,6 +33,8 @@ class MembershipRate(models.Model):
     months = models.IntegerField(default=1)
     description = models.CharField(max_length=128)
     order = models.IntegerField(default=0)
+    class Meta:
+        ordering = ("order",)
 
 class Role(models.Model):
     name = models.CharField(max_length=64)

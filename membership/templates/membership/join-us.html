@@ -33,14 +33,13 @@ $(document).ready(function() {$("select").change()});
   <ul class="bulleted">{% for f in m.feature_set.all %}
     <li>{{ f.text }}</li>{% endfor %}
   </ul>
-  {% if forloop.counter != 4 %}
   <form name="_xclick" action="https://www.paypal.com/cgi-bin/webscr" method="post">
     <input type="hidden" name="cmd" value="_xclick-subscriptions">
     <input type="hidden" name="business" value="txrxlabs@gmail.com">
     <input type="hidden" name="no_shipping" value="1">
     <input type="hidden" name="on0" value="{{ m.name }}">
-    <input type="" name="a3" value="">
-    <input type="" name="p3" value="">
+    <input type="hidden" name="a3" value="">
+    <input type="hidden" name="p3" value="">
     <input type="hidden" name="t3" value="M">
     <input type="hidden" name="src" value="1">
     <input type="hidden" name="sra" value="1">
@@ -55,7 +54,6 @@ $(document).ready(function() {$("select").change()});
 	   src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif">
     <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="" width="1" height="1" border="0">
   </form>
-  {% endif %}
 </div>
 
 <script type="text/javascript">
