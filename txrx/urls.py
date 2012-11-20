@@ -47,7 +47,7 @@ urlpatterns += patterns(
    'django.contrib.auth.views.password_reset_confirm',
    {'post_reset_redirect' : '/accounts/password/done/'}),
   (r'^accounts/password/done/$', 'django.contrib.auth.views.password_reset_complete'),
-  (r'^$',include('django.contrib.flatpages.urls')),
+  (r'^',include('django.contrib.flatpages.urls')),
 )
 # hardcoded urls for content pages. Will be created when a super user hits the address.
 #urlpatterns += patterns(
