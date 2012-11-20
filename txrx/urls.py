@@ -14,6 +14,7 @@ urlpatterns = patterns(
   (r'^members/$','members'),
   (r'^member/(?P<username>.*)/$','member'),
   (r'^membership/$', include('membership.urls')),
+  (r'^$','course.views.index'),
   (r'^classes/', include('course.urls',namespace='course',app_name='course')),
   (r'^weblog/', include('zinnia.urls')),
   (r'^comments/', include('django.contrib.comments.urls')),
