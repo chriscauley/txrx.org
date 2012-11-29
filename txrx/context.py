@@ -9,7 +9,7 @@ _nav = [
       ]
    },
   #{"name": "blog", "url": "/weblog/"},
-  #{'name': "join us", "url": "/join-us/"},
+  {'name': "join us", "url": "/join-us/"},
   ]
 
 def nav(request):
