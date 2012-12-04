@@ -23,12 +23,16 @@ class SectionAdmin(admin.ModelAdmin):
   list_display = ("__unicode__","prerequisites","requirements","max_students")
   list_editable = ("prerequisites","requirements","max_students")
 
+class EnrollmentInline(admin.TabularInline):
+  model = Enrollment
+  readonly_fields = ('user',)
+
 class SessionAdmin(admin.ModelAdmin):
   list_display = ("__unicode__","user")
   list_editable = ("user",)
   exclude = ('time_string','slug')
   extra = 0
-  inlines = (ClassTimeInline,)
+  inlines = (ClassTimeInline, EnrollmentInline)
 
 class EnrollmentAdmin(admin.ModelAdmin):
   list_display = ("id",'user', 'session', )
