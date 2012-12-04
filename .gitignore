@@ -12,6 +12,7 @@ txrx/settings/local.py
 goldstar/*
 env
 env/*
+environ/*
 .pydev
 .pydevproject
 .project

@@ -1,0 +1,91 @@
+#courses {
+  margin-bottom: 75px;
+  .row { border-bottom: 1px black solid; padding: 5px;}
+  .row1 { background: #d8d8d0; }
+}
+
+#courses .row>div {
+  display: inline-block;
+  vertical-align: top;
+  padding-right:5px;
+}
+
+#courses .course .details { display: none; }
+
+#courses .course .details {
+  .left { float: left; width: 200px; }
+  .right { float: left; width: 600px; }
+  .left, .right { padding: 10px; }
+}
+
+#courses .row {
+  .name { width: 375px; }
+  .instructor { width: 95px; }
+  .first_date { width: 110px; }
+  .intro { width: 120px; }
+  .days { width: 45px; }
+  .fee { width: 45px; }
+}
+
+#courses .course {
+  .anchor {
+    background: none;
+    float: left;
+    height: 20px;
+    width: 20px;
+  }
+  &:hover .anchor { background: url(/static/link_icon.jpg) no-repeat; }
+  .details { display: none; }
+}
+
+#courses .name .showDetails:before {
+  content: "(show details)";
+}
+
+#courses .course.expanded {
+  .name .showDetails:before { content: "(hide details)"; }
+  .details {
+    display: block;
+  }
+}
+
+#courses .course:target {
+  outline: black 3px dashed;
+  .name .showDetails:before { content: ""; }
+  .details {
+    display: block;
+  }
+}
+
+#courses .course .details {
+  .left { float: left; width: 200px; }
+  .right { float: left; width: 600px; }
+  .left, .right { padding: 10px; }
+}
+
+#checkout-box {
+  background: white;
+  border: 4px double black;
+  bottom: 0;
+  padding: 10px;
+  position: fixed;
+  right: 100px;
+  width: 100px;
+}
+#cart { padding-bottom: 20px; }
+
+/** cart **/
+.cartHeaders > div, .itemContainer > div {
+  display: inline-block;
+  padding: 3px 20px 3px 10px;
+  width: 35px;
+}
+
+.checkout-box {
+  text-align: right;
+  padding-right: 30px;
+}
+
+.course .drop, .in-cart .add { display: none; }
+
+.in-cart .drop { display: inline-block }

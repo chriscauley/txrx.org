@@ -55,6 +55,18 @@ a { display: inline-block; }
   padding: 15px;
 }
 
+#content {
+  float: left;
+  width: 590px;
+}
+
+#side {
+  float: right;
+  margin: 0 10px 10px 0;
+  height: 100%;
+  width: 300px;
+}
+
 .header {
   height: 51px;
   margin: 0 0 10px;
@@ -85,14 +97,26 @@ a { display: inline-block; }
   padding: 10px;
 }
 
-#nav a {
+#nav li {
   border-right: 1px solid black;
   color: #333;
   display: inline-block;
   margin-bottom: 5px;
   padding: 5px 10px;
+  position: relative;
   text-shadow: 1px 1px 1px #bbb;
   &:last-child { border: none; }
+  &:hover div { display: block; }
+  div {
+    background: white;
+    box-shadow: 1px 1px 6px #333;
+    display: none;
+    position: absolute;
+    top: 100%;
+    width: 100px;
+    z-index: 10;
+    a { display: block; margin: 6px 6px; }
+  }
 }
 
 .auth {
@@ -154,13 +178,6 @@ a { display: inline-block; }
   padding-top: 25px;
 }
 
-#side {
-  float: right;
-  margin: 0 10px 10px 0;
-  height: 100%;
-  width: 300px;
-}
-
 /* filters */
 .filters {
   float: right;
@@ -170,124 +187,6 @@ a { display: inline-block; }
 .filters .filter {
   display: inline-block;
   padding-right: 20px;
-}
-
-/* feed */
-.feed {
-  list-style: none;
-  padding: 0 10px 10px;
-}
-
-.feed > li {
-  border-top: 1px #111 solid;
-  min-height: 20px;
-  padding: 10px;
-  overflow: auto;
-}
-
-.feed .label {
-  font-size: 13px;
-  text-transform: uppercase;
-}
-
-.feed p {
-  margin: .5em 0;
-}
-
-.feed > li:first-child {
-  border: none;
-}
-
-.feed > li > .img {
-  float: left;
-  margin-right: 10px;
-}
-
-.feed .text {
-  float: right;
-  width: 425px;
-}
-
-.feed h1 {
-  font-size:22px;
-}
-
-/* item */
-.item {
-  margin: 0 20px 20px;
-}
-
-.item .single-image {
-  display: block;
-  margin: 0 auto 20px;
-}
-
-/* course */
-#courses {
-  margin-bottom: 75px;
-  .row { border-bottom: 1px black solid; padding: 5px;}
-  .row1 { background: #d8d8d0; }
-}
-
-#courses .row>div {
-  display: inline-block;
-  vertical-align: top;
-  padding-right:5px;
-}
-
-#courses .row {
-  .name { width: 390px; }
-  .instructor { width: 95px; }
-  .first_date { width: 110px; }
-  .intro { width: 120px; }
-  .days { width: 45px; }
-  .fee { width: 45px; }
-}
-
-#courses .course {
-  .anchor {
-    background: none;
-    float: left;
-    height: 20px;
-    width: 20px;
-  }
-  &:hover .anchor { background: url(/static/link_icon.jpg) no-repeat; }
-}
-#courses .course .details { display: none; }
-
-#courses .name .showDetails:before {
-  content: "(show details)";
-}
-
-#courses .course.expanded {
-  .name .showDetails:before { content: "(hide details)"; }
-  .details {
-    display: block;
-  }
-}
-
-#courses .course:target {
-  outline: black 3px dashed;
-  .name .showDetails:before { content: ""; }
-  .details {
-    display: block;
-  }
-}
-
-#courses .course .details {
-  .left { float: left; width: 200px; }
-  .right { float: left; width: 600px; }
-  .left, .right { padding: 10px; }
-}
-
-#checkout-box {
-  background: white;
-  border: 4px double black;
-  bottom: 0;
-  padding: 10px;
-  position: fixed;
-  right: 100px;
-  width: 100px;
 }
 
 /* modals */
@@ -319,27 +218,9 @@ a { display: inline-block; }
   width: 480px;
 }
 
-#cart { padding-bottom: 20px; }
-
-/** cart **/
-.cartHeaders > div, .itemContainer > div {
-  display: inline-block;
-  padding: 3px 20px 3px 10px;
-  width: 35px;
-}
-
 .modal .itemName {
   width: 300px;
 }
-
-.checkout-box {
-  text-align: right;
-  padding-right: 30px;
-}
-
-.course .drop, .in-cart .add { display: none; }
-
-.in-cart .drop { display: inline-block }
 
 /* about-us */
 .about-us-wrapper h2 {
@@ -354,26 +235,15 @@ a { display: inline-block; }
   padding: 15px;
   width: 40%;
   min-height: 300px;
-}
-
-.membership > div {
-  font-size: 1.3em;
-}
-
-.membership ul {
-  padding: 10px 0;
-}
-
-.membership li {
-  padding: 3px 0;
-}
-
-.join-us-wrapper #content > h1 {
-  text-align: center;
-}
-
-.join-us-wrapper #content > p {
-  padding: 0 60px 10px;
+  > div {
+    font-size: 1.3em;
+  }
+  ul {
+    padding: 10px 0;
+  }
+  li {
+    padding: 3px 0;
+  }
 }
 
 /* slide show */
@@ -381,18 +251,12 @@ a { display: inline-block; }
   margin: 0 auto;
   position: relative;
   width: 450px;
-}
-
-.slide-show h1 {
-
-}
-
-.slide-show .slide {
-  display: none;
-}
-
-.slide-show li {
-  float: left;
+  .slide {
+    display: none;
+  }
+  li {
+    float: left;
+  }
 }
 
 .slide-show .caption {
@@ -410,66 +274,55 @@ a { display: inline-block; }
 .labs {
   position: relative;
   width: 100%;
-}
+  > li {
+    display: inline-block;
+    margin: 3px;
+  }
 
-.labs > li {
-  display: inline-block;
-  margin: 3px;
-}
+  > li > a {
+    text-align: center;
+  }
+  
+  .tools {
+    display: none;
+    margin: 10px;
+    position: absolute;
+    right: 0;
+    top: 120px;
+    width: 640px;
+  }
+  
+  li.current {
+    outline: 3px solid black;
+  }
 
-.labs > li > a {
-  text-align: center;
+  li.current {
+    .tools { display: block; }
+    .slides {
+      height: 460px;
+      margin: 10px auto;
+      overflow: hidden;
+      position: relative;
+      width: 560px;
+    }
+    .slides .wrapper {
+      left: 0;
+      position: absolute;
+      top: 0;
+      -webkit-transition: left 0.5s ease-out;
+    }
+    .tool { float: left; }
+    .tool a { position: relative; }
+    .tool a > .after {
+      background-color: white;
+      bottom: 0;
+      line-height: 1em;
+      padding: 3px 10px;
+      position: absolute;
+      right: 0;
+    }
+  }
 }
-
-.labs .tools {
-  display: none;
-  margin: 10px;
-  position: absolute;
-  right: 0;
-  top: 120px;
-  width: 640px;
-}
-
-.labs li.current {
-  outline: 3px solid black;
-}
-
-.labs li.current .tools {
-  display: block;
-}
-
-.labs .slides {
-  height: 460px;
-  margin: 10px auto;
-  overflow: hidden;
-  position: relative;
-  width: 560px;
-}
-
-.labs .slides .wrapper {
-  left: 0;
-  position: absolute;
-  top: 0;
-  -webkit-transition: left 0.5s ease-out;
-}
-
-.labs .tool {
-  float: left;
-}
-
-.labs .tool a {
-  position: relative;
-}
-
-.labs .tool a > .after {
-  background-color: white;
-  bottom: 0;
-  line-height: 1em;
-  padding: 3px 10px;
-  position: absolute;
-  right: 0;
-}
-
 .modal div > a > img {
   display: block;
 }

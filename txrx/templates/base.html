@@ -4,116 +4,58 @@
 <head>
   <title>{% block title %}TX/RX Labs{% endblock %}</title>
   {# Remote CSS #}
-  <link href="http://fonts.googleapis.com/css?family=Josefin+Sans:400,700&v2"
-        rel="stylesheet" type="text/css">
-  <link href="http://fonts.googleapis.com/css?family=News+Cycle"
-	rel="stylesheet" type="text/css" />
+  <link href="http://fonts.googleapis.com/css?family=Josefin+Sans:400,700&v2" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=News+Cycle" rel="stylesheet" type="text/css" />
   <link rel="shortcut icon" href="{{ STATIC_URL }}favicon-1.ico" type="image/x-icon" />
-    
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="cache-control" content="public" />
+  <meta name="robots" content="follow, all" />
+  <meta name="language" content="{{ LANGUAGE_CODE }}" />
+  <meta name="viewport" content="width=device-width; initial-scale=1.0;" />
+  <meta name="description" content="{% block meta-description %}Tx/Rx Labs. Houston's Hackerspace{% endblock %}" />
+  <meta name="keywords" content="{% block meta-keywords %}txrx labs, houston, technology, hackerspace, {{ entry_tags|join:", "}}{% endblock %}" />
+  <meta name="author" content="Chris Cauley" />
+  {% block meta %}{% endblock %}
   {# Local CSS #}
   {# Site Design CSS #}
   {% if settings.DEBUG %}
-  <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}base.less" />
-  <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}zinnia.less" />
+  <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/base.less" />
+  <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/course.less" />
+  {#<link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/zinnia.less" />#}
   <script type="text/javascript" src="{{ STATIC_URL }}js/less.js"></script>
   {% else %}
   {% compress css %}
-  <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}base.less" />
-  <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}zinnia.less" />
+  <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/base.less" />
+  <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/course.less" />
+  {#<link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/zinnia.less" />#}
   {% endcompress %}
   {% endif %}
-  <!--[if IE 6]>
-  <link rel="stylesheet" type="text/css" href="/static/design/ie6.css"/>
-  <![endif]-->
-  <!--[if IE 7]>
-  <link rel="stylesheet" type="text/css" href="/static/design/ie7.css"/>
-  <![endif]-->
-  <!--[if IE 8]>
-  <link rel="stylesheet" type="text/css" href="/static/design/ie8.css"/>
-  <![endif]-->
-    
-<script type="text/javascript">
-var _NOTIFY_URL = "http://{{ request.META.HTTP_HOST }}/tx/rx/ipn/handler/";
-</script>
+  <!--[if IE 7]><link rel="stylesheet" type="text/css" href="/static/design/ie7.css"/><![endif]-->
+  <!--[if IE 8]><link rel="stylesheet" type="text/css" href="/static/design/ie8.css"/><![endif]-->
+
   <script type="text/javascript" src="{{ STATIC_URL }}js/simpleCart.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.simplemodal.js"></script>
-  <script type="text/javascript">
-function loadJSON(url) { window.location = url; } // IE Fallback
-{% comment %} {# ajax functionality temporarily disabled #}
-if (!!(window.history && history.pushState)) {
-    function loadJSON(url,back) {
-	var className = url.split("/").pop();
-	$("#content").load(url+".json");
-	$("#wrapper")[0].className=className+"-wrapper";
-	$("#theme")[0].className=className+"-theme";
-	$(".current").removeClass("current");
-	$("#nav ."+className).addClass("current").removeClass("loading");
-	if (!back) {history.pushState({path:url},null,url);}	
-	return false;
-/*
-	$.get(
-	    url+".json",
-	    function(data) {
-		$("#content").html(data);
-		$("#wrapper")[0].className=className+"-wrapper";
-		$("#theme")[0].className=className+"-theme";
-		$(".current").removeClass("current");
-		$("#nav ."+className).addClass("current").removeClass("loading");
-		if (!back) {history.pushState({path:url},null,url);}
-            },
-	    "text");*/
-    }
-    history.replaceState({ path: '/{{current}}' }, '/{{current}}');
-}
-$(window).bind('popstate', function(event) {
-    // if the event has our history data on it, load the page fragment with AJAX
-    var state = event.originalEvent.state;
-    if (state) {
-        loadJSON(state.path,true);
-    }
-});
-{% endcomment %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/cart.js"></script>
 
-function showLogin() {
-    $("#login-dialog").toggleClass("login-visible");
-}
-
-
-/* simpleCart setup */
-simpleCart.email = "txrxlabs@gmail.com";
-//simpleCart.email = "seller_1346532499_biz@ufl.edu";
-
-simpleCart.successURL = "/classes/?success"
-simpleCart.cartHeaders = ["Name", "Price","Remove"]
-
-function showCart() {
-    $("#cart-modal").modal({width: 400, modal: true, minHight: 300});
-}
-function addItem(name,price,id) {
-    simpleCart.add('name='+name,'price='+price,'id='+id,'quantity=1');
-}
-function toggleCourses() {
-    $(".in-cart").removeClass("in-cart");
-    for (id in simpleCart.items) { $("#c"+id).addClass("in-cart") }
-    simpleCart.update();
-}
-
-  </script>
-
-{% block extra_head %}{% endblock %}
+  {% block extra_head %}{% endblock %}
+  {% block link %}{% endblock %}
+  {% block script %}{% endblock %}
 </head>
 
-<body>
+<body class="{% block body-class %}{% endblock %} zinnia">
   <div id="wrapper">
     {% include "header.html" %}
   <div id="main" class="{{ current|slugify }}">
     {% block main %}
     <div id="content">
+      {% block breadcrumbs %}{% endblock %}
       {% block content %}{% endblock %}
     </div>
     <div id="side">
+      {% block sidebar %}
       <iframe src="https://www.google.com/calendar/embed?showPrint=0&amp;mode=AGENDA&amp;src=e9rnjdeb9btnj1cis287be9quc%40group.calendar.google.com&amp;ctz=America/Chicago" style="border: 0; margin: auto; display: block;" width="300" height="440" frameborder="0" scrolling="no"></iframe>
+      {% endblock %}
     </div>
     {% endblock %}
     <div class="clear"></div>
@@ -124,8 +66,7 @@ function toggleCourses() {
     </div>
   </div>
 </body>
-{% block extrafooter %}
-{% endblock %}
+{% block extrafooter %}{% endblock %}
 <script type="text/javascript">;
   /*var logo = document.getElementsByClassName("header")[0].children[0];
   logo.href = "javascript:loadJSON('"+logo.href+"');";
