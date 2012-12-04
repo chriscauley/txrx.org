@@ -1,4 +1,3 @@
-var _NOTIFY_URL = "http://{{ request.META.HTTP_HOST }}/tx/rx/ipn/handler/";
 function loadJSON(url) { window.location = url; } // IE Fallback
 function showLogin() {
     $("#login-dialog").toggleClass("login-visible");
