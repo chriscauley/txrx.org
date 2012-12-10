@@ -1,14 +1,12 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from lablackey.profile.models import UserModel
 from sorl.thumbnail import ImageField
 import datetime
 
 from lablackey.geo.models import Location
-from lablackey.event.models import Event
-from articles.models import Tag
-#from tool.models import Tool
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 

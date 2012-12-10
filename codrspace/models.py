@@ -37,7 +37,7 @@ class Post(models.Model):
     title = models.CharField(max_length=200, blank=True)
     content = models.TextField(blank=True)
     slug = models.SlugField(max_length=75)
-    author = models.ForeignKey(User, editable=False)
+    author = models.ForeignKey(User)
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default=0)
     publish_dt = models.DateTimeField(null=True)
     create_dt = models.DateTimeField(auto_now_add=True)
