@@ -8,7 +8,7 @@ _nav = [
       {"name": "My classes", "url": "/classes/my-sessions/"},
       ]
    },
-  {"name": "Blog", "url": "/blog/"},
+  #{"name": "Blog", "url": "/blog/"},
   {'name': "Join us", "url": "/join-us/"},
   ]
 
