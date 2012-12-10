@@ -1,0 +1,83 @@
+/* txrx overrides */
+body { margin-bottom: 50px; overflow: scroll; }
+.navbar .brand { padding: 3px 20px; }
+.navbar .brand img { height: 35px; }
+
+.icon-white,.nav-pills>.active>a>[class^="icon-"],.nav-pills>.active>a>[class*=" icon-"],.nav-list>.active>a>[class^="icon-"],.nav-list>.active>a>[class*=" icon-"],.navbar-inverse .nav>.active>a>[class^="icon-"],.navbar-inverse .nav>.active>a>[class*=" icon-"],.dropdown-menu>li>a:hover>[class^="icon-"],.dropdown-menu>li>a:hover>[class*=" icon-"],.dropdown-menu>.active>a>[class^="icon-"],.dropdown-menu>.active>a>[class*=" icon-"],.dropdown-submenu:hover>a>[class^="icon-"],.dropdown-submenu:hover>a>[class*=" icon-"]{
+  background-image:url("../img/glyphicons-halflings-white.png") !important;
+  background-color: transparent;
+}
+
+.membership_features {
+  height: 135px;
+  list-style: none;
+  margin: 0;
+  padding: 10px 0;
+}
+
+.membership_features li {
+  padding-bottom: 10px;
+}
+
+form label.required {
+  font-weight: bold;
+}
+
+
+/* blog */
+.post-content.short {
+  width: 100%;
+}
+
+/* modal */
+
+.modal .itemName {
+  width: 300px;
+}
+/* should be in a classes.css file! */
+#show_closed,[for=show_closed] { display: inline-block; margin-bottom: 5px; vertical-align: middle; }
+#show_closed { margin-left: 20px; margin-top: 0; }
+.week { margin-bottom: 20px; }
+.class-table .name {
+  width: 350px;
+}
+
+/* cart css */
+#checkout-box {
+  background: white;
+  border: 4px double black;
+  bottom: 0;
+  padding: 10px;
+  position: fixed;
+  right: 100px;
+  width: 100px;
+}
+#cart { padding-bottom: 20px; }
+
+.cartHeaders > div, .itemContainer > div {
+  display: inline-block;
+  padding: 3px 20px 3px 10px;
+  width: 35px;
+}
+
+.checkout-box {
+  text-align: right;
+  padding-right: 30px;
+}
+
+.course .drop, .in-cart .add { display: none; }
+
+.in-cart .drop { display: inline-block }
+
+/* from the codrspace boot strap */
+h1,h2,h3,h4,h5,h6{margin:0;font-family:inherit;font-weight:bold;color:inherit;text-rendering:optimizelegibility;}
+h1 small,h2 small,h3 small,h4 small,h5 small,h6 small{font-weight:normal;color:#999999;}
+h1{font-size:30px;line-height:36px;}h1 small{font-size:18px;}
+h2{font-size:24px;line-height:36px;}h2 small{font-size:18px;}
+h3{line-height:27px;font-size:18px;}h3 small{font-size:14px;}
+h4,h5,h6{line-height:18px;}
+h4{font-size:14px;}
+h4 small{font-size:12px;}
+h5{font-size:12px;}
+h6{font-size:11px;color:#999999;text-transform:uppercase;}
+

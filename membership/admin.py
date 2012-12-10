@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Membership, Feature, Profile, MembershipRate
+from models import Membership, Feature, UserMembership, MembershipRate
 
 class FeatureInline(admin.TabularInline):
     extra = 0
@@ -14,11 +14,10 @@ class MembershipAdmin(admin.ModelAdmin):
     list_editable = ("order",)
     inlines = (FeatureInline,MembershipRateInline)
 
-class ProfileAdmin(admin.ModelAdmin):
+class UserMembershipAdmin(admin.ModelAdmin):
     list_display = ("__unicode__",'photo')
     list_editable = ('photo',)
-    exclude = ("ghandle",) #gmail email address from ProfileModel
 
 
 admin.site.register(Membership,MembershipAdmin)
-admin.site.register(Profile,ProfileAdmin)
+admin.site.register(UserMembership,UserMembershipAdmin)

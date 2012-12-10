@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block header_content %}Edit your account settings{% endblock %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <table class="table">
+    {% for form in forms %}{% for field in form %}
+    <tr>
+      <td>
+        <label for="id_{{ field.name }}"{% if field.field.required %} class="required"{% endif %}>
+          {{ field.label }}:
+        </label>
+        {% if field.errors %}
+        <span class="text-error">{{ field.errors.0 }}</span>
+        {% endif %}
+      </td>
+      <td>
+        {{ field }}
+      </td>
+      <td class="muted">
+        {% if field.help_text %}
+        {{ field.help_text|linebreaks }}
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}{% endfor %}
+    <tr>
+      <td></td>
+      <td><input type="submit" class="btn btn-success" /></td>
+      <td></td>
+    </tr>
+  </table>
+</form>
+{% endblock %}

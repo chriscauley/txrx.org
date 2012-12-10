@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
 
 from lablackey.utils import cached_method
-from lablackey.profile.models import ProfileModel, UserModel
+from lablackey.profile.models import UserModel
 from lablackey.photo.models import Photo
 from course.models import Session
 from project.models import Project
@@ -46,22 +46,24 @@ class Feature(models.Model):
     class Meta:
         ordering = ("order",)
 
-class ProfileManager(models.Manager):
+class UserMembershipManager(models.Manager):
     def list_instructors(self,**kwargs):
         from course.models import Session
-        return set([s.user.profile for s in Session.objects.filter(**kwargs)])
+        return set([s.user.usermembership for s in Session.objects.filter(**kwargs)])
 
-class Profile(ProfileModel):
+class UserMembership(models.Model):
+    user = models.OneToOneField(User)
     membership = models.ForeignKey(Membership,default=1)
     #roles = models.ManyToManyField(Role,null=True,blank=True)
     photo = models.ForeignKey(Photo,null=True,blank=True)
     bio = models.TextField(null=True,blank=True)
     _folder = settings.UPLOAD_DIR+'/avatars/%Y-%m'
-    by_line = models.CharField(max_length=50,null=True,blank=True,help_text="50 characters max")
-    src = property(lambda self: self.avatar)
+    by_line = models.CharField(max_length=50,null=True,blank=True,help_text="A short description of what you do for the lab.")
     name = lambda self: "%s %s"%(self.user.first_name,self.user.last_name)
-    paypal_email = models.EmailField(null=True,blank=True)
-    objects = ProfileManager()
+    paypal_email = models.EmailField(null=True,blank=True,help_text="Used to connect payments to your account.\nLeave blank if this is the same as your email address above.")
+    __unicode__ = lambda self: "%s's Membership"%self.user
+    objects = UserMembershipManager()
+
     @cached_method
     def get_sessions(self):
         return Session.objects.filter(user=self.user)

@@ -5,119 +5,85 @@
 {% block title %}Classes {{ term.name }} at {{ block.super }} {% endblock %}
 
 {% block extra_head %}
-<script type="text/javascript">
-function expand(that) {
-  $(that).closest('.row').toggleClass('expanded');
-  return false;
-}
 </script>
 {% endblock %}
 
-{% block main %}
-{% if "success" in request.GET %}
-<b>
-  You have been enrolled in your classes.
-  {% if not request.user.is_authenticated %}
-  <br />
-  If you haven't already, please click
-  <a href="/password-reset/recover/">reset your password</a>.
-  <br />
-  Otherwise click please <a href="/accounts/login/">log in</a>.
-  {% endif %}
-</b>
-{% endif %}
-{% include "widgets/filters.html" %}
-<h1>Classes for {{ term.name }}</h1>
-<div id="courses">
-  <div class="row th">
-    <div class="name">Class Name</div>
-    <div class="instructor">Instructor</div>
-    <div class="first_date">First Date</div>
-    <div class="intro">Intro Level?</div>
-    <div class="days">Days</div>
-    <div class="cost">Cost</div>
-    <div class="fee"></div>
-  </div>
-  {% for session in sessions %}
+{% block header_content %}Upcomming Classes{% endblock %}
 
-  {% ifchanged session.week %}
-  <div class="row month">
-    <div colspan="8" style="padding: 25px 0 5px;">
-      Classes starting {{ session.week.0 }} - {{ session.week.1 }}
-    </div>
-  </div>
-  {% endifchanged %}
-
-  <div id="c{{session.id}}" class="row course filterable {% cycle row1,row2 %}"
-       data-subject="{% for subject in session.subjects %}{{ subject }},{% endfor %}"
-       {%if not session.course.closed%}data-open{%endif%}
-       data-date="{{ session.starttime|date:"Ymd" }}">
-    {% if request.user.is_superuser %}
-    <a href="{{ request.path }}#c{{ session.id }}" class="anchor"></a>
+{% block content %}
+<div class="container">
+  {% if "success" in request.GET %}
+  <b>
+    You have been enrolled in your classes.
+    {% if not request.user.is_authenticated %}
+    <br />
+    If you haven't already, please click
+    <a href="/password-reset/recover/">reset your password</a>.
+    <br />
+    Otherwise click please <a href="/accounts/login/">log in</a>.
     {% endif %}
-    <div class="name">
-      <a href="{% url "course:detail" session.slug %}">
-	{{ session.section.course }}
-      </a>
-    </div>
-    <div class="instructor">{% if session.user.first_name and session.user.last_name%}
-      {{ session.user.first_name }} {{ session.user.last_name|slice:":1" }}.{% else %}
-      {{ session.user.username }}{% endif %}
-    </div>
-    <div class="first_date">{{ session.classtime_set.all.0.start|date:"F j" }}</div>
-    <div class="intro">
-      {% if session.section.prerequisites or session.section.requirements %}
-      <a href="javascript:;" onclick="return expand(this);" class="showDetails">No (details)</a>
-      {% else %}
-      Yes
-      {% endif %}
-    </div>
-    <div class="days">{{ session.classtime_set.count }}</div>
-    <div class="fee">
-      <span class="item_price">
-        {{ session.section.fee }}{% if session.section.fee_notes %}*{% endif %}
-      </span>
-    </div>
-    {% include "course/_enroll_link.html" %}
-    <div class="details">
-      <div class="left">
-	<div class="subjects">
-	  <b>Subject{% if session.section.course.subjects.count > 1 %}s{% endif %}</b>:
-	  {% for subject in session.section.course.subjects.all %}
-	  {{ subject }}{% if not forloop.last %}, {% endif %}
-	  {% endfor %}
-	</div>
-	<ol class="dates">{% for classtime in session.classtime_set.all %}
-	  <li>
-	    {{ classtime.start|date:"D m/d G:i" }}
-	    -
-	    {{ classtime.end_time|time:"G:i" }}
-	  </li>{% endfor %}
-	</ol>
-      </div>
-      <div class="right">
-	<div class="description">
-	  {{ session.section.description|linebreaksbr }}
-	</div>
-	{% if session.section.fee_notes %}
-	<span class="notes">* {{ session.section.fee_notes }}</span>
-	{% endif %}
-	{% if session.section.requirements %}
-	<span class="notes">
-	  <b>Requirements:</b> {{ session.section.requirements }}
-	</span>
-	{% endif %}
-	{% if session.section.prerequisites %}
-	<span class="notes">
-	  <b>Prerequisites:</b>
-	  {{ session.section.prerequisites }}
-	</span>
-	{% endif %}
-      </div>
-      <div style="clear: both;"></div>
-    </div>
+  </b>
+  {% endif %}
+  <p class="lead">
+    {% if all_sessions_closed %}
+    All sessions for this term are closed. Come back soon to see our next round of classes!
+    {% elif not request.user.is_authenticated %}
+    You can register for classes without logging in. Once you pay, a txrx account will be made using your paypal email address, and instructions on how to view your course schedule will be sent to that email address. If you have any problems feel free to write to classes@txrxlabs.org
+    {% elif not request.user.enrollment_set.count %}
+    Our records show you've never registered for a class before. If this is in error you should contact classes@txrxlabs.org and we'll adjust our records.
+    {% else %}
+    Here are all upcoming classes at the hackerspace. If you have any questions email classes@txrxlabs.org or stop by the hackerspace.
+    {% endif %}
+  </p>
+  {% include "widgets/filters.html" %}
+  {% for week in weeks %}
+  <div class="week {{ week.open }}">
+    <h4>Classes starting {{ week.0 }} - {{ week.1 }}</h4>
+    <table class="table table-hover class-table">
+      <thead>
+        <tr>
+          <td class="name">Class Name</td>
+          <td>Instructor</td>
+          <td>First Date</td>
+          <td>Intro Level?</td>
+          <td>Days</td>
+          <td>Cost</td>
+        </tr>
+      </thead>
+      {% for session in week.sessions %}
+      <tr id="c{{session.id}}" class="course filterable"
+          data-subject="{% for subject in session.subjects %}{{ subject }},{% endfor %}"
+          {%if not session.course.closed%}data-open{%endif%}
+          data-date="{{ session.starttime|date:"Ymd" }}">
+        <td class="name">
+          <a href="{% url "course:detail" session.slug %}">
+	    {{ session.section.course }}
+          </a>
+        </td>
+        <td class="instructor">{% if session.user.first_name and session.user.last_name%}
+          {{ session.user.first_name }} {{ session.user.last_name|slice:":1" }}.{% else %}
+          {{ session.user.username }}{% endif %}
+        </td>
+        <td class="first_date">{{ session.classtime_set.all.0.start|date:"F j" }}</td>
+        <td class="intro">
+          {% if session.section.prerequisites or session.section.requirements %}
+          <a href="javascript:;" onclick="return expand(this);" class="showDetails">No (details)</a>
+          {% else %}
+          Yes
+          {% endif %}
+        </td>
+        <td class="days">{{ session.classtime_set.count }}</td>
+        <td class="fee">
+          <span class="item_price">
+            {{ session.section.fee }}{% if session.section.fee_notes %}*{% endif %}
+          </span>
+        </td>
+        <td>{% include "course/_enroll_link.html" %}</td>
+      </tr>
+      {% endfor %}
+    </table>
   </div>
   {% endfor %}
+  {% include "course/_cart.html" %}
 </div>
-{% include "course/_cart.html" %}
 {% endblock %}

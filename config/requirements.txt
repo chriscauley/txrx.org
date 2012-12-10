@@ -11,8 +11,18 @@ django-devserver==0.4
 django-registration==0.8
 -e git+https://github.com/chriscauley/Django-Crop-Override-Field.git#egg=django-crop-override-field
 -e git+https://github.com/dcramer/django-paypal.git#egg=django-paypal
-django-blog-zinnia
+#django-blog-zinnia
 django-password-reset
 BeautifulSoup==3.2.1
-django_compressor==1.2
+
 django-mptt==0.5.4
+#django==1.3.1
+django-redis-cache
+Markdown==2.0.3
+django-timezones==0.2
+pytz>=2011n
+Pygments
+django-tastypie==0.9.11
+django-debug-toolbar
+-e git://github.com/kennethreitz/requests.git#egg=requests
+-e git://github.com/durden/frappy.git#egg=frappy

@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from course.models import Course, Section, Term, Subject, Session, Enrollment
-from membership.models import Profile
+from membership.models import UserMembership
 
 from paypal.standard.ipn.models import *
 
@@ -29,13 +29,26 @@ def index(request):
   sessions = Session.objects.filter(section__term=term).select_related(depth=2)
   sessions = sorted(list(sessions),key=lambda s: s.first_date)
   user_sessions = []
+  current_week = None
+  weeks = {}
+  all_sessions_closed = True
+  for session in sessions:
+    if current_week != session.week:
+      current_week = session.week
+      weeks[current_week] = { 'open': 'closed', 0: current_week[0], 1: current_week[1], 'sessions': [] }
+    weeks[current_week]['sessions'].append(session)
+    if not session.closed:
+      weeks[current_week]['open'] = 'open'
+      all_sessions_closed = False
   if request.user.is_authenticated():
     user_sessions = Session.objects.filter(enrollment__user=request.user.id)
   values = {
+    'weeks': sorted(weeks.values(),key=lambda i: i[0]),
     'sessions': sessions,
     'filters': [filters['term'],filters['subject']],
     'term': term,
-    'user_sessions': user_sessions
+    'user_sessions': user_sessions,
+    'all_sessions_closed': all_sessions_closed,
     }
   return TemplateResponse(request,"course/classes.html",values)
 
@@ -47,12 +60,12 @@ def detail(request,slug):
   return TemplateResponse(request,"course/detail.html",values)
 
 def instructors(request,username=None):
-  instructors = Profile.objects.list_instructors()
+  instructors = UserMembership.objects.list_instructors()
   values = {'instructors':instructors}
   return TemplateResponse(request,"course/instructors.html",values)
 
 def instructor_detail(request,username=None):
-  profile = Profile.objects.get(user__username=username)
+  profile = UserMembership.objects.get(user__username=username)
   values = {
     'profile': profile
     }

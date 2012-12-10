@@ -63,7 +63,7 @@ class Session(UserModel):
   time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
   __unicode__ = lambda self: "%s (%s - %s)"%(self.section, self.user,self.first_date.date())
 
-  closed = lambda self: self.cancelled or self.archived or self.full
+  closed = property(lambda self: self.cancelled or self.archived or self.full)
   full = property(lambda self: self.enrollment_set.count() >= self.section.max_students)
   archived = property(lambda self: self.first_date<datetime.datetime.now())
   @property
@@ -79,8 +79,8 @@ class Session(UserModel):
       return "closed"
     return "full"
   def save(self,*args,**kwargs):
-    from membership.models import Profile
-    profile,new = Profile.objects.get_or_create(user=self.user)
+    from membership.models import UserMembership
+    profile,new = UserMembership.objects.get_or_create(user=self.user)
     self.slug = slugify("%s_%s"%(self.section,self.id))
     return super(Session,self).save(*args,**kwargs)
   @property

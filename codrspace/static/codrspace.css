@@ -1,0 +1,313 @@
+/**
+* Global Styles
+*/
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+header {
+    font-size: 18px;
+    color: #222;
+    margin: 60px auto;
+    width: 90%;
+    text-align: center;
+}
+
+header h2 {
+    color: #555;
+}
+
+.nav-clear {
+  clear: both;
+  margin-top: 70px;
+}
+
+footer {
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+}
+
+.clear {
+  clear: both;
+}
+
+a.disabled-link,
+a.disabled-link:visited ,
+a.disabled-link:active,
+a.disabled-link:hover {
+    color:#aaa !important;
+}
+
+/**
+* Home page styles
+*/
+div#recent-codrs-wrapper {
+  margin: 40px 0 40px 0;
+  text-align: center;
+}
+
+div#recent-codrs-wrapper img {
+  border: 3px solid #DDD;
+  margin-right: 5px;
+}
+
+div#latest-posts {
+  margin: 0 auto;
+}
+
+div#latest-posts a {
+  float: left;
+  padding: 10px;
+  width: 350px;
+  max-width: 350px;
+  margin-right: 20px;
+  margin-left: 20px;
+  text-align: left;
+  overflow: hidden;
+  border-bottom: 1px dotted #CCC;
+}
+
+div#latest-posts a:hover {
+  background-color: #CCC;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+div#latest-posts img {
+  float: left;
+  margin-right: 5px;
+  border: 3px solid #999;
+}
+
+div#latest-posts p {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+  padding: 0;
+}
+
+/**
+* Post List Styles
+*/
+#post-list-page {
+  margin-top: 20px;
+}
+
+#popover-content {
+  display: none;
+  visibility: hidden;
+}
+
+#popover-wrap img {
+  float: left;
+}
+
+#popover-wrap p {
+  float: left;
+  color: #777;
+  margin-bottom: 5px;
+  margin-left: 15px;
+  width: 150px;
+}
+
+/**
+* Post Detail Style
+*/
+.post-meta {
+  color: #777;
+  vertical-align: bottom;
+  line-height: 11px;
+}
+
+.post-meta a {
+  vertical-align: bottom;
+  line-height: 11px;
+}
+
+.post-meta i {
+  vertical-align: bottom;
+  line-height: 11px;
+}
+
+div.post-content {
+  margin: 40px 0 40px 0;
+  width: 750px;
+}
+
+div.post-content p {
+  font-size: 14px;
+  line-height: 25px;
+  color: #555;
+}
+
+div.post-content h1, h2, h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+/**
+* Admin area styles
+*/
+div#date {
+  display: none;
+}
+
+ul#post-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+ul#post-list li a {
+  margin: 0 0 0 10px;
+  font-size: 18px;
+  vertical-align: bottom;
+  line-height: 13px;
+}
+
+ul#post-list li {
+  padding: 8px;
+  border-bottom: 1px solid #CCC;
+}
+
+ul#post-list li:hover {
+  background-color: #DDD;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+ul#post-list span.post-list-date {
+  margin: 0 0 0 10px;
+  vertical-align: bottom;
+  line-height: 11px;
+  color: #777;
+}
+
+#media-list .media-item {
+  font-size: 14px;
+}
+
+#media-list .media-item a {
+  text-decoration: none;
+  display: block;
+  padding: 10px 5px 10px 5px;
+  color: #777;
+}
+
+#media-list .media-item a:hover {
+  color: white;
+  background-color: #AAA;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+#view-post-link {
+  color: black;
+  font-size: 12px;
+}
+
+.sc-example {
+  color: #777;
+}
+
+/**
+* Pygments overrides
+*/
+.highlight {
+  padding: 5px 0px 5px 20px;
+  background-color: #EEE;
+}
+
+.highlighttable .linenos {
+  vertical-align: top;
+
+}
+.highlighttable .highlight {
+  overflow: auto; width: 635px;
+}
+
+/**
+* WMD overrides
+*/
+#wmd-button-bar {
+  width: 50%;
+  background: none;
+}
+
+#wmd-button-bar, .wmd-panel {
+  margin: 0;
+}
+
+#wmd-help-button {
+  display: none;
+}
+
+/**
+* Form styles
+*/
+.form-button {
+  margin-top: 20px;
+}
+
+/**
+* Bootstrap Overrides
+*/
+a.brand {
+  padding: 0;
+  margin: 0;
+}
+
+h1.home-tagline {
+  background: url('/site_media/static/underline.png') no-repeat;
+  background-position: 90% 97%;
+  padding: 0 0 20px 0;
+  font-size: 44px;
+}
+
+ul.features-list {
+  margin-top: 5px;
+  list-style-image: url('/site_media/static/list-check.png');
+  font-size: 24px;
+}
+
+ul.features-list li {
+  margin-bottom: 15px;
+}
+
+div.home-well {
+  height: 170px;
+}
+
+ul.home-options-list {
+  list-style-type: none;
+}
+
+.btn-huge {
+  margin: 15px 0 15px 17px;
+  padding: 20px 0 20px 0;
+  width: 90%;
+  -webkit-border-radius:15px;
+  -moz-border-radius:15px;
+  border-radius:15px;
+  font-size: 36px;
+  cursor: pointer;
+}
+
+.media-list-header {
+  margin-top: 10px;
+}
+
+#preview-modal {
+  display: none;
+}
+
+#preview-page {
+  width: 530px;
+}
