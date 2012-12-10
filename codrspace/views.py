@@ -282,7 +282,7 @@ def signin_start(request, slug=None, template_name="signin.html"):
 def signout(request):
     if request.user.is_authenticated():
         logout(request)
-    return redirect(reverse('homepage'))
+    return redirect(reverse(getattr(settings,'LOGOUT_REDIRECT','homepage')))
 
 
 def _validate_github_response(resp):

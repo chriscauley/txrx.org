@@ -10,8 +10,8 @@ j = "(?:.json)?"
 
 urlpatterns = patterns(
   '',
-  (r'^$','course.views.index'),
-  (r'^$',include('django.contrib.flatpages.urls')),
+  url(r'^$','course.views.index',name='home'),
+  #url(r'^$',include('django.contrib.flatpages.urls'),name='home'),
   (r'^admin/', include(admin.site.urls)),
   (r'^members/$','txrx.views.members'),
   (r'^member/(?P<username>.*)/$','txrx.views.member'),
