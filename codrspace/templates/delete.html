@@ -1,0 +1,44 @@
+{% extends "auth_base.html" %}
+
+{% load short_codes %}
+{% load codrspace_tags %}
+
+{% block pre_title %}
+{% if user_settings.blog_title %}
+    {{ user_settings.blog_title|striptags }} - 
+{% else %}
+    {{ SITE_NAME }}:
+{% endif %}
+{% endblock %}
+
+{% block title %}Delete {% firstof post.title "Untitled" %} by {{ post.author.username }}{% endblock %}
+
+{% block nav %}
+    {% include "_nav.html" with page="post_detail" %}
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+    <div id="post-delete">
+        <div class="row">
+            <div class="span6">
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.content|striptags|truncatewords:"100"}}</p>
+            </div>
+            <div class="span6">
+                <div class="well">
+                    <p><strong>You are about to delete this post. All good?</strong></p>
+                    <form action="." method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="delete-post" value="delete" />
+                        <input class="btn btn-warning btn-large" type="submit" name="submit" value="Yes, delete this post!" />
+                        <a class="btn btn-success btn-large" href="#" onclick="history.back(); return false;">Nah, nevermind.</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

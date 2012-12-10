@@ -39,8 +39,6 @@ ROOT_URL = "http://txrxlabs.org/"
 LOGIN_REDIRECT_URL = '/membership/redirect/'
 
 SECRET_KEY = '^f_fn6)^e5^)+p-rjcrcdf(7iwz4@5z9thx92%^=e_)$jly7mc'
-EZGAUTH_KEY = 'monkeybutlersleepsatmidnight@5z9thx92%^=e_)$jly7mc'
-JANRAIN_RPX_API_KEY = 'd8811e4889d480b090343b70e374ebeb7be05339'
 MAPS_API_KEY = 'ABQIAAAAeppD1h9lB7H61ozR18SeZRS_YqHDtehKcRTrrAGjc25rDMjatxT8nvoX4-jJXcRPaT4I-RdMYv3fJA'
 
 TEMPLATE_LOADERS = (
@@ -65,7 +63,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   "django.core.context_processors.request",
   "django.contrib.messages.context_processors.messages",
   'txrx.context.nav',
-  'zinnia.context_processors.version',
+  'codrspace.context_processors.codrspace_contexts',
 )
 
 ROOT_URLCONF = 'txrx.urls'
@@ -75,6 +73,8 @@ TEMPLATE_DIRS = (
   os.path.join(SPATH,"../lablackey/templates"),
 )
 
+STATICFILES_DIRS = (os.path.join(SPATH,"static"),)
+
 STATICFILES_FINDERS = (
   'django.contrib.staticfiles.finders.FileSystemFinder',
   'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -82,61 +82,13 @@ STATICFILES_FINDERS = (
   'compressor.finders.CompressorFinder',
   )
 
-COMPRESS_ENABLED = True
-
-COMPRESS_PRECOMPILERS = (
-  ('text/less', 'lessc {infile} {outfile}'),
-  )
-
-INSTALLED_APPS = (
-  'grappelli',
-  'django.contrib.auth',
-  'django.contrib.contenttypes',
-  'django.contrib.sessions',
-  'django.contrib.sites',
-  'django.contrib.markup',
-  'django.contrib.messages',
-  'django.contrib.comments',
-  'django.contrib.staticfiles',
-  'django.contrib.humanize',
-  'django.contrib.flatpages',
-  'django.contrib.admin',
-  #'template_utils',
-
-  # 3rd party
-  'south',
-  'devserver',
-  'sorl.thumbnail',
-  'registration',
-  'paypal.standard.ipn',
-  'password_reset',
-  'compressor',
-  'tagging',
-  'mptt',
-  #'mptt_comments',
-  'zinnia',
-
-  # lablackey
-  'lablackey.photo',
-  'lablackey.content',
-  'lablackey.geo',
-  'lablackey.profile',
-  #'lablackey.djangogcal',
-  'lablackey.db',
-  'lablackey.event',
-
-  # this project
-  #'project',
-  #'tool',
-  'course',
-  'membership',
-  'main',
-  'password_reset',
-)
-
 ACCOUNT_ACTIVATION_DAYS = 7
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+SITE_URL = "http://txrxlabs.org"
+SITE_NAME = "TX/RX Labs"
+
+AUTH_PROFILE_MODULE = 'codrspace.Profile'
 
 LOGGING = {
   'version': 1,
@@ -164,27 +116,18 @@ import socket
 # Remove characters that are invalid for python modules.
 machine = re.sub('[^A-z0-9._]', '_', socket.gethostname())
 
-try:
-  istr = 'txrx.settings.' + machine
-  tmp = __import__(istr)
-  mod = sys.modules[istr]
-except ImportError:
-  print "No %r module found for this machine." % istr
-else:
-  for setting in dir(mod):
-    if setting == setting.upper():
-      setattr(sys.modules[__name__], setting, getattr(mod, setting))
+for s_file in ['apps','local']:
+  try:
+    istr = 'txrx.settings.' + s_file
+    tmp = __import__(istr)
+    mod = sys.modules[istr]
+  except ImportError:
+    print "No %r module found for this machine." % istr
+  else:
+    for setting in dir(mod):
+      if setting == setting.upper():
+        setattr(sys.modules[__name__], setting, getattr(mod, setting))
 
-try:
-  istr = 'txrx.settings.local'
-  tmp = __import__(istr)
-  mod = sys.modules[istr]
-except ImportError:
-  print "No local settings found for this machine."
-else:
-  for setting in dir(mod):
-    if setting == setting.upper():
-      setattr(sys.modules[__name__], setting, getattr(mod, setting))
 EMAIL_SUBJECT_PREFIX = "[TXRX]"
 DEFAULT_FROM_EMAIL = "noreply@txrxlabs.org"
 NEW_STUDENT_PASSWORD = "I am a new student, reset my passwrod asap"

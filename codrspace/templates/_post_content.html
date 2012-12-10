@@ -1,0 +1,31 @@
+{% load cache %}
+{% load codrspace_tags %}
+{% load short_codes %}
+
+<h2><a href="{{ post.get_absolute_url }}">{% filter striptags|truncatewords:30 %}{% firstof post.title "Untitled" %}{% endfilter %}</a></h2>
+
+<div class="post-meta">
+    {% if post.author == user %}
+        {% if post.status == 'published' %}
+            <span class="label label-success">{{ post.status }}</span>
+        {% endif %}
+        {% if post.status == 'draft' %}
+            <span class="label label-warning">{{ post.status }}</span>
+        {% endif %}
+    {% endif %}
+        by <a href="#" rel="popover" data-original-title="{{ post.author.username }}">{{ post.author.username }}</a> {% if post.status == 'published' %}on {{ post.publish_dt|localize:user }}{% endif %}
+    {% if post.author == user %}
+        <i class="icon-pencil"></i> <a href="{% url edit post.pk %}">edit</a>
+        <i class="icon-trash"></i> <a href="{% url delete post.pk %}">delete</a>
+    {% endif %}
+</div>
+
+<div class="post-content">
+    {% if cache == 0 %}
+        <p>{{ post.content|explosivo }}</p>
+    {% else %}
+        {% cache 3600 content post.pk %}
+            <p>{{ post.content|explosivo }}</p>
+        {% endcache %}
+    {% endif %}
+</div>

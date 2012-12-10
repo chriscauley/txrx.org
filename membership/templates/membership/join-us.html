@@ -1,6 +1,8 @@
 {% extends "base.html" %}{% load content_tags %}
 
-{% block main %}
+{% block header_content %}Become a Member of TX/RX Labs{% endblock %}
+
+{% block content %}
 <script type="text/javascript">
 
 membership_form_parameters = {}; //this is established at the bottom of every form
@@ -16,22 +18,27 @@ function setHiddenFields(that) {
 //when pages loaded, update all selects
 $(document).ready(function() {$("select").change()});
 </script>
-<h1>Become a Member of TX/RX Labs</h1>
-{{ "join_us-top"|print_text }}
+<p class="lead">
+  {{ "join_us-top"|print_text }}
+</p>
 <div class="clear"></div>
-
+<h2>There are 4 membership levels to choose from:</h2>
+<br />
 {% for m in memberships %}
-<div class="membership outlined">
-  <div>
-    <b>
-    "<u>{{ m.name }}</u>"
-    </b>
-    ${{ m.monthly_rate.cost }}/month or ${{ m.yearly_rate.cost }}/year
-  </div>
+<span class="span5 well">
+  <h2>
+    "{{ m.name }}"
+    <small>{% if forloop.last %}Starting at {% endif %}${{ m.monthly_rate.cost }}/month</small>
+  </h2>
   {% if m.notes %}<br />
   {{ m.notes|safe }}{% endif %}
-  <ul class="bulleted">{% for f in m.feature_set.all %}
-    <li>{{ f.text }}</li>{% endfor %}
+  <ul class="membership_features">
+    {% for f in m.feature_set.all %}
+    <li>
+      <i class="icon-ok"></i>
+      {{ f.text }}
+    </li>
+    {% endfor %}
   </ul>
   <form name="_xclick" action="https://www.paypal.com/cgi-bin/webscr" method="post">
     <input type="hidden" name="cmd" value="_xclick-subscriptions">
@@ -54,7 +61,7 @@ $(document).ready(function() {$("select").change()});
 	   src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif">
     <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="" width="1" height="1" border="0">
   </form>
-</div>
+</span>
 
 <script type="text/javascript">
 {% for rate in m.membershiprate_set.all %}

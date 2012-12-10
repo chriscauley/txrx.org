@@ -9,33 +9,33 @@ _urls = lambda *ns: [url(r'^%s/'%n, include('%s.urls'%n, namespace=n, app_name=n
 j = "(?:.json)?"
 
 urlpatterns = patterns(
-  'txrx.views',
+  '',
+  (r'^$','course.views.index'),
+  (r'^$',include('django.contrib.flatpages.urls')),
   (r'^admin/', include(admin.site.urls)),
-  (r'^members/$','members'),
-  (r'^member/(?P<username>.*)/$','member'),
+  (r'^members/$','txrx.views.members'),
+  (r'^member/(?P<username>.*)/$','txrx.views.member'),
   (r'^membership/$', include('membership.urls')),
   (r'^classes/', include('course.urls',namespace='course',app_name='course')),
-  (r'^weblog/', include('zinnia.urls')),
+  (r'^blog/$','txrx.views.blog_home'),
+  (r'^blog/',include('codrspace.urls')),
   (r'^comments/', include('django.contrib.comments.urls')),
-  (r'^projects/(?P<slug>[\w\d\-]*)/?$','projects'),
-  (r'^survey/$','survey'),
-  (r'^tools/?(?P<lab>[\w\d\-]*)/?(?P<tool>[\w\d\-]*)/','tools'),
-  (r'^google_login','google_login'),
-  (r'^google_return/(?P<url>.*)','google_return'),
+  (r'^projects/(?P<slug>[\w\d\-]*)/?$','txrx.views.projects'),
+  (r'^survey/$','txrx.views.survey'),
+  (r'^tools/?(?P<lab>[\w\d\-]*)/?(?P<tool>[\w\d\-]*)/','txrx.views.tools'),
   (r'^grappelli/', include('grappelli.urls')),
+  url(r'^accounts/settings/$','membership.views.settings',name='account_settings'),
   (r'^accounts/', include('registration.backends.default.urls')),
   (r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
   (r'^password-reset/', include('password_reset.urls')),
-  (r'^force_login/(\d+)/$', 'force_login'),
+  (r'^force_login/(\d+)/$', 'txrx.views.force_login'),
   #(r'^comments/', include('mptt_comments.urls')),
 )
 
 urlpatterns += patterns(
   '',
-  (r'^$','course.views.index'),
   url(r'^instructors/$','course.views.instructors',name='instructor_detail'),
   url(r'^instructors/([^/]+)/$','course.views.instructor_detail',name='instructor_detail'),
-  #(r'^$','course.views.index'),
   (r'^join-us/$','membership.views.join_us'),
   (r'^new-classes$','course.views.index'),
   (r'^new_classes$','course.views.index'),
@@ -48,7 +48,6 @@ urlpatterns += patterns(
    'django.contrib.auth.views.password_reset_confirm',
    {'post_reset_redirect' : '/accounts/password/done/'}),
   (r'^accounts/password/done/$', 'django.contrib.auth.views.password_reset_complete'),
-  (r'^',include('django.contrib.flatpages.urls')),
 )
 # hardcoded urls for content pages. Will be created when a super user hits the address.
 #urlpatterns += patterns(

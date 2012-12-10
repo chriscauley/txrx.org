@@ -1,78 +1,53 @@
-{% load compress %}
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-<head>
-  <title>{% block title %}TX/RX Labs{% endblock %}</title>
-  {# Remote CSS #}
-  <link href="http://fonts.googleapis.com/css?family=Josefin+Sans:400,700&v2" rel="stylesheet" type="text/css">
-  <link href="http://fonts.googleapis.com/css?family=News+Cycle" rel="stylesheet" type="text/css" />
-  <link rel="shortcut icon" href="{{ STATIC_URL }}favicon-1.ico" type="image/x-icon" />
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <meta http-equiv="cache-control" content="public" />
-  <meta name="robots" content="follow, all" />
-  <meta name="language" content="{{ LANGUAGE_CODE }}" />
-  <meta name="viewport" content="width=device-width; initial-scale=1.0;" />
-  <meta name="description" content="{% block meta-description %}Tx/Rx Labs. Houston's Hackerspace{% endblock %}" />
-  <meta name="keywords" content="{% block meta-keywords %}txrx labs, houston, technology, hackerspace, {{ entry_tags|join:", "}}{% endblock %}" />
-  <meta name="author" content="Chris Cauley" />
-  {% block meta %}{% endblock %}
-  {# Local CSS #}
-  {# Site Design CSS #}
-  {% if settings.DEBUG %}
-  <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/base.less" />
-  <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/course.less" />
-  {#<link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/zinnia.less" />#}
-  <script type="text/javascript" src="{{ STATIC_URL }}js/less.js"></script>
-  {% else %}
-  {% compress css %}
-  <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/base.less" />
-  <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/course.less" />
-  {#<link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/zinnia.less" />#}
-  {% endcompress %}
-  {% endif %}
-  <!--[if IE 7]><link rel="stylesheet" type="text/css" href="/static/design/ie7.css"/><![endif]-->
-  <!--[if IE 8]><link rel="stylesheet" type="text/css" href="/static/design/ie8.css"/><![endif]-->
-
-  <script type="text/javascript" src="{{ STATIC_URL }}js/simpleCart.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.simplemodal.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/cart.js"></script>
-
-  {% block extra_head %}{% endblock %}
-  {% block link %}{% endblock %}
-  {% block script %}{% endblock %}
-</head>
-
-<body class="{% block body-class %}{% endblock %} zinnia">
-  <div id="wrapper">
-    {% include "header.html" %}
-  <div id="main" class="{{ current|slugify }}">
-    {% block main %}
-    <div id="content">
-      {% block breadcrumbs %}{% endblock %}
+  <head>
+    <title>{% block pre_title %}{{ SITE_NAME }} - {% endblock %} {% block title %}{% endblock %}</title>
+    {% block extra_head %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.css">
+    {# <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-responsive.css"> #}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/pygments.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wmd/wmd.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/codrspace.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/txrx.css">
+    <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery.labelify.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-modal.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-tooltip.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-dropdown.js"></script>
+    {% block extra_body %}
+    <script type="text/javascript">
+      $('img[rel=tooltip]').tooltip();
+    </script>
+    {% endblock %}
+    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-alert.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}codrspace.js"></script>
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    {% block analytics %}{{ ANALYTICS_CODE|safe }}{% endblock %}
+  </head>
+  <body>
+    {% block nav %}
+    {% include "_nav.html" with page="home" %}
+    {% endblock %}
+    <div class="container">
+      {% block messages %}
+      {% include "_messages.html" with messages=messages %}
+      {% endblock %}
+      {% block header %}
+      <header>
+        <div class="page-header">
+          <h1 class="home-tagline">{% block header_content %}{{ SITE_TAGLINE }}{% endblock %}</h1>
+        </div>
+      </header>
+      {% endblock %}
       {% block content %}{% endblock %}
-    </div>
-    <div id="side">
-      {% block sidebar %}
-      <iframe src="https://www.google.com/calendar/embed?showPrint=0&amp;mode=AGENDA&amp;src=e9rnjdeb9btnj1cis287be9quc%40group.calendar.google.com&amp;ctz=America/Chicago" style="border: 0; margin: auto; display: block;" width="300" height="440" frameborder="0" scrolling="no"></iframe>
+      {% block footer %}
+      <footer>
+      </footer>
       {% endblock %}
     </div>
-    {% endblock %}
-    <div class="clear"></div>
-    {% include "footer.html" %}
-  </div>
-  <div class="modal" id="modal" style="display: none;">
-    <div class="close" onclick="$(this).closest('.modal').dialog('close');">
-    </div>
-  </div>
-</body>
-{% block extrafooter %}{% endblock %}
-<script type="text/javascript">;
-  /*var logo = document.getElementsByClassName("header")[0].children[0];
-  logo.href = "javascript:loadJSON('"+logo.href+"');";
-  var links = document.getElementById("nav").children;
-  for (i=0; i<links.length; i++) {
-    links[i].href = "javascript:loadJSON('"+links[i].href+"');";
-  }*/
-</script>
+  </body>
 </html>

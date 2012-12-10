@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.conf import settings
-from membership.models import Profile
+from membership.models import UserMembership
 
 def get_or_create_student(email):
     try:
@@ -10,7 +10,7 @@ def get_or_create_student(email):
         if new:
             user.set_password(settings.NEW_STUDENT_PASSWORD)
             user.save()
-            profile = Profile(
+            profile = UserMembership(
                 user=user,
                 paypal_email=email
                 )

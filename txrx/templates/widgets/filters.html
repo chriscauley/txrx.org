@@ -1,11 +1,19 @@
-<form class="filters">{% for f in filters %}
-  <div class="filter">
-    <label for="{{ f.slug }}">{{ f.name }}</label>
-    <select id="{{ f.slug }}" name="{{ f.slug }}" onchange="applyFilters(this);">
-      <option value="">All</option>{% for o in f.options %}
-      <option value="{{ o.value }}">{{ o }}</option>{% endfor %}
-    </select>
-  </div>{% endfor %}
+<form class="filters">
+  {% for f in filters %}
+  <select id="{{ f.slug }}" name="{{ f.slug }}" onchange="applyFilters(this);">
+    <option value="">All {{ f.name }}s</option>{% for o in f.options %}
+    <option value="{{ o.value }}">{{ o }}</option>{% endfor %}
+  </select>
+  {% endfor %}
+  {% if not all_sessions_closed %}
+  <span>
+    <input id="show_closed" type="checkbox" onchange="toggleClosed(this);" />
+    <label for="show_closed">Show Closed Sections</label>
+    <script type="text/javascript">
+      $(document).ready(function() { $("#show_closed").change() });
+    </script>
+  </span>
+  {% endif %}
 </form>
 <script type="text/javascript">
 function applyFilters(that) {
@@ -15,5 +23,9 @@ function applyFilters(that) {
   items.filter(function() {
       return $(this).data("subject").search(subject)<0;
   }).hide();
+}
+function toggleClosed(that) {
+  if (!$(that).attr("checked")) { $(".week.closed").hide(); return; }
+  $(".week").show()
 }
 </script>

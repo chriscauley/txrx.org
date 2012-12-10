@@ -1,0 +1,69 @@
+{% load codrspace_tags %}
+{% load url from future %}
+
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      
+      <!-- Be sure to leave the brand out there if you want it shown -->
+      <a class="brand" href="{% url "homepage" %}">
+        <img src="{{ STATIC_URL }}bw-logo.png"
+             alt="Tx/Rx Labs - {{ SITE_TAGLINE }}" title="Tx/Rx Labs - {{ SITE_TAGLINE }}"/></a>
+      
+      <!-- Everything you want hidden at 940px or less, place within here -->
+      <div class="nav-collapse">
+        <ul class="nav">
+          {# <li><a href="{% url "feedback" %}"><i class="icon-ok"></i> Give Feedback</a></li> #}
+          {% for n in nav %}
+          {% if n.sublinks %}
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle {{ n.class }}" data-toggle="dropdown">
+              {{ n.name }} <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              {% for sublink in n.sublinks %}
+              <li><a href="{{ sublink.url }}">{{ sublink.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </li>
+          {% else %}
+          <li><a href="{{ n.url }}" class="{{ n.class }}">{{ n.name }}</a></li>
+          {% endif %}
+          {% endfor %}
+        </ul>
+        <ul class="nav pull-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="icon-user"></i>
+              {% if user.is_authenticated %}
+              {{ user.username }}
+              {% else %}
+              Log In/Register
+              {% endif %}
+              <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              {% if user.is_authenticated %}
+              {% if user.is_staff %}<li><a href="/admin/"><i class="icon-cog"></i> Admin</a></li>{% endif %}
+              <li><a href="{% url "signout" %}"><i class="icon-off"></i> Log out</a></li>
+              <li><a href="{% url "account_settings" %}"><i class="icon-cog"></i> Settings</a></li>
+              {% else %}
+              <li><a href="/accounts/register/">Register</a></li>
+              <li><a href="/accounts/login/">Log in with Username</a></li>
+              <li><a href="{% url "signin_start" %}">Log in with GitHub</a></li>
+              {% endif %}
+            </ul>
+          </li>
+        </ul>
+        <!-- .nav, .navbar-search, .navbar-form, etc -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="nav-clear"><!-- iefix --></div>

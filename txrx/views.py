@@ -10,8 +10,9 @@ from django.contrib.admin.views.decorators import staff_member_required
 from articles.models import Article
 from django.shortcuts import get_object_or_404
 from project.models import Project
-from membership.models import Membership, Profile
+from membership.models import Membership
 from tool.models import Tool, Lab
+from codrspace.models import Post
 
 import os,urllib, re
 
@@ -142,12 +143,18 @@ def survey(request):
         pass
     return TemplateResponse(request,"survey.html",values)
 
-@staff_member_required
 def force_login(request,uid):
-    if not request.user.is_authenticated and not request.user.is_superuser:
+    if not request.user.is_authenticated() and not request.user.is_superuser:
         raise Http404()
     u = User.objects.get(id=uid)
     from django.contrib.auth import login
     u.backend='django.contrib.auth.backends.ModelBackend'
     login(request,u)
     return HttpResponseRedirect('/')
+
+def blog_home(request):
+    posts = Post.objects.filter(status="published")[:10]
+    values = {
+        'posts': posts,
+        }
+    return TemplateResponse(request,"blog_home.html",values)
