@@ -14,6 +14,12 @@ from codrspace.managers import SettingManager
 
 models.signals.post_save.connect(create_api_key, sender=User)
 
+try:
+    from south.modelsinspector import add_introspection_rules
+    add_introspection_rules([], ["^timezones\.fields\.TimeZoneField"])
+except ImportError:
+    #necessary if you're going to use south
+    pass
 
 def invalidate_cache_key(fragment_name, *variables):
     args = md5_constructor(u':'.join([urlquote(var) for var in variables]))

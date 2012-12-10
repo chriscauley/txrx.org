@@ -78,3 +78,5 @@ class Survey(models.Model):
     skills = models.TextField(blank=True)
     expertise = models.TextField(blank=True)
     questions = models.TextField(blank=True)
+
+from .listeners import *
