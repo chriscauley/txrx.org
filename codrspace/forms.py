@@ -21,6 +21,8 @@ class TaggedModelForm(forms.ModelForm):
             self.fields['tags'].initial = ','.join([t.name for t in Tag.objects.get_for_object(instance)])
     def save(self,*args,**kwargs):
         instance = super(TaggedModelForm,self).save(*args,**kwargs)
+        if not kwargs.get('commit',True):
+            return instance
         Tag.objects.update_tags(instance,self.cleaned_data['tags'])
         return instance
     class Meta:
@@ -50,6 +52,10 @@ class PostForm(TaggedModelForm):
             raise forms.ValidationError(msg)
 
         return slug
+
+    def save(self,*args,**kwargs):
+        self.instance.author = self.author
+        return super(PostForm,self).save(*args,**kwargs)
 
     def __init__(self, *args, **kwargs):
         # checking for user argument here for a more

@@ -118,19 +118,17 @@ def add(request, template_name="add.html"):
         # post
         form = PostForm(request.POST, user=request.user)
         if form.is_valid() and 'submit_post' in request.POST:
-            post = form.save(commit=False)
+            form.author = request.user
+            post = form.save()
 
-            # if something to submit
-            if post.title or post.content:
-                post.author = request.user
-                if post.status == 'published' and not post.publish_dt:
-                    post.publish_dt = datetime.now()
-                post.save()
-                messages.info(
-                    request,
-                    'Added post "%s".' % post,
-                    extra_tags='alert-success')
-                return redirect('edit', pk=post.pk)
+            if post.status == 'published' and not post.publish_dt:
+                post.publish_dt = datetime.now()
+            post.save()
+            messages.info(
+                request,
+                'Added post "%s".' % post,
+                extra_tags='alert-success')
+            return redirect('edit', pk=post.pk)
 
     else:
         form = PostForm(user=request.user)
