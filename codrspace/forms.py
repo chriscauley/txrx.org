@@ -12,7 +12,7 @@ from tagging.models import Tag
 
 class TaggedModelForm(forms.ModelForm):
     """Provides an easy mixin for adding tags using django-tagging"""
-    tags = TagField()
+    tags = TagField(help_text="Separate tags with spaces. Input will be lowercased")
     def __init__(self,*args,**kwargs):
         super(TaggedModelForm,self).__init__(*args,**kwargs)
         instance = kwargs.get('instance',None)

@@ -1,6 +1,7 @@
-** Cody 
-* Remove lablackey
-* combine all tagging stuff into a forked django tagging
-** codrspace forms
-** autocomplete
-** django-tagging (main)
+* Cody 
+** Remove lablackey
+** combine all tagging stuff into a forked django tagging
+*** codrspace forms
+*** autocomplete
+*** django-tagging (main)
+** display tags and link to a tag page

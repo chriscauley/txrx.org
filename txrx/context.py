@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 def nav(request):
   blog_sublinks = [
     {'name': 'Blog Home', 'url': '/blog/'},
-    {'name': 'Add Post', 'url': '/blog/add/'},
+    {'name': 'Add Post', 'url': '/blog/admin/add/'},
     {'name': 'My Posts', 'url': '/blog/%s/'%request.user.username},
     ]
   _nav = [
@@ -15,10 +15,10 @@ def nav(request):
         {"name": "My classes", "url": "/classes/my-sessions/"},
         ]
      },
-    #{"name": "Blog",
-    # "url": "/blog/",
-    # "sublinks": blog_sublinks if request.user.is_staff else [],
-    # },
+    {"name": "Blog",
+     "url": "/blog/",
+     "sublinks": blog_sublinks if request.user.is_staff else [],
+     },
     {'name': "Join us", "url": "/join-us/"},
     ]
 

@@ -4,6 +4,9 @@
 {% load url from future %}
 {% block content %}
 <span class="span6">
+  <p class="lead">
+    UNDER CONSTRUCTION: This page is currently being tested and filled with content. Please bear with me. It will break often.
+  </p>
   {% for post in posts %}
   <h2><a href="{{ post.get_absolute_url }}">{{ post }}</a></h2>
   <div class="post-meta">

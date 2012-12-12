@@ -4,7 +4,7 @@ from membership.models import UserMembership
 
 def get_or_create_student(email):
     try:
-        user = User.objects.get(profile__paypal_email=email)
+        user = User.objects.get(usermembership__paypal_email=email)
     except User.DoesNotExist:
         user, new = User.objects.get_or_create(email=email,defaults={'username':email})
         if new:
