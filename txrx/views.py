@@ -143,8 +143,9 @@ def survey(request):
         pass
     return TemplateResponse(request,"survey.html",values)
 
+@login_required
 def force_login(request,uid):
-    if not request.user.is_authenticated() and not request.user.is_superuser:
+    if not request.user.is_superuser:
         raise Http404()
     u = User.objects.get(id=uid)
     from django.contrib.auth import login

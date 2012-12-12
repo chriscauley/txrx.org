@@ -6,6 +6,7 @@ from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import simplejson
 from django.core.urlresolvers import reverse
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -84,12 +85,12 @@ def post_list(request, username, post_type='published',
     })
 
 
-@login_required
+@staff_member_required
 def drafts(request):
     return post_list(request, request.user.username, post_type='drafts')
 
 
-@login_required
+@staff_member_required
 def add(request, template_name="add.html"):
     """ Add a post """
 
@@ -142,7 +143,7 @@ def add(request, template_name="add.html"):
     })
 
 
-@login_required
+@staff_member_required
 def user_settings(request, template_name="settings.html"):
     """ Add/Edit a setting """
 
@@ -173,7 +174,7 @@ def user_settings(request, template_name="settings.html"):
     })
 
 
-@login_required
+@staff_member_required
 def api_settings(request, template_name="api_settings.html"):
     """ View API settings """
 
@@ -185,7 +186,7 @@ def api_settings(request, template_name="api_settings.html"):
     })
 
 
-@login_required
+@staff_member_required
 def delete(request, pk=0, template_name="delete.html"):
     """ Delete a post """
     post = get_object_or_404(Post, pk=pk, author=request.user)
@@ -205,7 +206,7 @@ def delete(request, pk=0, template_name="delete.html"):
     })
 
 
-@login_required
+@staff_member_required
 def edit(request, pk=0, template_name="edit.html"):
     """ Edit a post """
     post = get_object_or_404(Post, pk=pk, author=request.user)
@@ -416,7 +417,7 @@ def feedback(request, template_name='feedback.html'):
     })
 
 
-@login_required
+@staff_member_required
 def render_preview(request, template_name='preview.html'):
     """Ajax view for rendering preview of post"""
 
