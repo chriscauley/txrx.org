@@ -15,10 +15,10 @@ def nav(request):
         {"name": "My classes", "url": "/classes/my-sessions/"},
         ]
      },
-    {"name": "Blog",
-     "url": "/blog/",
-     "sublinks": blog_sublinks if request.user.is_staff else [],
-     },
+    #{"name": "Blog",
+    # "url": "/blog/",
+    # "sublinks": blog_sublinks if request.user.is_staff else [],
+    # },
     {'name': "Join us", "url": "/join-us/"},
     ]
 
