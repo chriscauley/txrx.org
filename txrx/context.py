@@ -1,18 +1,27 @@
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
-_nav = [
-  {"name": "Classes",
-   "url": "/classes/",
-   'sublinks': [
-      {"name": "All classes", "url": "/classes/"},
-      {"name": "My classes", "url": "/classes/my-sessions/"},
-      ]
-   },
-  #{"name": "Blog", "url": "/blog/"},
-  {'name': "Join us", "url": "/join-us/"},
-  ]
 
 def nav(request):
+  blog_sublinks = [
+    {'name': 'Blog Home', 'url': '/blog/'},
+    {'name': 'Add Post', 'url': '/blog/add/'},
+    {'name': 'My Posts', 'url': '/blog/%s/'%request.user.username},
+    ]
+  _nav = [
+    {"name": "Classes",
+     "url": "/classes/",
+     'sublinks': [
+        {"name": "All classes", "url": "/classes/"},
+        {"name": "My classes", "url": "/classes/my-sessions/"},
+        ]
+     },
+    {"name": "Blog",
+     "url": "/blog/",
+     "sublinks": blog_sublinks if request.user.is_staff else [],
+     },
+    {'name': "Join us", "url": "/join-us/"},
+    ]
+
   return dict(
     current = request.path.split('/')[1] or 'home',
     nav = _nav,

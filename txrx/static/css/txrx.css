@@ -1,7 +1,7 @@
 /* txrx overrides */
 body { margin-bottom: 50px; overflow: scroll; }
 .navbar .brand { padding: 3px 20px; }
-.navbar .brand img { height: 35px; }
+.navbar .brand img { height: 35px; width: 222px; }
 
 .icon-white,.nav-pills>.active>a>[class^="icon-"],.nav-pills>.active>a>[class*=" icon-"],.nav-list>.active>a>[class^="icon-"],.nav-list>.active>a>[class*=" icon-"],.navbar-inverse .nav>.active>a>[class^="icon-"],.navbar-inverse .nav>.active>a>[class*=" icon-"],.dropdown-menu>li>a:hover>[class^="icon-"],.dropdown-menu>li>a:hover>[class*=" icon-"],.dropdown-menu>.active>a>[class^="icon-"],.dropdown-menu>.active>a>[class*=" icon-"],.dropdown-submenu:hover>a>[class^="icon-"],.dropdown-submenu:hover>a>[class*=" icon-"]{
   background-image:url("../img/glyphicons-halflings-white.png") !important;

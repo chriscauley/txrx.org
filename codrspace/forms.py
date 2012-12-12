@@ -12,7 +12,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        exclude = ('user',)
+        exclude = ('author',)
 
     class Media:
         js = ('grappelli/js/grappelli.min.js',)
