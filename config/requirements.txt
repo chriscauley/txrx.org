@@ -26,3 +26,6 @@ django-tastypie==0.9.11
 django-debug-toolbar
 -e git://github.com/kennethreitz/requests.git#egg=requests
 -e git://github.com/durden/frappy.git#egg=frappy
+
+django-tagging
+-e git+https://github.com/alekam/django-tagging-autocomplete.git#egg=django-tagging-autocomplete

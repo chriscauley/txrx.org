@@ -8,8 +8,11 @@ from django.utils.hashcompat import md5_constructor
 from django.core.cache import cache
 from django.utils.http import urlquote
 from django.conf import settings
+
 from timezones.fields import TimeZoneField
 from tastypie.models import create_api_key
+import tagging
+
 from codrspace.managers import SettingManager
 
 models.signals.post_save.connect(create_api_key, sender=User)
@@ -68,6 +71,7 @@ class Post(models.Model):
     def get_absolute_url(self):
         return ("post_detail", [self.author.username, self.slug])
 
+tagging.register(Post)
 
 class Media(models.Model):
     file = models.FileField(upload_to=file_directory, null=True)

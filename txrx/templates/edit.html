@@ -33,6 +33,10 @@
                    <label>Status</label>
                    {{ form.status }}
                </div>
+               <div id="tags">
+                 {{ form.tags.label_tag }}
+                 {{ form.tags }}
+               </div>
             </div>
             <input class="btn btn-success btn-large" type="submit" name="submit_post" value="Save changes" />
             {% if posts %}

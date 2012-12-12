@@ -7,9 +7,27 @@ from codrspace.utils import localize_date
 
 from datetime import datetime
 
-class PostForm(forms.ModelForm):
-    content = forms.CharField(widget=forms.Textarea(attrs={'class': 'wmd-input'}),required=False)
+from tagging.forms import TagField
+from tagging.models import Tag
 
+class TaggedModelForm(forms.ModelForm):
+    """Provides an easy mixin for adding tags using django-tagging"""
+    tags = TagField()
+    def __init__(self,*args,**kwargs):
+        super(TaggedModelForm,self).__init__(*args,**kwargs)
+        instance = kwargs.get('instance',None)
+        initial = kwargs.get('initial',{})
+        if instance and not initial.get('tags',None):
+            self.fields['tags'].initial = ' '.join([t.name for t in Tag.objects.get_for_object(instance)])
+    def save(self,*args,**kwargs):
+        instance = super(TaggedModelForm,self).save(*args,**kwargs)
+        Tag.objects.update_tags(instance,self.cleaned_data['tags'])
+        return instance
+    class Meta:
+        abstract = True
+
+class PostForm(TaggedModelForm):
+    content = forms.CharField(widget=forms.Textarea(attrs={'class': 'wmd-input'}),required=False)
     class Meta:
         model = Post
         exclude = ('author',)
