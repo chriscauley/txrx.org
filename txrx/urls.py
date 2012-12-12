@@ -53,7 +53,7 @@ urlpatterns += patterns(
 urlpatterns += patterns(
   '',
   url(r'^$',include('django.contrib.flatpages.urls'),name='home'),
-  url(r'^map/$',include('django.contrib.flatpages.urls'),name='map'),
+  url(r'^(map/)$','django.contrib.flatpages.views.flatpage',name='map'),
 )
 
 # hardcoded urls for content pages. Will be created when a super user hits the address.
