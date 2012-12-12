@@ -74,9 +74,6 @@ div.post-content h1, h2, h3 {
 /**
 * Admin area styles
 */
-div#date {
-  display: none;
-}
 
 ul#post-list {
   margin: 0;

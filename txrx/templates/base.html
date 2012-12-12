@@ -14,15 +14,6 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}jquery.labelify.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-modal.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-tooltip.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-dropdown.js"></script>
-    {% block extra_body %}
-    <script type="text/javascript">
-      $('img[rel=tooltip]').tooltip();
-    </script>
-    {% endblock %}
-    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-alert.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}codrspace.js"></script>
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -49,5 +40,14 @@
       </footer>
       {% endblock %}
     </div>
+    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-tooltip.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-dropdown.js"></script>
+    {% block extra_body %}
+    <script type="text/javascript">
+      $('img[rel=tooltip]').tooltip();
+    </script>
+    {% endblock %}
+    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-alert.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}codrspace.js"></script>
   </body>
 </html>
