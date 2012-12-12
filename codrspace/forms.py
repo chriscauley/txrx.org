@@ -12,13 +12,13 @@ from tagging.models import Tag
 
 class TaggedModelForm(forms.ModelForm):
     """Provides an easy mixin for adding tags using django-tagging"""
-    tags = TagField(help_text="Separate tags with spaces. Input will be lowercased")
+    tags = TagField(help_text="Separate tags with commas. Input will be lowercased")
     def __init__(self,*args,**kwargs):
         super(TaggedModelForm,self).__init__(*args,**kwargs)
         instance = kwargs.get('instance',None)
         initial = kwargs.get('initial',{})
         if instance and not initial.get('tags',None):
-            self.fields['tags'].initial = ' '.join([t.name for t in Tag.objects.get_for_object(instance)])
+            self.fields['tags'].initial = ','.join([t.name for t in Tag.objects.get_for_object(instance)])
     def save(self,*args,**kwargs):
         instance = super(TaggedModelForm,self).save(*args,**kwargs)
         Tag.objects.update_tags(instance,self.cleaned_data['tags'])
