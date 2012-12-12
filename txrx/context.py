@@ -20,6 +20,7 @@ def nav(request):
      "sublinks": blog_sublinks if request.user.is_staff else [],
      },
     {'name': "Join us", "url": "/join-us/"},
+    {'name': "Location", "url": "/map/"},
     ]
 
   return dict(
