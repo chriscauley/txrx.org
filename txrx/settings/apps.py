@@ -1,3 +1,4 @@
+
 INSTALLED_APPS = (
   'grappelli',
   'django.contrib.auth',
@@ -24,6 +25,7 @@ INSTALLED_APPS = (
   'tagging',
   'mptt',
   #'mptt_comments',
+  'password_reset',
   'codrspace',
   'tastypie',
 
@@ -34,7 +36,6 @@ INSTALLED_APPS = (
   'lablackey.profile',
   #'lablackey.djangogcal',
   'lablackey.db',
-  'lablackey.event',
 
   # this project
   #'project',
@@ -42,7 +43,7 @@ INSTALLED_APPS = (
   'course',
   'membership',
   'main',
-  'password_reset',
+  'event',
 )
 
 LOGOUT_REDIRECT = 'home'
