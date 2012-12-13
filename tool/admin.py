@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib import admin
 from models import Tool, ToolPhoto, ToolLink, ToolVideo, Lab
-from lablackey.content.mixins import CKEditorMixin
 from lablackey.photo.admin import PhotoAdmin
 from lablackey.db.admin import SlugModelAdmin
 
@@ -38,7 +37,7 @@ class ToolVideoInline(admin.StackedInline):
          (None, {'fields': ("embed_code",)})
          )
 
-class ToolAdmin(CKEditorMixin, SlugModelAdmin):
+class ToolAdmin(SlugModelAdmin):
   list_display = ("__unicode__","order")
   list_editable = ("order",)
   inlines = (ToolLinkInline,ToolPhotoInline,ToolVideoInline)
