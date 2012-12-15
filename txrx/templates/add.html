@@ -37,6 +37,10 @@
                  {{ form.tags }}
                  <p class="muted">{{ form.tags.help_text }}</p>
                </div>
+               <div id="photo">
+                 {{ form.photo.label_tag }}
+                 {{ form.photo }}
+               </div>
             </div>
             <input class="btn btn-success btn-large" type="submit" name="submit_post" value="Save changes" />
             {% if posts %}

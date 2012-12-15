@@ -51,6 +51,7 @@ class Post(models.Model):
     publish_dt = models.DateTimeField(null=True)
     create_dt = models.DateTimeField(auto_now_add=True)
     update_dt = models.DateTimeField(auto_now=True)
+    photo = models.ForeignKey("Media",null=True,blank=True)
 
     class Meta:
         unique_together = ("slug", "author")
@@ -78,7 +79,7 @@ class Media(models.Model):
     filename = models.CharField(max_length=200, editable=False)
     uploader = models.ForeignKey(User, editable=False)
     upload_dt = models.DateTimeField(auto_now_add=True)
-
+    __unicode__ = lambda self: self.filename
     def type(self):
         ext = os.path.splitext(self.filename)[1].lower()
         # map file-type to extension
