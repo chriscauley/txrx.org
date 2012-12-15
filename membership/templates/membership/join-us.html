@@ -2,7 +2,7 @@
 
 {% block header_content %}Become a Member of TX/RX Labs{% endblock %}
 
-{% block content %}
+{% block main %}
 <script type="text/javascript">
 
 membership_form_parameters = {}; //this is established at the bottom of every form
@@ -27,7 +27,7 @@ $(document).ready(function() {$("select").change()});
 {% for m in memberships %}
 <span class="span5 well">
   <h2>
-    "{{ m.name }}"
+    {{ m.name }}
     <small>{% if forloop.last %}Starting at {% endif %}${{ m.monthly_rate.cost }}/month</small>
   </h2>
   {% if m.notes %}<br />

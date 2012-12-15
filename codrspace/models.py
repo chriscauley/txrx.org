@@ -51,6 +51,7 @@ class Post(models.Model):
     publish_dt = models.DateTimeField(null=True)
     create_dt = models.DateTimeField(auto_now_add=True)
     update_dt = models.DateTimeField(auto_now=True)
+    featured = models.BooleanField(default=False)
     photo = models.ForeignKey("Media",null=True,blank=True)
 
     class Meta:

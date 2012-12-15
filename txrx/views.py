@@ -154,8 +154,10 @@ def force_login(request,uid):
     return HttpResponseRedirect('/')
 
 def blog_home(request):
-    posts = Post.objects.filter(status="published")[:10]
+    posts = Post.objects.filter(status="published",featured=False)[:10]
+    featured_posts = Post.objects.filter(status="published",featured=True)
     values = {
         'posts': posts,
+        'featured_posts': featured_posts,
         }
     return TemplateResponse(request,"blog_home.html",values)

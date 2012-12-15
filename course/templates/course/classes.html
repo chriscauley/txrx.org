@@ -5,85 +5,82 @@
 {% block title %}Classes {{ term.name }} at {{ block.super }} {% endblock %}
 
 {% block extra_head %}
-</script>
 {% endblock %}
 
 {% block header_content %}Upcomming Classes{% endblock %}
 
-{% block content %}
-<div class="container">
-  {% if "success" in request.GET %}
-  <b>
-    You have been enrolled in your classes.
-    {% if not request.user.is_authenticated %}
-    <br />
-    If you haven't already, please click
-    <a href="/password-reset/recover/">reset your password</a>.
-    <br />
-    Otherwise click please <a href="/accounts/login/">log in</a>.
-    {% endif %}
-  </b>
+{% block main %}
+{% if "success" in request.GET %}
+<b>
+  You have been enrolled in your classes.
+  {% if not request.user.is_authenticated %}
+  <br />
+  If you haven't already, please click
+  <a href="/password-reset/recover/">reset your password</a>.
+  <br />
+  Otherwise click please <a href="/accounts/login/">log in</a>.
   {% endif %}
-  <p class="lead">
-    {% if all_sessions_closed %}
-    All sessions for this term are closed. Come back soon to see our next round of classes!
-    {% elif not request.user.is_authenticated %}
-    You can register for classes without logging in. Once you pay, a txrx account will be made using your paypal email address, and instructions on how to view your course schedule will be sent to that email address. If you have any problems feel free to write to classes@txrxlabs.org
-    {% elif not request.user.enrollment_set.count %}
-    Our records show you've never registered for a class before. If this is in error you should contact classes@txrxlabs.org and we'll adjust our records.
-    {% else %}
-    Here are all upcoming classes at the hackerspace. If you have any questions email classes@txrxlabs.org or stop by the hackerspace.
-    {% endif %}
-  </p>
-  {% include "widgets/filters.html" %}
-  {% for week in weeks %}
-  <div class="week {{ week.open }}">
-    <h4>Classes starting {{ week.0 }} - {{ week.1 }}</h4>
-    <table class="table table-hover class-table">
-      <thead>
-        <tr>
-          <td class="name">Class Name</td>
-          <td>Instructor</td>
-          <td>First Date</td>
-          <td>Intro Level?</td>
-          <td>Days</td>
-          <td>Cost</td>
-        </tr>
-      </thead>
-      {% for session in week.sessions %}
-      <tr id="c{{session.id}}" class="course filterable"
-          data-subject="{% for subject in session.subjects %}{{ subject }},{% endfor %}"
-          {%if not session.course.closed%}data-open{%endif%}
-          data-date="{{ session.starttime|date:"Ymd" }}">
-        <td class="name">
-          <a href="{% url "course:detail" session.slug %}">
-	    {{ session.section.course }}
-          </a>
-        </td>
-        <td class="instructor">{% if session.user.first_name and session.user.last_name%}
-          {{ session.user.first_name }} {{ session.user.last_name|slice:":1" }}.{% else %}
-          {{ session.user.username }}{% endif %}
-        </td>
-        <td class="first_date">{{ session.classtime_set.all.0.start|date:"F j" }}</td>
-        <td class="intro">
-          {% if session.section.prerequisites or session.section.requirements %}
-          <a href="javascript:;" onclick="return expand(this);" class="showDetails">No (details)</a>
-          {% else %}
-          Yes
-          {% endif %}
-        </td>
-        <td class="days">{{ session.classtime_set.count }}</td>
-        <td class="fee">
-          <span class="item_price">
-            {{ session.section.fee }}{% if session.section.fee_notes %}*{% endif %}
-          </span>
-        </td>
-        <td>{% include "course/_enroll_link.html" %}</td>
+</b>
+{% endif %}
+<p class="lead">
+  {% if all_sessions_closed %}
+  All sessions for this term are closed. Come back soon to see our next round of classes!
+  {% elif not request.user.is_authenticated %}
+  You can register for classes without logging in. Once you pay, a txrx account will be made using your paypal email address, and instructions on how to view your course schedule will be sent to that email address. If you have any problems feel free to write to classes@txrxlabs.org
+  {% elif not request.user.enrollment_set.count %}
+  Our records show you've never registered for a class before. If this is in error you should contact classes@txrxlabs.org and we'll adjust our records.
+  {% else %}
+  Here are all upcoming classes at the hackerspace. If you have any questions email classes@txrxlabs.org or stop by the hackerspace.
+  {% endif %}
+</p>
+{% include "widgets/filters.html" %}
+{% for week in weeks %}
+<div class="week {{ week.open }}">
+  <h4>Classes starting {{ week.0 }} - {{ week.1 }}</h4>
+  <table class="table table-hover class-table">
+    <thead>
+      <tr>
+        <td class="name">Class Name</td>
+        <td>Instructor</td>
+        <td>First Date</td>
+        <td>Intro Level?</td>
+        <td>Days</td>
+        <td>Cost</td>
       </tr>
-      {% endfor %}
-    </table>
-  </div>
-  {% endfor %}
-  {% include "course/_cart.html" %}
+    </thead>
+    {% for session in week.sessions %}
+    <tr id="c{{session.id}}" class="course filterable"
+        data-subject="{% for subject in session.subjects %}{{ subject }},{% endfor %}"
+        {%if not session.course.closed%}data-open{%endif%}
+        data-date="{{ session.starttime|date:"Ymd" }}">
+      <td class="name">
+        <a href="{% url "course:detail" session.slug %}">
+	  {{ session.section.course }}
+        </a>
+      </td>
+      <td class="instructor">{% if session.user.first_name and session.user.last_name%}
+        {{ session.user.first_name }} {{ session.user.last_name|slice:":1" }}.{% else %}
+        {{ session.user.username }}{% endif %}
+      </td>
+      <td class="first_date">{{ session.classtime_set.all.0.start|date:"F j" }}</td>
+      <td class="intro">
+        {% if session.section.prerequisites or session.section.requirements %}
+        <a href="javascript:;" onclick="return expand(this);" class="showDetails">No (details)</a>
+        {% else %}
+        Yes
+        {% endif %}
+      </td>
+      <td class="days">{{ session.classtime_set.count }}</td>
+      <td class="fee">
+        <span class="item_price">
+          {{ session.section.fee }}{% if session.section.fee_notes %}*{% endif %}
+        </span>
+      </td>
+      <td>{% include "course/_enroll_link.html" %}</td>
+    </tr>
+    {% endfor %}
+  </table>
 </div>
+{% endfor %}
+{% include "course/_cart.html" %}
 {% endblock %}
