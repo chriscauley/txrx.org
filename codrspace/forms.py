@@ -54,7 +54,8 @@ class PostForm(TaggedModelForm):
         return slug
 
     def save(self,*args,**kwargs):
-        self.instance.author = self.author
+        if not self.instance.author:
+            self.instance.author = self.author
         return super(PostForm,self).save(*args,**kwargs)
 
     def __init__(self, *args, **kwargs):

@@ -29,3 +29,4 @@ django-debug-toolbar
 
 django-tagging
 -e git+https://github.com/alekam/django-tagging-autocomplete.git#egg=django-tagging-autocomplete
+-e git://github.com/marcuswhybrow/django-wmd-editor.git#egg=django_wmd_editor

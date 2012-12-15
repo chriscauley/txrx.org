@@ -25,6 +25,7 @@ INSTALLED_APPS = (
   'tagging',
   'mptt',
   #'mptt_comments',
+  'wmd',
   'password_reset',
   'codrspace',
   'tastypie',
