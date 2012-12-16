@@ -1,3 +1,7 @@
+* side bar
+** donate button
+** blog posts
+** zphotos?
 * Cody 
 ** Remove lablackey
 ** combine all tagging stuff into a forked django tagging

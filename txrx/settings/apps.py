@@ -63,8 +63,8 @@ from frappy.services.github import Github
 # Information for correct authentication with github
 # Replace with information specific to your app, etc.
 GITHUB_AUTH = {
-  'client_id': 'ad90096419ea0c8af261',
-  'secret': '0b1c825d87540b7f7b98c51ff400d00a85a91828',
+  'client_id': '',
+  'secret': '',
   'callback_url': 'http://txrx.lablackey.com:8009/blog/signin_callback',
   'auth_url': 'https://github.com/login/oauth/authorize',
   'access_token_url': 'https://github.com/login/oauth/access_token',
