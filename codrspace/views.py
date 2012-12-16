@@ -383,7 +383,7 @@ def signin_callback(request, slug=None, template_name="base.html"):
     user.backend = 'django.contrib.auth.backends.ModelBackend'
     login(request, user)
 
-    return redirect(reverse('post_list', args=[user.username]))
+    return redirect('/')
 
 
 @login_required
