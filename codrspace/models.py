@@ -51,14 +51,14 @@ class Post(models.Model):
     publish_dt = models.DateTimeField("Publish On",null=True)
     create_dt = models.DateTimeField(auto_now_add=True)
     update_dt = models.DateTimeField(auto_now=True)
-    featured = models.BooleanField(default=False)
+    _h = "The most recent featured blog will appear on top of the blog feed no matter how old it is."
+    featured = models.BooleanField(default=False,help_text=_h)
     photo = models.ForeignKey("Media",null=True,blank=True)
 
     class Meta:
         unique_together = ("slug", "author")
 
-    def __unicode__(self):
-        return '%s' % (self.title or 'Untitled')
+    __unicode__ = lambda self: self.title or 'Untitled'
 
     def url(self):
         return '%s%s' % (settings.SITE_URL, self.get_absolute_url(),)

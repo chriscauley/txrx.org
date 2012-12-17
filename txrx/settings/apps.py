@@ -1,4 +1,4 @@
-
+THUMBNAIL_DEBUG = True
 INSTALLED_APPS = (
   'grappelli',
   'django.contrib.auth',

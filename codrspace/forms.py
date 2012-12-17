@@ -35,7 +35,7 @@ class TaggedModelForm(forms.ModelForm):
 
 class PostForm(TaggedModelForm):
     content = forms.CharField(widget=MarkDownInput(),required=False)
-    photo = forms.CharField(max_length=10)
+    photo = forms.ModelChoiceField(Media.objects.all())
     class Meta:
         model = Post
         fields = ('title','slug','content','publish_dt','tags','status','photo')
@@ -57,9 +57,7 @@ class PostForm(TaggedModelForm):
         return slug
 
     def save(self,*args,**kwargs):
-        self.instance
-        self.author
-        if self.instance:
+        if getattr(self,'author',None):
             self.instance.author = self.author
         return super(PostForm,self).save(*args,**kwargs)
 

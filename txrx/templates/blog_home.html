@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load codrspace_tags %}
-{% load short_codes %}
+{% load short_codes thumbnail %}
 {% load url from future %}
 
 {% block header %}
@@ -32,8 +32,12 @@ $(document).ready(function(){ miniSlideShow($("#blog-slide")); });
   {% endif %}
 </div>
 <div class="post-content short">
+  {% thumbnail post.photo.file "200x200" as im %}
+  <img class="post-image" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+  {% endthumbnail %}
   {{ post.content|explosivo|truncatewords_html:50 }}
   <a href="{{ post.get_absolute_url }}">Read More</a>
+  <div style="clear: both;"></div>
 </div>
 {% endfor %}
 {% endblock %}

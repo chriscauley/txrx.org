@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% load short_codes %}
 
 {% block header_content %}{{ occurrence.name }}{% endblock %}
 
 {% block content %}
 <p class="lead">{{ occurrence.start }}{% if occurrence.end %} - {{ occurrence.end }}{% endif %}</p>
-<p>{{ occurrence.description }}</p>
+<p>{{ occurrence.description|explosivo }}</p>
 {% endblock %}

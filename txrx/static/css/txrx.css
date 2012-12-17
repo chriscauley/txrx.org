@@ -26,12 +26,18 @@ form label.required {
 
 /* blog */
 .post-content.short {
+  margin: 20px 0 40px; 
   width: 100%;
+}
+
+.post-content.short .post-image {
+  float: left;
+  margin-right: 20px;
 }
 
 label .help-text {
   display: inline-block;
-  font-size: 0.9em;
+  font-size: 0.8em;
   margin-left: 25px;
 }
 
