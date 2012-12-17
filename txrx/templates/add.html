@@ -33,7 +33,7 @@
     <div id="tags">
       {{ form.tags.label_tag }}
       {{ form.tags }}
-      <p class="muted">{{ form.tags.help_text }}</p>
+      <p class="help-block">{{ form.tags.help_text }}</p>
     </div>
     <div id="photo">
       {{ form.photo.label_tag }}
@@ -61,19 +61,7 @@
 {% endblock %}
 
 {% block side %}
-<h2>Media</h2>
-<div class="well">
-  {{ media_form.file }}
-  <input class="btn btn-info btn-small" type="submit" name="submit_file" value="Upload File" />
-  {% if media_set %}
-  <h4 class="media-list-header">Media List</h4>
-  {% include "_partial-media-list.html" %}
-  {% endif %}
-</div>
-<h2>Help</h2>
-<div class="well">
-  {% include "_shortcode_help.html" %}
-</div>
+{% include "_blog_side.html" %}
 {% endblock %}
 
 {% block extra_body %}

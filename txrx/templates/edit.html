@@ -1,6 +1,6 @@
 {% extends "auth_base.html" %}
 
-{% block title %}Edit Post - {% firstof post.title "Untitled" %}{% endblock %}
+{% block title %}{% if post %}Edit{% else %}Add{% endif %} Post - {% firstof post.title "Untitled" %}{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wmd.css">
@@ -8,74 +8,63 @@
 {% endblock %}
 
 {% block content %}
-    {% include "_form_messages.html" with form=form %}
-    <div class="row">
-        <form action="" method="POST" enctype="multipart/form-data">
-        <div class="span8">
-            {% csrf_token %}
-            <div class="form-vertical">
-               <p><a href="{% url post_detail user.username post.slug %}" target="_new">View this post <i class="icon-arrow-right"></i></a></p>
-               <label>Title</label>
-               {{ form.title }}
-               <label>Slug</label>
-               {{ form.slug }}
-               <span class="help-block">
-                  Ex. {{ SITE_URL }}/{{ user.username }}/<span id="slug-helper">{{ post.slug }}</span>
-               </span>
-               <label>Content</label>
-               <div id="wmd-button-bar" class="wmd-panel"></div>
-               {{ form.content }}
-               <div id="date">
-                   <label for="id_publish_dt">Publish Date</label>
-                   {{ form.publish_dt }}
-               </div>
-               <div id="status">
-                   <label>Status</label>
-                   {{ form.status }}
-               </div>
-               <div id="tags">
-                 {{ form.tags.label_tag }}
-                 {{ form.tags }}
-                 <p class="muted">
-                   {{ form.tags.help_text }}
-                 </p>
-               </div>
-            </div>
-            <input class="btn btn-success btn-large" type="submit" name="submit_post" value="Save changes" />
-            {% if posts %}
-                <div class="page-header">
-                    <h2>Other posts</h2>
-                </div>
-                {% include "_partial-post-list.html" with current_post=post %}
-            {% endif %}
-        </div>
-        <div class="span4">
-            <h2>Media</h2>
-            <div class="well">
-                {{ media_form.file }}
-                <input class="btn btn-info btn-small" type="submit" name="submit_file" value="Upload File" />
-                {% if media_set %}
-                  <h4 class="media-list-header">Media List</h4>
-                  {% include "_partial-media-list.html" %}
-                {% endif %}
-            </div>
-            <h2>Help</h2>
-            <div class="well">
-                {% include "_shortcode_help.html" %}
-            </div>
-        </div>
-        </form>
+{% include "_form_messages.html" with form=form %}
+<form action="" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="form-vertical">
+    {% if post %}
+    <p><a href="{% url post_detail user.username post.slug %}" target="_new">View this post <i class="icon-arrow-right"></i></a></p>
+    {% endif %}
+    <label>Title</label>
+    {{ form.title }}
+    <label>Slug</label>
+    {{ form.slug }}
+    <span class="help-block">
+      Ex. {{ SITE_URL }}/{{ user.username }}/<span id="slug-helper">{% firstof post.title "slug-goes-here" %}</span>
+    </span>
+    <label>Content</label>
+    <div id="wmd-button-bar" class="wmd-panel"></div>
+    {{ form.content }}
+    <div id="date">
+      <label for="id_publish_dt">Publish Date</label>
+      {{ form.publish_dt }}
     </div>
-    <div class="modal" id="preview-modal">
-      <div class="modal-header">
-        <a class="close" data-dismiss="modal">×</a>
-        <h3>Preview</h3>
-      </div>
-      <div class="modal-body"></div>
-      <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn">Close</a>
-      </div>
+    <div id="status">
+      <label>Status</label>
+      {{ form.status }}
     </div>
+    <div id="tags">
+      {{ form.tags.label_tag }}
+      {{ form.tags }}
+      <p class="help-block">{{ form.tags.help_text }}</p>
+    </div>
+    <div id="photo">
+      {{ form.photo.label_tag }}
+      {{ form.photo }}
+    </div>
+  </div>
+  <input class="btn btn-success btn-large" type="submit" name="submit_post" value="Save changes" />
+  {% if posts %}
+  <div class="page-header">
+    <h2>Other posts</h2>
+  </div>
+  {% include "_partial-post-list.html" with current_post=post %}
+  {% endif %}
+</form>
+<div class="modal" id="preview-modal">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>Preview</h3>
+  </div>
+  <div class="modal-body"></div>
+  <div class="modal-footer">
+    <a href="#" data-dismiss="modal" class="btn">Close</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block side %}
+{% include "_blog_side.html" %}
 {% endblock %}
 
 {% block extra_body %}
