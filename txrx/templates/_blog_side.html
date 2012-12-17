@@ -1,0 +1,13 @@
+<h2>Media</h2>
+<div class="well">
+  {{ media_form.file }}
+  <input class="btn btn-info btn-small" type="submit" name="submit_file" value="Upload File" />
+  {% if media_set %}
+  <h4 class="media-list-header">Media List</h4>
+  {% include "_partial-media-list.html" %}
+  {% endif %}
+</div>
+<h2>Help</h2>
+<div class="well">
+  {% include "_shortcode_help.html" %}
+</div>

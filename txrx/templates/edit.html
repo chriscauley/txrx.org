@@ -15,33 +15,15 @@
     {% if post %}
     <p><a href="{% url post_detail user.username post.slug %}" target="_new">View this post <i class="icon-arrow-right"></i></a></p>
     {% endif %}
-    <label>Title</label>
-    {{ form.title }}
-    <label>Slug</label>
-    {{ form.slug }}
-    <span class="help-block">
-      Ex. {{ SITE_URL }}/{{ user.username }}/<span id="slug-helper">{% firstof post.title "slug-goes-here" %}</span>
-    </span>
-    <label>Content</label>
-    <div id="wmd-button-bar" class="wmd-panel"></div>
-    {{ form.content }}
-    <div id="date">
-      <label for="id_publish_dt">Publish Date</label>
-      {{ form.publish_dt }}
+    {% for field in form %}
+    <div id="{{ field.field.name }}">
+      <label for="id_{{ field.field.name }}">
+        {{ field.label }}
+        {% if field.help_text %}<span class="muted help-text">{{ field.help_text|safe }}</span>{% endif %}
+      </label>
+      {{ field }}
     </div>
-    <div id="status">
-      <label>Status</label>
-      {{ form.status }}
-    </div>
-    <div id="tags">
-      {{ form.tags.label_tag }}
-      {{ form.tags }}
-      <p class="help-block">{{ form.tags.help_text }}</p>
-    </div>
-    <div id="photo">
-      {{ form.photo.label_tag }}
-      {{ form.photo }}
-    </div>
+    {% endfor %}
   </div>
   <input class="btn btn-success btn-large" type="submit" name="submit_post" value="Save changes" />
   {% if posts %}
@@ -69,7 +51,7 @@
 
 {% block extra_body %}
 <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-modal.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}wmd.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}wmd/wmd.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}jquery.insertat.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}jquery.hotkeys.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}anytimec.js"></script>

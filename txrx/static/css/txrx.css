@@ -29,6 +29,12 @@ form label.required {
   width: 100%;
 }
 
+label .help-text {
+  display: inline-block;
+  font-size: 0.9em;
+  margin-left: 25px;
+}
+
 /* modal */
 
 .modal .itemName {

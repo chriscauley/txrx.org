@@ -91,7 +91,7 @@ def drafts(request):
 
 
 @staff_member_required
-def add(request, template_name="add.html"):
+def add(request, template_name="edit.html"):
     """ Add a post """
 
     posts = Post.objects.filter(

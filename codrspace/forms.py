@@ -10,6 +10,8 @@ from datetime import datetime
 from tagging.forms import TagField
 from tagging.models import Tag
 
+from wmd.widgets import MarkDownInput
+
 class TaggedModelForm(forms.ModelForm):
     """Provides an easy mixin for adding tags using django-tagging"""
     tags = TagField(help_text="Separate tags with commas. Input will be lowercased")
@@ -29,10 +31,10 @@ class TaggedModelForm(forms.ModelForm):
         abstract = True
 
 class PostForm(TaggedModelForm):
-    content = forms.CharField(widget=forms.Textarea(attrs={'class': 'wmd-input'}),required=False)
+    content = forms.CharField(widget=MarkDownInput(),required=False)
     class Meta:
         model = Post
-        exclude = ('author',)
+        fields = ('title','slug','content','publish_dt','tags','status','photo')
 
     class Media:
         js = ('grappelli/js/grappelli.min.js',)
@@ -69,6 +71,8 @@ class PostForm(TaggedModelForm):
 
         super(PostForm, self).__init__(*args, **kwargs)
         self.fields['publish_dt'].widget = widgets.AdminSplitDateTime()
+        self.fields['slug'].help_text = "URL will be /blog/your-name/<b>slug-goes-here</b>/"
+        self.fields['tags'].help_text = "Separate tags with commas. Input will be lowercased."
 
         # add span class to charfields
         for field in self.fields.values():
