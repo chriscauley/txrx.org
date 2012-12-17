@@ -3,17 +3,19 @@
 {% load short_codes thumbnail %}
 {% load url from future %}
 
-{% block header %}
+{% block title %}Home{% endblock %}
+{% block header_content %}TX/RX Labs - Houston's Hackerspace{% endblock %}
+
+{% comment %}
+{% block head %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/miniSlideShow.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ miniSlideShow($("#blog-slide")); });
 </script>
 {% endblock %}
+{% endcomment %}
 
 {% block content %}
-<p class="lead">
-  UNDER CONSTRUCTION: This page is currently being tested and filled with content. Please bear with me. It will break often.
-</p>
 {% for post in posts %}
 <h2><a href="{{ post.get_absolute_url }}">{{ post }}</a></h2>
 <div class="post-meta">
