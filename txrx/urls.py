@@ -10,7 +10,7 @@ j = "(?:.json)?"
 
 urlpatterns = patterns(
   '',
-  url(r'^$','txrx.views.blog_home'),
+  url(r'^$','txrx.views.blog_home',name="home"),
   (r'^admin/', include(admin.site.urls)),
   (r'^members/$','txrx.views.members'),
   (r'^member/(?P<username>.*)/$','txrx.views.member'),
@@ -56,11 +56,6 @@ urlpatterns += patterns(
   url(r'^(map/)$','django.contrib.flatpages.views.flatpage',name='map'),
 )
 
-# hardcoded urls for content pages. Will be created when a super user hits the address.
-#urlpatterns += patterns(
-#  '',
-#  url(r'^(about-us)','lablackey.content.views.page',name='about_us'),
-#)
 if settings.DEBUG:
   urlpatterns += patterns(
     '',

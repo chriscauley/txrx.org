@@ -339,9 +339,17 @@ def signin_callback(request, slug=None, template_name="base.html"):
 
     github_user = simplejson.loads(resp.content)
 
+    user = None
+
     try:
         user = User.objects.get(username=github_user['login'])
     except User.DoesNotExist:
+        try:
+            user = User.objects.get(email=github_user['email'])
+        except User.DoesNotExist:
+            pass
+
+    if not user:
         password = User.objects.make_random_password()
         user_defaults = {
             'username': github_user['login'],

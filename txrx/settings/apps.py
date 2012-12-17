@@ -32,7 +32,6 @@ INSTALLED_APPS = (
 
   # lablackey
   'lablackey.photo',
-  'lablackey.content',
   'lablackey.geo',
   'lablackey.profile',
   #'lablackey.djangogcal',
