@@ -3,34 +3,37 @@
 {% load short_codes %}
 {% load url from future %}
 
-{% block header %}{% endblock %}
+{% block header %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/miniSlideShow.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ miniSlideShow($("#blog-slide")); });
+</script>
+{% endblock %}
 
 {% block content %}
-<span class="span8">
-  <p class="lead">
-    UNDER CONSTRUCTION: This page is currently being tested and filled with content. Please bear with me. It will break often.
-  </p>
-  {% for post in posts %}
-  <h2><a href="{{ post.get_absolute_url }}">{{ post }}</a></h2>
-  <div class="post-meta">
-    {% if post.author == user %}
-    {% if post.status == 'published' %}
-    <span class="label label-success">{{ post.status }}</span>
-    {% endif %}
-    {% if post.status == 'draft' %}
-    <span class="label label-warning">{{ post.status }}</span>
-    {% endif %}
-    {% endif %}
-    by <a href="{% url "post_list" post.author.username %}">{{ post.author.username }}</a> {% if post.status == 'published' %}on {{ post.publish_dt|localize:user }}{% endif %}
-    {% if post.author == user %}
-    <i class="icon-pencil"></i> <a href="{% url "edit" post.pk %}">edit</a>
-    <i class="icon-trash"></i> <a href="{% url "delete" post.pk %}">delete</a>
-    {% endif %}
-  </div>
-  <div class="post-content short">
-    {{ post.content|explosivo|truncatewords_html:50 }}
-    <a href="{{ post.get_absolute_url }}">Read More</a>
-  </div>
-  {% endfor %}
-</span>
+<p class="lead">
+  UNDER CONSTRUCTION: This page is currently being tested and filled with content. Please bear with me. It will break often.
+</p>
+{% for post in posts %}
+<h2><a href="{{ post.get_absolute_url }}">{{ post }}</a></h2>
+<div class="post-meta">
+  {% if post.author == user %}
+  {% if post.status == 'published' %}
+  <span class="label label-success">{{ post.status }}</span>
+  {% endif %}
+  {% if post.status == 'draft' %}
+  <span class="label label-warning">{{ post.status }}</span>
+  {% endif %}
+  {% endif %}
+  by <a href="{% url "post_list" post.author.username %}">{{ post.author.username }}</a> {% if post.status == 'published' %}on {{ post.publish_dt|localize:user }}{% endif %}
+  {% if post.author == user %}
+  <i class="icon-pencil"></i> <a href="{% url "edit" post.pk %}">edit</a>
+  <i class="icon-trash"></i> <a href="{% url "delete" post.pk %}">delete</a>
+  {% endif %}
+</div>
+<div class="post-content short">
+  {{ post.content|explosivo|truncatewords_html:50 }}
+  <a href="{{ post.get_absolute_url }}">Read More</a>
+</div>
+{% endfor %}
 {% endblock %}

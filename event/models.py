@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 from django.conf import settings
 
 from wmd import models as wmd_models
@@ -18,6 +19,16 @@ class Event(models.Model):
   location = models.ForeignKey(Location)
   description = wmd_models.MarkDownField(blank=True,null=True)
 
+  @property
+  def upcoming_occurrences(self):
+    return self.eventoccurrence_set.filter(start__gte=datetime.datetime.now())
+
+  @property
+  def next_occurrence(self):
+    if not self.upcoming_occurrences.count():
+      return None
+    return self.upcoming_occurrences[0]
+
   def get_name(self):
     return self.name or self.location
 
@@ -25,10 +36,10 @@ class Event(models.Model):
   class Meta:
     pass
 
-class OccurenceModel(models.Model):
+class OccurrenceModel(models.Model):
   """
   The goal is to eventually make this very general so that it can reach accross many models to be put into a feed.
-  Occurences need a start (DateTime), end (DateTime, optional), name (str), description (str), and get_absolute_url (str).
+  Occurrences need a start (DateTime), end (DateTime, optional), name (str), description (str), and get_absolute_url (str).
   """
   start = models.DateTimeField()
   end = models.DateTimeField(null=True,blank=True)
@@ -39,5 +50,6 @@ class OccurenceModel(models.Model):
   class Meta:
     abstract = True
 
-class EventOccurence(OccurenceModel):
+class EventOccurrence(OccurrenceModel):
   event = models.ForeignKey(Event)
+  get_absolute_url = lambda self: reverse('occurrence_detail',args=(self.id,))

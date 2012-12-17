@@ -1,6 +1,10 @@
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 
+from event.models import EventOccurrence
+
+import datetime
+
 def nav(request):
   blog_sublinks = [
     {'name': 'Blog Home', 'url': '/blog/'},
@@ -22,6 +26,7 @@ def nav(request):
     {'name': "Join us", "url": "/join-us/"},
     {'name': "Location", "url": "/map/"},
     ]
+  today = datetime.date.today()
 
   return dict(
     current = request.path.split('/')[1] or 'home',
@@ -31,4 +36,5 @@ def nav(request):
     app_path = "/admin/login/",
     next = request.path,
     settings = settings,
+    upcoming_events = EventOccurrence.objects.filter(start__gte=today)[:5],
     )

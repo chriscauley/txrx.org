@@ -1,0 +1,11 @@
+<h2>Upcoming Events</h2>
+<div class="well">
+  <ul class="unstyled">
+    {% for event in upcoming_events %}
+    <li>
+      {{ event.start|date:"m/d/y" }} -
+      <a href="{{ event.get_absolute_url }}">{{ event.name }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>

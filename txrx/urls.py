@@ -28,6 +28,7 @@ urlpatterns = patterns(
   (r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
   (r'^password-reset/', include('password_reset.urls')),
   (r'^force_login/(\d+)/$', 'txrx.views.force_login'),
+  url(r'^event/',include('event.urls')),
   #(r'^comments/', include('mptt_comments.urls')),
 )
 

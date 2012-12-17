@@ -13,41 +13,41 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
             ('location', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geo.Location'])),
-            ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('description', self.gf('wmd.models.MarkDownField')(null=True, blank=True)),
         ))
         db.send_create_signal('event', ['Event'])
 
-        # Adding model 'EventOccurence'
-        db.create_table('event_eventoccurence', (
+        # Adding model 'EventOccurrence'
+        db.create_table('event_eventoccurrence', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('start', self.gf('django.db.models.fields.DateTimeField')()),
             ('end', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('name_override', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
-            ('description_override', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('description_override', self.gf('wmd.models.MarkDownField')(null=True, blank=True)),
             ('event', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['event.Event'])),
         ))
-        db.send_create_signal('event', ['EventOccurence'])
+        db.send_create_signal('event', ['EventOccurrence'])
 
 
     def backwards(self, orm):
         # Deleting model 'Event'
         db.delete_table('event_event')
 
-        # Deleting model 'EventOccurence'
-        db.delete_table('event_eventoccurence')
+        # Deleting model 'EventOccurrence'
+        db.delete_table('event_eventoccurrence')
 
 
     models = {
         'event.event': {
             'Meta': {'object_name': 'Event'},
-            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'description': ('wmd.models.MarkDownField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['geo.Location']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'})
         },
-        'event.eventoccurence': {
-            'Meta': {'object_name': 'EventOccurence'},
-            'description_override': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+        'event.eventoccurrence': {
+            'Meta': {'object_name': 'EventOccurrence'},
+            'description_override': ('wmd.models.MarkDownField', [], {'null': 'True', 'blank': 'True'}),
             'end': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'event': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['event.Event']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
