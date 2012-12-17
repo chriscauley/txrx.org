@@ -98,7 +98,7 @@ def add(request, template_name="edit.html"):
         author=request.user,
         status__in=['draft', 'published']
     ).order_by('-pk')
-    media_set = Media.objects.filter(uploader=request.user).order_by('-pk')
+    media_set = Media.objects.all().order_by('-pk')
     media_form = MediaForm()
 
     if request.method == "POST":
@@ -106,7 +106,6 @@ def add(request, template_name="edit.html"):
         media_form = MediaForm(request.POST, request.FILES)
         if media_form.is_valid():
             media = media_form.save(commit=False)
-            media.uploader = request.user
             media.filename = unicode(media_form.cleaned_data.get('file', ''))
             media.save()
             messages.info(
@@ -213,7 +212,7 @@ def edit(request, pk=0, template_name="edit.html"):
         author=request.user,
         status__in=['draft', 'published']
     ).order_by('-pk')
-    media_set = Media.objects.filter(uploader=request.user).order_by('-pk')
+    media_set = Media.objects.filter().order_by('-pk')
     media_form = MediaForm()
 
     if request.method == "POST":
@@ -223,7 +222,6 @@ def edit(request, pk=0, template_name="edit.html"):
             media_form = MediaForm(request.POST, request.FILES)
             if media_form.is_valid():
                 media = media_form.save(commit=False)
-                media.uploader = request.user
                 media.filename = unicode(media_form.cleaned_data.get(
                                                                 'file', ''))
                 media.save()

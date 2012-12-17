@@ -35,6 +35,10 @@ label .help-text {
   margin-left: 25px;
 }
 
+#wmd-input {
+  height: 300px;
+}
+
 /* modal */
 
 .modal .itemName {

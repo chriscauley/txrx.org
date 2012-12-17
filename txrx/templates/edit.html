@@ -2,9 +2,8 @@
 
 {% block title %}{% if post %}Edit{% else %}Add{% endif %} Post - {% firstof post.title "Untitled" %}{% endblock %}
 
-{% block extra_head %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wmd.css">
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}anytimec.css">
+{% block head %}
+<script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -16,9 +15,9 @@
     <p><a href="{% url post_detail user.username post.slug %}" target="_new">View this post <i class="icon-arrow-right"></i></a></p>
     {% endif %}
     {% for field in form %}
-    <div id="{{ field.field.name }}">
-      <label for="id_{{ field.field.name }}">
-        {{ field.label }}
+    <div id="{{ field.name }}" class="control-group">
+      <label for="id_{{ field.name }}">
+        <b>{{ field.label }}</b>
         {% if field.help_text %}<span class="muted help-text">{{ field.help_text|safe }}</span>{% endif %}
       </label>
       {{ field }}
@@ -54,6 +53,5 @@
 <script type="text/javascript" src="{{ STATIC_URL }}wmd/wmd.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}jquery.insertat.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}jquery.hotkeys.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}anytimec.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}codrspace_admin.js"></script>
 {% endblock %}

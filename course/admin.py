@@ -28,6 +28,7 @@ class EnrollmentInline(admin.TabularInline):
 
 class SessionAdmin(admin.ModelAdmin):
   list_display = ("__unicode__","user")
+  raw_id_fields = ('section',)
   list_editable = ("user",)
   exclude = ('time_string','slug')
   extra = 0

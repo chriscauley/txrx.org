@@ -1,5 +1,7 @@
 from django.conf import settings
-from django.contrib.admin import widgets
+from django.contrib import admin
+admin.autodiscover()
+from django.contrib.admin.widgets import ForeignKeyRawIdWidget, AdminSplitDateTime
 from django import forms
 
 from codrspace.models import Post, Media, Setting
@@ -11,6 +13,7 @@ from tagging.forms import TagField
 from tagging.models import Tag
 
 from wmd.widgets import MarkDownInput
+
 
 class TaggedModelForm(forms.ModelForm):
     """Provides an easy mixin for adding tags using django-tagging"""
@@ -32,12 +35,10 @@ class TaggedModelForm(forms.ModelForm):
 
 class PostForm(TaggedModelForm):
     content = forms.CharField(widget=MarkDownInput(),required=False)
+    photo = forms.CharField(max_length=10)
     class Meta:
         model = Post
         fields = ('title','slug','content','publish_dt','tags','status','photo')
-
-    class Media:
-        js = ('grappelli/js/grappelli.min.js',)
 
     def clean_slug(self):
         slug = self.cleaned_data['slug']
@@ -56,7 +57,9 @@ class PostForm(TaggedModelForm):
         return slug
 
     def save(self,*args,**kwargs):
-        if not self.instance.author:
+        self.instance
+        self.author
+        if self.instance:
             self.instance.author = self.author
         return super(PostForm,self).save(*args,**kwargs)
 
@@ -70,10 +73,11 @@ class PostForm(TaggedModelForm):
             self.user = kwargs.pop('user', None)
 
         super(PostForm, self).__init__(*args, **kwargs)
-        self.fields['publish_dt'].widget = widgets.AdminSplitDateTime()
+        self.fields['publish_dt'].widget = AdminSplitDateTime()
         self.fields['slug'].help_text = "URL will be /blog/your-name/<b>slug-goes-here</b>/"
         self.fields['tags'].help_text = "Separate tags with commas. Input will be lowercased."
-
+        self.fields['publish_dt'].help_text = "<i>YYYY-MM-DD</i> and <i>HH:MM</i> (24-hour time)"
+        self.fields['photo'].widget=ForeignKeyRawIdWidget(Post._meta.get_field("photo").rel,admin.site)
         # add span class to charfields
         for field in self.fields.values():
             if isinstance(field, forms.fields.CharField):
