@@ -49,6 +49,7 @@ class OccurrenceModel(models.Model):
   description = property(lambda self: self.description_override or self.event.description)
   class Meta:
     abstract = True
+    ordering = ('start',)
 
 class EventOccurrence(OccurrenceModel):
   event = models.ForeignKey(Event)
