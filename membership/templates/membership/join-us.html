@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% load content_tags %}
+{% extends "base.html" %}
 
 {% block header_content %}Become a Member of TX/RX Labs{% endblock %}
 
@@ -18,9 +18,7 @@ function setHiddenFields(that) {
 //when pages loaded, update all selects
 $(document).ready(function() {$("select").change()});
 </script>
-<p class="lead">
-  {{ "join_us-top"|print_text }}
-</p>
+{{ flatpage.content }}
 <div class="clear"></div>
 <h2>There are 4 membership levels to choose from:</h2>
 <br />

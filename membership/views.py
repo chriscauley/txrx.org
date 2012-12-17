@@ -1,5 +1,6 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
+from django.contrib.flatpages.models import FlatPage
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
@@ -25,7 +26,10 @@ def login_redirect(request):
         return redirect("/")
 
 def join_us(request):
-    values = {'memberships': Membership.objects.active()}
+    values = {
+        'memberships': Membership.objects.active(),
+        'flatpage':FlatPage.objects.get(url='/join-us/'),
+        }
     return TemplateResponse(request,"membership/join-us.html",values)
 
 @login_required
