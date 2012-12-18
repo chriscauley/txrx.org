@@ -74,7 +74,7 @@ class Media(models.Model):
     filename = models.CharField(max_length=200,editable=False)
     name = models.CharField(null=True,blank=True,max_length=500)
     upload_dt = models.DateTimeField(auto_now_add=True)
-    __unicode__ = lambda self: self.name
+    __unicode__ = lambda self: self.name or self.filename
     def type(self):
         ext = os.path.splitext(self.filename)[1].lower()
         # map file-type to extension
