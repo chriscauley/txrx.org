@@ -72,8 +72,9 @@ tagging.register(Post)
 class Media(models.Model):
     file = models.FileField(upload_to='uploads/photos/%Y-%m', null=True)
     filename = models.CharField(max_length=200,editable=False)
+    name = models.CharField(null=True,blank=True,max_length=500)
     upload_dt = models.DateTimeField(auto_now_add=True)
-    __unicode__ = lambda self: self.filename
+    __unicode__ = lambda self: self.name
     def type(self):
         ext = os.path.splitext(self.filename)[1].lower()
         # map file-type to extension
@@ -107,6 +108,7 @@ class Media(models.Model):
         return shortcode
     def save(self,*args,**kwargs):
         self.filename = self.filename or str(self.file).split('/')[-1]
+        self.name = self.name or self.filename
         super(Media,self).save(*args,**kwargs)
 
 class Setting(models.Model):
