@@ -32,7 +32,7 @@ div.post-content {
 
 div.post-content .post-image {
   float: left;
-  margin-right: 20px;
+  margin: 0 20px 20px 0;
 }
 
 label .help-text {
