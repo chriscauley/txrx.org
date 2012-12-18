@@ -25,7 +25,7 @@ form label.required {
 
 
 /* blog */
-.post-content {
+div.post-content {
   margin: 20px 0 40px; 
   width: 100%;
 }
