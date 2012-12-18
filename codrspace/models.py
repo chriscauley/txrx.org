@@ -112,7 +112,7 @@ class Media(models.Model):
 
         return shortcode
     def save(self,*args,**kwargs):
-        self.filename = self.filename or str(self.file)
+        self.filename = self.filename or str(self.file).split('/')[-1]
         super(Media,self).save(*args,**kwargs)
 
 class Setting(models.Model):
