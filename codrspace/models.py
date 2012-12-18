@@ -30,12 +30,6 @@ def invalidate_cache_key(fragment_name, *variables):
     cache.delete(cache_key)
 
 
-def file_directory(instance, filename):
-    filename = re.sub(r'[^a-zA-Z0-9._]+', '-', filename)
-    filename, ext = os.path.splitext(filename)
-    return 'blog/%s%s' % (uuid.uuid1().hex[:13], ext)
-
-
 class Post(models.Model):
 
     STATUS_CHOICES = (
@@ -76,7 +70,7 @@ class Post(models.Model):
 tagging.register(Post)
 
 class Media(models.Model):
-    file = models.FileField(upload_to=file_directory, null=True)
+    file = models.FileField(upload_to='uploads/photos/%Y-%m', null=True)
     filename = models.CharField(max_length=200,editable=False)
     upload_dt = models.DateTimeField(auto_now_add=True)
     __unicode__ = lambda self: self.filename
