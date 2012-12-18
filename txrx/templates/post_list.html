@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block extra_head %}
-<link rel="alternate" type="application/rss+xml" href="{% url posts_feed username %}" title="Codrspace: Posts by {{ username }}">
+<link rel="alternate" type="application/rss+xml" href="{% url posts_feed username %}" title="TX/RX Labs: Posts by {{ username }}">
 {% endblock %}
 
 {% block nav %}
@@ -37,7 +37,7 @@
         {% if user_settings.blog_title %}
         {{ user_settings.blog_title|striptags }}
         {% else %}
-        Codrspace
+        TX/RX Labs
         {% endif %}
 
         -
