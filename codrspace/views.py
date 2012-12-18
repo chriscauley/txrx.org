@@ -116,7 +116,7 @@ def add(request, template_name="edit.html"):
 
         # post
         form = PostForm(request.POST, user=request.user)
-        if form.is_valid() and 'submit_post' in request.POST:
+        if 'submit_post' in request.POST and form.is_valid():
             form.author = request.user
             post = form.save()
 

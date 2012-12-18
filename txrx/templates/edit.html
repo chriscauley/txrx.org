@@ -6,46 +6,49 @@
 <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
 {% endblock %}
 
-{% block content %}
-{% include "_form_messages.html" with form=form %}
-<form action="" method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  <div class="form-vertical">
-    {% if post %}
-    <p><a href="{% url post_detail user.username post.slug %}" target="_new">View this post <i class="icon-arrow-right"></i></a></p>
-    {% endif %}
-    {% for field in form %}
-    <div id="{{ field.name }}" class="control-group">
-      <label for="id_{{ field.name }}">
-        <b>{{ field.label }}</b>
-        {% if field.help_text %}<span class="muted help-text">{{ field.help_text|safe }}</span>{% endif %}
-      </label>
-      {{ field }}
+{% block main %}
+<div class="row">
+  <form action="" method="POST" enctype="multipart/form-data">
+    <div class="span8">
+      {% include "_form_messages.html" with form=form %}
+      {% csrf_token %}
+      <div class="form-vertical">
+        {% if post %}
+        <p><a href="{% url post_detail user.username post.slug %}" target="_new">View this post <i class="icon-arrow-right"></i></a></p>
+        {% endif %}
+        {% for field in form %}
+        <div id="{{ field.name }}" class="control-group">
+          <label for="id_{{ field.name }}">
+            <b>{{ field.label }}</b>
+            {% if field.help_text %}<span class="muted help-text">{{ field.help_text|safe }}</span>{% endif %}
+          </label>
+          {{ field }}
+        </div>
+        {% endfor %}
+      </div>
+      <input class="btn btn-success btn-large" type="submit" name="submit_post" value="Save changes" />
+      {% if posts %}
+      <div class="page-header">
+        <h2>Other posts</h2>
+      </div>
+      {% include "_partial-post-list.html" with current_post=post %}
+      {% endif %}
+      <div class="modal" id="preview-modal">
+        <div class="modal-header">
+          <a class="close" data-dismiss="modal">×</a>
+          <h3>Preview</h3>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+          <a href="#" data-dismiss="modal" class="btn">Close</a>
+        </div>
+      </div>
     </div>
-    {% endfor %}
-  </div>
-  <input class="btn btn-success btn-large" type="submit" name="submit_post" value="Save changes" />
-  {% if posts %}
-  <div class="page-header">
-    <h2>Other posts</h2>
-  </div>
-  {% include "_partial-post-list.html" with current_post=post %}
-  {% endif %}
-</form>
-<div class="modal" id="preview-modal">
-  <div class="modal-header">
-    <a class="close" data-dismiss="modal">×</a>
-    <h3>Preview</h3>
-  </div>
-  <div class="modal-body"></div>
-  <div class="modal-footer">
-    <a href="#" data-dismiss="modal" class="btn">Close</a>
-  </div>
+    <div class="span4">
+      {% include "_blog_side.html" %}
+    </div>
+  </form>
 </div>
-{% endblock %}
-
-{% block side %}
-{% include "_blog_side.html" %}
 {% endblock %}
 
 {% block extra_body %}
