@@ -51,7 +51,7 @@ class Post(models.Model):
 
     class Meta:
         unique_together = ("slug", "author")
-
+        ordering = ('-publish_dt',)
     __unicode__ = lambda self: self.title or 'Untitled'
 
     def url(self):
