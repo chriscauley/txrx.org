@@ -20,8 +20,8 @@
 
 <div class="post-content">
   {% thumbnail post.photo.file "300x300" as im %}
-  <a href="{{ post.photo.file.url }}">
-    <img class="post-image" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+  <a href="{{ post.photo.file.url }}" class="post-image">
+    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
   </a>
   {% endthumbnail %}
   {% if cache == 0 %}
