@@ -24,7 +24,7 @@ class SurveyForm(forms.Form):
 
 class UserMembershipForm(forms.ModelForm):
     class Meta:
-        fields = ('by_line','paypal_email')
+        fields = ('by_line','bio','paypal_email')
         model = UserMembership
 
 class UserForm(forms.ModelForm):
