@@ -33,7 +33,7 @@ def invalidate_cache_key(fragment_name, *variables):
 def file_directory(instance, filename):
     filename = re.sub(r'[^a-zA-Z0-9._]+', '-', filename)
     filename, ext = os.path.splitext(filename)
-    return '%s%s' % (uuid.uuid1().hex[:13], ext)
+    return 'blog/%s%s' % (uuid.uuid1().hex[:13], ext)
 
 
 class Post(models.Model):
@@ -77,7 +77,7 @@ tagging.register(Post)
 
 class Media(models.Model):
     file = models.FileField(upload_to=file_directory, null=True)
-    filename = models.CharField(max_length=200, editable=False)
+    filename = models.CharField(max_length=200,editable=False)
     upload_dt = models.DateTimeField(auto_now_add=True)
     __unicode__ = lambda self: self.filename
     def type(self):
@@ -111,7 +111,9 @@ class Media(models.Model):
             shortcode = "[local %s]" % self.file.name
 
         return shortcode
-
+    def save(self,*args,**kwargs):
+        self.filename = self.filename or str(self.file)
+        super(Media,self).save(*args,**kwargs)
 
 class Setting(models.Model):
     """
