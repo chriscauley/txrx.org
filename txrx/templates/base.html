@@ -1,15 +1,22 @@
+{% load compress %}
 <!DOCTYPE HTML>
 <html>
   <head>
     <title>{% block pre_title %}{{ SITE_NAME }} - {% endblock %} {% block title %}{% endblock %}</title>
     {% block extra_head %}{% endblock %}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.css">
-    {# <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-responsive.css"> #}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme.css">
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/pygments.css">
+    {% compress css %}
+    {# all styling is kept in the less directory. This see the import file here. #}
+    <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/bootstrap.less">
+    {#<script type="text/javascript" src="{{ STATIC_URL }}less/less.js"> </script>#}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}less/pygments.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wmd/wmd.css">
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/codrspace.css">
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/txrx.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}less/codrspace.css">
+    <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/txrx.less">
+    {% endcompress %}
+    
+    {% comment %}
+    depracating in favor of less
+    {% endcomment %}
     <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}jquery.labelify.js"></script>
