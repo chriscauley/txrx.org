@@ -6,22 +6,16 @@ import os
 admin.autodiscover()
 
 _urls = lambda *ns: [url(r'^%s/'%n, include('%s.urls'%n, namespace=n, app_name=n)) for n in ns]
-j = "(?:.json)?"
 
 urlpatterns = patterns(
   '',
   url(r'^$','txrx.views.blog_home',name="home"),
   (r'^admin/', include(admin.site.urls)),
-  (r'^members/$','txrx.views.members'),
-  (r'^member/(?P<username>.*)/$','txrx.views.member'),
   (r'^membership/$', include('membership.urls')),
   (r'^classes/', include('course.urls',namespace='course',app_name='course')),
   (r'^blog/$','txrx.views.blog_home'),
   (r'^blog/',include('codrspace.urls')),
-  (r'^comments/', include('django.contrib.comments.urls')),
-  (r'^projects/(?P<slug>[\w\d\-]*)/?$','txrx.views.projects'),
   (r'^survey/$','txrx.views.survey'),
-  (r'^tools/?(?P<lab>[\w\d\-]*)/?(?P<tool>[\w\d\-]*)/','txrx.views.tools'),
   (r'^grappelli/', include('grappelli.urls')),
   url(r'^accounts/settings/$','membership.views.settings',name='account_settings'),
   (r'^accounts/', include('registration.backends.default.urls')),
@@ -29,7 +23,10 @@ urlpatterns = patterns(
   (r'^password-reset/', include('password_reset.urls')),
   (r'^force_login/(\d+)/$', 'txrx.views.force_login'),
   url(r'^event/',include('event.urls')),
-  #(r'^comments/', include('mptt_comments.urls')),
+
+  # comments and javascript translation
+  (r'^comments/', include('mptt_comments.urls')),
+  url(r'^jsi18n/(?P<packages>\S+?)/$', 'django.views.i18n.javascript_catalog'),
 )
 
 urlpatterns += patterns(

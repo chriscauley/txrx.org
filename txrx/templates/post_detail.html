@@ -1,20 +1,16 @@
 {% extends "base.html" %}
-
 {% load short_codes %}
 {% load codrspace_tags %}
+{% load mptt_comments_tags %}
 
 {% block pre_title %}
-{% if user_settings.blog_title %}
-    {{ user_settings.blog_title|striptags }} - 
-{% else %}
-    {{ SITE_NAME }} - 
-{% endif %}
+{% if user_settings.blog_title %}{{ user_settings.blog_title|striptags }}{% else %}{{ SITE_NAME }}{% endif %} - 
 {% endblock %}
 
 {% block title %}{% firstof post.title "Untitled" %} by {{ post.author.username }}{% endblock %}
 
 {% block nav %}
-    {% include "_nav.html" with page="post_detail" %}
+{% include "_nav.html" with page="post_detail" %}
 {% endblock %}
 
 {% block header %}{% endblock %}
@@ -26,11 +22,13 @@
     {% if post.status != "deleted" %}
     {% include "_post_content.html" with post=post %}
     {% endif %}
+    {% display_comment_toplevel_for post %}
   </div>
 </div>
 <div id="popover-content">
   <div id="popover-wrap">
-    <a href="{{ meta.html_url }}"><img class="user-detail-image" src="{{ meta.avatar_url }}" alt="GitHub &ndash; {{ meta.login }}"/></a>
+    <a href="{{ meta.html_url }}">
+      <img class="user-detail-image" src="{{ meta.avatar_url }}" alt="GitHub &ndash; {{ meta.login }}" /></a>
     <p>{% firstof user_settings.name meta.name meta.login %}</p>
     {% if meta.location %}
     <p>{{ meta.location }}</p>

@@ -22,8 +22,12 @@ INSTALLED_APPS = (
   'password_reset',
   'compressor',
   'tagging',
+
+  # comments
   'mptt',
-  #'mptt_comments',
+  'mptt_comments',
+
+  # blarg
   'wmd',
   'password_reset',
   'codrspace',
@@ -44,6 +48,9 @@ INSTALLED_APPS = (
   'main',
   'event',
 )
+
+#mptt_comments
+COMMENTS_APP = 'mptt_comments'
 
 LOGOUT_REDIRECT = 'home'
 
