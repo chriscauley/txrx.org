@@ -5,14 +5,15 @@
     <title>{% block pre_title %}{{ SITE_NAME }} - {% endblock %} {% block title %}{% endblock %}</title>
     {% block extra_head %}{% endblock %}
     {% compress css %}
+    {% endcompress %}
     {# all styling is kept in the less directory. This see the import file here. #}
     <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/base.less">
-    {#<script type="text/javascript" src="{{ STATIC_URL }}less/less.js"> </script>#}
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}less/pygments.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wmd/wmd.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}less/codrspace.css">
     <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/txrx.less">
-    {% endcompress %}
+    <script type="text/javascript" src="{{ STATIC_URL }}less/less.js"> </script>
+
     
     {% comment %}
     depracating in favor of less
