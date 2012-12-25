@@ -10,7 +10,6 @@ membership_form_parameters = {}; //this is established at the bottom of every fo
 function setHiddenFields(that) {
   var form = $(that).closest('form');
   var params = membership_form_parameters[$(that).val()];
-  console.log(form);
   form.find("[name=a3]").val(params['cost']+".00");
   form.find("[name=p3]").val(params['months']);
 }
