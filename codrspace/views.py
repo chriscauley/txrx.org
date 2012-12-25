@@ -450,7 +450,6 @@ def insert_photo(request):
     if not request.GET or request.GET.get('mine',False):
         photos = photos.filter(uploader=request.user)
     form = MediaFilterForm(request.GET or None,initial={'mine':True})
-    photos = list(photos)*10
     paginator = None
     if photos:
         paginator = Paginator(photos,8)
