@@ -1,0 +1,51 @@
+{% load thumbnail %}
+<style type="text/css">
+ul { margin: 0 auto; padding: 0; list-style: none; width: 480px; height: 240px; }
+li { float: left; width: 110px; height: 110px; padding: 5px; text-align: center; }
+li:hover { background: #afa; }
+</style>
+<form method="GET" class="form-inline">
+  <span class="input-append">
+    {{ form.search }}
+    <button class="btn" type="button">Search</button>
+  </span>
+  <label class="checkbox inline" style="float: right;">
+    {{ form.mine }} Only show my images
+  </label>
+  {# any change to the form should reset to page 1 #}
+  <input type="hidden" name="page" id="id_page" value="1" />
+</form>
+{% if photos %}
+<ul>
+  {% for photo in photos %}
+  {% thumbnail photo.file "110x110" crop="center" as im %}
+  <li>
+    <a href="javascript:;"  title="{{ photo }}"
+       onclick="window.parent.iframe_callback({'id':{{ photo.id }},'shortcode':'{{ photo.shortcode }}'});">
+      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+    </a>
+  </li>
+  {% endthumbnail %}
+  {% endfor %}
+</ul>
+{% else %}
+<p>
+  No matching photos found. Change search options above or click button below to add a photo.
+</p>
+{% endif %}
+<div style="clear: both;"></div>
+{% if photos.has_previous %}
+<a href="javascript:;" onclick="goToPage({{ photos.previous_page_number }});" style="float: left;">Previous Page</a>
+{% endif %}
+{% if photos.has_next %}
+<a href="javascript:;" onclick="goToPage({{ photos.next_page_number }});" style="float: right">Next Page</a>
+{% endif %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript">
+$("#id_mine").change(function(){$("form").submit()});
+$("#id_search").focus();
+function goToPage(number) {
+  $("#id_page").val(number);
+  $("form").submit();
+}
+</script>

@@ -90,6 +90,7 @@ class PostForm(TaggedModelForm):
 class MediaForm(forms.ModelForm):
 
     class  Meta:
+        exclude = ("uploader",)
         model = Media
 
 
@@ -116,3 +117,8 @@ class FeedBackForm(forms.Form):
         for field in self.fields.values():
             if isinstance(field, forms.fields.CharField):
                 field.widget.attrs.update({'class': 'span10'})
+
+class MediaFilterForm(forms.Form):
+    search = forms.CharField(max_length=40)
+    mine = forms.BooleanField()
+    page = forms.IntegerField(required=False,widget=forms.HiddenInput())

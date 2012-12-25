@@ -14,11 +14,11 @@ from django.conf import settings
 from django.contrib import messages
 from django.db.models import Q
 from django.core.cache import cache
+from django.core.paginator import Paginator
+from django.template.response import TemplateResponse
 
 from codrspace.models import Post, Profile, Media, Setting
-from codrspace.forms import PostForm, MediaForm, \
-                            SettingForm, FeedBackForm
-
+from codrspace.forms import PostForm, MediaForm, SettingForm, FeedBackForm, MediaFilterForm
 
 class GithubAuthError(Exception):
     pass
@@ -107,6 +107,8 @@ def add(request, template_name="edit.html"):
         if media_form.is_valid():
             media = media_form.save(commit=False)
             media.filename = unicode(media_form.cleaned_data.get('file', ''))
+            media.save()
+            media.uploader = request.user
             media.save()
             messages.info(
                 request,
@@ -224,6 +226,7 @@ def edit(request, pk=0, template_name="edit.html"):
                 media = media_form.save(commit=False)
                 media.filename = unicode(media_form.cleaned_data.get(
                                                                 'file', ''))
+                media.uploader = request.user
                 media.save()
 
         # post post  hehe
@@ -440,3 +443,35 @@ def render_preview(request, template_name='preview.html'):
     return render(request, template_name, {
         'post': post,
     })
+
+
+def insert_photo(request):
+    photos = Media.objects.all()
+    if not request.GET or request.GET.get('mine',False):
+        photos = photos.filter(uploader=request.user)
+    form = MediaFilterForm(request.GET or None,initial={'mine':True})
+    photos = list(photos)*10
+    paginator = None
+    if photos:
+        paginator = Paginator(photos,8)
+        photos = paginator.page(request.GET.get('page',1))
+    values = {
+        "paginator": paginator,
+        "photos": photos,
+        "form": form,
+        }
+    return TemplateResponse(request,"codrspace/insert_photo.html",values)
+
+def add_photo(request):
+    photo = None
+    form = MediaForm(request.POST or None,request.FILES or None)
+    if request.POST and form.is_valid():
+        photo = form.save()
+        photo.uploader = request.user
+        photo.save()
+        # Not redirecting because we're going to close modal using javascript
+    values = {
+        'photo': photo,
+        'form': form,
+        }
+    return TemplateResponse(request,"codrspace/add_photo.html",values)

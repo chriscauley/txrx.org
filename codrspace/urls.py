@@ -13,7 +13,8 @@ site_maps = {
     'users': UserMap
 }
 
-urlpatterns = patterns('codrspace.views',
+urlpatterns = patterns(
+    'codrspace.views',
     url(r'^$', 'index', name="homepage"),
 
     url(r'^admin/add/$', 'add', name="add"),
@@ -31,7 +32,10 @@ urlpatterns = patterns('codrspace.views',
 
     url(r'^feedback/$', 'feedback', name="feedback"),
     url(r'^api/', include(post_resource.urls)),
-)
+
+    url(r'photo/insert/$','insert_photo',name='insert_photo'),
+    url(r'photo/add/$','add_photo',name='add_photo'),
+    )
 
 urlpatterns += patterns('codrspace.mock_views',
     url(r'^fake_user/$', 'fake_user', name="fake_user"),
