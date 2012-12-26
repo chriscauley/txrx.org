@@ -62,7 +62,8 @@
 {% endblock %}
 
 {% block extra_body %}
-<script type="text/javascript" src="{{ STATIC_URL }}bootstrap-modal.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-typeahead.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}wmd/wmd.js"></script>
 <script type="text/javascript">
 function insertImage(chunk,callback) {
@@ -90,7 +91,32 @@ $(document).ready(function(){
   $("#lookup_id_photo").click(function(){insertImage('',insertID)})
   $("#lookup_id_photo").attr("href","javascript:;")
 });
-</script>
+function extractor(query) {
+  var result = /([^,]+)$/.exec(query);
+  if(result && result[1])
+    return result[1].trim();
+  return '';
+}
+
+$("#id_tags").attr("autocomplete","off");
+
+$('#id_tags').typeahead({
+  source: [{% for tag in tags %}"{{ tag }}"{% if not forloop.last %},{% endif %}{% endfor %}],
+  updater: function(item) {
+    return this.$element.val().replace(/[^,]*$/,'')+item+',';
+  },
+  matcher: function (item) {
+    var tquery = extractor(this.query);
+    if(!tquery) return false;
+    return ~item.toLowerCase().indexOf(tquery)
+  },
+  highlighter: function (item) {
+    var query = extractor(this.query).replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
+    return item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+        return '<strong>' + match + '</strong>'
+    })
+  }
+});</script>
 <script type="text/javascript" src="{{ STATIC_URL }}jquery.insertat.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}jquery.hotkeys.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}codrspace_admin.js"></script>

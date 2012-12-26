@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 
+from tagging.models import Tag
+
 from event.models import EventOccurrence
 
 import datetime
@@ -37,4 +39,5 @@ def nav(request):
     next = request.path,
     settings = settings,
     upcoming_events = EventOccurrence.objects.filter(start__gte=today)[:5],
+    tags = Tag.objects.all(),
     )
