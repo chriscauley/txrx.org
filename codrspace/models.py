@@ -72,9 +72,13 @@ tagging.register(Post)
 
 class Media(models.Model):
     file = OriginalImage("Photo",upload_to='uploads/photos/%Y-%m', null=True)
-    square_crop = CropOverride('Square Crop (1:1)', upload_to='uploads/photos/%Y-%m', original='file', aspect='1x1')
-    landscape_crop = CropOverride('Landscape Crop (5:3)', upload_to='uploads/photos/%Y-%m', original='file', aspect='5x3')
-    portrait_crop = CropOverride('Portrait Crop (3:5)', upload_to='uploads/photos/%Y-%m', original='file', aspect='3x5')
+    kwargs = dict(upload_to='uploads/photos/%Y-%m', original='file')
+    _sh = "Usages: Blog Photo"
+    square_crop = CropOverride('Square Crop (1:1)', aspect='1x1',help_text=_sh,**kwargs)
+    _lh = "Usages: Featured Blog Photo"
+    landscape_crop = CropOverride('Landscape Crop (5:3)', aspect='5x3',help_text=_lh,**kwargs)
+    _ph = "Usages: None"
+    portrait_crop = CropOverride('Portrait Crop (3:5)', aspect='3x5',help_text=_ph,**kwargs)
     filename = models.CharField(max_length=200,editable=False)
     name = models.CharField(null=True,blank=True,max_length=500)
     uploader = models.ForeignKey(User,null=True,blank=True)

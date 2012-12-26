@@ -978,7 +978,7 @@ Attacklab.wmdBase = function(){
 			var imageButton = document.createElement("li");
 			imageButton.className = "wmd-button";
 			imageButton.id = "wmd-image-button";
-			imageButton.title = "Image <img> or File Ctrl+G";
+			imageButton.title = "Image <img> Ctrl+G";
 			imageButton.XShift = "-100px";
 			imageButton.textOp = function(chunk, postProcessing, useDefaultText){
 			  return insertImage(chunk,insertShortCode);

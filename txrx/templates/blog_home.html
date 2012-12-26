@@ -51,7 +51,7 @@
   {% endif %}
 </div>
 <div class="post-content short">
-  {% thumbnail post.photo.file "200x200" as im %}
+  {% thumbnail post.photo|get_override:"square_crop" "200x200" as im %}
   <img class="post-image" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
   {% endthumbnail %}
   {{ post.content|explosivo|truncatewords_html:50 }}

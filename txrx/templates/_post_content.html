@@ -1,4 +1,4 @@
-{% load cache codrspace_tags thumbnail short_codes %}
+{% load cache codrspace_tags thumbnail short_codes crop_util %}
 
 <h2><a href="{{ post.get_absolute_url }}">{% filter striptags|truncatewords:30 %}{% firstof post.title "Untitled" %}{% endfilter %}</a></h2>
 
@@ -19,7 +19,7 @@
 </div>
 
 <div class="post-content">
-  {% thumbnail post.photo.file "300x300" as im %}
+  {% thumbnail post.photo|get_override:"square_crop" "300x300" as im %}
   <a href="{{ post.photo.file.url }}" class="post-image">
     <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
   </a>
