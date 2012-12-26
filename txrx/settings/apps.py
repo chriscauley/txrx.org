@@ -22,6 +22,7 @@ INSTALLED_APPS = (
   'password_reset',
   'compressor',
   'tagging',
+  'crop_override',
 
   # comments
   'mptt',

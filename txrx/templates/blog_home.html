@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% load codrspace_tags %}
-{% load short_codes thumbnail %}
+{% load codrspace_tags short_codes %}
+{% load thumbnail crop_util %}
 {% load url from future %}
 
 {% block title %}Home{% endblock %}
@@ -15,7 +15,7 @@
 <div id="myCarousel" class="carousel slide">
   <div class="carousel-inner">
     {% for post in featured_posts %}
-    {% thumbnail post.photo.file "620x350" crop="center" as im %}
+    {% thumbnail post.photo|get_override:"landscape_crop" "620x375" crop="center" as im %}
     <div class="item{% if forloop.first %} active{% endif %}">
       <a href="{{ post.get_absolute_url }}">
         <img src="{{ im.url }}" alt="" width="{{ im.width }}" height="{{ im.height }}" />

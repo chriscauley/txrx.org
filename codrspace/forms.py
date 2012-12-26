@@ -90,7 +90,7 @@ class PostForm(TaggedModelForm):
 class MediaForm(forms.ModelForm):
 
     class  Meta:
-        exclude = ("uploader",)
+        fields = ('file','name')
         model = Media
 
 

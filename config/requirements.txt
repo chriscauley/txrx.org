@@ -2,7 +2,7 @@ django==1.4
 django-articles==2.4.1
 south==0.7.6
 # PIL==1.1.7 #install me with apt-get!
--e git+https://github.com/sehmaschine/django-grappelli.git@grappelli_2_4#egg=django-grappelli
+-e git+https://github.com/sehmaschine/django-grappelli.git#egg=django-grappelli
 simplejson==2.1.2
 sorl-thumbnail==11.12
 django-devserver==0.4

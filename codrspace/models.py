@@ -9,6 +9,7 @@ from django.core.cache import cache
 from django.utils.http import urlquote
 from django.conf import settings
 
+from crop_override import CropOverride, OriginalImage
 from timezones.fields import TimeZoneField
 from tastypie.models import create_api_key
 import tagging
@@ -70,7 +71,10 @@ class Post(models.Model):
 tagging.register(Post)
 
 class Media(models.Model):
-    file = models.FileField(upload_to='uploads/photos/%Y-%m', null=True)
+    file = OriginalImage("Photo",upload_to='uploads/photos/%Y-%m', null=True)
+    square_crop = CropOverride('Square Crop (1:1)', upload_to='uploads/photos/%Y-%m', original='file', aspect='1x1')
+    landscape_crop = CropOverride('Landscape Crop (5:3)', upload_to='uploads/photos/%Y-%m', original='file', aspect='5x3')
+    portrait_crop = CropOverride('Portrait Crop (3:5)', upload_to='uploads/photos/%Y-%m', original='file', aspect='3x5')
     filename = models.CharField(max_length=200,editable=False)
     name = models.CharField(null=True,blank=True,max_length=500)
     uploader = models.ForeignKey(User,null=True,blank=True)
