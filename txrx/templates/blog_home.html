@@ -6,16 +6,33 @@
 {% block title %}Home{% endblock %}
 {% block header_content %}TX/RX Labs - Houston's Hackerspace{% endblock %}
 
-{% comment %}
 {% block head %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/miniSlideShow.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){ miniSlideShow($("#blog-slide")); });
-</script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-carousel.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-transition.js"></script>
 {% endblock %}
-{% endcomment %}
 
 {% block content %}
+<div id="myCarousel" class="carousel slide">
+  <div class="carousel-inner">
+    {% for post in featured_posts %}
+    {% thumbnail post.photo.file "620x350" crop="center" as im %}
+    <div class="item{% if forloop.first %} active{% endif %}">
+      <a href="{{ post.get_absolute_url }}">
+        <img src="{{ im.url }}" alt="" width="{{ im.width }}" height="{{ im.height }}" />
+        <div class="carousel-caption">
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.content|striptags|truncatewords:30 }}</p>
+        </div>
+      </a>
+    </div>
+    {% endthumbnail %}
+    {% endfor %}
+  </div>
+  {% if featured_posts|length > 1 %}
+  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+  {% endif %}
+</div>
 {% for post in posts %}
 <h2><a href="{{ post.get_absolute_url }}">{{ post }}</a></h2>
 <div class="post-meta">
