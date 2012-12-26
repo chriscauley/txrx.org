@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block pre_title %}{{ tag.name }} Posts - TX/RX Labs{% endblock %}
+
+{% block header_content %}Posts Tagged {{ tag.name }}{% endblock %}
+{% block extra_head %}
+<link rel="alternate" type="application/rss+xml" href="{{ request.path }}" title="TX/RX Labs: Posts Tagged {{ tag.name }}" />
+{% endblock %}
+
+{% block content %}
+{% for post in posts %}
+{% include "_post_content.html" with truncate_posts="True" %}
+{% endfor %}
+{% endblock %}

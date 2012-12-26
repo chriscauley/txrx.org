@@ -43,10 +43,12 @@ urlpatterns += patterns('codrspace.mock_views',
     url(r'^access_token/$', 'access_token', name="access_token"),
 )
 username_regex = '(?P<username>[\w\d\-\.\@\_]+)'
-urlpatterns += patterns('codrspace.views',
-    url(r'^%s/feed/$'%username_regex, LatestPostsFeed(), name="posts_feed"),
-    url(r'^%s/(?P<slug>[\w\d\-]+)/$'%username_regex, 'post_detail', name="post_detail"),
-    url(r'^%s/$'%username_regex, 'post_list', name="post_list"),
+urlpatterns += patterns(
+  'codrspace.views',
+  url(r'^tag/(.+)/$','posts_by_tag',name='posts_by_tag'),
+  url(r'^%s/feed/$'%username_regex, LatestPostsFeed(), name="posts_feed"),
+  url(r'^%s/(?P<slug>[\w\d\-]+)/$'%username_regex, 'post_detail', name="post_detail"),
+  url(r'^%s/$'%username_regex, 'post_list', name="post_list"),
 )
 
 urlpatterns += patterns('',

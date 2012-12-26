@@ -17,6 +17,8 @@ from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.template.response import TemplateResponse
 
+from tagging.models import Tag
+
 from codrspace.models import Post, Profile, Media, Setting
 from codrspace.forms import PostForm, MediaForm, SettingForm, FeedBackForm, MediaFilterForm
 
@@ -474,3 +476,13 @@ def add_photo(request):
         'form': form,
         }
     return TemplateResponse(request,"codrspace/add_photo.html",values)
+
+def posts_by_tag(request,name):
+    tag = get_object_or_404(Tag,name=name)
+    items = tag.items.filter(content_type__app_label="codrspace",content_type__name="post",object_id__isnull=False)
+    posts = [item.object for item in items]
+    values = {
+        "posts": posts,
+        "tag": tag,
+        }
+    return TemplateResponse(request,"codrspace/posts_by_tag.html",values)
