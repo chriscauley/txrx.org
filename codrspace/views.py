@@ -288,7 +288,7 @@ def signout(request):
 def _validate_github_response(resp):
     """Raise exception if given response has error"""
 
-    if resp.error is not None:
+    if getattr(resp,'error',None) is not None:
         raise GithubAuthError('Could not communicate with Github API (%s)' % (
                                                             resp.error.reason))
 
