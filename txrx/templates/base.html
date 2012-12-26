@@ -6,7 +6,7 @@
     {% block extra_head %}{% endblock %}
     {% compress css %}
     {# all styling is kept in the less directory. This see the import file here. #}
-    <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/base.less">
+    <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/{{ request.theme }}.less">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}less/pygments.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wmd/wmd.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}less/codrspace.css">
@@ -65,5 +65,12 @@
     {% endblock %}
     <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-alert.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}codrspace.js"></script>
+    <div id="bot_right">
+      {% if request.theme == "dark" %}
+      <a href="?set_theme=default">Who turned out the Lights?</a>
+      {% else %}
+      <a href="?set_theme=dark">The Darkness Calls</a>
+      {% endif %}
+    </div>
   </body>
 </html>
