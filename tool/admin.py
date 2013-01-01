@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 from models import Lab, Tool, ToolLink
-from lablackey.db.admin import SlugModelAdmin
+from lablackey.db.admin import SlugModelAdmin,OrderedModelAdmin
 
 class LabAdmin(SlugModelAdmin):
   list_display = ("__unicode__","order")
@@ -12,9 +12,7 @@ class ToolLinkInline(admin.TabularInline):
   model = ToolLink
   fields = ("title","url","order")
 
-class ToolAdmin(SlugModelAdmin):
-  list_display = ("__unicode__","order")
-  list_editable = ("order",)
+class ToolAdmin(SlugModelAdmin,OrderedModelAdmin):
   inlines = (ToolLinkInline,)
 
 admin.site.register(Lab,LabAdmin)
