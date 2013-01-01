@@ -22,6 +22,7 @@ urlpatterns = patterns(
   (r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
   (r'^password-reset/', include('password_reset.urls')),
   (r'^force_login/(\d+)/$', 'txrx.views.force_login'),
+  (r'^tools/',include('tool.urls')),
   url(r'^event/',include('event.urls')),
 
   # comments and javascript translation

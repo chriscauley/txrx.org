@@ -43,7 +43,7 @@ INSTALLED_APPS = (
 
   # this project
   #'project',
-  #'tool',
+  'tool',
   'course',
   'membership',
   'main',
@@ -52,6 +52,7 @@ INSTALLED_APPS = (
 
 #mptt_comments
 COMMENTS_APP = 'mptt_comments'
+MPTT_COMMENTS_CUTOFF = 0
 
 LOGOUT_REDIRECT = 'home'
 

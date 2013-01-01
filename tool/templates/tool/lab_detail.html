@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load thumbnail crop_util %}
+{% load short_codes %}
+
+{% block title %}{{ current_lab }} Tools{% endblock %}
+{% block header_content %}{{ current_lab }} Tools{% endblock %}
+
+{% block content %}
+<div id="tool_{{ current_lab.slug }}">
+  {% for tool in current_lab.tool_set.all %}
+  {% thumbnail tool.photo|get_override:"square_crop" "220x220" crop="center" as im %}
+  <div class="tool row">
+    <div class="side pull-{% cycle "left" "right" %} span3">
+      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+    </div>
+    <div class="span5 content">
+      <h2>{{ tool }}</h2>
+      {% if tool.make or tool.model %}
+      <h4>{{ tool.make|default:"" }} {{ tool.model|default:"" }}</h4>
+      {% endif %}
+      {{ tool.description|explosivo }}
+      {% if tool.toollink_set.count %}
+      <h4>Related Links:</h4>
+      {% for link in tool.toollink_set.all %}
+      <a href="{{ link.url }}">{{ link.title }}</a><br />
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+  {% if not forloop.last %}<hr />{% endif %}
+  {% endthumbnail %}
+  {% endfor %}
+  <div style="clear:both;"></div>
+</div>
+{% endblock %}

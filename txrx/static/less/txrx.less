@@ -24,6 +24,55 @@ form label.required {
 }
 
 #bot_right { position: fixed; bottom: 0px; left: 0px; padding: 3px 6px; border: double 4px; }
+
+/* tools */
+#labs {
+  height: 375px;
+  overflow: hidden;
+}
+
+.vertical-gradient(@color1,@color2) {
+  background: @color1;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(@color2), to(@color1));
+  background: -webkit-linear-gradient(top, @color1, @color2);
+  background: -moz-linear-gradient(top, @color1, @color2);
+  background: -ms-linear-gradient(top, @color1, @color2);
+  background: -o-linear-gradient(top, @color1, @color2);
+}
+
+.lab {
+  float: left;
+  margin-bottom: 0;
+  -webkit-transition: width 0.25s ease-in;
+  transition: width 0.25s ease-in;
+  width: 50px;
+  .carousel-caption { margin-left: 50px; }
+  .wrapper {
+    position: relative;
+    width: 620px;
+  }
+  label {
+    .vertical-gradient(rgba(55,55,55,.75),rgba(0,0,0,.75));
+    color: white;
+    cursor: pointer;
+    height: 51px;
+    font-size: 25px;
+    left: -380px;
+    line-height: 50px;
+    position: absolute;
+    text-transform: uppercase;
+    text-align: center;
+    top: -2px;
+    -webkit-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    -webkit-transform-origin: top right;
+    transform-origin: top right;
+    width: 380px;
+  }
+}
+
+[type=radio]:checked + .lab { width: 620px; }
+
 /* blog */
 div.highlight { clear: both; }
 div.post-content {

@@ -1,8 +1,10 @@
+* classes
+** add an exit survey - what classes would you like to take?
 * side bar
 ** donate button
 ** blog posts
 ** zphotos?
-* Cody 
+* Cody
 ** Remove lablackey
 ** combine all tagging stuff into a forked django tagging
 *** codrspace forms

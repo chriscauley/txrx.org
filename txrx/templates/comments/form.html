@@ -4,7 +4,7 @@
     <div class="comment_form">
     <form action="{% comment_form_target %}" method="POST">{% csrf_token %}
         <fieldset>
-            <ul>
+            <ul class="unstyled">
             {% for field in form %}
                 {% if not field.is_hidden %}
                 <li class="{% if not field.field.required %}not{% endif %}required{% if field.errors %} errors{% endif %}{% if field.name == 'honeypot' %} hidden{% endif %}">

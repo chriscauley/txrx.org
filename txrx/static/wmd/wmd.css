@@ -1,3 +1,12 @@
+/* txrx overrides */
+.wmd-panel {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+#wmd-preview { display: none; }
+#wmd-input { height: 300px !important; }
+
+/* orriginal rules */
 .wmd-panel {
 	margin-left: 25%;
 	margin-right: 25%;

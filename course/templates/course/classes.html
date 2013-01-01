@@ -65,7 +65,7 @@
       <td class="first_date">{{ session.classtime_set.all.0.start|date:"F j" }}</td>
       <td class="intro">
         {% if session.section.prerequisites or session.section.requirements %}
-        <a href="javascript:;" onclick="return expand(this);" class="showDetails">No (details)</a>
+        No
         {% else %}
         Yes
         {% endif %}
