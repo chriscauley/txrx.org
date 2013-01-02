@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 from models import Lab, Tool, ToolLink
-from lablackey.db.admin import SlugModelAdmin,OrderedModelAdmin
+from db.admin import SlugModelAdmin,OrderedModelAdmin
 
 class LabAdmin(SlugModelAdmin):
   list_display = ("__unicode__","order")

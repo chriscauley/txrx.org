@@ -5,7 +5,7 @@ from south.modelsinspector import add_introspection_rules
 from wmd.models import MarkDownField
 from codrspace.models import Media
 
-from lablackey.db.models import SlugModel, OrderedModel
+from db.models import SlugModel, OrderedModel
 from lablackey.utils import cached_method
 
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
