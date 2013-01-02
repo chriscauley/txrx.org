@@ -17,6 +17,7 @@ class MembershipAdmin(admin.ModelAdmin):
 class UserMembershipAdmin(admin.ModelAdmin):
     list_display = ("__unicode__",'photo')
     list_editable = ('photo',)
+    list_filter = ('user__is_staff',)
 
 
 admin.site.register(Membership,MembershipAdmin)

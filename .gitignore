@@ -10,9 +10,9 @@ txrx/txrx.db
 txrx/settings/local.py
  # I'm merging this project into txrx.org/txrx as chores
 goldstar/*
-env
 env/*
 environ/*
+.environ/*
 .pydev
 .pydevproject
 .project

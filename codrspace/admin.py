@@ -4,13 +4,13 @@ from sorl.thumbnail import get_thumbnail
 
 from db.forms import StaffMemberForm
 
-from .models import Post, Media
+from .models import Post, Photo
 
 class PostAdmin(admin.ModelAdmin):
   list_display = ('__unicode__','author','featured','publish_dt','status')
   list_editable = ('featured','status')
 
-class MediaAdmin(CropAdmin):
+class PhotoAdmin(CropAdmin):
   form = StaffMemberForm
   list_display = ('__unicode__','_thumbnail')
   def _thumbnail(self,obj):
@@ -20,4 +20,4 @@ class MediaAdmin(CropAdmin):
   _thumbnail.allow_tags=True
 
 admin.site.register(Post,PostAdmin)
-admin.site.register(Media,MediaAdmin)
+admin.site.register(Photo,PhotoAdmin)

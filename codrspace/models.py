@@ -48,7 +48,7 @@ class Post(models.Model):
     update_dt = models.DateTimeField(auto_now=True)
     _h = "Featured blogs must have a photo or they won't appear at all."
     featured = models.BooleanField(default=False,help_text=_h)
-    photo = models.ForeignKey("Media",null=True,blank=True)
+    photo = models.ForeignKey("Photo",null=True,blank=True)
 
     class Meta:
         unique_together = ("slug", "author")
@@ -70,20 +70,14 @@ class Post(models.Model):
 
 tagging.register(Post)
 
-class Media(models.Model):
-    file = OriginalImage("Photo",upload_to='uploads/photos/%Y-%m', null=True)
-    kwargs = dict(upload_to='uploads/photos/%Y-%m', original='file')
-    _sh = "Usages: Blog Photo"
-    square_crop = CropOverride('Square Crop (1:1)', aspect='1x1',help_text=_sh,**kwargs)
-    _lh = "Usages: Featured Blog Photo"
-    landscape_crop = CropOverride('Landscape Crop (5:3)', aspect='5x3',help_text=_lh,**kwargs)
-    _ph = "Usages: None"
-    portrait_crop = CropOverride('Portrait Crop (3:5)', aspect='3x5',help_text=_ph,**kwargs)
+class FileModel(models.Model):
+    """An abstract file model. Needs a file model which will be a models.FileField"""
     filename = models.CharField(max_length=200,editable=False)
     name = models.CharField(null=True,blank=True,max_length=500)
     user = models.ForeignKey(User,null=True,blank=True)
     upload_dt = models.DateTimeField(auto_now_add=True)
     __unicode__ = lambda self: self.name or self.filename
+
     def type(self):
         ext = os.path.splitext(self.filename)[1].lower()
         # map file-type to extension
@@ -102,23 +96,33 @@ class Media(models.Model):
         for type in types:
             if ext in types[type]:
                 return type
-
         return 'code'
 
     def shortcode(self):
         shortcode = ''
-
         if self.type() == 'image':
             shortcode = "![%s](%s)" % (self.filename, self.file.url)
-
         if self.type() == 'code':
             shortcode = "[local %s]" % self.file.name
-
         return shortcode
+
     def save(self,*args,**kwargs):
         self.filename = self.filename or str(self.file).split('/')[-1]
         self.name = self.name or self.filename
-        super(Media,self).save(*args,**kwargs)
+        super(FileModel,self).save(*args,**kwargs)
+
+    class Meta:
+        abstract = True
+
+class Photo(FileModel):
+    file = OriginalImage("Photo",upload_to='uploads/photos/%Y-%m', null=True)
+    kwargs = dict(upload_to='uploads/photos/%Y-%m', original='file')
+    _sh = "Usages: Blog Photo, Tool Photo"
+    square_crop = CropOverride('Square Crop (1:1)', aspect='1x1',help_text=_sh,**kwargs)
+    _lh = "Usages: Featured Blog Photo, Lab Photo"
+    landscape_crop = CropOverride('Landscape Crop (5:3)', aspect='5x3',help_text=_lh,**kwargs)
+    _ph = "Usages: None"
+    portrait_crop = CropOverride('Portrait Crop (3:5)', aspect='3x5',help_text=_ph,**kwargs)
 
 class Setting(models.Model):
     """

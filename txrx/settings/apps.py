@@ -35,7 +35,6 @@ INSTALLED_APPS = (
   'tastypie',
 
   # lablackey
-  'lablackey.photo',
   'lablackey.geo',
   'lablackey.profile',
   #'lablackey.djangogcal',

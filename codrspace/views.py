@@ -19,8 +19,8 @@ from django.template.response import TemplateResponse
 
 from tagging.models import Tag
 
-from codrspace.models import Post, Profile, Media, Setting
-from codrspace.forms import PostForm, MediaForm, SettingForm, FeedBackForm, MediaFilterForm
+from codrspace.models import Post, Profile, Photo, Setting
+from codrspace.forms import PostForm, PhotoForm, SettingForm, FeedBackForm, PhotoFilterForm
 
 class GithubAuthError(Exception):
     pass
@@ -100,23 +100,8 @@ def add(request, template_name="edit.html"):
         author=request.user,
         status__in=['draft', 'published']
     ).order_by('-pk')
-    media_set = Media.objects.all().order_by('-pk')
-    media_form = MediaForm()
 
     if request.method == "POST":
-        # media
-        media_form = MediaForm(request.POST, request.FILES)
-        if media_form.is_valid():
-            media = media_form.save(commit=False)
-            media.filename = unicode(media_form.cleaned_data.get('file', ''))
-            media.save()
-            media.user = request.user
-            media.save()
-            messages.info(
-                request,
-                'Media %s has been uploaded.' % media.filename,
-                extra_tags='alert-success'
-            )
 
         # post
         form = PostForm(request.POST, user=request.user)
@@ -139,8 +124,6 @@ def add(request, template_name="edit.html"):
     return render(request, template_name, {
         'form': form,
         'posts': posts,
-        'media_set': media_set,
-        'media_form': media_form,
     })
 
 
@@ -216,20 +199,8 @@ def edit(request, pk=0, template_name="edit.html"):
         author=request.user,
         status__in=['draft', 'published']
     ).order_by('-pk')
-    media_set = Media.objects.filter().order_by('-pk')
-    media_form = MediaForm()
 
     if request.method == "POST":
-
-        # media post
-        if 'file' in request.FILES:
-            media_form = MediaForm(request.POST, request.FILES)
-            if media_form.is_valid():
-                media = media_form.save(commit=False)
-                media.filename = unicode(media_form.cleaned_data.get(
-                                                                'file', ''))
-                media.user = request.user
-                media.save()
 
         # post post  hehe
         if 'title' in request.POST:
@@ -250,16 +221,12 @@ def edit(request, pk=0, template_name="edit.html"):
                     'form': form,
                     'post': post,
                     'posts': posts,
-                    'media_set': media_set,
-                    'media_form': media_form,
                 })
 
             return render(request, template_name, {
                 'form': form,
                 'post': post,
                 'posts': posts,
-                'media_set': media_set,
-                'media_form': media_form,
             })
 
     form = PostForm(instance=post, user=request.user)
@@ -267,8 +234,6 @@ def edit(request, pk=0, template_name="edit.html"):
         'form': form,
         'post': post,
         'posts': posts,
-        'media_set': media_set,
-        'media_form': media_form,
     })
 
 
@@ -448,10 +413,10 @@ def render_preview(request, template_name='preview.html'):
 
 
 def insert_photo(request):
-    photos = Media.objects.all()
+    photos = Photo.objects.all()
     if not request.GET or request.GET.get('mine',False):
         photos = photos.filter(user=request.user)
-    form = MediaFilterForm(request.GET or None,initial={'mine':True})
+    form = PhotoFilterForm(request.GET or None,initial={'mine':True})
     paginator = None
     if photos:
         paginator = Paginator(photos,8)
@@ -465,7 +430,7 @@ def insert_photo(request):
 
 def add_photo(request):
     photo = None
-    form = MediaForm(request.POST or None,request.FILES or None)
+    form = PhotoForm(request.POST or None,request.FILES or None)
     if request.POST and form.is_valid():
         photo = form.save()
         photo.user = request.user

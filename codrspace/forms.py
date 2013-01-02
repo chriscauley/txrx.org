@@ -4,7 +4,7 @@ admin.autodiscover()
 from django.contrib.admin.widgets import ForeignKeyRawIdWidget, AdminSplitDateTime
 from django import forms
 
-from codrspace.models import Post, Media, Setting
+from codrspace.models import Post, Photo, Setting
 from codrspace.utils import localize_date
 
 from datetime import datetime
@@ -35,7 +35,7 @@ class TaggedModelForm(forms.ModelForm):
 
 class PostForm(TaggedModelForm):
     content = forms.CharField(widget=MarkDownInput(),required=False)
-    photo = forms.ModelChoiceField(Media.objects.all())
+    photo = forms.ModelChoiceField(Photo.objects.all())
     class Meta:
         model = Post
         fields = ('title','slug','content','publish_dt','tags','status','photo')
@@ -87,11 +87,11 @@ class PostForm(TaggedModelForm):
                 else:
                     field.widget.attrs['class'] = 'span8'
 
-class MediaForm(forms.ModelForm):
+class PhotoForm(forms.ModelForm):
 
     class  Meta:
         fields = ('file','name')
-        model = Media
+        model = Photo
 
 
 class SettingForm(forms.ModelForm):
@@ -118,7 +118,7 @@ class FeedBackForm(forms.Form):
             if isinstance(field, forms.fields.CharField):
                 field.widget.attrs.update({'class': 'span10'})
 
-class MediaFilterForm(forms.Form):
+class PhotoFilterForm(forms.Form):
     search = forms.CharField(max_length=40)
     mine = forms.BooleanField()
     page = forms.IntegerField(required=False,widget=forms.HiddenInput())

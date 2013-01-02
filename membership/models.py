@@ -5,7 +5,7 @@ from sorl.thumbnail import ImageField
 
 from lablackey.utils import cached_method
 from lablackey.profile.models import UserModel
-from lablackey.photo.models import Photo
+from codrspace.models import Photo
 from course.models import Session
 from project.models import Project
 
