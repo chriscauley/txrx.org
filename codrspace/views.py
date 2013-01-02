@@ -110,7 +110,7 @@ def add(request, template_name="edit.html"):
             media = media_form.save(commit=False)
             media.filename = unicode(media_form.cleaned_data.get('file', ''))
             media.save()
-            media.uploader = request.user
+            media.user = request.user
             media.save()
             messages.info(
                 request,
@@ -228,7 +228,7 @@ def edit(request, pk=0, template_name="edit.html"):
                 media = media_form.save(commit=False)
                 media.filename = unicode(media_form.cleaned_data.get(
                                                                 'file', ''))
-                media.uploader = request.user
+                media.user = request.user
                 media.save()
 
         # post post  hehe
@@ -450,7 +450,7 @@ def render_preview(request, template_name='preview.html'):
 def insert_photo(request):
     photos = Media.objects.all()
     if not request.GET or request.GET.get('mine',False):
-        photos = photos.filter(uploader=request.user)
+        photos = photos.filter(user=request.user)
     form = MediaFilterForm(request.GET or None,initial={'mine':True})
     paginator = None
     if photos:
@@ -468,7 +468,7 @@ def add_photo(request):
     form = MediaForm(request.POST or None,request.FILES or None)
     if request.POST and form.is_valid():
         photo = form.save()
-        photo.uploader = request.user
+        photo.user = request.user
         photo.save()
         # Not redirecting because we're going to close modal using javascript
     values = {

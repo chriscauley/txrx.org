@@ -81,7 +81,7 @@ class Media(models.Model):
     portrait_crop = CropOverride('Portrait Crop (3:5)', aspect='3x5',help_text=_ph,**kwargs)
     filename = models.CharField(max_length=200,editable=False)
     name = models.CharField(null=True,blank=True,max_length=500)
-    uploader = models.ForeignKey(User,null=True,blank=True)
+    user = models.ForeignKey(User,null=True,blank=True)
     upload_dt = models.DateTimeField(auto_now_add=True)
     __unicode__ = lambda self: self.name or self.filename
     def type(self):
