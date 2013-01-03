@@ -129,6 +129,7 @@ for s_file in ['apps','local']:
       if setting == setting.upper():
         setattr(sys.modules[__name__], setting, getattr(mod, setting))
 
-EMAIL_SUBJECT_PREFIX = "[TXRX]"
+EMAIL_SUBJECT_PREFIX = "[TXRX] "
 DEFAULT_FROM_EMAIL = "noreply@txrxlabs.org"
+SERVER_EMAIL = "noreply@txrxlabs.org"
 NEW_STUDENT_PASSWORD = "I am a new student, reset my passwrod asap"
