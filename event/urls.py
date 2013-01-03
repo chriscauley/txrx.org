@@ -5,6 +5,7 @@ urlpatterns = patterns(
   url(r'^$', 'index', name="index"),
   url(r'^repeat/(monthly|weekly)/(\d+)/$','repeat_event',name='repeat_event'),
   url(r'^occurrence/(\d+)/$','occurrence_detail',name='occurrence_detail'),
+  url(r'^(\d+)/([^/]+)/$','occurrence_detail',name='occurrence_detail'),
   #url(r'weekly/(\d+\-\d+\-\d+)/',"weekly",name="weekly"),
   #url(r'weekly/(\d+\-\d+\-\d+)/(?P<page_number>\d+)/',"weekly",name="weekly"),
   #url(r'^(?P<page_number>\d+)/$', 'index', name="event_list"),

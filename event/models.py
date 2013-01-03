@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.template.defaultfilters import slugify
 
 from wmd import models as wmd_models
 from lablackey.geo.models import Location
@@ -54,4 +55,4 @@ class OccurrenceModel(models.Model):
 
 class EventOccurrence(OccurrenceModel):
   event = models.ForeignKey(Event)
-  get_absolute_url = lambda self: reverse('occurrence_detail',args=(self.id,))
+  get_absolute_url = lambda self: reverse('occurrence_detail',args=(self.id,slugify(self.name)))

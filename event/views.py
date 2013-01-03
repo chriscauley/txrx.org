@@ -9,7 +9,8 @@ import datetime
 def index(request):
   pass
 
-def occurrence_detail(request,occurrence_id):
+def occurrence_detail(request,occurrence_id,slug=None):
+  # NOTE: the above slug does nothing, it is only for prettier urls
   occurrence = EventOccurrence.objects.get(pk=occurrence_id)
   values = {
     'occurrence': occurrence,
