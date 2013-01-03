@@ -119,7 +119,7 @@ def add(request, template_name="edit.html"):
             return redirect('edit', pk=post.pk)
 
     else:
-        form = PostForm(user=request.user)
+        form = PostForm(user=request.user,initial={'publish_dt':datetime.now()})
 
     return render(request, template_name, {
         'form': form,
