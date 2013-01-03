@@ -47,6 +47,7 @@ class OccurrenceModel(models.Model):
   name = property(lambda self: self.name_override or self.event.name)
   description_override = wmd_models.MarkDownField(blank=True,null=True)
   description = property(lambda self: self.description_override or self.event.description)
+  __unicode__ = lambda self: "%s - %s"%(self.name,self.start)
   class Meta:
     abstract = True
     ordering = ('start',)

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load short_codes %}
 
+{% block title %}{{ occurrence.name }}{% endblock %}
 {% block header_content %}{{ occurrence.name }}{% endblock %}
 
 {% block content %}

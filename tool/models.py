@@ -8,6 +8,8 @@ from codrspace.models import Photo
 from db.models import SlugModel, OrderedModel
 from lablackey.utils import cached_method
 
+from tagging.fields import TagField
+
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
 
 class Lab(SlugModel,OrderedModel):
@@ -25,6 +27,7 @@ class Tool(SlugModel,OrderedModel):
   description = MarkDownField(blank=True,null=True)
   photo = models.ForeignKey(Photo,null=True,blank=True)
   links = lambda self: self.toollink_set.all()
+  tags = TagField()
   class Meta:
     ordering = ("order",)
 

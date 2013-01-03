@@ -1,13 +1,13 @@
 from django.db import models
 from lablackey.profile.models import UserModel
-from articles.models import Article, ArticleManager
-#from tool.models import Tool
+from db.models import SlugModel
+from tool.models import Tool
 #from course.models import Course
 
-class Project(Article):
-    _feed_label = "Project Spotlight"
-    objects = ArticleManager()
+class Project(SlugModel,UserModel):
+    parent = models.ForeignKey("self")
+    created_on = models.DateTimeField(auto_now_add=True)
 
-class NewsItem(Article):
-    _feed_label = "News"
-    objects = ArticleManager()
+class ProjectItem(UserModel):
+    name = models.CharField(max_length=64)
+    project = models.ForeignKey(Project)
