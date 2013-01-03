@@ -23,6 +23,7 @@ urlpatterns = patterns(
   (r'^password-reset/', include('password_reset.urls')),
   (r'^force_login/(\d+)/$', 'txrx.views.force_login'),
   (r'^tools/',include('tool.urls')),
+  (r'^500/$','txrx.views.intentional_500'),
   url(r'^event/',include('event.urls')),
 
   # comments and javascript translation

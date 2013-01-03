@@ -49,3 +49,6 @@ def blog_home(request):
         'featured_posts': featured_posts,
         }
     return TemplateResponse(request,"blog_home.html",values)
+
+def intentional_500(request):
+    arst
