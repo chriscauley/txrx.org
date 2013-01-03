@@ -1,0 +1,30 @@
+{% load url from future %}
+<tr id="c{{session.id}}" class="course filterable"
+    data-subject="{% for subject in session.subjects %}{{ subject }},{% endfor %}"
+    {%if not session.course.closed%}data-open{%endif%}
+    data-date="{{ session.starttime|date:"Ymd" }}">
+  <td class="name">
+    <a href="{% url "course:detail" session.slug %}">
+      {{ session.section.course }}
+    </a>
+  </td>
+  <td class="instructor">{% if session.user.first_name and session.user.last_name%}
+    {{ session.user.first_name }} {{ session.user.last_name|slice:":1" }}.{% else %}
+    {{ session.user.username }}{% endif %}
+  </td>
+  <td class="first_date">{{ session.classtime_set.all.0.start|date:"F j" }}</td>
+  <td class="intro">
+    {% if session.section.prerequisites or session.section.requirements %}
+    No
+    {% else %}
+    Yes
+    {% endif %}
+  </td>
+  <td class="days">{{ session.classtime_set.count }}</td>
+  <td class="fee">
+    <span class="item_price">
+      {{ session.section.fee }}{% if session.section.fee_notes %}*{% endif %}
+    </span>
+  </td>
+  <td>{% include "course/_enroll_link.html" %}</td>
+</tr>
