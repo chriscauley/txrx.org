@@ -2,7 +2,7 @@
 import requests
 from datetime import datetime
 
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import simplejson
 from django.core.urlresolvers import reverse
@@ -194,42 +194,16 @@ def delete(request, pk=0, template_name="delete.html"):
 def edit(request, pk=0, template_name="edit.html"):
     """ Edit a post """
     post = get_object_or_404(Post, pk=pk, author=request.user)
-    posts = Post.objects.filter(
-        ~Q(id=post.pk),
-        author=request.user,
-        status__in=['draft', 'published']
-    ).order_by('-pk')
+    posts = Post.objects.exclude(id=post.pk)
+    posts = posts.filter(author=request.user,status__in=['draft', 'published'])
+    posts = posts.order_by('-pk')
 
-    if request.method == "POST":
+    form = PostForm(request.POST or None, instance=post, user=request.user)    
+    if request.POST and form.is_valid():
+        form.save()
+        messages.info(request,'Edited post "%s".' % post,extra_tags='alert-success')
+        return HttpResponseRedirect(request.path)
 
-        # post post  hehe
-        if 'title' in request.POST:
-            form = PostForm(request.POST, instance=post, user=request.user)
-            if form.is_valid() and 'submit_post' in request.POST:
-                post = form.save(commit=False)
-                if post.status == 'published':
-                    if not post.publish_dt:
-                        post.publish_dt = datetime.now()
-                if post.status == "draft":
-                    post.publish_dt = None
-                post.save()
-                messages.info(
-                    request,
-                    'Edited post "%s".' % post,
-                    extra_tags='alert-success')
-                return render(request, template_name, {
-                    'form': form,
-                    'post': post,
-                    'posts': posts,
-                })
-
-            return render(request, template_name, {
-                'form': form,
-                'post': post,
-                'posts': posts,
-            })
-
-    form = PostForm(instance=post, user=request.user)
     return render(request, template_name, {
         'form': form,
         'post': post,

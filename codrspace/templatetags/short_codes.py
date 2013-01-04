@@ -49,6 +49,36 @@ def explosivo(value):
 
     return mark_safe(value)
 
+def filter_jsfiddle(value):
+    """Used to insert fiddle iframe. format: [jsfiddle "username/id" "widthxheight"]"""
+    replacements = []
+    pattern = re.compile('\\[jsfiddle (?P<code>[^ ]+) (?P<extra>.*)\\]', re.I | re.S | re.M)
+    base_url = "http://jsfiddle.net/%s/embedded/result,js,resources,html,css/"
+
+    if len(re.findall(pattern, value)) == 0:
+        return (replacements, value, None,)
+
+    shortcodes = re.finditer(pattern, value)
+
+    for shortcode in shortcodes:
+        try:
+            code = shortcode.group('code').strip('/')
+        except IndexError:
+            code = ""
+        extra = shortcode.group('extra')
+        try:
+            width = re.findall("(\d+)x",extra)[0]
+        except IndexError:
+            width = ""
+        try:
+            height = re.findall("x(\d+)",extra)[0]
+        except IndexError:
+            height = ""
+        tag = '<iframe src="%s" width="%s" height="%s" />'%(base_url%code,width,height)
+        replacements.append(['[jsfiddle %s %s]'%(code,extra),tag])
+
+    return (replacements, value, True,)
+    
 
 def filter_inline(value):
     replacements = []
