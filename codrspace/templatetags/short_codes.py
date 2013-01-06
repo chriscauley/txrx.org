@@ -50,10 +50,9 @@ def explosivo(value):
     return mark_safe(value)
 
 def filter_jsfiddle(value):
-    """Used to insert fiddle iframe. format: [jsfiddle "username/id" "widthxheight"]"""
+    """Used to insert fiddle iframe. format: [jsfiddle "username/id" opt1=val1,opt2=val2...]"""
     replacements = []
-    pattern = re.compile('\\[jsfiddle (?P<code>[^ ]+) (?P<extra>.*)\\]', re.I | re.S | re.M)
-    base_url = "http://jsfiddle.net/%s/embedded/result,js,resources,html,css/"
+    pattern = re.compile('\\[jsfiddle (?P<values>[^\\]]*)\\]', re.I | re.S | re.M)
 
     if len(re.findall(pattern, value)) == 0:
         return (replacements, value, None,)
@@ -61,21 +60,24 @@ def filter_jsfiddle(value):
     shortcodes = re.finditer(pattern, value)
 
     for shortcode in shortcodes:
-        try:
-            code = shortcode.group('code').strip('/')
-        except IndexError:
-            code = ""
-        extra = shortcode.group('extra')
-        try:
-            width = re.findall("(\d+)x",extra)[0]
-        except IndexError:
-            width = ""
-        try:
-            height = re.findall("x(\d+)",extra)[0]
-        except IndexError:
-            height = ""
-        tag = '<iframe src="%s" width="%s" height="%s" />'%(base_url%code,width,height)
-        replacements.append(['[jsfiddle %s %s]'%(code,extra),tag])
+        values = shortcode.group('values').split(' ')
+        code = values[0]
+        base_url = "http://jsfiddle.net/%(code)s/embedded/%(tabs)s/"
+        options = {
+            'code': code,
+            'width': 640,
+            'height': 400,
+            'tabs': 'result,js,resources,html,css',
+            'style': '',
+            }
+        for k,v in [i.split('=') for i in values[1:]]:
+            options[k] = v
+        if options['tabs'] == 'result':
+            base_url = 'http://fiddle.jshell.net/%(code)s/show/'
+        options['url'] = base_url%options
+        tag = '<iframe src="%(url)s" width="%(width)s" height="%(height)s" style="%(style)s"></iframe>'%options
+        print '[jsfiddle %s]'%(' '.join(values))
+        replacements.append(['[jsfiddle %s]'%(' '.join(values)),tag])
 
     return (replacements, value, True,)
     
