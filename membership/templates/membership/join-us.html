@@ -1,8 +1,10 @@
-{% extends "base.html" %}
+{% extends parent %}
+{% load cache %}
 
 {% block header_content %}Become a Member of TX/RX Labs{% endblock %}
 
 {% block main %}
+{% cache settings.LONG_CACHE memberships %}
 <script type="text/javascript">
 
 membership_form_parameters = {}; //this is established at the bottom of every form
@@ -48,7 +50,7 @@ $(document).ready(function() {$("select").change()});
     <input type="hidden" name="src" value="1">
     <input type="hidden" name="sra" value="1">
     <select name="os0" onchange="setHiddenFields(this);">
-      {% for rate in m.membershiprate_set.all %}
+      {% for rate in m.rates %}
       <option value="{{ m.name }} - {{ rate.description }}">{{ rate.description }}</option>
       {% endfor %}
     </select>
@@ -61,7 +63,7 @@ $(document).ready(function() {$("select").change()});
 </span>
 
 <script type="text/javascript">
-{% for rate in m.membershiprate_set.all %}
+{% for rate in m.rates %}
 membership_form_parameters['{{ m.name }} - {{ rate.description }}'] = {
   'cost': {{ rate.cost }},
   'months': {{ rate.months }}, // "wait this many months between billings"
@@ -71,4 +73,5 @@ membership_form_parameters['{{ m.name }} - {{ rate.description }}'] = {
 {% endfor %}
 
 <div class="clear"></div>
+{% endcache %}
 {% endblock %}

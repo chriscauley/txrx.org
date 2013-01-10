@@ -7,6 +7,7 @@ from django.template.response import TemplateResponse
 from course.models import Course, Section, Term, Subject, Session, Enrollment
 from membership.models import UserMembership
 
+from djpjax import pjaxtend
 from paypal.standard.ipn.models import *
 
 filters = {
@@ -24,6 +25,7 @@ filters = {
     }
   }
 
+@pjaxtend()
 def index(request):
   term = Term.objects.all()[0]
   sessions = Session.objects.filter(section__term=term).select_related(depth=2)
@@ -54,6 +56,7 @@ def index(request):
     }
   return TemplateResponse(request,"course/classes.html",values)
 
+@pjaxtend()
 def detail(request,slug):
   session = get_object_or_404(Session,slug=slug)
   values = {
@@ -61,11 +64,13 @@ def detail(request,slug):
     }
   return TemplateResponse(request,"course/detail.html",values)
 
+@pjaxtend()
 def instructors(request,username=None):
   instructors = UserMembership.objects.list_instructors()
   values = {'instructors':instructors}
   return TemplateResponse(request,"course/instructors.html",values)
 
+@pjaxtend()
 def instructor_detail(request,username=None):
   profile = UserMembership.objects.get(user__username=username)
   values = {
@@ -73,6 +78,7 @@ def instructor_detail(request,username=None):
     }
   return TemplateResponse(request,"course/instructor_detail.html",values)
 
+@pjaxtend()
 @login_required
 def my_sessions(request):
   instructor = request.user

@@ -38,9 +38,9 @@ INSTALLED_APPS = (
   'lablackey.geo',
   'lablackey.profile',
   #'lablackey.djangogcal',
-  'db',
 
   # this project
+  'db',
   #'project',
   'tool',
   'course',

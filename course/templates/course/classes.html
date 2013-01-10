@@ -1,11 +1,8 @@
-{% extends "base.html" %}
+{% extends parent %}
 {% load url from future %}
 {% load thumbnail %}
 
 {% block title %}Classes {{ term.name }} at {{ block.super }} {% endblock %}
-
-{% block extra_head %}
-{% endblock %}
 
 {% block header_content %}Upcomming Classes{% endblock %}
 

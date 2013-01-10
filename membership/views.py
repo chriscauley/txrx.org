@@ -5,9 +5,10 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 
-from .models import Membership
+from djpjax import pjaxtend
 
-from forms import UserForm, UserMembershipForm
+from .models import Membership
+from .forms import UserForm, UserMembershipForm
 
 def redirect(redirect_url):
     return HttpResponseRedirect(redirect_url)
@@ -25,10 +26,11 @@ def login_redirect(request):
     else:
         return redirect("/")
 
+@pjaxtend()
 def join_us(request):
     values = {
         'memberships': Membership.objects.active(),
-        'flatpage':FlatPage.objects.get(url='/join-us/'),
+        'flatpage':lambda:FlatPage.objects.get(url='/join-us/'),
         }
     return TemplateResponse(request,"membership/join-us.html",values)
 

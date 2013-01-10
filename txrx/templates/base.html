@@ -22,7 +22,7 @@
     {% endcomment %}
     <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}jquery.labelify.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.pjax.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-modal.js"></script>
     {% block head %}{% endblock %}
     <!--[if lt IE 9]>
@@ -42,16 +42,16 @@
       </header>
       {% endblock %}
 
-      {% block main %}
-      <div class="row">
+      <div class="row" id="main">
+        {% block main %}
         <div class="span8">
           {% block content %}{% endblock %}
         </div>
         <div class="span4">
           {% block side %}{% include "_side.html" %}{% endblock %}
         </div>
+        {% endblock %}
       </div>
-      {% endblock %}
 
       {% block footer %}
       <footer>
@@ -63,6 +63,9 @@
     {% block extra_body %}
     <script type="text/javascript">
       $('img[rel=tooltip]').tooltip();
+      $(document).ready(function() {
+      $(document).pjax('a[data-pjax=main]', '#main');
+      });
     </script>
     {% endblock %}
     <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-alert.js"></script>
