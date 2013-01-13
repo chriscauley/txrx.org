@@ -1,17 +1,14 @@
 {% extends parent %}
 {% load codrspace_tags short_codes %}
 {% load thumbnail crop_util %}
+{% load cache %}
 {% load url from future %}
 
 {% block title %}Home{% endblock %}
 {% block header_content %}TX/RX Labs - Houston's Hackerspace{% endblock %}
 
-{% block head %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-carousel.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-transition.js"></script>
-{% endblock %}
-
 {% block content %}
+{% cache settings.SHORT_CACHE blog_home %}
 <div id="myCarousel" class="carousel slide">
   <div class="carousel-inner">
     {% for post in featured_posts %}
@@ -36,4 +33,5 @@
 {% for post in posts %}
 {% include "_post_content.html" with truncate_posts="True" %}
 {% endfor %}
+{% endcache %}
 {% endblock %}

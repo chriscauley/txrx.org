@@ -59,17 +59,17 @@
       {% endblock %}
     </div>
     <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-tooltip.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-carousel.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-transition.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-dropdown.js"></script>
     {% block extra_body %}
-    <script type="text/javascript">
-      $('img[rel=tooltip]').tooltip();
-      $(document).ready(function() {
-      $(document).pjax('a[data-pjax=main]', '#main');
-      });
-    </script>
     {% endblock %}
     <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-alert.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}codrspace.js"></script>
+    <script type="text/javascript">
+      $('img[rel=tooltip]').tooltip();
+      $(document).pjax('[data-pjax]','#main',{timeout:5000});
+    </script>
     <div id="bot_right">
       {% if request.theme == "dark" %}
       <a href="?set_theme=default">Who turned out the Lights?</a>

@@ -1,3 +1,6 @@
+{% load cache %}
+
+{% cache settings.LONG_CACHE sidebar %}
 <div class="well">
   <p>
     TX/RX Labs is a non-profit organization that provides a makerspace for the greater Houston area.
@@ -31,3 +34,4 @@
     {% endfor %}
   </ul>
 </div>
+{% endcache %}

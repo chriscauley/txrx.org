@@ -12,7 +12,7 @@
       </a>
       
       <!-- Be sure to leave the brand out there if you want it shown -->
-      <a class="brand" href="{% url "homepage" %}" data-pjax="main">
+      <a class="brand" href="{% url "homepage" %}" data-pjax="#main">
         <img src="{{ STATIC_URL }}img/{{ request.theme }}-logo.png"
              alt="Tx/Rx Labs - {{ SITE_TAGLINE }}" title="Tx/Rx Labs - {{ SITE_TAGLINE }}"/></a>
       
@@ -28,12 +28,12 @@
             </a>
             <ul class="dropdown-menu">
               {% for sublink in n.sublinks %}
-              <li><a href="{{ sublink.url }}" data-pjax="main">{{ sublink.name }}</a></li>
+              <li><a href="{{ sublink.url }}" data-pjax="#main">{{ sublink.name }}</a></li>
               {% endfor %}
             </ul>
           </li>
           {% else %}
-          <li><a href="{{ n.url }}" class="{{ n.class }}" data-pjax="main">{{ n.name }}</a></li>
+          <li><a href="{{ n.url }}" class="{{ n.class }}" data-pjax="#main">{{ n.name }}</a></li>
           {% endif %}
           {% endfor %}
         </ul>
@@ -50,12 +50,12 @@
             </a>
             <ul class="dropdown-menu">
               {% if user.is_authenticated %}
-              {% if user.is_staff %}<li><a href="/admin/" data-pjax="main"><i class="icon-cog"></i> Admin</a></li>{% endif %}
-              <li><a href="{% url "signout" %}" data-pjax="main"><i class="icon-off"></i> Log out</a></li>
-              <li><a href="{% url "account_settings" %}" data-pjax="main"><i class="icon-cog"></i> Settings</a></li>
+              {% if user.is_staff %}<li><a href="/admin/"><i class="icon-cog"></i> Admin</a></li>{% endif %}
+              <li><a href="{% url "signout" %}"><i class="icon-off"></i> Log out</a></li>
+              <li><a href="{% url "account_settings" %}" data-pjax="#main"><i class="icon-cog"></i> Settings</a></li>
               {% else %}
-              <li><a href="/accounts/register/" data-pjax="main">Register</a></li>
-              <li><a href="/accounts/login/" data-pjax="main">Log in with Username</a></li>
+              <li><a href="/accounts/register/" data-pjax="#main">Register</a></li>
+              <li><a href="/accounts/login/" data-pjax="#main">Log in with Username</a></li>
               <li><a href="{% url "signin_start" %}">Log in with GitHub</a></li>
               {% endif %}
             </ul>
