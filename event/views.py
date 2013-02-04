@@ -11,7 +11,7 @@ import datetime
 def index(request,daystring=None):
   start = datetime.date.today()
   if daystring:
-    start = datetime.date(daystring,'%Y-%m-%d')
+    start = datetime.datetime.strptime(daystring,'%Y-%m-%d').date()
   end = start+datetime.timedelta(7)
   occurrences = EventOccurrence.objects.filter(start__gte=start,start__lte=end)
   values = {
