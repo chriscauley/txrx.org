@@ -14,6 +14,7 @@ from timezones.fields import TimeZoneField
 from tastypie.models import create_api_key
 import tagging
 
+from db.models import SlugModel, OrderedModel
 from codrspace.managers import SettingManager
 
 models.signals.post_save.connect(create_api_key, sender=User)
@@ -123,6 +124,14 @@ class Photo(FileModel):
     landscape_crop = CropOverride('Landscape Crop (5:3)', aspect='5x3',help_text=_lh,**kwargs)
     _ph = "Usages: None"
     portrait_crop = CropOverride('Portrait Crop (3:5)', aspect='3x5',help_text=_ph,**kwargs)
+
+class PhotoSet(SlugModel):
+    photos = models.ManyToManyField(Photo,through="SetPhoto")
+
+class SetPhoto(OrderedModel):
+    photo = models.ForeignKey(Photo)
+    photoset = models.ForeignKey(PhotoSet)
+    __unicode__ = lambda self: unicode(self.photo)
 
 class Setting(models.Model):
     """

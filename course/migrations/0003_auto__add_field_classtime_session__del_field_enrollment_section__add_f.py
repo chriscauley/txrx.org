@@ -126,7 +126,7 @@ class Migration(SchemaMigration):
         'geo.city': {
             'Meta': {'object_name': 'City'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'latlon': ('lablackey.geo.widgets.LocationField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'latlon': ('geo.widgets.LocationField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'state': ('django.contrib.localflavor.us.models.USStateField', [], {'max_length': '2'})
         },
@@ -136,7 +136,7 @@ class Migration(SchemaMigration):
             'address2': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             'city': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'to': "orm['geo.City']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'latlon': ('lablackey.geo.widgets.LocationField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'latlon': ('geo.widgets.LocationField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'zip_code': ('django.db.models.fields.IntegerField', [], {'default': '77007'})
         },

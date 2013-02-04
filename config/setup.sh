@@ -1,6 +1,6 @@
 # install node
 sudo apt-get update
-sudo apt-get install git-core curl build-essential openssl libssl-dev
+sudo apt-get install git-core curl build-essential openssl libssl-dev -y
 git clone https://github.com/joyent/node.git
 cd node
 ./configure

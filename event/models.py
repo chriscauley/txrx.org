@@ -4,7 +4,7 @@ from django.conf import settings
 from django.template.defaultfilters import slugify
 
 from wmd import models as wmd_models
-from lablackey.geo.models import Location
+from geo.models import Location
 
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])

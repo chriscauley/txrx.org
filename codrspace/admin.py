@@ -2,9 +2,10 @@ from django.contrib import admin
 from crop_override.admin import CropAdmin
 from sorl.thumbnail import get_thumbnail
 
+from db.admin import SlugModelAdmin, OrderedModelAdmin, OrderedModelInline
 from db.forms import StaffMemberForm
 
-from .models import Post, Photo
+from .models import Post, Photo, SetPhoto, PhotoSet
 
 class PostAdmin(admin.ModelAdmin):
   list_display = ('__unicode__','author','featured','publish_dt','status')
@@ -19,5 +20,13 @@ class PhotoAdmin(CropAdmin):
     return out
   _thumbnail.allow_tags=True
 
+class SetPhotoInline(OrderedModelInline):
+  model = SetPhoto
+
+class PhotoSetAdmin(SlugModelAdmin):
+  inlines = [SetPhotoInline]
+
 admin.site.register(Post,PostAdmin)
 admin.site.register(Photo,PhotoAdmin)
+admin.site.register(SetPhoto,OrderedModelAdmin)
+admin.site.register(PhotoSet,PhotoSetAdmin)

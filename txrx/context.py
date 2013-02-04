@@ -9,7 +9,7 @@ import datetime
 
 def nav(request):
   blog_sublinks = [
-    {'name': 'Blog Home', 'url': '/blog/'},
+    {'name': 'Blog Home', 'url': '/blog/', 'pjax': True},
     {'name': 'Add Post', 'url': '/blog/admin/add/'},
     {'name': 'My Posts', 'url': '/blog/%s/'%request.user.username},
     ]
@@ -17,16 +17,17 @@ def nav(request):
     {"name": "Classes",
      "url": "/classes/",
      'sublinks': [
-        {"name": "All classes", "url": "/classes/"},
-        {"name": "My classes", "url": "/classes/my-sessions/"},
+        {"name": "All classes", "url": "/classes/", 'pjax': True},
+        {"name": "My classes", "url": "/classes/my-sessions/", 'pjax': True},
         ]
      },
     {"name": "Blog",
      "url": "/blog/",
+     'pjax': True,
      "sublinks": blog_sublinks if request.user.is_staff else [],
      },
-    {'name': "Join us", "url": "/join-us/"},
-    {'name': "Location", "url": "/map/"},
+    {'name': "Join us", "url": "/join-us/", 'pjax': True},
+    {'name': "Location", "url": "/map/", 'pjax': True},
     ]
   today = datetime.date.today()
 

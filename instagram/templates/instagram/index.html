@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block wrapper %}
+<div id="instagram">
+  <div class="top">
+    <img src="{{ media_url }}instagram_left.png" />
+  </div>
+  {% include "pagination.html" %}
+  <ul>{% for photo in page.object_list %}
+    <li>
+      {% thumbnail photo.low_resolution "200x200" crop="center" as small %}
+      {% thumbnail photo.standard_resolution "800x800" as large %}
+      <a href="{{ large }}">
+	<img src="{{ small }}" width="{{ small.width }}" height="{{ small.height }}" />
+	<p>{% if photo.caption %}{{ photo.caption|truncatewords:7 }}{% endif %}</p>
+	<em>{{ photo.datetime|date:"F jS Y" }}</em>
+      </a>
+    </li>{% endfor %}
+  </ul>
+{% include "pagination.html" %}
+</div>
+{% endblock %}

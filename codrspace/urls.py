@@ -17,31 +17,22 @@ urlpatterns = patterns(
     'codrspace.views',
     url(r'^$', 'index', name="homepage"),
 
-    url(r'^admin/add/$', 'add', name="add"),
+    url(r'^admin/add/$', 'edit', name="add"),
     url(r'^admin/edit/(?P<pk>\d+)/$', 'edit', name="edit"),
     url(r'^admin/delete/(?P<pk>\d+)/$', 'delete', name="delete"),
     url(r'^admin/drafts/$', 'drafts', name="drafts"),
     url(r'^admin/preview/$', 'render_preview', name="render_preview"),
 
-    url(r'^settings/$', 'user_settings', name="user_settings"),
-    url(r'^api-settings/', 'api_settings', name="api_settings"),
-
     url(r'^signin/$', 'signin_start', name="signin_start"),
     url(r'^signin_callback/$', 'signin_callback', name="signin_callback"),
     url(r'^signout/$', 'signout', name="signout"),
 
-    url(r'^feedback/$', 'feedback', name="feedback"),
     url(r'^api/', include(post_resource.urls)),
 
     url(r'photo/insert/$','insert_photo',name='insert_photo'),
     url(r'photo/add/$','add_photo',name='add_photo'),
     )
 
-urlpatterns += patterns('codrspace.mock_views',
-    url(r'^fake_user/$', 'fake_user', name="fake_user"),
-    url(r'^authorize/$', 'authorize', name="authorize"),
-    url(r'^access_token/$', 'access_token', name="access_token"),
-)
 username_regex = '(?P<username>[\w\d\-\.\@\_]+)'
 urlpatterns += patterns(
   'codrspace.views',

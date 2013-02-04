@@ -35,13 +35,14 @@ INSTALLED_APPS = (
   'tastypie',
 
   # lablackey
-  'lablackey.geo',
+  'geo',
   'lablackey.profile',
   #'lablackey.djangogcal',
 
   # this project
   'db',
   #'project',
+  'instagram',
   'tool',
   'course',
   'membership',
@@ -85,3 +86,5 @@ GITHUB_AUTH = {
 # set this to the JSON that comes back from http://api.github.com/user/
 #user = Github().users(GITHUB_AUTH['username'])
 #GITHUB_USER_JSON = user.response_json
+
+INSTAGRAM_TAG = "txrx"

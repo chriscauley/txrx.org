@@ -6,7 +6,7 @@ from lablackey.profile.models import UserModel
 from sorl.thumbnail import ImageField
 import datetime
 
-from lablackey.geo.models import Location
+from geo.models import Location
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 

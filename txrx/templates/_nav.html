@@ -28,12 +28,12 @@
             </a>
             <ul class="dropdown-menu">
               {% for sublink in n.sublinks %}
-              <li><a href="{{ sublink.url }}" data-pjax="#main">{{ sublink.name }}</a></li>
+              <li><a href="{{ sublink.url }}"{% if sublink.pjax %} data-pjax="#main"{% endif %}>{{ sublink.name }}</a></li>
               {% endfor %}
             </ul>
           </li>
           {% else %}
-          <li><a href="{{ n.url }}" class="{{ n.class }}" data-pjax="#main">{{ n.name }}</a></li>
+          <li><a href="{{ n.url }}" class="{{ n.class }}"{% if n.pjax %} data-pjax="#main"{% endif %}>{{ n.name }}</a></li>
           {% endif %}
           {% endfor %}
         </ul>
