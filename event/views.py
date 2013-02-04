@@ -1,13 +1,26 @@
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
+from djpjax import pjaxtend
 
 from .models import Event, EventOccurrence
 
 import datetime
 
-def index(request):
-  pass
+@pjaxtend()
+def index(request,daystring=None):
+  start = datetime.date.today()
+  if daystring:
+    start = datetime.date(daystring,'%Y-%m-%d')
+  end = start+datetime.timedelta(7)
+  occurrences = EventOccurrence.objects.filter(start__gte=start,start__lte=end)
+  values = {
+    'occurrences': occurrences,
+    'current_date': start,
+    'next': start+datetime.timedelta(7),
+    'previous': start-datetime.timedelta(7),
+    }
+  return TemplateResponse(request,'event/index.html',values)
 
 def occurrence_detail(request,occurrence_id,slug=None):
   # NOTE: the above slug does nothing, it is only for prettier urls

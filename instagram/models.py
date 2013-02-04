@@ -26,6 +26,6 @@ class InstagramPhoto(models.Model):
   __unicode__ = lambda self: "Instagram Photo by %s"%(self.username)
   thumbnail_ = lambda self: '<img src="%s" height="75" />'%self.thumbnail.url
   thumbnail_.allow_tags=True
-  datetime = lambda self: datetime.datetime.utcfromtimestamp(self.created_time)
+  datetime = property(lambda self: datetime.datetime.utcfromtimestamp(self.created_time))
   class Meta:
     ordering = ("-created_time",)

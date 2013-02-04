@@ -25,7 +25,7 @@
   </div>
   {% comment %}
   <div>
-    <a href="/google_login?next={{ next }}" style="vertical-align: botton; display: inline-block; height: 25px; padding-left: 30px">
+    <a href="/google_login?next={{ request.path }}" style="vertical-align: botton; display: inline-block; height: 25px; padding-left: 30px">
       <img src="{{ STATIC_URL }}google_login.png" />
     </a>
     Login/register with google 

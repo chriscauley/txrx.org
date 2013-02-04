@@ -24,7 +24,7 @@ urlpatterns = patterns(
   (r'^force_login/(\d+)/$', 'txrx.views.force_login'),
   (r'^tools/',include('tool.urls')),
   (r'^500/$','txrx.views.intentional_500'),
-  url(r'^event/',include('event.urls')),
+  url(r'^event/',include('event.urls',namespace="event",app_name="event")),
 
   # comments and javascript translation
   (r'^comments/', include('mptt_comments.urls')),

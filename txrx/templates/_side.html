@@ -1,4 +1,5 @@
 {% load cache %}
+{% load url from future %}
 
 {% cache settings.LONG_CACHE sidebar %}
 <div class="well">
@@ -23,7 +24,7 @@
   </form>
 </div>
 
-<h2>Upcoming Events</h2>
+<h2>This week at TX/RX</h2>
 <div class="well">
   <ul class="unstyled">
     {% for event in upcoming_events %}
@@ -33,5 +34,6 @@
     </li>
     {% endfor %}
   </ul>
+  <a href="{% url "event:index" %}">View all events</a>
 </div>
 {% endcache %}

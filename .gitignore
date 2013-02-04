@@ -1,6 +1,7 @@
 *.pyc
 *.py~
 *~
+\.\#*
 \#*
 media/*
 static/*

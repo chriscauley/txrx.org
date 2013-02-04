@@ -37,8 +37,7 @@ def nav(request):
     STATIC_URL = settings.STATIC_URL,
     auth_form = AuthenticationForm,
     app_path = "/admin/login/",
-    next = request.path,
     settings = settings,
-    upcoming_events = EventOccurrence.objects.filter(start__gte=today)[:5],
+    upcoming_events = EventOccurrence.objects.filter(start__gte=today,start__lte=today+datetime.timedelta(7)),
     tags = Tag.objects.all(),
     )

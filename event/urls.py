@@ -3,6 +3,7 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns(
   'event.views',
   url(r'^$', 'index', name="index"),
+  url(r'^(\d+\-\d+\-\d+)/$', 'index', name="index"),
   url(r'^repeat/(monthly|weekly)/(\d+)/$','repeat_event',name='repeat_event'),
   url(r'^occurrence/(\d+)/$','occurrence_detail',name='occurrence_detail'),
   url(r'^(\d+)/([^/]+)/$','occurrence_detail',name='occurrence_detail'),
