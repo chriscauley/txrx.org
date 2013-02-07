@@ -78,8 +78,8 @@ def instructor_detail(request,username=None):
     }
   return TemplateResponse(request,"course/instructor_detail.html",values)
 
-@pjaxtend()
 @login_required
+@pjaxtend()
 def my_sessions(request):
   instructor = request.user
   current_term = Term.objects.all()[0]
