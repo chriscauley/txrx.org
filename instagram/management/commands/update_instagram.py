@@ -7,7 +7,7 @@ import requests, os
 
 from instagram.models import InstagramPhoto, InstagramLocation, photofile_path
 
-InstagramPhoto.objects.all().delete()
+#InstagramPhoto.objects.all().delete()
 
 tag_url = "https://api.instagram.com/v1/tags/%s/media/recent?access_token=%s"
 user_url = "https://api.instagram.com/v1/users/%s/media/recent?access_token=%s&count=100"
