@@ -8,7 +8,8 @@ import datetime
 
 def instagram_occurrence_connection(sender, **kwargs):
   obj = kwargs['instance']
-  if not obj.approved:
+  if not obj.approved: # non approved photos should NEVER appear on the site
+    SetPhoto.objects.filter(instagram_photo=obj).delete()
     return
   #get all events that started no more than 4 hours before the photo was submitted
   gte = obj.datetime - datetime.timedelta(.5)
@@ -19,8 +20,6 @@ def instagram_occurrence_connection(sender, **kwargs):
   occurrence = occurrences[0]
   photoset = occurrence.get_photoset()
   setphoto,new = SetPhoto.objects.get_or_create(instagram_photo=obj,photoset=photoset)
-  if new:
-    print "Set Photo Created"
 
 def twitter_occurrence_connection(sender,**kwargs):
   pass
