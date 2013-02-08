@@ -5,6 +5,7 @@ from django.template.defaultfilters import slugify
 
 from wmd import models as wmd_models
 from geo.models import Location
+from codrspace.models import PhotoSet
 
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
@@ -55,4 +56,16 @@ class OccurrenceModel(models.Model):
 
 class EventOccurrence(OccurrenceModel):
   event = models.ForeignKey(Event)
-  get_absolute_url = lambda self: reverse('occurrence_detail',args=(self.id,slugify(self.name)))
+  photoset = models.OneToOneField(PhotoSet,null=True,blank=True)
+  get_absolute_url = lambda self: reverse('event:occurrence_detail',args=(self.id,slugify(self.name)))
+  def get_photoset(self):
+    """Returns a new PhotoSet if one doesn't already exist."""
+    if self.photoset:
+      return self.photoset
+    p = PhotoSet(title="%s photos"%unicode(self))
+    p.save()
+    self.photoset=p
+    self.save()
+    return p
+
+from .signals import *

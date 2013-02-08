@@ -16,6 +16,7 @@ import tagging
 
 from db.models import SlugModel, OrderedModel
 from codrspace.managers import SettingManager
+from instagram.models import InstagramPhoto
 
 models.signals.post_save.connect(create_api_key, sender=User)
 
@@ -117,6 +118,7 @@ class FileModel(models.Model):
 
 class Photo(FileModel):
     file = OriginalImage("Photo",upload_to='uploads/photos/%Y-%m', null=True)
+    caption = models.TextField(null=True,blank=True)
     kwargs = dict(upload_to='uploads/photos/%Y-%m', original='file')
     _sh = "Usages: Blog Photo, Tool Photo"
     square_crop = CropOverride('Square Crop (1:1)', aspect='1x1',help_text=_sh,**kwargs)
@@ -126,12 +128,18 @@ class Photo(FileModel):
     portrait_crop = CropOverride('Portrait Crop (3:5)', aspect='3x5',help_text=_ph,**kwargs)
 
 class PhotoSet(SlugModel):
-    photos = models.ManyToManyField(Photo,through="SetPhoto")
+    setphotos = models.ManyToManyField(Photo,through="SetPhoto")
+    def get_photos(self):
+        return [p.get_photo() for p in self.setphoto_set.all()]
 
 class SetPhoto(OrderedModel):
-    photo = models.ForeignKey(Photo)
+    photo = models.ForeignKey(Photo,null=True,blank=True)
+    instagram_photo = models.ForeignKey(InstagramPhoto,null=True,blank=True)
     photoset = models.ForeignKey(PhotoSet)
-    __unicode__ = lambda self: unicode(self.photo)
+    def get_photo(self):
+        return self.photo or self.instagram_photo
+    def __unicode__(self):
+        return unicode(self.get_photo())
 
 class Setting(models.Model):
     """

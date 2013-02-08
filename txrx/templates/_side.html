@@ -29,11 +29,28 @@
   <ul class="unstyled">
     {% for event in upcoming_events %}
     <li>
-      {{ event.start|date:"m/d/y" }} -
+      {{ event.start|date:"m/d" }} -
       <a href="{{ event.get_absolute_url }}">{{ event.name }}</a>
     </li>
     {% endfor %}
   </ul>
   <a href="{% url "event:index" %}">View all events</a>
 </div>
+
+{% if last_week %}
+<h2>Past events</h2>
+<div class="well">
+  <ul class="unstyled">
+    {% for event in last_week %}
+    <li>
+      {{ event.start|date:"m/d" }} -
+      <a href="{{ event.get_absolute_url }}">
+        {{ event.name }}
+        ({{ event.get_photoset.get_photos|length }} photos)
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
 {% endcache %}

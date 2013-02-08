@@ -88,3 +88,4 @@ GITHUB_AUTH = {
 #GITHUB_USER_JSON = user.response_json
 
 INSTAGRAM_TAG = "txrx"
+INSTAGRAM_EMAIL = ['chris@lablackey.com']

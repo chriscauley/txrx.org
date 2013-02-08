@@ -29,7 +29,7 @@ def nav(request):
     {'name': "Join us", "url": "/join-us/", 'pjax': True},
     {'name': "Location", "url": "/map/", 'pjax': True},
     ]
-  today = datetime.date.today()
+  now = datetime.datetime.now()
 
   return dict(
     current = request.path.split('/')[1] or 'home',
@@ -38,6 +38,7 @@ def nav(request):
     auth_form = AuthenticationForm,
     app_path = "/admin/login/",
     settings = settings,
-    upcoming_events = EventOccurrence.objects.filter(start__gte=today,start__lte=today+datetime.timedelta(7)),
+    upcoming_events = EventOccurrence.objects.filter(start__gte=now,start__lte=now+datetime.timedelta(7)),
+    last_week = EventOccurrence.objects.filter(start__lte=now,photoset__isnull=False),
     tags = Tag.objects.all(),
     )

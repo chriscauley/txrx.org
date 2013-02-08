@@ -25,6 +25,7 @@ urlpatterns = patterns(
   (r'^tools/',include('tool.urls')),
   (r'^500/$','txrx.views.intentional_500'),
   url(r'^event/',include('event.urls',namespace="event",app_name="event")),
+  url(r'^instagram/',include('instagram.urls',namespace="instagram",app_name="instagram")),
 
   # comments and javascript translation
   (r'^comments/', include('mptt_comments.urls')),

@@ -8,41 +8,20 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'InstagramLocation'
-        db.create_table('instagram_instagramlocation', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('latitude', self.gf('django.db.models.fields.FloatField')()),
-            ('longitude', self.gf('django.db.models.fields.FloatField')()),
-            ('iid', self.gf('django.db.models.fields.IntegerField')()),
-        ))
-        db.send_create_signal('instagram', ['InstagramLocation'])
 
-        # Adding model 'InstagramPhoto'
-        db.create_table('instagram_instagramphoto', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('thumbnail', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
-            ('low_resolution', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
-            ('standard_resolution', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
-            ('username', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
-            ('caption', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
-            ('created_time', self.gf('django.db.models.fields.IntegerField')()),
-            ('iid', self.gf('django.db.models.fields.IntegerField')()),
-            ('location', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['instagram.InstagramLocation'], null=True, blank=True)),
-            ('approved', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('rejected', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal('instagram', ['InstagramPhoto'])
+        # Changing field 'InstagramPhoto.iid'
+        db.alter_column('instagram_instagramphoto', 'iid', self.gf('django.db.models.fields.CharField')(max_length=32))
 
+        # Changing field 'InstagramLocation.iid'
+        db.alter_column('instagram_instagramlocation', 'iid', self.gf('django.db.models.fields.CharField')(max_length=32))
 
     def backwards(self, orm):
-        # Deleting model 'InstagramLocation'
-        db.delete_table('instagram_instagramlocation')
 
-        # Deleting model 'InstagramPhoto'
-        db.delete_table('instagram_instagramphoto')
+        # Changing field 'InstagramPhoto.iid'
+        db.alter_column('instagram_instagramphoto', 'iid', self.gf('django.db.models.fields.IntegerField')())
 
+        # Changing field 'InstagramLocation.iid'
+        db.alter_column('instagram_instagramlocation', 'iid', self.gf('django.db.models.fields.IntegerField')())
 
     models = {
         'auth.group': {
@@ -84,7 +63,7 @@ class Migration(SchemaMigration):
         'instagram.instagramlocation': {
             'Meta': {'object_name': 'InstagramLocation'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'iid': ('django.db.models.fields.IntegerField', [], {}),
+            'iid': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
             'latitude': ('django.db.models.fields.FloatField', [], {}),
             'longitude': ('django.db.models.fields.FloatField', [], {}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128'})
@@ -95,7 +74,7 @@ class Migration(SchemaMigration):
             'caption': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'created_time': ('django.db.models.fields.IntegerField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'iid': ('django.db.models.fields.IntegerField', [], {}),
+            'iid': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
             'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['instagram.InstagramLocation']", 'null': 'True', 'blank': 'True'}),
             'low_resolution': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'rejected': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
