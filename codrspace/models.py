@@ -119,6 +119,7 @@ class FileModel(models.Model):
 class Photo(FileModel):
     file = OriginalImage("Photo",upload_to='uploads/photos/%Y-%m', null=True)
     caption = models.TextField(null=True,blank=True)
+    instagramphoto = models.ForeignKey(InstagramPhoto,null=True,blank=True)
     kwargs = dict(upload_to='uploads/photos/%Y-%m', original='file')
     _sh = "Usages: Blog Photo, Tool Photo"
     square_crop = CropOverride('Square Crop (1:1)', aspect='1x1',help_text=_sh,**kwargs)
@@ -134,10 +135,9 @@ class PhotoSet(SlugModel):
 
 class SetPhoto(OrderedModel):
     photo = models.ForeignKey(Photo,null=True,blank=True)
-    instagram_photo = models.ForeignKey(InstagramPhoto,null=True,blank=True)
     photoset = models.ForeignKey(PhotoSet)
     def get_photo(self):
-        return self.photo or self.instagram_photo
+        return self.photo
     def __unicode__(self):
         return unicode(self.get_photo())
 

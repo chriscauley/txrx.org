@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 
-from codrspace.models import SetPhoto
+from codrspace.models import SetPhoto, Photo
 from instagram.models import InstagramPhoto
 from .models import EventOccurrence
 
@@ -9,7 +9,7 @@ import datetime
 def instagram_occurrence_connection(sender, **kwargs):
   obj = kwargs['instance']
   if not obj.approved: # non approved photos should NEVER appear on the site
-    SetPhoto.objects.filter(instagram_photo=obj).delete()
+    Photo.objects.filter(instagramphoto=obj).delete()
     return
   #get all events that started no more than 4 hours before the photo was submitted
   gte = obj.datetime - datetime.timedelta(.5)
@@ -18,8 +18,16 @@ def instagram_occurrence_connection(sender, **kwargs):
   if not occurrences:
     return
   occurrence = occurrences[0]
+  defaults = {
+    'filename': str(obj.standard_resolution).split('/')[-1],
+    'name': obj.name,
+    'user': obj.user,
+    'file': obj.standard_resolution,
+    'caption': obj.caption,
+    }
+  photo,new = Photo.objects.get_or_create(instagramphoto=obj,defaults=defaults)
   photoset = occurrence.get_photoset()
-  setphoto,new = SetPhoto.objects.get_or_create(instagram_photo=obj,photoset=photoset)
+  setphoto,new = SetPhoto.objects.get_or_create(photo=photo,photoset=photoset)
 
 def twitter_occurrence_connection(sender,**kwargs):
   pass

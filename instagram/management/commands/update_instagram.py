@@ -7,7 +7,7 @@ import requests, os
 
 from instagram.models import InstagramPhoto, InstagramLocation, photofile_path
 
-#InstagramPhoto.objects.all().delete()
+InstagramPhoto.objects.all().delete()
 
 tag_url = "https://api.instagram.com/v1/tags/%s/media/recent?access_token=%s"
 user_url = "https://api.instagram.com/v1/users/%s/media/recent?access_token=%s&count=100"
@@ -36,6 +36,7 @@ def save_photos(response,new,count,approved=False,username=""):
       i.save()
       for size in ['thumbnail','low_resolution','standard_resolution']:
         url = item['images'][size]['url']
+        print url
         ri = requests.get(url,stream=True)
         path = os.path.join(photo_dir,url.split("/")[-1])
         f = open(path,'w')
@@ -43,7 +44,6 @@ def save_photos(response,new,count,approved=False,username=""):
         f.close()
         setattr(i,size,path.split('media/')[-1])
         i.save()
-        print "%s written"%url
   return new,count
 
 def save_location(location):
