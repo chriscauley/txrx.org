@@ -109,7 +109,7 @@ class InstagramPhoto(models.Model):
   thumbnail_.allow_tags=True
   @property
   def name(self):
-    return "Instagram Photo by: %s"%self.username
+    return self.__unicode__()
   @property
   def datetime(self):
     return datetime.datetime.utcfromtimestamp(float(self.created_time))
