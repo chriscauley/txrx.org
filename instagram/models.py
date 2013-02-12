@@ -7,7 +7,7 @@ photofile_path = getattr(settings,"INSTAGRAM_DIR",'uploads/instagram')
 
 class FollowableModel(models.Model):
   follow = models.BooleanField(default=False,help_text="Searches for photos belonging to this when update_instagram is run")
-  approved = models.BooleanField(default=False,help_text="Automatically mark all photos of this type as approved, user with caution")
+  approved = models.BooleanField(default=False,help_text="USE WITH CATUION!! Automatically mark all photos of this type as approved.")
   token = getattr(settings,"INSTAGRAM_TOKEN")
   @property
   def latest_url(self):
@@ -104,7 +104,7 @@ class InstagramPhoto(models.Model):
   approved = models.BooleanField(default=False)
   rejected = models.BooleanField(default=False)
 
-  __unicode__ = lambda self: "Instagram Photo by %s"%(self.username)
+  __unicode__ = lambda self: "Instagram Photo by %s"%(self.instagram_user or None)
   thumbnail_ = lambda self: '<img src="%s" height="75" />'%self.thumbnail.url
   thumbnail_.allow_tags=True
   @property
