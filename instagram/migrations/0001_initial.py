@@ -8,17 +8,11 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'FollowableModel'
-        db.create_table('instagram_followablemodel', (
+        # Adding model 'InstagramUser'
+        db.create_table('instagram_instagramuser', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('follow', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('approved', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal('instagram', ['FollowableModel'])
-
-        # Adding model 'InstagramUser'
-        db.create_table('instagram_instagramuser', (
-            ('followablemodel_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['instagram.FollowableModel'], unique=True, primary_key=True)),
             ('iid', self.gf('django.db.models.fields.CharField')(max_length=32)),
             ('username', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
             ('profile_picture', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
@@ -31,14 +25,18 @@ class Migration(SchemaMigration):
 
         # Adding model 'InstagramTag'
         db.create_table('instagram_instagramtag', (
-            ('followablemodel_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['instagram.FollowableModel'], unique=True, primary_key=True)),
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('follow', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('approved', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=128)),
         ))
         db.send_create_signal('instagram', ['InstagramTag'])
 
         # Adding model 'InstagramLocation'
         db.create_table('instagram_instagramlocation', (
-            ('followablemodel_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['instagram.FollowableModel'], unique=True, primary_key=True)),
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('follow', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('approved', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=128)),
             ('latitude', self.gf('django.db.models.fields.FloatField')()),
             ('longitude', self.gf('django.db.models.fields.FloatField')()),
@@ -72,9 +70,6 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        # Deleting model 'FollowableModel'
-        db.delete_table('instagram_followablemodel')
-
         # Deleting model 'InstagramUser'
         db.delete_table('instagram_instagramuser')
 
@@ -128,15 +123,11 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'instagram.followablemodel': {
-            'Meta': {'object_name': 'FollowableModel'},
+        'instagram.instagramlocation': {
+            'Meta': {'object_name': 'InstagramLocation'},
             'approved': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'follow': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
-        'instagram.instagramlocation': {
-            'Meta': {'object_name': 'InstagramLocation', '_ormbases': ['instagram.FollowableModel']},
-            'followablemodel_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['instagram.FollowableModel']", 'unique': 'True', 'primary_key': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'iid': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
             'latitude': ('django.db.models.fields.FloatField', [], {}),
             'longitude': ('django.db.models.fields.FloatField', [], {}),
@@ -158,15 +149,19 @@ class Migration(SchemaMigration):
             'thumbnail': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'})
         },
         'instagram.instagramtag': {
-            'Meta': {'object_name': 'InstagramTag', '_ormbases': ['instagram.FollowableModel']},
-            'followablemodel_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['instagram.FollowableModel']", 'unique': 'True', 'primary_key': 'True'}),
+            'Meta': {'object_name': 'InstagramTag'},
+            'approved': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'follow': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128'})
         },
         'instagram.instagramuser': {
-            'Meta': {'object_name': 'InstagramUser', '_ormbases': ['instagram.FollowableModel']},
+            'Meta': {'object_name': 'InstagramUser'},
+            'approved': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'bio': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'followablemodel_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['instagram.FollowableModel']", 'unique': 'True', 'primary_key': 'True'}),
+            'follow': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'full_name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'iid': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
             'profile_picture': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),

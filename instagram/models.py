@@ -16,6 +16,8 @@ class FollowableModel(models.Model):
     request = requests.get(self.latest_url)
     json = simplejson.loads(request.text)
     save_photos(json,approved=self.approved)
+  class Meta:
+    abstract = True
 
 class InstagramUserManager(models.Manager):
   def get_or_create_from_username(self,username=None):
