@@ -6,7 +6,7 @@ function insertImage(chunk,callback) {
   $("#image-modal").modal('show');
 }
 function addImage() {
-  $("#image-modal iframe").attr("src","/blog/photo/insert/");
+  $("#image-modal iframe").attr("src","/blog/photo/add/");
 }
 function insertShortCode(obj) {
   var out = wmd_chunk.before.trimRight()+"\n\n";
