@@ -9,6 +9,7 @@ from django.template.response import TemplateResponse
 from codrspace.models import Post
 from codrspace.forms import PostForm
 
+import datetime
 
 @staff_member_required
 def drafts(request):
@@ -41,12 +42,12 @@ def edit(request, pk=0, template_name="edit.html"):
         posts = Post.objects.exclude(id=post.pk)
     posts = posts.filter(author=request.user,status__in=['draft', 'published'])
     posts = posts.order_by('-pk')
-
-    form = PostForm(request.POST or None, instance=post, user=request.user)    
+    kwargs = dict(instance=post,user=request.user,initial={'publish_dt':datetime.datetime.now()})
+    form = PostForm(request.POST or None, **kwargs)
     if request.POST and form.is_valid():
         post = form.save()
         messages.info(request,'Edited post "%s".' % post,extra_tags='alert-success')
-        return HttpResponseRedirect(request.path)
+        return HttpResponseRedirect("/blog/admin/edit/%s/"%post.id)
 
     values = {
         'form': form,
