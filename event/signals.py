@@ -21,10 +21,11 @@ def instagram_occurrence_connection(sender, **kwargs):
   defaults = {
     'filename': str(obj.standard_resolution).split('/')[-1],
     'name': obj.name,
-    'user': obj.user,
     'file': obj.standard_resolution,
     'caption': obj.caption,
     }
+  if obj.instagram_user:
+    defaults['user'] = obj.instagram_user.user
   photo,new = Photo.objects.get_or_create(instagramphoto=obj,defaults=defaults)
   photoset = occurrence.get_photoset()
   setphoto,new = SetPhoto.objects.get_or_create(photo=photo,photoset=photoset)
