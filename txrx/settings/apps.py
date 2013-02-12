@@ -50,6 +50,8 @@ INSTALLED_APPS = (
   'event',
 )
 
+SOUTH_TESTS_MIGRATE = False
+
 #mptt_comments
 COMMENTS_APP = 'mptt_comments'
 MPTT_COMMENTS_CUTOFF = 0
@@ -89,3 +91,4 @@ GITHUB_AUTH = {
 
 INSTAGRAM_TAG = "txrx"
 INSTAGRAM_EMAIL = ['chris@lablackey.com']
+INSTAGRAM_TOKEN = "3794301.f59def8.e08bcd8b10614074882b2d1b787e2b6f"

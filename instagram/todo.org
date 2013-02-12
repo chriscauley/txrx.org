@@ -1,0 +1,2 @@
+* add a setting (possibly INSTAGRAM_EMAIL=False or maybe []) to prevent emails from being sent
+* search geographies for closest location when a location without a photo is saved to the database

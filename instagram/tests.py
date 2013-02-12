@@ -1,16 +1,13 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
+from django.utils import unittest
+from .models import InstagramPhoto, InstagramLocation, InstagramUser, InstagramTag
 
-Replace this with more appropriate tests for your application.
-"""
+class SimpleTest(unittest.TestCase):
+    def setUp(self):
+      self.tag = InstagramTag(name="txrx")
+      self.tag.save()
+      self.location= InstagramLocation(iid=65957079)
 
-from django.test import TestCase
-
-
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+    def test_models(self):
+        """Animals that can speak are correctly identified"""
+        self.tag.follow_me()
+        self.assertTrue(self.tag.instagramphoto_set.count()>0)
