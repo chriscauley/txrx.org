@@ -35,7 +35,7 @@ class TaggedModelForm(forms.ModelForm):
 
 class PostForm(TaggedModelForm):
     content = forms.CharField(widget=MarkDownInput(),required=False)
-    photo = forms.ModelChoiceField(Photo.objects.all())
+    photo = forms.ModelChoiceField(Photo.objects.all(),required=False)
     class Meta:
         model = Post
         fields = ('title','slug','content','publish_dt','tags','status','photo')
