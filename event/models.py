@@ -23,6 +23,7 @@ class Event(models.Model):
   location = models.ForeignKey(Location)
   description = wmd_models.MarkDownField(blank=True,null=True)
 
+  get_short_name = lambda self: self.short_name or self.name
   @property
   def upcoming_occurrences(self):
     return self.eventoccurrence_set.filter(start__gte=datetime.datetime.now())
