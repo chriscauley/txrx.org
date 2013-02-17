@@ -19,7 +19,7 @@
         {{ day }}
         {% for occurrence in occurrences %}
         <p>
-          <a href="{{ occurrence.get_absolute_url }}">{{ occurrence.get_short_name }}</a>
+          <a href="{{ occurrence.get_absolute_url }}">{{ occurrence.short_name }}</a>
         </p>
         {% endfor %}
       </div>

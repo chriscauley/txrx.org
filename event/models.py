@@ -50,6 +50,7 @@ class OccurrenceModel(models.Model):
   end = models.DateTimeField(null=True,blank=True)
   name_override = models.CharField(null=True,blank=True,max_length=128)
   name = property(lambda self: self.name_override or self.event.name)
+  short_name = property(lambda self: self.name_override or self.event.get_short_name())
   description_override = wmd_models.MarkDownField(blank=True,null=True)
   description = property(lambda self: self.description_override or self.event.description)
   __unicode__ = lambda self: "%s - %s"%(self.name,self.start)
