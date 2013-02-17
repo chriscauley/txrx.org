@@ -4,18 +4,28 @@
 {% block pre_title %}Events at TX/RX{% endblock %}
 {% block header_content %}Events at TX/RX{% endblock %}
 
-{% block content %}
+{% block main %}
 <div class="paginator">
   <a class="left" href="{% url "event:index" previous|date:"Y-m-d" %}">&laquo; Previous 7 Days</a>
   <strong>{{ current_date }} - {{ next }}</strong>
   <a class="right" href="{% url "event:index" next|date:"Y-m-d" %}">Next 7 Days &raquo;</a>
 </div>
-{% for occurrence in occurrences %}
-{% ifchanged occurrence.start.date %}
-<h3 class="date">{{ occurrence.start.date|date:"l, F d, Y" }}</h2>
-{% endifchanged %}
-<div class="occurrence short">
-  <a href="{{ occurrence.get_absolute_url }}">{{ occurrence.name }} - {{ occurrence.start|date:"g:i a" }}</a>
-</div>
-{% endfor %}
+<table>
+  {% for week in weeks %}
+  <tr>
+    {% for day,occurrences in week %}
+    <td style="vertical-align:top;{% if day %} border: 1px gray solid{% endif %}">
+      <div style="width: 135px; min-height: 150px;">
+        {{ day }}
+        {% for occurrence in occurrences %}
+        <p>
+          <a href="{{ occurrence.get_absolute_url }}">{{ occurrence.get_short_name }}</a>
+        </p>
+        {% endfor %}
+      </div>
+    </td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+</table>
 {% endblock %}

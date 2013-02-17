@@ -13,12 +13,29 @@ def index(request,daystring=None):
   if daystring:
     start = datetime.datetime.strptime(daystring,'%Y-%m-%d').date()
   end = start+datetime.timedelta(7)
-  occurrences = EventOccurrence.objects.filter(start__gte=start,start__lte=end)
+  year = start.year
+  month = start.month
+  first = datetime.date(year,month,1)
+  weeks = []
+  week = []
+  if first.isoweekday() != 7:
+    week = [('',[])]*first.isoweekday()
+  day = 0
+  while True:
+    day += 1
+    try:
+      date = datetime.date(year,month,day)
+    except ValueError:
+      break
+    week.append((day,EventOccurrence.objects.filter(start__gte=date,start__lte=datetime.timedelta(1)+date)))
+    if len(week) == 7:
+      weeks.append(week)
+      week = []
   values = {
-    'occurrences': occurrences,
+    'weeks': weeks,
     'current_date': start,
-    'next': start+datetime.timedelta(7),
-    'previous': start-datetime.timedelta(7),
+    'next': datetime.date(year if month!=12 else year+1,month if month!=12 else 1,1),
+    'previous': datetime.date(year if month!=1 else year-1,month if month!=1 else 12,1),
     }
   return TemplateResponse(request,'event/index.html',values)
 

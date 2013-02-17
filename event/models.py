@@ -18,6 +18,8 @@ def print_time(t):
 
 class Event(models.Model):
   name = models.CharField(max_length=128,null=True,blank=True)
+  _ht = "Optional. Alternative name for the calendar."
+  short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   location = models.ForeignKey(Location)
   description = wmd_models.MarkDownField(blank=True,null=True)
 
