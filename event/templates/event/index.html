@@ -6,9 +6,9 @@
 
 {% block main %}
 <div class="paginator">
-  <a class="left" href="{% url "event:index" previous|date:"Y-m-d" %}">&laquo; Previous 7 Days</a>
-  <strong>{{ current_date }} - {{ next }}</strong>
-  <a class="right" href="{% url "event:index" next|date:"Y-m-d" %}">Next 7 Days &raquo;</a>
+  <a class="left" href="{% url "event:index" previous|date:"Y-m-d" %}">&laquo; Previous Month</a>
+  <strong>{{ current_date|date:"F Y" }}</strong>
+  <a class="right" href="{% url "event:index" next|date:"Y-m-d" %}">Next Month &raquo;</a>
 </div>
 <table>
   {% for week in weeks %}

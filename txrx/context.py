@@ -28,6 +28,7 @@ def nav(request):
      },
     {'name': "Join us", "url": "/join-us/", 'pjax': True},
     {'name': "Location", "url": "/map/", 'pjax': True},
+    {'name': "Events", "url": "/event/", 'pjax': False},
     ]
   now = datetime.datetime.now()
 

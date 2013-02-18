@@ -26,6 +26,8 @@ def index(request,daystring=None):
     try:
       date = datetime.date(year,month,day)
     except ValueError:
+      if week:
+        weeks.append(week)
       break
     week.append((day,EventOccurrence.objects.filter(start__gte=date,start__lte=datetime.timedelta(1)+date)))
     if len(week) == 7:
@@ -34,8 +36,8 @@ def index(request,daystring=None):
   values = {
     'weeks': weeks,
     'current_date': start,
-    'next': datetime.date(year if month!=12 else year+1,month if month!=12 else 1,1),
-    'previous': datetime.date(year if month!=1 else year-1,month if month!=1 else 12,1),
+    'next': datetime.date(year if month!=12 else year+1,month+1 if month!=12 else 1,1),
+    'previous': datetime.date(year if month!=1 else year-1,month-1 if month!=1 else 12,1),
     }
   return TemplateResponse(request,'event/index.html',values)
 
