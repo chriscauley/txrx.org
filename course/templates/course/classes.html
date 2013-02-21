@@ -48,9 +48,11 @@
     {% for session in week.sessions %}
     {% include "course/_session_row.html" %}
     {% endfor %}
+    {% comment %}
     {% if request.user.is_superuser and forloop.last %}
     {% include "course/_session_row.html" with session=test_session %}
     {% endif %}
+    {% endcomment %}
   </table>
 </div>
 {% endfor %}
