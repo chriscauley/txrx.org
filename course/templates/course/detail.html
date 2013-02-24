@@ -1,12 +1,13 @@
 {% extends "base.html" %}
+{% load mptt_comments_tags %}
 
-{% block main %}
+{% block title %}{{ session.section.course }}{% endblock %}
+{% block header_content %}{{ session.section.course }}{% endblock %}
+
+{% block content %}
 <div class="course" data-subject="{{ session.subjects|join:"," }}"
      {%if not session.course.closed%}data-open{%endif%}
      data-date="{{ session.starttime|date:"Ymd" }}">
-  <div class="name">
-    <h1>{{ session.section.course }}</h1>
-  </div>
   <div class="instructor">
     Taught by
     {% if session.user.first_name and session.user.last_name %}
@@ -51,6 +52,7 @@
       {% endif %}
     </div>
     <div style="clear: both;"></div>
+    {% display_comment_toplevel_for session %}
   </div>
 </div>
 {% include "course/_cart.html" %}
