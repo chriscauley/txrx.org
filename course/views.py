@@ -30,11 +30,7 @@ def index(request):
   term = Term.objects.all()[0]
   sessions = Session.objects.filter(section__term=term).select_related(depth=2)
   sessions = sorted(list(sessions),key=lambda s: s.first_date)
-  def get_test_session():
-    try:
-      return Session.objects.get(section__term__name__iexact="test term") #the test term
-    except:
-      pass
+  test_session = Session.objects.get(section__term__name__iexact="test term") #the test term
   user_sessions = []
   current_week = None
   weeks = {}
@@ -56,7 +52,7 @@ def index(request):
     'term': term,
     'user_sessions': user_sessions,
     'all_sessions_closed': all_sessions_closed,
-    'test_session': get_test_session,
+    'test_session': test_session,
     }
   return TemplateResponse(request,"course/classes.html",values)
 
