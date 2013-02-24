@@ -4,10 +4,6 @@ function showLogin() {
 }
 
 
-/* simpleCart setup */
-simpleCart.email = "txrxlabs@gmail.com";
-//simpleCart.email = "seller_1346532499_biz@ufl.edu";
-
 simpleCart.successURL = "/classes/?success"
 simpleCart.cartHeaders = ["Name", "Price","Remove"]
 

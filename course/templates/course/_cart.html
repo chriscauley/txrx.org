@@ -1,4 +1,6 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/simpleCart.js"></script>
+<script type="text/javascript">
+simpleCart.email = "{{ settings.PAYPAL_RECEIVER_EMAIL }}";</script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/cart.js"></script>
 <div id="checkout-box">
   <div>
@@ -8,10 +10,10 @@
     Total: <span class="simpleCart_finalTotal"></span>
   </div>
   <div>
-    <a class="blue" href="javascript:;" onclick="$('#cart-modal').modal();return false;">Checkout</a>
+    <a class="blue" href="javascript:$('#cartModal').modal().show()" data-toggle="modal">Checkout</a>
   </div>
 </div>
-<div class="modal hide fade" id="cart-modal" style="display: none;">
+<div class="modal hide" id="cartModal" role="dialog">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h3>Pay For Classes</h3>
