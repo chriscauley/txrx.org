@@ -162,3 +162,25 @@ h3.date {
   text-decoration: underline;
   margin: 15px 0 0;
 }
+
+#comments {
+  h2 { margin: 20px 0 5px; }
+  textarea { height: 150px; width: 350px; }
+}
+
+#mptt-comments-tree .comment {
+  .comment:last-child { margin-bottom: 0; }
+  &.collapsed {
+    height: 20px;
+    overflow: hidden;
+    .comment {
+      display: none;
+    }
+    .expand-link:before { content: "[+]"; }
+  }
+  .expand-link:before { content: "[-]"; font-weight: normal; font-family: monospace; }
+  a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+}

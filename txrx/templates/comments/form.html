@@ -7,8 +7,7 @@
             <ul class="unstyled">
             {% for field in form %}
                 {% if not field.is_hidden %}
-                <li class="{% if not field.field.required %}not{% endif %}required{% if field.errors %} errors{% endif %}{% if field.name == 'honeypot' %} hidden{% endif %}">
-                    {{ field.label_tag }}
+                <li class="{% if not field.field.required %}not{% endif %}required{% if field.errors %} errors{% endif %}{% if field.name != 'comment' %} hide{% endif %}">
                     {{ field }}
                     {{ field.errors }}
                 </li>
@@ -23,10 +22,7 @@
                         {{ field }}
                     {% endif %}
                 {% endfor %}
-                {% if allow_post %}
                   <input type="submit" name="submit" class="submit-post" value="{% trans 'Post' %}">
-                {% endif %}
-                  <input type="submit" name="preview" class="submit-preview" value="{% trans 'Preview' %}">
                 </li>
             </ul>
         </fieldset>
