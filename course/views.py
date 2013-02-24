@@ -25,7 +25,6 @@ filters = {
     }
   }
 
-@pjaxtend()
 def index(request):
   term = Term.objects.all()[0]
   sessions = Session.objects.filter(section__term=term).select_related(depth=2)
@@ -53,6 +52,7 @@ def index(request):
     'user_sessions': user_sessions,
     'all_sessions_closed': all_sessions_closed,
     'test_session': test_session,
+    'parent': 'base.html',
     }
   return TemplateResponse(request,"course/classes.html",values)
 

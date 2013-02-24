@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from djpjax import pjaxtend
 
@@ -43,7 +44,7 @@ def index(request,daystring=None):
 
 def occurrence_detail(request,occurrence_id,slug=None):
   # NOTE: the above slug does nothing, it is only for prettier urls
-  occurrence = EventOccurrence.objects.get(pk=occurrence_id)
+  occurrence = get_object_or_404(EventOccurrence,pk=occurrence_id)
   values = {
     'occurrence': occurrence,
     }

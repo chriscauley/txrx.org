@@ -17,7 +17,7 @@ def nav(request):
     {"name": "Classes",
      "url": "/classes/",
      'sublinks': [
-        {"name": "All classes", "url": "/classes/", 'pjax': True},
+        {"name": "All classes", "url": "/classes/", 'pjax': False},
         {"name": "My classes", "url": "/classes/my-sessions/", 'pjax': True},
         ]
      },
