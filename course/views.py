@@ -25,7 +25,7 @@ filters = {
     }
   }
 
-def index(request,term_id):
+def index(request,term_id=None):
   term = Term.objects.all()[0]
   if term_id:
     term = Term.objects.get(pk=term_id)
