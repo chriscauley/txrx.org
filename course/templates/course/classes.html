@@ -3,7 +3,7 @@
 {% load thumbnail %}
 
 {% block title %}Classes {{ term.name }} at {{ block.super }} {% endblock %}
-{% block header_content %}Upcomming Classes{% endblock %}
+{% block header_content %}{{ term.name }} Classes{% endblock %}
 
 {% block main %}
 {% if "success" in request.GET %}

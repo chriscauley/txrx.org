@@ -24,6 +24,7 @@ class Term(models.Model):
   __unicode__ = lambda self: self.name
   _s = lambda d: d.strftime("%Y%m%d")
   value = lambda self: self._s(self.start)+"|"+self._s(self.end)
+  get_absolute_url = lambda self: "/classes/term/%s/%s"%(self.id,slugify(self.name))
   class Meta:
     ordering = ('-start',)
 

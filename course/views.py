@@ -13,7 +13,7 @@ from paypal.standard.ipn.models import *
 filters = {
   "term": lambda: {
     "model": Term,
-    "options": Term.objects.all(),
+    "options": Term.objects.exclude(section__term__name__icontains='test'),
     "name": "Term",
     "slug": "term"
     },
@@ -25,8 +25,10 @@ filters = {
     }
   }
 
-def index(request):
+def index(request,term_id):
   term = Term.objects.all()[0]
+  if term_id:
+    term = Term.objects.get(pk=term_id)
   sessions = Session.objects.filter(section__term=term).select_related(depth=2)
   sessions = sorted(list(sessions),key=lambda s: s.first_date)
   test_session = Session.objects.get(section__term__name__iexact="test term") #the test term
@@ -47,7 +49,7 @@ def index(request):
   values = {
     'weeks': sorted(weeks.values(),key=lambda i: i[0]),
     'sessions': sessions,
-    'filters': [filters['term'],filters['subject']],
+    'filters': [filters['subject']],
     'term': term,
     'user_sessions': user_sessions,
     'all_sessions_closed': all_sessions_closed,
