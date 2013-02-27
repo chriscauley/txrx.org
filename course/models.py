@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 from lablackey.profile.models import UserModel
 from sorl.thumbnail import ImageField
@@ -82,6 +83,8 @@ class Session(UserModel):
     profile,new = UserMembership.objects.get_or_create(user=self.user)
     self.slug = slugify("%s_%s"%(self.section,self.id))
     return super(Session,self).save(*args,**kwargs)
+  def get_absolute_url(self):
+    return reverse('course:detail',args=[self.slug])
   @property
   def first_date(self):
     if self.classtime_set.count():

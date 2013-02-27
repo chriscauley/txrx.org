@@ -85,12 +85,20 @@ def instructor_detail(request,username=None):
 def my_sessions(request):
   instructor = request.user
   current_term = Term.objects.all()[0]
-  sessions = Session.objects.filter(user=instructor,section__term=current_term)
-  enrollments = Enrollment.objects.filter(user=request.user,session__section__term=current_term)
+  terms = Term.objects.all()
+  enrollment_tuples = []
+  teaching_tuples = []
+  for term in terms:
+    enrollments = Enrollment.objects.filter(user=request.user,session__section__term=term)
+    sessions = Session.objects.filter(user=instructor,section__term=term)
+    if enrollments:
+      enrollment_tuples.append((enrollments,term))
+    if sessions:
+      teaching_tuples.append((sessions,term))
   values = {
     'instructor': instructor,
-    'sessions': sessions,
-    'enrollments': enrollments,
+    'teaching_tuples': teaching_tuples,
+    'enrollment_tuples': enrollment_tuples,
     'current_term': current_term,
     }
   return TemplateResponse(request,"course/my_sessions.html",values)

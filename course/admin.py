@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django import forms
 from course.models import Subject, Course, Section, Session, Enrollment, Term, ClassTime
+from db.forms import StaffMemberForm
 
 class SubjectAdmin(admin.ModelAdmin):
   pass
@@ -15,6 +16,7 @@ class CourseAdmin(admin.ModelAdmin):
   #inlines = (SectionInline,)
 
 class ClassTimeInline(admin.TabularInline):
+  extra = 0
   model = ClassTime
 
 class SectionAdmin(admin.ModelAdmin):
@@ -25,11 +27,11 @@ class SectionAdmin(admin.ModelAdmin):
 class EnrollmentInline(admin.TabularInline):
   model = Enrollment
   readonly_fields = ('user',)
+  extra = 0
 
 class SessionAdmin(admin.ModelAdmin):
-  list_display = ("__unicode__","user")
+  form = StaffMemberForm
   raw_id_fields = ('section',)
-  list_editable = ("user",)
   exclude = ('time_string','slug')
   extra = 0
   inlines = (ClassTimeInline, EnrollmentInline)

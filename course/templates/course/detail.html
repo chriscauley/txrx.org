@@ -57,3 +57,28 @@
 </div>
 {% include "course/_cart.html" %}
 {% endblock %}
+
+{% block side %}
+{% if request.user == session.user or request.user.is_superuser %}
+<h2>Instructor Panel</h2>
+<div class="accordion" id="instructor_panel">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-parent="#instructor_panel"
+         data-toggle="collapse" href="#student_list">
+        Student List ({{ session.enrollment_set.count }} students)
+      </a>
+    </div>
+    <div id="student_list" class="accordion-body collapse in">
+      <div class="accordion-inner">
+        <ul>
+          {% for enrollment in session.enrollment_set.all %}
+          <li>{{ enrollment.user.email }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

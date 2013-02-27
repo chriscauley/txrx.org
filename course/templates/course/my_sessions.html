@@ -1,34 +1,78 @@
 {% extends parent %}
 {% load url from future %}
 
-{% block content %}
-{% if sessions %}
-<section>
-  <h1>Classes You are Teaching ({{ current_term }})</h1>
-
-  {% for session in sessions %}
-  <h3>{{ session.section.course.name }} - {{ session.enrollment_set.count }} students</h3>
-  <ol>
-    {% for enrollment in session.enrollment_set.all %}
-    <li>
-      {{ enrollment.user.email }} - {{ enrollment.user.get_full_name }}
-    </li>
-    {% empty %}
-    <li>This class is currently empty</li>
+{% block main %}
+{% if teaching_tuples %}
+<section class="span6">
+  <h1>Classes You are Teaching</h1>
+  <div class="accordion" id="teaching_terms">
+    {% for sessions,term in teaching_tuples %}
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-parent="#teaching_terms"
+           data-toggle="collapse" href="#_teaching_{{ term.id }}">
+          {{ term }}
+        </a>
+      </div>
+      <div id="_teaching_{{ term.id }}"
+           class="accordion-body collapse{% if forloop.first %} in{% endif %}">
+        <div class="accordion-inner">
+          {% for session in sessions %}
+          <dl>
+            <dt>
+              <a href="{{session.get_absolute_url }}">
+                {{ session.section.course.name }}
+              </a>
+            </dt>
+            <dd>{{ session.enrollment_set.count }} students</dd>
+            <dd>{{ session.first_date }}</dd>
+          </dl>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
     {% endfor %}
-  </ol>
-  {% endfor %}
+  </div>
 </section>
+<div class="span1"></div>
 {% endif %}
 
-<section>
+<section class="span5">
   <h1>Classes You are Taking</h1>
-  <ol>
-    {% for enrollment in enrollments %}
-    <li>{{ enrollment.session }}</li>
-    {% empty %}
-    <li>You are not signed up for any classes</li>
+  <div class="accordion" id="teaching_terms">
+    {% for enrollments,term in enrollment_tuples %}
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-parent="#teaching_terms"
+           data-toggle="collapse" href="#_teaching_{{ term.id }}">
+          {{ term }}
+        </a>
+      </div>
+      <div id="_teaching_{{ term.id }}"
+           class="accordion-body collapse{% if forloop.first %} in{% endif %}">
+        <div class="accordion-inner">
+          {% for enrollment in enrollments %}
+          <dl>
+            <dt>
+              <a href="{{enrollment.session.get_absolute_url }}">
+                {{ enrollment.session.section.course.name }}
+              </a>
+            </dt>
+            <dd>with {{ enrollment.session.user }}</dd>
+            <dd>
+              {% if enrollment.session.class_time.count > 1 %}
+              Starting {{ enrollment.session.first_date }}
+              ({{ enrollment.session.class_time.count }} days total)
+              {% else %}
+              on {{ enrollment.session.first_date }}
+              {% endif %}
+            </dd>
+          </dl>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
     {% endfor %}
-  </ol>
+  </div>
 </section>
 {% endblock %}
