@@ -12,6 +12,7 @@ urlpatterns = patterns(
   url(r'^$','txrx.views.blog_home',name="home"),
   (r'^admin/', include(admin.site.urls)),
   (r'^membership/$', include('membership.urls')),
+  url(r'^minutes/(\d+-\d+-\d+)/$', 'membership.views.minutes', name='meeting_minutes',),
   (r'^classes/', include('course.urls',namespace='course',app_name='course')),
   (r'^blog/$','txrx.views.blog_home'),
   (r'^blog/',include('codrspace.urls')),

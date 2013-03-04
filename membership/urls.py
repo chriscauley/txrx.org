@@ -1,8 +1,7 @@
 from django.conf.urls.defaults import *
-from views import *
 
-urlpatterns = patterns('',
-    
-    url(r'^redirect/$', login_redirect, name='membership.redirector',),
-    
-    )
+urlpatterns = patterns(
+  'membership.views',
+  url(r'^redirect/$', 'login_redirect', name='membership.redirector',),
+  url(r'^minutes/(\d+-\d+-\d+)/$', 'minutes', name='meeting_minutes',),
+  )

@@ -11,3 +11,9 @@
 *** autocomplete
 *** django-tagging (main)
 ** display tags and link to a tag page
+* voting members
+** add to profile
+** get current list and add to the data
+** by laws
+* put membership meetings on the events
+* put meetings minutes on the web
