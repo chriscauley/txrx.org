@@ -5,7 +5,7 @@
 {% block header_content %}Meeting Minutes for {{ minutes.date }}{% endblock %}
 
 {% block content %}
-{{ minutes.content|explosivo }}
+<div class="well">{{ minutes.content|explosivo }}</div>
 {% endblock %}
 
 {% block side %}
