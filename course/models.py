@@ -81,6 +81,9 @@ class Session(UserModel):
   def save(self,*args,**kwargs):
     from membership.models import UserMembership
     profile,new = UserMembership.objects.get_or_create(user=self.user)
+    if not self.id:
+      self.slug = 'arst'
+      super(Session,self).save(*args,**kwargs)
     self.slug = slugify("%s_%s"%(self.section,self.id))
     return super(Session,self).save(*args,**kwargs)
   def get_absolute_url(self):
