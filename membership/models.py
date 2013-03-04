@@ -83,7 +83,7 @@ class UserMembership(models.Model):
 
 class MeetingMinutes(models.Model):
   date = models.DateField(default=datetime.date.today,unique=True)
-  members_present = models.ManyToManyField(User)
+  members_present = models.ManyToManyField(User,null=True,blank=True)
   content = MarkDownField()
   _ht = "Used only when an exact list of members is unavailable (eg legacy minutes)"
   member_count = models.IntegerField(default=0,help_text=_ht)
