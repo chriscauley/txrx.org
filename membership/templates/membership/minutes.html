@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load short_codes txrx_tags %}
+
+{% block title %}{{ minutes.date|date:"Y/m/d" }} Meeting Minutes{% endblock %}
+{% block header_content %}Meeting Minutes for {{ minutes.date }}{% endblock %}
+
+{% block content %}
+{{ minutes.content|explosivo }}
+{% endblock %}
+
+{% block side %}
+<h2>Members in Attendance</h2>
+<div class="well">
+  <p><b>Total:</b>{{ minutes.get_member_count }}</p>
+  <ul>
+    {% for member in minutes.members_present.all %}
+    <li>{{ member.username|noemail }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
