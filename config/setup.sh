@@ -14,5 +14,5 @@ npm -v
 sudo npm install less
 
 #less doesn't automatically add itself to the path :(
-sudo updatedb
-sudo ln -s `locate lessc|tail -n1` /usr/bin
+#sudo updatedb
+#sudo ln -s `locate lessc|tail -n1` /usr/bin

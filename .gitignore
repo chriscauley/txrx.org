@@ -18,3 +18,4 @@ environ/*
 .pydevproject
 .project
 .idea
+node/*
