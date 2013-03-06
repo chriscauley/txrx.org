@@ -10,7 +10,7 @@ simpleCart.email = "{{ settings.PAYPAL_RECEIVER_EMAIL }}";</script>
     Total: <span class="simpleCart_finalTotal"></span>
   </div>
   <div>
-    <a class="blue" href="javascript:$('#cartModal').modal().show();">Checkout</a>
+    <a class="blue" href="javascript:;" onclick="$('#cartModal').modal().show();return false;">Checkout</a>
   </div>
 </div>
 <div class="modal hide" id="cartModal" role="dialog">
