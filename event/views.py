@@ -5,6 +5,7 @@ from django.template.response import TemplateResponse
 from djpjax import pjaxtend
 
 from .models import Event, EventOccurrence
+from course.models import ClassTime
 
 import datetime
 
@@ -30,7 +31,9 @@ def index(request,daystring=None):
       if week:
         weeks.append(week)
       break
-    week.append((day,EventOccurrence.objects.filter(start__gte=date,start__lte=datetime.timedelta(1)+date)))
+    events = EventOccurrence.objects.filter(start__gte=date,start__lte=datetime.timedelta(1)+date)
+    classtimes = ClassTime.objects.filter(start__gte=date,start__lte=datetime.timedelta(1)+date)
+    week.append((day,sorted(list(events)+list(classtimes),key=lambda s:s.start)))
     if len(week) == 7:
       weeks.append(week)
       week = []

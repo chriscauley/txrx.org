@@ -10,9 +10,7 @@ def get_or_create_student(email):
         if new:
             user.set_password(settings.NEW_STUDENT_PASSWORD)
             user.save()
-            profile = UserMembership(
-                user=user,
-                paypal_email=email
-                )
+            profile = user.usermembership
+            profile.paypal_email=profile.paypal_email or email
             profile.save()
     return user

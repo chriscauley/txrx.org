@@ -19,7 +19,11 @@
         {{ day }}
         {% for occurrence in occurrences %}
         <p>
+          {% if occurrence.short_name %}{# actual event #}
           <a href="{{ occurrence.get_absolute_url }}">{{ occurrence.short_name }}</a>
+          {% else %}{# course.short_name #}
+          <a href="{{ occurrence.get_absolute_url }}">{{ occurrence.short_name }}</a>
+          {% endif %}
         </p>
         {% endfor %}
       </div>

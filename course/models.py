@@ -31,9 +31,12 @@ class Term(models.Model):
 
 class Course(models.Model):
   name = models.CharField(max_length=64)
+  _ht = "Used for the events page."
   subjects = models.ManyToManyField(Subject)
   _folder = settings.UPLOAD_DIR+'/course/%Y-%m'
   src = ImageField("Logo",max_length=300,upload_to=_folder,null=True,blank=True)
+  short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
+  get_short_name = lambda self: self.short_name or self.name
   __unicode__ = lambda self: self.name
   class Meta:
     ordering = ("name",)
@@ -100,6 +103,7 @@ class ClassTime(models.Model):
   session = models.ForeignKey(Session)
   start = models.DateTimeField()
   end_time = models.TimeField()
+  short_name = lambda self: self.session.section.course.get_short_name()
   class Meta:
     ordering = ("start",)
 

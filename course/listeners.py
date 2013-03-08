@@ -46,7 +46,7 @@ def handle_successful_payment(sender, **kwargs):
 
         else:
             #they tried to cheat us
-            mail_admins("cost and fee don't match","PP cost: %s\nSession Fee: %s\n"%(section_cost,session.section.fee))
+            mail_admins("cost and fee don't match","PP cost: %s\nSession Fee: %s\nSession Id:%s"%(section_cost,session.section.fee,session.id))
 
 @receiver(payment_was_flagged, dispatch_uid='course.signals.handle_flagged_payment')
 def handle_flagged_payment(sender, **kwargs):
