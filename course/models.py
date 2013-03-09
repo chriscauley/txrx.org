@@ -104,6 +104,7 @@ class ClassTime(models.Model):
   start = models.DateTimeField()
   end_time = models.TimeField()
   short_name = lambda self: self.session.section.course.get_short_name()
+  get_absolute_url = lambda self: self.session.get_absolute_url()
   class Meta:
     ordering = ("start",)
 
