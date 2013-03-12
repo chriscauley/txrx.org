@@ -19,3 +19,4 @@ environ/*
 .project
 .idea
 node/*
+*.sql
