@@ -91,14 +91,15 @@ def signin_callback(request, slug=None, template_name="base.html"):
             pass
 
     if not user:
-        password = User.objects.make_random_password()
         user_defaults = {
             'username': github_user['login'],
             'is_active': True,
             'is_superuser': False,
-            'password': password}
+            }
 
         user = User(**user_defaults)
+        user.save()
+        user.set_unsable_password()
         user.save()
 
     # Get/Create the user profile
