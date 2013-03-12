@@ -6,7 +6,6 @@ from wmd.models import MarkDownField
 from codrspace.models import Photo
 
 from db.models import SlugModel, OrderedModel
-from lablackey.utils import cached_method
 
 from tagging.fields import TagField
 
