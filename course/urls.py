@@ -9,4 +9,5 @@ urlpatterns = patterns(
   url(r'^all-sessions/$', 'all_sessions',name='all_sessions'),
   url(r'^([\w\d\-\_]+)/$','detail',name='detail'),
   url(r'^debug/(?P<id>\d+)/$', 'debug_parsing',name='debug_parsing'),
+  url(r'^email/instructor/(\d+)/$','email_instructor',name='email_instructor'),
 )

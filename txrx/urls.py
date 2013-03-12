@@ -35,7 +35,7 @@ urlpatterns = patterns(
 
 urlpatterns += patterns(
   '',
-  url(r'^instructors/$','course.views.instructors',name='instructor_detail'),
+  url(r'^instructors/$','course.views.instructors',name='instructor_index'),
   url(r'^instructors/([^/]+)/$','course.views.instructor_detail',name='instructor_detail'),
   (r'^join-us/$','membership.views.join_us'),
   (r'^new-classes$','course.views.index'),

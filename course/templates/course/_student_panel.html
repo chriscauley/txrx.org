@@ -1,0 +1,19 @@
+<h2>Student Panel</h2>
+<div class="accordion" id="student_panel">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-parent="#student_panel"
+         data-toggle="collapse" href="#student_list">
+        Contact Instructor
+      </a>
+    </div>
+    <div id="student_list" class="accordion-body collapse in">
+      <div class="accordion-inner">
+        <form method="POST" action="/email/instructor/{{ session.id }}/">
+          {{ form }}
+          <input type="submit" />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,7 +4,8 @@ from django.http import QueryDict
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from course.models import Course, Section, Term, Subject, Session, Enrollment
+from .models import Course, Section, Term, Subject, Session, Enrollment
+from .forms import EmailInstructorForm
 from membership.models import UserMembership
 
 from djpjax import pjaxtend
@@ -61,8 +62,12 @@ def index(request,term_id=None):
 @pjaxtend()
 def detail(request,slug):
   session = get_object_or_404(Session,slug=slug)
+  enrollment = None
+  if request.user.is_authenticated():
+    enrollment = Enrollment.objects.filter(session=session,user=request.user)
   values = {
-    'session': session
+    'session': session,
+    'enrollment': enrollment,
     }
   return TemplateResponse(request,"course/detail.html",values)
 
@@ -125,23 +130,31 @@ def all_sessions(request):
   return TemplateResponse(request,"course/all_sessions.html",values)
 
 def debug_parsing(request, id):
-    ipn = PayPalIPN.objects.get(id=id)
+  ipn = PayPalIPN.objects.get(id=id)
 
-    query = ipn.query
-    #add them to the classes they're enrolled in
-    params = QueryDict(ipn.query)
+  query = ipn.query
+  #add them to the classes they're enrolled in
+  params = QueryDict(ipn.query)
 
-    class_count = int(params['num_cart_items'])
+  class_count = int(params['num_cart_items'])
 
-    course_info = []
+  course_info = []
 
-    for i in range(1, class_count+1):
-        session_id = int(params['item_number%d' % (i, )])
-        section_cost = int(float(params['mc_gross_%d' % (i, )]))
+  for i in range(1, class_count+1):
+    session_id = int(params['item_number%d' % (i, )])
+    section_cost = int(float(params['mc_gross_%d' % (i, )]))
 
-        session = Session.objects.get(id=session_id)
+    session = Session.objects.get(id=session_id)
 
-        course_info.append((session_id, section_cost))
+    course_info.append((session_id, section_cost))
 
 
     return TemplateResponse(request,"course/debug.html",locals())
+
+def email_instructor(request,session_pk):
+  session = get_object_or_404(Session,pk=session_pk)
+  form = EmailInstructorForm(session,request)
+  if request.POST and form.is_valid():
+    form.send()
+  values = {'form': form}
+  return TemplateResponse(request,"course/email_instructor.html",values)

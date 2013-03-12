@@ -1,11 +1,12 @@
 {% extends "base.html" %}
-{% load thumbnail %}
+{% load thumbnail crop_util %}
 
 {% block content %}
 <section>
   <h1>Bio: {{ profile.name }}</h1>
-  {% thumbnail profile.src "150x200" crop="center" as im %}
-  <div class="img"><img src="{{ im.url }}" /></div>
+{{ profile.photo|get_override:"portrait_crop" }}
+  {% thumbnail profile.photo|get_override:"portrait_crop" "150x200" crop="center" as im %}
+  <div class="img"><img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.hight }}" /></div>
   {% endthumbnail %}
   <div class="details">
     <div class="descripiton">
@@ -13,11 +14,13 @@
     </div>
   </div>
   <div>
-    Classes taught ({{ profile.get_sessions|length }}):
+    <h2>Classes taught ({{ profile.get_sessions|length }}):</h2>
     {% for session in profile.get_sessions %}
     {% ifchanged session.section %}
     <br />
-    {{ session.section.course.name }} ({{ session.section.term }})
+    <a href="{{ session.get_absolute_url }}">
+      {{ session.section.course.name }} ({{ session.section.term }})
+    </a>
     {% endifchanged %}
     {% endfor %}
   </div>

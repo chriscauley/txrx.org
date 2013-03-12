@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load mptt_comments_tags %}
+{% load url from future %}
 
 {% block title %}{{ session.section.course }}{% endblock %}
 {% block header %}{% endblock %}
@@ -8,18 +9,17 @@
 <div class="page-header" style="margin: -10px 0 20px;">
   <h1 class="home-tagline">{{ session.section.course }}</h1>
 </div>
-<div class="course" data-subject="{{ session.subjects|join:"," }}"
+<div class="course course-detail" data-subject="{{ session.subjects|join:"," }}"
      {%if not session.course.closed%}data-open{%endif%}
      data-date="{{ session.starttime|date:"Ymd" }}">
-  <div class="instructor">
-    Taught by
-    {% if session.user.first_name and session.user.last_name %}
-    {{ session.user.first_name }} {{ session.user.last_name|slice:":1" }}.{% else %}
-    {{ session.user.username }}{% endif %}
-  </div>
   <div class="fee">
     {% include "course/_enroll_link.html" %}
-    (${{ session.section.fee }}{% if session.section.fee_notes %}*{% endif %})
+  </div>
+  <div class="instructor">
+    Taught by
+    <a href="{% url "instructor_detail" session.user.username %}">
+      <i class="icon-user"></i>{{ session.get_instructor_name }}
+    </a>
   </div>
   <div class="details">
     <div class="left">
@@ -61,28 +61,12 @@
 {% endblock %}
 
 {% block side %}
-{% if request.user == session.user or request.user.is_superuser %}
-<h2>Instructor Panel</h2>
-<div class="accordion" id="instructor_panel">
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-parent="#instructor_panel"
-         data-toggle="collapse" href="#student_list">
-        Student List ({{ session.enrollment_set.count }} students)
-      </a>
-    </div>
-    <div id="student_list" class="accordion-body collapse in">
-      <div class="accordion-inner">
-        <ul>
-          {% for enrollment in session.enrollment_set.all %}
-          <li>{{ enrollment.user.email }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
+{% if request.user == session.user %}
+{% include "course/_instructor_panel.html" %}
+{% elif enrollment %}
+{% include "course/_student_panel.html" %}
 {% else %}
 {% include "course/_cart.html" %}
 {% endif %}
+
 {% endblock %}
