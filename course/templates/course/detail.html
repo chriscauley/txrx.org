@@ -2,9 +2,12 @@
 {% load mptt_comments_tags %}
 
 {% block title %}{{ session.section.course }}{% endblock %}
-{% block header_content %}{{ session.section.course }}{% endblock %}
+{% block header %}{% endblock %}
 
 {% block content %}
+<div class="page-header" style="margin: -10px 0 20px;">
+  <h1 class="home-tagline">{{ session.section.course }}</h1>
+</div>
 <div class="course" data-subject="{{ session.subjects|join:"," }}"
      {%if not session.course.closed%}data-open{%endif%}
      data-date="{{ session.starttime|date:"Ymd" }}">
@@ -55,7 +58,6 @@
     {% display_comment_toplevel_for session %}
   </div>
 </div>
-{% include "course/_cart.html" %}
 {% endblock %}
 
 {% block side %}
@@ -80,5 +82,7 @@
     </div>
   </div>
 </div>
+{% else %}
+{% include "course/_cart.html" %}
 {% endif %}
 {% endblock %}

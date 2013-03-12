@@ -49,12 +49,23 @@ class Section(models.Model):
   requirements = models.CharField(max_length=256,null=True,blank=True)
   prerequisites = models.CharField(max_length=256,null=True,blank=True)
   description = models.TextField(null=True,blank=True)
+  safety = models.BooleanField(default=False)
   location = models.ForeignKey(Location,default=1)
   src = ImageField("Logo",max_length=300,upload_to='course/%Y-%m',null=True,blank=True)
   #tools = models.ManyToManyField(Tool,blank=True)
   max_students = models.IntegerField(default=40)
-  get_instructors = lambda self: set([s.user for s in self.session_set.all()])
   __unicode__ = lambda self: "%s - %s"%(self.course.name,self.term)
+  def get_notes(self):
+    notes = []
+    if self.requirements:
+      notes.append(('Requirements',self.requirements))
+    if self.fee_notes:
+      notes.append(('Fee Notes',self.fee_notes))
+    if self.safety:
+      notes.append(('Safety',"This class has a 20 minute safety session before the first session."))
+    if self.prerequisites:
+      notes.append(('Prerequisites',self.prerequisites))
+    return notes
   class Meta:
     ordering = ("term","course")
 
@@ -96,6 +107,23 @@ class Session(UserModel):
     if self.classtime_set.count():
       return self.classtime_set.all()[0].start
     return datetime.datetime(2000,1,1)
+  def get_instructor_name(self):
+    instructor = self.user
+    if self.user.first_name and self.user.last_name:
+      return "%s %s."%(self.user.first_name, self.user.last_name[0])
+    return self.user.username
+  def get_short_dates(self):
+    dates = [ct.start for ct in self.classtime_set.all()]
+    month = None
+    out = []
+    for d in dates:
+      if month != d.month:
+        month = d.month
+        out.append(d.strftime("%b %e"))
+      else:
+        out.append(d.strftime("%e"))
+    return ', '.join(out)
+    
   class Meta:
     ordering = ('section',)
 

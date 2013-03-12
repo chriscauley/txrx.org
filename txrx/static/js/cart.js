@@ -14,7 +14,9 @@ function addItem(name,price,id) {
     simpleCart.add('name='+name,'price='+price,'id='+id,'quantity=1');
 }
 function toggleCourses() {
-    $(".in-cart").removeClass("in-cart");
-    for (id in simpleCart.items) { $("#c"+id).addClass("in-cart") }
-    simpleCart.update();
+  $(".in-cart").removeClass("in-cart");
+  for (id in simpleCart.items) { $("#c"+id).addClass("in-cart") }
+  simpleCart.update();
+  $("#cartEmpty").hide();
+  if ($("#cart .itemContainer").length == 0) { $("#cartEmpty").show(); }
 }

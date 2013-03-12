@@ -32,6 +32,12 @@ def nav(request):
     ]
   now = datetime.datetime.now()
 
+  class_faqs = [
+    ('Do I have to register? No!','When you register classes, an account will be created at txrxlabs.org using your email address. You will be emailed login credentials. Most people who take classes with us just ignore this email, and that is fine.'),
+    ('Can I pay cash? Sure!', 'Come to the lab in person and ask to see Roland or any officer. They can accept payment and give you a receipt. Some classes do have an enrollment cap, so it is better to do this sooner than later.'),
+    ('Is this class right for me? Maybe...','Most classes are for beginners, and clicking on the class title will take you to the class detail page. The right column shows <span class="has_notes">prerequisites</span> and <span class="has_notes">requirements</span>. If you mouse over them you will see what is required for that class. Some classes require a brief <span class="has_notes">safety</span> class which is taught 20 minutes before the class. Additionally, there may be <span class="has_notes">fee notes</span> which explain how much of the cost goes towards materials.'),
+    ]
+
   return dict(
     current = request.path.split('/')[1] or 'home',
     nav = _nav,
@@ -42,4 +48,5 @@ def nav(request):
     upcoming_events = EventOccurrence.objects.filter(start__gte=now,start__lte=now+datetime.timedelta(7)),
     last_week = EventOccurrence.objects.filter(start__lte=now,photoset__isnull=False),
     tags = Tag.objects.all(),
+    class_faqs = class_faqs,
     )

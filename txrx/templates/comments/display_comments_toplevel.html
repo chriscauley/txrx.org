@@ -23,9 +23,9 @@
     {% get_mptt_comment_form for object as form %}
 
     {% include "comments/form.html" %}
-    {% else %}
-      Please <a href="/login?next={{ request.path }}">login or register</a> to comment.
-    {% endif %}
   </div>
+  {% else %}
+  Please <a href="/login?next={{ request.path }}">login or register</a> to comment.
+  {% endif %}
 </div> 
 

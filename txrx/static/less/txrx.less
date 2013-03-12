@@ -99,11 +99,6 @@ label .help-text {
   height: 300px;
 }
 
-/* modal */
-
-.modal .itemName {
-  width: 300px;
-}
 /* should be in a classes.css file! */
 #show_closed,[for=show_closed] { display: inline-block; margin-bottom: 5px; vertical-align: middle; }
 #show_closed { margin-left: 20px; margin-top: 0; }
@@ -111,28 +106,76 @@ label .help-text {
 .class-table .name {
   width: 350px;
 }
+.class-table .enroll-cell {
+  padding-right: 0;
+  width: 90px;
+}
+.class-table .lower {
+  line-height: 1em;
+}
+
+.class-table .info-cell {
+  width: 250px;
+  a { font-size: 13px; }
+}
+.class-table .note-cell {
+  padding-right: 0;
+  width: 170px;
+}
+
+.class-table .has_notes {
+  line-height: 1.6em;
+  float: left;
+  width: 85px;
+}
+
+.has_notes {
+  border-bottom: dashed 1px;
+  color: #0088cc;
+  cursor: help;
+}
 
 /* cart css */
-#checkout-box {
-  background: white;
-  border: 4px double black;
-  bottom: 0;
-  padding: 10px;
+#cart {
+  padding: 0;
   position: fixed;
-  right: 100px;
-  width: 100px;
+  top: 60px;
+  width: 298px;
 }
-#cart { padding-bottom: 20px; }
 
-.cartHeaders > div, .itemContainer > div {
-  display: inline-block;
-  padding: 3px 20px 3px 10px;
-  width: 35px;
-}
+.cartHeaders { display: none; }
 
 .checkout-box {
   text-align: right;
   padding-right: 30px;
+}
+
+.itemContainer {
+  position: relative;
+  margin-bottom: 5px;
+  min-height: 20px;
+  overflow: hidden;
+}
+
+.itemName, .itemPrice {
+  width: 245px;
+  font-size: 12px;
+}
+
+.itemRemove {
+  font-size: 0;
+  right: 0;
+  position: absolute;
+  top: 5px;
+  a {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    margin-top: 1px;
+    line-height: 14px;
+    background-image: url("/static/img/icon_x_red.png");
+    background-repeat: no-repeat;
+  }
 }
 
 .course .drop, .in-cart .add { display: none; }

@@ -3,9 +3,13 @@
 {% load thumbnail %}
 
 {% block title %}Classes {{ term.name }} at {{ block.super }} {% endblock %}
-{% block header_content %}{{ term.name }} Classes{% endblock %}
+{% block header %}{% endblock %}
 
-{% block main %}
+{% block content %}
+<div class="page-header" style="margin: -10px 0 20px;">
+  <h1 class="home-tagline">{{ term.name }} Classes</h1>
+</div>
+{% comment %}
 {% if "success" in request.GET %}
 <b>
   You have been enrolled in your classes.
@@ -29,21 +33,12 @@
   Here are all upcoming classes at the hackerspace. If you have any questions email classes@txrxlabs.org or stop by the hackerspace.
   {% endif %}
 </p>
+{% endcomment %}
 {% include "widgets/filters.html" %}
 {% for week in weeks %}
 <div class="week {{ week.open }}">
   <h4>Classes starting {{ week.0 }} - {{ week.1 }}</h4>
   <table class="table table-hover class-table">
-    <thead>
-      <tr>
-        <td class="name">Class Name</td>
-        <td>Instructor</td>
-        <td>First Date</td>
-        <td>Intro Level?</td>
-        <td>Days</td>
-        <td>Cost</td>
-      </tr>
-    </thead>
     {% for session in week.sessions %}
     {% include "course/_session_row.html" %}
     {% endfor %}
@@ -53,5 +48,8 @@
   </table>
 </div>
 {% endfor %}
+{% endblock %}
+
+{% block side %}
 {% include "course/_cart.html" %}
 {% endblock %}

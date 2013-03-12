@@ -2,33 +2,40 @@
 <script type="text/javascript">
 simpleCart.email = "{{ settings.PAYPAL_RECEIVER_EMAIL }}";</script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/cart.js"></script>
-<div id="checkout-box">
-  <div>
-    Classes: <span class="simpleCart_quantity"></span>
+<div class="well accordion" id="cart">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-parent="#cart"
+         data-toggle="collapse" href="#cart-contents">Shopping Cart</a>
+    </div>
+    <div id="cart-contents" class="accordion-body collapse in">
+      <div class="accordion-inner">
+        <div id="cartEmpty">Your cart is empty</div>
+        <div class="simpleCart_items"></div>
+        <div class="checkout-box">
+          Total: <span class="simpleCart_finalTotal"></span>
+        </div>
+        <div style="text-align: center;">
+          <a href="javascript:;"
+             onclick="createCookie('checkout_initiated','yes!',10);simpleCart.checkout(); return false">
+            <img src="{{ STATIC_URL }}img/paypal.png"></a>
+        </div>
+      </div>
+    </div>
   </div>
-  <div>
-    Total: <span class="simpleCart_finalTotal"></span>
+  {% for group,content in class_faqs %}
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-parent="#cart"
+         data-toggle="collapse" href="#class_faqs{{ forloop.counter }}">{{ group }}</a>
+    </div>
+    <div id="class_faqs{{ forloop.counter }}" class="accordion-body collapse">
+      <div class="accordion-inner">
+        {{ content|safe }}
+      </div>
+    </div>
   </div>
-  <div>
-    <a class="blue" href="javascript:;" onclick="$('#cartModal').modal().show();return false;">Checkout</a>
-  </div>
-</div>
-<div class="modal hide" id="cartModal" role="dialog">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>Pay For Classes</h3>
-  </div>
-  <div id="cart" class="simpleCart_items"></div>
-  <div class="checkout-box">
-    Total: <span class="simpleCart_finalTotal"></span>
-  </div>
-  <div class="modal-footer">
-    <a href="javascript:;" 
-       onclick="createCookie('checkout_initiated','yes!',10);simpleCart.checkout(); return false">
-      <img src="{{ STATIC_URL }}img/paypal.png">
-    </a>
-    <a href="#" data-dismiss="modal" class="btn">Cancel</a>
-  </div>
+  {% endfor %}
 </div>
 <script type="text/javascript">
 function createCookie(name,value,days) {
@@ -61,4 +68,5 @@ function simple_cart_ready() {
   toggleCourses();
 };
 simpleCart.ready(simple_cart_ready)
+$(".itemRemove a").live("click",toggleCourses);
 </script>

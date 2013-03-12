@@ -1,8 +1,25 @@
 {% load url from future %}
+{% load txrx_tags %}
 <tr id="c{{session.id}}" class="course filterable"
     data-subject="{% for subject in session.subjects %}{{ subject }},{% endfor %}"
     {%if not session.course.closed%}data-open{%endif%}
     data-date="{{ session.starttime|date:"Ymd" }}">
+  <td class="enroll-cell">
+    {% include "course/_enroll_link.html" %}
+  </td>
+  <td class="info-cell">
+    <a href="{% url "course:detail" session.slug %}">{{ session.section.course }}</a>
+    <div class="lower"><small>
+        {{ session.get_short_dates }}
+        with {{ session.get_instructor_name|noemail }}
+    </small></div>
+  </td>
+  <td class="note-cell">
+    {% for note,title in session.section.get_notes %}
+    <small class="has_notes" title="{{ title }}"><span>{{ note }}</span></small>
+    {% endfor %}
+  </td>
+  {% comment %}
   <td class="name">
     <a href="{% url "course:detail" session.slug %}">
       {{ session.section.course }}
@@ -27,4 +44,5 @@
     </span>
   </td>
   <td>{% include "course/_enroll_link.html" %}</td>
+  {% endcomment %}
 </tr>
