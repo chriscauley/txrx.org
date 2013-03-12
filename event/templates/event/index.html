@@ -10,13 +10,13 @@
   <strong>{{ current_date|date:"F Y" }}</strong>
   <a class="right" href="{% url "event:index" next|date:"Y-m-d" %}">Next Month &raquo;</a>
 </div>
-<table>
+<table id="calendar">
   {% for week in weeks %}
   <tr>
     {% for day,occurrences in week %}
     <td style="vertical-align:top;{% if day %} border: 1px gray solid{% endif %}">
-      <div style="width: 135px; min-height: 150px;">
-        {{ day }}
+      <div class="events">
+        <div class="day">{{ day }}</div>
         {% for occurrence in occurrences %}
         <p>
           {% if occurrence.short_name %}{# actual event #}
