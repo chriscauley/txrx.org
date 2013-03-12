@@ -1,5 +1,4 @@
 from django.db import models
-from lablackey.profile.models import UserModel
 from db.models import SlugModel
 from tool.models import Tool
 #from course.models import Course

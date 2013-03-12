@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
 
 from lablackey.utils import cached_method
-from lablackey.profile.models import UserModel
+from db.models import UserModel
 from codrspace.models import Photo
 from course.models import Session
 from project.models import Project

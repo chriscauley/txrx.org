@@ -34,13 +34,9 @@ INSTALLED_APPS = (
   'codrspace',
   'tastypie',
 
-  # lablackey
-  'geo',
-  'lablackey.profile',
-  #'lablackey.djangogcal',
-
   # this project
   'db',
+  'geo',
   #'project',
   'instagram',
   'tool',
