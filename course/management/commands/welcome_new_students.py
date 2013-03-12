@@ -7,6 +7,7 @@ import string
 
 class Command(BaseCommand):
   def handle(self, *args, **options):
-    new_users = [u for u in User.objects.all() if u.check_password(settings.NEW_STUDENT_PASSWORD)]
-    for u in new_users:
-      reset_password(u,email_template_name="email/welcome_classes.html")
+    #new_users = [u for u in User.objects.all() if u.check_password(settings.NEW_STUDENT_PASSWORD)]
+    #for u in new_users:
+    #  reset_password(u,email_template_name="email/welcome_classes.html")
+    pass
