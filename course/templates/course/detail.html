@@ -64,7 +64,10 @@
 {% if request.user == session.user %}
 {% include "course/_instructor_panel.html" %}
 {% elif enrollment %}
-{% include "course/_student_panel.html" %}
+<div class="well">
+  <h2>You are enrolled in this course</h2>
+</div>
+{# {% include "course/_student_panel.html" %} #}
 {% else %}
 {% include "course/_cart.html" %}
 {% endif %}

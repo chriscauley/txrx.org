@@ -1,24 +1,26 @@
 {% extends "base.html" %}
 {% load thumbnail crop_util %}
 
+{% block header_content %}Bio: {{ profile.name }}{% endblock %}
+
 {% block content %}
-<section>
-  <h1>Bio: {{ profile.name }}</h1>
-  {% thumbnail profile.photo|get_override:"portrait_crop" "150x200" crop="center" as im %}
-  <div class="img"><img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.hight }}" /></div>
-  {% endthumbnail %}
-  <div class="details">
-    <div class="descripiton">
-      {{ profile.bio }}
-    </div>
+<section class="instructor-bio">
+  <div class="descripiton">
+    {% thumbnail profile.photo|get_override:"portrait_crop" "150x200" crop="center" as im %}
+    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" style="float: left; margin: 0 20px 15px 0;" />
+    {% endthumbnail %}
+    <p>{{ profile.bio }}</p>
+    <div style="clear: both"></div>
   </div>
   <div>
-    <h2>Classes taught ({{ profile.get_sessions|length }}):</h2>
     {% for session in profile.get_sessions %}
+    {% ifchanged session.section.term %}
+    <h2>Classes Taught {{ session.section.term }}</h2>
+    {% endifchanged %}
     {% ifchanged session.section %}
     <br />
     <a href="{{ session.get_absolute_url }}">
-      {{ session.section.course.name }} ({{ session.section.term }})
+      {{ session.section.course.name }}
     </a>
     {% endifchanged %}
     {% endfor %}
