@@ -4,7 +4,6 @@
 {% block content %}
 <section>
   <h1>Bio: {{ profile.name }}</h1>
-{{ profile.photo|get_override:"portrait_crop" }}
   {% thumbnail profile.photo|get_override:"portrait_crop" "150x200" crop="center" as im %}
   <div class="img"><img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.hight }}" /></div>
   {% endthumbnail %}
