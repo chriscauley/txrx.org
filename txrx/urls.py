@@ -12,6 +12,7 @@ urlpatterns = patterns(
   url(r'^$','txrx.views.blog_home',name="home"),
   (r'^admin/', include(admin.site.urls)),
   (r'^membership/$', include('membership.urls')),
+  url(r'^minutes/$', 'membership.views.minutes_index', name='meeting_minutes_index',),
   url(r'^minutes/(\d+-\d+-\d+)/$', 'membership.views.minutes', name='meeting_minutes',),
   (r'^classes/', include('course.urls',namespace='course',app_name='course')),
   (r'^blog/$','txrx.views.blog_home'),
@@ -54,7 +55,7 @@ urlpatterns += patterns(
 # flat pages
 urlpatterns += patterns(
   '',
-  url(r'^(map/)$','django.contrib.flatpages.views.flatpage',name='map'),
+  url(r'^(map|about-us|by-laws)/$','django.contrib.flatpages.views.flatpage',name='map'),
 )
 
 if settings.DEBUG:
