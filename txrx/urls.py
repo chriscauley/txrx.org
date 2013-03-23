@@ -55,7 +55,7 @@ urlpatterns += patterns(
 # flat pages
 urlpatterns += patterns(
   '',
-  url(r'^(map|about-us|by-laws)/$','django.contrib.flatpages.views.flatpage',name='map'),
+  url(r'^(map/|about-us/|bylaws/)$','django.contrib.flatpages.views.flatpage',name='map'),
 )
 
 if settings.DEBUG:

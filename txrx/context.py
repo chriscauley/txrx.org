@@ -15,7 +15,7 @@ def nav(request):
     ]
   about_links = [
     {'name': 'About TX/RX', 'url': '/about-us/'},
-    {'name': 'By Laws', 'url': '/by-laws/'},
+    {'name': 'Bylaws', 'url': '/bylaws/'},
     {'name': 'Meeting Minutes', 'url': '/minutes/'},     
     ]
   _nav = [
