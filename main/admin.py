@@ -12,7 +12,7 @@ TEMPLATE_CHOICES = (
   )
 
 class FlatPageForm(forms.ModelForm):
-  template_name = forms.CharField("Render As",help_text="")
+  template_name = forms.CharField("Render As",help_text="",required=False)
   def __init__(self, *args, **kwargs):
     super(FlatPageForm, self).__init__(*args, **kwargs)
     self.fields['template_name'].widget = forms.Select(choices=TEMPLATE_CHOICES)
