@@ -13,13 +13,18 @@ def nav(request):
     {'name': 'Add Post', 'url': '/blog/admin/add/'},
     {'name': 'My Posts', 'url': '/blog/%s/'%request.user.username},
     ]
+  about_links = [
+    {'name': 'About TX/RX', 'url': '/about-us/'},
+    {'name': 'By Laws', 'url': '/by-laws/'},
+    {'name': 'Meeting Minutes', 'url': '/minutes/'},     
+    ]
   _nav = [
     {"name": "Classes",
      "url": "/classes/",
-     'sublinks': [
-        {"name": "All classes", "url": "/classes/", 'pjax': False},
-        {"name": "My classes", "url": "/classes/my-sessions/", 'pjax': True},
-        ]
+     #'sublinks': [
+     #   {"name": "All classes", "url": "/classes/", 'pjax': False},
+     #   {"name": "My classes", "url": "/classes/my-sessions/", 'pjax': True},
+     #   ]
      },
     {"name": "Blog",
      "url": "/blog/",
@@ -29,6 +34,10 @@ def nav(request):
     {'name': "Join us", "url": "/join-us/", 'pjax': True},
     {'name': "Location", "url": "/map/", 'pjax': True},
     {'name': "Events", "url": "/event/", 'pjax': False},
+    {"name": "Information",
+     "url": "/about-us/",
+     "sublinks": about_links,
+     },
     ]
   now = datetime.datetime.now()
 

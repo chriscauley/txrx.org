@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load short_codes txrx_tags %}
+
+{% block title %}Meeting Minutes{% endblock %}
+{% block header_content %}Meeting Minutes{% endblock %}
+
+{% block content %}
+<p class="lead">
+  Meetings are held on the last Friday of every month. 
+</p>
+<ul>
+  {% for minutes in minutes_set %}
+  <li><a href="{{ minutes.get_absolute_url }}">
+      {{ minutes }}
+  </a></li>
+  {% endfor %}
+</ul>
+{% endblock %}

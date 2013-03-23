@@ -82,7 +82,7 @@ class Session(UserModel):
   archived = property(lambda self: self.first_date<datetime.datetime.now())
   @property
   def week(self):
-    sunday = self.first_date.date()-datetime.timedelta(self.first_date.weekday()+1)
+    sunday = self.first_date.date()-datetime.timedelta(self.first_date.weekday())
     return (sunday,sunday+datetime.timedelta(6))
   subjects = property(lambda self: self.section.course.subjects.all())
   @property

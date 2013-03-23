@@ -56,3 +56,10 @@ def minutes(request,datestring):
     'minutes': minutes,
     }
   return TemplateResponse(request,'membership/minutes.html',values)
+
+@login_required
+def minutes_index(request):
+  values = {
+    'minutes_set': MeetingMinutes.objects.all(),
+    }
+  return TemplateResponse(request,'membership/minutes_index.html',values)
