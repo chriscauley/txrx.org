@@ -76,7 +76,6 @@ def filter_jsfiddle(value):
             base_url = 'http://fiddle.jshell.net/%(code)s/show/'
         options['url'] = base_url%options
         tag = '<iframe src="%(url)s" width="%(width)s" height="%(height)s" style="%(style)s"></iframe>'%options
-        print '[jsfiddle %s]'%(' '.join(values))
         replacements.append(['[jsfiddle %s]'%(' '.join(values)),tag])
 
     return (replacements, value, True,)
