@@ -11,6 +11,8 @@
 *** autocomplete
 *** django-tagging (main)
 ** display tags and link to a tag page
+* prepare for class on txrxlabs.org
+** make build files
 * voting members
 ** add to profile
 ** get current list and add to the data
