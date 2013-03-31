@@ -7,10 +7,14 @@ import datetime
 
 class EventOccurrenceInline(admin.TabularInline):
   model = EventOccurrence
-  fields = ('name_override','start','end')
+  fields = ('name_override','start','end','_photoset')
+  readonly_fields = ['_photoset']
   def queryset(self,request):
     qs = super(EventOccurrenceInline,self).queryset(request)
     return qs.filter(start__gte=datetime.datetime.now())
+  def _photoset(self,obj):
+    return '<a href="/admin/event/edit_photoset/%s/">Edit Photo Set</a>'%obj.id
+  _photoset.allow_tags = True
 
 class EventAdmin(admin.ModelAdmin):
   list_display = ("__unicode__",)

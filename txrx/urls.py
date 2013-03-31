@@ -10,6 +10,7 @@ _urls = lambda *ns: [url(r'^%s/'%n, include('%s.urls'%n, namespace=n, app_name=n
 urlpatterns = patterns(
   '',
   url(r'^$','txrx.views.blog_home',name="home"),
+  url(r'admin/event/edit_photoset/(\d+)/$','event.views.edit_photoset'),
   (r'^admin/', include(admin.site.urls)),
   (r'^membership/$', include('membership.urls')),
   url(r'^minutes/$', 'membership.views.minutes_index', name='meeting_minutes_index',),

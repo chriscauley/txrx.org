@@ -139,5 +139,7 @@ class ClassTime(models.Model):
 
 class Enrollment(UserModel):
   session = models.ForeignKey(Session)
+  datetime = models.DateTimeField(default=datetime.datetime.now)
+  __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.session)
 
 from .listeners import *

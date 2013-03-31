@@ -1,3 +1,4 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -83,3 +84,9 @@ def repeat_event(request,period,event_id):
   messages.success(request,"All upcoming occurrences have been deleted.")
   messages.success(request,message)
   return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+@staff_member_required
+def edit_photoset(self,_id):
+  occurrence = EventOccurrence.objects.get(pk=_id)
+  photoset = occurrence.get_photoset()
+  return HttpResponseRedirect('/admin/codrspace/photoset/%s/'%photoset.id)
