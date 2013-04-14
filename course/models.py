@@ -142,6 +142,6 @@ class Enrollment(UserModel):
   datetime = models.DateTimeField(default=datetime.datetime.now)
   __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.session)
   class Meta:
-    ordering = ('-datetime',)
+    ordering = ('-datetime','-id')
 
 from .listeners import *
