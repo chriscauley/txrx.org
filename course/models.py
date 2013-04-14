@@ -141,5 +141,7 @@ class Enrollment(UserModel):
   session = models.ForeignKey(Session)
   datetime = models.DateTimeField(default=datetime.datetime.now)
   __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.session)
+  class Meta:
+    ordering = ('-datetime',)
 
 from .listeners import *
