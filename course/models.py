@@ -66,6 +66,9 @@ class Section(models.Model):
     if self.prerequisites:
       notes.append(('Prerequisites',self.prerequisites))
     return notes
+  @property
+  def users(self):
+    return [s.user for s in self.session_set.all()]
   class Meta:
     ordering = ("term","course")
 

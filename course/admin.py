@@ -23,6 +23,12 @@ class SectionAdmin(admin.ModelAdmin):
   save_as = True
   list_display = ("__unicode__","prerequisites","requirements","max_students")
   list_editable = ("prerequisites","requirements","max_students")
+  def has_change_permission(self,request,obj=None):
+    if not obj:
+      return request.user.is_superuser
+    return request.user.is_superuser or (request.user in obj.users)
+  def has_delete_permission(self,request,obj=None):
+    return request.user.is_superuser
 
 class EnrollmentInline(admin.TabularInline):
   model = Enrollment
