@@ -12,18 +12,33 @@
     <p>{{ profile.bio }}</p>
     <div style="clear: both"></div>
   </div>
+</section>
+<section>
   <div>
-    {% for session in profile.get_sessions %}
-    {% ifchanged session.section.term %}
-    <h2>Classes Taught {{ session.section.term }}</h2>
-    {% endifchanged %}
-    {% ifchanged session.section %}
-    <br />
-    <a href="{{ session.get_absolute_url }}">
-      {{ session.section.course.name }}
-    </a>
-    {% endifchanged %}
-    {% endfor %}
+    <div class="accordion" id="instructor_classes">
+      {% for term,sessions in profile.get_term_sessions %}
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-parent="#instructor_classes"
+             data-toggle="collapse" href="#instructor_classes_{{ term.id }}">
+            <h3>Classes Taught {{ term }}</h3>
+          </a>
+        </div>
+        <div id="instructor_classes_{{ term.id }}"
+             class="accordion-body collapse{% if forloop.first %} in{% endif %}">
+          <div class="accordion-inner">
+            <ul class="unstyled">
+              {% for session in sessions %}
+              <li><a href="{{ session.get_absolute_url }}">
+                  {{ session.section.course.name }}
+              </a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
   </div>
 </section>
 {% endblock %}

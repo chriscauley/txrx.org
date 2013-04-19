@@ -75,8 +75,14 @@ class UserMembership(models.Model):
   objects = UserMembershipManager()
 
   @cached_method
-  def get_sessions(self):
-    return Session.objects.filter(user=self.user)
+  def get_term_sessions(self):
+    term_dict = {}
+    for session in Session.objects.filter(user=self.user):
+      term = session.section.term
+      if not term in term_dict:
+        term_dict[term] = []
+      term_dict[term].append(session)
+    return sorted(term_dict.items(),key=lambda i: i[0])
   @cached_method
   def get_projects(self):
     return Project.objects.filter(author=self.user)
