@@ -14,7 +14,7 @@ from timezones.fields import TimeZoneField
 from tastypie.models import create_api_key
 import tagging
 
-from db.models import SlugModel, OrderedModel
+from db.models import SlugModel, OrderedModel, UserModel
 from codrspace.managers import SettingManager
 from instagram.models import InstagramPhoto
 
@@ -128,7 +128,7 @@ class Photo(FileModel):
   _ph = "Usages: None"
   portrait_crop = CropOverride('Portrait Crop (3:5)', aspect='3x5',help_text=_ph,**kwargs)
 
-class PhotoSet(SlugModel):
+class PhotoSet(SlugModel,UserModel):
   setphotos = models.ManyToManyField(Photo,through="SetPhoto")
   def get_photos(self):
     return [p.get_photo() for p in self.setphoto_set.all()]
