@@ -26,12 +26,14 @@
 	<b>Subject{{ session.section.course.subjects|pluralize:"s" }}</b>:
 	{{ session.section.course.subjects.all|join:"," }}
       </div>
-      <ol class="dates">{% for classtime in session.classtime_set.all %}
+      <ol class="dates">
+        {% for classtime in session.classtime_set.all %}
 	<li>
-	  {{ classtime.start|date:"D m/d G:i" }}
+	  {{ classtime.start|date:"l F j, G:i" }}
 	  -
 	  {{ classtime.end_time|time:"G:i" }}
-	</li>{% endfor %}
+	</li>
+        {% endfor %}
       </ol>
     </div>
     <div class="right">
