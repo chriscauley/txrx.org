@@ -23,3 +23,5 @@ class FlatPageAdmin(FlatPageAdmin):
   form = FlatPageForm
 
 admin.site.register(FlatPage,FlatPageAdmin)
+
+from .signals import *
