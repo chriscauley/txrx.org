@@ -26,6 +26,7 @@ class Tool(SlugModel,OrderedModel):
   description = MarkDownField(blank=True,null=True)
   photo = models.ForeignKey(Photo,null=True,blank=True)
   links = lambda self: self.toollink_set.all()
+  est_price = models.FloatField(null=True,blank=True)
   tags = TagField()
   class Meta:
     ordering = ("order",)

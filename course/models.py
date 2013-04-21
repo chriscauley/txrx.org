@@ -67,8 +67,8 @@ class Section(models.Model):
       notes.append(('Prerequisites',self.prerequisites))
     return notes
   @property
-  def users(self):
-    return [s.user for s in self.session_set.all()]
+  def list_users(self):
+    return list(set([s.user for s in self.session_set.all()]))
   class Meta:
     ordering = ("term","course")
 
@@ -83,6 +83,9 @@ class Session(UserModel):
   closed = property(lambda self: self.cancelled or self.archived or self.full)
   full = property(lambda self: self.enrollment_set.count() >= self.section.max_students)
   archived = property(lambda self: self.first_date<datetime.datetime.now())
+
+  list_users = property(lambda self: [self.user])
+
   @property
   def week(self):
     sunday = self.first_date.date()-datetime.timedelta(self.first_date.weekday())

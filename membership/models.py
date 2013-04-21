@@ -6,7 +6,7 @@ from sorl.thumbnail import ImageField
 
 from db.models import UserModel
 from codrspace.models import Photo
-from course.models import Session
+from course.models import Session, Term
 from txrx.utils import cached_method
 from project.models import Project
 
@@ -76,13 +76,11 @@ class UserMembership(models.Model):
 
   @cached_method
   def get_term_sessions(self):
-    term_dict = {}
-    for session in Session.objects.filter(user=self.user):
-      term = session.section.term
-      if not term in term_dict:
-        term_dict[term] = []
-      term_dict[term].append(session)
-    return sorted(term_dict.items(),key=lambda i: i[0])
+    terms = Term.objects.exclude(name__icontains='test')
+    out = []
+    for term in terms:
+      out.append((term,Session.objects.filter(user=self.user,section__term=term)))
+    return out
   @cached_method
   def get_projects(self):
     return Project.objects.filter(author=self.user)

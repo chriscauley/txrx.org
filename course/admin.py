@@ -26,7 +26,7 @@ class SectionAdmin(admin.ModelAdmin):
   def has_change_permission(self,request,obj=None):
     if not obj:
       return request.user.is_superuser
-    return request.user.is_superuser or (request.user in obj.users)
+    return request.user.is_superuser or (request.user in obj.list_users)
   def has_delete_permission(self,request,obj=None):
     return request.user.is_superuser
 

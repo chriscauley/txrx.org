@@ -34,7 +34,7 @@ STATIC_URL = '/static/'
 
 LOGIN_URL = "/accounts/login/"
 LOGOUT_URL = "/accounts/logout/"
-ROOT_URL = "http://txrxlabs.org/"
+ROOT_URL = "http://txrxlabs.org"
 
 SECRET_KEY = '^f_fn6)^e5^)+p-rjcrcdf(7iwz4@5z9thx92%^=e_)$jly7mc'
 MAPS_API_KEY = 'ABQIAAAAeppD1h9lB7H61ozR18SeZRS_YqHDtehKcRTrrAGjc25rDMjatxT8nvoX4-jJXcRPaT4I-RdMYv3fJA'

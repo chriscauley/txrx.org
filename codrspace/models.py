@@ -66,6 +66,8 @@ class Post(models.Model):
     # Invalidate cache for all individual posts and the list of posts
     invalidate_cache_key('content', self.pk)
 
+  list_users = property(lambda self: [self.author])
+
   @models.permalink
   def get_absolute_url(self):
     return ("post_detail", [self.author.username, self.slug])
