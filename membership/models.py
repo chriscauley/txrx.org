@@ -14,7 +14,7 @@ from wmd.models import MarkDownField
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
 
-import datetime
+import datetime, random, string
 
 class MembershipManager(models.Manager):
   def active(self):
@@ -64,13 +64,18 @@ class UserMembership(models.Model):
   membership = models.ForeignKey(Membership,default=1)
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
+
   #roles = models.ManyToManyField(Role,null=True,blank=True)
   photo = models.ForeignKey(Photo,null=True,blank=True)
   bio = models.TextField(null=True,blank=True)
-  _folder = settings.UPLOAD_DIR+'/avatars/%Y-%m'
-  by_line = models.CharField(max_length=50,null=True,blank=True,help_text="A short description of what you do for the lab.")
+  _h = "A short description of what you do for the lab."
+  by_line = models.CharField(max_length=50,null=True,blank=True,help_text=_h)
   name = lambda self: "%s %s"%(self.user.first_name,self.user.last_name)
-  paypal_email = models.EmailField(null=True,blank=True,help_text="Used to connect payments to your account.\nLeave blank if this is the same as your email address above.")
+  _h ="Leave blank if this is the same as your email address above."
+  paypal_email = models.EmailField(null=True,blank=True,help_text=_h)
+  _h = "If checked, you will be emailed whenever someone replies to a comment you make on this site."
+  notify_comments = models.BooleanField("Email Comment Responses",default=True,help_text=_h)
+
   __unicode__ = lambda self: "%s's Membership"%self.user
   objects = UserMembershipManager()
 
@@ -84,6 +89,18 @@ class UserMembership(models.Model):
   @cached_method
   def get_projects(self):
     return Project.objects.filter(author=self.user)
+
+class UnsubscribeLink(UserModel):
+  key = models.CharField(max_length=32,unique=True)
+  created = models.DateField(auto_now_add=True)
+  get_absolute_url = lambda self: "/membership/unsubscribe/%s/"%self.key
+
+  @classmethod
+  def new(clss,user):
+    seed = string.letters+string.digits
+    key = ''.join([random.choice(seed) for i in range(32)])
+    return clss(key=key,user=user)
+
 
 class MeetingMinutes(models.Model):
   date = models.DateField(default=datetime.date.today,unique=True)

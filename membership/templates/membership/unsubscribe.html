@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block title %}Unsubscribe{% endblock %}
+{% block header_content %}You have been {{ verb }}!{% endblock %}
+
+{% block content %}
+<p class="lead">
+  {% if 'subscribe' in request.GET %}
+  You have been re-subscribed to comment responses. Any time someone responds to a comment you make on this website, you will be emailed a notification. 
+  <br />
+  To re-unsubscribe again redundantly, click <a href="/membership/unsubscribe/{{ key }}/">here</a>.
+  {% else %}
+  You have unsubscribed from comment responses. You will not be notified if someone replies to your comments, so check the site regularly to see responses.
+  <br />
+  To quickly re-subscribe, click <a href="/membership/unsubscribe/{{ key }}/?subscribe">here</a>.
+  {% endif %}
+  <br />
+  To change your account settings, click <a href="/accounts/settings/">here (login required)</a>.
+</p>
+{% endblock %}

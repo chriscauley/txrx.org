@@ -16,23 +16,23 @@ lq = "Questions or comments"
 kwargs = dict(widget=forms.Textarea,required=False)
 
 class SurveyForm(forms.Form):
-    reasons = forms.CharField(label=lr,**kwargs)
-    projects = forms.CharField(label=lp,**kwargs)
-    skills = forms.CharField(label=ls,help_text=s,**kwargs)
-    expertise = forms.CharField(label=le,help_text=e,**kwargs)
-    questions = forms.CharField(label=lq,help_text=q,**kwargs)
+  reasons = forms.CharField(label=lr,**kwargs)
+  projects = forms.CharField(label=lp,**kwargs)
+  skills = forms.CharField(label=ls,help_text=s,**kwargs)
+  expertise = forms.CharField(label=le,help_text=e,**kwargs)
+  questions = forms.CharField(label=lq,help_text=q,**kwargs)
 
 class UserMembershipForm(forms.ModelForm):
-    class Meta:
-        fields = ('by_line','bio','paypal_email')
-        model = UserMembership
+  class Meta:
+    fields = ('by_line','bio','paypal_email','notify_comments')
+    model = UserMembership
 
 class UserForm(forms.ModelForm):
-    def __init__(self,*args,**kwargs):
-        super(UserForm,self).__init__(*args,**kwargs)
-        self.fields['first_name'].required = True
-        self.fields['last_name'].required = True
-        self.fields['email'].required = True
-    class Meta:
-        fields = ('username','first_name','last_name','email')
-        model = User
+  def __init__(self,*args,**kwargs):
+    super(UserForm,self).__init__(*args,**kwargs)
+    self.fields['first_name'].required = True
+    self.fields['last_name'].required = True
+    self.fields['email'].required = True
+  class Meta:
+    fields = ('username','first_name','last_name','email')
+    model = User

@@ -7,12 +7,13 @@ from django.template.response import TemplateResponse
 
 from djpjax import pjaxtend
 
-from .models import Membership, MeetingMinutes
+from .models import Membership, MeetingMinutes, UnsubscribeLink
 from .forms import UserForm, UserMembershipForm
 
 import datetime
 
-@login_required
+#! depracated
+"""@login_required
 def login_redirect(request):
   #staff bounce right away
   if request.user.is_staff:
@@ -23,6 +24,7 @@ def login_redirect(request):
   
   else:
     return HttpResponseRedirect("/")
+"""
 
 @pjaxtend()
 def join_us(request):
@@ -63,3 +65,10 @@ def minutes_index(request):
     'minutes_set': MeetingMinutes.objects.all(),
     }
   return TemplateResponse(request,'membership/minutes_index.html',values)
+
+def unsubscribe(request,key):
+  d = datetime.date.today()+datetime.timedelta(7)
+  link = get_object_or_404(UnsubscribeLink,key=key,created__lte=d)
+  usermembership = link.user.usermembership
+  usermembership.notify_comments = 'subscribe' in request.GET
+  return TemplateResponse(request,'membership/unsubscribe.html')

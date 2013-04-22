@@ -3,12 +3,13 @@
 {# replace with your own base template #}
 
 {% block extrahead %}
-	{% mptt_comments_media_css %}
+{% mptt_comments_media_css %}
 {% endblock %}
 
 {% block content %}
-    {% load i18n %}
-
-    <h1>{% trans "Thanks for your comment" %}</h1>
-    <p><a href="{{ comment.get_absolute_url }}">{% trans "Back to the page you commented on" %}</a></p>
+{% load i18n %}
+<h1>{% trans "Thanks for your comment" %}</h1>
+<p>
+<a href="{% if comment.content_object.get_absolute_url %}{{ comment.content_object.get_absolute_url }}{% else %}{{ comment.get_absolute_url }}{% endif %}">
+  {% trans "Back to the page you commented on" %}</a></p>
 {% endblock %}
