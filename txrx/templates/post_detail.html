@@ -3,10 +3,6 @@
 {% load codrspace_tags %}
 {% load mptt_comments_tags %}
 
-{% block pre_title %}
-{% if user_settings.blog_title %}{{ user_settings.blog_title|striptags }}{% else %}{{ SITE_NAME }}{% endif %} - 
-{% endblock %}
-
 {% block title %}{% firstof post.title "Untitled" %} by {{ post.author.username }}{% endblock %}
 
 {% block nav %}

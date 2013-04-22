@@ -2,7 +2,7 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <title>{% block pre_title %}{{ SITE_NAME }} - {% endblock %} {% block title %}{% endblock %}</title>
+    <title>{% block full_title %}{% block title %}{% endblock %} - {{ SITE_NAME }}{% endblock %}</title>
     {% block extra_head %}{% endblock %}
     {% compress css %}
     {# all styling is kept in the less directory. This see the import file here. #}

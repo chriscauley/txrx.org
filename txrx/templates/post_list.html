@@ -3,21 +3,7 @@
 {% load short_codes %}
 {% load codrspace_tags %}
 
-{% block pre_title %}
-{% if user_settings.blog_title %}
-    {{ user_settings.blog_title|striptags }} - 
-{% else %}
-    {{ SITE_NAME }} - 
-{% endif %}
-{% endblock %}
-
-{% block title %}
-{% if user_settings.blog_tagline %}
-    {{ user_settings.blog_tagline|striptags }}
-{% else %}
-    Latest {{ post_type }} by {{ username }}
-{% endif %}
-{% endblock %}
+{% block title %}Latest {{ post_type }} by {{ username }}{% endblock %}
 
 {% block extra_head %}
 <link rel="alternate" type="application/rss+xml" href="{% url posts_feed username %}" title="TX/RX Labs: Posts by {{ username }}">
@@ -37,7 +23,7 @@
         {% if user_settings.blog_title %}
         {{ user_settings.blog_title|striptags }}
         {% else %}
-        TX/RX Labs
+        {{ SITE_NAME }}
         {% endif %}
 
         -
