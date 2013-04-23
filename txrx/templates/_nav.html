@@ -58,7 +58,7 @@
               <li><a href="/accounts/login/?next={{ request.path|urlencode }}">
                   Log in with Username
               </a></li>
-              <li><a href="{% url "signin_start" %}">Log in with GitHub</a></li>
+              <li><a href="{% url "signin_start" %}?next={{ request.path }}">Log in with GitHub</a></li>
               {% endif %}
             </ul>
           </li>

@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
+from django.template.defaultfilters import urlencode
 from django.template.response import TemplateResponse
 
 from codrspace.models import Setting
@@ -14,8 +15,11 @@ class GithubAuthError(Exception):
 
 def signin_start(request, slug=None, template_name="signin.html"):
     """Start of OAuth signin"""
+    auth = settings.GITHUB_AUTH
+    if 'next' in request.GET:
+        auth['callback_url'] += urlencode("?next="+request.GET.get('next'))
     url = '%(auth_url)s?client_id=%(client_id)s&redirect_uri=%(callback_url)s'
-    return HttpResponseRedirect(url%settings.GITHUB_AUTH)
+    return HttpResponseRedirect(url%auth)
 
 def signout(request):
     if request.user.is_authenticated():
@@ -131,4 +135,4 @@ def signin_callback(request, slug=None, template_name="base.html"):
     user.backend = 'django.contrib.auth.backends.ModelBackend'
     login(request, user)
 
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect(request.GET.get('next','/'))
