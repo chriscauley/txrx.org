@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load thumbnail crop_util %}
 
+{% block title %}Bio: {{ profile.name }}{% endblock %}
 {% block header_content %}Bio: {{ profile.name }}{% endblock %}
 
 {% block content %}
