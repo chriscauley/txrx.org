@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.utils.hashcompat import md5_constructor
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
 from django.utils.http import urlquote
 from django.conf import settings
 
@@ -130,10 +131,18 @@ class Photo(FileModel):
   _ph = "Usages: None"
   portrait_crop = CropOverride('Portrait Crop (3:5)', aspect='3x5',help_text=_ph,**kwargs)
 
+class PhotoSetManager(models.Manager):
+  def live(self,*args,**kwargs):
+    return self.filter(*args,**kwargs).filter(active=True,setphotos__isnull=False).distinct()
+
 class PhotoSet(SlugModel,UserModel):
   setphotos = models.ManyToManyField(Photo,through="SetPhoto")
+  active = models.BooleanField(default=False)
+  objects = PhotoSetManager()
   def get_photos(self):
-    return [p.get_photo() for p in self.setphoto_set.all()]
+    return self.setphotos.all()
+  first_photo = property(lambda self: self.get_photos()[0])
+  get_absolute_url = lambda self: reverse('photoset_detail',args=[self.id,unicode(self)])
 
 class SetPhoto(OrderedModel):
   photo = models.ForeignKey(Photo,null=True,blank=True)

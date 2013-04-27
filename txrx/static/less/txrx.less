@@ -1,3 +1,4 @@
+@import "bs/variables.less";
 /* txrx overrides */
 body { margin-bottom: 50px; overflow: scroll; }
 .navbar .brand { padding: 3px 20px; }
@@ -250,4 +251,28 @@ h3.date {
     text-decoration: none;
     cursor: pointer;
   }
+}
+
+.photorow :target {
+  position: relative;
+  &:after {
+    border: solid 10px;
+    border-color: transparent transparent @grayLight;
+    bottom: -5px;
+    content: "";
+    display: block;
+    left: 50%;
+    margin-left: -15px;
+    position: absolute;
+  }
+}
+
+.photorow .after {
+  background-color: @grayLight;
+  display: none;
+  float: left;
+  margin: 5px 0 20px 20px;
+  text-align: center;
+  width: 940px;
+  .link { display: block; margin: 20px; }
 }

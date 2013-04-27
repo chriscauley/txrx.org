@@ -8,30 +8,32 @@ from codrspace.site_maps import DefaultMap, PostMap, UserMap
 
 post_resource = PostResource()
 site_maps = {
-    'default': DefaultMap,
-    'posts': PostMap,
-    'users': UserMap
-}
+  'default': DefaultMap,
+  'posts': PostMap,
+  'users': UserMap
+  }
 
 urlpatterns = patterns(
-    'codrspace.views',
-    url(r'^$', 'index', name="homepage"),
+  'codrspace.views',
+  url(r'^$', 'index', name="homepage"),
 
-    url(r'^admin/add/$', 'edit', name="add"),
-    url(r'^admin/edit/(?P<pk>\d+)/$', 'edit', name="edit"),
-    url(r'^admin/delete/(?P<pk>\d+)/$', 'delete', name="delete"),
-    url(r'^admin/drafts/$', 'drafts', name="drafts"),
-    url(r'^admin/preview/$', 'render_preview', name="render_preview"),
+  url(r'^admin/add/$', 'edit', name="add"),
+  url(r'^admin/edit/(?P<pk>\d+)/$', 'edit', name="edit"),
+  url(r'^admin/delete/(?P<pk>\d+)/$', 'delete', name="delete"),
+  url(r'^admin/drafts/$', 'drafts', name="drafts"),
+  url(r'^admin/preview/$', 'render_preview', name="render_preview"),
 
-    url(r'^signin/$', 'signin_start', name="signin_start"),
-    url(r'^signin_callback/$', 'signin_callback', name="signin_callback"),
-    url(r'^signout/$', 'signout', name="signout"),
+  url(r'^signin/$', 'signin_start', name="signin_start"),
+  url(r'^signin_callback/$', 'signin_callback', name="signin_callback"),
+  url(r'^signout/$', 'signout', name="signout"),
 
-    url(r'^api/', include(post_resource.urls)),
+  url(r'^api/', include(post_resource.urls)),
 
-    url(r'photo/insert/$','insert_photo',name='insert_photo'),
-    url(r'photo/add/$','add_photo',name='add_photo'),
-    )
+  url(r'^photo/insert/$','insert_photo',name='insert_photo'),
+  url(r'^photo/add/$','add_photo',name='add_photo'),
+  url(r'^photoset/$','photoset_index',name='photoset_index'),
+  url(r'^photoset/(\d+)_([^/]+)/$','photoset_detail',name='photoset_detail'),
+  )
 
 username_regex = '(?P<username>[\w\d\-\.\@\_]+)'
 urlpatterns += patterns(
@@ -42,7 +44,8 @@ urlpatterns += patterns(
   url(r'^%s/$'%username_regex, 'post_list', name="post_list"),
 )
 
-urlpatterns += patterns('',
-    (r'^robots\.txt$', lambda r: HttpResponse("User-agent: *\nCrawl-delay: 5", mimetype="text/plain")),
-    (r'^sitemap\.xml$', cache_page(86400)(sitemaps_views.sitemap), {'sitemaps': site_maps})
-)
+urlpatterns += patterns(
+  '',
+  (r'^robots\.txt$', lambda r: HttpResponse("User-agent: *\nCrawl-delay: 5", mimetype="text/plain")),
+  (r'^sitemap\.xml$', cache_page(86400)(sitemaps_views.sitemap), {'sitemaps': site_maps})
+  )

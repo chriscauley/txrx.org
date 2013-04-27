@@ -25,6 +25,8 @@ class SetPhotoInline(OrderedModelInline):
 
 class PhotoSetAdmin(SlugModelAdmin):
   inlines = [SetPhotoInline]
+  list_display = ('__unicode__','active')
+  list_editable = ('active',)
 
 admin.site.register(Post,PostAdmin)
 admin.site.register(Photo,PhotoAdmin)
