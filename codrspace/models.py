@@ -123,6 +123,7 @@ class Photo(FileModel):
   file = OriginalImage("Photo",upload_to='uploads/photos/%Y-%m', null=True)
   caption = models.TextField(null=True,blank=True)
   instagramphoto = models.ForeignKey(InstagramPhoto,null=True,blank=True)
+  approved = models.BooleanField(default=False)
   kwargs = dict(upload_to='uploads/photos/%Y-%m', original='file')
   _sh = "Usages: Blog Photo, Tool Photo"
   square_crop = CropOverride('Square Crop (1:1)', aspect='1x1',help_text=_sh,**kwargs)
@@ -151,6 +152,20 @@ class SetPhoto(OrderedModel):
     return self.photo
   def __unicode__(self):
     return unicode(self.get_photo())
+
+class SetModel(models.Model):
+  photoset = models.OneToOneField(PhotoSet,null=True,blank=True)
+  def get_photoset(self):
+    """Returns a new PhotoSet if one doesn't already exist."""
+    if self.photoset:
+      return self.photoset
+    p = PhotoSet(title="%s photos"%unicode(self))
+    p.save()
+    self.photoset=p
+    self.save()
+    return p
+  class Meta:
+    abstract = True
 
 class Setting(models.Model):
   """

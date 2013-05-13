@@ -1,11 +1,11 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.template.defaultfilters import slugify
+from django.template.defaultfilters import slugify, date
 
 from wmd import models as wmd_models
 from geo.models import Location
-from codrspace.models import PhotoSet
+from codrspace.models import SetModel
 
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
@@ -53,23 +53,13 @@ class OccurrenceModel(models.Model):
   short_name = property(lambda self: self.name_override or self.event.get_short_name())
   description_override = wmd_models.MarkDownField(blank=True,null=True)
   description = property(lambda self: self.description_override or self.event.description)
-  __unicode__ = lambda self: "%s - %s"%(self.name,self.start)
+  __unicode__ = lambda self: "%s - %s"%(self.name,date(self.start,'l F d, Y'))
   class Meta:
     abstract = True
     ordering = ('start',)
 
-class EventOccurrence(OccurrenceModel):
+class EventOccurrence(OccurrenceModel,SetModel):
   event = models.ForeignKey(Event)
-  photoset = models.OneToOneField(PhotoSet,null=True,blank=True)
   get_absolute_url = lambda self: reverse('event:occurrence_detail',args=(self.id,slugify(self.name)))
-  def get_photoset(self):
-    """Returns a new PhotoSet if one doesn't already exist."""
-    if self.photoset:
-      return self.photoset
-    p = PhotoSet(title="%s photos"%unicode(self))
-    p.save()
-    self.photoset=p
-    self.save()
-    return p
 
 from .signals import *
