@@ -119,11 +119,19 @@ class FileModel(models.Model):
   class Meta:
     abstract = True
 
+SOURCE_CHOICES = (
+  ('web','Web'),
+  ('instagram','Instagram'),
+  ('twittpic','TwittPic'),
+  ('email','Email')
+  )
+
 class Photo(FileModel):
   file = OriginalImage("Photo",upload_to='uploads/photos/%Y-%m', null=True)
   caption = models.TextField(null=True,blank=True)
   instagramphoto = models.ForeignKey(InstagramPhoto,null=True,blank=True)
   approved = models.BooleanField(default=False)
+  source = models.CharField(choices=SOURCE_CHOICES,default="web",max_length=16)
   kwargs = dict(upload_to='uploads/photos/%Y-%m', original='file')
   _sh = "Usages: Blog Photo, Tool Photo"
   square_crop = CropOverride('Square Crop (1:1)', aspect='1x1',help_text=_sh,**kwargs)

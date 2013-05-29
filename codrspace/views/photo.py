@@ -57,3 +57,6 @@ def photoset_detail(request,pk,slug):
     'photo_rows': photo_rows,
     }
   return TemplateResponse(request,'gallery/detail.html',values)
+
+def modify_photos(request):
+  pass

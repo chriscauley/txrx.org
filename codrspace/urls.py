@@ -33,6 +33,8 @@ urlpatterns = patterns(
   url(r'^photo/add/$','add_photo',name='add_photo'),
   url(r'^photoset/$','photoset_index',name='photoset_index'),
   url(r'^photoset/(\d+)_([^/]+)/$','photoset_detail',name='photoset_detail'),
+
+  url(r'^photos/$','modify_photos',name='modify_photos'),
   )
 
 username_regex = '(?P<username>[\w\d\-\.\@\_]+)'

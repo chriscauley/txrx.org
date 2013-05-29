@@ -103,7 +103,7 @@ def signin_callback(request, slug=None, template_name="base.html"):
 
         user = User(**user_defaults)
         user.save()
-        user.set_unsable_password()
+        user.set_unusable_password()
         user.save()
 
     # Get/Create the user profile
