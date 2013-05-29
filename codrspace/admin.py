@@ -13,7 +13,8 @@ class PostAdmin(admin.ModelAdmin):
 
 class PhotoAdmin(CropAdmin):
   form = StaffMemberForm
-  list_display = ('__unicode__','_thumbnail')
+  list_display = ('__unicode__','_thumbnail','approved')
+  list_editable = ('approved',)
   def _thumbnail(self,obj):
     im = get_thumbnail(obj.file,'100x100',crop='center')
     out = '<img src="%s" width="%s" height="%s" />'%(im.url,im.width,im.height)
