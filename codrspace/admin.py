@@ -26,8 +26,11 @@ class SetPhotoInline(OrderedModelInline):
 
 class PhotoSetAdmin(SlugModelAdmin):
   inlines = [SetPhotoInline]
-  list_display = ('__unicode__','active')
+  list_display = ('__unicode__','active','photo_count')
   list_editable = ('active',)
+  def photo_count(self,obj):
+    return len(obj.get_photos())
+  photo_count.allow_tags = True
 
 admin.site.register(Post,PostAdmin)
 admin.site.register(Photo,PhotoAdmin)
