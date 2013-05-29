@@ -8,14 +8,14 @@
 {% block main %}
 <section>
 {% for photoset in photosets %}
-<div class="span4">
+<div class="span4 center">
   <div class="well">
     <a href="{{ photoset.get_absolute_url }}">
       {% thumbnail photoset.first_photo|get_override:"landscape_crop" "260x200" as im %}
       <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
       {% endthumbnail %}
       <div>
-        {{ photoset }} ({{ photoset.get_photos.count }} photos)
+        {{ photoset }} ({{ photoset.get_photos.count }}&nbsp;photos)
       </div>
     </a>
   </div>
