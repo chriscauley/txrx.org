@@ -146,10 +146,11 @@ class PhotoSetManager(models.Manager):
 
 class PhotoSet(SlugModel,UserModel):
   setphotos = models.ManyToManyField(Photo,through="SetPhoto")
-  active = models.BooleanField(default=False)
+  _ht = "If true, this photoset will appear on the photoset index page"
+  active = models.BooleanField(default=False,help_text=_ht)
   objects = PhotoSetManager()
   def get_photos(self):
-    return self.setphotos.all()
+    return self.setphotos.filter(approved=True)
   first_photo = property(lambda self: self.get_photos()[0])
   get_absolute_url = lambda self: reverse('photoset_detail',args=[self.id,unicode(self)])
 

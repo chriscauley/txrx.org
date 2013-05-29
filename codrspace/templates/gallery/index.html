@@ -14,7 +14,9 @@
       {% thumbnail photoset.first_photo|get_override:"landscape_crop" "260x200" as im %}
       <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
       {% endthumbnail %}
-      {{ photoset }}
+      <div>
+        {{ photoset }} ({{ photoset.get_photos.count }} photos)
+      </div>
     </a>
   </div>
 </div>
