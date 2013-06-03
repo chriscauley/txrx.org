@@ -8,6 +8,7 @@ from sorl.thumbnail import ImageField
 import datetime
 
 from geo.models import Location
+from event.models import OccurrenceModel
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
@@ -133,15 +134,23 @@ class Session(UserModel):
   class Meta:
     ordering = ('section',)
 
-class ClassTime(models.Model):
+class ClassTime(OccurrenceModel):
   session = models.ForeignKey(Session)
   start = models.DateTimeField()
   end_time = models.TimeField()
   short_name = lambda self: self.session.section.course.get_short_name()
   get_absolute_url = lambda self: self.session.get_absolute_url()
+  @property
+  def description(self):
+    return self.session.section.description
+  @property
+  def name(self):
+    return self.session.section.course.name
+  @property
+  def end(self):
+    return self.start.replace(hour=self.end_time.hour,minute=self.end_time.minute)
   class Meta:
     ordering = ("start",)
-
 
 class Enrollment(UserModel):
   session = models.ForeignKey(Session)

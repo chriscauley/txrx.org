@@ -32,6 +32,7 @@
 	  {{ classtime.start|date:"l F j, G:i" }}
 	  -
 	  {{ classtime.end_time|time:"G:i" }}
+          <a href="{{ classtime.google_link }}">Add to calendar</a>
 	</li>
         {% endfor %}
       </ol>
