@@ -135,4 +135,4 @@ def signin_callback(request, slug=None, template_name="base.html"):
     user.backend = 'django.contrib.auth.backends.ModelBackend'
     login(request, user)
 
-    return HttpResponseRedirect(request.GET.get('next','/'))
+    return HttpResponseRedirect('/')
