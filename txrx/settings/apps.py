@@ -15,7 +15,7 @@ INSTALLED_APPS = (
 
   # 3rd party
   'south',
-  'devserver',
+  #'devserver',
   'sorl.thumbnail',
   'registration',
   'paypal.standard.ipn',
@@ -70,7 +70,7 @@ from frappy.services.github import Github
 GITHUB_AUTH = {
   'client_id': '',
   'secret': '',
-  'callback_url': 'http://txrx.lablackey.com:8009/blog/signin_callback',
+  'callback_url': 'http://txrx.lablackey.com:8009/blog/signin_callback/',
   'auth_url': 'https://github.com/login/oauth/authorize',
   'access_token_url': 'https://github.com/login/oauth/access_token',
   
