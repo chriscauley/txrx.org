@@ -3,10 +3,16 @@
 {% block title %}{% trans "New password set" %}{% endblock %}
 
 {% block main %}
+{% if request.user.is_authenticated %}
+<script type="text/javascript">
+  window.location = "/"
+</script>
+{% else %}
 <p>
-  Your password has successfully been reset. You are now logged in.
+  Your password has successfully been reset. You can now log in <a href="/accounts/login/?next=/">here</a>
 </p>
 <p>
   In the future you can log in using the link at the top right of the page.
 </p>
+{% endif %}
 {% endblock %}
