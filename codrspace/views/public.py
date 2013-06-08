@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.mail import mail_admins
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.template.response import TemplateResponse
@@ -81,7 +82,6 @@ def post_list(request, username, post_type='published',
 @login_required
 def feedback(request, template_name='feedback.html'):
     """ Send Feed back """
-    from django.core.mail import mail_admins
     user = get_object_or_404(User, username=request.user.username)
 
     form = FeedBackForm(initial={'email': user.email})
@@ -125,7 +125,7 @@ def post_redirect(request,y,m,d,slug):
         lexscore = lambda post: difflib.SequenceMatcher(a=post.slug.lower(),b=slug.lower()).ratio()
         post = sorted(list(posts),key=lexscore)[-1]
     else:
-        mail_admins('unable to find blog post',request.path)
+        #mail_admins('unable to find blog post',request.path)
         raise Http404("Unable to find matching blog article.")
     kwargs = {'username': post.author.username,'slug': post.slug}
     return HttpResponseRedirect(reverse('post_detail',kwargs=kwargs))
