@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.template.response import TemplateResponse
 
@@ -13,7 +14,7 @@ from tagging.models import Tag
 from codrspace.models import Post, Setting
 from codrspace.forms import FeedBackForm
 
-import datetime
+import datetime, difflib
 
 #not currently in use, but will be eventually
 @pjaxtend()
@@ -114,3 +115,17 @@ def posts_by_tag(request,name):
         "tag": tag,
         }
     return TemplateResponse(request,"codrspace/posts_by_tag.html",values)
+
+def post_redirect(request,y,m,d,slug):
+    date = datetime.datetime.strptime('%s-%s-%s'%(y,m,d),'%Y-%m-%d').date()
+    posts = Post.objects.filter(publish_dt__gte=date,publish_dt__lte=date+datetime.timedelta(1))
+    if posts.count() == 1: # found it
+        post = posts[0]
+    elif posts.count > 2: # ftake closest slug
+        lexscore = lambda post: difflib.SequenceMatcher(a=post.slug.lower(),b=slug.lower()).ratio()
+        post = sorted(list(posts),key=lexscore)[-1]
+    else:
+        mail_admins('unable to find blog post',request.path)
+        raise Http404("Unable to find matching blog article.")
+    kwargs = {'username': post.author.username,'slug': post.slug}
+    return HttpResponseRedirect(reverse('post_detail',kwargs=kwargs))
