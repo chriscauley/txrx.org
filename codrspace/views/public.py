@@ -121,7 +121,7 @@ def post_redirect(request,y,m,d,slug):
     posts = Post.objects.filter(publish_dt__gte=date,publish_dt__lte=date+datetime.timedelta(1))
     if posts.count() == 1: # found it
         post = posts[0]
-    elif posts.count > 2: # ftake closest slug
+    elif posts.count() > 2: # ftake closest slug
         lexscore = lambda post: difflib.SequenceMatcher(a=post.slug.lower(),b=slug.lower()).ratio()
         post = sorted(list(posts),key=lexscore)[-1]
     else:
