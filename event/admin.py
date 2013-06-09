@@ -17,7 +17,7 @@ class EventOccurrenceInline(admin.TabularInline):
   _photoset.allow_tags = True
 
 class EventAdmin(admin.ModelAdmin):
-  list_display = ("__unicode__",)
+  list_display = ("__unicode__","repeat")
   inlines = [EventOccurrenceInline]
 
 admin.site.register(Event,EventAdmin)
