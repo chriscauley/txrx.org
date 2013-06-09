@@ -16,12 +16,20 @@ def print_time(t):
   if t: return t.strftime('%I:%M %P')
   return ''
 
+REPEAT_CHOICES = (
+  ('','No Repeat'),
+  ('weekly','Weekly'),
+  ('month-dow','Monthly (Nth weekday of every month)'),
+  ('month-number','Monthly (by day number)'),
+  )
+
 class Event(models.Model):
   name = models.CharField(max_length=128,null=True,blank=True)
   _ht = "Optional. Alternative name for the calendar."
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   location = models.ForeignKey(Location)
   description = wmd_models.MarkDownField(blank=True,null=True)
+  repeat = models.CharField(max_length=32,choices=REPEAT_CHOICES,null=True,blank=True)
 
   get_short_name = lambda self: self.short_name or self.name
   @property
