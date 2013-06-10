@@ -6,8 +6,8 @@
 {% block header_content %}{{ occurrence.name }}{% endblock %}
 
 {% block content %}
-{% if occurrence.photoset %}
-{% include "widgets/photo_slideshow.html" with photos=occurrence.photoset.get_photos %}
+{% if occurrence.get_photoset %}
+{% include "widgets/photo_slideshow.html" with photos=occurrence.get_photoset.get_photos %}
 {% endif %}
 <p class="lead">{{ occurrence.start }}{% if occurrence.end %} - {{ occurrence.end.time }}{% endif %}</p>
 <p><a href="{{ occurrence.google_link }}">Add to Calendar</a>

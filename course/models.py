@@ -7,6 +7,7 @@ from db.models import UserModel
 from sorl.thumbnail import ImageField
 import datetime
 
+from codrspace.models import SetModel
 from geo.models import Location
 from event.models import OccurrenceModel
 
@@ -73,7 +74,7 @@ class Section(models.Model):
   class Meta:
     ordering = ("term","course")
 
-class Session(UserModel):
+class Session(UserModel,SetModel):
   section = models.ForeignKey(Section)
   slug = models.CharField(max_length=255)
   cancelled = models.BooleanField(default=False)

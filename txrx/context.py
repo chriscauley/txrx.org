@@ -55,7 +55,7 @@ def nav(request):
     app_path = "/admin/login/",
     settings = settings,
     upcoming_events = EventOccurrence.objects.filter(start__gte=now,start__lte=now+datetime.timedelta(7)),
-    last_week = EventOccurrence.objects.filter(start__lte=now,photoset__isnull=False),
+    #last_week = EventOccurrence.objects.filter(start__lte=now,photoset__isnull=False),
     tags = Tag.objects.all(),
     class_faqs = class_faqs,
     )

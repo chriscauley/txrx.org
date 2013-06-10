@@ -154,12 +154,6 @@ class PhotoSet(SlugModel,UserModel):
   first_photo = property(lambda self: self.get_photos()[0])
   get_absolute_url = lambda self: reverse('photoset_detail',args=[self.id,unicode(self)])
 
-class PhotoSetConnection(models.Model):
-  photoset = models.ForeignKey(PhotoSet)
-  content_type = models.ForeignKey("contenttypes.ContentType")
-  object_id = models.IntegerField()
-  content_object = generic.GenericForeignKey('content_type', 'object_id')
-
 class SetPhoto(OrderedModel):
   photo = models.ForeignKey(Photo,null=True,blank=True)
   photoset = models.ForeignKey(PhotoSet)
@@ -168,19 +162,43 @@ class SetPhoto(OrderedModel):
   def __unicode__(self):
     return unicode(self.get_photo())
 
-class SetModel(models.Model):
-  photoset = models.OneToOneField(PhotoSet,null=True,blank=True)
-  def get_photoset(self):
-    """Returns a new PhotoSet if one doesn't already exist."""
-    if self.photoset:
-      return self.photoset
-    p = PhotoSet(title="%s photos"%unicode(self))
-    p.save()
-    self.photoset=p
-    self.save()
-    return p
+class PhotoSetConnection(models.Model):
+  photoset = models.ForeignKey(PhotoSet)
+  content_type = models.ForeignKey("contenttypes.ContentType")
+  object_id = models.IntegerField()
+  content_object = generic.GenericForeignKey('content_type', 'object_id')
   class Meta:
-    abstract = True
+    unique_together = ('content_type','object_id')
+
+class SetModel():
+  """ A model that has a PhotoSetConnection attached to it. """
+  photoset = None
+  _photoset_checked = False
+  def get_photoset(self):
+    if self._photoset_checked:
+      return self.photoset
+    self._photoset_checked = True
+    try:
+      content_type = ContentType.objects.get_for_model(self.__class__)
+      self.photoset = PhotoSet.objects.get(
+        photosetconnection__content_type=content_type,
+        photosetconnection__object_id=self.id)
+    except PhotoSet.DoesNotExist:
+      pass
+    return self.photoset
+  def get_or_create_photoset(self):
+    if self.get_photoset():
+      return self.get_photoset()
+    photoset = PhotoSet(
+      title="Photos for %s"%str(self),
+      user_id=getattr(self,'user_id',1)
+      )
+    photoset.save()
+    content_type = ContentType.objects.get_for_model(self.__class__)
+    PhotoSetConnection(content_type=content_type,photoset=photoset,object_id=self.id).save()
+    self._photoset_checked = True
+    self.photoset=photoset
+    return photoset
 
 class Setting(models.Model):
   """
