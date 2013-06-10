@@ -3,6 +3,8 @@ from django import forms
 from course.models import Subject, Course, Section, Session, Enrollment, Term, ClassTime
 from db.forms import StaffMemberForm
 
+from codrspace.admin import PhotoSetConnectionInline
+
 class SubjectAdmin(admin.ModelAdmin):
   pass
 
@@ -40,7 +42,7 @@ class SessionAdmin(admin.ModelAdmin):
   raw_id_fields = ('section',)
   exclude = ('time_string','slug')
   extra = 0
-  inlines = (ClassTimeInline, EnrollmentInline)
+  inlines = (PhotoSetConnectionInline, ClassTimeInline, EnrollmentInline,)
 
 class EnrollmentAdmin(admin.ModelAdmin):
   list_display = ("id",'user', 'session', )

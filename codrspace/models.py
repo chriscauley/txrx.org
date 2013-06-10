@@ -1,14 +1,14 @@
-import os
-import re
-import uuid
+import os, re, uuid
 from django.db import models
 from django.contrib.auth.models import User
-from django.template.defaultfilters import slugify
-from django.utils.hashcompat import md5_constructor
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
-from django.utils.http import urlquote
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
+from django.template.defaultfilters import slugify
+from django.utils.hashcompat import md5_constructor
+from django.utils.http import urlquote
 
 from crop_override import CropOverride, OriginalImage
 from timezones.fields import TimeZoneField
@@ -153,6 +153,12 @@ class PhotoSet(SlugModel,UserModel):
     return self.setphotos.filter(approved=True)
   first_photo = property(lambda self: self.get_photos()[0])
   get_absolute_url = lambda self: reverse('photoset_detail',args=[self.id,unicode(self)])
+
+class PhotoSetConnection(models.Model):
+  photoset = models.ForeignKey(PhotoSet)
+  content_type = models.ForeignKey("contenttypes.ContentType")
+  object_id = models.IntegerField()
+  content_object = generic.GenericForeignKey('content_type', 'object_id')
 
 class SetPhoto(OrderedModel):
   photo = models.ForeignKey(Photo,null=True,blank=True)

@@ -1,11 +1,12 @@
 from django.contrib import admin
+from django.contrib.contenttypes.generic import GenericTabularInline
 from crop_override.admin import CropAdmin
 from sorl.thumbnail import get_thumbnail
 
 from db.admin import SlugModelAdmin, OrderedModelAdmin, OrderedModelInline
 from db.forms import StaffMemberForm
 
-from .models import Post, Photo, SetPhoto, PhotoSet
+from .models import Post, Photo, SetPhoto, PhotoSet, PhotoSetConnection
 
 class PostAdmin(admin.ModelAdmin):
   list_display = ('__unicode__','author','featured','publish_dt','status')
@@ -25,8 +26,12 @@ class PhotoAdmin(CropAdmin):
 class SetPhotoInline(OrderedModelInline):
   model = SetPhoto
 
+class PhotoSetConnectionInline(GenericTabularInline):
+  max_num = 1
+  model = PhotoSetConnection
+
 class PhotoSetAdmin(SlugModelAdmin):
-  inlines = [SetPhotoInline]
+  inlines = [SetPhotoInline] #,PhotoSetConnectionInline]
   list_display = ('__unicode__','active','photo_count')
   list_editable = ('active',)
   def photo_count(self,obj):

@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.contrib.contenttypes.generic import GenericTabularInline
 from django.core.urlresolvers import reverse
 
 from .models import Event, EventOccurrence
+from codrspace.admin import PhotoSetConnectionInline
 
 import datetime
 
@@ -20,5 +22,8 @@ class EventAdmin(admin.ModelAdmin):
   list_display = ("__unicode__","repeat")
   inlines = [EventOccurrenceInline]
 
+class EventOccurrenceAdmin(admin.ModelAdmin):
+  inlines = [PhotoSetConnectionInline]
+
 admin.site.register(Event,EventAdmin)
-admin.site.register(EventOccurrence)
+admin.site.register(EventOccurrence,EventOccurrenceAdmin)
