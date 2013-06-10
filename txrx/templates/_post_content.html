@@ -1,4 +1,4 @@
-{% load cache codrspace_tags thumbnail short_codes crop_util %}
+{% load codrspace_tags thumbnail short_codes crop_util %}
 {% load url from future %}
 <div class="post-tags">
   {% for tag in post.tags %}
@@ -35,13 +35,7 @@
     <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
   </a>
   {% endthumbnail %}
-  {% if cache == 0 %}
   <p>{{ post.content|explosivo }}</p>
-  {% else %}
-  {% cache 3600 content post.pk %}
-  <p>{{ post.content|explosivo }}</p>
-  {% endcache %}
-  {% endif %}
   <div style="clear:both"></div>
 </div>
 {% endif %}

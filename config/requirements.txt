@@ -11,7 +11,6 @@ psycopg2==2.4.6
 django-registration==0.8
 -e git+https://github.com/chriscauley/Django-Crop-Override-Field.git#egg=django-crop-override-field
 -e git+https://github.com/dcramer/django-paypal.git#egg=django-paypal
-#django-blog-zinnia
 django-password-reset
 django_compressor==1.2
 BeautifulSoup==3.2.1
@@ -33,3 +32,5 @@ django-tagging
 -e git+https://github.com/alekam/django-tagging-autocomplete.git#egg=django-tagging-autocomplete
 -e git://github.com/marcuswhybrow/django-wmd-editor.git#egg=django_wmd_editor
 -e git+git://github.com/jacobian/django-pjax.git#egg=django-pjax
+
+django-next-please

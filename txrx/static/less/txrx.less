@@ -198,10 +198,15 @@ h6{font-size:11px;color:#999999;text-transform:uppercase;}
 /* events */
 .paginator {
   margin-bottom: 10px;
+  position: relative;
   text-align: center;
   strong { font-size: 2em; }
-  .left { float: left; }
-  .right { float: right; }
+  .left, .right {
+    position: absolute;
+    top: 0;
+  }
+  .left { left: 0; }
+  .right { right: 0; }
 }
 
 h3.date {

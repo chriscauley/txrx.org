@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
 
+from NextPlease import pagination
 from djpjax import pjaxtend
 
 from membership.models import Membership
@@ -46,9 +47,9 @@ def force_login(request,uid):
     login(request,u)
     return HttpResponseRedirect('/')
 
-@pjaxtend()
+@pagination("posts")
 def blog_home(request):
-    posts = Post.objects.filter(status="published",featured=False)[:10]
+    posts = Post.objects.filter(status="published",featured=False)
     featured_posts = Post.objects.filter(status="published",featured=True)
     values = {
         'posts': posts,

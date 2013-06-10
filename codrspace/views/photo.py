@@ -6,7 +6,8 @@ from django.template.response import TemplateResponse
 
 from codrspace.models import Photo,PhotoSet
 from codrspace.forms import PhotoForm, PhotoFilterForm
-from codrspace.utils import pagination
+
+from NextPlease import pagination
 
 @staff_member_required
 def insert_photo(request):

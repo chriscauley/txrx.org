@@ -1,14 +1,12 @@
-{% extends parent %}
+{% extends "base.html" %}
 {% load codrspace_tags short_codes %}
 {% load thumbnail crop_util %}
-{% load cache %}
 {% load url from future %}
 
 {% block full_title %}Welcome to TX/RX Labs{% endblock %}
 {% block header_content %}TX/RX Labs - Houston's Hackerspace{% endblock %}
 
 {% block content %}
-{% cache settings.SHORT_CACHE blog_home %}
 <div id="myCarousel" class="carousel slide">
   <div class="carousel-inner">
     {% for post in featured_posts %}
@@ -30,8 +28,16 @@
   <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
   {% endif %}
 </div>
-{% for post in posts %}
+<div class="paginator">
+  {% if paginator.has_previous %}
+  <a class="left" href="?{{ paginator.previous_qs }}">&lt; Previous</a>
+  {% endif %}
+  Page {{ paginator.number }}
+  {% if paginator.has_next %}
+  <a class="right" href="?{{ paginator.next_qs }}">Next &gt;</a>
+  {% endif %}
+</div>
+{% for post in paginator.current_list %}
 {% include "_post_content.html" with truncate_posts="True" %}
 {% endfor %}
-{% endcache %}
 {% endblock %}
