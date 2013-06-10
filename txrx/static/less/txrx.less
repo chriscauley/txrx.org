@@ -226,8 +226,33 @@ h3.date {
     line-height: 1.1;
     min-height: 130px;
     padding: 5px 5px 0;
-    width: 125px;
+    width: 135px;
   }
+  .event {
+    .m, .c, .w {
+      display: inline-block;
+      padding-left: 19px;
+      position: relative;
+      &:before {
+	outline: 1px solid @grayDark;
+	color: @grayDark;
+	display: inline-block;
+	font-weight: bold;
+	height: 12px;
+	left: 0;
+	margin: -8px 3px 0 0;
+	padding: 1px 2px 2px;
+	position: absolute;
+	text-align: center;
+	top: 50%;
+	width: 12px;
+      }
+    }
+    .m:before { background-color: @yellow; content: "M"; }
+    .c:before { background-color: @blue; content: "C"; }
+    .w:before { background-color: @green; content: "W"; }
+  }
+  td.event { line-height: 13px; }
 }
 
 /* comments */

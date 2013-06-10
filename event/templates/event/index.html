@@ -10,26 +10,35 @@
   <strong>{{ current_date|date:"F Y" }}</strong>
   <a class="right" href="{% url "event:index" next|date:"Y-m-d" %}">Next Month &raquo;</a>
 </div>
-<table id="calendar">
-  {% for week in weeks %}
-  <tr>
-    {% for day,occurrences in week %}
-    <td style="vertical-align:top;{% if day %} border: 1px gray solid{% endif %}">
-      <div class="events">
-        <div class="day">{{ day }}</div>
-        {% for occurrence in occurrences %}
-        <p>
-          {% if occurrence.short_name %}{# actual event #}
-          <a href="{{ occurrence.get_absolute_url }}">{{ occurrence.short_name }}</a>
-          {% else %}{# course.short_name #}
-          <a href="{{ occurrence.get_absolute_url }}">{{ occurrence.short_name }}</a>
-          {% endif %}
-        </p>
-        {% endfor %}
-      </div>
-    </td>
+<div id="calendar" style="margin-left: -35px;">
+  <table>
+    <tr style="font-size: 12px;text-align: center;">
+      <td></td>
+      <td></td>
+      <td class="event"><span class="m">Monthly event</span></td>
+      <td class="event"><span class="w">Weekly event</span></td>
+      <td class="event"><span class="c">Class session</span></td>
+    </tr>
+    {% for week in weeks %}
+    <tr>
+      {% for day,occurrences in week %}
+      <td style="vertical-align:top;{% if day %} border: 1px gray solid{% endif %}">
+        <div class="events">
+          <div class="day">{{ day }}</div>
+          {% for occurrence in occurrences %}
+          <p class="event">
+            {% if occurrence.event %}{# actual event #}
+            <a class="{{ occurrence.event.repeat|slice:":1" }}" href="{{ occurrence.get_absolute_url }}">{{ occurrence.short_name }}</a>
+            {% else %}{# course.short_name #}
+            <a class="c" href="{{ occurrence.get_absolute_url }}">{{ occurrence.short_name }}</a>
+            {% endif %}
+          </p>
+          {% endfor %}
+        </div>
+      </td>
+      {% endfor %}
+    </tr>
     {% endfor %}
-  </tr>
-  {% endfor %}
-</table>
+  </table>
+</div>
 {% endblock %}
