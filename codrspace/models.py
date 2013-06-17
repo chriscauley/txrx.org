@@ -123,7 +123,8 @@ SOURCE_CHOICES = (
   ('web','Web'),
   ('instagram','Instagram'),
   ('twittpic','TwittPic'),
-  ('email','Email')
+  ('email','Email'),
+  ('misc','Miscelaneous'),
   )
 
 class Photo(FileModel):

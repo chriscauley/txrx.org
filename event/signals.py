@@ -27,7 +27,7 @@ def instagram_occurrence_connection(sender, **kwargs):
   if obj.instagram_user:
     defaults['user'] = obj.instagram_user.user
   photo,new = Photo.objects.get_or_create(instagramphoto=obj,defaults=defaults)
-  photoset = occurrence.get_photoset()
+  photoset = occurrence.get_or_create_photoset()
   setphoto,new = SetPhoto.objects.get_or_create(photo=photo,photoset=photoset)
 
 def twitter_occurrence_connection(sender,**kwargs):
