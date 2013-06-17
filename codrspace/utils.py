@@ -40,7 +40,6 @@ def photoset_from_zip(path,approved=True):
     process.communicate()
     for folder,_,files in os.walk('.'):
         for f in files:
-            print folder, f
             os.rename(os.path.join(folder,f),os.path.join(directory,f))
     photoset,new = PhotoSet.objects.get_or_create(
         title = 'uploaded photos: %s'%zip_name,
@@ -53,7 +52,7 @@ def photoset_from_zip(path,approved=True):
     for f_path in files:
         print "creating photo!"
         photo = Photo(
-            file = os.path.join(directory,f_path),
+            file = os.path.join(directory,f_path).split(settings.MEDIA_ROOT)[-1],
             source = "misc",
             approved = approved,
             )

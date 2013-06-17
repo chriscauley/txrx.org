@@ -12,6 +12,9 @@
 <div class="course course-detail" data-subject="{{ session.subjects|join:"," }}"
      {%if not session.course.closed%}data-open{%endif%}
      data-date="{{ session.starttime|date:"Ymd" }}">
+  {% if session.get_photoset %}
+  {% include "widgets/photo_slideshow.html" with photos=session.get_photoset.get_photos %}
+  {% endif %}
   <div class="fee">
     {% include "course/_enroll_link.html" %}
   </div>
