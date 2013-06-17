@@ -128,7 +128,7 @@ SOURCE_CHOICES = (
   )
 
 class Photo(FileModel):
-  file = OriginalImage("Photo",upload_to='uploads/photos/%Y-%m', null=True)
+  file = OriginalImage("Photo",upload_to='uploads/photos/%Y-%m', null=True,max_length=200)
   caption = models.TextField(null=True,blank=True)
   instagramphoto = models.ForeignKey(InstagramPhoto,null=True,blank=True)
   approved = models.BooleanField(default=False)

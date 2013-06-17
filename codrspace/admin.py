@@ -24,6 +24,7 @@ class PhotoAdmin(CropAdmin):
   _thumbnail.allow_tags=True
 
 class SetPhotoInline(OrderedModelInline):
+  raw_id_fields = ('photo',)
   model = SetPhoto
 
 class PhotoSetConnectionInline(GenericTabularInline):
@@ -34,6 +35,7 @@ class PhotoSetAdmin(SlugModelAdmin):
   inlines = [SetPhotoInline] #,PhotoSetConnectionInline]
   list_display = ('__unicode__','active','photo_count')
   list_editable = ('active',)
+  raw_id_fields = ('user',)
   def photo_count(self,obj):
     return len(obj.get_photos())
   photo_count.allow_tags = True

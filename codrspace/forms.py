@@ -121,3 +121,6 @@ class PhotoFilterForm(forms.Form):
   search = forms.CharField(max_length=40)
   mine = forms.BooleanField()
   page = forms.IntegerField(required=False,widget=forms.HiddenInput())
+
+class ZipForm(forms.Form):
+  zip_file = forms.FileField()
