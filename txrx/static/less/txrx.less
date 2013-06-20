@@ -308,3 +308,21 @@ h3.date {
 }
 
 .center { text-align: center; }
+
+[data-tooltip] {
+  position: relative;
+  z-index: 10;
+  &:hover:after {
+    background: white;
+    border-radius: 5px;
+    box-shadow: 1px 1px 4px black;
+    content: attr(data-tooltip);
+    display: block;
+    padding: 3px;
+    position: absolute;
+    bottom: 20px;
+    text-align: center;
+    width: 160px;
+    z-index: 10;
+  }
+}

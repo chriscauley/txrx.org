@@ -17,7 +17,7 @@
   </td>
   <td class="note-cell">
     {% for note,title in session.section.get_notes %}
-    <small class="has_notes" title="{{ title }}"><span>{{ note }}</span></small>
+    <small class="has_notes" data-tooltip="{{ title }}"> <span>{{ note }}</span></small>
     {% endfor %}
   </td>
 </tr>
