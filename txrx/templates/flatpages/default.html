@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load codrspace_tags thumbnail %}
 
 {% block full_title %}{{ flatpage.title }}{% endblock %}
 {% block header_content %}{{ flatpage.title }}{% endblock %}
@@ -7,4 +8,14 @@
 <div id="flatpage">
 {{ flatpage.content }}
 </div>
+{% endblock %}
+
+{% block side %}
+{% for photo in flatpage|get_photos %}{{ photo.file }}<br />
+{% thumbnail photo.file "300x300" crop="center" as im %}
+<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+{% endthumbnail %}
+{% empty %}
+{{ block.super }}
+{% endfor %}
 {% endblock %}

@@ -4,6 +4,8 @@ from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.forms import *
 from django import forms
 
+from codrspace.admin import PhotoSetConnectionInline
+
 admin.site.unregister(FlatPage)
 
 TEMPLATE_CHOICES = (
@@ -21,6 +23,7 @@ class FlatPageForm(forms.ModelForm):
 
 class FlatPageAdmin(FlatPageAdmin):
   form = FlatPageForm
+  inlines = [PhotoSetConnectionInline]
 
 admin.site.register(FlatPage,FlatPageAdmin)
 

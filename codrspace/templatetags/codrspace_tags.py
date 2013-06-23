@@ -1,10 +1,11 @@
 from django.template import Library, TemplateSyntaxError, Variable, Node
 from django.template.defaulttags import token_kwargs
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.conf import settings
-from codrspace.models import Post, Setting
+from codrspace.models import Post, Setting, PhotoSet
 from codrspace.utils import localize_date
 
 register = Library()
@@ -79,3 +80,13 @@ def recent_codrs(context, amount=20):
         'codrs': codrs
     })
     return context
+
+@register.filter
+def get_photos(obj):
+    try:
+        content_type = ContentType.objects.get_for_model(obj.__class__)
+        return PhotoSet.objects.get(
+            photosetconnection__content_type=content_type,
+            photosetconnection__object_id=obj.id).get_photos()
+    except PhotoSet.DoesNotExist:
+        return None
