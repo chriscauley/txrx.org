@@ -1,4 +1,14 @@
 @import "bs/variables.less";
+
+.floatingBox {
+  background: white;
+  border-radius: 5px;
+  box-shadow: 1px 1px 4px black;
+  padding: 3px;
+  position: absolute;
+  z-index: 10;
+}
+
 /* txrx overrides */
 body { margin-bottom: 50px; overflow: scroll; }
 .navbar .brand { padding: 3px 20px; }
@@ -255,6 +265,35 @@ h3.date {
   td.event { line-height: 13px; }
 }
 
+.calendar_widget {
+  position: relative;
+  .add_to_calendar {
+    .floatingBox;
+    display:none;
+    font-size: 14px;
+    left: 0;
+    min-height: 0;
+    overflow: hidden;
+    padding: 10px;
+    top: 100%;
+    width: 600px;
+  }
+  .header {
+    border-bottom: 1px solid black;
+    display: inline-block;
+    margin-bottom: .5em;
+    padding-right: 10px;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+  }
+  .left, right {
+    float: left;
+    width: 50%;
+  }
+}
+
 /* comments */
 
 #comments {
@@ -313,16 +352,11 @@ h3.date {
   position: relative;
   z-index: 10;
   &:hover:after {
-    background: white;
-    border-radius: 5px;
-    box-shadow: 1px 1px 4px black;
+    .floatingBox;
     content: attr(data-tooltip);
     display: block;
-    padding: 3px;
-    position: absolute;
     bottom: 20px;
     text-align: center;
     width: 160px;
-    z-index: 10;
   }
 }

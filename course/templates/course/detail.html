@@ -29,16 +29,10 @@
 	<b>Subject{{ session.section.course.subjects|pluralize:"s" }}</b>:
 	{{ session.section.course.subjects.all|join:"," }}
       </div>
-      <ol class="dates">
-        {% for classtime in session.classtime_set.all %}
-	<li>
-	  {{ classtime.start|date:"l F j, G:i" }}
-	  -
-	  {{ classtime.end_time|time:"G:i" }}
-          <a href="{{ classtime.google_link }}">Add to calendar</a>
-	</li>
-        {% endfor %}
-      </ol>
+      <div class="calendar_widget">
+        <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">Add to calendar</a>
+        {% include "course/_add_to_calendar.html" with calendar_event=session %}
+      </div>
     </div>
     <div class="right">
       <div class="description">

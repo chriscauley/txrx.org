@@ -4,9 +4,10 @@ from django.http import QueryDict
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .models import Course, Section, Term, Subject, Session, Enrollment
+from .models import Course, Section, Term, Subject, Session, Enrollment, ClassTime
 from .forms import EmailInstructorForm
 from membership.models import UserMembership
+from event.utils import make_ics,ics2response
 
 from djpjax import pjaxtend
 from paypal.standard.ipn.models import *
@@ -158,3 +159,8 @@ def email_instructor(request,session_pk):
     form.send()
   values = {'form': form}
   return TemplateResponse(request,"course/email_instructor.html",values)
+
+def ics_classes_all(request,fname):
+  occurrences = ClassTime.objects.all()
+  calendar_object = make_ics(occurrences,title="TX/RX Labs Classes")
+  return ics2response(calendar_object,fname=fname)

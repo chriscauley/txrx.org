@@ -2,7 +2,13 @@
 {% load url from future %}
 
 {% block full_title %}Events at TX/RX{% endblock %}
-{% block header_content %}Events at TX/RX{% endblock %}
+{% block header_content %}
+Events at TX/RX
+<div class="calendar_widget" style="display: inline-block; padding-left: 50px; font-size:0.7em;">
+  (<a href="javascript:;" onclick="$('.add_to_calendar').toggle()">Subscribe to calendar</a>)
+  {% include "event/_subscribe_to_calendar.html" %}
+</div>
+{% endblock %}
 
 {% block main %}
 <div class="paginator">

@@ -1,10 +1,14 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.conf import settings
+from django.db.models.loading import get_model
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.template.defaultfilters import slugify
 from djpjax import pjaxtend
 
+from .utils import make_ics,ics2response
 from .models import Event, EventOccurrence
 from course.models import ClassTime
 
@@ -90,3 +94,24 @@ def edit_photoset(self,_id):
   occurrence = EventOccurrence.objects.get(pk=_id)
   photoset = occurrence.get_photoset()
   return HttpResponseRedirect('/admin/codrspace/photoset/%s/'%photoset.id)
+
+def ics(request,module,model_str,pk,fname):
+  """Returns an ics file for any `Event` like or `EventOccurrence` like model.
+     An `Event` model will add an entry for `Event.all_occurrences()`.
+     """
+  model = get_model(module,model_str)
+  event = model.objects.get(pk=pk)
+  try:
+    occurrences = event.all_occurrences
+  except AttributeError: # single occurrence
+    occurrences = [event]
+
+  calendar_object = make_ics(occurrences,title=event.name)
+
+  return ics2response(calendar_object,fname=fname)
+
+def all_ics(request,fname):
+  occurrences = EventOccurrence.objects.all()
+
+  calendar_object = make_ics(occurrences,title="TX/RX Labs Events")
+  return ics2response(calendar_object,fname=fname)

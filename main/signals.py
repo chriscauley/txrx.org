@@ -8,7 +8,7 @@ from mptt_comments.models import MpttComment
 from membership.models import UnsubscribeLink
 from .var import admin_comment_email, comment_response_email
 
-_u = lambda s: settings.ROOT_URL + s
+_u = lambda s: settings.SITE_URL + s
 
 def mail_admins_plus(subject,message,recipient_list):
   recipient_list += [email for name,email in settings.ADMINS if not email in recipient_list]

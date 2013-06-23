@@ -10,6 +10,9 @@
 {% include "widgets/photo_slideshow.html" with photos=occurrence.get_photoset.get_photos %}
 {% endif %}
 <p class="lead">{{ occurrence.start }}{% if occurrence.end %} - {{ occurrence.end.time }}{% endif %}</p>
-<p><a href="{{ occurrence.google_link }}">Add to Calendar</a>
+<div class="calendar_widget">
+  <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">Add to calendar</a>
+  {% include "event/_add_to_calendar.html" with calendar_event=occurrence %}
+</div>
 <p>{{ occurrence.description|explosivo }}</p>
 {% endblock %}

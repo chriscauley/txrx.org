@@ -9,7 +9,7 @@ import datetime
 
 from codrspace.models import SetModel
 from geo.models import Location
-from event.models import OccurrenceModel
+from event.models import OccurrenceModel, reverse_ics
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
@@ -56,7 +56,9 @@ class Section(models.Model):
   src = ImageField("Logo",max_length=300,upload_to='course/%Y-%m',null=True,blank=True)
   #tools = models.ManyToManyField(Tool,blank=True)
   max_students = models.IntegerField(default=40)
+
   __unicode__ = lambda self: "%s - %s"%(self.course.name,self.term)
+
   def get_notes(self):
     notes = []
     if self.requirements:
@@ -85,8 +87,12 @@ class Session(UserModel,SetModel):
   closed = property(lambda self: self.cancelled or self.archived or self.full)
   full = property(lambda self: self.enrollment_set.count() >= self.section.max_students)
   archived = property(lambda self: self.first_date<datetime.datetime.now())
-
   list_users = property(lambda self: [self.user])
+
+  #calendar crap
+  name = property(lambda self: self.section.course.name)
+  all_occurrences = property(lambda self: self.classtime_set.all())
+  get_ics_url = lambda self: reverse_ics(self)
 
   @property
   def week(self):
@@ -141,6 +147,7 @@ class ClassTime(OccurrenceModel):
   end_time = models.TimeField()
   short_name = lambda self: self.session.section.course.get_short_name()
   get_absolute_url = lambda self: self.session.get_absolute_url()
+  get_location = lambda self: self.session.section.location
   @property
   def description(self):
     return self.session.section.description

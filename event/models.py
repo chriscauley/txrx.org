@@ -1,6 +1,6 @@
 from django.db import models
-from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify, date, urlencode
 
 from wmd import models as wmd_models
@@ -16,6 +16,15 @@ def print_time(t):
   if t: return t.strftime('%I:%M %P')
   return ''
 
+def reverse_ics(obj):
+  """ see event.views.ics for information on what objects can be used with this function """
+  clss = obj.__class__
+  module = clss.__module__.split(".")[0]
+  model_str = clss.__name__
+  f_name = '%s-%s.ics'%(slugify(obj.name),slugify(settings.SITE_NAME))
+  return "%s/event/ics/%s/%s/%s/%s"%(settings.SITE_DOMAIN,module,model_str,obj.id,f_name)
+
+
 REPEAT_CHOICES = (
   ('','No Repeat'),
   ('weekly','Weekly'),
@@ -28,10 +37,14 @@ class Event(models.Model):
   _ht = "Optional. Alternative name for the calendar."
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   location = models.ForeignKey(Location)
+  get_location = lambda self: self.location
   description = wmd_models.MarkDownField(blank=True,null=True)
   repeat = models.CharField(max_length=32,choices=REPEAT_CHOICES,null=True,blank=True)
 
   get_short_name = lambda self: self.short_name or self.name
+  @property
+  def all_occurrences(self):
+    return self.eventoccurrence_set.all()
   @property
   def upcoming_occurrences(self):
     return self.eventoccurrence_set.filter(start__gte=datetime.datetime.now())
@@ -45,6 +58,8 @@ class Event(models.Model):
   def get_name(self):
     return self.name or self.location
 
+  get_ics_url = lambda self: reverse_ics(self)
+
   __unicode__ = lambda self: "%s@%s"%(self.name,self.location)
   class Meta:
     pass
@@ -55,6 +70,9 @@ class OccurrenceModel(models.Model):
   Occurrences need a start (DateTime), end (DateTime, optional), name (str), description (str), and get_absolute_url (str).
   """
   __unicode__ = lambda self: "%s - %s"%(self.name,date(self.start,'l F d, Y'))
+
+  get_ics_url = lambda self: reverse_ics(self)
+
   @property
   def google_link(self):
     d = {
@@ -80,6 +98,7 @@ class EventOccurrence(OccurrenceModel,SetModel):
   short_name = property(lambda self: self.name_override or self.event.get_short_name())
   description_override = wmd_models.MarkDownField(blank=True,null=True)
   description = property(lambda self: self.description_override or self.event.description)
+  get_location = lambda self: self.event.location
   class Meta:
     ordering = ('start',)
 

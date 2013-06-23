@@ -34,3 +34,4 @@ django-tagging
 -e git+git://github.com/jacobian/django-pjax.git#egg=django-pjax
 
 django-next-please
+icalendar

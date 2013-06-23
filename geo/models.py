@@ -38,4 +38,5 @@ class Location(GeoModel):
     l = [self.name,self.address,self.address2,self.city.__unicode__(),self.zip_code]
     return '\n'.join([str(li) for li in l if li])
   def __unicode__(self):
-    return self.name or "<%s>"%self.address
+    items = [self.name, self.address, self.address2, self.city, self.zip_code]
+    return ', '.join([str(i) for i in items if i])

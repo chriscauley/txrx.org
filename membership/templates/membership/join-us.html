@@ -55,7 +55,7 @@ function setHiddenFields(that) {
       {% endfor %}
     </select>
     <input type="hidden" name="currency_code" value="USD">
-    <input type="hidden" name="RETURNURL" value="{{ settings.ROOT_URL }}/joined/{{ user.id }}/">
+    <input type="hidden" name="RETURNURL" value="{{ settings.SITE_URL }}/joined/{{ user.id }}/">
     <input type="image" name="submit" alt="PayPal - The safer, easier way to pay online!"
 	   src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif">
     <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="" width="1" height="1" border="0">

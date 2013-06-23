@@ -10,4 +10,5 @@ urlpatterns = patterns(
   url(r'^([\w\d\-\_]+)/$','detail',name='detail'),
   url(r'^debug/(?P<id>\d+)/$', 'debug_parsing',name='debug_parsing'),
   url(r'^email/instructor/(\d+)/$','email_instructor',name='email_instructor'),
+  url(r'^ics/(all_classes).ics$','ics_classes_all',name='ics_classes_all'),
 )

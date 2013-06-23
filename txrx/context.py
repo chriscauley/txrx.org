@@ -58,4 +58,7 @@ def nav(request):
     #last_week = EventOccurrence.objects.filter(start__lte=now,photoset__isnull=False),
     tags = Tag.objects.all(),
     class_faqs = class_faqs,
+    all_ics = '%s/event/ics/all_events.ics'%settings.SITE_DOMAIN, #! move to event.context
+    google_calendar_url = 'http://www.google.com/calendar/render?cid=', #! move to event.context
+    all_classes_ics = '%s/classes/ics/all_classes.ics'%settings.SITE_DOMAIN, #! move to course.context
     )
