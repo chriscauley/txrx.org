@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from codrspace.models import Photo,PhotoSet
-from codrspace.forms import PhotoForm, PhotoFilterForm
+from codrspace.forms import PhotoForm, PhotoFilterForm, ZipForm
 
 from NextPlease import pagination
 
@@ -61,3 +61,17 @@ def photoset_detail(request,pk,slug):
 
 def modify_photos(request):
   pass
+
+@staff_member_required
+def upload_zip(request):
+  form = ZipForm(request.POST or None, request.FILES or None)
+  if request.POST and form.is_valid():
+    z = request.FILES['zip_file']
+    folder = os.path.join(settings.MEDIA_ROOT,'zip_temp')
+    if not os.path.exists(folder):
+      os.mkdir(folder)
+    folder = os.path.join(folder,z.name)
+    os.mkdir(folder)
+    with open('tmp', 'wb+') as destination:
+      for chunk in f.chunks():
+        destination.write(request.FILES['zip_file'])

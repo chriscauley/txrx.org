@@ -28,6 +28,8 @@ def reverse_ics(obj):
 REPEAT_CHOICES = (
   ('','No Repeat'),
   ('weekly','Weekly'),
+  ('biweekly','Bi Weekly'),
+  ('triweekly','Tri Weekly'),
   ('month-dow','Monthly (Nth weekday of every month)'),
   ('month-number','Monthly (by day number)'),
   )

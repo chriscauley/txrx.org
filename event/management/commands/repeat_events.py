@@ -42,24 +42,34 @@ class Command (BaseCommand):
       errors = []
       event_set = Event.objects.filter(repeat__isnull=False)
       now = datetime.datetime.now()
-      year_from_now = now+datetime.timedelta(365)
+      year_from_now = now+datetime.timedelta(120) #actually 4 months!
       for event in event_set:
           try:
               last_occurrence = list(event.eventoccurrence_set.all())[-1]
               while last_occurrence.start < year_from_now:
-                  if event.repeat == 'weekly':
-                      start = last_occurrence.start+datetime.timedelta(7)
-                      end = last_occurrence.end + datetime.timedelta(7)
+                  occurrences = []
+                  if 'weekly' in event.repeat:
+                      _map = {'weekly':2,'biweekly':3,'triweekly':4}
+                      for i in range(1,_map[event.repeat]):
+                          last_occurrence = list(event.eventoccurrence_set.all())[-i]
+                          start = last_occurrence.start+datetime.timedelta(7)
+                          end = last_occurrence.end + datetime.timedelta(7)
+                          occurrences.append({'start':start,'end':end})
                   if event.repeat =='month-dow':
                       start = add_month_dow(last_occurrence.start)
                       end = add_month_dow(last_occurrence.end)
+                      occurrences.append({'start':start,'end':end})
                   if event.repeat == 'month-number':
                       start = add_month(last_occurrence.start)
                       end = add_month(last_occurrence.end)
-                  last_occurrence = EventOccurrence(start=start,end=end,event=event)
-                  last_occurrence.save()
-                  success.append("%s occurrence created on %s"%(event,last_occurrence.end))
+                      occurrences.append({'start':start,'end':end})
+                  for occurrence in occurrences:
+                      last_occurrence = EventOccurrence(event=event,**occurrence)
+                      last_occurrence.save()
+                      success.append("%s occurrence created on %s"%(event,last_occurrence.start))
           except Exception, err:
+              if settings.DEBUG:
+                  raise
               errors.append("%s error: \n%s"%(event,traceback.format_exc()))
       if errors:
           mail_admins("event errors",'\n'.join(errors))
