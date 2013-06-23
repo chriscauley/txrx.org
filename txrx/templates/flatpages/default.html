@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block side %}
-{% for photo in flatpage|get_photos %}{{ photo.file }}<br />
+{% for photo in flatpage|get_photos %}
 {% thumbnail photo.file "300x300" crop="center" as im %}
 <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
 {% endthumbnail %}
