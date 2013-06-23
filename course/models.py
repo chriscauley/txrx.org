@@ -145,7 +145,11 @@ class ClassTime(OccurrenceModel):
   session = models.ForeignKey(Session)
   start = models.DateTimeField()
   end_time = models.TimeField()
-  short_name = lambda self: self.session.section.course.get_short_name()
+  def short_name(self):
+    times = list(self.session.classtime_set.all())
+    if len(times) == 1:
+      return self.session.section.course.get_short_name()
+    return "%s (%s/%s)"%(self.session.section.course.get_short_name(),times.index(self)+1,len(times))
   get_absolute_url = lambda self: self.session.get_absolute_url()
   get_location = lambda self: self.session.section.location
   @property
