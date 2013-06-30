@@ -12,7 +12,7 @@ MANAGERS = ADMINS = (
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.sqlite',
-    'NAME': os.path.join(SPATH.'local.db'),
+    'NAME': os.path.join(SPATH,'local.db'),
     'USER': '',
     'PASSWORD': '',
     'HOST': '',
