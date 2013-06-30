@@ -2,32 +2,26 @@
 TXRX Labs Website
 ========
 
-Depends on the LabLackey git repository. After cloning, cd into txrx.org and run:
+Install required system packages. This will vary from distribution to distribution.
 
-    $ git submodule update --init --recursive
+```bash
+apt-get install python-dev git-core python-pip libpng-dev libjpeg-dev
+```
 
+Now get the sourcecode from github. If you forked the source code use your own url (replace chriscauley with your github username).
 
-Then install all python requirements with:
+```bash
+git clone https://github.com/chriscauley/txrx.org
+cd txrx.org
+```
 
-    $ sudo apt-get install python-imaging    # package manager may vary
-    
-    $ sudo pip install -r requirements.txt
+Install the python requirements.
 
-Create database with:
+```bash
+pip install -r config/requirements.txt
+```
 
-    $ cd txrx
-    
-    $ python manage.py syncdb    # You will be prompted to create a super user
-    
-    $ python manage.py migrate
-
-Database is stored in txrx.db by default. Feel free to delete and recreate.
-Run devserver with
-
-    $ python manage.py runserver 0.0.0.0:8000
-
-Website can be accessed through localhost:8000
-Admin is at /admin 
+Copy the 
 
 Author
 ======
