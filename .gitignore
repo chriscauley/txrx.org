@@ -1,16 +1,17 @@
+#temp files, etc.
 *.pyc
 *.py~
 *~
 \.\#*
 \#*
+
+#site generated content
 media/*
 static/*
 log/*
 scripts/backups
-txrx/txrx.db
-txrx/settings/local.py
- # I'm merging this project into txrx.org/txrx as chores
-goldstar/*
+
+#virtual environments
 env/*
 environ/*
 .environ/*
@@ -19,4 +20,8 @@ environ/*
 .project
 .idea
 node/*
+
+#relevant to development
+txrx/local.db
+txrx/settings/local.py
 *.sql
