@@ -11,10 +11,10 @@ MANAGERS = ADMINS = (
 
 DATABASES = {
   'default': {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'txrx',
-    'USER': 'postgres',
-    'PASSWORD': 'postgres',
+    'ENGINE': 'django.db.backends.sqlite',
+    'NAME': os.path.join(SPATH.'local.db'),
+    'USER': '',
+    'PASSWORD': '',
     'HOST': '',
     'PORT': '',
     }
