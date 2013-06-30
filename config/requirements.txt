@@ -1,10 +1,9 @@
 django==1.4
-django-articles==2.4.1
 south==0.7.6
 # PIL==1.1.7 #install me with apt-get!
--e git+https://github.com/sehmaschine/django-grappelli.git#egg=django-grappelli
+django-grappelli
 simplejson==2.1.2
-sorl-thumbnail==11.12
+sorl-thumbnail==12.04
 django-devserver==0.4
 #we need this but there's a problem with the pip version, mx.DateTime problem
 psycopg2==2.4.6
@@ -24,8 +23,7 @@ django-timezones==0.2
 pytz>=2011n
 Pygments
 django-tastypie==0.9.11
-django-debug-toolbar
--e git://github.com/kennethreitz/requests.git#egg=requests
+requests
 -e git://github.com/durden/frappy.git#egg=frappy
 
 django-tagging

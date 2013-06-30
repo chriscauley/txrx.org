@@ -84,7 +84,8 @@ class Session(UserModel,SetModel):
   time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
   __unicode__ = lambda self: "%s (%s - %s)"%(self.section, self.user,self.first_date.date())
 
-  closed = property(lambda self: self.cancelled or self.archived or self.full)
+  in_progress = property(lambda self: self.archived and self.last_date>datetime.datetime.now())
+  closed = property(lambda self: self.cancelled or (self.archived and not self.in_progress) or self.full)
   full = property(lambda self: self.enrollment_set.count() >= self.section.max_students)
   archived = property(lambda self: self.first_date<datetime.datetime.now())
   list_users = property(lambda self: [self.user])
@@ -120,6 +121,11 @@ class Session(UserModel,SetModel):
   def first_date(self):
     if self.classtime_set.count():
       return self.classtime_set.all()[0].start
+    return datetime.datetime(2000,1,1)
+  @property
+  def last_date(self):
+    if self.classtime_set.count():
+      return list(self.classtime_set.all())[-1].end
     return datetime.datetime(2000,1,1)
   def get_instructor_name(self):
     instructor = self.user
