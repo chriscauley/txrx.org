@@ -32,7 +32,6 @@ INSTALLED_APPS = (
   'wmd',
   'password_reset',
   'codrspace',
-  'tastypie',
 
   # this project
   'db',

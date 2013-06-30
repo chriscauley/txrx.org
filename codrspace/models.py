@@ -12,14 +12,11 @@ from django.utils.http import urlquote
 
 from crop_override import CropOverride, OriginalImage
 from timezones.fields import TimeZoneField
-from tastypie.models import create_api_key
 import tagging
 
 from db.models import SlugModel, OrderedModel, UserModel
 from codrspace.managers import SettingManager
 from instagram.models import InstagramPhoto
-
-models.signals.post_save.connect(create_api_key, sender=User)
 
 try:
   from south.modelsinspector import add_introspection_rules

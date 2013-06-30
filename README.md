@@ -21,7 +21,11 @@ Install the python requirements.
 pip install -r config/requirements.txt
 ```
 
-Copy the 
+Copy the dummy settings file to local.py
+
+```bash
+cp txrx/settings/dummy.py txrx/settings/local.py
+```
 
 Author
 ======

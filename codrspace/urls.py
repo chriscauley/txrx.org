@@ -3,10 +3,8 @@ from django.views.decorators.cache import cache_page
 from django.contrib.sitemaps import views as sitemaps_views
 from django.http import HttpResponse
 from codrspace.feeds import LatestPostsFeed
-from codrspace.api import PostResource
 from codrspace.site_maps import DefaultMap, PostMap, UserMap
 
-post_resource = PostResource()
 site_maps = {
   'default': DefaultMap,
   'posts': PostMap,
@@ -26,8 +24,6 @@ urlpatterns = patterns(
   url(r'^signin/$', 'signin_start', name="signin_start"),
   url(r'^signin_callback/$', 'signin_callback', name="signin_callback"),
   url(r'^signout/$', 'signout', name="signout"),
-
-  url(r'^api/', include(post_resource.urls)),
 
   url(r'^photo/insert/$','insert_photo',name='insert_photo'),
   url(r'^photo/add/$','add_photo',name='add_photo'),
