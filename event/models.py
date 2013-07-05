@@ -10,7 +10,7 @@ from codrspace.models import SetModel
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
 import simplejson as json
-import datetime
+import datetime,sys
 
 def print_time(t):
   if t: return t.strftime('%I:%M %P')
@@ -104,4 +104,6 @@ class EventOccurrence(OccurrenceModel,SetModel):
   class Meta:
     ordering = ('start',)
 
-from .signals import *
+#these signals fire and mess up loaddata
+if not 'loaddata' in sys.argv:
+  from .signals import *
