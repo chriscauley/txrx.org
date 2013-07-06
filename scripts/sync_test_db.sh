@@ -17,8 +17,8 @@ if [[ $FORCE -eq $FORCE ]]; then
     fi
 fi
 cd $SOURCE_DIR
-#mv txrx/txrx.db txrx/old.db
-#scp development@dev.txrxlabs.org:/home/development/anon.db txrx/txrx.db
+mv txrx/txrx.db txrx/old.db
+scp development@dev.txrxlabs.org:/home/development/anon.db txrx/txrx.db
 echo -e "\nOld db has been backed up as txrx/old.db and the anon database has been created."
 echo "Please use username \"admin\" and password \"hackerspace\" for superuser access to your site."
 echo
