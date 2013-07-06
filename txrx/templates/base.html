@@ -13,10 +13,12 @@
     depracating in favor of less
     {% endcomment %}
     <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
+    {% compress js %}
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.pjax.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jsi18n.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}mptt_comments/js/mptt_comments.js"></script>
+    {% endcompress %}
     {% block head %}{% endblock %}
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -51,34 +53,36 @@
       </footer>
       {% endblock %}
     </div>
+    {% script compress js %}
     <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-tooltip.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-carousel.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-collapse.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-transition.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-dropdown.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-modal.js"></script>
-    {% block extra_body %}
-    {% endblock %}
     <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-alert.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}codrspace.js"></script>
     <script type="text/javascript">
       $('img[rel=tooltip]').tooltip();
       $(document).pjax('[data-pjax]','#main',{timeout:5000});
     </script>
-<script type="text/javascript">
+    <script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-39204768-1']);
-  _gaq.push(['_setDomainName','txrxlabs.org']);
-  _gaq.push(['_trackPageview']);
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-39204768-1']);
+      _gaq.push(['_setDomainName','txrxlabs.org']);
+      _gaq.push(['_trackPageview']);
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+      (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
 
-</script>
+    </script>
+    {% endcompress %}
+    {% block extra_body %}
+    {% endblock %}
     <div id="bot_right">
       {% if request.theme == "dark" %}
       <a href="?set_theme=default">Who turned out the Lights?</a>
