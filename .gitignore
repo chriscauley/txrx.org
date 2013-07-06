@@ -25,3 +25,5 @@ node/*
 txrx/local.db
 txrx/settings/local.py
 *.sql
+scripts/anon.db
+scripts/backup.json
