@@ -13,7 +13,7 @@ django_compressor==1.2
 BeautifulSoup==3.2.1
 
 django-mptt==0.5.4
--e git+https://github.com/liberation/django-mptt-comments.git#egg=django-mptt-comments
+-e git+https://github.com/chriscauley/django-mptt-comments.git#egg=django-mptt-comments
 
 django-redis-cache
 Markdown==2.0.3
