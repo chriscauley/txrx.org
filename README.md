@@ -27,6 +27,23 @@ Copy the dummy settings file to local.py
 cp txrx/settings/dummy.py txrx/settings/local.py
 ```
 
+You can create the database one of two ways. Ask me for the password to development@dev.txrxlabs.org and then run the following command:
+
+```bash
+bash scripts/sync_test_db.sh
+```
+
+Hit 'y'  when prompted and enter the password. This will download the latest copy of the database (fully anonymized).
+
+Aternately you can create the database by running the following two commands.
+
+```bash
+python manage.py syncdb
+python manage.py migrate
+```
+
+This will create an empty database and you will be prompetd to create a superuser. 
+
 Author
 ======
 Chris Cauley

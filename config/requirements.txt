@@ -11,7 +11,7 @@ django_compressor==1.2
 BeautifulSoup==3.2.1
 
 #image stuff
-sorl-thumbnail==11.12
+-e git+https://github.com/chriscauley/sorl-thumbnail.git#egg=sorl-thumbnail
 -e git+https://github.com/chriscauley/Django-Crop-Override-Field.git#egg=django-crop-override-field
 pillow==2.1.0
 
