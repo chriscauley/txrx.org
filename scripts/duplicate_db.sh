@@ -12,10 +12,10 @@ python $SOURCE_DIR/manage.py dumpdata>backup.json
 python $SOURCE_DIR/manage.py loaddata --database=anon backup.json
 echo `ls anon.db -al`
 
-echo "truncate table django_session;"|sqlite3 anon.db #>/dev/null
-echo "truncate table paypal_ipn;"|sqlite3 anon.db #>/dev/null
-echo "truncate table django_admin_log;"|sqlite3 anon.db #>/dev/null
-echo "truncate table thumbnail_kvstore;"|sqlite3 anon.db #>/dev/null
+echo "delete from django_session;"|sqlite3 anon.db #>/dev/null
+echo "delete from paypal_ipn;"|sqlite3 anon.db #>/dev/null
+echo "delete from django_admin_log;"|sqlite3 anon.db #>/dev/null
+echo "delete from thumbnail_kvstore;"|sqlite3 anon.db #>/dev/null
 
 echo `ls anon.db -al`
 
