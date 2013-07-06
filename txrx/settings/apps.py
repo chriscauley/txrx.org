@@ -55,7 +55,6 @@ LOGOUT_REDIRECT = 'home'
 
 #compress
 COMPRESS_ENABLED = True
-COMPRESS_PRECOMPILERS = (('text/less', 'lessc {infile} {outfile}'),)
 
 #codrspace
 SITE_TAGLINE = "Houston's Hackerspace"
