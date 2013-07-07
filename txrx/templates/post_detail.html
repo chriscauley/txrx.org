@@ -20,7 +20,7 @@
     {% if post.status != "deleted" %}
     {% include "_post_content.html" with post=post %}
     {% endif %}
-    {#{% display_comment_toplevel_for post %}#}
+    {% display_comment_toplevel_for post %}
   </div>
 </div>
 <div id="popover-content">

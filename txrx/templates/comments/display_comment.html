@@ -28,8 +28,10 @@
       {% endblock %}
     </div>
   </div>
+  {% with template="comments/display_comment.html" %}
   {% for child in comment.children.all %}
-  {% include "comments/display_comment.html" with comment=child %}
+  {% include template with comment=child %}
   {% endfor %}
+  {% endwith %}
 </div>
 {% endwith %}
