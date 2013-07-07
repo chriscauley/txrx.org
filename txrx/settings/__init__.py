@@ -2,7 +2,7 @@ import os, sys
 SPATH = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0,os.path.normpath(SPATH))
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 MANAGERS = ADMINS = (
@@ -118,6 +118,13 @@ import socket
 # Remove characters that are invalid for python modules.
 machine = re.sub('[^A-z0-9._]', '_', socket.gethostname())
 
+EMAIL_SUBJECT_PREFIX = "[TXRX] "
+DEFAULT_FROM_EMAIL = "noreply@txrxlabs.org"
+SERVER_EMAIL = "noreply@txrxlabs.org"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+NEW_STUDENT_PASSWORD = "I am a new student, reset my passwrod asap"
+
 for s_file in ['apps','local']:
   try:
     istr = 'txrx.settings.' + s_file
@@ -130,7 +137,3 @@ for s_file in ['apps','local']:
       if setting == setting.upper():
         setattr(sys.modules[__name__], setting, getattr(mod, setting))
 
-EMAIL_SUBJECT_PREFIX = "[TXRX] "
-DEFAULT_FROM_EMAIL = "noreply@txrxlabs.org"
-SERVER_EMAIL = "noreply@txrxlabs.org"
-NEW_STUDENT_PASSWORD = "I am a new student, reset my passwrod asap"
