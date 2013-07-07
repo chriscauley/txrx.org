@@ -21,13 +21,7 @@ Install the python requirements.
 pip install -r config/requirements.txt
 ```
 
-Copy the dummy settings file to local.py
-
-```bash
-cp txrx/settings/dummy.py txrx/settings/local.py
-```
-
-You can create the database one of two ways. Ask me for the password to development@dev.txrxlabs.org and then run the following command:
+You can create the database one of two ways. Ask chriscauley for the password to development@dev.txrxlabs.org and then run the following command:
 
 ```bash
 bash scripts/sync_test_db.sh
