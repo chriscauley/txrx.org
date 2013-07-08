@@ -28,10 +28,6 @@
       {% endblock %}
     </div>
   </div>
-  {% with template="comments/display_comment.html" %}
-  {% for child in comment.children.all %}
-  {% include template with comment=child %}
-  {% endfor %}
-  {% endwith %}
+  {{ child_comments|safe }}
 </div>
 {% endwith %}

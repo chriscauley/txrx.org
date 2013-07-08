@@ -19,7 +19,7 @@ def mail_admins_plus(subject,message,recipient_list):
     recipient_list)
 
 def new_comment_connection(sender, instance=None, created=False,**kwargs):
-  if not created:
+  if not created or settings.DEBUG:
     return
   _dict = {
     'content': instance.comment,
