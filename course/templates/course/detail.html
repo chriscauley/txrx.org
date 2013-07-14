@@ -1,11 +1,16 @@
 {% extends "base.html" %}
-{% load mptt_comments_tags %}
+{% load mptt_comments_tags thumbnail %}
 {% load url from future %}
 
 {% block title %}{{ session.section.course }}{% endblock %}
 {% block header %}{% endblock %}
 
 {% block content %}
+{% if session.branding %}
+{% thumbnail session.branding.image "620x100" as im %}
+<img src="{{ im.url }}" width="620" />
+{% endthumbnail %}
+{% endif %}
 <div class="page-header" style="margin: -10px 0 20px;">
   <h1 class="home-tagline">{{ session.section.course }}</h1>
 </div>
