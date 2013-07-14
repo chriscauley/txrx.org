@@ -1,30 +1,35 @@
-        
-    {% load comments %}
-    {% load i18n %}
-    <div class="comment_form">
-    <form action="{% comment_form_target %}" method="POST">{% csrf_token %}
-        <fieldset>
-            <ul class="unstyled">
-            {% for field in form %}
-                {% if not field.is_hidden %}
-                <li class="{% if not field.field.required %}not{% endif %}required{% if field.errors %} errors{% endif %}{% if field.name != 'comment' %} hide{% endif %}">
-                    {{ field }}
-                    {{ field.errors }}
-                </li>
-                {% endif %}
-            {% endfor %}
-                {% if form.non_field_errors %}
-                <li class="errors">{{ form.non_field_errors }}</li>
-                {% endif %}
-                <li>
-                {% for field in form %}
-                    {% if field.is_hidden %}
-                        {{ field }}
-                    {% endif %}
-                {% endfor %}
-                  <input type="submit" name="submit" class="submit-post" value="{% trans 'Post' %}">
-                </li>
-            </ul>
-        </fieldset>
-    </form>
-    </div>
+{% load comments %}
+{% load i18n %}
+<div class="comment_form">
+  <form action="{% comment_form_target %}" method="POST">{% csrf_token %}
+    <fieldset>
+      <ul class="unstyled">
+        {% for field in form %}
+        {% if not field.is_hidden %}
+        <li class="{% if not field.field.required %}not{% endif %}required{% if field.errors %} errors{% endif %}{% if field.name != 'comment' %} hide{% endif %}">
+          {{ field }}
+          {{ field.errors }}
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% if form.non_field_errors %}
+        <li class="errors">{{ form.non_field_errors }}</li>
+        {% endif %}
+        <li>
+          {% for field in form %}
+          {% if field.is_hidden %}
+          {{ field }}
+          {% endif %}
+          {% endfor %}
+          {% if warn %}
+          <div class="alert alert-warning reply-warning">
+            If you want to respond to a comment, please click "Post Reply".
+            This way the comment author will receive a notification of your response.
+          </div>
+          {% endif %}
+          <input type="submit" name="submit" class="submit-post" value="{% trans 'Post' %}">
+        </li>
+      </ul>
+    </fieldset>
+  </form>
+</div>

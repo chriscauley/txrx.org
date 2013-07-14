@@ -18,7 +18,7 @@
   <div class="new_comment_form_wrapper">
     {% get_mptt_comment_form for object as form %}
 
-    {% include "comments/form.html" %}
+    {% include "comments/form.html" with warn=comments %}
   </div>
   {% else %}
   Please <a href="/accounts/login?next={{ request.path }}">login or register</a> to comment.
