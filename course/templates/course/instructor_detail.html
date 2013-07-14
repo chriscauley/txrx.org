@@ -18,6 +18,7 @@
   <div>
     <div class="accordion" id="instructor_classes">
       {% for term,sessions in profile.get_term_sessions %}
+      {% if sessions %}
       <div class="accordion-group">
         <div class="accordion-heading">
           <a class="accordion-toggle" data-parent="#instructor_classes"
@@ -38,6 +39,7 @@
           </div>
         </div>
       </div>
+      {% endif %}
       {% endfor %}
     </div>
   </div>
