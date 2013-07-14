@@ -76,12 +76,21 @@ class Section(models.Model):
   class Meta:
     ordering = ("term","course")
 
+class Branding(models.Model):
+  name = models.CharField(max_length=32)
+  image = models.ImageField(upload_to="course_branding/%Y-%m")
+  small_image_override = models.ImageField(upload_to="course_branding/%Y-%m",null=True,blank=True)
+  get_small_image = lambda self: self.small_image_override or self.image
+  __unicode__ = lambda self: self.name
+
 class Session(UserModel,SetModel):
   section = models.ForeignKey(Section)
   slug = models.CharField(max_length=255)
   cancelled = models.BooleanField(default=False)
   ts_help = "Only used to set dates on creation."
   time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
+  branding = models.ForeignKey(Branding,null=True,blank=True)
+
   __unicode__ = lambda self: "%s (%s - %s)"%(self.section, self.user,self.first_date.date())
 
   in_progress = property(lambda self: self.archived and self.last_date>datetime.datetime.now())

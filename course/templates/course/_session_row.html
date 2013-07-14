@@ -1,5 +1,5 @@
 {% load url from future %}
-{% load txrx_tags %}
+{% load txrx_tags thumbnail %}
 <tr id="c{{session.id}}" class="course filterable"
     data-subject="{% for subject in session.subjects %}{{ subject }},{% endfor %}"
     {%if not session.course.closed%}data-open{%endif%}
@@ -8,6 +8,11 @@
     {% include "course/_enroll_link.html" %}
   </td>
   <td class="info-cell">
+    {% if session.branding %}
+    {% thumbnail session.branding.get_small_image "150x40" as im %}
+    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" style="float:right" />
+    {% endthumbnail %}
+    {% endif %}
     <a href="{% url "course:detail" session.slug %}">{{ session.section.course }}</a>
     <div class="lower"><small>
         {{ session.get_short_dates }}

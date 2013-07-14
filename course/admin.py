@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from course.models import Subject, Course, Section, Session, Enrollment, Term, ClassTime
+from course.models import Subject, Course, Section, Session, Enrollment, Term, ClassTime, Branding
 from db.forms import StaffMemberForm
 
 from codrspace.admin import PhotoSetConnectionInline
@@ -55,3 +55,4 @@ admin.site.register(Section,SectionAdmin)
 admin.site.register(Enrollment,EnrollmentAdmin)
 admin.site.register(Session,SessionAdmin)
 admin.site.register(Term)
+admin.site.register(Branding)
