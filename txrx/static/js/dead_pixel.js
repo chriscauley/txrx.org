@@ -37,6 +37,6 @@ window.onload = function() {
     var top = p[0], left = p[1], color = p[2];
     deadPixel(top,left,color);
   }
-  if (pixels.length < 2 || Math.random() > 0) { pixels.push(deadPixel()) }
+  if (pixels.length < 2 || Math.random() > 0.5) { pixels.push(deadPixel()) }
   document.cookie = name + "arstneiojkrofl=" + pixels.join("|") +";path=/";
 }
