@@ -40,7 +40,6 @@
 {% for post in paginator.current_list %}
 {% include "_post_content.html" with truncate_posts="True" %}
 {% endfor %}
-{% endblock %}
 <div class="paginator">
   {% if paginator.has_previous %}
   <a class="left" href="?{{ paginator.previous_qs }}">&lt; Previous</a>
@@ -50,3 +49,4 @@
   <a class="right" href="?{{ paginator.next_qs }}">Next &gt;</a>
   {% endif %}
 </div>
+{% endblock %}
