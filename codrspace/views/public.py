@@ -36,9 +36,8 @@ def post_detail(request, username, slug, template_name="post_detail.html"):
     except:
         user_settings = None
 
-    if post.status == 'draft':
-        if post.author != request.user:
-            raise Http404
+    if post.status == 'draft' and post.author != request.user and not request.user.is_superuser:
+        raise Http404
 
     return TemplateResponse(request, template_name, {
         'username': username,
