@@ -1,30 +1,18 @@
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.contrib.flatpages.models import FlatPage
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
-
-from djpjax import pjaxtend
 
 from .models import Membership, MeetingMinutes, UnsubscribeLink
 from .forms import UserForm, UserMembershipForm
 
+from djpjax import pjaxtend
+from registration.views import register as _register
 import datetime
-
-#! depracated
-"""@login_required
-def login_redirect(request):
-  #staff bounce right away
-  if request.user.is_staff:
-    return HttpResponseRedirect("/admin/")
-  
-  elif request.user.has_perm("course.change_session"):
-    return HttpResponseRedirect("/classes/my-sessions/")
-  
-  else:
-    return HttpResponseRedirect("/")
-"""
 
 @pjaxtend()
 def join_us(request):
@@ -66,9 +54,35 @@ def minutes_index(request):
     }
   return TemplateResponse(request,'membership/minutes_index.html',values)
 
+def register(request,*args,**kwargs):
+  if request.POST and request.POST.get('email',None):
+    email = request.POST.get('email','')
+    if User.objects.filter(email__iexact=email) or User.objects.filter(usermembership__paypal_email__iexact=email):
+      m = "An account with that email address already exists. "
+      m += "Please use the form below to reset your password. "
+      m += "If you believe this is in error, please email chris [{at}] lablackey.com"
+      messages.error(request,m)
+      return HttpResponseRedirect(reverse('password_reset_recover'))
+  return _register(request,'registration.backends.default.DefaultBackend',*args,**kwargs)
+
 def unsubscribe(request,key):
   d = datetime.date.today()+datetime.timedelta(7)
   link = get_object_or_404(UnsubscribeLink,key=key,created__lte=d)
   usermembership = link.user.usermembership
   usermembership.notify_comments = 'subscribe' in request.GET
   return TemplateResponse(request,'membership/unsubscribe.html')
+
+def roland_email(request,y=2012,m=1,d=1):
+  if not request.user.is_superuser:
+    raise Http404
+  import csv
+  dt = datetime.date(y,m,d)
+  # Create the HttpResponse object with the appropriate CSV header.
+  response = HttpResponse(content_type='text/csv')
+  response['Content-Disposition'] = 'attachment; filename="txrx_emails_%s-%s-%s.csv"'%(y,m,d)
+
+  writer = csv.writer(response)
+  for user in User.objects.filter(date_joined__gt=dt,is_active=True):
+    writer.writerow([user.email,user.username,str(user.date_joined)])
+
+  return response

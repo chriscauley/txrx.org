@@ -29,6 +29,7 @@ urlpatterns = patterns(
 urlpatterns += patterns(
   '',
   url(r'^accounts/settings/$','membership.views.settings',name='account_settings'),
+  url(r'^accounts/register/$','membership.views.register'),
   url(r'^accounts/', include('registration.backends.default.urls')),
   url(r'^password-reset/', include('password_reset.urls')),
   url(r'^force_login/(\d+)/$', 'txrx.views.force_login'),
@@ -45,12 +46,13 @@ urlpatterns += patterns(
 
 #membership urls
 urlpatterns += patterns(
-  '',
-  url(r'^join-us/$','membership.views.join_us'),
-  url(r'^membership/$', include('membership.urls')),
-  url(r'^minutes/$', 'membership.views.minutes_index', name='meeting_minutes_index',),
-  url(r'^minutes/(\d+-\d+-\d+)/$', 'membership.views.minutes', name='meeting_minutes',),
-)
+  'membership.views',
+  url(r'^join-us/$','join_us'),
+  url(r'^membership/', include('membership.urls')),
+  url(r'^minutes/$', 'minutes_index', name='meeting_minutes_index',),
+  url(r'^minutes/(\d+-\d+-\d+)/$', 'minutes', name='meeting_minutes',),
+  url(r'^roland_email/$','roland_email',name='roland_email'),
+  url(r'^roland_email/(\d+)/(\d+)/(\d+)/$','roland_email',name='roland_email'),)
 
 # todo
 urlpatterns += patterns(
