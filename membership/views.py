@@ -76,7 +76,7 @@ def roland_email(request,y=2012,m=1,d=1):
   if not request.user.is_superuser:
     raise Http404
   import csv
-  dt = datetime.date(y,m,d)
+  dt = datetime.date(int(y),int(m),int(d))
   # Create the HttpResponse object with the appropriate CSV header.
   response = HttpResponse(content_type='text/csv')
   response['Content-Disposition'] = 'attachment; filename="txrx_emails_%s-%s-%s.csv"'%(y,m,d)
