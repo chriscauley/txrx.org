@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load mptt_comments_tags thumbnail %}
 {% load url from future %}
+{% load short_codes %}
 
 {% block title %}{{ session.section.course }}{% endblock %}
 {% block header %}{% endblock %}
@@ -51,7 +52,7 @@
     </div>
     <div class="right">
       <div class="description">
-	{{ session.section.description|linebreaksbr }}
+	{{ session.section.description|explosivo|removetags:"script,style" }}
       </div>
       {% if session.section.fee_notes %}
       <span class="notes"><b>* Fee Notes:</b> {{ session.section.fee_notes }}</span>
