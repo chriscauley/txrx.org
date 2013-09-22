@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block main %}
+<table>
+  {% for session,money,attendance in course_tuples %}
+  {% ifchanged session.section.course.term %}
+  <tr><th></th></tr>
+  <tr>
+    <th colspan="4">{{ session.section.course.term }}</th>
+  </tr>
+  <tr>
+    <th>date</th>
+    <th>session</th>
+    <th>money</th>
+    <th>attendance</th>
+  </tr>
+  {% endifchanged %}
+  <tr>
+    <td>{{ session.first_date }}</td>
+    <td>{{ session.section.course }}</td>
+    <td>{{ money }}</td>
+    <td>{{ attendance }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

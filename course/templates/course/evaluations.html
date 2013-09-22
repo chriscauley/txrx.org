@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block content %}
+<ul>
+  {% for enrollment in enrollments %}
+  <li>
+    <a href="{% url "course:evaluation_detail" enrollment.id %}">{{ enrollment.session }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

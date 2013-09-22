@@ -366,3 +366,53 @@ h3.date {
     width: 160px;
   }
 }
+
+.evaluation_form .top {
+  margin: 0 15px 10px 250px;
+  min-height: 10px;
+  overflow: hidden;
+  text-align: center;
+  .l { float: left; }
+  .r { float: right; }
+  .scale { font-size: 0.8em; display: inline-block; width: 75px; }
+}
+
+.evaluation_form {
+  ._row { margin-bottom: 10px; }
+  ul {
+    display: inline-block;
+    margin: 0;
+    padding: 0 0 0 50px;
+    width: 350px;
+    label { position: relative; width: 100%; }
+    input { position: absolute; left: 50%; margin-left: -10px; top: 100%; width: 20px; }
+    &.errorlist {
+      color: red;
+      font-weight: bold;
+      padding-left: 20px;
+      width: 250px;
+      li { width: auto; }
+    }
+  }
+  li {
+    display: inline-block;
+    text-align: center;
+    width: 19%;
+  }
+  label {
+    display: inline-block;
+    width: 200px;
+  }
+  .required > label { font-weight: bold; &:after { content: "*"; } }
+  label, input { margin-bottom: 0; }
+  .help_text { font-size: 0.8em; width: 250px; }
+  .comments {
+    margin-bottom: 30px;
+    input { margin-left: -100px; width: 500px; }
+  }
+}
+
+.evaluation_form [class^=id_question] {
+  label { margin-bottom: 10px; width: 100%; }
+  textarea { height: 75px; width: 100%; }
+}

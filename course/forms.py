@@ -1,6 +1,8 @@
 from django import forms
 from django.core.mail import send_mail
 
+from .models import Evaluation, FIVE_CHOICES
+
 class RequestForm(forms.Form):
   """
   Just like a normal form but requires a request as the first argument rather than data.
@@ -38,3 +40,12 @@ class EmailInstructorForm(RequestForm):
     if mail_admins:
       to_addresses.append('chris@lablackey.com')
     send_mail(subject,body,from_address,to_addresses)
+
+class EvaluationForm(forms.ModelForm):
+  _kwargs = dict(choices=FIVE_CHOICES,widget=forms.RadioSelect)
+  presentation = forms.ChoiceField(label="Instructor Presentation",help_text=Evaluation.p_ht,**_kwargs)
+  content = forms.ChoiceField(label="Course Content",help_text=Evaluation.c_ht,**_kwargs)
+  visuals = forms.ChoiceField(label="Handouts/Audio/Visuals",help_text=Evaluation.v_ht,**_kwargs)
+  class Meta:
+    model = Evaluation
+    exclude = ('user','enrollment')

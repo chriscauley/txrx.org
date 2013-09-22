@@ -1,11 +1,13 @@
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
 
 from tagging.models import Tag
 
 from event.models import EventOccurrence
+from course.models import ClassTime
 
-import datetime
+import datetime,time
 
 def nav(request):
   blog_sublinks = [
@@ -62,3 +64,22 @@ def nav(request):
     google_calendar_url = 'http://www.google.com/calendar/render?cid=', #! move to event.context
     all_classes_ics = '%s/classes/ics/all_classes.ics'%settings.SITE_DOMAIN, #! move to course.context
     )
+
+def motd(request):
+  now = time.time()
+  yesterday = now - 60*60*24
+  if request.session.get('last_MOTD',0) > yesterday or settings.DEBUG:
+    # They have seen a MOTD in the past 24 hours, don't show them one
+    return {}
+  request.session['last_MOTD'] = now
+  request.session.save()
+
+  today = datetime.date.today()
+  tomorrow = today + datetime.timedelta(1)
+  events = EventOccurrence.objects.filter(start__gte=today,start__lte=tomorrow)
+  class_times = ClassTime.objects.filter(start__gte=today,start__lte=tomorrow)
+  if not classes or not events:
+    return {}
+
+  messages.success(request,"hooray message of the day")
+  return {}

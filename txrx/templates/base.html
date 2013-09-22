@@ -26,7 +26,7 @@
   <body>
     {% block nav %}{% include "_nav.html" with page="home" %}{% endblock %}
     <div class="container">
-      {% block messages %}{% include "_messages.html" with messages=messages %}{% endblock %}
+      {% block messages %}{% include "_messages.html" %}{% endblock %}
       {% block header %}
       <header>
         <div class="page-header">

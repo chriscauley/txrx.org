@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="." method="POST" class="evaluation_form">
+  {% csrf_token %}
+  <div class="top">
+    <div class="scale l">Did not meet expetactions</div>
+    <div class="scale">Met Expectations</div>
+    <div class="scale r">Exceeded Expectations</div>
+  </div>
+  {% for field in form %}
+  <div class="{{ field.auto_id }} _row{% if "Comments" in field.label %} comments{% endif %}{% if field.field.required %} required {% endif %}">
+    {{ field.label_tag }}
+    {{ field }}
+    {% if field.errors %}{{ field.errors }}{% endif %}
+    {% if field.help_text %}
+    <div class="help_text">{{ field.help_text }}</div>
+    {% endif %}
+  </div>
+  {% endfor %}
+  <input type="submit" />
+</form>
+{% endblock %}
