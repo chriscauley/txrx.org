@@ -3,10 +3,10 @@
 {% block main %}
 <table>
   {% for session,money,attendance in course_tuples %}
-  {% ifchanged session.section.course.term %}
-  <tr><th></th></tr>
+  {% ifchanged session.section.term %}
+  {% if not forloop.first %}<tr><th colspan="4">---------------</th></tr>{% endif %}
   <tr>
-    <th colspan="4">{{ session.section.course.term }}</th>
+    <th colspan="4">{{ session.section.term }}</th>
   </tr>
   <tr>
     <th>date</th>
@@ -16,7 +16,7 @@
   </tr>
   {% endifchanged %}
   <tr>
-    <td>{{ session.first_date }}</td>
+    <td>{{ session.first_date|date:"Y/m/d" }}</td>
     <td>{{ session.section.course }}</td>
     <td>{{ money }}</td>
     <td>{{ attendance }}</td>
