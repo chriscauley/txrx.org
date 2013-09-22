@@ -66,6 +66,8 @@ def nav(request):
     )
 
 def motd(request):
+  if True:
+    return
   now = time.time()
   yesterday = now - 60*60*24
   if request.session.get('last_MOTD',0) > yesterday or settings.DEBUG:
