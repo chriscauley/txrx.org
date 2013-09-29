@@ -182,7 +182,7 @@ def course_totals(request):
     raise Http404
   dicts = {}
   args = ('session','session__section','session__section__course','session__section__term')
-  enrollments = Enrollment.objects.select_related(*args).order_by('session__section__term')
+  enrollments = Enrollment.objects.select_related(*args).order_by('session__section__term__id')
   for e in enrollments:
     session_dict = dicts.get(e.session,{})
     session_dict['money'] = session_dict.get('money',0) + e.session.section.fee

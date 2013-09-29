@@ -62,6 +62,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   "django.contrib.messages.context_processors.messages",
   'txrx.context.nav',
   'txrx.context.motd',
+  'txrx.context.evaluations',
   'codrspace.context_processors.codrspace_contexts',
 )
 

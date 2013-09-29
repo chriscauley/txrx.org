@@ -5,7 +5,7 @@ from django.contrib import messages
 from tagging.models import Tag
 
 from event.models import EventOccurrence
-from course.models import ClassTime
+from course.models import ClassTime, Evaluation
 
 import datetime,time
 
@@ -64,6 +64,9 @@ def nav(request):
     google_calendar_url = 'http://www.google.com/calendar/render?cid=', #! move to event.context
     all_classes_ics = '%s/classes/ics/all_classes.ics'%settings.SITE_DOMAIN, #! move to course.context
     )
+
+def evaluations(request):
+  return { }#'evaluations': Evaluation.objects.filter(enrollment__user=request.user) }
 
 def motd(request):
   if True:

@@ -43,6 +43,7 @@
               <i class="icon-user"></i>
               {% if user.is_authenticated %}
               {{ user.username }}
+              {{ user_notifications.count }}
               {% else %}
               Log In/Register
               {% endif %}
