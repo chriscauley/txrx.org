@@ -120,6 +120,9 @@ class Proposal(models.Model):
   meeting_minutes = models.ForeignKey(MeetingMinutes)
   original = MarkDownField()
   ammended = MarkDownField(null=True,blank=True)
+  __unicode__ = lambda self: "Proposal #%s: %s"%(self.order,self.title or "(UNNAMED)")
+  class Meta: 
+    ordering = ('order',)
 
 class Survey(models.Model):
   user = models.ForeignKey(User,unique=True)
