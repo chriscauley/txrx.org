@@ -6,6 +6,12 @@
 
 {% block content %}
 <div class="well">{{ minutes.content|explosivo }}</div>
+{% for proposal in minutes.proposal_set.all %}
+<div class="well">
+  <h3>Proposal #{{ proposal.order }}: {{ proposal.title }}</h3>
+  {{ proposal.final_text }}
+</div>
+{% endfor %}
 {% endblock %}
 
 {% block side %}

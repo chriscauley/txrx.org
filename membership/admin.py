@@ -19,8 +19,9 @@ class UserMembershipAdmin(admin.ModelAdmin):
   list_editable = ('photo',)
   list_filter = ('user__is_staff',)
 
-class ProposalInline(admin.TabularInline):
+class ProposalInline(admin.StackedInline):
   model = Proposal
+  fields = (('order','title'),'original','ammended')
   extra = 0
 
 class MeetingMinutesAdmin(admin.ModelAdmin):
