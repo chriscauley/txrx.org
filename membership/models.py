@@ -114,6 +114,12 @@ class MeetingMinutes(models.Model):
   class Meta:
     ordering = ('-date',)
 
+class Proposal(models.Model):
+  meeting_minutes = models.ForeignKey(MeetingMinutes)
+  original = MarkDownField()
+  ammended = MarkDownField(null=True,blank=True)
+  order = models.IntegerField(default=0)
+
 class Survey(models.Model):
   user = models.ForeignKey(User,unique=True)
   reasons = models.TextField(blank=True)
