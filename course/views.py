@@ -180,15 +180,24 @@ def ics_classes_all(request,fname):
 def course_totals(request):
   if not request.user.is_superuser:
     raise Http404
-  dicts = {}
+  term_list = []
   args = ('session','session__section','session__section__course','session__section__term')
-  enrollments = Enrollment.objects.select_related(*args).order_by('session__section__term__id')
-  for e in enrollments:
-    session_dict = dicts.get(e.session,{})
-    session_dict['money'] = session_dict.get('money',0) + e.session.section.fee
-    session_dict['attendance'] = session_dict.get('attendance',0) + e.quantity
-    dicts[e.session] = session_dict
-  _t = [(k,v['money'],v['attendance']) for k,v in dicts.items()]
-  _t.sort(key=lambda l:l[0].first_date)
-  values = {'course_tuples':_t}
+  enrollments = Enrollment.objects.select_related(*args)
+  for term in Term.objects.all():
+    _dict = {
+      'term': term,
+      'sessions': {},
+      'money': 0,
+      'attendance': 0,
+      }
+    _enrollments = enrollments.filter(session__section__term=term)
+    for e in _enrollments:
+      session_dict = _dict['sessions'].get(e.session,{})
+      session_dict['money'] = session_dict.get('money',0) + e.session.section.fee
+      session_dict['attendance'] = session_dict.get('attendance',0) + e.quantity
+      _dict['sessions'][e.session] = session_dict
+      _dict['money'] += e.session.section.fee
+      _dict['attendance'] += e.quantity
+    term_list.append(_dict)
+  values = { 'term_list': term_list }
   return TemplateResponse(request,'course/course_totals.html',values)
