@@ -21,7 +21,7 @@ class UserMembershipAdmin(admin.ModelAdmin):
 
 class ProposalInline(admin.StackedInline):
   model = Proposal
-  fields = (('order','title'),'original','ammended')
+  fields = (('order','title','user'),'original','ammended')
   extra = 0
 
 class MeetingMinutesAdmin(admin.ModelAdmin):

@@ -114,7 +114,7 @@ class MeetingMinutes(models.Model):
   class Meta:
     ordering = ('-date',)
 
-class Proposal(models.Model):
+class Proposal(UserModel):
   order = models.IntegerField(default=0)
   title = models.CharField(max_length=256,null=True,blank=True)
   meeting_minutes = models.ForeignKey(MeetingMinutes)

@@ -9,6 +9,7 @@
 {% for proposal in minutes.proposal_set.all %}
 <div class="well">
   <h3>{{ proposal }}</h3>
+  <i>Proposed by {{ proposal.user.username|noemail }}</i>
   {{ proposal.final_text|explosivo }}
 </div>
 {% endfor %}
