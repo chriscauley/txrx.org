@@ -181,8 +181,8 @@ def course_totals(request):
   if not request.user.is_superuser:
     raise Http404
   dicts = {}
-  args = ('session','session__section','session__section__course','session__section__course__term')
-  enrollments = Enrollment.objects.select_related(*args)
+  args = ('session','session__section','session__section__course','session__section__term')
+  enrollments = Enrollment.objects.select_related(*args).order_by('session__section__term')
   for e in enrollments:
     session_dict = dicts.get(e.session,{})
     session_dict['money'] = session_dict.get('money',0) + e.session.section.fee
