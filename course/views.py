@@ -189,6 +189,6 @@ def course_totals(request):
     session_dict['attendance'] = session_dict.get('attendance',0) + e.quantity
     dicts[e.session] = session_dict
   _t = [(k,v['money'],v['attendance']) for k,v in dicts.items()]
-  _t.sort(key=lambda l:l[0].first_date)
+  #_t.sort(key=lambda l:l[0].first_date)
   values = {'course_tuples':_t}
   return TemplateResponse(request,'course/course_totals.html',values)
