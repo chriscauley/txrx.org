@@ -121,6 +121,7 @@ class Proposal(models.Model):
   original = MarkDownField()
   ammended = MarkDownField(null=True,blank=True)
   __unicode__ = lambda self: "Proposal #%s: %s"%(self.order,self.title or "(UNNAMED)")
+  final_text = property(lambda self: self.ammended or self.original)
   class Meta: 
     ordering = ('order',)
 
