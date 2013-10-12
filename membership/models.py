@@ -114,6 +114,17 @@ class MeetingMinutes(models.Model):
   class Meta:
     ordering = ('-date',)
 
+class Proposal(UserModel):
+  order = models.IntegerField(default=0)
+  title = models.CharField(max_length=256,null=True,blank=True)
+  meeting_minutes = models.ForeignKey(MeetingMinutes)
+  original = MarkDownField()
+  ammended = MarkDownField(null=True,blank=True)
+  __unicode__ = lambda self: "Proposal #%s: %s"%(self.order,self.title or "(UNNAMED)")
+  final_text = property(lambda self: self.ammended or self.original)
+  class Meta: 
+    ordering = ('order',)
+
 class Survey(models.Model):
   user = models.ForeignKey(User,unique=True)
   reasons = models.TextField(blank=True)
