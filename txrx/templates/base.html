@@ -11,12 +11,19 @@
     
     <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
     {% compress js %}
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.pjax.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jsi18n.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/dead_pixel.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}mptt_comments/js/mptt_comments.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.pjax.js"></script>
+    <script src="{{ STATIC_URL }}js/jsi18n.js"></script>
+    <script src="{{ STATIC_URL }}js/dead_pixel.js"></script>
+    <script src="{{ STATIC_URL }}mptt_comments/js/mptt_comments.js"></script>
     {% endcompress %}
+    <script src="{{ STATIC_URL }}js/favico-0.3.0.min.js"></script>
+    <script>
+      var f = new Favico({
+        animation : 'popFade'
+      });
+      f.badge({{ p_evaluations.count }});
+    </script>
     {% block head %}{% endblock %}
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -51,19 +58,19 @@
       </footer>
       {% endblock %}
     </div>
-    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-tooltip.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-carousel.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-collapse.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-transition.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-dropdown.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-modal.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-alert.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}codrspace.js"></script>
-    <script type="text/javascript">
+    <script src="{{ STATIC_URL }}bootstrap-tooltip.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-carousel.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-collapse.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-transition.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap-dropdown.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-modal.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap-alert.js"></script>
+    <script src="{{ STATIC_URL }}codrspace.js"></script>
+    <script>
       $('img[rel=tooltip]').tooltip();
       $(document).pjax('[data-pjax]','#main',{timeout:5000});
     </script>
-    <script type="text/javascript">
+    <script>
 
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-39204768-1']);

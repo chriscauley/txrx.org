@@ -1,7 +1,8 @@
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
-from django.http import QueryDict, Http404
+from django.http import QueryDict, Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
@@ -141,9 +142,12 @@ def evaluation_detail(request,enrollment_id):
   enrollment = get_object_or_404(Enrollment,pk=enrollment_id,user=request.user)
   form = EvaluationForm(request.POST or None)
   if request.POST and form.is_valid():
-    evaluation = form.save()
+    evaluation = form.save(commit=False)
+    evaluation.user = request.user
+    evaluation.enrollment = enrollment
+    evaluation.save()
     messages.success(request,"Your evaluation has been submitted. Thank you for your feedback!")
-    return HttpResponseRedirect(reverse("evaluation_index"))
+    return HttpResponseRedirect(reverse("course:evaluation_index"))
   values = { 'enrollment': enrollment, 'form': form }
   return TemplateResponse(request,"course/evaluation_form.html",values)
 

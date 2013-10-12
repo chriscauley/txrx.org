@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% block full_title %}Course Evaluation{% endblock %}
+{% block header_content %}
+Evaluate {{ enrollment.session.section.course }} ({{ enrollment.session.first_date }})
+{% endblock %}
+
 {% block content %}
 <form action="." method="POST" class="evaluation_form">
   {% csrf_token %}

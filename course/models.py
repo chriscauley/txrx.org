@@ -185,16 +185,29 @@ class Enrollment(UserModel):
   quantity = models.IntegerField(default=1)
   evaluated = models.BooleanField(default=False)
   __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.session)
+  def save(self,*args,**kwargs):
+    super(Enrollment,self).save(*args,**kwargs)
+    if not self.evaluated:
+      _d = {'live_date': list(self.session.all_occurrences)[-1].start+datetime.timedelta(1)}
+      p,new = PendingEvaluation.objects.get_or_create(user=self.user,enrollment=self,defaults=_d)
+      if new:
+        print "pending evaluation created"
   class Meta:
     ordering = ('-datetime',)
 
 FIVE_CHOICES = (
-  ('1','1'),
-  ('2','2'),
-  ('3','3'),
-  ('4','4'),
-  ('5','5'),
+  (1,'1'),
+  (2,'2'),
+  (3,'3'),
+  (4,'4'),
+  (5,'5'),
 )
+
+class PendingEvaluation(UserModel):
+  """ This model is primarily used to filter on which classes are over so that we can evaluate them"""
+  enrollment = models.ForeignKey(Enrollment,unique=True)
+  live_date = models.DateTimeField()
+  declined = models.BooleanField(default=False)
 
 class Evaluation(UserModel):
   enrollment = models.ForeignKey(Enrollment,unique=True)
@@ -218,6 +231,13 @@ class Evaluation(UserModel):
   question4 = models.TextField("What classes would you like to see offered in the future?",null=True,blank=True)
 
   __unicode__ = lambda self: "%s evaluation for %s"%(self.user,self.enrollment.session)
+
+  def save(self,*args,**kwargs):
+    super(Evaluation,self).save(*args,**kwargs)
+    pe = PendingEvaluation.objects.filter(enrollment=self.enrollment).delete()
+    e = self.enrollment
+    e.evaluated = True
+    e.save()
 
   class Meta:
     ordering = ('-datetime',)

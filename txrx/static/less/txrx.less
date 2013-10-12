@@ -367,6 +367,24 @@ h3.date {
   }
 }
 
+[data-reddot] {
+  &:before {
+    background: red;
+    border-radius: 100%;
+    color: white;
+    content: attr(data-reddot);
+    display: inline-block;
+    font-family: Arial;
+    font-size: 10px;
+    height: 14px;
+    line-height: 14px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    width: 14px;
+  }
+}
+
 .evaluation_form .top {
   margin: 0 15px 10px 250px;
   min-height: 10px;
