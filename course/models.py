@@ -196,7 +196,7 @@ class Enrollment(UserModel):
   __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.session)
   def save(self,*args,**kwargs):
     if not self.evaluation_date:
-      self.evaluation_date = list(self.session.all_occurrences)[-1].start+datetime.timedelta(1)
+      self.evaluation_date = list(self.session.all_occurrences)[-1].start
     super(Enrollment,self).save(*args,**kwargs)
   class Meta:
     ordering = ('-datetime',)
