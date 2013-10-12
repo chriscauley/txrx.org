@@ -67,7 +67,6 @@ def nav(request):
 
 def evaluations(request):
   _e = Enrollment.objects.pending_evaluation(user=request.user)
-  print _e
   return {'pending_evaluations': _e}
 
 def motd(request):
