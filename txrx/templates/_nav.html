@@ -53,8 +53,9 @@
               {% if user.is_staff %}<li><a href="/admin/"><i class="icon-cog"></i> Admin</a></li>{% endif %}
               <li><a href="{% url "signout" %}"><i class="icon-off"></i> Log out</a></li>
               <li><a href="{% url "account_settings" %}" data-pjax="#main"><i class="icon-cog"></i> Settings</a></li>
-              {% if p_evaluations %}
-              <li><a data-reddot="{{ p_evaluations.count }}" href="{% url "course:evaluation_index" %}"> Evaluations</a></li>
+              {% if pending_evaluations %}
+              <li><a data-reddot="{{ pending_evaluations.count }}"
+                     href="{% url "course:evaluation_index" %}"> Evaluations</a></li>
               {% endif %}
               {% else %}
               <li><a href="/accounts/register/" data-pjax="#main">Register</a></li>

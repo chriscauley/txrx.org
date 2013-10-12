@@ -5,11 +5,7 @@ from django.contrib import messages
 from tagging.models import Tag
 
 from event.models import EventOccurrence
-<<<<<<< Updated upstream
-from course.models import ClassTime
-=======
-from course.models import ClassTime, PendingEvaluation
->>>>>>> Stashed changes
+from course.models import ClassTime, Enrollment
 
 import datetime,time
 
@@ -70,8 +66,9 @@ def nav(request):
     )
 
 def evaluations(request):
-  _e = PendingEvaluation.objects.filter(user=request.user,declined=False)
-  return {'p_evaluations': _e}
+  _e = Enrollment.objects.pending_evaluation(user=request.user)
+  print _e
+  return {'pending_evaluations': _e}
 
 def motd(request):
   if True:

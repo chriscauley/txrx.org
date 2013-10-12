@@ -6,10 +6,12 @@
 
 {% block content %}
 <ul>
-  {% for enrollment in enrollments %}
+  {% for enrollment in pending_evaluations %}
   <li>
     <a href="{% url "course:evaluation_detail" enrollment.id %}">{{ enrollment.session }}</a>
   </li>
+  {% empty%}
+  <li>You have no pending evaluations</li>
   {% endfor %}
 </ul>
 {% endblock %}

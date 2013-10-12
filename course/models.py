@@ -179,19 +179,25 @@ class ClassTime(OccurrenceModel):
   class Meta:
     ordering = ("start",)
 
+class EnrollmentManager(models.Manager):
+  def pending_evaluation(self,*args,**kwargs):
+    kwargs['evaluation_date__lte'] = datetime.datetime.now()
+    kwargs['evaluation_date__gte'] = datetime.datetime.now()-datetime.timedelta(30)
+    kwargs['evaluated'] = False
+    return self.filter(*args,**kwargs)
+
 class Enrollment(UserModel):
   session = models.ForeignKey(Session)
   datetime = models.DateTimeField(default=datetime.datetime.now)
   quantity = models.IntegerField(default=1)
   evaluated = models.BooleanField(default=False)
+  evaluation_date = models.DateTimeField(null=True,blank=True)
+  objects = EnrollmentManager()
   __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.session)
   def save(self,*args,**kwargs):
+    if not self.evaluation_date:
+      self.evaluation_date = list(self.session.all_occurrences)[-1].start+datetime.timedelta(1)
     super(Enrollment,self).save(*args,**kwargs)
-    if not self.evaluated:
-      _d = {'live_date': list(self.session.all_occurrences)[-1].start+datetime.timedelta(1)}
-      p,new = PendingEvaluation.objects.get_or_create(user=self.user,enrollment=self,defaults=_d)
-      if new:
-        print "pending evaluation created"
   class Meta:
     ordering = ('-datetime',)
 
@@ -202,12 +208,6 @@ FIVE_CHOICES = (
   (4,'4'),
   (5,'5'),
 )
-
-class PendingEvaluation(UserModel):
-  """ This model is primarily used to filter on which classes are over so that we can evaluate them"""
-  enrollment = models.ForeignKey(Enrollment,unique=True)
-  live_date = models.DateTimeField()
-  declined = models.BooleanField(default=False)
 
 class Evaluation(UserModel):
   enrollment = models.ForeignKey(Enrollment,unique=True)
@@ -234,7 +234,6 @@ class Evaluation(UserModel):
 
   def save(self,*args,**kwargs):
     super(Evaluation,self).save(*args,**kwargs)
-    pe = PendingEvaluation.objects.filter(enrollment=self.enrollment).delete()
     e = self.enrollment
     e.evaluated = True
     e.save()

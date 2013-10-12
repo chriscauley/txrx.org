@@ -134,8 +134,7 @@ def all_sessions(request):
 
 @login_required
 def evaluation_index(request):
-  enrollments = Enrollment.objects.filter(evaluated=False,user=request.user)
-  return TemplateResponse(request,"course/evaluations.html",{'enrollments': enrollments})
+  return TemplateResponse(request,"course/evaluations.html",{})
 
 @login_required
 def evaluation_detail(request,enrollment_id):
