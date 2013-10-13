@@ -9,6 +9,7 @@ urlpatterns = patterns(
   url(r'^all-sessions/$', 'all_sessions',name='all_sessions'),
   url(r'^evaluations/$','evaluation_index',name='evaluation_index'),
   url(r'^evaluation/(\d+)/$','evaluation_detail',name='evaluation_detail'),
+  url(r'^instructor_evaluations/(\d+)/$','instructor_evaluations',name='instructor_evaluations'),
   url(r'^totals/$','course_totals',name='course_totals'),
   url(r'^([\w\d\-\_]+)/$','detail',name='detail'),
   url(r'^debug/(?P<id>\d+)/$', 'debug_parsing',name='debug_parsing'),

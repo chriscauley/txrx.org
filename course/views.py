@@ -6,7 +6,7 @@ from django.http import QueryDict, Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .models import Course, Section, Term, Subject, Session, Enrollment, ClassTime
+from .models import Course, Section, Term, Subject, Session, Enrollment, ClassTime, Evaluation
 from .forms import EmailInstructorForm, EvaluationForm
 from membership.models import UserMembership
 from event.utils import make_ics,ics2response
@@ -149,6 +149,22 @@ def evaluation_detail(request,enrollment_id):
     return HttpResponseRedirect(reverse("course:evaluation_index"))
   values = { 'enrollment': enrollment, 'form': form }
   return TemplateResponse(request,"course/evaluation_form.html",values)
+
+@login_required
+def instructor_evaluations(request,instructor_id=None):
+  if not request.user.is_staff or (not instructor_id and not request.user.is_superuser):
+    return HttpResponseNotAllowed()
+  if not instructor_id:
+    instructor_id = request.user.id
+  sessions = Session.objects.filter(user_id=instructor_id)
+  session_evaluations = []
+  for session in sessions:
+    evaluations = Evaluation.objects.filter(enrollment__session=session)
+    if not evaluations:
+      continue
+    session_evaluations.append((session,evaluations))
+  values = {'session_evaluations': session_evaluations}
+  return TemplateResponse(request,"course/instructor_evaluations.html",values)
 
 def debug_parsing(request, id):
   ipn = PayPalIPN.objects.get(id=id)

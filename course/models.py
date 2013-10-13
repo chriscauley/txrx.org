@@ -231,6 +231,13 @@ class Evaluation(UserModel):
   question4 = models.TextField("What classes would you like to see offered in the future?",null=True,blank=True)
 
   __unicode__ = lambda self: "%s evaluation for %s"%(self.user,self.enrollment.session)
+  number_fields = ["presentation","content","visuals"]
+  def get_number_tuples(self):
+    return [(f,getattr(self,f),getattr(self,f+"_comments")) for f in self.number_fields]
+  question_fields = property(lambda self: ['question'+str(i) for i in range(1,5)])
+  def get_question_tuples(self):
+    _t = [(self._meta.get_field(q).verbose_name,getattr(self,q)) for q in self.question_fields]
+    return [t for t in _t if t[1]] #filter out unanswered quesions
 
   def save(self,*args,**kwargs):
     super(Evaluation,self).save(*args,**kwargs)
