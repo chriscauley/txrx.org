@@ -73,7 +73,7 @@ class Post(models.Model):
 tagging.register(Post)
 
 class FileModel(models.Model):
-  """An abstract file model. Needs a file model which will be a models.FileField"""
+  """An abstract file model. Needs a file field which will be a models.FileField"""
   filename = models.CharField(max_length=200,editable=False)
   name = models.CharField(null=True,blank=True,max_length=500)
   user = models.ForeignKey(User,null=True,blank=True)
@@ -115,6 +115,9 @@ class FileModel(models.Model):
 
   class Meta:
     abstract = True
+
+class MiscFile(FileModel):
+  file = models.FileField(upload_to='uploads/file/%Y-%m')
 
 SOURCE_CHOICES = (
   ('web','Web'),

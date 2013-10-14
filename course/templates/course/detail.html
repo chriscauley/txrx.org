@@ -69,6 +69,14 @@
       </span>
       {% endif %}
     </div>
+    {% if session.sessionattachment_set.count %}
+    <div>
+      <h2>Relevant files</h2>
+      {% for attachment in session.sessionattachment_set.all %}
+      <a href="{{ attachment.attachment.file.url }}" target="_blank">{{ attachment.attachment.name }}</a><br/>
+      {% endfor %}
+    </div>
+    {% endif %}
     <div style="clear: both;"></div>
     {% display_comment_toplevel_for session %}
   </div>

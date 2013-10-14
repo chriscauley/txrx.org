@@ -39,8 +39,8 @@ urlpatterns += patterns(
 urlpatterns += patterns(
   'course.views',
   url(r'^classes/', include('course.urls',namespace='course',app_name='course')),
-  url(r'^instructors/$','instructors',name='instructor_index'),
-  url(r'^instructors/([^/]+)/$','instructor_detail',name='instructor_detail'),
+  url(r'^instructors/$','instructor.index',name='instructor_index'),
+  url(r'^instructors/([^/]+)/$','instructor.detail',name='instructor_detail'),
   url(r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
 )
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from course.models import Subject, Course, Section, Session, Enrollment, Term, ClassTime, Branding, Evaluation
+from course.models import Subject, Course, Section, Session, Enrollment, Term, ClassTime, Branding, Evaluation, SessionAttachment
 from db.forms import StaffMemberForm
 
 from codrspace.admin import PhotoSetConnectionInline
@@ -37,12 +37,16 @@ class EnrollmentInline(admin.TabularInline):
   readonly_fields = ('user',)
   extra = 0
 
+class SessionAttachmentInline(admin.TabularInline):
+  model = SessionAttachment
+  extra = 0
+
 class SessionAdmin(admin.ModelAdmin):
   form = StaffMemberForm
   raw_id_fields = ('section',)
   exclude = ('time_string','slug')
   extra = 0
-  inlines = (PhotoSetConnectionInline, ClassTimeInline, EnrollmentInline,)
+  inlines = (PhotoSetConnectionInline, ClassTimeInline, EnrollmentInline,SessionAttachmentInline)
 
 class EnrollmentAdmin(admin.ModelAdmin):
   list_display = ("id",'user', 'session', )

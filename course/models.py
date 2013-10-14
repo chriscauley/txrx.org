@@ -7,7 +7,7 @@ from db.models import UserModel
 from sorl.thumbnail import ImageField
 import datetime
 
-from codrspace.models import SetModel
+from codrspace.models import SetModel, MiscFile
 from geo.models import Location
 from event.models import OccurrenceModel, reverse_ics
 
@@ -155,6 +155,13 @@ class Session(UserModel,SetModel):
     
   class Meta:
     ordering = ('section',)
+
+class SessionAttachment(models.Model):
+  session = models.ForeignKey(Session)
+  attachment = models.ForeignKey(MiscFile)
+  order = models.IntegerField(default=0)
+  class Meta:
+    ordering = ('order',)
 
 class ClassTime(OccurrenceModel):
   session = models.ForeignKey(Session)
