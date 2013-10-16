@@ -15,6 +15,8 @@ INSTALLED_APPS = (
 
   # 3rd party
   'south',
+  'captcha',
+
   #'devserver',
   'sorl.thumbnail',
   'registration',
@@ -91,3 +93,6 @@ THUMBNAIL_DUMMY = True
 THUMBNAIL_DEBUG = True
 THUMBNAIL_DUMMY_SOURCE = "placereddit"
 THUMBNAIL_DUMMY_RATIO = "1.5"
+
+RECAPTCHA_PUBLIC_KEY = '6Lc53egSAAAAAFuu4PgoRVw_2ONjTTCfwkfDCFxF'
+RECAPTCHA_PRIVATE_KEY = '6Lc53egSAAAAACCvXuucwYu_M3mn-ZQsOlc4Ly_0'

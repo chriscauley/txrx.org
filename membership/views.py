@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from .models import Membership, MeetingMinutes, UnsubscribeLink
-from .forms import UserForm, UserMembershipForm
+from .forms import UserForm, UserMembershipForm, RegistrationForm
 
 from djpjax import pjaxtend
 from registration.views import register as _register
@@ -55,6 +55,7 @@ def minutes_index(request):
   return TemplateResponse(request,'membership/minutes_index.html',values)
 
 def register(request,*args,**kwargs):
+  kwargs['form_class'] = RegistrationForm
   if request.POST and request.POST.get('email',None):
     email = request.POST.get('email','')
     if User.objects.filter(email__iexact=email) or User.objects.filter(usermembership__paypal_email__iexact=email):
