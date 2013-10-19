@@ -3,7 +3,7 @@
 
 {% trans "Please go to the following link to evaluate your class." %}
 {% block reset_link %}
-{{ protocol }}://{{ domain }}{% url "course/evaluation_detail" evaluation.id %}?user_token={{ token }}
+{{ domain }}{% url "course:evaluation_detail" evaluation.id %}?LA_KEY={{ la_key.key }}
 {% endblock %}
 
 {% trans "Thank you for your time and we hope to see you again soon!" %}
