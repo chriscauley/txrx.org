@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block title %}Unsubscribed!{% endblock %}
+{% block header_content %}You have unsubscribed!{% endblock %}
+
+{% block content %}
+<p class="lead">
+  You have unsubscribed from comment responses. You will not be notified if someone replies to your comments, so please check the site regularly to see responses.
+  <br />
+  To change your account settings, click <a href="/accounts/settings/">here (login required)</a>.
+</p>
+{% endblock %}

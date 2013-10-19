@@ -105,6 +105,26 @@ class UnsubscribeLink(UserModel):
     key = ''.join([random.choice(seed) for i in range(32)])
     return clss(key=key,user=user)
 
+class LimitedAccessKey(UserModel):
+  """
+  Used to handle user operations that do not require login.
+  A user can change email preferences and fill out evaluations with this.
+  """
+  key = models.CharField(max_length=32,unique=True)
+  created = models.DateField(auto_now_add=True)
+  expires = models.DateField()
+
+  def save(self,*args,**kwargs):
+    self.expires = datetime.datetime.now()+datetime.timedelta(7)
+    return super(LimitedAccessKey,self).save(*args,**kwargs)
+
+  @classmethod
+  def new(clss,user):
+    seed = string.letters+string.digits
+    key = ''.join([random.choice(seed) for i in range(32)])
+    out = clss(key=key,user=user)
+    out.save()
+    return out
 
 class MeetingMinutes(models.Model):
   date = models.DateField(default=datetime.date.today,unique=True)

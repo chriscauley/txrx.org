@@ -3,6 +3,9 @@
 {% block content %}
 <p>
   You have successfully registered.
-  Please click login in the top right corner to log in to the lab.
+  Please <a href="/accounts/login/">login in</a>.
 </p>
+{% if request.user.is_authenticated %}
+<script>window.location="/"</script>
+{% endif %}
 {% endblock %}

@@ -1,5 +1,10 @@
 from django.conf import settings
+from django.http import HttpResponseForbidden
 from django.contrib.auth.forms import PasswordResetForm
+
+m = "You are not authorized to do this. If you believe this is in error, please email %s"%settings.WEBMASTER
+
+FORBIDDEN = HttpResponseForbidden(m)
 
 def cached_method (target):
   def wrapper(*args, **kwargs):

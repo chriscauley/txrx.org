@@ -88,6 +88,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 SITE_URL = "http://txrxlabs.org"
 SITE_DOMAIN = "txrxlabs.org"
 SITE_NAME = "TX/RX Labs"
+WEBMASTER = "chris@lablackey.com"
 
 LONG_CACHE = 60*60 # 1h
 SHORT_CACHE = 10*60 # 10 min
