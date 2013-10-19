@@ -15,4 +15,3 @@ def post_save_user_handler(sender, **kwargs):
     except model.DoesNotExist:
       obj = model(user=user)
       obj.save()
-      print "Created %s for %s"%(model.__name__,user)
