@@ -35,16 +35,17 @@ def new_comment_connection(sender, instance=None, created=False,**kwargs):
 
   if instance.parent:
     # email whoever wrote the parent comment
-    if instance.parent.user.usermembership.notify_comments:
+    user = instance.parent.user
+    if user.usermembership.notify_comments and user.usermembership.notify_global:
       # this conditional is incase they opt out
-      _dict['unsubscribe_url'] = _u(UnsubscribeLink.new(instance.parent.user).get_absolute_url())
+      _dict['unsubscribe_url'] = _u(UnsubscribeLink.new(user).get_absolute_url())
       users = []
       subject = 'Someone responded to your comment'
       send_mail(
         subject,
         comment_response_email%_dict,
         settings.DEFAULT_FROM_EMAIL,
-        [instance.parent.user.email])
+        [user.email])
   else:
     # email the course instructor or whoever is in the "users" list
     try:

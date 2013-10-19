@@ -73,8 +73,12 @@ class UserMembership(models.Model):
   name = lambda self: "%s %s"%(self.user.first_name,self.user.last_name)
   _h ="Leave blank if this is the same as your email address above."
   paypal_email = models.EmailField(null=True,blank=True,help_text=_h)
+  _h = "Uncheck this to stop all email correspondance from this website (same as unchecking all the below items and any future notifications we add)."
+  notify_global = models.BooleanField("Global Email Preference",default=True,help_text=_h)
   _h = "If checked, you will be emailed whenever someone replies to a comment you make on this site."
-  notify_comments = models.BooleanField("Email Comment Responses",default=True,help_text=_h)
+  notify_comments = models.BooleanField("Comment Response Email",default=True,help_text=_h)
+  _h = "If checked, you will be emailed a reminder 24 hours before a class (that you've signed up for)."
+  notify_classes = models.BooleanField("Class Reminder Email",default=True,help_text=_h)
 
   __unicode__ = lambda self: "%s's Membership"%self.user
   objects = UserMembershipManager()

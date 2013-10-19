@@ -25,7 +25,3 @@ def reset_password(user,
     
   else:
     print form.errorsform.save(email_template_name=email_template_name)
-
-if settings.DEBUG:
-  def reset_password(user,email_template_name=None):
-    print user
