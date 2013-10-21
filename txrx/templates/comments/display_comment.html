@@ -1,6 +1,5 @@
 {% load i18n %}
-{% load mptt_tags %}
-{% load mptt_comments_tags %}
+{% load mptt_tags mptt_comments_tags short_codes %}
 
 {% with comment_id=comment.pk|default:"preview" %}
 <div class="{% include 'comments/_comment_class.html' %}" id="c{{ comment_id }}">
@@ -15,7 +14,7 @@
       {% if comment.is_removed %}
       {% trans "Comment removed" %}
       {% else %}
-      {{ comment.comment|linebreaks }}
+      {{ comment.comment|public_explosivo }}
       {% endif %}
       {% endblock %}
       

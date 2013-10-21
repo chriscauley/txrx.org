@@ -1,6 +1,7 @@
 {% load comments %}
 {% load i18n %}
 <div class="comment_form">
+  {% include "comments/_md_helptext.html" %}
   <form action="{% comment_form_target %}" method="POST">{% csrf_token %}
     <fieldset>
       <ul class="unstyled">
