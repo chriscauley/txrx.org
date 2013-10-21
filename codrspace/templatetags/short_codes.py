@@ -40,7 +40,7 @@ def explosivo(value,safe_mode=False):
         all_replacements.extend(replacements)
 
   # convert to markdown
-  value = markdown.markdown(value,safe_mode='escape')
+  value = markdown.markdown(value,safe_mode=safe_mode)
 
   # replace the hash values with the replacement values
   for r in all_replacements:
@@ -51,7 +51,7 @@ def explosivo(value,safe_mode=False):
 
 @register.filter
 def public_explosivo(value):
-  return explosivo(value,safe_mode=True)
+  return explosivo(value,safe_mode='escape')
 
 def filter_jsfiddle(value):
   """Used to insert fiddle iframe. format: [jsfiddle "username/id" opt1=val1,opt2=val2...]"""
