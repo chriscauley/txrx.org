@@ -17,6 +17,8 @@ from codrspace.templatetags.syntax_color import _colorize_table
 
 register = template.Library()
 
+urlfinder = re.compile('^(http:\/\/\S+)')
+urlfinder2 = re.compile('\s(http:\/\/\S+)')
 
 @register.filter
 def explosivo(value,safe_mode=False):
@@ -38,6 +40,10 @@ def explosivo(value,safe_mode=False):
       replacements, value, match = var(value)
       if match:
         all_replacements.extend(replacements)
+
+  # find urls, convert to links
+  value = urlfinder.sub(r'<\1>', value)
+  value = urlfinder2.sub(r' <\1>', value)
 
   # convert to markdown
   value = markdown.markdown(value,safe_mode=safe_mode)
@@ -154,7 +160,6 @@ def filter_gist(value):
     value = re.sub(pattern, text_hash, value, count=1)
 
   return (replacements, value, True,)
-
 
 def filter_upload(value):
   replacements = []
