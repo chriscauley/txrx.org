@@ -22,12 +22,6 @@
           {{ field }}
           {% endif %}
           {% endfor %}
-          {% if warn %}
-          <div class="alert alert-warning reply-warning">
-            If you want to respond to a comment, please click "Post Reply".
-            This way the comment author will receive a notification of your response.
-          </div>
-          {% endif %}
           <input type="submit" name="submit" class="submit-post" value="{% trans 'Post' %}">
         </li>
       </ul>

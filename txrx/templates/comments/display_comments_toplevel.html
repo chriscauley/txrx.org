@@ -4,6 +4,12 @@
 <div id="comments">
   {% if comments %}
   <h2>{% trans "Comments" %}</h2>
+  {% if request.user.is_authenticated %}
+  <div class="alert alert-error reply-warning">
+    If you want to respond to a comment, please click "Post Reply" underneath that comment.
+    This way the comment author will receive a notification of your response.
+  </div>
+  {% endif %}
   {% endif %}
   
   <div id="mptt-comments-tree" class="block-comments-tree">
@@ -23,5 +29,11 @@
   {% else %}
   Please <a href="/accounts/login?next={{ request.path }}">login or register</a> to comment.
   {% endif %}
+  <script>
+    $(function() {
+      var active_comment = $(window.location.hash);
+      if (active_comment.length) {$("."+active_comment[0].id).click(); }
+    });
+  </script>
 </div> 
 
