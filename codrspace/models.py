@@ -16,6 +16,7 @@ import tagging
 
 from db.models import SlugModel, OrderedModel, UserModel
 from codrspace.managers import SettingManager
+from .templatetags.short_codes import explosivo
 from instagram.models import InstagramPhoto
 
 try:
@@ -49,6 +50,7 @@ class Post(models.Model):
   _h = "Featured blogs must have a photo or they won't appear at all."
   featured = models.BooleanField(default=False,help_text=_h)
   photo = models.ForeignKey("Photo",null=True,blank=True)
+  description = property(lambda self: explosivo(self.content))
 
   class Meta:
     unique_together = ("slug", "author")

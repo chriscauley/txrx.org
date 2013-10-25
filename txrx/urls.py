@@ -1,6 +1,9 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.conf import settings
+
+from txrx.feeds import AllFeed
+
 import os
 
 admin.autodiscover()
@@ -23,6 +26,7 @@ urlpatterns = patterns(
   # comments and javascript translation
   url(r'^comments/', include('mptt_comments.urls')),
   url(r'^jsi18n/(?P<packages>\S+?)/$', 'django.views.i18n.javascript_catalog'),
+  url(r'^rss/$', AllFeed()),
 )
 
 #auth related

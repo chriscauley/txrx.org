@@ -87,6 +87,7 @@ class Session(UserModel,SetModel):
   section = models.ForeignKey(Section)
   slug = models.CharField(max_length=255)
   cancelled = models.BooleanField(default=False)
+  publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
   ts_help = "Only used to set dates on creation."
   time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
   branding = models.ForeignKey(Branding,null=True,blank=True)
@@ -98,6 +99,7 @@ class Session(UserModel,SetModel):
   full = property(lambda self: self.enrollment_set.count() >= self.section.max_students)
   archived = property(lambda self: self.first_date<datetime.datetime.now())
   list_users = property(lambda self: [self.user])
+  description = property(lambda self: self.section.description)
 
   #calendar crap
   name = property(lambda self: self.section.course.name)

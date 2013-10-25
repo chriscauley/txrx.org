@@ -93,6 +93,7 @@ class OccurrenceModel(models.Model):
 class EventOccurrence(OccurrenceModel,SetModel):
   event = models.ForeignKey(Event)
   start = models.DateTimeField()
+  publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
   end = models.DateTimeField(null=True,blank=True)
   get_absolute_url = lambda self: reverse('event:occurrence_detail',args=(self.id,slugify(self.name)))
   name_override = models.CharField(null=True,blank=True,max_length=128)
@@ -101,6 +102,10 @@ class EventOccurrence(OccurrenceModel,SetModel):
   description_override = wmd_models.MarkDownField(blank=True,null=True)
   description = property(lambda self: self.description_override or self.event.description)
   get_location = lambda self: self.event.location
+  def save(self,*args,**kwargs):
+    # set the publish_dt to a week before the event
+    self.publish_dt = start - datetime.timedelta(7)
+    super(OccurrenceModel,self).save(*args,**kwargs)
   class Meta:
     ordering = ('start',)
 
