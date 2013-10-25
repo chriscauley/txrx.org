@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 
 from .models import UserMembership
@@ -20,7 +21,7 @@ kwargs = dict(widget=forms.Textarea,required=False)
 from captcha.fields import ReCaptchaField
 
 class RegistrationForm(RegistrationForm):
-    captcha = ReCaptchaField()
+  captcha = ReCaptchaField()
 
 class SurveyForm(forms.Form):
   reasons = forms.CharField(label=lr,**kwargs)
@@ -43,3 +44,19 @@ class UserForm(forms.ModelForm):
   class Meta:
     fields = ('username','first_name','last_name','email')
     model = User
+
+class AuthenticationForm(AuthenticationForm):
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+
+        if username and password:
+            self.user_cache = authenticate(username=username,
+                                           password=password)
+            if self.user_cache is None:
+                raise forms.ValidationError(
+                    self.error_messages['invalid_login'])
+            elif not self.user_cache.is_active:
+                raise forms.ValidationError(self.error_messages['inactive'])
+        self.check_for_test_cookie()
+        return self.cleaned_data

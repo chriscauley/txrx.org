@@ -104,7 +104,7 @@ class EventOccurrence(OccurrenceModel,SetModel):
   get_location = lambda self: self.event.location
   def save(self,*args,**kwargs):
     # set the publish_dt to a week before the event
-    self.publish_dt = start - datetime.timedelta(7)
+    self.publish_dt = self.start - datetime.timedelta(7)
     super(OccurrenceModel,self).save(*args,**kwargs)
   class Meta:
     ordering = ('start',)
