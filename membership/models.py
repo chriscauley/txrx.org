@@ -98,6 +98,7 @@ class Officer(UserModel):
   position = models.CharField(max_length=50)
   start = models.DateField(default=datetime.date.today)
   end = models.DateField(null=True,blank=True)
+  __unicode__ = lambda self: "%s as %s"%(self.user,self.position)
 
 class UnsubscribeLink(UserModel):
   key = models.CharField(max_length=32,unique=True)
