@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load url from future %}
+
+{% block content %}
+{% for officer in officers %}
+<div class="span3">
+  <div class="well">
+    <a href="{% url "course:instructor_detail" officer.user.id %}">
+      {% thumbnail officer.user.usermembership.photo "180x240" as im %}
+      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+      {% endthumbnail %}
+      <div class="name">{{ officer.user.get_full_name }}</div>
+      {{ officer.position }}
+    </a>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

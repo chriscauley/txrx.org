@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .models import Membership, MeetingMinutes, UnsubscribeLink
+from .models import Membership, MeetingMinutes, UnsubscribeLink, Officer
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required
 
@@ -104,3 +104,5 @@ def roland_email(request,y=2012,m=1,d=1):
 
 def officers(request):
   officers = Officer.objects.all()
+  values = {'officers': officers}
+  return TemplateResponse(request,'membership/officers.html',values)
