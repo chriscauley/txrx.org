@@ -94,6 +94,11 @@ class UserMembership(models.Model):
   def get_projects(self):
     return Project.objects.filter(author=self.user)
 
+class Officer(UserModel):
+  position = models.CharField(max_length=50)
+  start = models.DateField(default=datetime.date.today)
+  end = models.DateField(null=True,blank=True)
+
 class UnsubscribeLink(UserModel):
   key = models.CharField(max_length=32,unique=True)
   created = models.DateField(auto_now_add=True)

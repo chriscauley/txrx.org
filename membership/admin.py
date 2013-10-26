@@ -1,5 +1,7 @@
 from django.contrib import admin
-from models import Membership, Feature, UserMembership, MembershipRate, MeetingMinutes, Proposal
+from models import Membership, Feature, UserMembership, MembershipRate, MeetingMinutes, Proposal, Officer
+
+from db.forms import StaffMemberForm
 
 class FeatureInline(admin.TabularInline):
   extra = 0
@@ -27,6 +29,10 @@ class ProposalInline(admin.StackedInline):
 class MeetingMinutesAdmin(admin.ModelAdmin):
   inlines = [ProposalInline]
 
+class OfficerAdmin(admin.ModelAdmin):
+  form = StaffMemberForm
+
 admin.site.register(Membership,MembershipAdmin)
 admin.site.register(UserMembership,UserMembershipAdmin)
 admin.site.register(MeetingMinutes,MeetingMinutesAdmin)
+admin.site.register(Officer,OfficerAdmin)

@@ -21,7 +21,13 @@ class AllFeed(Feed):
     return sorted(sessions+posts+events,key=lambda i: i.publish_dt,reverse=True)
 
   def item_title(self, item):
-    return str(item)
+    if isinstance(item,Post):
+      before = "Blog Post: "
+    if isinstance(item,Session):
+      before = "New Class: "
+    if isinstance(item,EventOccurrence):
+      before = "Upcoming Event: "
+    return before + str(item)
 
   def item_description(self, item):
     return item.description

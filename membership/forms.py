@@ -46,17 +46,16 @@ class UserForm(forms.ModelForm):
     model = User
 
 class AuthenticationForm(AuthenticationForm):
-    def clean(self):
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
+  def clean(self):
+    username = self.cleaned_data.get('username')
+    password = self.cleaned_data.get('password')
 
-        if username and password:
-            self.user_cache = authenticate(username=username,
-                                           password=password)
-            if self.user_cache is None:
-                raise forms.ValidationError(
-                    self.error_messages['invalid_login'])
-            elif not self.user_cache.is_active:
-                raise forms.ValidationError(self.error_messages['inactive'])
-        self.check_for_test_cookie()
-        return self.cleaned_data
+    if username and password:
+      self.user_cache = authenticate(username=username, password=password)
+      if self.user_cache is None:
+        raise forms.ValidationError(
+          self.error_messages['invalid_login'])
+      elif not self.user_cache.is_active:
+        raise forms.ValidationError(self.error_messages['inactive'])
+    self.check_for_test_cookie()
+    return self.cleaned_data
