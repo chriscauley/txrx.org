@@ -101,3 +101,6 @@ def roland_email(request,y=2012,m=1,d=1):
     writer.writerow([user.email,user.username,str(user.date_joined)])
 
   return response
+
+def officers(request):
+  officers = Officer.objects.all()

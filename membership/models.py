@@ -94,11 +94,23 @@ class UserMembership(models.Model):
   def get_projects(self):
     return Project.objects.filter(author=self.user)
 
+class OfficerManager(models.Manager):
+  def current(self,*args,**kwargs):
+    kwargs['end__isnull'] = True
+    return self.filter(*args,**kwargs)
+  def past(self,*args,**kwargs):
+    kwargs['end__isnull'] = False
+    return self.filter(*args,**kwargs)
+
 class Officer(UserModel):
   position = models.CharField(max_length=50)
   start = models.DateField(default=datetime.date.today)
   end = models.DateField(null=True,blank=True)
+  order = models.IntegerField(default=999)
+  objects = OfficerManager()
   __unicode__ = lambda self: "%s as %s"%(self.user,self.position)
+  class Meta:
+    ordering = ('order','end')
 
 class UnsubscribeLink(UserModel):
   key = models.CharField(max_length=32,unique=True)
