@@ -2,7 +2,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.conf import settings
 from django.db.models.loading import get_model
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.template.defaultfilters import slugify
@@ -19,6 +19,10 @@ def index(request,daystring=None):
   start = datetime.date.today()
   if daystring:
     start = datetime.datetime.strptime(daystring,'%Y-%m-%d').date()
+    dt = start - datetime.date.today()
+    if dt.days < -770 or dt.days > 365:
+      print "DDoS: %s || %s"%(request.META['HTTP_USER_AGENT'],request.META['REMOTE_ADDR'])
+      raise Http404("You have selected a date too far in the future or past.")
   end = start+datetime.timedelta(7)
   year = start.year
   month = start.month
