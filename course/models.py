@@ -10,6 +10,7 @@ import datetime
 from codrspace.models import SetModel, MiscFile
 from geo.models import Location
 from event.models import OccurrenceModel, reverse_ics
+from txrx.utils import cached_method
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
@@ -96,18 +97,20 @@ class Session(UserModel,SetModel):
 
   in_progress = property(lambda self: self.archived and self.last_date>datetime.datetime.now())
   closed = property(lambda self: self.cancelled or (self.archived and not self.in_progress))
-  full = property(lambda self: self.enrollment_set.count() >= self.section.max_students)
+  full = lambda self: sum([e.quantity for e in self.enrollment_set.all()]) >= self.section.max_students
+  full = property(cached_method(full))
   archived = property(lambda self: self.first_date<datetime.datetime.now())
   list_users = property(lambda self: [self.user])
   description = property(lambda self: self.section.description)
 
   #calendar crap
   name = property(lambda self: self.section.course.name)
-  all_occurrences = property(lambda self: self.classtime_set.all())
+  all_occurrences = lambda self: self.classtime_set.all()
+  all_occurrences = property(cached_method(all_occurrences))
   get_ics_url = lambda self: reverse_ics(self)
 
-  @property
-  def week(self):
+  @cached_method
+  def get_week(self):
     sunday = self.first_date.date()-datetime.timedelta(self.first_date.weekday())
     return (sunday,sunday+datetime.timedelta(6))
   subjects = property(lambda self: self.section.course.subjects.all())
@@ -129,14 +132,16 @@ class Session(UserModel,SetModel):
   def get_absolute_url(self):
     return reverse('course:detail',args=[self.slug])
   @property
+  @cached_method
   def first_date(self):
-    if self.classtime_set.count():
-      return self.classtime_set.all()[0].start
+    if self.all_occurrences:
+      return self.all_occurrences[0].start
     return datetime.datetime(2000,1,1)
   @property
+  @cached_method
   def last_date(self):
-    if self.classtime_set.count():
-      return list(self.classtime_set.all())[-1].end
+    if self.all_occurrences:
+      return list(self.all_occurrences)[-1].end
     return datetime.datetime(2000,1,1)
   def get_instructor_name(self):
     instructor = self.user
@@ -144,7 +149,7 @@ class Session(UserModel,SetModel):
       return "%s %s."%(self.user.first_name, self.user.last_name[0])
     return self.user.username
   def get_short_dates(self):
-    dates = [ct.start for ct in self.classtime_set.all()]
+    dates = [ct.start for ct in self.all_occurrences]
     month = None
     out = []
     for d in dates:

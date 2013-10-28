@@ -1,3 +1,4 @@
+
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -33,7 +34,7 @@ def index(request,term_id=None):
   term = Term.objects.all()[0]
   if term_id:
     term = Term.objects.get(pk=term_id)
-  sessions = Session.objects.filter(section__term=term).select_related(depth=2)
+  sessions = Session.objects.filter(section__term=term).select_related(depth=3)
   sessions = sorted(list(sessions),key=lambda s: s.first_date)
   test_session = Session.objects.get(section__term__name__iexact="test term") #the test term
   user_sessions = []
@@ -41,8 +42,8 @@ def index(request,term_id=None):
   weeks = {}
   all_sessions_closed = True
   for session in sessions:
-    if current_week != session.week:
-      current_week = session.week
+    if current_week != session.get_week():
+      current_week = session.get_week()
       weeks[current_week] = { 'open': 'closed', 0: current_week[0], 1: current_week[1], 'sessions': [] }
     weeks[current_week]['sessions'].append(session)
     if not session.closed:
