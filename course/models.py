@@ -97,8 +97,8 @@ class Session(UserModel,SetModel):
 
   in_progress = property(lambda self: self.archived and self.last_date>datetime.datetime.now())
   closed = property(lambda self: self.cancelled or (self.archived and not self.in_progress))
-  full = lambda self: self.enrollment_set.count() >= self.section.max_students
-  full = property(cached_method(full))
+  full = lambda self: sum([e.quantity for e in self.enrollment_set.all()]) >= self.section.max_students
+  full = property(full)
   archived = property(lambda self: self.first_date<datetime.datetime.now())
   list_users = property(lambda self: [self.user])
   description = property(lambda self: self.section.description)
