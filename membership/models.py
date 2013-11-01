@@ -25,7 +25,8 @@ class Membership(models.Model):
   name = models.CharField(max_length=64)
   order = models.IntegerField("Level")
   objects = MembershipManager()
-  rates = property(cached_method(lambda self: self.membershiprate_set.all()))
+  rates = lambda self: self.membershiprate_set.all()
+  rates = property(cached_method(rates))
   monthly_rate = lambda self: self.rates.filter(months=1)[0]
   yearly_rate = lambda self: self.rates.filter(months=12)[0]
   def profiles(self):
