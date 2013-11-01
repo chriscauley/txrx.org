@@ -7,7 +7,7 @@ from sorl.thumbnail import ImageField
 from db.models import UserModel
 from codrspace.models import Photo
 from course.models import Session, Term
-from txrx.utils import cached_method
+from txrx.utils import cached_method, cached_property
 from project.models import Project
 
 from wmd.models import MarkDownField
@@ -25,8 +25,7 @@ class Membership(models.Model):
   name = models.CharField(max_length=64)
   order = models.IntegerField("Level")
   objects = MembershipManager()
-  rates = lambda self: self.membershiprate_set.all()
-  rates = property(cached_method(rates))
+  rates = cached_property(lambda self: self.membershiprate_set.all(),name="rates")
   monthly_rate = lambda self: self.rates.filter(months=1)[0]
   yearly_rate = lambda self: self.rates.filter(months=12)[0]
   def profiles(self):

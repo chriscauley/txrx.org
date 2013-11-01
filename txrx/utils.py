@@ -6,7 +6,10 @@ m = "You are not authorized to do this. If you believe this is in error, please 
 
 FORBIDDEN = HttpResponseForbidden(m)
 
-def cached_method (target):
+def cached_method(target,name=None):
+  target.__name__ = name or target.__name__
+  if target.__name__ == "<lambda>":
+    raise ValueError("Using lambda functions in cached_methods causes __name__ collisions.")
   def wrapper(*args, **kwargs):
     obj = args[0]
     name = '_' + target.__name__
@@ -18,6 +21,9 @@ def cached_method (target):
     return getattr(obj, name)
   
   return wrapper
+
+def cached_property(target,name=None):
+  return property(cached_method(target,name=name))
 
 def reset_password(user,
                    email_template_name='registration/password_reset_email.html',

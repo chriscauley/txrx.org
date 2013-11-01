@@ -10,7 +10,7 @@ import datetime
 from codrspace.models import SetModel, MiscFile
 from geo.models import Location
 from event.models import OccurrenceModel, reverse_ics
-from txrx.utils import cached_method
+from txrx.utils import cached_method,cached_property
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
@@ -105,8 +105,7 @@ class Session(UserModel,SetModel):
 
   #calendar crap
   name = property(lambda self: self.section.course.name)
-  all_occurrences = lambda self: self.classtime_set.all()
-  all_occurrences = property(cached_method(all_occurrences))
+  all_occurrences = cached_property(lambda self: self.classtime_set.all(),name='all_occurrences')
   get_ics_url = lambda self: reverse_ics(self)
 
   @cached_method
@@ -131,14 +130,12 @@ class Session(UserModel,SetModel):
     return super(Session,self).save(*args,**kwargs)
   def get_absolute_url(self):
     return reverse('course:detail',args=[self.slug])
-  @property
-  @cached_method
+  @cached_property
   def first_date(self):
     if self.all_occurrences:
       return self.all_occurrences[0].start
     return datetime.datetime(2000,1,1)
-  @property
-  @cached_method
+  @cached_property
   def last_date(self):
     if self.all_occurrences:
       return list(self.all_occurrences)[-1].end

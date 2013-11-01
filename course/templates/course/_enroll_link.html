@@ -1,10 +1,10 @@
 <span class="enroll-link">
   {% if session in user_sessions %}
-  ENROLLED
+  ENROLLED (${{ session.section.fee }})
   {% elif session.closed %}
-  {{ session.closed_string }}
+  {{ session.closed_string }} (${{ session.section.fee }})
   {% elif session.full %}
-  FULL
+  FULL (${{ session.section.fee }})
   {% else %}
   <a class="btn btn-success add" href="javascript:addItem('{{ session.section.course }} ({{ session.classtime_set.all.0.start|date:"m/d/Y" }})',{{ session.section.fee }},'{{ session.id }}'); toggleCourses();">{% if session.in_progress %}In Progress{% else %}Enroll{% endif %} ${{ session.section.fee }}</a>
   <a class="btn btn-danger drop" href="javascript:simpleCart.remove('{{ session.id }}'); toggleCourses();">Drop ${{ session.section.fee }}</a>
