@@ -1,4 +1,3 @@
-
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -14,6 +13,7 @@ from event.utils import make_ics,ics2response
 
 from djpjax import pjaxtend
 from paypal.standard.ipn.models import *
+import datetime
 
 filters = {
   "term": lambda: {
@@ -69,9 +69,12 @@ def detail(request,slug):
   enrollment = None
   if request.user.is_authenticated():
     enrollment = Enrollment.objects.filter(session=session,user=request.user)
+  kwargs = dict(first_date__gte=datetime.datetime.now(),section__course=session.section.course)
+  related_classes = Session.objects.filter(**kwargs).exclude(id=session.id)
   values = {
     'session': session,
     'enrollment': enrollment,
+    'related_classes': related_classes,
     }
   return TemplateResponse(request,"course/detail.html",values)
 

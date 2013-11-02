@@ -89,6 +89,7 @@ class Session(UserModel,SetModel):
   slug = models.CharField(max_length=255)
   cancelled = models.BooleanField(default=False)
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
+  first_date = models.DateTimeField(default=datetime.datetime.now) # for filtering
   ts_help = "Only used to set dates on creation."
   time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
   branding = models.ForeignKey(Branding,null=True,blank=True)
@@ -126,15 +127,12 @@ class Session(UserModel,SetModel):
     if not self.id:
       self.slug = 'arst'
       super(Session,self).save(*args,**kwargs)
+    if self.all_occurrences:
+      self.first_date = self.all_occurrences[0].start
     self.slug = slugify("%s_%s"%(self.section,self.id))
     return super(Session,self).save(*args,**kwargs)
   def get_absolute_url(self):
     return reverse('course:detail',args=[self.slug])
-  @cached_property
-  def first_date(self):
-    if self.all_occurrences:
-      return self.all_occurrences[0].start
-    return datetime.datetime(2000,1,1)
   @cached_property
   def last_date(self):
     if self.all_occurrences:
