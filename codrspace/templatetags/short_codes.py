@@ -42,11 +42,12 @@ def explosivo(value,safe_mode=False):
         all_replacements.extend(replacements)
 
   # find urls, convert to links
-  #value = urlfinder.sub(r'<\1>', value)
-  #value = urlfinder2.sub(r' <\1>', value)
 
   # convert to markdown
   value = markdown.markdown(value,safe_mode=safe_mode)
+
+  #value = urlfinder.sub(r'<a href="\1">\1</a>', value)
+  #value = urlfinder2.sub(r' <a href="\1">\1</a>', value)
 
   # replace the hash values with the replacement values
   for r in all_replacements:
