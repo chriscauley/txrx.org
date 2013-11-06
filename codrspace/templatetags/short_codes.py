@@ -42,8 +42,8 @@ def explosivo(value,safe_mode=False):
         all_replacements.extend(replacements)
 
   # find urls, convert to links
-  value = urlfinder.sub(r'<\1>', value)
-  value = urlfinder2.sub(r' <\1>', value)
+  #value = urlfinder.sub(r'<\1>', value)
+  #value = urlfinder2.sub(r' <\1>', value)
 
   # convert to markdown
   value = markdown.markdown(value,safe_mode=safe_mode)
