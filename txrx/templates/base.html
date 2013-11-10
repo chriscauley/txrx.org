@@ -9,15 +9,15 @@
       _NOTIFY_URL = "http://txrxlabs.org/tx/rx/ipn/handler/"
     </script>
     
-    <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
+    <link rel="shortcut icon" href="/favicon.ico" />
     {% compress js %}
     <script src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
     <script src="{{ STATIC_URL }}js/jquery.pjax.js"></script>
     <script src="{{ STATIC_URL }}js/jsi18n.js"></script>
     <script src="{{ STATIC_URL }}js/dead_pixel.js"></script>
     <script src="{{ STATIC_URL }}mptt_comments/js/mptt_comments.js"></script>
+    <script src="{{ STATIC_URL }}js/favico.js"></script>
     {% endcompress %}
-    <script src="{{ STATIC_URL }}js/favico-0.3.0.min.js"></script>
     <script>
       var f = new Favico({
         animation : 'popFade'
