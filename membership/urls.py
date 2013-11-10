@@ -5,6 +5,5 @@ urlpatterns = patterns(
   url(r'^$','join_us'),
   url(r'^officers/$', 'officers', name='officers'),
   url(r'^minutes/(\d+-\d+-\d+)/$', 'minutes', name='meeting_minutes',),
-  url(r'^unsubscribe/([\w\d]+)/$', 'unsubscribe', name='unsubscribe'),
-  url(r'^unsubscribe_comments/([\d]+)/$', 'unsubscribe_comments', name='unsubscribe_comments'),
+  url(r'^unsubscribe/(global|comments|classes)/(?P<user_id>\d+)/$', 'unsubscribe', name='unsubscribe'),
   )

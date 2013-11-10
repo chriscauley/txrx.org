@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import url, patterns, include
 from django.contrib import admin
 from django.conf import settings
 
@@ -52,11 +52,11 @@ urlpatterns += patterns(
 urlpatterns += patterns(
   'membership.views',
   url(r'^join-us/$','join_us'),
-  url(r'^membership/', include('membership.urls')),
   url(r'^minutes/$', 'minutes_index', name='meeting_minutes_index',),
   url(r'^minutes/(\d+-\d+-\d+)/$', 'minutes', name='meeting_minutes',),
   url(r'^roland_email/$','roland_email',name='roland_email'),
   url(r'^roland_email/(\d+)/(\d+)/(\d+)/$','roland_email',name='roland_email'),
+  url(r'^unsubscribe/(global|comments|classes)/(\d+)/$', 'unsubscribe', name='unsubscribe'),\
 )
 
 # todo

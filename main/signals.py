@@ -19,6 +19,9 @@ def filter_emails(emails):
 def mail_admins_plus(subject,message,recipient_list):
   recipient_list += [email for name,email in settings.ADMINS if not email in recipient_list]
   recipient_list = filter_emails(recipient_list)
+  if not recipient_list:
+    print message
+    return
   send_mail(
     subject,
     message,
@@ -27,6 +30,9 @@ def mail_admins_plus(subject,message,recipient_list):
 
 def send_mail_plus(subject,message,from_email,recipient_list):
   recipient_list = filter_emails(recipient_list)
+  if not recipient_list:
+    print message
+    return
   send_mail(subject,message,from_email,recipient_list)
 
 def new_comment_connection(sender, instance=None, created=False,**kwargs):
@@ -49,9 +55,10 @@ def new_comment_connection(sender, instance=None, created=False,**kwargs):
     # email whoever wrote the parent comment
     user = instance.parent.user
     if user.usermembership.notify_comments and user.usermembership.notify_global:
+      print user
       # this conditional is incase they opt out
       key = LimitedAccessKey.new(user).key
-      _dict['unsubscribe_url'] = _u(reverse("unsubscribe_comments",args=[user.id])+"?LA_KEY="+key)
+      _dict['unsubscribe_url'] = _u(reverse("unsubscribe",args=['comments',user.id])+"?LA_KEY="+key)
       subject = 'Someone responded to your comment'
       send_mail(
         subject,

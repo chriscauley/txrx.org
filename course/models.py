@@ -185,6 +185,9 @@ class ClassTime(OccurrenceModel):
   @property
   def end(self):
     return self.start.replace(hour=self.end_time.hour,minute=self.end_time.minute)
+  def save(self,*args,**kwargs):
+    super(ClassTime,self).save(*args,**kwargs)
+    self.session.save() #update first_date
   class Meta:
     ordering = ("start",)
 

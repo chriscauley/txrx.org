@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .models import Membership, MeetingMinutes, UnsubscribeLink, Officer
+from .models import Membership, MeetingMinutes, Officer
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required
 
@@ -69,23 +69,14 @@ def register(request,*args,**kwargs):
       return HttpResponseRedirect(reverse('password_reset_recover'))
   return _register(request,'registration.backends.default.DefaultBackend',*args,**kwargs)
 
-#depracated 10/2013, delete on 11/1/2013
-def unsubscribe(request,key):
-  d = datetime.date.today()+datetime.timedelta(7)
-  link = get_object_or_404(UnsubscribeLink,key=key,created__lte=d)
-  usermembership = link.user.usermembership
-  usermembership.notify_comments = 'subscribe' in request.GET
-  usermembership.save()
-  return TemplateResponse(request,'membership/unsubscribe.html')
-
 @limited_login_required
-def unsubscribe_comments(request,user_id):
+def unsubscribe(request,attr,user_id):
   if not str(request.limited_user.id) == user_id:
     return FORBIDDEN
   usermembership = request.limited_user.usermembership
-  usermembership.notify_comments = False
+  setattr(usermembership,"notify_"+attr,False)
   usermembership.save()
-  return TemplateResponse(request,'membership/unsubscribe_comments.html')
+  return TemplateResponse(request,'membership/unsubscribe.html',{'attr':attr})
 
 def roland_email(request,y=2012,m=1,d=1):
   if not request.user.is_superuser:

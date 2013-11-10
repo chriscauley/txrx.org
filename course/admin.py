@@ -43,9 +43,8 @@ class SessionAttachmentInline(admin.TabularInline):
 
 class SessionAdmin(admin.ModelAdmin):
   form = StaffMemberForm
-  raw_id_fields = ('section',)
-  exclude = ('time_string','slug')
-  extra = 0
+  raw_id_fields = ('section','user')
+  exclude = ('time_string','slug','first_date','publish_dt')
   inlines = (PhotoSetConnectionInline, ClassTimeInline, EnrollmentInline,SessionAttachmentInline)
 
 class EnrollmentAdmin(admin.ModelAdmin):
