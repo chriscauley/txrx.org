@@ -22,7 +22,7 @@
   {% if not request.user.is_authenticated %}
   <br />
   If you haven't already, please click
-  <a href="/password-reset/recover/">reset your password</a>.
+  <a href="{% url "password_reset" %}">reset your password</a>.
   <br />
   Otherwise click please <a href="/accounts/login/">log in</a>.
   {% endif %}

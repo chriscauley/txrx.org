@@ -1,3 +1,4 @@
+{% load url from future %}
 <form action="/accounts/login/" method="post" id="login-form">
   {% csrf_token %}
   {% if form.errors %}Username and password did not match.{% endif %}
@@ -21,7 +22,7 @@
   </div>
   <div>
     <a class="blue" href="/accounts/register/">Register</a> |
-    <a class="blue" href="/password-reset/recover/">Reset Password</a>
+    <a class="blue" href="{% url "password_reset" %}">Reset Password</a>
   </div>
   {% comment %}
   <div>

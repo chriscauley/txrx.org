@@ -6,7 +6,6 @@ simplejson==2.1.2
 django-devserver==0.4
 django-registration==0.8
 -e git+https://github.com/dcramer/django-paypal.git#egg=django-paypal
-django-password-reset
 django_compressor==1.2
 BeautifulSoup==3.2.1
 

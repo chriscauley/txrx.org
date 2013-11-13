@@ -37,7 +37,7 @@ urlpatterns += patterns(
   url(r'^accounts/settings/$','membership.views.settings',name='account_settings'),
   url(r'^accounts/register/$','membership.views.register'),
   url(r'^accounts/', include('registration.backends.default.urls')),
-  url(r'^password-reset/', include('password_reset.urls')),
+  url(r'^auth/',include('django.contrib.auth.urls')),
   url(r'^force_login/(\d+)/$', 'txrx.views.force_login'),
 )
 

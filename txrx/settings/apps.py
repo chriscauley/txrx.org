@@ -21,7 +21,6 @@ INSTALLED_APPS = (
   'sorl.thumbnail',
   'registration',
   'paypal.standard.ipn',
-  'password_reset',
   'compressor',
   'tagging',
   'crop_override',
@@ -32,7 +31,6 @@ INSTALLED_APPS = (
 
   # blarg
   'wmd',
-  'password_reset',
   'codrspace',
 
   # this project
