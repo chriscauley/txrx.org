@@ -1,18 +1,11 @@
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib import messages
-from django.http import QueryDict, Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from ..models import Course, Section, Term, Subject, Session, Enrollment, ClassTime
-from ..forms import EmailInstructorForm, EvaluationForm
+from ..models import Session
+from ..forms import EmailInstructorForm
 from membership.models import UserMembership
-from event.utils import make_ics,ics2response
 
 from djpjax import pjaxtend
-from paypal.standard.ipn.models import *
 
 @pjaxtend()
 def index(request,username=None):
@@ -22,7 +15,7 @@ def index(request,username=None):
 
 @pjaxtend()
 def detail(request,username=None):
-  profile = UserMembership.objects.get(user__username=username)
+  profile = get_object_or_404(UserMembership,user__username=username)
   values = {
     'profile': profile
     }
