@@ -66,7 +66,7 @@ def register(request,*args,**kwargs):
       m += "Please use the form below to reset your password. "
       m += "If you believe this is in error, please email chris [{at}] lablackey.com"
       messages.error(request,m)
-      return HttpResponseRedirect(reverse('password_reset_recover'))
+      return HttpResponseRedirect(reverse('password_reset'))
   return _register(request,'registration.backends.default.DefaultBackend',*args,**kwargs)
 
 @limited_login_required
