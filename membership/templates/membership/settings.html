@@ -1,9 +1,11 @@
 {% extends "base.html" %}
+{% load url from future %}
 
 {% block full_title %}Settings - {{ SITE_NAME }}{% endblock %}
 {% block header_content %}Edit your account settings{% endblock %}
 
 {% block main %}
+<p>If you want to change your password click <a href="{% url "auth_password_change" %}">here</a></p>
 <form method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   <table class="table">
