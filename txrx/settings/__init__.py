@@ -142,3 +142,5 @@ for s_file in ['apps','local']:
       if setting == setting.upper():
         setattr(sys.modules[__name__], setting, getattr(mod, setting))
 
+if DEBUG:
+  INSTALLED_APPS += ('devserver',)

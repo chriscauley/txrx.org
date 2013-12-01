@@ -18,6 +18,7 @@ from db.models import SlugModel, OrderedModel, UserModel
 from codrspace.managers import SettingManager
 from .templatetags.short_codes import explosivo
 from instagram.models import InstagramPhoto
+from feed.models import FeedItem, prep_thumbnail
 
 try:
   from south.modelsinspector import add_introspection_rules
@@ -71,6 +72,15 @@ class Post(models.Model):
   @models.permalink
   def get_absolute_url(self):
     return ("post_detail", [self.author.username, self.slug])
+
+  def update_feed(self):
+    feed_item = FeedItem.get_for_object(self)
+    feed_item.title = self.title
+    feed_item.thumbnail = prep_thumbnail(self.photo.file)
+    feed_item.publish_dt = self.publish_dt
+    feed_item.item_type = 'blog'
+    feed_item.user = self.author
+    feed_item.save()
 
 tagging.register(Post)
 
