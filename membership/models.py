@@ -79,6 +79,8 @@ class UserMembership(models.Model):
   notify_comments = models.BooleanField("Comment Response Email",default=True,help_text=_h)
   _h = "If checked, you will be emailed a reminder 24 hours before a class (that you've signed up for)."
   notify_classes = models.BooleanField("Class Reminder Email",default=True,help_text=_h)
+  _h = "If checked, you will be emailed new class offerings (once a week)."
+  new_classes = models.BooleanField("New Course Email",default=True,help_text=_h)
 
   __unicode__ = lambda self: "%s's Membership"%self.user
   objects = UserMembershipManager()
