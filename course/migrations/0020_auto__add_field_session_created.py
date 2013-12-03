@@ -8,15 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'ClassTime.created'
-        db.add_column('course_classtime', 'created',
-                      self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=datetime.datetime(2013, 11, 1, 0, 0), blank=True),
+        # Adding field 'Session.created'
+        db.add_column('course_session', 'created',
+                      self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=datetime.datetime(2013, 11, 2, 0, 0), blank=True),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'ClassTime.created'
-        db.delete_column('course_classtime', 'created')
+        # Deleting field 'Session.created'
+        db.delete_column('course_session', 'created')
 
 
     models = {
@@ -134,6 +134,7 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('section',)", 'object_name': 'Session'},
             'branding': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['course.Branding']", 'null': 'True', 'blank': 'True'}),
             'cancelled': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'first_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'publish_dt': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),

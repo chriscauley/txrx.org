@@ -90,6 +90,7 @@ class Session(UserModel,SetModel):
   cancelled = models.BooleanField(default=False)
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
   first_date = models.DateTimeField(default=datetime.datetime.now) # for filtering
+  created = models.DateTimeField(auto_now_add=True) # for emailing new classes
   ts_help = "Only used to set dates on creation."
   time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
   branding = models.ForeignKey(Branding,null=True,blank=True)
