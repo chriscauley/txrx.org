@@ -46,6 +46,10 @@ class SessionAdmin(admin.ModelAdmin):
   raw_id_fields = ('section','user')
   exclude = ('time_string','slug','first_date','publish_dt')
   inlines = (PhotoSetConnectionInline, ClassTimeInline, EnrollmentInline,SessionAttachmentInline)
+  def change_view(self,request,object_id,**kwargs):
+    obj = Session.objects.get(id=object_id)
+    obj.save()
+    return super(SessionAdmin,self).change_view(request,object_id,**kwargs)
 
 class EnrollmentAdmin(admin.ModelAdmin):
   list_display = ("id",'user', 'session', )
