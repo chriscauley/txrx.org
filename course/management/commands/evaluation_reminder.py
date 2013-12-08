@@ -15,6 +15,8 @@ class Command (BaseCommand):
     pe = pe.filter(evaluation_date__gte=yesterday)
     print "sending %s evaluation emails"%pe.count()
     for evaluation in pe:
+      if not evaluation.user.email:
+        continue
       _dict = {
         'evaluation': evaluation,
         'la_key': LimitedAccessKey.new(evaluation.user),

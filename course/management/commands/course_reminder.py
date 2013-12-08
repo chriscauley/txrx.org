@@ -13,9 +13,8 @@ class Command (BaseCommand):
     today = datetime.datetime.now()
     tomorrow = datetime.datetime.now()+datetime.timedelta(1)
     class_times = ClassTime.objects.filter(start__gte=today,start__lte=tomorrow)
-    print class_times
-    print "%s class times in the next 24 hours"%class_times.count()
     for class_time in class_times:
+      sent = []
       for enrollment in class_time.session.enrollment_set.all():
         user = enrollment.user
         _dict = {
@@ -25,7 +24,9 @@ class Command (BaseCommand):
           'session': class_time.session,
           'class_time': class_time,
           }
-        print user.email
+        if user.email in sent:
+          continue
+        sent.append(user.email)
         send_mail_plus(
           "[TX/RX] Class today!",
           render_to_string("email/course_reminder.html",_dict),
