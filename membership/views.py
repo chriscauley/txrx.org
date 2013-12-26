@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -27,7 +28,7 @@ def join_us(request):
   return TemplateResponse(request,"membership/join-us.html",values)
 
 @login_required
-def settings(request):
+def user_settings(request):
   user = request.user
   user_form = UserForm(request.POST or None, instance=user)
   user_membership = user.usermembership
@@ -101,6 +102,8 @@ def officers(request):
 
 def verify_api(request):
   if not getattr(settings,'PORTAL_KEY','') == request.REQUEST.get('api_key',''):
+    x = getattr(settings,'PORTAL_KEY','')
+    arst
     raise Http404
 
 def user_emails(request):

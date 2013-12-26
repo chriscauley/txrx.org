@@ -34,7 +34,7 @@ urlpatterns = patterns(
 #auth related
 urlpatterns += patterns(
   '',
-  url(r'^accounts/settings/$','membership.views.settings',name='account_settings'),
+  url(r'^accounts/settings/$','membership.views.user_settings',name='account_settings'),
   url(r'^accounts/register/$','membership.views.register'),
   url(r'^accounts/', include('registration.backends.default.urls')),
   url(r'^auth/',include('django.contrib.auth.urls')),
