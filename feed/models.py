@@ -22,7 +22,7 @@ class FeedItem(UserModel):
   """
   # obj.update_feed() should set these 4
   title = models.CharField(max_length=256)
-  thumbnail = models.ImageField(upload_to='feed_thumbnails')
+  thumbnail = models.ImageField(upload_to='feed_thumbnails',default='feed_thumbnails/default.png')
   item_type = models.CharField(max_length=16,choices=ITEM_TYPE_CHOICES)
   publish_dt = models.DateTimeField()
 

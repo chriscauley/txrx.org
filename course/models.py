@@ -10,6 +10,7 @@ import datetime
 from codrspace.models import SetModel, MiscFile
 from geo.models import Location
 from event.models import OccurrenceModel, reverse_ics
+from feed.models import FeedItem
 from txrx.utils import cached_method,cached_property
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
@@ -130,7 +131,14 @@ class Session(UserModel,SetModel):
     if self.all_occurrences:
       self.first_date = self.all_occurrences[0].start
     self.slug = slugify("%s_%s"%(self.section,self.id))
+    self.update_feed_item()
     return super(Session,self).save(*args,**kwargs)
+  def update_feed_item(self):
+    item = FeedItem.get_for_object(self)
+    item.title = unicode(self)
+    item.type = 'session'
+    item.publish_dt = self.publish_dt
+    
   def get_absolute_url(self):
     return reverse('course:detail',args=[self.slug])
   @cached_property
