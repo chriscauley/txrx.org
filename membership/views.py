@@ -102,8 +102,6 @@ def officers(request):
 
 def verify_api(request):
   if not getattr(settings,'PORTAL_KEY','') == request.REQUEST.get('api_key',''):
-    x = getattr(settings,'PORTAL_KEY','')
-    arst
     raise Http404
 
 def user_emails(request):
@@ -127,6 +125,9 @@ def course_completion(request,year=None,month=None,day=None):
     dt = datetime.date(int(year),int(month),int(day))
   else:
     dt = datetime.date.today()-datetime.timedelta(1)
-  for c in CourseCompletion.objects.filter(created__gte=dt):
+  completions = CourseCompletion.objects.filter(created__gte=dt)
+  if 'course_id' in request.GET:
+    completions = completions.filter(course_id=request.GET['course_id'])
+  for c in completions:
     out.append(','.join([str(c.course.id),str(c.user.id)]))
   return HttpResponse('\n'.join(out))
