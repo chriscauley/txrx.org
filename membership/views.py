@@ -11,6 +11,7 @@ from .models import Membership, MeetingMinutes, Officer
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required
 
+from course.models import Course,CourseCompletion
 from txrx.utils import FORBIDDEN
 
 from djpjax import pjaxtend
@@ -97,3 +98,32 @@ def officers(request):
   officers = Officer.objects.all()
   values = {'officers': officers}
   return TemplateResponse(request,'membership/officers.html',values)
+
+def verify_api(request):
+  if not getattr(settings,'PORTAL_KEY','') == request.REQUEST.get('api_key',''):
+    raise Http404
+
+def user_emails(request):
+  verify_api(request)
+  out = []
+  for u in User.objects.all():
+    out.append(','.join([str(u.id),u.email or '',u.usermembership.paypal_email or '']))
+  return HttpResponse('\n'.join(out))
+
+def course_names(request):
+  verify_api(request)
+  out = []
+  for c in Course.objects.all():
+    out.append(','.join([str(c.id),c.name]))
+  return HttpResponse('\n'.join(out))
+
+def course_completion(request,year=None,month=None,day=None):
+  verify_api(request)
+  out = []
+  if year:
+    dt = datetime.date(int(year),int(month),int(day))
+  else:
+    dt = datetime.date.today()-datetime.timedelta(1)
+  for c in CourseCompletion.objects.filter(created__gte=dt):
+    out.append(','.join([str(c.course.id),str(c.user.id)]))
+  return HttpResponse('\n'.join(out))

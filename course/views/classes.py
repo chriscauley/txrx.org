@@ -11,7 +11,6 @@ from ..forms import EmailInstructorForm, EvaluationForm
 from membership.models import UserMembership
 from event.utils import make_ics,ics2response
 
-from djpjax import pjaxtend
 from paypal.standard.ipn.models import *
 import datetime
 
@@ -63,7 +62,6 @@ def index(request,term_id=None):
     }
   return TemplateResponse(request,"course/classes.html",values)
 
-@pjaxtend()
 def detail(request,slug):
   session = get_object_or_404(Session,slug=slug)
   enrollment = None
@@ -71,6 +69,16 @@ def detail(request,slug):
     enrollment = Enrollment.objects.filter(session=session,user=request.user)
   kwargs = dict(first_date__gte=datetime.datetime.now(),section__course=session.section.course)
   related_classes = Session.objects.filter(**kwargs).exclude(id=session.id)
+  if request.POST:
+    if not (request.user.is_superuser or request.user == session.user):
+      messages.error(request,"Only an instructor can do that")
+      return HttpResponseRedirect(request.path)
+    ids = [int(i) for i in request.POST.getlist('completed')]
+    for enrollment in session.enrollment_set.all():
+      enrollment.completed = enrollment.id in ids
+      enrollment.save()
+    messages.success(request,"Course completion status saved for all students in this class.")
+    return HttpResponseRedirect(request.path)
   values = {
     'session': session,
     'enrollment': enrollment,

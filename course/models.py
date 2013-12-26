@@ -200,16 +200,26 @@ class Enrollment(UserModel):
   session = models.ForeignKey(Session)
   datetime = models.DateTimeField(default=datetime.datetime.now)
   quantity = models.IntegerField(default=1)
+
+  completed = models.BooleanField(default=False)
   evaluated = models.BooleanField(default=False)
   evaluation_date = models.DateTimeField(null=True,blank=True)
+
   objects = EnrollmentManager()
+
   __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.session)
   def save(self,*args,**kwargs):
     if not self.evaluation_date:
       self.evaluation_date = list(self.session.all_occurrences)[-1].start
     super(Enrollment,self).save(*args,**kwargs)
+    if self.completed:
+      CourseCompletion.objects.get_or_create(user=self.user,course=self.session.section.course)
   class Meta:
     ordering = ('-datetime',)
+
+class CourseCompletion(UserModel):
+  course = models.ForeignKey(Course)
+  created = models.DateTimeField(auto_now_add=True)
 
 FIVE_CHOICES = (
   (1,'1'),
