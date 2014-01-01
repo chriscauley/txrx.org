@@ -124,7 +124,7 @@ def course_completion(request,year=None,month=None,day=None):
   if year:
     dt = datetime.date(int(year),int(month),int(day))
   else:
-    dt = datetime.date.today()-datetime.timedelta(1)
+    dt = datetime.date.today()-datetime.timedelta(30)
   completions = CourseCompletion.objects.filter(created__gte=dt)
   if 'course_id' in request.GET:
     completions = completions.filter(course_id=request.GET['course_id'])
