@@ -44,6 +44,9 @@ class Course(models.Model):
   class Meta:
     ordering = ("name",)
 
+class CourseSubscription(UserModel):
+  course = models.ForeignKey(Course)
+
 class Section(models.Model):
   course = models.ForeignKey(Course)
   term = models.ForeignKey("Term")
@@ -123,11 +126,11 @@ class Session(UserModel,SetModel):
       return "closed"
     return "full"
   def save(self,*args,**kwargs):
+    #this may be depracated, basically the site fails hard if instructors don't have membership profiles
     from membership.models import UserMembership
-    profile,new = UserMembership.objects.get_or_create(user=self.user)
-    if not self.id:
-      self.slug = 'arst'
-      super(Session,self).save(*args,**kwargs)
+    profile,_ = UserMembership.objects.get_or_create(user=self.user)
+    self.slug = self.slug or 'arst' # can't save without one, we'll set this below
+    super(Session,self).save(*args,**kwargs)
     if self.all_occurrences:
       self.first_date = self.all_occurrences[0].start
     self.slug = slugify("%s_%s"%(self.section,self.id))

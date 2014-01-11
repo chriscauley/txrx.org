@@ -170,22 +170,31 @@ label .help-text {
 }
 
 .itemContainer {
+  padding: 3px;
   position: relative;
   margin-bottom: 5px;
   min-height: 20px;
   overflow: hidden;
+  &:nth-child(2n+1) { background-color: rgba(0,0,0,0.05); }
 }
 
-.itemName, .itemPrice {
+.itemName {
   width: 245px;
   font-size: 12px;
 }
 
+.itemQuantity, .itemPrice {
+  display: inline-block;
+  padding-right: 20px;
+}
+.itemQuantity:before { content: "x"; }
+
 .itemRemove {
   font-size: 0;
   right: 0;
+  margin-top: -9px;
   position: absolute;
-  top: 5px;
+  top: 50%;
   a {
     display: inline-block;
     width: 11px;
@@ -451,3 +460,4 @@ h3.date {
 
 p.error { color: red; } /* currently only used on login form */
 ul.errorlist { color: red; }
+
