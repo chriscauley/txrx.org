@@ -35,9 +35,9 @@ def handle_successful_payment(sender, **kwargs):
       
     enrollment,new = Enrollment.objects.get_or_create(user=user, session=session)
     if new:
-      enrollment.quantity += quantity
-    else:
       enrollment.quantity = quantity
+    else:
+      enrollment.quantity += quantity
     enrollment.save()
 
     if True: #section_cost != session.section.fee:

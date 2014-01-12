@@ -3,12 +3,15 @@ from django.conf import settings
 from django.template.loader import render_to_string
 
 from course.models import ClassTime
-from main.signals import send_mail_plus
 from membership.models import LimitedAccessKey
+
+from txrx.mail import send_mail_plus
+from txrx.utils import mail_on_fail
 
 import datetime
 
 class Command (BaseCommand):
+  @mail_on_fail
   def handle(self, *args, **options):
     today = datetime.datetime.now()
     tomorrow = datetime.datetime.now()+datetime.timedelta(1)

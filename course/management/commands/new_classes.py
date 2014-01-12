@@ -5,12 +5,13 @@ from django.template.defaultfilters import striptags
 from django.template.loader import render_to_string
 
 from course.models import Session
-from main.signals import send_mail_plus, mail_admins_plus, filter_users
+from txrx.mail import send_mail_plus, mail_admins_plus, filter_users
 from membership.models import LimitedAccessKey
 
 import datetime
 
 class Command (BaseCommand):
+  @mail_on_fail
   def handle(self, *args, **options):
     dt = datetime.datetime.now() + datetime.timedelta(-14)
     new_sessions = Session.objects.filter(created__gte=dt)

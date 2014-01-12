@@ -6,8 +6,10 @@ from simplejson import loads
 import requests, os
 
 from instagram.models import InstagramTag, InstagramLocation, InstagramUser, InstagramPhoto
+from txrx.utils import mail_on_fail
 
 class Command (BaseCommand):
+  @mail_on_fail
   def handle(self, *args, **options):
     # InstagramPhoto.objects.all().delete() #useful for testing!
     count = InstagramPhoto.objects.count()
