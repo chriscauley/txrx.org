@@ -40,6 +40,14 @@
   {% endif %}
 </p>
 {% endcomment %}
+{% if request.user.is_authenticated %}
+{# TODO: my classes widget #}
+{% else %}
+<p>
+  Already signed up? <a href="/accounts/login/">Log in</a> to see your classes.<br />
+  If not, an account will be automatically created when you first pay for a class.
+</p>
+{% endif %}
 {% include "widgets/filters.html" %}
 {% for week in weeks %}
 <div class="week {{ week.open }}">
