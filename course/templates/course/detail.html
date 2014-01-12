@@ -29,6 +29,15 @@
     <a href="{% url "instructor_detail" session.user.username %}">
       <i class="icon-user"></i>{{ session.get_instructor_name }}</a>
   </div>
+  {% if session.get_session_photoset %}
+  <div class="photoset">
+    {% for photo in session.get_session_photoset.get_photos %}
+    {% thumbnail photo.src "200x200" crop="center" as im %}
+    <img src="{{ im.url }}" />
+    {% endthumbnail %}
+    {% endfor %}
+  </div>
+  {% endif %}
   <div class="details">
     <div class="left">
       <div class="subjects">

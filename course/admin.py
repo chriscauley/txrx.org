@@ -16,7 +16,7 @@ class CourseCompletionInline(admin.TabularInline):
 class CourseAdmin(admin.ModelAdmin):
   list_display = ("name",)
   filter_horizontal = ("subjects",)
-  inlines = [CourseCompletionInline]
+  inlines = [PhotoSetConnectionInline,CourseCompletionInline]
 
 class ClassTimeInline(admin.TabularInline):
   extra = 0
