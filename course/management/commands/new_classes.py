@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 
 from course.models import Session
 from txrx.mail import send_mail_plus, mail_admins_plus, filter_users
+from txrx.utils import mail_on_fail
 from membership.models import LimitedAccessKey
 
 import datetime
