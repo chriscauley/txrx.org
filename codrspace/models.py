@@ -200,7 +200,7 @@ class SetModel():
     content_type = ContentType.objects.get_for_model(self.__class__)
     PhotoSetConnection(content_type=content_type,photoset=photoset,object_id=self.id).save()
     self._photoset_checked = True
-    self.photoset=photoset
+    self.photoset = photoset
     return photoset
 
 class Setting(models.Model):

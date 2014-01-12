@@ -32,7 +32,7 @@ class Term(models.Model):
   class Meta:
     ordering = ('-start',)
 
-class Course(models.Model):
+class Course(models.Model,SetModel):
   name = models.CharField(max_length=64)
   _ht = "Used for the events page."
   subjects = models.ManyToManyField(Subject)
@@ -108,6 +108,11 @@ class Session(UserModel,SetModel):
   archived = property(lambda self: self.first_date<datetime.datetime.now())
   list_users = property(lambda self: [self.user])
   description = property(lambda self: self.section.description)
+
+  # get the course photo_set if there is none here
+  @cached_method
+  def get_session_photoset(self):
+    return self.get_photoset() or self.section.course.get_photoset()
 
   #calendar crap
   name = property(lambda self: self.section.course.name)
