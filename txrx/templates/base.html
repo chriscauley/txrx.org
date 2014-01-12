@@ -12,10 +12,15 @@
     <link rel="shortcut icon" href="/favicon.ico" />
     {% compress js %}
     <script src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
+    <script src="{{ STATIC_URL }}js/init.js"></script>
+    <script src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
+    <script src="{{ STATIC_URL }}thumb-scroller/js/jquery.thumb-scroller.js"></script>
     <script src="{{ STATIC_URL }}js/jsi18n.js"></script>
     <script src="{{ STATIC_URL }}mptt_comments/js/mptt_comments.js"></script>
     <script src="{{ STATIC_URL }}js/favico.js"></script>
     {% endcompress %}
+    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}thumb-scroller/css/thumb-scroller.css" />
+    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" />
     <script>
       var f = new Favico({
         animation : 'popFade'
@@ -58,9 +63,6 @@
     </div>
     <script src="{{ STATIC_URL }}less/bootstrap/js/bootstrap.min.js"></script>
     <script src="{{ STATIC_URL }}codrspace.js"></script>
-    <script>
-      $('img[rel=tooltip]').tooltip();
-    </script>
     <script>
 
       var _gaq = _gaq || [];

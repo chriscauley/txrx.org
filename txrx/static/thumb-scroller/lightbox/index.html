@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>jQuery Lightbox</title>
+    <link rel="stylesheet" type="text/css" href="css/wt-lightbox.css"/>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.wt-lightbox.js"></script>
+    <style>
+        body{
+            font-family:Arial, Helvetica, sans-serif;
+        }
+        a, a:visited{
+            color:#0066ff;
+        }
+        .container{
+            width:610px;
+            margin:0 auto;
+        }
+        .section{
+            float:left;
+            clear:both;
+            margin:0 3px 20px 3px;
+        }
+        ul{
+            list-style:none;
+            padding:0;
+            margin:0;
+        }
+        li{
+            display:block;
+            float:left;
+            background-color:#eee;
+            border:1px solid #ddd;
+            -moz-border-radius:4px;
+            -webkit-border-radius:4px;
+            border-radius:4px;
+            padding:6px;
+            margin:0 6px;
+			line-height:0;
+        }
+        #inlineExample{
+            display:none;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            //activate lightbox on all links
+			$('a').wtLightBox({
+                responsive:true,
+				autoPlay:false,
+				delay:5000,
+				speed:600,
+				easing:'swing',
+				navButtons:'normal',
+				playButton:true,				
+				numberInfo:true,
+				timer:true,
+				caption:true,
+				captionPosition:'outside',
+				captionButton:false,
+				continuous:true,
+				mousewheel:true,
+				keyboard:true,
+				swipe:true,
+				errorMessage:'Error Loading Content'
+            });
+        });
+    </script>
+</head>
+<body>
+	<div class="container">
+    	<div class="section">
+        	<h3>Single Image</h3>
+            <ul>
+            	<li><a href="images/triworks_abstract17.jpg"><img src="images/thumbs/triworks_abstract17.jpg" alt="" width="125" height="125"></a></li>
+                <li><a href="images/triworks_abstract25.jpg"><img src="images/thumbs/triworks_abstract25.jpg" alt="" width="125" height="125"></a></li>
+                <li><a href="images/triworks_abstract38.jpg"><img src="images/thumbs/triworks_abstract38.jpg" alt="" width="125" height="125"></a></li>
+                <li><a href="images/triworks_abstract8.jpg"><img src="images/thumbs/triworks_abstract8.jpg" alt="" width="125" height="125"></a></li>
+            </ul>
+        </div>
+        <div class="section">
+        	<h3>Gallery</h3>
+            <ul>
+            	<li><a href="images/scottwills_building1.jpg" data-lightbox-group="gallery1"><img src="images/thumbs/scottwills_building1.jpg" alt="" width="125" height="125"></a></li>
+            	<li><a href="images/madness_arch3.jpg" data-lightbox-group="gallery1"><img src="images/thumbs/madness_arch3.jpg" alt="" width="125" height="125"></a></li>
+            	<li><a href="images/scottwills_building2.jpg" data-lightbox-group="gallery1"><img src="images/thumbs/scottwills_building2.jpg" alt="" width="125" height="125"></a></li>
+            	<li><a href="images/madness_arch2.jpg" data-lightbox-group="gallery1"><img src="images/thumbs/madness_arch2.jpg" alt="" width="125" height="125"></a></li>
+            </ul>
+        </div>
+        <div class="section">
+        	<h3>Gallery with Text</h3>
+            <ul>
+            	<li><a href="images/scottwills_bee.jpg" data-lightbox-group="gallery2" title="Pellentesque varius convallis mi. Nunc ipsum lectus, tempus in orci vitae, ornare sagittis massa."><img src="images/thumbs/scottwills_bee.jpg" alt="" width="125" height="125"></a></li>
+                <li><a href="images/kariminal_mountain.jpg" data-lightbox-group="gallery2" title="Lorem ipsum dolor sit amet, consectetur adipiscing elit."><img src="images/thumbs/kariminal_mountain.jpg" alt="" width="125" height="125"></a></li>            	
+            	<li><a href="images/scottwills_fish.jpg" data-lightbox-group="gallery2" title="Pellentesque varius convallis mi. Nunc ipsum lectus, tempus in orci vitae, ornare sagittis massa."><img src="images/thumbs/scottwills_fish.jpg" alt="" width="125" height="125"></a></li>
+                <li><a href="images/scottwills_underwater4.jpg" data-lightbox-group="gallery2" title="Lorem ipsum dolor sit amet, consectetur adipiscing elit."><img src="images/thumbs/scottwills_underwater4.jpg" alt="" width="125" height="125"></a></li>
+            </ul>
+        </div>
+        <div class="section">
+        	<h3>Other Media</h3>
+            <ul>
+            	<li style="line-height:normal"><a href="http://www.adobe.com/jp/events/cs3_web_edition_tour/swfs/perform.swf" data-lightbox-type="flash">flash</a></li>
+            	<li style="line-height:normal"><a href="http://www.codecanyon.net" data-lightbox-type="iframe" data-lightbox-width="900" data-lightbox-height="600">iframe</a></li>
+            	<li style="line-height:normal"><a href="#inlineExample" data-lightbox-type="inline" data-lightbox-width="600" data-lightbox-height="450">inline content</a></li>
+                <li style="line-height:normal"><a href="http://www.youtube.com/embed/xYYi1EUzHCU?autoplay=1" data-lightbox-type="iframe" data-lightbox-width="640" data-lightbox-height="360">youtube</a></li>
+                <li style="line-height:normal"><a href="images/not-found.jpg">error message</a></li>
+           </ul>
+        </div>
+    </div>
+    
+    <div id="inlineExample">
+    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eros orci, hendrerit in vulputate vitae, molestie id enim. Ut sollicitudin imperdiet vestibulum. Duis vel bibendum quam. Aenean eleifend ornare aliquet. Vestibulum sed velit at mauris scelerisque tincidunt sit amet quis tellus. Ut cursus laoreet libero a interdum. Maecenas feugiat ipsum et justo ultrices, quis dignissim elit tincidunt. Etiam ut semper eros.</p>
+		<p>Vestibulum aliquam ipsum eget tellus porttitor luctus. Nulla consequat diam suscipit elit elementum pulvinar. Sed blandit erat pulvinar nibh blandit, at cursus dolor sodales. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec eu arcu ut tellus dignissim semper. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris auctor erat sed lacus lobortis dictum cursus elementum orci. Nunc non lorem consectetur, ornare nulla et, cursus velit. Aliquam quis commodo lorem. Maecenas nec consequat libero. Nam at gravida elit, in euismod odio. Morbi sed luctus arcu. Curabitur quis libero arcu. Pellentesque molestie sem euismod semper faucibus. Duis eget magna sit amet leo iaculis commodo.</p>
+        <p>Vestibulum venenatis lacus sed massa tincidunt, in auctor risus luctus. Nunc neque velit, convallis iaculis vulputate sed, faucibus id nunc. Nulla viverra metus eu metus tincidunt, in tristique eros sagittis. Aenean aliquam nisl in hendrerit imperdiet. Proin euismod odio enim, ut bibendum magna hendrerit et. Nulla lacinia a metus vel rhoncus. Maecenas sagittis leo mi, nec imperdiet justo aliquet at. In vitae feugiat elit, in fermentum sem.</p>
+    </div>
+</body>
+</html>
