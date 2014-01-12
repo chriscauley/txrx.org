@@ -30,8 +30,8 @@ function initCodrspace() {
   /* a function to initialize blog javascript */
   $("#id_tags").attr("autocomplete","off");
 
+  $("#lookup_id_photo").attr("href","javascript:;").attr("onclick","");
   $("#lookup_id_photo").click(function(){insertImage('',insertID)})
-  $("#lookup_id_photo").attr("href","javascript:;")
   $('#id_tags').typeahead({
     source: window.tagsAutocomplete,
     updater: function(item) {

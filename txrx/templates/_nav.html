@@ -1,57 +1,79 @@
 {% load codrspace_tags %}
 {% load url from future %}
 
-<div class="navbar">
-  <div class="navbar-inner">
-    <div class="container">
-      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-      
-      <!-- Be sure to leave the brand out there if you want it shown -->
-      <a class="brand" href="{% url "homepage" %}" data-pjax="#main">
-        <img src="{{ STATIC_URL }}img/{{ request.theme }}-logo.png" height="30" width="115"
-             alt="Tx/Rx Labs - {{ SITE_TAGLINE }}" title="Tx/Rx Labs - {{ SITE_TAGLINE }}"/></a>
-      
-      <!-- Everything you want hidden at 940px or less, place within here -->
-      <div class="nav-collapse">
-        <ul class="nav">
-          {# <li><a href="{% url "feedback" %}"><i class="icon-ok"></i> Give Feedback</a></li> #}
-          {% for n in nav %}
-          {% if n.sublinks %}
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle {{ n.class }}" data-toggle="dropdown">
-              {{ n.name }} <b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu">
-              {% for sublink in n.sublinks %}
-              <li><a href="{{ sublink.url }}"{% if sublink.pjax %} data-pjax="#main"{% endif %}>{{ sublink.name }}</a></li>
-              {% endfor %}
-            </ul>
-          </li>
-          {% else %}
-          <li><a href="{{ n.url }}" class="{{ n.class }}"{% if n.pjax %} data-pjax="#main"{% endif %}>{{ n.name }}</a></li>
-          {% endif %}
+<nav class="navbar navbar-default" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="/">
+      <img src="{{ STATIC_URL }}img/{{ request.theme }}-logo.png" height="30" width="115"
+           alt="Tx/Rx Labs - {{ SITE_TAGLINE }}" title="Tx/Rx Labs - {{ SITE_TAGLINE }}"/></a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="navbar-collapse-1">
+    <ul class="nav navbar-nav">
+      {% for n in nav %}
+      {% if n.sublinks %}
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ n.name }} <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          {% for sublink in n.sublinks %}
+          <li><a href="{{ sublink.url }}">{{ sublink.name }}</a></li>
           {% endfor %}
         </ul>
+      </li>
+      {% else %}
+      <li class="{{ n.class }}"><a href="{{ n.url }}">{{ n.name }}</a></li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          {% if not user.is_authenticated or not pending_evaluations %}
+          <i class="glyphicon glyphicon-user"></i>
+          {% else %}
+          <span data-reddot="{{ pending_evaluations.count }}"></span>
+          {% endif %}
+          {% if user.is_authenticated %}
+          {{ user.username }}
+          {{ user_notifications.count }}
+          {% else %}
+          Log In/Register
+          {% endif %}
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+          {% if user.is_authenticated %}
+          {% if user.is_staff %}<li><a href="/admin/"><i class="icon-cog"></i> Admin</a></li>{% endif %}
+          <li><a href="{% url "signout" %}"><i class="icon-off"></i> Log out</a></li>
+          <li><a href="{% url "account_settings" %}" data-pjax="#main"><i class="icon-cog"></i> Settings</a></li>
+          {% if pending_evaluations %}
+          <li><a data-reddot="{{ pending_evaluations.count }}"
+                 href="{% url "course:evaluation_index" %}"> Evaluations</a></li>
+          {% endif %}
+          {% else %}
+          <li><a href="/accounts/register/" data-pjax="#main">Register</a></li>
+          <li><a href="/accounts/login/?next={{ request.path|urlencode }}">
+              Log in with Username
+          </a></li>
+          <li><a href="{% url "signin_start" %}?next={{ request.path }}">Log in with GitHub</a></li>
+          {% endif %}
+        </ul>
+      </li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+{% comment %}
         <ul class="nav pull-right">
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              {% if not user.is_authenticated or not pending_evaluations %}
-              <i class="icon-user"></i>
-              {% else %}
-              <span data-reddot="{{ pending_evaluations.count }}"></span>
-              {% endif %}
-              {% if user.is_authenticated %}
-              {{ user.username }}
-              {{ user_notifications.count }}
-              {% else %}
-              Log In/Register
-              {% endif %}
-              <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
               {% if user.is_authenticated %}
@@ -78,3 +100,4 @@
   </div>
 </div>
 <div class="nav-clear"><!-- iefix --></div>
+{% endcomment %}

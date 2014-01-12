@@ -12,9 +12,7 @@
     <link rel="shortcut icon" href="/favicon.ico" />
     {% compress js %}
     <script src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
-    <script src="{{ STATIC_URL }}js/jquery.pjax.js"></script>
     <script src="{{ STATIC_URL }}js/jsi18n.js"></script>
-    <script src="{{ STATIC_URL }}js/dead_pixel.js"></script>
     <script src="{{ STATIC_URL }}mptt_comments/js/mptt_comments.js"></script>
     <script src="{{ STATIC_URL }}js/favico.js"></script>
     {% endcompress %}
@@ -44,10 +42,10 @@
 
       <div class="row" id="main">
         {% block main %}
-        <div class="span8">
+        <div class="col-sm-8">
           {% block content %}{% endblock %}
         </div>
-        <div class="span4">
+        <div class="col-sm-4">
           {% block side %}{% include "_side.html" %}{% endblock %}
         </div>
         {% endblock %}
@@ -58,13 +56,7 @@
       </footer>
       {% endblock %}
     </div>
-    <script src="{{ STATIC_URL }}bootstrap-tooltip.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-carousel.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-collapse.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-transition.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap-dropdown.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-modal.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap-alert.js"></script>
+    <script src="{{ STATIC_URL }}less/bootstrap/js/bootstrap.min.js"></script>
     <script src="{{ STATIC_URL }}codrspace.js"></script>
     <script>
       $('img[rel=tooltip]').tooltip();
