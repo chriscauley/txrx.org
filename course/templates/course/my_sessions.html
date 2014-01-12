@@ -1,9 +1,9 @@
-{% extends parent %}
+{% extends "base.html" %}
 {% load url from future %}
 
 {% block main %}
 {% if teaching_tuples %}
-<section class="span6">
+<section class="col-sm-6">
   <h1>Classes You are Teaching</h1>
   <div class="accordion" id="teaching_terms">
     {% for sessions,term in teaching_tuples %}

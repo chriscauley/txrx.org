@@ -1,4 +1,4 @@
-{% extends parent %}
+{% extends "base.html" %}
 {% load url from future %}
 {% load thumbnail %}
 
@@ -15,31 +15,7 @@
     </div>
   </h1>
 </div>
-{% comment %}
-{% if "success" in request.GET %}
-<b>
-  You have been enrolled in your classes.
-  {% if not request.user.is_authenticated %}
-  <br />
-  If you haven't already, please click
-  <a href="{% url "password_reset" %}">reset your password</a>.
-  <br />
-  Otherwise click please <a href="/accounts/login/">log in</a>.
-  {% endif %}
-</b>
-{% endif %}
-<p class="lead">
-  {% if all_sessions_closed %}
-  All sessions for this term are closed. Come back soon to see our next round of classes!
-  {% elif not request.user.is_authenticated %}
-  You can register for classes without logging in. Once you pay, a txrx account will be made using your paypal email address, and instructions on how to view your course schedule will be sent to that email address. If you have any problems feel free to write to classes@txrxlabs.org
-  {% elif not request.user.enrollment_set.count %}
-  Our records show you've never registered for a class before. If this is in error you should contact classes@txrxlabs.org and we'll adjust our records.
-  {% else %}
-  Here are all upcoming classes at the hackerspace. If you have any questions email classes@txrxlabs.org or stop by the hackerspace.
-  {% endif %}
-</p>
-{% endcomment %}
+{% for session in user_sessions %}
 {% include "widgets/filters.html" %}
 {% for week in weeks %}
 <div class="week {{ week.open }}">

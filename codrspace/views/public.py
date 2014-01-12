@@ -9,7 +9,6 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.template.response import TemplateResponse
 
-from djpjax import pjaxtend
 from tagging.models import Tag
 
 from codrspace.models import Post, Setting
@@ -18,11 +17,9 @@ from codrspace.forms import FeedBackForm
 import datetime, difflib
 
 #not currently in use, but will be eventually
-@pjaxtend()
 def index(request, template_name="home.html"):
     return TemplateResponse(request, template_name)
 
-@pjaxtend()
 def post_detail(request, username, slug, template_name="post_detail.html"):
     user = get_object_or_404(User, username=username)
 
@@ -46,7 +43,6 @@ def post_detail(request, username, slug, template_name="post_detail.html"):
         'user_settings': user_settings
     })
 
-@pjaxtend()
 def post_list(request, username, post_type='published',
               template_name="post_list.html"):
     user = get_object_or_404(User, username=username)

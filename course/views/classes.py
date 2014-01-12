@@ -58,7 +58,6 @@ def index(request,term_id=None):
     'user_sessions': user_sessions,
     'all_sessions_closed': all_sessions_closed,
     'test_session': test_session,
-    'parent': 'base.html',
     }
   return TemplateResponse(request,"course/classes.html",values)
 

@@ -11,7 +11,7 @@ import datetime,time
 
 def nav(request):
   blog_sublinks = [
-    {'name': 'Blog Home', 'url': '/blog/', 'pjax': True},
+    {'name': 'Blog Home', 'url': '/blog/'},
     {'name': 'Add Post', 'url': '/blog/admin/add/'},
     {'name': 'My Posts', 'url': '/blog/%s/'%request.user.username},
     ]
@@ -24,19 +24,18 @@ def nav(request):
     {"name": "Classes",
      "url": "/classes/",
      #'sublinks': [
-     #   {"name": "All classes", "url": "/classes/", 'pjax': False},
-     #   {"name": "My classes", "url": "/classes/my-sessions/", 'pjax': True},
+     #   {"name": "All classes", "url": "/classes/"},
+     #   {"name": "My classes", "url": "/classes/my-sessions/"},
      #   ]
      },
     {"name": "Blog",
      "url": "/blog/",
-     'pjax': True,
      "sublinks": blog_sublinks if request.user.is_staff else [],
      },
-    {'name': "Join us", "url": "/join-us/", 'pjax': True},
-    {'name': "Location", "url": "/map/", 'pjax': True},
-    {'name': "Events", "url": "/event/", 'pjax': False},
-    {"name": "Information",
+    {'name': "Join us", "url": "/join-us/"},
+    {'name': "Location", "url": "/map/"},
+    {'name': "Events", "url": "/event/"},
+    {"name": "Info",
      "url": "/about-us/",
      "sublinks": about_links,
      },

@@ -11,7 +11,6 @@ from ..forms import EmailInstructorForm, EvaluationForm
 from membership.models import UserMembership
 from event.utils import make_ics,ics2response
 
-from djpjax import pjaxtend
 from paypal.standard.ipn.models import *
 
 @login_required

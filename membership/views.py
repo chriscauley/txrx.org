@@ -15,11 +15,9 @@ from .utils import limited_login_required
 from course.models import Course,CourseCompletion
 from txrx.utils import FORBIDDEN
 
-from djpjax import pjaxtend
 from registration.views import register as _register
 import datetime
 
-@pjaxtend()
 def join_us(request):
   values = {
     'memberships': Membership.objects.active(),

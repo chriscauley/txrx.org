@@ -10,18 +10,15 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
 
 from NextPlease import pagination
-from djpjax import pjaxtend
 
 from membership.models import Membership
 from codrspace.models import Post
 
-@pjaxtend()
 def members(request,username=None):
     memberships = Membership.objects.active()[::-1]
     values = {'memberships':memberships}
     return TemplateResponse(request,"members.html",values)
 
-@pjaxtend()
 def member(request,username=None):
     member = User.objects.get(username=username)
     values = {'member':member}

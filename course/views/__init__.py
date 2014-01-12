@@ -11,11 +11,9 @@ from ..forms import EmailInstructorForm, EvaluationForm
 from membership.models import UserMembership
 from event.utils import make_ics,ics2response
 
-from djpjax import pjaxtend
 from paypal.standard.ipn.models import *
 
 @login_required
-@pjaxtend()
 def my_sessions(request):
   instructor = request.user
   current_term = Term.objects.all()[0]
