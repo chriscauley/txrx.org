@@ -14,7 +14,7 @@ import datetime
 class Command (BaseCommand):
   @mail_on_fail
   def handle(self, *args, **options):
-    dt = datetime.datetime.now() + datetime.timedelta(-14)
+    dt = datetime.datetime.now() + datetime.timedelta(-16)
     new_sessions = Session.objects.filter(created__gte=dt)
     if not new_sessions:
       mail_admins_plus("No classes","No new classes to email anyone about :(")
