@@ -9,46 +9,43 @@ import traceback
 
 @receiver(payment_was_successful, dispatch_uid='course.signals.handle_successful_payment')
 def handle_successful_payment(sender, **kwargs):
-    from course.models import Enrollment, Session
-    print 'Got payment!'
+  from course.models import Enrollment, Session
 
-    user = get_or_create_student(sender.payer_email)
+  user = get_or_create_student(sender.payer_email)
 
-    #add them to the classes they're enrolled in
-    params = QueryDict(sender.query)
+  #add them to the classes they're enrolled in
+  params = QueryDict(sender.query)
+  try:
+    class_count = int(params['num_cart_items'])
+  except:
+    class_count = 1
+
+  for i in range(1, class_count+1):
+    section_cost = int(float(params['mc_gross_%d'%i]))
+    quantity = int(params['quantity%s'%i])
+
     try:
-        class_count = int(params['num_cart_items'])
-    except:
-        class_count = 1
+      session = Session.objects.get(id=int(params['item_number%d' % (i, )]))
+    except Session.DoesNotExist:
+      mail_admins("Session not found",traceback.format_exc())
+      continue
+    except ValueError:
+      mail_admins("Non-integer session number",traceback.format_exc())
+      continue
+      
+    enrollment,new = Enrollment.objects.get_or_create(user=user, session=session)
+    if new:
+      enrollment.quantity = quantity
+    else:
+      enrollment.quantity += quantity
+    enrollment.save()
 
-    for i in range(1, class_count+1):
-        section_cost = int(float(params['mc_gross_%d' % (i, )]))
-
-        try:
-            session = Session.objects.get(id=int(params['item_number%d' % (i, )]))
-        except Session.DoesNotExist:
-            mail_admins("Session not found",traceback.format_exc())
-            continue
-        except ValueError:
-            mail_admins("Non-integer session number",traceback.format_exc())
-            continue
-            
-        #we're trusting during testing
-        #enrollment = Enrollment(user=user, session=session)
-        #enrollment.save()
-
-
-        #make sure they didn't spoof things to paypal
-        if section_cost == session.section.fee:
-            #everything is groovy
-            enrollment = Enrollment(user=user, session=session)
-            enrollment.save()
-
-        else:
-            #they tried to cheat us
-            mail_admins("cost and fee don't match","PP cost: %s\nSession Fee: %s\nSession Id:%s"%(section_cost,session.section.fee,session.id))
+    if True: #section_cost != session.section.fee:
+      # email chris for verification
+      m = "PP cost: %s\nSession Fee: %s\nSession Id:%s\nQuantity:%s"
+      mail_admins("New course enrollment",m%(section_cost,session.section.fee,session.id,enrollment.quantity))
 
 @receiver(payment_was_flagged, dispatch_uid='course.signals.handle_flagged_payment')
 def handle_flagged_payment(sender, **kwargs):
-    #email people to let them intervene manually
-    handle_successful_payment(sender, **kwargs)
+  #email people to let them intervene manually
+  handle_successful_payment(sender, **kwargs)

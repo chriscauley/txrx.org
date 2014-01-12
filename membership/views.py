@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -11,6 +12,7 @@ from .models import Membership, MeetingMinutes, Officer
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required
 
+from course.models import Course,CourseCompletion
 from txrx.utils import FORBIDDEN
 
 from djpjax import pjaxtend
@@ -26,7 +28,7 @@ def join_us(request):
   return TemplateResponse(request,"membership/join-us.html",values)
 
 @login_required
-def settings(request):
+def user_settings(request):
   user = request.user
   user_form = UserForm(request.POST or None, instance=user)
   user_membership = user.usermembership
@@ -97,3 +99,35 @@ def officers(request):
   officers = Officer.objects.all()
   values = {'officers': officers}
   return TemplateResponse(request,'membership/officers.html',values)
+
+def verify_api(request):
+  if not getattr(settings,'PORTAL_KEY','') == request.REQUEST.get('api_key',''):
+    raise Http404
+
+def user_emails(request):
+  verify_api(request)
+  out = []
+  for u in User.objects.all():
+    out.append(','.join([str(u.id),u.email or '',u.usermembership.paypal_email or '']))
+  return HttpResponse('\n'.join(out))
+
+def course_names(request):
+  verify_api(request)
+  out = []
+  for c in Course.objects.all():
+    out.append(','.join([str(c.id),c.name]))
+  return HttpResponse('\n'.join(out))
+
+def course_completion(request,year=None,month=None,day=None):
+  verify_api(request)
+  out = []
+  if year:
+    dt = datetime.date(int(year),int(month),int(day))
+  else:
+    dt = datetime.date.today()-datetime.timedelta(30)
+  completions = CourseCompletion.objects.filter(created__gte=dt)
+  if 'course_id' in request.GET:
+    completions = completions.filter(course_id=request.GET['course_id'])
+  for c in completions:
+    out.append(','.join([str(c.course.id),str(c.user.id)]))
+  return HttpResponse('\n'.join(out))

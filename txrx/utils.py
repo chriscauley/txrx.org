@@ -2,9 +2,29 @@ from django.conf import settings
 from django.http import HttpResponseForbidden
 from django.contrib.auth.forms import PasswordResetForm
 
+from txrx.mail import mail_admins_plus
+
+import traceback, sys
+
 m = "You are not authorized to do this. If you believe this is in error, please email %s"%settings.WEBMASTER
 
 FORBIDDEN = HttpResponseForbidden(m)
+
+def mail_on_fail(target):
+  def wrapper(*args,**kwargs):
+    try:
+      return target(*args,**kwargs)
+    except Exception, err:
+      lines = [
+        "An unknown erro has occurred when executing the following function:",
+        "name: %s"%target.__name__,
+        "args: %s"%args,
+        "kwargs: %s"%kwargs,
+        "",
+        "traceback:\n%s"%traceback.format_exc(),
+        ]
+      mail_admins_plus("Error occurred via 'mail_on_fail'",'\n'.join(lines))
+  return wrapper
 
 def cached_method(target,name=None):
   target.__name__ = name or target.__name__

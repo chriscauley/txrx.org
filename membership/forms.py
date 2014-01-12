@@ -32,7 +32,7 @@ class SurveyForm(forms.Form):
 
 class UserMembershipForm(forms.ModelForm):
   class Meta:
-    fields = ('by_line','bio','paypal_email','notify_global','notify_classes','notify_comments')
+    fields = ('by_line','bio','paypal_email','notify_global','notify_classes','notify_comments','notify_sessions')
     model = UserMembership
 
 class UserForm(forms.ModelForm):

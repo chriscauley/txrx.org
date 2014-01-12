@@ -96,9 +96,9 @@ def get_url(url):
         text = text.replace(*t)
     return text
 
-f = open("data/data.py",'r')
-posts = eval(f.read())
-f.close()
+#f = open("data/data.py",'r')
+#posts = eval(f.read())
+#f.close()
 
 posts = {}
 

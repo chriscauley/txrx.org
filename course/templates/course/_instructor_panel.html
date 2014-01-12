@@ -10,11 +10,35 @@
     </div>
     <div id="student_list" class="accordion-body collapse in">
       <div class="accordion-inner">
-        <ul>
+          <ul>
+            {% for enrollment in session.enrollment_set.all %}
+            <li>{{ enrollment.user.email }}</li>
+            {% endfor %}
+          </ul>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-parent="#instructor_panel"
+         data-toggle="collapse" href="#completion_form">
+        Completion Form
+      </a>
+    </div>
+    <div id="completion_form" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <form method="POST">{% csrf_token %}
+          When class is completedly over, check off the students who have completed the class and press submit.
           {% for enrollment in session.enrollment_set.all %}
-          <li>{{ enrollment.user.email }}</li>
+          <p>
+            <input type="checkbox" name="completed"{% if enrollment.completed %}
+                   checked="checked"{% endif %} value="{{ enrollment.id }}"/>
+            {{ enrollment.user }}
+          </p>
           {% endfor %}
-        </ul>
+          <input type="submit" value="Update" />
+        </form>
       </div>
     </div>
   </div>

@@ -30,6 +30,7 @@ class SetPhotoInline(OrderedModelInline):
 class PhotoSetConnectionInline(GenericTabularInline):
   max_num = 1
   model = PhotoSetConnection
+  raw_id_fields = ('photoset',)
 
 class PhotoSetAdmin(SlugModelAdmin):
   inlines = [SetPhotoInline] #,PhotoSetConnectionInline]

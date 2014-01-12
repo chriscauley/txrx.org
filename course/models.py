@@ -45,6 +45,9 @@ class Course(models.Model):
   class Meta:
     ordering = ("name",)
 
+class CourseSubscription(UserModel):
+  course = models.ForeignKey(Course)
+
 class Section(models.Model):
   course = models.ForeignKey(Course)
   term = models.ForeignKey("Term")
@@ -90,7 +93,9 @@ class Session(UserModel,SetModel):
   slug = models.CharField(max_length=255)
   cancelled = models.BooleanField(default=False)
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
-  first_date = models.DateTimeField(default=datetime.datetime.now) # for filtering
+  _ht = "This will be automatically updated when you save the model. Do not change"
+  first_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
+  created = models.DateTimeField(auto_now_add=True) # for emailing new classes
   ts_help = "Only used to set dates on creation."
   time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
   branding = models.ForeignKey(Branding,null=True,blank=True)
@@ -107,7 +112,16 @@ class Session(UserModel,SetModel):
 
   #calendar crap
   name = property(lambda self: self.section.course.name)
-  all_occurrences = cached_property(lambda self: self.classtime_set.all(),name='all_occurrences')
+  @cached_property
+  def all_occurrences(self):
+    # this sets self.first_date to the first ClassTime.start if they aren't equal
+    # handled in the admin by /static/js/course_admin.js
+    _a = self.classtime_set.all()
+    if not _a[0].start == self.first_date:
+      print "setting first_date"
+      self.first_date = _a[0].start
+      self.save()
+    return _a
   get_ics_url = lambda self: reverse_ics(self)
 
   @cached_method
@@ -123,13 +137,11 @@ class Session(UserModel,SetModel):
       return "closed"
     return "full"
   def save(self,*args,**kwargs):
+    #this may be depracated, basically the site fails hard if instructors don't have membership profiles
     from membership.models import UserMembership
-    profile,new = UserMembership.objects.get_or_create(user=self.user)
-    if not self.id:
-      self.slug = 'arst'
-      super(Session,self).save(*args,**kwargs)
-    if self.all_occurrences:
-      self.first_date = self.all_occurrences[0].start
+    profile,_ = UserMembership.objects.get_or_create(user=self.user)
+    self.slug = self.slug or 'arst' # can't save without one, we'll set this below
+    super(Session,self).save(*args,**kwargs)
     self.slug = slugify("%s_%s"%(self.section,self.id))
     self.update_feed_item()
     return super(Session,self).save(*args,**kwargs)
@@ -193,9 +205,6 @@ class ClassTime(OccurrenceModel):
   @property
   def end(self):
     return self.start.replace(hour=self.end_time.hour,minute=self.end_time.minute)
-  def save(self,*args,**kwargs):
-    super(ClassTime,self).save(*args,**kwargs)
-    self.session.save() #update first_date
   class Meta:
     ordering = ("start",)
 
@@ -210,16 +219,26 @@ class Enrollment(UserModel):
   session = models.ForeignKey(Session)
   datetime = models.DateTimeField(default=datetime.datetime.now)
   quantity = models.IntegerField(default=1)
+
+  completed = models.BooleanField(default=False)
   evaluated = models.BooleanField(default=False)
   evaluation_date = models.DateTimeField(null=True,blank=True)
+
   objects = EnrollmentManager()
+
   __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.session)
   def save(self,*args,**kwargs):
     if not self.evaluation_date:
       self.evaluation_date = list(self.session.all_occurrences)[-1].start
     super(Enrollment,self).save(*args,**kwargs)
+    if self.completed:
+      CourseCompletion.objects.get_or_create(user=self.user,course=self.session.section.course)
   class Meta:
     ordering = ('-datetime',)
+
+class CourseCompletion(UserModel):
+  course = models.ForeignKey(Course)
+  created = models.DateTimeField(auto_now_add=True)
 
 FIVE_CHOICES = (
   (1,'1'),

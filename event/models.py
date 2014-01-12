@@ -72,6 +72,7 @@ class OccurrenceModel(models.Model):
   Occurrences need a start (DateTime), end (DateTime, optional), name (str), description (str), and get_absolute_url (str).
   """
   __unicode__ = lambda self: "%s - %s"%(self.name,date(self.start,'l F d, Y'))
+  created = models.DateTimeField(auto_now_add=True)
 
   get_ics_url = lambda self: reverse_ics(self)
 

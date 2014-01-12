@@ -10,31 +10,6 @@ from .var import admin_comment_email, comment_response_email
 
 _u = lambda s: settings.SITE_URL + s
 
-def filter_emails(emails):
-  if settings.DEBUG:
-    #only email certain people from dev server!
-    return [e for e in emails if e in getattr(settings,'ALLOWED_EMAILS',[])]
-  return emails
-
-def mail_admins_plus(subject,message,recipient_list):
-  recipient_list += [email for name,email in settings.ADMINS if not email in recipient_list]
-  recipient_list = filter_emails(recipient_list)
-  if not recipient_list:
-    print message
-    return
-  send_mail(
-    subject,
-    message,
-    settings.DEFAULT_FROM_EMAIL,
-    recipient_list)
-
-def send_mail_plus(subject,message,from_email,recipient_list):
-  recipient_list = filter_emails(recipient_list)
-  if not recipient_list:
-    print message
-    return
-  send_mail(subject,message,from_email,recipient_list)
-
 def new_comment_connection(sender, instance=None, created=False,**kwargs):
   if not created:
     return

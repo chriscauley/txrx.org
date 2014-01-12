@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from course.models import Subject, Course, Section, Session, Enrollment, Term, ClassTime, Branding, Evaluation, SessionAttachment
+from course.models import Subject, Course, Section, Session, Enrollment, Term, ClassTime, Branding, Evaluation, SessionAttachment, CourseCompletion
 from db.forms import StaffMemberForm
 
 from codrspace.admin import PhotoSetConnectionInline
@@ -8,14 +8,15 @@ from codrspace.admin import PhotoSetConnectionInline
 class SubjectAdmin(admin.ModelAdmin):
   pass
 
-class SectionInline(admin.TabularInline):
+class CourseCompletionInline(admin.TabularInline):
+  model = CourseCompletion
   extra = 0
-  model = Section
+  raw_id_fields = ('user',)
 
 class CourseAdmin(admin.ModelAdmin):
   list_display = ("name",)
   filter_horizontal = ("subjects",)
-  #inlines = (SectionInline,)
+  inlines = [CourseCompletionInline]
 
 class ClassTimeInline(admin.TabularInline):
   extra = 0
@@ -44,8 +45,10 @@ class SessionAttachmentInline(admin.TabularInline):
 class SessionAdmin(admin.ModelAdmin):
   form = StaffMemberForm
   raw_id_fields = ('section','user')
-  exclude = ('time_string','slug','first_date','publish_dt')
+  exclude = ('time_string','slug','publish_dt')
   inlines = (PhotoSetConnectionInline, ClassTimeInline, EnrollmentInline,SessionAttachmentInline)
+  class Media:
+    js = ("js/course_admin.js",)
 
 class EnrollmentAdmin(admin.ModelAdmin):
   list_display = ("id",'user', 'session', )
