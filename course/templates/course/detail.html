@@ -26,7 +26,6 @@
     <a href="{% url "instructor_detail" session.user.username %}">
       <i class="icon-user"></i>{{ session.get_instructor_name }}</a>
   </div>
-  {{ session.get_session_photoset }}
   {% with photos=session.get_session_photoset.get_photos %}
   <div class="photoset{% if photos|length < 3 %} no-slides{% endif %}">
     <ul>
