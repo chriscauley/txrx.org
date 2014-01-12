@@ -53,13 +53,13 @@
           {% if user.is_authenticated %}
           {% if user.is_staff %}<li><a href="/admin/"><i class="icon-cog"></i> Admin</a></li>{% endif %}
           <li><a href="{% url "signout" %}"><i class="icon-off"></i> Log out</a></li>
-          <li><a href="{% url "account_settings" %}" data-pjax="#main"><i class="icon-cog"></i> Settings</a></li>
+          <li><a href="{% url "account_settings" %}"><i class="icon-cog"></i> Settings</a></li>
           {% if pending_evaluations %}
           <li><a data-reddot="{{ pending_evaluations.count }}"
                  href="{% url "course:evaluation_index" %}"> Evaluations</a></li>
           {% endif %}
           {% else %}
-          <li><a href="/accounts/register/" data-pjax="#main">Register</a></li>
+          <li><a href="/accounts/register/">Register</a></li>
           <li><a href="/accounts/login/?next={{ request.path|urlencode }}">
               Log in with Username
           </a></li>
@@ -79,13 +79,13 @@
               {% if user.is_authenticated %}
               {% if user.is_staff %}<li><a href="/admin/"><i class="icon-cog"></i> Admin</a></li>{% endif %}
               <li><a href="{% url "signout" %}"><i class="icon-off"></i> Log out</a></li>
-              <li><a href="{% url "account_settings" %}" data-pjax="#main"><i class="icon-cog"></i> Settings</a></li>
+              <li><a href="{% url "account_settings" %}"><i class="icon-cog"></i> Settings</a></li>
               {% if pending_evaluations %}
               <li><a data-reddot="{{ pending_evaluations.count }}"
                      href="{% url "course:evaluation_index" %}"> Evaluations</a></li>
               {% endif %}
               {% else %}
-              <li><a href="/accounts/register/" data-pjax="#main">Register</a></li>
+              <li><a href="/accounts/register/">Register</a></li>
               <li><a href="/accounts/login/?next={{ request.path|urlencode }}">
                   Log in with Username
               </a></li>
