@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Guide</title>    
+    <link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/>
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap-responsive.min.css"/>
+    <style type="text/css">
+        .section{
+        margin-top:40px;
+        }
+        .th-attr{
+        width:15%;
+        }
+        .th-desc{
+        width:40%;
+        }
+        .th-def{
+        width:15%;
+        }
+        .th-val{
+        width:30%;
+        }
+        .cat-odd{
+        background-color:#ffd !important;
+        }
+        .cat-even{
+        background-color:#fff !important;
+        }
+        ul ul{
+        list-style:disc;
+        }
+    </style>
+    <script type="text/javascript" src="scripts/shCore.js"></script>
+    <script type="text/javascript" src="scripts/shBrushJScript.js"></script>
+    <script type="text/javascript">
+        SyntaxHighlighter.defaults.toolbar = false;
+        SyntaxHighlighter.all();
+    </script>
+</head>
+<body>
+<br/>
+<div class="container">
+	<div class="row">
+    	<div class="span3">
+        	<div class="well affix">
+            	<h4>Contents</h4>
+                <ul>
+                    <li><a href="#install">Installation</a></li>
+                    <li><a href="#markup">HTML Markup</a>
+                        <ul>                   
+                            <li><a href="#images">Images</a></li>
+                            <li><a href="#content">Other Contents</a></li>                         
+                            <li><a href="#links">Links</a></li>
+                            <li><a href="#captions">Captions</a></li>
+                            <li><a href="#caption-config">Caption Config</a></li>                           
+                            <li><a href="#img-pos">Image Position</a></li>
+                       	</ul>
+                    </li>
+                    <li><a href="#activate">Activation &amp; Configuration</a></li>
+                    <li><a href="#opts">Options</a>
+                    	<ul>
+                        	<li><a href="#size-opts">Size</a></li>
+                            <li><a href="#ss-opts">Slideshow</a></li>
+                            <li><a href="#nav-opts">Navigation Control</a></li>
+                            <li><a href="#caption-opts">Captions</a></li>
+                            <li><a href="#misc-opts">Misc.</a></li>
+                            <li><a href="#callback-opts">Callbacks</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#events">Custom Events</a></li>
+                    <li><a href="#contact">Contact Info</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="span9">
+            <div class="hero-unit">
+            	<h1>jQuery Thumb Scroller</h1>
+                <h2><span class="muted">help guide</span></h2>
+          	</div>
+        	<div class="section">
+            	<div class="page-header">
+        			<h1 id="install">Installation</h1>
+                </div>
+                <p>
+                	To install the thumb scroller, 
+                    first include the style sheet inside the <code>&lt;head&gt;</code> tag:
+                </p>
+<pre class="brush:js;">
+&lt;link rel="stylesheet" type="text/css" href="css/thumb-scroller.css" /&gt;
+</pre>
+                <p>
+                    Next, include the jQuery's library file, the jQuery UI file, and the thumb scroller's script file 
+                    inside the <code>&lt;head&gt;</code> tag:
+                </p>
+<pre class="brush:js;">
+&lt;script type="text/javascript" src="js/jquery-1.10.2.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="js/jquery.thumb-scroller.js"&gt;&lt;/script&gt;
+</pre>
+				<p>
+                	This completes the installation process, next you'll have to specify the <a href="#markup">HTML markup</a>.
+                </p>
+            </div>
+            <br/>
+            
+        	<div class="section">
+            	<div class="page-header">
+        			<h1 id="markup">HTML Markup</h1>
+                </div>
+        		<p>
+            		To insert a thumb scroller for your page, specify the thumb scroller's markup inside the <code>&lt;body&gt;</code> tag. 
+            		The following is an example of a basic markup:
+        		</p>        
+<pre class="brush:js;">
+&lt;div id="scroller1" class="thumb-scroller"&gt;
+    &lt;ul class="ts-list"&gt;
+        &lt;li&gt;
+            &lt;img src="images/photo1.jpg"/&gt;
+        &lt;/li&gt;                    
+        &lt;li&gt; 
+            &lt;img src="images/photo2.jpg"/&gt;
+        &lt;/li&gt;
+        &lt;li&gt; 
+            &lt;img src="images/photo3.jpg"/&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;
+</pre>  
+                <p>
+                    From the example, the <code>&lt;div&gt;</code> tag on line 1 represents the thumb scroller's container.
+                    The <code>&lt;div&gt;</code> tag should have the required class <code>thumb-scroller</code> but can have any <code>id</code>
+                    value. 
+                    For this example, we use an <code>id</code> of <code>scroller1</code> which will be referenced in the <a href="#activate">activation</a> function call.
+                </p>
+                <p>
+                    Also of importance is the <code>&lt;ul&gt;</code> tag with class <code>ts-list</code>.
+                    This <code>&lt;ul&gt;</code> tag will hold all the <code>&lt;li&gt;</code> tags, with 
+                    each <code>&lt;li&gt;</code> tag representing an individual slide.  
+                </p>
+                <br/>
+                
+                <h2 id="images">Images</h2>        
+                <p>
+                    There are two ways to add an image to the thumb scroller.
+                    One is using a regular <code>&lt;img&gt;</code> tag and the other is specifying an url to the image.
+                </p>
+                <p>     	
+                    For the first method, just insert an <code>&lt;img&gt;</code> tag inside the <code>&lt;li&gt;</code> tag:
+                </p>
+<pre class="brush:js; highlight:2">
+&lt;li&gt;
+    &lt;img src="images/photo1.jpg" /&gt;
+&lt;/li&gt;
+</pre>      
+                <p>
+                    This is the simpler of the two methods but the image is downloaded immediately versus when needed.                    
+                </p>
+                <br/>
+                <p>
+                    For the second method, to add an image using a link, 
+                    insert a <code>data-src</code> attribute for the <code>&lt;li&gt;</code> tag:
+                </p>
+<pre class="brush:js; highlight:1">
+&lt;li data-src="images/photo1.jpg"&gt;
+    &lt;img src="images/placeholder.jpg" /&gt;
+&lt;/li&gt;
+</pre>     
+                <p>
+                    This method will reduce the initial download time using lazy loading. The image is downloaded as needed instead of all at once.
+                </p>
+                <p>    
+                	From the example, once photo1.jpg is finished loading, it will replace placeholder.jpg.
+               		It is recommended you use a small place holder image, preferably a transparent 1 x 1 pixel image.
+                </p>  
+				<br/>
+                
+                <h2 id="content">Other Contents</h2>        
+                <p>
+                	Aside from images, you can load other types of content for a slide.
+                    A slide can support content coming from flash, iframe, ajax, and inline content.
+           		</p>
+                <p>         
+                    In order to load other types of content, assign the content's url to the <code>data-src</code> attribute for the <code>&lt;li&gt;</code> tag.
+                    You can also specify an optional <code>data-content-type</code> attribute to tell what type of content it is loading.
+                    If you do not specify a <code>data-content-type</code> attribute, the scroller will try its best to determine what type it is.
+            	</p>
+                <h3>Flash</h3>
+                <p>        
+                    To load flash content, specify the swf file for the <code>data-src</code> attribute.
+                </p>
+<pre class="brush:js; highlight:1">
+&lt;li data-src="test.swf" data-content-type="flash"&gt;
+    &lt;img src="images/placeholder.jpg" /&gt;
+&lt;/li&gt;
+</pre>     
+        
+				<h3>iframe</h3>       
+                <p>
+                	To load content for an iframe, specify an url for the <code>data-src</code> attribute.
+                </p>
+<pre class="brush:js; highlight:1">
+&lt;li data-src="http://www.codecanyon.net" data-content-type="iframe"&gt;
+    &lt;img src="images/placeholder.jpg" /&gt;
+&lt;/li&gt;
+</pre>            
+				
+                <h3>AJAX</h3>    
+                <p>
+                	To load content for an ajax call, specify an url with your variables for the <code>data-src</code> attribute
+                    and set the <code>data-content-type</code> attribute to <code>ajax</code>.
+                </p>
+<pre class="brush:js; highlight:1">
+&lt;li data-src="test.php?var1=hello&amp;var2=world" data-content-type="ajax" data-method="POST"&gt;
+    &lt;img src="images/placeholder.jpg" /&gt;
+&lt;/li&gt;
+</pre>                
+               	<p>
+                	You can also specify either a <code>GET</code> or <code>POST</code> type using the <code>data-method</code> attribute.
+                </p>
+                
+                <h3>Inline Content</h3> 
+                <p>
+                	To load inline content for the slide, specify an id value for the <code>data-src</code> attribute.
+                </p> 
+<pre class="brush:js; highlight:1">
+&lt;li data-src="#mydiv" data-content-type="inline"&gt;
+    &lt;img src="images/placeholder.jpg" /&gt;
+&lt;/li&gt;
+</pre>     
+				<p>
+                	The <code>id</code> should reference the <code>id</code> of the element you want the html content to come from.
+                </p>             
+               	<br/>
+                  
+                <h2 id="links">Links</h2>
+                <p>
+                    To add a link for a slide, insert a <code>&lt;a&gt;</code> tag around your image.
+                </p>
+<pre class="brush:js; highlight:2">
+&lt;li&gt;
+    &lt;a href="http://www.codecanyon.net"&gt;&lt;img src="images/photo1.jpg" /&gt;&lt;/a&gt;
+&lt;/li&gt;
+</pre>  
+				<br/>
+        
+                <h2 id="captions">Captions</h2>       
+                <p>
+                	To add a caption for a slide, insert a tag like <code>div</code> within the <code>&lt;li&gt;</code> tag.        
+                </p>
+<pre class="brush:js; highlight:[3,4,5]">
+&lt;li&gt;
+    &lt;img src="images/photo1.jpg" /&gt;
+    &lt;div&gt;
+    	Lorem ipsum dolor sit amet.
+    &lt;/div&gt;
+&lt;/li&gt;
+</pre>
+				<p>
+                    You can use virtually any tags to represent a caption. 
+                    Some supported tag types are <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;span&gt;</code>, and <code>&lt;h1&gt;</code> thru <code>&lt;h6&gt;</code>.
+                </p>
+				<p>
+                    Also, you can embed html content within the caption tag like in the following example:
+                </p>
+<pre class="brush:js; highlight:[3,4,5,6]">
+&lt;li&gt;
+    &lt;img src="images/photo1.jpg" /&gt;
+    &lt;div&gt;
+    	&lt;a href="http://www.codecanyon.net"&gt;Code Canyon&lt;/a&gt;
+    	&lt;em&gt;Lorem ipsum dolor sit amet.&lt;/em&gt;
+    &lt;/div&gt;
+&lt;/li&gt;
+</pre>               
+                
+                <br/>
+                    
+                <h2 id="caption-config">Caption Configuration</h2>       
+                <p>
+                    You can configure each caption individually.
+                    To customize these options, set the following data attributes for the <code>&lt;li&gt;</code> tag:
+                </p>
+<pre class="brush:js; highlight:[1]">
+&lt;li data-caption-align="top" data-caption-effect="fade" data-caption-button="true"&gt;
+    &lt;img src="images/photo1.jpg" /&gt;
+    &lt;div&gt;
+    	lorem ipsum
+    &lt;/div&gt;
+&lt;/li&gt;
+</pre>
+                <p>
+                    The available options are:
+                </p>
+                <ul>
+                	<li><code>data-caption-align</code> - the caption's alignment. (top or bottom)</li>                    
+                    <li><code>data-caption-effect</code> - the caption's transition effect.  
+                    	(none, normal, fade, or slide)</li>
+                    <li><code>data-caption-button</code> - specify if the caption's toggle button is displayed. (true or false)</li>
+                </ul> 
+                <br/>
+                
+                <h2 id="img-pos">Image Position</h2>       
+                <p>
+                    You can configure the positioning of each slide image by setting the 
+                    <code>data-image-position</code> attribute of the <code>&lt;li&gt;</code> tag:
+                </p>
+<pre class="brush:js; highlight:[1]">
+&lt;li data-image-position="center"&gt;
+    &lt;img src="images/photo1.jpg" /&gt;
+&lt;/li&gt;
+</pre>
+                <p>
+                    The available values for <code>data-image-position</code> are:
+                </p>
+                <ul>
+                    <li><code>center</code> - center the image within the slide container.</li>
+                    <li><code>fill</code> - fill the slide container with the image. (cropping might occur)</li>
+                    <li><code>fit</code> - fit the whole image within the slide container.</li>
+                    <li><code>stretch</code> - stretch the image to fill the slide container.</li>
+                    <li><code>none</code> - show the image as is.</li>
+                </ul> 
+                <br/>          
+        	</div>
+            <br/>
+           
+      		<div class="section">
+                <div class="page-header">
+                    <h1 id="activate">Activation &amp; Configuration</h1>
+                </div>
+                <p>
+                	Once the <a href="#markup">HTML markup</a> is specified, the final step is to activate it to get it running.
+                    To activate the thumb scroller, simply use the following script in your page:
+                </p>
+<pre class="brush:js; highlight:4">
+&lt;script type="text/javascript"&gt;
+$(window).load(
+   function() {
+      $("#scroller1").thumbScroller();
+   }
+);
+&lt;/script&gt;
+</pre>
+                <p>
+                    The code snippet activates the thumb scroller by using the <code>id</code> of the thumb scroller's <code>&lt;div&gt;</code> container tag and applying the activation function on it.           			Also, make sure the activation function call is within the <code>$(window).load()</code> function.
+                </p>
+                <br/>
+                <p>
+                    The thumb scroller has many configurable options.
+                    In order to configure the thumb scroller, pass in a list of the options to the activation function call.
+                    The following example activates the thumb scroller, but this time with the option <code>slideWidth</code> and <code>slideHeight</code> set.
+                </p>
+<pre class="brush:js; highlight:[5,6]">
+&lt;script type="text/javascript"&gt;
+$(window).load(
+    function() {
+        $("#scroller1").thumbScroller({
+            slideWidth:400,
+            slideHeight:300
+        });
+    }
+);
+&lt;/script&gt;
+</pre>
+                <p>
+                    Please note that any options not specified for the function call will take on its default value. 
+                	For more information on all available options, please refer to the <a href="#opts">Options</a> tables.
+                </p>
+                <p>
+                    After activation and configuration, your thumb scroller is ready to run.
+                </p>
+    		</div>
+			<br/>
+            
+            <div class="section">	
+    			<div class="page-header">
+                	<h1 id="opts">Options</h1>
+              	</div>
+                
+                <h3 id="size-opts">Size</h3>
+                <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th class="th-attr">Name</th>
+                        <th class="th-desc">Description</th>
+                        <th class="th-def">Default Value</th>
+                        <th class="th-val">Possible Values</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>numDisplay</td>
+                        <td>The number of slides visible</td>
+                        <td>4</td>
+                        <td>Any positive integer</td>
+                    </tr> 
+                    <tr>
+                        <td>slideWidth</td>
+                        <td>The slide's width</td>
+                        <td>300</td>
+                        <td>Any positive integer</td>
+                    </tr>
+                    <tr>
+                        <td>slideHeight</td>
+                        <td>The slide's height</td>
+                        <td>200</td>
+                        <td>Any positive integer</td>
+                    </tr>   
+                    <tr>
+                        <td>slideBorder</td>
+                        <td>The slide's border size</td>
+                        <td>0</td>
+                        <td>Any non-negative integer</td>
+                    </tr>
+                    <tr>
+                        <td>slideMargin</td>
+                        <td>The slide's margin size</td>
+                        <td>0</td>
+                        <td>Any non-negative integer</td>
+                    </tr>
+                    <tr>
+                        <td>padding</td>
+                        <td>The scroller's surrounding padding</td>
+                        <td>10</td>
+                        <td>Any non-negative integer</td>
+                    </tr>
+                    <tr>
+                        <td>captionHeight</td>
+                        <td>The caption's height</td>
+                        <td>auto</td>
+                        <td>Any positive integer or auto</td>
+                    </tr>
+                </tbody>
+                </table>
+            
+                <h3 id="ss-opts">Slideshow</h3>
+                <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th class="th-attr">Name</th>
+                        <th class="th-desc">Description</th>
+                        <th class="th-def">Default Value</th>
+                        <th class="th-val">Possible Values</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	<tr>
+                        <td>startIndex</td>
+                        <td>The slide index to start on.</td>
+                        <td>0</td>
+                        <td>Any non-negative integer</td>
+                    </tr>                    
+                    <tr>
+                        <td>autoPlay</td>
+                        <td>Set true for slide show to play automatically on startup.</td>
+                        <td>false</td>
+                        <td>true, false</td>
+                    </tr>
+                    <tr>
+                        <td>delay</td>
+                        <td>The slide show's delay in milliseconds.</td>
+                        <td>5000</td>
+                        <td>Any positive integer</td>
+                    </tr>
+                    <tr>
+                        <td>speed</td>
+                        <td>The scrolling transition speed in milliseconds.</td>
+                        <td>800</td>
+                        <td>Any positive integer</td>
+                    </tr>
+                    <tr>
+                        <td>easing</td>
+                        <td>The transition animation easing.</td>
+                        <td>swing</td>
+                        <td>See <a href="http://jqueryui.com/resources/demos/effect/easing.html" target="_blank">jQuery Easing</a> for information on available easing.</td>
+                    </tr>
+                    <tr>
+                        <td>pauseOnHover</td>
+                        <td>Set true to pause slide show on mouseover and play on mouseout.</td>
+                        <td>false</td>
+                        <td>true, false</td>
+                    </tr>
+                    <tr>
+                        <td>pauseOnInteraction</td>
+                        <td>Set true to pause slide show on control's interaction.</td>
+                        <td>false</td>
+                        <td>true, false</td>
+                    </tr>
+                    <tr>
+                        <td>playOnce</td>
+                        <td>Set true for slide show to play through only once, stopping at the last slide.</td>
+                        <td>false</td>
+                        <td>true, false</td>
+                    </tr>
+                    <tr>
+                        <td>continuous</td>
+                        <td>Set true for navigation go to beginning again once end is reached.</td>
+                        <td>true</td>
+                        <td>true, false</td>
+                    </tr>
+                    <tr>
+                        <td>moveByOne</td>
+                        <td>Set true for scrolling to move by one slide at a time.</td>
+                        <td>false</td>
+                        <td>true, false</td>
+                    </tr>
+                </tbody>
+                </table>               
+        
+                <h3 id="nav-opts">Navigation Control</h3>
+                <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th class="th-attr">Name</th>
+                        <th class="th-desc">Description</th>
+                        <th class="th-def">Default Value</th>
+                        <th class="th-val">Possible Values</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>control</td>
+                        <td>The type of control.</td>
+                        <td>index</td>
+                        <td>none, index, scrollbar</td>
+                    </tr> 
+                    <tr>
+                        <td>navButtons</td>
+                        <td>The type of navigation buttons.</td>
+                        <td>normal</td>
+                        <td>none, small, normal, mouseover</td>
+                    </tr>        
+                    <tr>
+                        <td>playButton</td>
+                        <td>Set true to display the play button.</td>
+                        <td>true</td>
+                        <td>true, false</td>
+                    </tr>
+                    <tr>
+                        <td>pageInfo</td>
+                        <td>Set true to display the current number info.</td>
+                        <td>true</td>
+                        <td>true, false</td>
+                    </tr>
+                    <tr>
+                        <td>title</td>
+                        <td>The header title.</td>
+                        <td></td>
+                        <td>Any string value</td>
+                    </tr>
+              	</tbody>
+                </table>
+        		
+                <h3 id="caption-opts">Captions</h3>
+                <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th class="th-attr">Name</th>
+                        <th class="th-desc">Description</th>
+                        <th class="th-def">Default Value</th>
+                        <th class="th-val">Possible Values</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>captionAlign</td>
+                        <td>The alignment of the slide captions.</td>
+                        <td>bottom</td>
+                        <td>top, bottom</td>
+                    </tr>
+                   	<tr>
+                        <td>captionPosition</td>
+                        <td> The position of the slide captions.</td>
+                        <td>inside</td>
+                        <td>inside, outside</td>
+                    </tr>
+                    <tr>
+                        <td>captionEffect</td>
+                        <td>The caption transition effect.</td>
+                        <td>fade</td>
+                        <td>none, normal, fade, slide</td>
+                    </tr>
+                    <tr>
+                        <td>captionButton</td>
+                        <td>Set true to display caption toggle buttons.</td>
+                        <td>false</td>
+                        <td>true, false</td>
+                    </tr>                    
+                </tbody>
+                </table>
+                
+                <h3 id="misc-opts">Miscellaneous</h3>
+                <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th class="th-attr">Name</th>
+                        <th class="th-desc">Description</th>
+                        <th class="th-def">Default Value</th>
+                        <th class="th-val">Possible Values</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	<tr>
+                        <td>orientation</td>
+                        <td>The orientation of the scroller.</td>
+                        <td>horizontal</td>
+                        <td>horizontal, vertical</td>
+                    </tr>                	
+                	<tr>
+                        <td>responsive</td>
+                        <td>Set true for scroller to be responsive. Set false for fixed size.</td>
+                        <td>false</td>
+                        <td>true, false</td>
+                    </tr>
+                    <tr>
+                        <td>collapsible</td>
+                        <td>
+                        	Set true for scroller to be collapsible and expandable when window resizes. 
+                        	Only available for horizontal orientation.
+                            <strong>Note:</strong> if true, responsive setting is overrided.</td>
+                        <td>false</td>
+                        <td>true, false</td>
+                    </tr>
+                    <tr>
+                        <td>minDisplay</td>
+                        <td>The minimum number of slides displayed. <strong>Note:</strong> Only applicable if collapsible is set to true.</td>
+                        <td>1</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>imagePosition</td>
+                        <td>The position of the slide images.</td>
+                        <td>fill</td>
+                        <td>none, center, fill, fit, stretch</td>
+                    </tr>
+                    <tr>
+                        <td>shuffle</td>
+                        <td>Set true to shuffle slides in random order.</td>
+                        <td>false</td>
+                        <td>true, false</td>
+                    </tr>        
+                    <tr>
+                        <td>keyboard</td>
+                        <td>Set true to enable keyboard navigation.</td>
+                        <td>false</td>
+                        <td>true, false</td>
+                    </tr>
+                    <tr>
+                        <td>mousewheel</td>
+                        <td>Set true to enable mousewheel scroll navigation.</td>
+                        <td>false</td>
+                        <td>true, false</td>
+                    </tr>
+                </tbody>
+                </table>
+                
+                <h3 id="callback-opts">Callbacks</h3>
+                <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th class="th-attr">Name</th>
+                        <th class="th-desc">Description</th>
+                        <th class="th-def">Default Value</th>
+                        <th class="th-val">Possible Values</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>	
+                        <td>onInit</td>
+                        <td>Called after scroller's initialization is complete.</td>
+                        <td>function() {}</td>
+                        <td>Any javascript function</td>
+                    </tr>
+                    <tr>
+                        <td>onPlay</td>
+                        <td>Called when slideshow plays.</td>
+                        <td>function() {}</td>
+                        <td>Any javascript function</td>
+                    </tr>
+                    <tr>
+                        <td>onPause</td>
+                        <td>Called when slideshow pauses.</td>
+                        <td>function() {}</td>
+                        <td>Any javascript function</td>
+                    </tr>
+                    <tr>
+                        <td>onPrevious</td>
+                        <td>Called when advancing to previous slides.</td>
+                        <td>function() {}</td>
+                        <td>Any javascript function</td>
+                    </tr>
+                    <tr>
+                        <td>onNext</td>
+                        <td>Called when advancing to next slides.</td>
+                        <td>function() {}</td>
+                        <td>Any javascript function</td>
+                    </tr>
+                    <tr>
+                        <td>onBegin</td>
+                        <td>Called when the first slide is reached.</td>
+                        <td>function() {}</td>
+                        <td>Any javascript function</td>
+                    </tr>        
+                    <tr>
+                        <td>onEnd</td>
+                        <td>Called when the last slide is reached.</td>
+                        <td>function() {}</td>
+                        <td>Any javascript function</td>
+                    </tr>
+                </tbody>
+                </table>                
+        	</div>
+            <br/>
+            
+           	<div class="section">	
+                <div class="page-header">
+                	<h1 id="events">Custom Events</h1>
+             	</div>
+                <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width:25%;">Value</th>
+                        <th style="width:75%">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>scrollerInit</td>
+                        <td>Triggered after scroller is initialized.</td>
+                    </tr>        
+                    <tr>
+                        <td>scrollerPlay</td>
+                        <td>Triggered when scroller plays.</td>
+                    </tr>
+                    <tr>
+                        <td>scrollerPause</td>
+                        <td>Triggered when scroller pauses.</td>
+                    </tr>
+                    <tr>
+                        <td>scrollerPrevious</td>
+                        <td>Triggered when previous slides are reached.</td>
+                    </tr>
+                    <tr>
+                        <td>scrollerNext</td>
+                        <td>Triggered when next slides are reached.</td>
+                    </tr>
+                    <tr>
+                        <td>scrollerBegin</td>
+                        <td>Triggered when the first slide is reached.</td>
+                    </tr>            
+                    <tr>
+                        <td>scrollerEnd</td>
+                        <td>Triggered when the last slide is reached.</td>
+                    </tr>                                        
+                </tbody>
+                </table>
+            </div>
+            <br/>
+            
+     		<div class="section">
+            	<div class="page-header"><h1 id="contact">Contact Info</h1></div>
+                <p>
+                    For help or questions regarding this file,
+                    please contact me using the email form on my <a href="http://codecanyon.net/user/webtako">profile page</a>.         
+                </p>
+            </div>
+            <br/>  
+  	 	</div>
+   	</div>
+</div>
+</body>
+</html>
