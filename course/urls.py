@@ -12,8 +12,9 @@ urlpatterns = patterns(
   url(r'^instructor_evaluations/(\d+)/$','evaluation.instructor_detail',name='instructor_evaluations'),
   url(r'^debug/(?P<id>\d+)/$', 'debug_parsing',name='debug_parsing'),
 
-  (r'^$', 'classes.index'),
-  (r'^term/(\d+)/', 'classes.index'),
+  url(r'^$', 'classes.index'),
+  url(r'^rsvp/(\d+)/','classes.rsvp',name='rsvp'),
+  url(r'^term/(\d+)/', 'classes.index'),
   url(r'^ics/(all_classes).ics$','classes.ics_classes_all',name='ics_classes_all'),
   url(r'^totals/$','classes.course_totals',name='course_totals'),
   url(r'^([\w\d\-\_]+)/$','classes.detail',name='detail'),

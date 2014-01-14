@@ -206,9 +206,73 @@ label .help-text {
   }
 }
 
-.course .drop, .in-cart .add { display: none; }
+.course .add { display: inline-block; }
+.course .drop, .in-cart .add { display: none; margin: 0 auto; }
+.in-cart .drop { display: inline-block; }
 
-.in-cart .drop { display: inline-block }
+.course {
+  .rsvp-link, .enroll-link {
+    display: block;
+    position: relative;
+    text-align: center;
+  }
+}
+
+.recentAdd {
+  box-shadow: 0 0 5px #5F5;
+}
+
+.course .rsvp-link {
+  .is_full,.unrsvp { display: none; }
+  &.attending {
+    .unrsvp { display: inline-block; }
+    .rsvp { display: none; }
+  }
+}
+.course.full .rsvp-link {
+  .rsvp { display: none; }
+  .is_full { display: block; }
+  .not_full { display: none; }
+}
+
+.course .rsvp-link .message {
+  color: black;
+  bottom: 0;
+  display: none;
+  background: white;
+  box-shadow: inset 0 0 5px #55F;
+  left: 100%;
+  padding: 5px 20px 5px 5px;
+  position: absolute;
+  text-decoration: none;
+  width: 300px;
+  &:after {
+    background: url("/static/img/icon_x_red.png") no-repeat center;
+    color: #F33;
+    content: "";
+    display: block;
+    font-size: 1.5em;
+    position: absolute;
+    height: 10px;
+    line-height: 10px;
+    margin-top: -5px;
+    right: 10px;
+    top: 50%;
+    width: 10px;
+  }
+}
+
+.course.loading .rsvp-link {
+  &:before {
+    background: url(/static/img/loading.gif) center rgba(150,150,150,0.8) no-repeat;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+}
 
 /* from the codrspace boot strap */
 h1,h2,h3,h4,h5,h6{margin:0;font-family:inherit;font-weight:bold;color:inherit;text-rendering:optimizelegibility;}
@@ -471,4 +535,9 @@ ul.errorlist { color: red; }
     width: 31%;
     img { width: 100%; }
   }
+}
+
+.class_photos {
+  list-style: none;
+  img { max-width: 100% }
 }

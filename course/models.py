@@ -148,8 +148,10 @@ class Session(UserModel,SetModel):
     super(Session,self).save(*args,**kwargs)
     self.slug = slugify("%s_%s"%(self.section,self.id))
     return super(Session,self).save(*args,**kwargs)
+  @cached_method
   def get_absolute_url(self):
     return reverse('course:detail',args=[self.slug])
+  get_rsvp_url = cached_method(lambda self: reverse('course:rsvp',args=[self.id]),name="get_rsvp_url")
   @cached_property
   def last_date(self):
     if self.all_occurrences:
