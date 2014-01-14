@@ -18,9 +18,6 @@
 <div class="course course-detail" data-subject="{{ session.subjects|join:"," }}"
      {%if not session.course.closed%}data-open{%endif%}
      data-date="{{ session.starttime|date:"Ymd" }}">
-  {% if session.get_photoset %}
-  {% include "widgets/photo_slideshow.html" with photos=session.get_photoset.get_photos %}
-  {% endif %}
   <div class="fee">
     {% include "course/_enroll_link.html" %}
   </div>
@@ -29,18 +26,6 @@
     <a href="{% url "instructor_detail" session.user.username %}">
       <i class="icon-user"></i>{{ session.get_instructor_name }}</a>
   </div>
-  {% with photos=session.get_session_photoset.get_photos %}
-  <div class="photoset{% if photos|length < 3 %} no-slides{% endif %}">
-    <ul>
-      {% for photo in photos %}
-      {% thumbnail photo.src "200x200" crop="center" as im %}
-      <li><a href="{{ photo.src.url }}" data-lightbox="slideshow">
-          <img src="{{ im.url }}" alt="{{ photo.name }}"/></a></li>
-      {% endthumbnail %}
-      {% endfor %}
-    </ul>
-  </div>
-  {% endwith %}
   <div class="details">
     <div class="left">
       <div class="subjects">
@@ -118,4 +103,16 @@
 {% include "course/_cart.html" %}
 {% endif %}
 
+{% with photos=session.get_session_photoset.get_photos %}
+<div class="class_photos{% if photos|length < 3 %} no-slides{% endif %}">
+  <ul>
+    {% for photo in photos %}
+    {% thumbnail photo.file "400x400" crop="center" as im %}
+    <li><a href="{{ photo.src.url }}" data-lightbox="slideshow">
+        <img src="{{ im.url }}" alt="{{ photo.name }}"/></a></li>
+    {% endthumbnail %}
+    {% endfor %}
+  </ul>
+</div>
+{% endwith %}
 {% endblock %}

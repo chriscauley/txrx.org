@@ -31,11 +31,6 @@
     {% for session in week.sessions %}
     {% include "course/_session_row.html" %}
     {% endfor %}
-    {% if forloop.last %}
-    {% if request.user.is_superuser or 'test' in request.GET %}
-    {% include "course/_session_row.html" with session=test_session %}
-    {% endif %}
-    {% endif %}
   </table>
 </div>
 {% endfor %}

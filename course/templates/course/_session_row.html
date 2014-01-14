@@ -1,6 +1,6 @@
 {% load url from future %}
 {% load txrx_tags thumbnail %}
-<tr id="c{{session.id}}" class="course filterable"
+<tr id="c{{session.id}}" class="course filterable{% if session.full %} full{% endif %}"
     data-subject="{% for subject in session.subjects %}{{ subject }},{% endfor %}"
     {%if not session.course.closed%}data-open{%endif%}
     data-date="{{ session.starttime|date:"Ymd" }}">
@@ -13,7 +13,9 @@
     <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" style="float:right" />
     {% endthumbnail %}
     {% endif %}
-    <a href="{% url "course:detail" session.slug %}">{{ session.section.course }}</a>
+    <a href="{% url "course:detail" session.slug %}">
+      {% if not session.section.fee %}Free: {% endif %}{{ session.section.course }}
+    </a>
     <div class="lower"><small>
         {{ session.get_short_dates }}
         with <a href="{% url "instructor_detail" session.user.username %}">
