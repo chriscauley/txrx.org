@@ -16,5 +16,7 @@ def get_or_create_student(email):
         subject_template_name="email/welcome_classes_subject.txt",
         email_template_name="email/welcome_classes.html"
         )
+      user.set_password(settings.NEW_USER_PASSWORD)
+      user.save()
       reset_password(user,**kwargs)
   return user
