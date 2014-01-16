@@ -7,7 +7,7 @@ from mptt_comments.models import MpttComment
 
 from membership.models import LimitedAccessKey
 from .var import admin_comment_email, comment_response_email
-from txrx.mail import main_admins_plus
+#from txrx.mail import main_admins_plus
 
 _u = lambda s: settings.SITE_URL + s
 
