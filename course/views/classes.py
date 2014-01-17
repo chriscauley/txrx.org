@@ -41,7 +41,10 @@ def index(request,term_id=None):
     user_sessions = [s.id for s in sessions.filter(enrollment__user=request.user.id)]
     for session in sessions:
       if session.id in user_sessions:
-        session.user_enrollment = session.enrollment_set.get(user=request.user)
+        try:
+          session.user_enrollment = session.enrollment_set.filter(user=request.user)[0]
+        except IndexError:
+          pass
   sessions = sorted(list(sessions),key=lambda s: s.first_date)
   current_week = None
   weeks = {}
