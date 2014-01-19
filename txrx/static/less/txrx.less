@@ -210,32 +210,30 @@ label .help-text {
 .course .drop, .in-cart .add { display: none; margin: 0 auto; }
 .in-cart .drop { display: inline-block; }
 
-.course {
-  .rsvp-link, .enroll-link {
-    display: block;
-    position: relative;
-    text-align: center;
-  }
+.RsvpLink, .EnrollLink {
+  display: block;
+  position: relative;
+  text-align: center;
 }
 
 .recentAdd {
   box-shadow: 0 0 5px #5F5;
 }
 
-.course .rsvp-link {
+.RsvpLink {
   .is_full,.unrsvp { display: none; }
   &.attending {
     .unrsvp { display: inline-block; }
     .rsvp { display: none; }
   }
 }
-.course.full .rsvp-link {
+.full .RsvpLink {
   .rsvp { display: none; }
   .is_full { display: block; }
   .not_full { display: none; }
 }
 
-.course .rsvp-link .message {
+.RsvpLink .message {
   color: black;
   bottom: 0;
   display: none;
@@ -262,7 +260,7 @@ label .help-text {
   }
 }
 
-.course.loading .rsvp-link {
+.loading .RsvpLink {
   &:before {
     background: url(/static/img/loading.gif) center rgba(150,150,150,0.8) no-repeat;
     content: "";
@@ -271,6 +269,23 @@ label .help-text {
     position: absolute;
     top: 0;
     width: 100%;
+  }
+}
+
+.page-header {
+  position: relative;
+  .EnrollLink, .RsvpLink {
+    background: white;
+    position:absolute;
+    right: 0;
+    top: 0;
+    width: 110px;
+    .message {
+      bottom: auto;
+      left: auto;
+      right: 0;
+      top: 100%;
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 {% if session.section.fee %}
-<span class="enroll-link">
+<span class="EnrollLink">
   {% if session.user_enrollment.quantity == 1 %}
   ENROLLED
   {% elif session.user_enrollment %}
@@ -25,7 +25,7 @@
   };
 </script>
 {% else %}
-<span class="rsvp-link{% if session.user_enrollment %} attending{% endif %}">
+<span class="RsvpLink{% if session.user_enrollment %} attending{% endif %}">
   {% if session.archived %}
   CLOSED
   {% elif request.user %}

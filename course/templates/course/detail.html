@@ -6,20 +6,24 @@
 {% block title %}{{ session.section.course }}{% endblock %}
 {% block header %}{% endblock %}
 
+{% block head %}
+<script src="{{ STATIC_URL }}js/cart.js"></script>
+{% endblock %}
+
 {% block content %}
-{% if session.branding %}
-{% thumbnail session.branding.image "620x100" as im %}
-<img src="{{ im.url }}" width="620" />
-{% endthumbnail %}
-{% endif %}
-<div class="page-header" style="margin: -10px 0 20px;">
-  <h1 class="home-tagline">{{ session.section.course }}</h1>
-</div>
-<div class="course course-detail" data-subject="{{ session.subjects|join:"," }}"
+<div class="course course-detail" data-subject="{{ session.subjects|join:"," }}" id="c{{ session.id }}"
      {%if not session.course.closed%}data-open{%endif%}
      data-date="{{ session.starttime|date:"Ymd" }}">
-  <div class="fee">
-    {% include "course/_enroll_link.html" %}
+  {% if session.branding %}
+  {% thumbnail session.branding.image "620x100" as im %}
+  <img src="{{ im.url }}" width="620" />
+  {% endthumbnail %}
+  {% endif %}
+  <div class="page-header" style="margin: -10px 0 20px;">
+    <h1 class="home-tagline">{{ session.section.course }}</h1>
+    <div class="fee">
+      {% include "course/_enroll_link.html" %}
+    </div>
   </div>
   <div class="instructor">
     Taught by
