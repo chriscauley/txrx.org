@@ -80,8 +80,8 @@ class OccurrenceModel(models.Model):
   def google_link(self):
     d = {
       'name': urlencode(self.name),
-      'start': date(self.start,"Ymd\THi00\Z"),
-      'end': date(self.end,"Ymd\THi00\Z"),
+      'start': date(self.start,"Ymd\THi00"),
+      'end': date(self.end,"Ymd\THi00"),
       'description': urlencode(self.description),
       'site_name': urlencode('TX/RX Labs'),
       'location': "205 Roberts Street, Houston TX, 77003",
