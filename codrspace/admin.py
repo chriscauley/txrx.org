@@ -40,8 +40,8 @@ class PhotoSetConnectionInline(GenericTabularInline):
 
 class TaggedPhotoInline(GenericTabularInline):
   model = TaggedPhoto
-  exta = 0
   raw_id_fields = ('photo',)
+  extra = 0
 
 class PhotoSetAdmin(SlugModelAdmin):
   inlines = [SetPhotoInline] #,PhotoSetConnectionInline]
