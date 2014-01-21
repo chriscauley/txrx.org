@@ -180,6 +180,7 @@ class PhotoSetConnection(models.Model):
   content_object = generic.GenericForeignKey('content_type', 'object_id')
   class Meta:
     unique_together = ('content_type','object_id')
+  __unicode__ = lambda self: "conection: %s %s"%(self.content_type,self.object_id)
 
 class PhotosMixin():
   @cached_property
