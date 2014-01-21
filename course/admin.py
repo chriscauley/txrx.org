@@ -46,7 +46,7 @@ class SessionAdmin(admin.ModelAdmin):
   form = StaffMemberForm
   raw_id_fields = ('section','user')
   exclude = ('time_string','slug','publish_dt')
-  inlines = (ClassTimeInline, EnrollmentInline,SessionAttachmentInline)
+  inlines = (ClassTimeInline, EnrollmentInline, SessionAttachmentInline, TaggedPhotoInline)
   class Media:
     js = ("js/course_admin.js",)
 
