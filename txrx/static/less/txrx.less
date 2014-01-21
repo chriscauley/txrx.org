@@ -404,6 +404,47 @@ h3.date {
   }
 }
 
+.photo_well {
+  min-height: 10px;
+  overflow: hidden;
+  .well {
+    box-sizing: border-box;
+    float: left;
+    height: auto;
+    margin-bottom: 0;
+    max-height: 320px;
+    overflow: visible;
+    width: 50% !important;
+  }
+  #cart {
+    box-sizing: border-box;
+    left: 0;
+    height: 220px;
+    margin-bottom: 0;
+    position: relative;
+    top: 0;
+    z-index: 10;
+    .itemPrice, .itemQuantity { display: none; }
+    .itemName {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+      float: left;
+      padding: 0 1%;
+      width: 48%;
+    }
+    img { width: 100%; }
+  }
+}
+
 /* comments */
 
 #comments {
@@ -562,9 +603,4 @@ ul.errorlist { color: red; }
     width: 31%;
     img { width: 100%; }
   }
-}
-
-.class_photos {
-  list-style: none;
-  img { max-width: 100% }
 }

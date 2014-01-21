@@ -3,27 +3,23 @@ from django.contrib.contenttypes.generic import GenericTabularInline
 from django.core.urlresolvers import reverse
 
 from .models import Event, EventOccurrence
-from codrspace.admin import PhotoSetConnectionInline
+from codrspace.admin import TaggedPhotoInline
 
 import datetime
 
 class EventOccurrenceInline(admin.TabularInline):
   model = EventOccurrence
-  fields = ('name_override','start','end','_photoset')
-  readonly_fields = ['_photoset']
+  fields = ('name_override','start','end')
   def queryset(self,request):
     qs = super(EventOccurrenceInline,self).queryset(request)
     return qs.filter(start__gte=datetime.datetime.now())
-  def _photoset(self,obj):
-    return '<a href="/admin/event/edit_photoset/%s/">Edit Photo Set</a>'%obj.id
-  _photoset.allow_tags = True
 
 class EventAdmin(admin.ModelAdmin):
   list_display = ("__unicode__","repeat")
-  inlines = [EventOccurrenceInline]
+  inlines = [EventOccurrenceInline,TaggedPhotoInline]
 
 class EventOccurrenceAdmin(admin.ModelAdmin):
-  inlines = [PhotoSetConnectionInline]
+  inlines = [TaggedPhotoInline]
 
 admin.site.register(Event,EventAdmin)
 admin.site.register(EventOccurrence,EventOccurrenceAdmin)

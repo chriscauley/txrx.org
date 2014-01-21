@@ -1,18 +1,24 @@
 {% extends "base.html" %}
-{% load short_codes %}
+{% load short_codes codrspace_tags %}
 {% load thumbnail %}
 
 {% block title %}{{ occurrence.name }}{% endblock %}
 {% block header_content %}{{ occurrence.name }}{% endblock %}
 
-{% block content %}
-{% if occurrence.get_photoset %}
-{% include "widgets/photo_slideshow.html" with photos=occurrence.get_photoset.get_photos %}
-{% endif %}
-<p class="lead">{{ occurrence.start }}{% if occurrence.end %} - {{ occurrence.end.time }}{% endif %}</p>
-<div class="calendar_widget">
-  <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">Add to calendar</a>
-  {% include "event/_add_to_calendar.html" with calendar_event=occurrence %}
+{% block main %}
+{% with photos=occurrence.get_photos %}
+<div class="span6">
+  <p class="lead">{{ occurrence.start }}{% if occurrence.end %} - {{ occurrence.end.time }}{% endif %}</p>
+  <div class="calendar_widget">
+    <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">Add to calendar</a>
+    {% include "event/_add_to_calendar.html" with calendar_event=occurrence %}
+  </div>
+  <p>{{ occurrence.description|explosivo }}</p>
 </div>
-<p>{{ occurrence.description|explosivo }}</p>
+<div class="span6">
+  <div class="photo_well">
+    {% include "widgets/side_photos.html" %}
+  </div>
+</div>
+{% endwith %}
 {% endblock %}

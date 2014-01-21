@@ -95,9 +95,10 @@ def repeat_event(request,period,event_id):
 
 @staff_member_required
 def edit_photoset(self,_id):
-  occurrence = EventOccurrence.objects.get(pk=_id)
-  photoset = occurrence.get_photoset()
-  return HttpResponseRedirect('/admin/codrspace/photoset/%s/'%photoset.id)
+  pass
+  #occurrence = EventOccurrence.objects.get(pk=_id)
+  #photoset = occurrence.get_photoset()
+  #return HttpResponseRedirect('/admin/codrspace/photoset/%s/'%photoset.id)
 
 def ics(request,module,model_str,pk,fname):
   """Returns an ics file for any `Event` like or `EventOccurrence` like model.

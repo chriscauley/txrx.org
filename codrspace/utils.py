@@ -5,7 +5,7 @@ import os, datetime
 
 from subprocess import Popen, PIPE
 
-from models import Photo, PhotoSet, SetPhoto
+from models import Photo
 
 def localize_date(date, from_tz=None, to_tz=None):
     """
@@ -22,8 +22,8 @@ def localize_date(date, from_tz=None, to_tz=None):
     date = date.replace(tzinfo=None)
     return date
 
-def photoset_from_zip(path,approved=True):
-    """turn a zip file into a photoset"""
+def photos_from_zip(path,approved=True,user=None):
+    """turn a zip file into a photos"""
     now = datetime.datetime.now()
     _ = now.strftime(Photo._meta.get_field('file').upload_to)
     zip_name = path.split('/')[-1]
@@ -41,10 +41,6 @@ def photoset_from_zip(path,approved=True):
     for folder,_,files in os.walk('.'):
         for f in files:
             os.rename(os.path.join(folder,f),os.path.join(directory,f))
-    photoset,new = PhotoSet.objects.get_or_create(
-        title = 'uploaded photos: %s'%zip_name,
-        user_id=1,
-        )
     folders = [f for f in os.listdir(directory) if os.path.isdir(f)]
     for f in folders:
         os.rmdir(f)
@@ -55,10 +51,8 @@ def photoset_from_zip(path,approved=True):
             file = os.path.join(directory,f_path).split(settings.MEDIA_ROOT)[-1],
             source = "misc",
             approved = approved,
+            user=user
             )
         photo.save()
-        SetPhoto(photo=photo,photoset=photoset).save()
     #all done, delete the zip!
     os.remove(new_path)
-
-z = photoset_from_zip

@@ -3,9 +3,9 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify, date, urlencode
 
+from codrspace.models import PhotosMixin
 from wmd import models as wmd_models
 from geo.models import Location
-from codrspace.models import SetModel
 
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
@@ -34,7 +34,7 @@ REPEAT_CHOICES = (
   ('month-number','Monthly (by day number)'),
   )
 
-class Event(models.Model):
+class Event(models.Model,PhotosMixin):
   name = models.CharField(max_length=128,null=True,blank=True)
   _ht = "Optional. Alternative name for the calendar."
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
@@ -91,7 +91,7 @@ class OccurrenceModel(models.Model):
   class Meta:
     abstract = True
 
-class EventOccurrence(OccurrenceModel,SetModel):
+class EventOccurrence(OccurrenceModel,PhotosMixin):
   event = models.ForeignKey(Event)
   start = models.DateTimeField()
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed

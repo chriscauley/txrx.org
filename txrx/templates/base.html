@@ -6,7 +6,8 @@
     {% block extra_head %}{% endblock %}
     {% include "_styles.html" %}
     <script type="text/javascript">
-      _NOTIFY_URL = "http://txrxlabs.org/tx/rx/ipn/handler/"
+      var _NOTIFY_URL = "http://txrxlabs.org/tx/rx/ipn/handler/"
+      var _USER_NUMBER = "{{ request.user.pk }}";
     </script>
     
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -14,7 +15,6 @@
     <script src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
     <script src="{{ STATIC_URL }}js/init.js"></script>
     <script src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
-    <script src="{{ STATIC_URL }}thumb-scroller/js/jquery.thumb-scroller.js"></script>
     <script src="{{ STATIC_URL }}js/jsi18n.js"></script>
     <script src="{{ STATIC_URL }}js/dead_pixel.js"></script>
     <script src="{{ STATIC_URL }}mptt_comments/js/mptt_comments.js"></script>

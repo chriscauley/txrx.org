@@ -4,7 +4,7 @@ from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.forms import *
 from django import forms
 
-from codrspace.admin import PhotoSetConnectionInline
+from codrspace.admin import TaggedPhotoInline
 
 admin.site.unregister(FlatPage)
 
@@ -23,7 +23,7 @@ class FlatPageForm(forms.ModelForm):
 
 class FlatPageAdmin(FlatPageAdmin):
   form = FlatPageForm
-  inlines = [PhotoSetConnectionInline]
+  inlines = [TaggedPhotoInline]
 
 admin.site.register(FlatPage,FlatPageAdmin)
 

@@ -1,0 +1,11 @@
+{% if photos %}
+{% load thumbnail %}
+<ul>
+  {% for photo in photos %}
+  {% thumbnail photo.file "400x400" crop="center" as im %}
+  <li><a href="{{ photo.src.url }}" data-lightbox="slideshow">
+      <img src="{{ im.url }}" alt="{{ photo.name }}"/></a></li>
+  {% endthumbnail %}
+  {% endfor %}
+</ul>
+{% endif %}
