@@ -7,7 +7,7 @@ from db.models import UserModel
 from sorl.thumbnail import ImageField
 import datetime
 
-from codrspace.models import SetModel, MiscFile
+from codrspace.models import MiscFile, PhotosMixin
 from geo.models import Location
 from event.models import OccurrenceModel, reverse_ics
 from feed.models import FeedItem
@@ -33,7 +33,7 @@ class Term(models.Model):
   class Meta:
     ordering = ('-start',)
 
-class Course(models.Model,SetModel):
+class Course(models.Model,PhotosMixin):
   name = models.CharField(max_length=64)
   _ht = "Used for the events page."
   subjects = models.ManyToManyField(Subject)
@@ -88,7 +88,7 @@ class Branding(models.Model):
   get_small_image = lambda self: self.small_image_override or self.image
   __unicode__ = lambda self: self.name
 
-class Session(UserModel,SetModel):
+class Session(UserModel,PhotosMixin):
   section = models.ForeignKey(Section)
   slug = models.CharField(max_length=255)
   cancelled = models.BooleanField(default=False)
@@ -109,11 +109,6 @@ class Session(UserModel,SetModel):
   archived = property(lambda self: self.first_date<datetime.datetime.now())
   list_users = property(lambda self: [self.user])
   description = property(lambda self: self.section.description)
-
-  # get the course photo_set if there is none here
-  @cached_method
-  def get_session_photoset(self):
-    return self.get_photoset() or self.section.course.get_photoset()
 
   #calendar crap
   name = property(lambda self: self.section.course.name)

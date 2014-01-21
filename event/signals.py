@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 
-from codrspace.models import SetPhoto, Photo
+from codrspace.models import Photo
 from instagram.models import InstagramPhoto
 from .models import EventOccurrence
 
@@ -33,4 +33,4 @@ def instagram_occurrence_connection(sender, **kwargs):
 def twitter_occurrence_connection(sender,**kwargs):
   pass
 
-post_save.connect(instagram_occurrence_connection, sender=InstagramPhoto)
+#post_save.connect(instagram_occurrence_connection, sender=InstagramPhoto)

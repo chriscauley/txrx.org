@@ -1,118 +1,109 @@
 {% extends "base.html" %}
 {% load mptt_comments_tags thumbnail %}
 {% load url from future %}
-{% load short_codes %}
+{% load short_codes codrspace_tags %}
 
 {% block title %}{{ session.section.course }}{% endblock %}
 {% block header %}{% endblock %}
 
-{% block content %}
-{% if session.branding %}
-{% thumbnail session.branding.image "620x100" as im %}
-<img src="{{ im.url }}" width="620" />
-{% endthumbnail %}
-{% endif %}
-<div class="page-header" style="margin: -10px 0 20px;">
-  <h1 class="home-tagline">{{ session.section.course }}</h1>
-</div>
-<div class="course course-detail" data-subject="{{ session.subjects|join:"," }}"
-     {%if not session.course.closed%}data-open{%endif%}
-     data-date="{{ session.starttime|date:"Ymd" }}">
-  <div class="fee">
-    {% include "course/_enroll_link.html" %}
-  </div>
-  <div class="instructor">
-    Taught by
-    <a href="{% url "instructor_detail" session.user.username %}">
-      <i class="icon-user"></i>{{ session.get_instructor_name }}</a>
-  </div>
-  <div class="details">
-    <div class="left">
-      <div class="subjects">
-	<b>Subject{{ session.section.course.subjects|pluralize:"s" }}</b>:
-	{{ session.section.course.subjects.all|join:"," }}
-      </div>
-      <ol class="dates">
-        {% for classtime in session.classtime_set.all %}
-        <li>
-          {{ classtime.start|date:"l F j, G:i" }}
-          -
-          {{ classtime.end_time|time:"G:i" }}
-          <a href="{{ classtime.google_link }}">Add to calendar</a>
-        </li>
-        {% endfor %}
-      </ol>
-      <div class="calendar_widget">
-        <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">Add to calendar</a>
-        {% include "course/_add_to_calendar.html" with calendar_event=session %}
-      </div>
-    </div>
-    <div class="right">
-      <div class="description">
-	{{ session.section.description|explosivo|removetags:"script,style" }}
-      </div>
-      {% if session.section.fee_notes %}
-      <span class="notes"><b>* Fee Notes:</b> {{ session.section.fee_notes }}</span>
-      {% endif %}
-      {% if session.section.requirements %}
-      <span class="notes">
-	<b>Requirements:</b> {{ session.section.requirements }}
-      </span>
-      {% endif %}
-      {% if session.section.prerequisites %}
-      <span class="notes">
-	<b>Prerequisites:</b>
-	{{ session.section.prerequisites }}
-      </span>
-      {% endif %}
-    </div>
-    {% if session.sessionattachment_set.count %}
-    <div>
-      <h2>Relevant files</h2>
-      {% for attachment in session.sessionattachment_set.all %}
-      <a href="{{ attachment.attachment.file.url }}" target="_blank">{{ attachment.attachment.name }}</a><br/>
-      {% endfor %}
-    </div>
-    {% endif %}
-    {% if related_classes %}
-    <div class="related_classes">
-      <strong>Can't make it to this class? Checkout these other classes!</strong>
-      {% for klass in related_classes %}
-      <div>
-        {% if klass.full %}<strong class="full">[FULL]</strong>{% endif %}
-        <a href="{{ klass.get_absolute_url }}">{{ klass }}</a>
-      </div>
-      {% endfor %}
-    </div>
-    {% endif %}
-    <div style="clear: both;"></div>
-    {% display_comment_toplevel_for session %}
-  </div>
-</div>
-{% endblock %}
-
-{% block side %}
-{% if request.user == session.user %}
-{% include "course/_instructor_panel.html" %}
-{% elif enrollment %}
-<div class="well">
-  <h2>You are enrolled in this course</h2>
-</div>
-{# {% include "course/_student_panel.html" %} #}
-{% else %}
-{% include "course/_cart.html" %}
-{% endif %}
-
-{% with photos=session.get_session_photoset.get_photos %}
-<div class="class_photos{% if photos|length < 3 %} no-slides{% endif %}">
-  <ul>
-    {% for photo in photos %}
-    {% thumbnail photo.file "400x400" crop="center" as im %}
-    <li><a href="{{ photo.src.url }}" data-lightbox="slideshow">
-        <img src="{{ im.url }}" alt="{{ photo.name }}"/></a></li>
+{% block main %}
+<div class="span6">
+  <div class="course course-detail" data-subject="{{ session.subjects|join:"," }}" id="c{{ session.id }}"
+       {%if not session.course.closed%}data-open{%endif%}
+       data-date="{{ session.starttime|date:"Ymd" }}">
+    {% if session.branding %}
+    {% thumbnail session.branding.image "620x100" as im %}
+    <img src="{{ im.url }}" width="620" />
     {% endthumbnail %}
-    {% endfor %}
-  </ul>
+    {% endif %}
+    <div class="page-header" style="margin: -10px 0 20px;">
+      <h1 class="home-tagline">{{ session.section.course }}</h1>
+      <div class="fee">
+        {% include "course/_enroll_link.html" %}
+      </div>
+    </div>
+    <div class="instructor">
+      Taught by
+      <a href="{% url "instructor_detail" session.user.username %}">
+        <i class="icon-user"></i>{{ session.get_instructor_name }}</a>
+    </div>
+    <div class="details">
+      <div class="left">
+        <div class="subjects">
+	  <b>Subject{{ session.section.course.subjects|pluralize:"s" }}</b>:
+	  {{ session.section.course.subjects.all|join:"," }}
+        </div>
+        <ol class="dates">
+          {% for classtime in session.classtime_set.all %}
+          <li>
+            {{ classtime.start|date:"l F j, G:i" }}
+            -
+            {{ classtime.end_time|time:"G:i" }}
+          </li>
+          {% endfor %}
+        </ol>
+        <div class="calendar_widget">
+          <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">Add to calendar</a>
+          {% include "course/_add_to_calendar.html" with calendar_event=session %}
+        </div>
+      </div>
+      <div class="right">
+        <div class="description">
+	  {{ session.section.description|explosivo|removetags:"script,style" }}
+        </div>
+        {% if session.section.fee_notes %}
+        <span class="notes"><b>* Fee Notes:</b> {{ session.section.fee_notes }}</span>
+        {% endif %}
+        {% if session.section.requirements %}
+        <span class="notes">
+	  <b>Requirements:</b> {{ session.section.requirements }}
+        </span>
+        {% endif %}
+        {% if session.section.prerequisites %}
+        <span class="notes">
+	  <b>Prerequisites:</b>
+	  {{ session.section.prerequisites }}
+        </span>
+        {% endif %}
+      </div>
+      {% if session.sessionattachment_set.count %}
+      <div>
+        <h2>Relevant files</h2>
+        {% for attachment in session.sessionattachment_set.all %}
+        <a href="{{ attachment.attachment.file.url }}" target="_blank">{{ attachment.attachment.name }}</a><br/>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% if related_classes %}
+      <div class="related_classes">
+        <strong>Can't make it to this class? Checkout these other classes!</strong>
+        {% for klass in related_classes %}
+        <div>
+          {% if klass.full %}<strong class="full">[FULL]</strong>{% endif %}
+          <a href="{{ klass.get_absolute_url }}">{{ klass }}</a>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div style="clear: both;"></div>
+      {% display_comment_toplevel_for session %}
+    </div>
+  </div>
 </div>
-{% endwith %}
+<div class="span6">
+  <div class="photo_well">
+    {% if request.user == session.user %}
+    {% include "course/_instructor_panel.html" %}
+    {% elif enrollment %}
+    <div class="well">
+      <h2>You are enrolled in this course</h2>
+    </div>
+    {# {% include "course/_student_panel.html" %} #}
+    {% else %}
+    {% include "course/_cart.html" with small_cart="1" %}
+    {% endif %}
+
+    {% include "widgets/side_photos.html" with photos=session.section.course.get_photos %}
+  </div>
+</div>
 {% endblock %}

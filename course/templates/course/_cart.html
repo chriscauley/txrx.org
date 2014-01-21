@@ -23,6 +23,7 @@ simpleCart.email = "{{ settings.PAYPAL_RECEIVER_EMAIL }}";</script>
       </div>
     </div>
   </div>
+  {% if not small_cart %}
   {% for group,content in class_faqs %}
   <div class="accordion-group">
     <div class="accordion-heading">
@@ -36,6 +37,7 @@ simpleCart.email = "{{ settings.PAYPAL_RECEIVER_EMAIL }}";</script>
     </div>
   </div>
   {% endfor %}
+  {% endif %}
 </div>
 <script type="text/javascript">
 function createCookie(name,value,days) {

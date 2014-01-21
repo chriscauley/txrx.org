@@ -11,6 +11,7 @@ from .var import admin_comment_email, comment_response_email
 _u = lambda s: settings.SITE_URL + s
 
 def new_comment_connection(sender, instance=None, created=False,**kwargs):
+  from txrx.mail import mail_admins_plus
   if not created:
     return
   _dict = {

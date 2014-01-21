@@ -208,32 +208,30 @@ label .help-text {
 .course .drop, .in-cart .add { display: none; margin: 0 auto; }
 .in-cart .drop { display: inline-block; }
 
-.course {
-  .rsvp-link, .enroll-link {
-    display: block;
-    position: relative;
-    text-align: center;
-  }
+.RsvpLink, .EnrollLink {
+  display: block;
+  position: relative;
+  text-align: center;
 }
 
 .recentAdd {
   box-shadow: 0 0 5px #5F5;
 }
 
-.course .rsvp-link {
+.RsvpLink {
   .is_full,.unrsvp { display: none; }
   &.attending {
     .unrsvp { display: inline-block; }
     .rsvp { display: none; }
   }
 }
-.course.full .rsvp-link {
+.full .RsvpLink {
   .rsvp { display: none; }
   .is_full { display: block; }
   .not_full { display: none; }
 }
 
-.course .rsvp-link .message {
+.RsvpLink .message {
   color: black;
   bottom: 0;
   display: none;
@@ -260,7 +258,7 @@ label .help-text {
   }
 }
 
-.course.loading .rsvp-link {
+.loading .RsvpLink {
   &:before {
     background: url(/static/img/loading.gif) center rgba(150,150,150,0.8) no-repeat;
     content: "";
@@ -269,6 +267,24 @@ label .help-text {
     position: absolute;
     top: 0;
     width: 100%;
+  }
+}
+
+.course-detail .page-header {
+  padding-right: 100px;
+  position: relative;
+  .EnrollLink, .RsvpLink {
+    background: white;
+    position:absolute;
+    right: 0;
+    top: 0;
+    width: 110px;
+    .message {
+      bottom: auto;
+      left: auto;
+      right: 0;
+      top: 100%;
+    }
   }
 }
 
@@ -372,6 +388,59 @@ h3.date {
   .left, right {
     float: left;
     width: 50%;
+  }
+}
+
+.course-detail {
+  .left {
+    position: relative;
+    .calendar_widget {
+      font-size: 18px;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+}
+
+.photo_well {
+  min-height: 10px;
+  overflow: hidden;
+  .well {
+    box-sizing: border-box;
+    float: left;
+    height: auto;
+    margin-bottom: 0;
+    max-height: 320px;
+    overflow: visible;
+    width: 50% !important;
+  }
+  #cart {
+    box-sizing: border-box;
+    left: 0;
+    height: 220px;
+    margin-bottom: 0;
+    position: relative;
+    top: 0;
+    z-index: 10;
+    .itemPrice, .itemQuantity { display: none; }
+    .itemName {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+      float: left;
+      padding: 0 1%;
+      width: 48%;
+    }
+    img { width: 100%; }
   }
 }
 
@@ -534,7 +603,6 @@ ul.errorlist { color: red; }
     img { width: 100%; }
   }
 }
-
 .class_photos {
   list-style: none;
   img { max-width: 100% }

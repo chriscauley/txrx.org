@@ -19,6 +19,7 @@ from codrspace.managers import SettingManager
 from .templatetags.short_codes import explosivo
 from instagram.models import InstagramPhoto
 from feed.models import FeedItem, prep_thumbnail
+from txrx.utils import cached_method, cached_property
 
 try:
   from south.modelsinspector import add_introspection_rules
@@ -175,6 +176,13 @@ class SetPhoto(OrderedModel):
   def __unicode__(self):
     return unicode(self.get_photo())
 
+class TaggedPhoto(models.Model):
+  photo = models.ForeignKey(Photo)
+  content_type = models.ForeignKey("contenttypes.ContentType")
+  object_id = models.IntegerField()
+  content_object = generic.GenericForeignKey('content_type', 'object_id')
+  order = models.IntegerField(default=9999)
+
 class PhotoSetConnection(models.Model):
   photoset = models.ForeignKey(PhotoSet)
   content_type = models.ForeignKey("contenttypes.ContentType")
@@ -182,6 +190,16 @@ class PhotoSetConnection(models.Model):
   content_object = generic.GenericForeignKey('content_type', 'object_id')
   class Meta:
     unique_together = ('content_type','object_id')
+  __unicode__ = lambda self: "conection: %s %s"%(self.content_type,self.object_id)
+
+class PhotosMixin():
+  @cached_property
+  def _ct_id(self):
+    return ContentType.objects.get_for_model(self.__class__).id
+  @cached_method
+  def get_photos(self):
+    return list(Photo.objects.filter(taggedphoto__content_type_id=self._ct_id,
+                                     taggedphoto__object_id=self.id))
 
 class SetModel():
   """ A model that has a PhotoSetConnection attached to it. """

@@ -41,10 +41,10 @@ function rsvp(session_id,url) {
     function(data) {
       row.removeClass("loading");
       if (data[0]>0) {
-	row.find(".rsvp-link").addClass("attending");
+	row.find(".RsvpLink").addClass("attending");
 	row.find(".number_attending").text("RSVP'd x "+data[0])
       }
-      else { row.find(".rsvp-link").removeClass("attending"); }
+      else { row.find(".RsvpLink").removeClass("attending"); }
       row.removeClass("full");
       if (data[2]) { row.addClass("full"); }
       row.find(".message").css("display","block").html(data[1]);

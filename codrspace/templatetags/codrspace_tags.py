@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.conf import settings
-from codrspace.models import Post, Setting, PhotoSet
+from codrspace.models import Post, Setting, Photo
 from codrspace.utils import localize_date
 
 register = Library()
@@ -81,12 +81,8 @@ def recent_codrs(context, amount=20):
     })
     return context
 
+#depracated 2014/1/20
 @register.filter
 def get_photos(obj):
-    try:
-        content_type = ContentType.objects.get_for_model(obj.__class__)
-        return PhotoSet.objects.get(
-            photosetconnection__content_type=content_type,
-            photosetconnection__object_id=obj.id).get_photos()
-    except PhotoSet.DoesNotExist:
-        return None
+    content_type = ContentType.objects.get_for_model(obj.__class__)
+    return Photo.objects.filter(taggedphoto__content_type=content_type,taggedphoto__object_id=obj.id)

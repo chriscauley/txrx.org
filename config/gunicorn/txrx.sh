@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 LOGFILE=/var/log/gunicorn/txrx.log
-NUM_WORKERS=8
+NUM_WORKERS=5
 # user/group to run as
 USER=website
 GROUP=website
