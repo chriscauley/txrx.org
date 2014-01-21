@@ -36,9 +36,9 @@
         <ol class="dates">
           {% for classtime in session.classtime_set.all %}
           <li>
-            {{ classtime.start|date:"l F j, G:i" }}
+            {{ classtime.start|date:"l F j, g:i" }}
             -
-            {{ classtime.end_time|time:"G:i" }}
+            {{ classtime.end_time|time:"g:i A" }}
           </li>
           {% endfor %}
         </ol>
