@@ -6,10 +6,6 @@
 {% block title %}{{ session.section.course }}{% endblock %}
 {% block header %}{% endblock %}
 
-{% block head %}
-<script src="{{ STATIC_URL }}js/cart.js"></script>
-{% endblock %}
-
 {% block main %}
 <div class="span6">
   <div class="course course-detail" data-subject="{{ session.subjects|join:"," }}" id="c{{ session.id }}"
