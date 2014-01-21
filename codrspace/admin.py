@@ -31,6 +31,7 @@ class PhotoAdmin(CropAdmin):
 class SetPhotoInline(OrderedModelInline):
   raw_id_fields = ('photo',)
   model = SetPhoto
+  extra = 0
 
 class PhotoSetConnectionInline(GenericTabularInline):
   max_num = 1
