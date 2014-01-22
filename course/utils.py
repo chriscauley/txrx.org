@@ -5,7 +5,7 @@ from txrx.utils import reset_password
 
 def get_or_create_student(email,u_id=None):
   if u_id:
-    user = User.objects.get(u_id)
+    user = User.objects.get(id=u_id)
     profile = user.usermembership
     profile.email = email
     profile.save()
