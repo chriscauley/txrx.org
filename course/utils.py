@@ -3,7 +3,13 @@ from django.conf import settings
 from membership.models import UserMembership
 from txrx.utils import reset_password
 
-def get_or_create_student(email):
+def get_or_create_student(email,u_id=None):
+  if u_id:
+    user = user.objects.get(u_id)
+    profile = user.usermembership
+    profile.email = email
+    profile.save()
+    return user
   try:
     user = User.objects.get(usermembership__paypal_email=email)
   except User.DoesNotExist:

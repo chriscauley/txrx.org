@@ -10,9 +10,9 @@ import traceback
 @receiver(payment_was_successful, dispatch_uid='course.signals.handle_successful_payment')
 def handle_successful_payment(sender, **kwargs):
   from course.models import Enrollment, Session
-
-  user = get_or_create_student(sender.payer_email)
-
+  print "yay!"
+  user = get_or_create_student(sender.payer_email,u_id=params.get('custom',None))
+  print user
   #add them to the classes they're enrolled in
   params = QueryDict(sender.query)
   try:
@@ -39,11 +39,13 @@ def handle_successful_payment(sender, **kwargs):
     else:
       enrollment.quantity += quantity
     enrollment.save()
-
+    print "almost"
     if True: #section_cost != session.section.fee:
       # email chris for verification
-      m = "PP cost: %s\nSession Fee: %s\nSession Id:%s\nQuantity:%s"
-      mail_admins("New course enrollment",m%(section_cost,session.section.fee,session.id,enrollment.quantity))
+      m = "PP cost: %s\nSession Fee: %s\nSession Id:%s\nQuantity:%s\nPP Email:%s\n%U Email:%s"
+      m = m%(section_cost,session.section.fee,session.id,enrollment.quantity,sender.payer_email,user.email)
+      mail_admins("New course enrollment",m)
+      print "all done"
 
 @receiver(payment_was_flagged, dispatch_uid='course.signals.handle_flagged_payment')
 def handle_flagged_payment(sender, **kwargs):

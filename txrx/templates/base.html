@@ -6,7 +6,11 @@
     {% block extra_head %}{% endblock %}
     {% include "_styles.html" %}
     <script type="text/javascript">
+      {% if settings.DEBUG %}
+      var _NOTIFY_URL = "http://dev.txrxlabs.org:8009/tx/rx/ipn/handler/"
+      {% else %}
       var _NOTIFY_URL = "http://txrxlabs.org/tx/rx/ipn/handler/"
+      {% endif %}
       var _USER_NUMBER = "{{ request.user.pk }}";
     </script>
     
