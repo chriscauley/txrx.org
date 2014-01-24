@@ -7,10 +7,10 @@ from db.models import UserModel
 from sorl.thumbnail import ImageField
 import datetime
 
+from feed.models import FeedItemModel
 from codrspace.models import MiscFile, PhotosMixin
 from geo.models import Location
 from event.models import OccurrenceModel, reverse_ics
-from feed.models import FeedItem
 from txrx.utils import cached_method,cached_property
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
@@ -88,7 +88,7 @@ class Branding(models.Model):
   get_small_image = lambda self: self.small_image_override or self.image
   __unicode__ = lambda self: self.name
 
-class Session(UserModel,PhotosMixin):
+class Session(FeedItemModel,PhotosMixin):
   section = models.ForeignKey(Section)
   slug = models.CharField(max_length=255)
   cancelled = models.BooleanField(default=False)
@@ -146,7 +146,6 @@ class Session(UserModel,PhotosMixin):
     self.update_feed_item()
     return super(Session,self).save(*args,**kwargs)
   def update_feed_item(self):
-    item = FeedItem.get_for_object(self)
     item.title = unicode(self)
     item.type = 'session'
     item.publish_dt = self.publish_dt

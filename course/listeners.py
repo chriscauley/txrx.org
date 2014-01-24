@@ -44,7 +44,7 @@ def handle_successful_payment(sender, **kwargs):
            "Session Id:%s"%session.id,
            "Quantity:%s"%enrollment.quantity,
            "PP Email:%s"%sender.payer_email,
-           "U Email:%s"%user.email)
+           "U Email:%s"%user.email,
       ]
       m = '\n'.join(l)
       mail_admins("New course enrollment",m)

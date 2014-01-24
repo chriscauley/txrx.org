@@ -1,7 +1,7 @@
 <div id="latest-posts">
     {% for post in posts %}
         <a href="{{ post.get_absolute_url }}">
-            {% with post.author.profile.get_meta as git_meta %}
+            {% with post.user.profile.get_meta as git_meta %}
                 <img src="{{ git_meta.avatar_url }}" width="40" height="40" />
                     {% filter striptags %}
                         {% firstof post.title 'Untitled' %}

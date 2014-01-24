@@ -9,7 +9,7 @@ from db.forms import StaffMemberForm
 from .models import Post, Photo, SetPhoto, PhotoSet, PhotoSetConnection, MiscFile, TaggedPhoto
 
 class PostAdmin(admin.ModelAdmin):
-  list_display = ('__unicode__','author','featured','publish_dt','status')
+  list_display = ('__unicode__','user','featured','publish_dt','status')
   list_editable = ('featured','status')
   search_fields = ('content',)
 

@@ -25,7 +25,7 @@ def post_detail(request, username, slug, template_name="post_detail.html"):
 
     post = get_object_or_404(
         Post,
-        author=user,
+        user=user,
         slug=slug,)
 
     try:
@@ -33,7 +33,7 @@ def post_detail(request, username, slug, template_name="post_detail.html"):
     except:
         user_settings = None
 
-    if post.status == 'draft' and post.author != request.user and not request.user.is_superuser:
+    if post.status == 'draft' and post.user != request.user and not request.user.is_superuser:
         raise Http404
 
     return TemplateResponse(request, template_name, {
@@ -62,7 +62,7 @@ def post_list(request, username, post_type='published',
     posts = Post.objects.filter(
         status_query,
         Q(publish_dt__lte=datetime.datetime.now()) | Q(publish_dt=None),
-        author=user,
+        user=user,
     )
     posts = posts.order_by('-publish_dt')
 
@@ -122,5 +122,5 @@ def post_redirect(request,y,m,d,slug):
     else:
         #mail_admins('unable to find blog post',request.path)
         raise Http404("Unable to find matching blog article.")
-    kwargs = {'username': post.author.username,'slug': post.slug}
+    kwargs = {'username': post.user.username,'slug': post.slug}
     return HttpResponseRedirect(reverse('post_detail',kwargs=kwargs))

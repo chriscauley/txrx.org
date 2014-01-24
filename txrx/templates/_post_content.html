@@ -9,10 +9,10 @@
 <h2><a href="{{ post.get_absolute_url }}">{% filter striptags|truncatewords:30 %}{% firstof post.title "Untitled" %}{% endfilter %}</a></h2>
 
 <div>
-  {% if post.author == user %}
+  {% if post.user == user %}
   <span class="label label-{% if post.status == 'published' %}success{% else %}warning{% endif %}">{{ post.status }}</span>
   {% endif %}
-  by <a href="{% url "post_list" post.author.username %}" rel="popover" data-original-title="{{ post.author.username }}">{{ post.author.username }}</a> {% if post.status == 'published' %}on {{ post.publish_dt|localize:user }}{% endif %}
+  by <a href="{% url "post_list" post.user.username %}" rel="popover" data-original-title="{{ post.user.username }}">{{ post.user.username }}</a> {% if post.status == 'published' %}on {{ post.publish_dt|localize:user }}{% endif %}
   {% if post.authr == user %}
   <i class="icon-pencil"></i> <a href="{% url "edit" post.pk %}">edit</a>
   <i class="icon-trash"></i> <a href="{% url "delete" post.pk %}">delete</a>

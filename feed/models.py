@@ -5,6 +5,7 @@ from django.db import models
 from db.models import UserModel
 
 from sorl.thumbnail import get_thumbnail
+from wmd import models as wmd_models
 
 ITEM_TYPE_CHOICES = (
   ('blog','Blog Post'),
@@ -25,6 +26,7 @@ class FeedItem(UserModel):
   thumbnail = models.ImageField(upload_to='feed_thumbnails',default='feed_thumbnails/default.png')
   item_type = models.CharField(max_length=16,choices=ITEM_TYPE_CHOICES)
   publish_dt = models.DateTimeField()
+  get_absolute_url = models.CharField(max_length=256)
 
   datetime = models.DateTimeField(auto_now_add=True)
   votes = models.IntegerField(default=0)
@@ -59,3 +61,34 @@ class Like(UserModel):
   feed_item = models.ForeignKey(FeedItem)
   class Meta:
     unique_together = ('user','feed_item')
+
+class FeedItemModel(UserModel):
+  """ Abstract class for anything which is a FeedItem. Needs the following fields/methods
+  self.title: Display name for object.
+  self.first_photo: the first photo for the object
+  self.user: property returning the user responsible for item
+  self.get_absolute_url: the url to view details
+  class.default_photo: photo to show if there is no default photo
+  class.item_type: a string for the item type
+  """
+  def save(self,*args,**kwargs):
+    super(FeedItemModel,self).save(*args,**kwargs)
+    self.update_feed()
+  def update_feed(self):
+    feed_item = FeedItem.get_for_object(self)
+    feed_item.title = self.title
+    feed_item.thumbnail = prep_thumbnail(self.photo.file)
+    feed_item.publish_dt = self.publish_dt
+    feed_item.item_type = self.feed_item_type
+    feed_item.user = self.user
+    feed_item.save()
+  class Meta:
+    abstract = True
+
+from codrspace.models import PhotosMixin
+class Thing(FeedItemModel,PhotosMixin):
+  feed_item_type = 'thing'
+  title = models.CharField(max_length=128)
+  description = wmd_models.MarkDownField(blank=True,null=True)
+  publish_dt = models.DateTimeField(auto_now_add=True)
+  featured = models.BooleanField(default=False)

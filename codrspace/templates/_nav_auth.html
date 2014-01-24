@@ -4,7 +4,7 @@
     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit icon-white"></i> Posts <b class="caret"></b></a>
     <ul class="dropdown-menu">
         <li><a href="{% url add %}">Add Post</a></li>
-        {% if post and user.pk == post.author.pk %}
+        {% if post and user.pk == post.user.pk %}
             <li><a href="{% url edit post.pk %}">Edit Post</a></li>
         {% else %}
             <li><a class="disabled-link" href="#" onclick="return false;">Edit Post</a></li>

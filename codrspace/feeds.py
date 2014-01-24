@@ -24,7 +24,7 @@ class LatestPostsFeed(Feed):
         posts = Post.objects.filter(
             publish_dt__lte=datetime.now(),
             status='published',
-            author=user,
+            user=user,
         )
         return posts.order_by('-publish_dt')[:10]
 

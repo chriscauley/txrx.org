@@ -42,11 +42,11 @@ class PostForm(TaggedModelForm):
 
   def clean_slug(self):
     slug = self.cleaned_data['slug']
-    count = Post.objects.filter(slug=slug, author=self.user).count()
+    count = Post.objects.filter(slug=slug, user=self.user).count()
 
     if count > 0:
       if self.instance:
-        posts = Post.objects.filter(slug=slug, author=self.user)
+        posts = Post.objects.filter(slug=slug, user=self.user)
         for post in posts:
           if post.pk == self.instance.pk:
             return slug
@@ -58,7 +58,7 @@ class PostForm(TaggedModelForm):
 
   def save(self,*args,**kwargs):
     if getattr(self,'user',None):
-      self.instance.author = self.user
+      self.instance.user = self.user
     return super(PostForm,self).save(*args,**kwargs)
 
   def __init__(self, *args, **kwargs):

@@ -3,6 +3,7 @@
 
 django.jQuery(function() {
   var $ = django.jQuery;
+  $("[name=first_date_0]").closest(".first_date").hide();
   $("[type=submit]").click(function() {
     try {
       var startDate = new Date(2099,1,1);

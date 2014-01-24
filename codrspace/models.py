@@ -18,7 +18,6 @@ from db.models import SlugModel, OrderedModel, UserModel
 from codrspace.managers import SettingManager
 from .templatetags.short_codes import explosivo
 from instagram.models import InstagramPhoto
-from feed.models import FeedItem, prep_thumbnail
 from txrx.utils import cached_method, cached_property
 
 try:
@@ -32,58 +31,6 @@ def invalidate_cache_key(fragment_name, *variables):
   args = md5_constructor(u':'.join([urlquote(var) for var in variables]))
   cache_key = 'template.cache.%s.%s' % (fragment_name, args.hexdigest())
   cache.delete(cache_key)
-
-
-class Post(models.Model):
-
-  STATUS_CHOICES = (
-    ('draft', 'Draft'),
-    ('published', 'Published'),
-  )
-
-  title = models.CharField(max_length=200, blank=True)
-  content = models.TextField(blank=True)
-  slug = models.SlugField(max_length=75)
-  author = models.ForeignKey(User)
-  status = models.CharField(max_length=30, choices=STATUS_CHOICES, default=0)
-  publish_dt = models.DateTimeField("Publish On",null=True)
-  create_dt = models.DateTimeField(auto_now_add=True)
-  update_dt = models.DateTimeField(auto_now=True)
-  _h = "Featured blogs must have a photo or they won't appear at all."
-  featured = models.BooleanField(default=False,help_text=_h)
-  photo = models.ForeignKey("Photo",null=True,blank=True)
-  description = property(lambda self: explosivo(self.content))
-
-  class Meta:
-    unique_together = ("slug", "author")
-    ordering = ('-featured','-publish_dt',)
-  __unicode__ = lambda self: self.title or 'Untitled'
-
-  def url(self):
-    return '%s%s' % (settings.SITE_URL, self.get_absolute_url(),)
-
-  def save(self, *args, **kwargs):
-    super(Post, self).save(*args, **kwargs)
-
-    # Invalidate cache for all individual posts and the list of posts
-    invalidate_cache_key('content', self.pk)
-
-  list_users = property(lambda self: [self.author])
-
-  @models.permalink
-  def get_absolute_url(self):
-    return ("post_detail", [self.author.username, self.slug])
-
-  def update_feed(self):
-    feed_item = FeedItem.get_for_object(self)
-    feed_item.title = self.title
-    feed_item.thumbnail = prep_thumbnail(self.photo.file)
-    feed_item.publish_dt = self.publish_dt
-    feed_item.item_type = 'blog'
-    feed_item.user = self.author
-    feed_item.save()
-
-tagging.register(Post)
 
 class FileModel(models.Model):
   """An abstract file model. Needs a file field which will be a models.FileField"""
@@ -230,6 +177,59 @@ class SetModel():
     self._photoset_checked = True
     self.photoset = photoset
     return photoset
+
+from feed.models import FeedItemModel
+
+class Post(FeedItemModel):
+
+  STATUS_CHOICES = (
+    ('draft', 'Draft'),
+    ('published', 'Published'),
+  )
+
+  title = models.CharField(max_length=200, blank=True)
+  content = models.TextField(blank=True)
+  slug = models.SlugField(max_length=75)
+  status = models.CharField(max_length=30, choices=STATUS_CHOICES, default=0)
+  publish_dt = models.DateTimeField("Publish On",null=True)
+  create_dt = models.DateTimeField(auto_now_add=True)
+  update_dt = models.DateTimeField(auto_now=True)
+  _h = "Featured blogs must have a photo or they won't appear at all."
+  featured = models.BooleanField(default=False,help_text=_h)
+  photo = models.ForeignKey("Photo",null=True,blank=True)
+  description = property(lambda self: explosivo(self.content))
+
+  class Meta:
+    unique_together = ("slug", "user")
+    ordering = ('-featured','-publish_dt',)
+  __unicode__ = lambda self: self.title or 'Untitled'
+
+  def url(self):
+    return '%s%s' % (settings.SITE_URL, self.get_absolute_url(),)
+
+  def save(self, *args, **kwargs):
+    super(Post, self).save(*args, **kwargs)
+
+    # Invalidate cache for all individual posts and the list of posts
+    invalidate_cache_key('content', self.pk)
+
+  #depracate please
+  list_users = property(lambda self: [self.user])
+
+  @models.permalink
+  def get_absolute_url(self):
+    return ("post_detail", [self.user.username, self.slug])
+
+  def update_feed(self):
+    feed_item = FeedItem.get_for_object(self)
+    feed_item.title = self.title
+    feed_item.thumbnail = prep_thumbnail(self.photo.file)
+    feed_item.publish_dt = self.publish_dt
+    feed_item.item_type = 'blog'
+    feed_item.user = self.user
+    feed_item.save()
+
+tagging.register(Post)
 
 class Setting(models.Model):
   """
