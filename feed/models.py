@@ -65,11 +65,12 @@ class Like(UserModel):
 class FeedItemModel(UserModel):
   """ Abstract class for anything which is a FeedItem. Needs the following fields/methods
   self.title: Display name for object.
-  self.first_photo: the first photo for the object
+  self.first_photo: property returning the first photo for the object
   self.user: property returning the user responsible for item
   self.get_absolute_url: the url to view details
+  self.publish_dt: when the item goes live
   class.default_photo: photo to show if there is no default photo
-  class.item_type: a string for the item type
+  class.feed_item_type: a string for the item type
   """
   def save(self,*args,**kwargs):
     super(FeedItemModel,self).save(*args,**kwargs)
@@ -77,7 +78,7 @@ class FeedItemModel(UserModel):
   def update_feed(self):
     feed_item = FeedItem.get_for_object(self)
     feed_item.title = self.title
-    feed_item.thumbnail = prep_thumbnail(self.photo.file)
+    feed_item.thumbnail = prep_thumbnail(self.first_photo)
     feed_item.publish_dt = self.publish_dt
     feed_item.item_type = self.feed_item_type
     feed_item.user = self.user

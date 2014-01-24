@@ -89,6 +89,7 @@ class Branding(models.Model):
   __unicode__ = lambda self: self.name
 
 class Session(FeedItemModel,PhotosMixin):
+  feed_item_type = 'session'
   section = models.ForeignKey(Section)
   slug = models.CharField(max_length=255)
   cancelled = models.BooleanField(default=False)
@@ -101,6 +102,7 @@ class Session(FeedItemModel,PhotosMixin):
   branding = models.ForeignKey(Branding,null=True,blank=True)
 
   __unicode__ = lambda self: "%s (%s - %s)"%(self.section, self.user,self.first_date.date())
+  title = property(lambda self: "%s (%s)"%(self.section.course.name,self.first_date.date()))
 
   in_progress = property(lambda self: self.archived and self.last_date>datetime.datetime.now())
   closed = property(lambda self: self.cancelled or (self.archived and not self.in_progress))
@@ -143,12 +145,7 @@ class Session(FeedItemModel,PhotosMixin):
     self.slug = self.slug or 'arst' # can't save without one, we'll set this below
     super(Session,self).save(*args,**kwargs)
     self.slug = slugify("%s_%s"%(self.section,self.id))
-    self.update_feed_item()
     return super(Session,self).save(*args,**kwargs)
-  def update_feed_item(self):
-    item.title = unicode(self)
-    item.type = 'session'
-    item.publish_dt = self.publish_dt
     
   @cached_method
   def get_absolute_url(self):
