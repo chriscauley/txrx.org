@@ -148,7 +148,9 @@ class LimitedAccessKey(UserModel):
 
 class MeetingMinutes(models.Model):
   date = models.DateField(default=datetime.date.today,unique=True)
-  members_present = models.ManyToManyField(User,null=True,blank=True)
+  voters_present = models.ManyToManyField(User,null=True,blank=True)
+  inactive_present = models.ManyToManyField(User,null=True,blank=True,related_name="meetings_inactive")
+  nonvoters_present = models.ManyToManyField(User,null=True,blank=True,related_name="+")
   content = MarkDownField()
   _ht = "Used only when an exact list of members is unavailable (eg legacy minutes)"
   member_count = models.IntegerField(default=0,help_text=_ht)
