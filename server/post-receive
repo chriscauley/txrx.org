@@ -1,0 +1,25 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT=$DIR/../../
+
+GIT_WORK_TREE=../ git checkout -f
+
+cd $PROJECT_ROOT
+
+echo -e "\n---Silently migrating, compressing, collecting static, and restarting---\n"
+
+python $PROJECT_ROOT/manage.py migrate>/dev/null
+python $PROJECT_ROOT/manage.py collectstatic --noinput>/dev/null
+python $PROJECT_ROOT/manage.py compress>/dev/null
+
+if pidof uwsgi>/dev/null
+then
+    kill -HUP `cat /tmp/uwsgi.pid`
+    echo "uwsgi reset"
+else
+    $PROJECT_ROOT/scripts/uwsgi.sh &&
+    echo "uwsgi wasn't running, but it is now!"
+fi
+
+exit 0

@@ -1,0 +1,1 @@
+/usr/bin/uwsgi -M -x /home/django/gamesupply/uwsgi.xml --plugin python
