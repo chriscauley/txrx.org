@@ -34,7 +34,7 @@ class MeetingMinutesForm(forms.ModelForm):
   _q = User.objects.filter(usermembership__voting_rights=True,usermembership__suspended=False)
   voters_present = forms.ModelMultipleChoiceField(queryset=_q,**kwargs)
   _q = User.objects.filter(usermembership__voting_rights=True,usermembership__suspended=True)
-  kwargs = dict(widget=forms.CheckboxSelectMultiple())
+  kwargs = dict(widget=forms.CheckboxSelectMultiple(),required=False)
   inactive_present = forms.ModelMultipleChoiceField(queryset=_q,**kwargs)
   class Meta:
     model = MeetingMinutes
