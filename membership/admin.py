@@ -18,6 +18,7 @@ class MembershipAdmin(admin.ModelAdmin):
   list_display = ("name","order")
   list_editable = ("order",)
   inlines = (FeatureInline,MembershipRateInline)
+  search_fields = ('user__email','user__username','paypal_email')
 
 class UserMembershipAdmin(admin.ModelAdmin):
   list_display = ("__unicode__",'photo')
