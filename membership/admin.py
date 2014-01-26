@@ -30,7 +30,7 @@ class ProposalInline(admin.StackedInline):
   extra = 0
 
 class MeetingMinutesForm(forms.ModelForm):
-  kwargs = dict(widget=forms.CheckboxSelectMultiple())
+  kwargs = dict(widget=forms.CheckboxSelectMultiple(),required=False)
   _q = User.objects.filter(usermembership__voting_rights=True,usermembership__suspended=False)
   voters_present = forms.ModelMultipleChoiceField(queryset=_q,**kwargs)
   _q = User.objects.filter(usermembership__voting_rights=True,usermembership__suspended=True)
