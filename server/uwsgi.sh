@@ -1,1 +1,1 @@
-/usr/bin/uwsgi -M -x /home/django/gamesupply/uwsgi.xml --plugin python
+/usr/bin/uwsgi-core -M -x /home/django/txrx.org/uwsgi.xml --plugin python

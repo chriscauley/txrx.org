@@ -8,6 +8,7 @@ class FeedItemAdmin(admin.ModelAdmin):
 
 class ThingAdmin(admin.ModelAdmin):
   inlines = [TaggedPhotoInline]
+  raw_id_fields = ('user',)
 
 admin.site.register(FeedItem,FeedItemAdmin)
 admin.site.register(Thing,ThingAdmin)

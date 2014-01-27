@@ -141,12 +141,15 @@ class PhotoSetConnection(models.Model):
 
 class PhotosMixin():
   @cached_property
+  def first_photo(self):
+    return self.get_photos()[0]
+  @cached_property
   def _ct_id(self):
     return ContentType.objects.get_for_model(self.__class__).id
   @cached_method
   def get_photos(self):
     return list(Photo.objects.filter(taggedphoto__content_type_id=self._ct_id,
-                                     taggedphoto__object_id=self.id))
+                                     taggedphoto__object_id=self.id).order_by("taggedphoto__order"))
 
 class SetModel():
   """ A model that has a PhotoSetConnection attached to it. """
@@ -180,7 +183,7 @@ class SetModel():
 
 from feed.models import FeedItemModel
 
-class Post(FeedItemModel):
+class Post(FeedItemModel,PhotosMixin):
 
   STATUS_CHOICES = (
     ('draft', 'Draft'),

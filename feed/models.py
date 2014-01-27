@@ -78,7 +78,10 @@ class FeedItemModel(UserModel):
   def update_feed(self):
     feed_item = FeedItem.get_for_object(self)
     feed_item.title = self.title
-    feed_item.thumbnail = prep_thumbnail(self.first_photo)
+    try:
+      feed_item.thumbnail = prep_thumbnail(self.first_photo)
+    except:
+      pass
     feed_item.publish_dt = self.publish_dt
     feed_item.item_type = self.feed_item_type
     feed_item.user = self.user
@@ -93,3 +96,6 @@ class Thing(FeedItemModel,PhotosMixin):
   description = wmd_models.MarkDownField(blank=True,null=True)
   publish_dt = models.DateTimeField(auto_now_add=True)
   featured = models.BooleanField(default=False)
+  __unicode__ = lambda self: self.title
+  class Meta:
+    ordering = ('-publish_dt',)
