@@ -118,11 +118,6 @@ LOGGING = {
 
 PAYPAL_RECEIVER_EMAIL = "txrxlabs@gmail.com"
 
-import re
-import socket
-# Remove characters that are invalid for python modules.
-machine = re.sub('[^A-z0-9._]', '_', socket.gethostname())
-
 EMAIL_SUBJECT_PREFIX = "[TXRX] "
 DEFAULT_FROM_EMAIL = "noreply@txrxlabs.org"
 SERVER_EMAIL = "noreply@txrxlabs.org"
@@ -132,15 +127,10 @@ NEW_STUDENT_PASSWORD = "I am a new student, reset my passwrod asap"
 
 for s_file in ['apps','local']:
   try:
-    istr = 'txrx.settings.' + s_file
-    tmp = __import__(istr)
-    mod = sys.modules[istr]
-  except ImportError:
-    print "No %r module found for this machine." % istr
-  else:
-    for setting in dir(mod):
-      if setting == setting.upper():
-        setattr(sys.modules[__name__], setting, getattr(mod, setting))
+    f = 'txrx/settings/%s.py'%s_file
+    exec(compile(open(os.path.abspath(f)).read(), f, 'exec'), globals(), locals())
+  except IOError:
+    print "Setting file missing. We looked here: %s"%f
 
 if DEBUG:
   INSTALLED_APPS += ('devserver',)

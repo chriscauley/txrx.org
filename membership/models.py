@@ -148,13 +148,17 @@ class LimitedAccessKey(UserModel):
 
 class MeetingMinutes(models.Model):
   date = models.DateField(default=datetime.date.today,unique=True)
-  members_present = models.ManyToManyField(User,null=True,blank=True)
+  voters_present = models.ManyToManyField(User,null=True,blank=True)
+  inactive_present = models.ManyToManyField(User,null=True,blank=True,related_name="meetings_inactive")
+  nonvoters_present = models.ManyToManyField(User,null=True,blank=True,related_name="+")
   content = MarkDownField()
   _ht = "Used only when an exact list of members is unavailable (eg legacy minutes)"
   member_count = models.IntegerField(default=0,help_text=_ht)
   __unicode__ = lambda self: "Minutes: %s"%self.date
   get_absolute_url = lambda self: reverse('meeting_minutes',args=[str(self.date)])
-  get_member_count = lambda self: self.members_present.count() or self.member_count or "unknown"
+  def get_member_count(self):
+    attrs = ['voters_present','inactive_present']
+    return sum([getattr(self,a).count() for a in attrs]) or self.member_count or "unknown"
   class Meta:
     ordering = ('-date',)
 

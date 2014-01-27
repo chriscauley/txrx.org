@@ -1,6 +1,15 @@
 <uwsgi>
-    <pythonpath>/home/chriscauley/txrx.org/</pythonpath>
-    <app mountpoint="/">
-        <script>django_uwsgi</script>
+  <pythonpath>/home/django/</pythonpath>
+  <pythonpath>/home/django/txrx.org/</pythonpath>
+  <chdir>/home/django/txrx.org</chdir>
+  <socket>127.0.0.1:3033</socket>
+  <processes>3</processes>
+  <app mountpoint="/">
+    <script>django_uwsgi</script>
     </app>
+  <plugin>python</plugin>
+  <harakiri>180</harakiri>
+  <socket-timeout>180</socket-timeout>
+  <pidfile>/tmp/uwsgi.pid</pidfile>
+  <module>django_uwsgi:application</module>
 </uwsgi>

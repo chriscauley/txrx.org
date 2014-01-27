@@ -18,7 +18,6 @@ urlpatterns = patterns(
   url(r'^blog/$','txrx.views.blog_home'),
   url(r'^blog/',include('codrspace.urls')),
   url(r'^(\d{4})/(\d{1,2})/(\d{1,2})/([^/]+)/','codrspace.views.post_redirect'),
-  url(r'^grappelli/', include('grappelli.urls')),
   url(r'^500/$','txrx.views.intentional_500'),
   url(r'^event/',include('event.urls',namespace="event",app_name="event")),
   url(r'^instagram/',include('instagram.urls',namespace="instagram",app_name="instagram")),
