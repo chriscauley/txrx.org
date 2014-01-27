@@ -4,6 +4,11 @@
 section { padding-bottom: 25px; }
 .comment:target > .comment_outer { background-color: @successBackground; }
 
+.transition(@value) {
+  transition: @value;
+  -webkit-transition: @value;
+}
+
 .floatingBox {
   background: white;
   border-radius: 5px;
@@ -21,6 +26,16 @@ body { margin-bottom: 50px; overflow: scroll; }
 .icon-white,.nav-pills>.active>a>[class^="icon-"],.nav-pills>.active>a>[class*=" icon-"],.nav-list>.active>a>[class^="icon-"],.nav-list>.active>a>[class*=" icon-"],.navbar-inverse .nav>.active>a>[class^="icon-"],.navbar-inverse .nav>.active>a>[class*=" icon-"],.dropdown-menu>li>a:hover>[class^="icon-"],.dropdown-menu>li>a:hover>[class*=" icon-"],.dropdown-menu>.active>a>[class^="icon-"],.dropdown-menu>.active>a>[class*=" icon-"],.dropdown-submenu:hover>a>[class^="icon-"],.dropdown-submenu:hover>a>[class*=" icon-"]{
   background-image:url("../img/glyphicons-halflings-white.png") !important;
   background-color: transparent;
+}
+
+header, #main {
+  padding: 0 15px;
+}
+
+h3.block_title {
+  font-weight: normal;
+  padding: 15px;
+  text-transform: uppercase;
 }
 
 .membership_features {
@@ -604,4 +619,58 @@ ul.errorlist { color: red; }
     width: 31%;
     img { width: 100%; }
   }
+}
+.class_photos {
+  list-style: none;
+  img { max-width: 100% }
+}
+
+.FeaturedThings {
+  .thing {
+    float: left;
+    padding: 0 15px;
+  }
+  a {
+    display: block;
+    height: 100%;
+    margin-bottom: 15px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    z-index: 0;
+    .title {
+      background: #222;
+      background: rgba(32,32,32,0.8);
+      bottom: -50px;
+      color: white;
+      left: 0;
+      opacity: 0;
+      padding: 3px 5px 3px;
+      position: absolute;
+      width: 100%;
+      .author { font-size: 0.8em; }
+    }
+    &:hover {
+      z-index: 1;
+      .title { bottom: 0; opacity: 1; .transition(bottom 0.25s linear); }
+    }
+  }
+  img {
+    max-width: 100%;
+  }
+}
+
+@media (max-width:599px) {
+  #main { margin: 0; padding: 0; }
+  .FeaturedThings .thing {
+    width: 50%;
+    padding: 0 10px;
+    a { margin-bottom: 10px; }
+  }
+}
+@media (min-width:600px) { .FeaturedThings .thing { width: 100/3%; } }
+@media (min-width:990px) { .FeaturedThings .thing { width: 25%; } }
+
+.recent_blogs {
+  img { margin-bottom: 10px; max-width: 100%; }
 }

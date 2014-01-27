@@ -8,6 +8,8 @@
 #site generated content
 media/*
 static/*
+.media/*
+.static/*
 log/*
 scripts/backups
 
@@ -15,6 +17,7 @@ scripts/backups
 env/*
 environ/*
 .environ/*
+src/*
 .pydev
 .pydevproject
 .project
