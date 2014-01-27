@@ -1,11 +1,14 @@
 {% load cache %}
 {% load url from future %}
 
-{% cache settings.LONG_CACHE sidebar %}
-<div class="well">
+<section>
+  <h3 class="block_title">Introduction</h3>
   <p>
-    TX/RX Labs is a non-profit organization that provides a makerspace for the greater Houston area.
-    If you like what we do, please donate.
+    Established in 2007, TX/RX Labs is a non-profit hackerspace for the greater Houston area.
+    Housed in the East End District, we offer courses in and access to our rapid prototyping lab,
+    woodshop, machineshop, electronics lab, and a wide variety of other tools. Our goal is to
+    educate the public about technology and show how seemingly complex techniques can be used
+    by anyone. If you like what we do, please donate.
   </p>
   <form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="margin:0;">
     <input type="hidden" name="cmd" value="_donations">
@@ -19,14 +22,14 @@
     <center>
       <input type="image" src="{{ STATIC_URL }}img/paypal-donate-button.png" border="0" height="30"
              name="submit" alt="PayPal - The safer, easier way to pay online!">
-    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+      <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
     </center>
   </form>
-</div>
+</section>
 
-<h2>This week at TX/RX</h2>
-<div class="well">
-  <ul class="unstyled">
+<section class="events_box">
+  <h3 class="block_title">This Week at TX/RX</h3>
+  <ul class="list-unstyled">
     {% for event in upcoming_events %}
     <li>
       {{ event.start|date:"m/d" }} -
@@ -35,7 +38,7 @@
     {% endfor %}
   </ul>
   <a href="{% url "event:index" %}">View all events</a>
-</div>
+</section>
 
 {% if last_week %}
 <h2>Past events</h2>
@@ -53,4 +56,3 @@
   </ul>
 </div>
 {% endif %}
-{% endcache %}
