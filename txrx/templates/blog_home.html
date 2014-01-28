@@ -26,13 +26,15 @@
 <section class="recent_blogs row">
   <h3 class="block_title">Recent Blogs</h3>
   {% for post in posts %}
-  {% thumbnail post.photo|get_override:"square_crop" "300x300" crop="center" as im %}
+  {% thumbnail post.photo|get_override:"landscape_crop" "300x200" crop="center" as im %}
   <div class="post col-xs-4">
-    <a href="{{ post.get_absolute_url }}">
-      <img src="{{ im.url }}" width="300" height="300" />
-      <div class="title">{{ post }}</div>
-      <div class="date">{{ post.publish_dt|date:"F j, Y" }}</div>
-    </a>
+    <div class="well">
+      <a href="{{ post.get_absolute_url }}">
+        <img src="{{ im.url }}" width="300" height="200" />
+        <div class="title">{{ post }}</div>
+        <div class="date">{{ post.publish_dt|date:"F j, Y" }}</div>
+      </a>
+    </div>
   </div>
   {% endthumbnail %}
   {% endfor %}

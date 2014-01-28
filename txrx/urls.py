@@ -28,6 +28,7 @@ urlpatterns = patterns(
   url(r'^rss/$', AllFeed()),
   url(r'^favicon.ico$','main.views.predirect',
       kwargs={'url':getattr(settings,'FAVICON','/static/favicon.ico')}),
+  url(r'^thing/(\d+)/([\w\d\-\_]+)/$','feed.views.thing_detail',name='thing_detail'),
 )
 
 #auth related

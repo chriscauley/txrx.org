@@ -38,30 +38,32 @@
   </head>
   <body>
     {% block nav %}{% include "_nav.html" with page="home" %}{% endblock %}
-    {% block messages %}{% include "_messages.html" %}{% endblock %}
-    {% block header %}
-    <header>
-      <div class="page-header">
-        <h1 class="home-tagline">{% block header_content %}{{ SITE_TAGLINE }}{% endblock %}</h1>
-      </div>
-    </header>
-    {% endblock %}
+    <div id="wrap">
+      {% block messages %}{% include "_messages.html" %}{% endblock %}
+      {% block header %}
+      <header>
+        <div class="page-header">
+          <h1 class="home-tagline">{% block header_content %}{{ SITE_TAGLINE }}{% endblock %}</h1>
+        </div>
+      </header>
+      {% endblock %}
 
-    <div class="row" id="main">
-      {% block main %}
-      <div class="col-sm-8">
-        {% block content %}{% endblock %}
+      <div class="row" id="main">
+        {% block main %}
+        <div class="col-sm-8 col-md-9">
+          {% block content %}{% endblock %}
+        </div>
+        <div class="col-sm-4 col-md-3" id="side">
+          {% block side %}{% include "_side.html" %}{% endblock %}
+        </div>
+        {% endblock %}
       </div>
-      <div class="col-sm-4" id="side">
-        {% block side %}{% include "_side.html" %}{% endblock %}
-      </div>
+
+      {% block footer %}
+      <footer>
+      </footer>
       {% endblock %}
     </div>
-
-    {% block footer %}
-    <footer>
-    </footer>
-    {% endblock %}
     {% compress js %}
     <script src="{{ STATIC_URL }}less/bootstrap/js/affix.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/button.js"></script>

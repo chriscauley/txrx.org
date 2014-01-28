@@ -24,7 +24,10 @@ section { padding-bottom: 25px; }
   nav > ul > li { border-top: 1px solid rgba(0,0,0,0.1); }
 }
 /* txrx overrides */
-body { margin-bottom: 50px; overflow: scroll; }
+body { margin: 0 auto 50px; max-width: 1400px; overflow: scroll; }
+#wrap { margin: 0 55px; }
+@media (max-width: @screen-sm-max) { #wrap { margin: 0 20px; } }
+@media (max-width: @screen-xs-max) { #wrap { margin: 0; } }
 
 header, #main {
   padding: 0 15px;
@@ -680,4 +683,13 @@ ul.errorlist { color: red; }
 
 .recent_blogs {
   img { height: auto; margin-bottom: 10px; max-width: 100%; }
+  a {
+    color: inherit;
+    &:hover { text-decoration: none; }
+  }
+  .title {
+    font-size: 18px;
+    height: 3.9em;
+    line-height: 1.3;
+  }
 }

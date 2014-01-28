@@ -1,5 +1,6 @@
 /* txrx overrides */
 .wmd-panel {
+  clear: both;
   margin-left: 0 !important;
   margin-right: 0 !important;
 }

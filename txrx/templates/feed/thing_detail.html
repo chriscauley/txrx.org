@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load thumbnail crop_util short_codes%}
+
+{% block header_content %}{{ thing }} by {{ thing.user }}{% endblock %}
+{% block title %}{{ thing }} by {{ thing.user }}{% endblock %}
+
+{% block content %}
+<div class="thing_detail">
+  <div class="slideshow">
+    <div class="active_slide">
+      {% thumbnail thing.first_photo|get_override:"landscape_crop" "750x500" crop="center" as im %}
+      <img src="{{ im.url }}" width="750" height="500" />
+      {% endthumbnail %}
+    </div>
+    {% if thing.get_photos|length < 1 %}
+    <div class="slide-nav">
+      {% for photo in thing.get_photos %}
+      {% thumbnail photo|get_override:"square_crop" "100x100" crop="center" as im %}
+      {% thumbnail thing.first_photo|get_override:"landscape_crop" "750x500" crop="center" as large %}
+      <a href="javascript:;" onclick="thing_slideshow.slide(this);" data-src="{{ large.url }}">
+        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" /></a>
+      {% endthumbnail %}
+      {% endthumbnail %}
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block side %}
+<section class="thing_details">
+  <h3 class="block_title">{{ thing }}</h3>
+  <div>
+    <div class="left">Created by:</div>
+    <div class="right">{{ thing.user }}</div>
+  </div>
+  <div>
+    <div class="left">Created by:</div>
+    <div class="right">{{ thing.user }}</div>
+  </div>
+  <div class="description">
+    {{ thing.description|public_explosivo }}
+</section>
+{% endblock %}
