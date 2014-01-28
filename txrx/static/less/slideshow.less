@@ -1,0 +1,29 @@
+.slideshow {
+  .active_slide {
+    max-width: 600px;
+    margin: 0 auto;
+    img { height:auto; width: 100%; }
+  }
+  .slide-nav {
+    min-height: 10px;
+    padding: 0 20px;
+    position: relative;
+    overflow: hidden;
+    a {
+      float: left;
+      width: 20%;
+      img { height: auto; padding: 10px; width: 100%; }
+    }
+    .next, .prev {
+      background: @well-bg;
+      border: 1px solid @well-border;
+      display: table-cell;
+      height: 100%;
+      position: absolute;
+      vertical-align: center;
+      width: 20px;
+    }
+    .next { right: 0; }
+    .prev { left: 0; }
+  }
+}

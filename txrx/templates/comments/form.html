@@ -4,7 +4,7 @@
   {% include "comments/_md_helptext.html" %}
   <form action="{% comment_form_target %}" method="POST">{% csrf_token %}
     <fieldset>
-      <ul class="unstyled">
+      <ul class="list-unstyled">
         {% for field in form %}
         {% if not field.is_hidden %}
         <li class="{% if not field.field.required %}not{% endif %}required{% if field.errors %} errors{% endif %}{% if field.name != 'comment' %} hide{% endif %}">
