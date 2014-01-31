@@ -26,12 +26,11 @@
 {% include "widgets/filters.html" %}
 {% for week in weeks %}
 <div class="week {{ week.open }}">
-  <h4>Classes starting {{ week.0 }} - {{ week.1 }}</h4>
-  <table class="table table-hover class-table">
+  <div class="table table-hover class-table">
     {% for session in week.sessions %}
     {% include "course/_session_row.html" %}
     {% endfor %}
-  </table>
+  </div>
 </div>
 {% endfor %}
 {% endblock %}

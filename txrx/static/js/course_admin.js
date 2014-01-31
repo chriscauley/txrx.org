@@ -3,11 +3,11 @@
 
 django.jQuery(function() {
   var $ = django.jQuery;
-  $("[name=first_date_0]").closest(".first_date").hide();
+  $("[name=first_date_0]").closest(".field-first_date").hide();
   $("[type=submit]").click(function() {
     try {
       var startDate = new Date(2099,1,1);
-      $(".start .vDateField").each(function(){
+      $(".field-start .vDateField").each(function(){
 	var day = this.value;
 	var time = $(this).siblings("[type=text]")[0].value
 	var _d = new Date(day+" "+time);

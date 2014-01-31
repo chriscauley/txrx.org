@@ -1,0 +1,62 @@
+@cartWidth: 100px;
+@pictureWidth: 120px;
+
+.course {
+  height: 92px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.course .picture {
+  background: pink;
+  width: @pictureWidth;
+  height: 80px;
+  float: left;
+}
+
+.course .details {
+  bottom: 0;
+  left: @pictureWidth+15px;
+  position: absolute;
+  right: @cartWidth+15px;
+  top: 0;
+  .title {
+    display: block;
+    font-size: 20px;
+    height: 2.4em;
+    line-height: 1.2em;
+    text-transform: uppercase;
+  }
+  .dates {
+    border-bottom: 1px @borderGray solid;
+  }
+  .bottom {
+    color: @borderGray;
+    .has_notes { float: right; padding: 0 10px; }
+  }
+}
+
+.course .CartBox {
+  float: right;
+  font-size: 20px;
+  height: 80px;
+  line-height: 1;
+  position: relative;
+  text-align: center;
+  width: @cartWidth;
+  .price { font-size: 25px; }
+  .EnrollLink {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+  }
+  .btn {
+    border-radius: 0;
+    font-size: 18px;
+    line-height: 1;
+    padding: 3px;
+    width: 100%;
+  }
+}
