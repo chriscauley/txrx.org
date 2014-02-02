@@ -10,9 +10,9 @@
   {% elif session.full %}
   FULL
   {% else %}
-  <button class="btn btn-success add" onclick="addClass({{ session.id }});">
+  <button class="btn btn-primary add" onclick="addClass({{ session.id }});">
     {% if session.in_progress %}In Progress{% else %}Enroll{% endif %}</button>
-  <button class="btn btn-success drop" onclick="addClass({{ session.id }});" title="double enroll">
+  <button class="btn btn-primary drop" onclick="addClass({{ session.id }});" title="double enroll">
     +1 Person</button>
   <button class="btn btn-danger drop" onclick="simpleCart.remove('{{ session.id }}'); toggleCourses();">
     Drop</button>
@@ -34,9 +34,9 @@
   <div class="is_full">FULL</div>
   <div class="number_attending unrsvp">RSVP'd x {{ session.user_enrollment.quantity }}</div>
   <div class="rsvp">Not Attending</div>
-  <button class="btn btn-primary rsvp" onclick="rsvp({{ session.id }},'{{ session.get_rsvp_url }}');">
+  <button class="btn btn-success rsvp" onclick="rsvp({{ session.id }},'{{ session.get_rsvp_url }}');">
     RSVP</button>
-  <button class="btn btn-primary unrsvp not_full" title="Bring a friend!"
+  <button class="btn btn-success unrsvp not_full" title="Bring a friend!"
           onclick="rsvp({{ session.id }},'{{ session.get_rsvp_url }}?plus_one=1');">+1 Person</button>
   <button class="btn btn-danger unrsvp" onclick="rsvp({{ session.id }},'{{ session.get_rsvp_url }}?drop=1');">
     un-RSVP</button>

@@ -28,7 +28,7 @@ function setHiddenFields(that) {
   <span class="well membership">
     <h2>
       {{ m.name }}
-      <small>{% if forloop.last %}Starting at {% endif %}${{ m.monthly_rate.cost }}/month</small>
+      <small>${{ m.monthly_rate.cost }}{% if forloop.last %}+{% endif %}/month</small>
     </h2>
     {% if m.notes %}<br />
     {{ m.notes|safe }}{% endif %}

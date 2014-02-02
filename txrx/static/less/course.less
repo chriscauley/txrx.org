@@ -2,29 +2,28 @@
 @pictureWidth: 120px;
 
 .course {
-  height: 92px;
+  min-height: 92px;
   overflow: hidden;
   position: relative;
   width: 100%;
 }
 
 .course .picture {
-  width: @pictureWidth;
   height: 80px;
-  float: left;
+  left: 5px;
+  position: absolute;
+  top: 5px;
+  width: @pictureWidth;
 }
 
 .course .details {
-  bottom: 0;
-  left: @pictureWidth+15px;
-  position: absolute;
-  right: @cartWidth+15px;
-  top: 0;
+  padding: 0 @cartWidth+10px 0 @pictureWidth+10px;
+  position: relative;
   .title {
     display: block;
     font-size: 20px;
-    height: 2.4em;
     line-height: 1.2em;
+    min-height: 2.4em;
     text-transform: uppercase;
   }
   .dates {
@@ -32,6 +31,16 @@
   }
   .bottom {
     color: @borderGray;
+    line-height: 1;
+    position: relative;
+    top: 2px;
+    .subjects,.notes {
+      display: inline-block;
+      min-height: 10px;
+      overflow: hidden;
+      vertical-align: top;
+      width: 49%;
+    }
     .has_notes { float: right; padding: 0 10px; }
   }
 }
@@ -40,8 +49,10 @@
   font-size: 20px;
   height: 80px;
   line-height: 1;
-  position: relative;
+  position: absolute;
+  right: 5px;
   text-align: center;
+  top: 5px;
   width: @cartWidth;
   .price { font-size: 25px; }
   .EnrollLink {
@@ -70,5 +81,35 @@
     right: 0;
     top: 0;
     z-index: 1;
+  }
+}
+
+#cart {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  .course {
+    height: auto;
+    .details {
+      padding: 0;
+    }
+    .picture {
+      height: auto;
+      min-height: 110px;
+      padding: 0 105px 10px 0;
+      position: static;
+      width: 100%;
+      img {
+	width: 100%;
+	height: auto;
+      }
+    }
+    .CartBox {
+      position: absolute;
+      top: 20px;
+      right: 5px;
+    }
   }
 }

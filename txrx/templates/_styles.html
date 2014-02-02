@@ -7,8 +7,9 @@
 <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/base.less">
 {% endcompress %}
 
-{% if request.theme == "dark" %}
 <style type="text/css">
+  {% if request.theme == "dark" %}
+  @media (min-width: 767px) {
   html, iframe, frame
   {-webkit-filter: invert(.95) hue-rotate(180deg) !important;filter: invert(100%) hue-rotate(180deg) !important}
 
@@ -23,5 +24,7 @@
   a:visited, a:visited *{ color: #884488 !important; }
   a:visited:hover, a:visited:hover *{ color: #55AAAA !important; }
   }
+  }
+  {% endif %}
+  @media (max-width: 768px) { #bot_right { display: none !important; } }
 </style>
-{% endif %}

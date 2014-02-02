@@ -24,12 +24,18 @@
           <i class="icon-user"></i>{{ session.get_instructor_name|noemail }}</a>
     </small></div>
     <div class="bottom">
-      {% for subject in session.section.course.subjects.all %}
-      {{ subject|upper }}
-      {% endfor %}
-      {% for note,title in session.section.get_notes %}
-      <small class="has_notes" data-tooltip="{{ title }}"><span>{{ note }}</span></small>
-      {% endfor %}
+      <div class="subjects">
+        {% for subject in session.section.course.subjects.all %}
+        {{ subject|upper }}
+        {% endfor %}
+      </div>
+      {% if session.section.get_notes %}
+      <div class="notes">
+        {% for note,title in session.section.get_notes %}
+        <small class="has_notes" data-tooltip="{{ title }}"><span>{{ note }}</span></small>
+        {% endfor %}
+      </div>
+      {% endif %}
     </div>
   </div>
   <div class="CartBox">

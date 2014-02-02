@@ -13,12 +13,6 @@
     {% thumbnail photo|get_override:"landscape_crop" "600x400" crop="center" as large %}
     <a href="javascript:;" onclick="$('.active_slide img').attr('src','{{ large.url }}')">
       <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" /></a>
-    <a href="javascript:;" onclick="$('.active_slide img').attr('src','{{ large.url }}')">
-      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" /></a>
-    <a href="javascript:;" onclick="$('.active_slide img').attr('src','{{ large.url }}')">
-      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" /></a>
-    <a href="javascript:;" onclick="$('.active_slide img').attr('src','{{ large.url }}')">
-      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" /></a>
     {% endthumbnail %}
     {% endthumbnail %}
     {% endfor %}

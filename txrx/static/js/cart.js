@@ -3,27 +3,30 @@ function showLogin() {
   $("#login-dialog").toggleClass("login-visible");
 }
 
-
 simpleCart.successURL = window.location.origin+"/classes/?success"
 simpleCart.cartHeaders = ["Name", "Price", "Quantity", "Remove"]
 
 function showCart() {
   $("#cart-modal").modal({width: 400, modal: true, minHight: 300});
 }
+
 function addClass(session_id) {
   var session = window.SESSIONS_ON_PAGE[session_id];
   addItem(session.name,session.fee,session_id);
   toggleCourses(session.name);
 }
+
 function addItem(name,price,id) {
   simpleCart.add('name='+name,'price='+price,'id='+id,'quantity=1');
 }
+
 function toggleCourses(name) {
   $(".in-cart").removeClass("in-cart");
   for (id in simpleCart.items) { $("#c"+id).addClass("in-cart") }
   simpleCart.update();
   $("#cartEmpty").hide();
-  if ($("#cart .itemContainer").length == 0) { $("#cartEmpty").show(); }
+  if ($("#cart .itemContainer").length == 0) { $("#cartEmpty").show(); $("#mobileCart").hide() }
+  else { $("#mobileCart").show(); }
   $(".recentAdd").removeClass("recentAdd");
   $(".itemContainer").each(function() {
     if ($(this).find(".itemName").text() == name) {
