@@ -8,31 +8,7 @@
 {% block main %}
 <div class="col-sm-8">
   <div class="thing_detail">
-    <div class="slideshow">
-      <div class="active_slide">
-        {% thumbnail thing.first_photo|get_override:"landscape_crop" "750x500" crop="center" as im %}
-        <img src="{{ im.url }}" width="750" height="500" />
-        {% endthumbnail %}
-      </div>
-      {% if thing.get_photos|length > 1 %}
-      <div class="slide-nav">
-        {% for photo in thing.get_photos %}
-        {% thumbnail photo|get_override:"square_crop" "100x100" crop="center" as im %}
-        {% thumbnail photo|get_override:"landscape_crop" "600x400" crop="center" as large %}
-        <a href="javascript:;" onclick="$('.active_slide img').attr('src','{{ large.url }}')">
-          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" /></a>
-        <a href="javascript:;" onclick="$('.active_slide img').attr('src','{{ large.url }}')">
-          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" /></a>
-        <a href="javascript:;" onclick="$('.active_slide img').attr('src','{{ large.url }}')">
-          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" /></a>
-        <a href="javascript:;" onclick="$('.active_slide img').attr('src','{{ large.url }}')">
-          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" /></a>
-        {% endthumbnail %}
-        {% endthumbnail %}
-        {% endfor %}
-      </div>
-      {% endif %}
-    </div>
+    {% include "widgets/thing_slideshow.html" %}
   </div>
   {% display_comment_toplevel_for thing %}
 </div>

@@ -32,7 +32,7 @@ def cached_method(target,name=None):
     raise ValueError("Using lambda functions in cached_methods causes __name__ collisions.")
   def wrapper(*args, **kwargs):
     obj = args[0]
-    name = '_' + target.__name__
+    name = '___' + target.__name__
 
     if not hasattr(obj, name):
       value = target(*args, **kwargs)

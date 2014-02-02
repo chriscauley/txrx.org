@@ -9,7 +9,6 @@
 }
 
 .course .picture {
-  background: pink;
   width: @pictureWidth;
   height: 80px;
   float: left;
@@ -37,8 +36,7 @@
   }
 }
 
-.course .CartBox {
-  float: right;
+.CartBox {
   font-size: 20px;
   height: 80px;
   line-height: 1;
@@ -58,5 +56,19 @@
     line-height: 1;
     padding: 3px;
     width: 100%;
+  }
+}
+
+.course .CartBox {
+  float: right;
+}
+
+.course-detail {
+  .subjects { padding-bottom: 5px; }
+  .CartBox {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
   }
 }

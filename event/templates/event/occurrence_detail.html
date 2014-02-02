@@ -7,7 +7,7 @@
 
 {% block main %}
 {% with photos=occurrence.get_photos %}
-<div class="span6">
+<div class="col-sm-6">
   <p class="lead">{{ occurrence.start }}{% if occurrence.end %} - {{ occurrence.end.time }}{% endif %}</p>
   <div class="calendar_widget">
     <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">Add to calendar</a>
@@ -15,7 +15,7 @@
   </div>
   <p>{{ occurrence.description|explosivo }}</p>
 </div>
-<div class="span6">
+<div class="col-sm-6">
   <div class="photo_well">
     {% include "widgets/side_photos.html" %}
   </div>

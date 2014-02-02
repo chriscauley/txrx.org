@@ -148,6 +148,8 @@ class PhotosMixin():
     return ContentType.objects.get_for_model(self.__class__).id
   @cached_method
   def get_photos(self):
+    return self._get_photos()
+  def _get_photos(self):
     return list(Photo.objects.filter(taggedphoto__content_type_id=self._ct_id,
                                      taggedphoto__object_id=self.id).order_by("taggedphoto__order"))
 

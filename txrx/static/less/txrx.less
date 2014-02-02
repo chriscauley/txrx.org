@@ -24,13 +24,19 @@ section { padding-bottom: 25px; }
   nav > ul > li { border-top: 1px solid rgba(0,0,0,0.1); }
 }
 /* txrx overrides */
-body { margin: 0 auto 50px; max-width: 1400px; overflow: scroll; }
+body { color: #424242; margin: 0 auto 50px; max-width: 1400px; overflow: scroll; }
 #wrap { margin: 0 55px; }
 @media (max-width: @screen-sm-max) { #wrap { margin: 0 20px; } }
 @media (max-width: @screen-xs-max) { #wrap { margin: 0; } }
 
 header, #main {
   padding: 0 15px;
+}
+
+h1.page_title {
+  border-bottom: 2px solid;
+  line-height: 37px;
+  padding-right: 120px;
 }
 
 h3.block_title {
@@ -41,24 +47,35 @@ h3.block_title {
 
 #side {
   h3.block_title {
-    border-bottom: 1px solid;
+    border-bottom: 2px solid;
     margin: 0 0 15px;
     padding-top: 10px;
     text-align: right;
   }
 }
 
-.membership_features {
-  height: 145px;
-  list-style: none;
-  margin: 0;
-  padding: 10px 0;
+#memberships {
+  text-align: center;
+  .membership {
+    display: inline-block;
+    text-align: left; 
+    width: 320px;
+    .membership_features {
+      height: 145px;
+      list-style: none;
+      margin: 0;
+      padding: 10px 0;
+    }
+    .membership_features li {
+      padding-bottom: 10px;
+    }
+  }
+  .button_box {
+    padding-top: 15px;
+    text-align: center;
+  }
+  select { max-width: 300px; }
 }
-
-.membership_features li {
-  padding-bottom: 10px;
-}
-
 form label.required {
   font-weight: bold;
 }
@@ -112,6 +129,7 @@ form label.required {
 }
 
 [type=radio]:checked + .lab { width: 620px; }
+img { max-width: 100%; }
 
 /* blog */
 div.highlight { clear: both; }
@@ -120,7 +138,6 @@ div.post-content {
   width: 100%;
   code { background-color: #eee; }
   iframe { max-width: 100%; }
-  img { max-width: 100%; }
   .post-image {
     float: left;
     margin: 0 20px 20px 0;
@@ -152,14 +169,6 @@ label .help-text {
   border-bottom: dashed 1px;
   color: #0088cc;
   cursor: help;
-}
-
-/* cart css */
-#cart {
-  padding: 0;
-  position: fixed;
-  top: 60px;
-  width: 298px;
 }
 
 .cartHeaders { display: none; }
@@ -206,9 +215,11 @@ label .help-text {
   }
 }
 
-.course .add { display: inline-block; }
-.course .drop, .in-cart .add { display: none; margin: 0 auto; }
-.in-cart .drop { display: inline-block; }
+.course, .course-detail {
+  .add { display: inline-block; }
+  .drop, &.in-cart .add { display: none; margin: 0 auto; }
+  &.in-cart .drop { display: inline-block; }
+}
 
 .RsvpLink, .EnrollLink {
   display: block;
@@ -269,24 +280,6 @@ label .help-text {
     position: absolute;
     top: 0;
     width: 100%;
-  }
-}
-
-.course-detail .page-header {
-  padding-right: 100px;
-  position: relative;
-  .EnrollLink, .RsvpLink {
-    background: white;
-    position:absolute;
-    right: 0;
-    top: 0;
-    width: 110px;
-    .message {
-      bottom: auto;
-      left: auto;
-      right: 0;
-      top: 100%;
-    }
   }
 }
 
@@ -402,47 +395,6 @@ h3.date {
       right: 0;
       top: 0;
     }
-  }
-}
-
-.photo_well {
-  min-height: 10px;
-  overflow: hidden;
-  .well {
-    box-sizing: border-box;
-    float: left;
-    height: auto;
-    margin-bottom: 0;
-    max-height: 320px;
-    overflow: visible;
-    width: 50% !important;
-  }
-  #cart {
-    box-sizing: border-box;
-    left: 0;
-    height: 220px;
-    margin-bottom: 0;
-    position: relative;
-    top: 0;
-    z-index: 10;
-    .itemPrice, .itemQuantity { display: none; }
-    .itemName {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      width: 100%;
-    }
-  }
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    li {
-      float: left;
-      padding: 0 1%;
-      width: 48%;
-    }
-    img { width: 100%; }
   }
 }
 

@@ -2,6 +2,20 @@
 <script type="text/javascript">
 simpleCart.email = "{{ settings.PAYPAL_RECEIVER_EMAIL }}";</script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/cart.js"></script>
+<h3 class="block_title">Shopping Cart</h3>
+<div id="cart" class="well">
+  <div id="cartEmpty">Your cart is empty</div>
+  <div class="simpleCart_items"></div>
+  <div class="checkout-box">
+    Total: <span class="simpleCart_finalTotal"></span>
+  </div>
+  <div style="text-align: center;">
+    <a href="javascript:;"
+       onclick="createCookie('checkout_initiated','yes!',10);simpleCart.checkout(); return false">
+      <img src="{{ STATIC_URL }}img/paypal.png"></a>
+  </div>
+</div>
+{% comment %}
 <div class="well accordion" id="cart">
   <div class="accordion-group">
     <div class="accordion-heading">
@@ -10,16 +24,6 @@ simpleCart.email = "{{ settings.PAYPAL_RECEIVER_EMAIL }}";</script>
     </div>
     <div id="cart-contents" class="accordion-body collapse in">
       <div class="accordion-inner">
-        <div id="cartEmpty">Your cart is empty</div>
-        <div class="simpleCart_items"></div>
-        <div class="checkout-box">
-          Total: <span class="simpleCart_finalTotal"></span>
-        </div>
-        <div style="text-align: center;">
-          <a href="javascript:;"
-             onclick="createCookie('checkout_initiated','yes!',10);simpleCart.checkout(); return false">
-            <img src="{{ STATIC_URL }}img/paypal.png"></a>
-        </div>
       </div>
     </div>
   </div>
@@ -39,6 +43,7 @@ simpleCart.email = "{{ settings.PAYPAL_RECEIVER_EMAIL }}";</script>
   {% endfor %}
   {% endif %}
 </div>
+{% endcomment %}
 <script type="text/javascript">
 function createCookie(name,value,days) {
   if (days) {
