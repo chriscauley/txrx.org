@@ -2,7 +2,7 @@
 {% load thumbnail crop_util short_codes%}
 {% load mptt_comments_tags %}
 
-{% block header_content %}{{ thing }} by {{ thing.user }}{% endblock %}
+{% block header %}{% endblock %}
 {% block title %}{{ thing }} by {{ thing.user }}{% endblock %}
 
 {% block main %}
@@ -20,8 +20,20 @@
       <div class="right">{{ thing.user }}</div>
     </div>
     <div>
-      <div class="left">Created by:</div>
-      <div class="right">{{ thing.user }}</div>
+      <div class="left">Date Submitted:</div>
+      <div class="right">{{ thing.publish_dt }}</div>
+    </div>
+    <div>
+      <div class="left">Materials:</div>
+      <div class="right">{{ thing.materials.all|join:", " }}</div>
+    </div>
+    <div>
+      <div class="left">Machine{{ thing.get_tools|pluralize:"s" }}:</div>
+      <div class="right">
+        {% for tool in thing.get_tools %}
+        <div><a href="{{ tool.get_absoulte_url }}">{{ tool }}</a></div>
+        {% endfor %}
+      </div>
     </div>
     <div class="description">
       {{ thing.description|public_explosivo }}

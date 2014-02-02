@@ -11,13 +11,15 @@
   <div class="course-detail row" data-subject="{{ session.subjects|join:"," }}" id="c{{ session.id }}"
        {%if not session.course.closed%}data-open{%endif%}
        data-date="{{ session.starttime|date:"Ymd" }}">
-    <h1 class="page_title">{{ session.section.course }}</h1>
-    <div class="subjects">
-      <b>Subject{{ session.section.course.subjects|pluralize:"s" }}</b>:
-      {{ session.section.course.subjects.all|join:"," }}
-    </div>
-    <div class="CartBox">
-      {% include "course/_enroll_link.html" %}
+    <div class="col-xs-12">
+      <h1 class="page_title">{{ session.section.course }}</h1>
+      <div class="subjects">
+        <b>Subject{{ session.section.course.subjects|pluralize:"s" }}</b>:
+        {{ session.section.course.subjects.all|join:"," }}
+      </div>
+      <div class="CartBox">
+        {% include "course/_enroll_link.html" %}
+      </div>
     </div>
     <div class="col-sm-6">
       {% include "widgets/thing_slideshow.html" with thing=session %}
@@ -86,7 +88,7 @@
        {% endif %}
     </div>
     <div style="clear: both;"></div>
-    {% display_comment_toplevel_for session %}
+    <div class="col-xs-12">{% display_comment_toplevel_for session %}</div>
   </div>
  </div>
  <div class="col-sm-3" id="side">

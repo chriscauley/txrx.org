@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib import admin
-from models import Lab, Tool, ToolLink
+from django.contrib.contenttypes.generic import GenericTabularInline
+
 from db.admin import SlugModelAdmin,OrderedModelAdmin
+from .models import Lab, Tool, ToolLink, TaggedTool
 
 class LabAdmin(SlugModelAdmin):
   list_display = ("__unicode__","order")
@@ -14,6 +16,12 @@ class ToolLinkInline(admin.TabularInline):
 
 class ToolAdmin(SlugModelAdmin,OrderedModelAdmin):
   inlines = (ToolLinkInline,)
+
+#See note above corresponding model
+class TaggedToolInline(GenericTabularInline):
+  model = TaggedTool
+  raw_id_fields = ('tool',)
+  extra = 0
 
 admin.site.register(Lab,LabAdmin)
 admin.site.register(Tool,ToolAdmin)

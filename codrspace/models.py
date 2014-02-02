@@ -97,9 +97,11 @@ class Photo(FileModel):
   _sh = "Usages: Blog Photo, Tool Photo"
   square_crop = CropOverride('Square Crop (1:1)', aspect='1x1',help_text=_sh,**kwargs)
   _lh = "Usages: Featured Blog Photo, Lab Photo"
-  landscape_crop = CropOverride('Landscape Crop (5:3)', aspect='5x3',help_text=_lh,**kwargs)
+  landscape_crop = CropOverride('Landscape Crop (4:3)', aspect='4x3',help_text=_lh,**kwargs)
   _ph = "Usages: None"
-  portrait_crop = CropOverride('Portrait Crop (3:5)', aspect='3x5',help_text=_ph,**kwargs)
+  portrait_crop = CropOverride('Portrait Crop (3:4)', aspect='3x4',help_text=_ph,**kwargs)
+  class Meta:
+    ordering = ('name',)
 
 class PhotoSetManager(models.Manager):
   def live(self,*args,**kwargs):
