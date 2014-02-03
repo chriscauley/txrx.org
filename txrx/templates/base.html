@@ -41,17 +41,13 @@
     {% block nav %}{% include "_nav.html" with page="home" %}{% endblock %}
     <div id="wrap">
       {% block messages %}{% include "_messages.html" %}{% endblock %}
-      {% block header %}
-      <header>
-        <div class="page-header">
-          <h1 class="home-tagline">{% block header_content %}{{ SITE_TAGLINE }}{% endblock %}</h1>
-        </div>
-      </header>
-      {% endblock %}
 
       <div class="row" id="main">
         {% block main %}
         <div class="col-sm-8 col-md-9">
+          {% block header %}
+          <h1 class="page_title">{% block header_content %}{{ SITE_TAGLINE }}{% endblock %}</h1>
+          {% endblock %}
           {% block content %}{% endblock %}
         </div>
         <div class="col-sm-4 col-md-3" id="side">

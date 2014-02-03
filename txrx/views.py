@@ -13,9 +13,9 @@ from NextPlease import pagination
 
 from membership.models import Membership
 from codrspace.models import Post
-from feed.models import Thing
+from thing.models import Thing
 
-import random
+import random, datetime
 
 def members(request,username=None):
   memberships = Membership.objects.active()[::-1]
@@ -47,15 +47,20 @@ def force_login(request,uid):
   login(request,u)
   return HttpResponseRedirect('/')
 
-@pagination("posts")
-def blog_home(request):
-  posts = Post.objects.filter(status="published",featured=False)
-  featured_posts = Post.objects.filter(status="published",featured=True)
+def index(request):
+  posts = Post.objects.filter(status="published",publish_dt__lte=datetime.datetime.now())
   things = list(Thing.objects.filter(featured=True)[:20])
   values = {
     'things': random.sample(things,min(len(things),8)),
     'posts': posts[:3],
-    'featured_posts': featured_posts,
+    }
+  return TemplateResponse(request,"index.html",values)
+
+@pagination("posts")
+def blog_home(request):
+  posts = Post.objects.filter(status="published",publish_dt__lte=datetime.datetime.now())
+  values = {
+    'posts': posts,
     }
   return TemplateResponse(request,"blog_home.html",values)
 

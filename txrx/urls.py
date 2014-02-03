@@ -12,10 +12,10 @@ _urls = lambda *ns: [url(r'^%s/'%n, include('%s.urls'%n, namespace=n, app_name=n
 
 urlpatterns = patterns(
   '',
-  url(r'^$','txrx.views.blog_home',name="home"),
+  url(r'^$','txrx.views.index',name="home"),
   url(r'admin/event/edit_photoset/(\d+)/$','event.views.edit_photoset'),
   url(r'^admin/', include(admin.site.urls)),
-  url(r'^blog/$','txrx.views.blog_home'),
+  url(r'^blog/$','txrx.views.blog_home',name="blog_home"),
   url(r'^blog/',include('codrspace.urls')),
   url(r'^(\d{4})/(\d{1,2})/(\d{1,2})/([^/]+)/','codrspace.views.post_redirect'),
   url(r'^500/$','txrx.views.intentional_500'),
@@ -28,7 +28,8 @@ urlpatterns = patterns(
   url(r'^rss/$', AllFeed()),
   url(r'^favicon.ico$','main.views.predirect',
       kwargs={'url':getattr(settings,'FAVICON','/static/favicon.ico')}),
-  url(r'^thing/(\d+)/([\w\d\-\_]+)/$','feed.views.thing_detail',name='thing_detail'),
+  url(r'^thing/$','thing.views.thing_index',name='thing_index'),
+  url(r'^thing/(\d+)/([\w\d\-\_]+)/$','thing.views.thing_detail',name='thing_detail'),
 )
 
 #auth related

@@ -42,7 +42,8 @@ INSTALLED_APPS = (
   'membership',
   'main',
   'event',
-  'feed',
+  'feed', #TODO!
+  'thing',
 )
 
 SOUTH_TESTS_MIGRATE = False

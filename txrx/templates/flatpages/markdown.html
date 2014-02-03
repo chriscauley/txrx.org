@@ -1,11 +1,9 @@
 {% extends "base.html" %}
 {% load short_codes %}
+
 {% block full_title %}{{ flatpage.title }}{% endblock %}
-{% block header_content %}{{ flatpage.title }}{% endblock %}
+{% block header %}{% endblock %}
+
 {% block content %}
-
-<div id="flatpage">
-  {{ flatpage.content|explosivo }}
-</div>
-
+<div id="flatpage">{{ flatpage.content|explosivo }}</div>
 {% endblock %}

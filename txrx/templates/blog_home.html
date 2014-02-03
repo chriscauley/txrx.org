@@ -1,42 +1,18 @@
 {% extends "base.html" %}
-{% load codrspace_tags short_codes %}
-{% load thumbnail crop_util %}
-{% load url from future %}
 
-{% block full_title %}Welcome to TX/RX Labs{% endblock %}
-{% block header %}{% endblock %}
+{% load codrspace_tags %}
+{% load cache %}
 
-{% block content %}
-<section class="FeaturedThings row">
-  <h3 class="block_title">Featured Projects</h3>
-  {% for thing in things %}
-  {% thumbnail thing.first_photo|get_override:"square_crop" "300x300" crop="center" as im %}
-  <div class="thing thing{{ forloop.counter }}">
-    <a href="{{ thing.get_absolute_url }}">
-      <img src="{{ im.url }}" />
-      <div class="title">
-        {{ thing.title }}
-        <div class="author"> by {{ thing.user }}</div>
-      </div>
-    </a>
-  </div>
-  {% endthumbnail %}
+{% block title %}{{ SITE_TAGLINE }}{% endblock %}
+
+{% block extra_head %}{% endblock %}
+
+{% block content %} 
+<div class="blog_home">
+  {% include "_paginator.html" %}
+  {% for post in paginator.current_list %}
+  {% include "_post_content.html" with truncate_posts="True" %}
   {% endfor %}
-</section>
-<section class="recent_blogs row">
-  <h3 class="block_title">Recent Blogs</h3>
-  {% for post in posts %}
-  {% thumbnail post.photo|get_override:"landscape_crop" "300x200" crop="center" as im %}
-  <div class="blog_well col-xs-6 col-md-4">
-    <div class="well">
-      <a href="{{ post.get_absolute_url }}">
-        <img src="{{ im.url }}" width="300" height="200" />
-        <div class="title">{{ post }}</div>
-        <div class="date">{{ post.publish_dt|date:"F j, Y" }}</div>
-      </a>
-    </div>
-  </div>
-  {% endthumbnail %}
-  {% endfor %}
-</section>
+  {% include "_paginator.html" %}
+</div>
 {% endblock %}

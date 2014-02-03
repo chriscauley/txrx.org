@@ -1,0 +1,11 @@
+{% if paginator.has_next or paginator.has_previous %}
+<div class="paginator">
+  {% if paginator.has_previous %}
+  <a class="left" href="?{{ paginator.previous_qs }}">&lt; Previous</a>
+  {% endif %}
+  Page {{ paginator.number }}
+  {% if paginator.has_next %}
+  <a class="right" href="?{{ paginator.next_qs }}">Next &gt;</a>
+  {% endif %}
+</div>
+{% endif %}

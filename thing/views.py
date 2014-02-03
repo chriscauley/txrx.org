@@ -11,11 +11,11 @@ def thing_index(request):
   values = {
     'things': things,
   }
-  return TemplateResponse(request,'feed/thing_index.html',values)
+  return TemplateResponse(request,'thing/thing_index.html',values)
 
 def thing_detail(request,pk,slug):
   thing = get_object_or_404(Thing,pk=pk,active=True)
   values = {
     'thing': thing,
   }
-  return TemplateResponse(request,'feed/thing_detail.html',values)
+  return TemplateResponse(request,'thing/thing_detail.html',values)

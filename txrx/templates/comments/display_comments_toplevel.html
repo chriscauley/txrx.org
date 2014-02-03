@@ -19,7 +19,7 @@
   {% include "comments/_comments_remaining.html" %}
 
   {% if request.user.is_authenticated %}
-  <h2 id="post_new_comment">{% trans "Post a new comment" %}</h2>
+  <h2 class="section_title">{% trans "Post a new comment" %}</h2>
 
   <div class="new_comment_form_wrapper">
     {% get_mptt_comment_form for object as form %}

@@ -9,35 +9,43 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Adding model 'Material'
-        db.create_table('feed_material', (
+        db.create_table('thing_material', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=64)),
         ))
-        db.send_create_signal('feed', ['Material'])
+        db.send_create_signal('thing', ['Material'])
 
-        # Adding field 'Thing.parent_link'
-        db.add_column('feed_thing', 'parent_link',
-                      self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True),
-                      keep_default=False)
+        # Adding model 'Thing'
+        db.create_table('thing_thing', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=128)),
+            ('description', self.gf('wmd.models.MarkDownField')(null=True, blank=True)),
+            ('publish_dt', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('featured', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('active', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('parent_link', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
+        ))
+        db.send_create_signal('thing', ['Thing'])
 
         # Adding M2M table for field materials on 'Thing'
-        db.create_table('feed_thing_materials', (
+        db.create_table('thing_thing_materials', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('thing', models.ForeignKey(orm['feed.thing'], null=False)),
-            ('material', models.ForeignKey(orm['feed.material'], null=False))
+            ('thing', models.ForeignKey(orm['thing.thing'], null=False)),
+            ('material', models.ForeignKey(orm['thing.material'], null=False))
         ))
-        db.create_unique('feed_thing_materials', ['thing_id', 'material_id'])
+        db.create_unique('thing_thing_materials', ['thing_id', 'material_id'])
 
 
     def backwards(self, orm):
         # Deleting model 'Material'
-        db.delete_table('feed_material')
+        db.delete_table('thing_material')
 
-        # Deleting field 'Thing.parent_link'
-        db.delete_column('feed_thing', 'parent_link')
+        # Deleting model 'Thing'
+        db.delete_table('thing_thing')
 
         # Removing M2M table for field materials on 'Thing'
-        db.delete_table('feed_thing_materials')
+        db.delete_table('thing_thing_materials')
 
 
     models = {
@@ -77,38 +85,18 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'feed.feeditem': {
-            'Meta': {'unique_together': "(('content_type', 'object_id'),)", 'object_name': 'FeedItem'},
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
-            'datetime': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'featured': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'get_absolute_url': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'item_type': ('django.db.models.fields.CharField', [], {'max_length': '16'}),
-            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'publish_dt': ('django.db.models.fields.DateTimeField', [], {}),
-            'thumbnail': ('django.db.models.fields.files.ImageField', [], {'default': "'feed_thumbnails/default.png'", 'max_length': '100'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
-            'votes': ('django.db.models.fields.IntegerField', [], {'default': '0'})
-        },
-        'feed.like': {
-            'Meta': {'unique_together': "(('user', 'feed_item'),)", 'object_name': 'Like'},
-            'feed_item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['feed.FeedItem']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
-        },
-        'feed.material': {
+        'thing.material': {
             'Meta': {'ordering': "('name',)", 'object_name': 'Material'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '64'})
         },
-        'feed.thing': {
+        'thing.thing': {
             'Meta': {'ordering': "('-publish_dt',)", 'object_name': 'Thing'},
+            'active': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'description': ('wmd.models.MarkDownField', [], {'null': 'True', 'blank': 'True'}),
             'featured': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'materials': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['feed.Material']", 'null': 'True', 'blank': 'True'}),
+            'materials': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['thing.Material']", 'null': 'True', 'blank': 'True'}),
             'parent_link': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'publish_dt': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
@@ -116,4 +104,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['feed']
+    complete_apps = ['thing']

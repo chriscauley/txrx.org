@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load thumbnail crop_util %}
+
+{% block header_content %}Items recently made at TX/RX{% endblock %}
+
+{% block content %}
+<div class="thing_index">
+  {% for thing in paginator.current_list %}
+  {# this should probably be merged with similar thing on home #}
+  {% thumbnail thing.first_photo|get_override:"square_crop" "300x300" crop="center" as im %}
+  <div class="thing thing{{ forloop.counter }}">
+    <a href="{{ thing.get_absolute_url }}" class="well">
+      <img src="{{ im.url }}" />
+      <div class="title">
+        {{ thing.title }}
+      </div>
+      <div class="author"> by {{ thing.user }}</div>
+    </a>
+  </div>
+  {% endthumbnail %}
+  {% endfor %}
+</div>
+{% endblock %}

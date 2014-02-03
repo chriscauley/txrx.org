@@ -21,20 +21,24 @@
     </div>
     <div>
       <div class="left">Date Submitted:</div>
-      <div class="right">{{ thing.publish_dt }}</div>
+      <div class="right">{{ thing.publish_dt.date }}</div>
     </div>
+    {% if thing.materials.all %}
     <div>
       <div class="left">Materials:</div>
       <div class="right">{{ thing.materials.all|join:", " }}</div>
     </div>
+    {% endif %}
+    {% if thing.get_tools %}
     <div>
       <div class="left">Machine{{ thing.get_tools|pluralize:"s" }}:</div>
       <div class="right">
         {% for tool in thing.get_tools %}
-        <div><a href="{{ tool.get_absoulte_url }}">{{ tool }}</a></div>
+        <div>{{ tool }}</div>
         {% endfor %}
       </div>
     </div>
+    {% endif %}
     <div class="description">
       {{ thing.description|public_explosivo }}
     </div>
