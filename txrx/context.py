@@ -23,10 +23,6 @@ def nav(request):
   _nav = [
     {"name": "Classes",
      "url": "/classes/",
-     #'sublinks': [
-     #   {"name": "All classes", "url": "/classes/"},
-     #   {"name": "My classes", "url": "/classes/my-sessions/"},
-     #   ]
      },
     {"name": "Blog",
      "url": "/blog/",
@@ -40,6 +36,9 @@ def nav(request):
      "sublinks": about_links,
      },
     ]
+  for _n in _nav:
+    if request.path.startswith(_n['url']):
+      _n['class'] = 'current'
   now = datetime.datetime.now()
 
   class_faqs = [

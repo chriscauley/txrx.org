@@ -6,19 +6,18 @@
 {% block header %}{% endblock %}
 
 {% block content %}
-<div class="page-header" style="margin: -10px 0 20px;">
-  <h1 class="home-tagline">
-    {{ term.name }} Classes
-    <div class="calendar_widget" style="display: inline-block; padding-left: 50px; font-size:0.7em;">
-      (<a href="javascript:;" onclick="$('.add_to_calendar').toggle()">Subscribe to calendar</a>)
-      {% include "event/_subscribe_to_calendar.html" with calendar_event=occurrence %}
-    </div>
-  </h1>
-</div>
+<h1 class="page_title">
+  {{ term.name }} Classes
+  <div class="calendar_widget">
+    <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">
+      <span class="glyphicon glyphicon-calendar"></span></a>
+    {% include "event/_subscribe_to_calendar.html" with calendar_event=occurrence %}
+  </div>
+</h1>
 {% if request.user.is_authenticated %}
 {# TODO: my classes widget #}
 {% else %}
-<p>
+<p class="alert alert-success">
   Already signed up? <a href="/accounts/login/">Log in</a> to see your classes.<br />
   If not, an account will be automatically created when you first pay for a class.
 </p>

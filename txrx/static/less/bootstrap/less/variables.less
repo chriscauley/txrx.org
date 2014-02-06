@@ -8,7 +8,7 @@
 //## Gray and brand colors for use across Bootstrap.
 
 @gray-darker:            lighten(#000, 13.5%); // #222
-@gray-dark:              lighten(#000, 20%);   // #333
+@gray-dark:              #424242;
 @gray:                   lighten(#000, 33.5%); // #555
 @gray-light:             lighten(#000, 60%);   // #999
 @gray-lighter:           lighten(#000, 93.5%); // #eee
@@ -25,7 +25,7 @@
 // ## Settings for some of the most global styles.
 
 // Background color for `<body>`.
-@body-bg:               #fff;
+@body-bg:               #fdfcfc;
 // Global text color on `<body>`.
 @text-color:            @gray-dark;
 
@@ -139,27 +139,27 @@
 
 @btn-default-color:              #333;
 @btn-default-bg:                 #fff;
-@btn-default-border:             #ccc;
+@btn-default-border:             #fff;//#ccc;
 
 @btn-primary-color:              #fff;
 @btn-primary-bg:                 @brand-primary;
-@btn-primary-border:             darken(@btn-primary-bg, 5%);
+@btn-primary-border:             darken(@btn-primary-bg, 0%); //5%);
 
 @btn-success-color:              #fff;
 @btn-success-bg:                 @brand-success;
-@btn-success-border:             darken(@btn-success-bg, 5%);
+@btn-success-border:             darken(@btn-success-bg, 0%); //5%);
 
 @btn-info-color:                 #fff;
 @btn-info-bg:                    @brand-info;
-@btn-info-border:                darken(@btn-info-bg, 5%);
+@btn-info-border:                darken(@btn-info-bg, 0%); //5%);
 
 @btn-warning-color:              #fff;
 @btn-warning-bg:                 @brand-warning;
-@btn-warning-border:             darken(@btn-warning-bg, 5%);
+@btn-warning-border:             darken(@btn-warning-bg, 0%); //5%);
 
 @btn-danger-color:               #fff;
 @btn-danger-bg:                  @brand-danger;
-@btn-danger-border:              darken(@btn-danger-bg, 5%);
+@btn-danger-border:              darken(@btn-danger-bg, 0%); //5%);
 
 @btn-link-disabled-color:        @gray-light;
 
@@ -314,7 +314,7 @@
 @navbar-collapse-max-height:       340px;
 
 @navbar-default-color:             #777;
-@navbar-default-bg:                white;
+@navbar-default-bg:                transparent;
 @navbar-default-border:            darken(@navbar-default-bg, 6.5%);
 
 // Navbar links
@@ -570,7 +570,7 @@
 //
 //## Define alert colors, border radius, and padding.
 
-@alert-padding:               15px;
+@alert-padding:               10px;
 @alert-border-radius:         @border-radius-base;
 @alert-link-font-weight:      bold;
 
@@ -697,7 +697,7 @@
 //
 //##
 
-@well-bg:                     #e3e8e8;
+@well-bg:                     #e5eaea;
 @well-border:                 darken(@well-bg, 7%);
 
 
