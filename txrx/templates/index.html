@@ -14,9 +14,11 @@
   <div class="thing thing{{ forloop.counter }}">
     <a href="{{ thing.get_absolute_url }}">
       <img src="{{ im.url }}" />
-      <div class="title">
-        {{ thing.title }}
-        <div class="author"> by {{ thing.user }}</div>
+      <div class="hover">
+        <div class="title">
+          {{ thing.title }}
+          <div class="author"> by {{ thing.user }}</div>
+        </div>
       </div>
     </a>
   </div>

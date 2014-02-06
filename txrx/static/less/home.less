@@ -17,22 +17,34 @@
   }
 }
 .FeaturedThings a { /*home behavior */
-  .title {
-    background: #222;
-    background: rgba(32,32,32,0.8);
+  .hover {
+    background: #444;
+    background: fade(@gray-dark,80%);
     color: white;
     display: none;
+    font-size: 20px;
     height: 100%;
     left: 0;
-    padding: 3px 5px 3px;
     position: absolute;
     top: 0;
     width: 100%;
-    .author { font-size: 0.8em; }
+    .title {
+      bottom: 5%;
+      left: 0;
+      padding: 3px 5px 3px;
+      position: absolute;
+      width: 100%;
+      .author {
+	border-top: 1px white solid;
+	font-size: 0.8em;
+	margin-top: 5px;
+	padding-top: 5px;
+      }
+    }
   }
   &:hover {
     z-index: 1;
-    .title { display: block; }
+    .hover { display: block; }
   }
 }
 
