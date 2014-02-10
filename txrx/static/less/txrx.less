@@ -10,7 +10,6 @@ section { padding-bottom: 25px; }
 
 .floatingBox {
   background: white;
-  border-radius: 5px;
   box-shadow: 1px 1px 4px black;
   padding: 3px;
   position: absolute;
@@ -82,10 +81,12 @@ h3.block_title {
   text-align: center;
   .membership {
     display: inline-block;
+    margin: 0 10px 20px;
+    padding: 15px 20px;
     text-align: left; 
-    width: 320px;
+    width: 420px;
     .membership_features {
-      height: 145px;
+      height: 180px;
       list-style: none;
       margin: 0;
       padding: 10px 0;
@@ -94,11 +95,16 @@ h3.block_title {
       padding-bottom: 10px;
     }
   }
-  .button_box {
-    padding-top: 15px;
-    text-align: center;
+  .button_box { padding-top: 15px; }
+  form { text-align: center; }
+  select { max-width: 100%; }
+}
+
+@media (max-width: @screen-xs-min) {
+  #memberships .membership {
+    width: 300px;
+    height: auto;
   }
-  select { max-width: 300px; }
 }
 form label.required {
   font-weight: bold;

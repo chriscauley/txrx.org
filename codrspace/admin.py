@@ -15,7 +15,8 @@ class PostAdmin(admin.ModelAdmin):
 
 class PhotoAdmin(CropAdmin):
   form = StaffMemberForm
-  list_display = ('__unicode__','_thumbnail','approved')
+  list_display = ('__unicode__','_thumbnail','approved','upload_dt')
+  list_sortable = ('__unicode__','upload_dt')
   list_editable = ('approved',)
   raw_id_fields = ('user',)
   fieldsets = (

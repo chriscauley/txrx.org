@@ -144,7 +144,10 @@ class PhotoSetConnection(models.Model):
 class PhotosMixin():
   @cached_property
   def first_photo(self):
-    return self.get_photos()[0]
+    try:
+      return self.get_photos()[0]
+    except IndexError:
+      return Photo.objects.get(pk=144)
   @cached_property
   def _ct_id(self):
     return ContentType.objects.get_for_model(self.__class__).id
