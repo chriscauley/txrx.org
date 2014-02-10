@@ -1,31 +1,36 @@
 <div class="add_to_calendar">
-  <div class="left">
-    <div class="header">
-      <img alt="Google Icon" src="{{ STATIC_URL }}event/icons/google.png"/>
-      Google Calendar
+  <div class="inner">
+    <h3 class="block_title">Subscribe to calendar:</h3>
+    <div class="left">
+      <div class="header">
+        <img alt="Google Icon" src="{{ STATIC_URL }}event/icons/google.png"/>
+        Google Calendar
+      </div>
+      <ul>
+        <li><a href="{{ google_calendar_url }}http://{{ all_ics|urlencode }}" target="_blank">
+            All Events
+        </a></li>
+        <li><a href="{{ google_calendar_url }}http://{{ all_classes_ics|urlencode }}" target="_blank">
+            All Classes
+        </a></li>
+      </ul>
     </div>
-    <ul>
-      <li><a href="{{ google_calendar_url }}http://{{ all_ics|urlencode }}" target="_blank">
-          Subscribe to TX/RX Events Calendar
-      </a></li>
-      <li><a href="{{ google_calendar_url }}http://{{ all_classes_ics|urlencode }}" target="_blank">
-          Subscribe to TX/RX Classes Calendar
-      </a></li>
-    </ul>
-  </div>
-  <div class="right">
-    <div class="header">
-      <img alt="Outlook Icon" src="{{ STATIC_URL }}event/icons/outlook.png"/> Outlook,
-      <img alt="Apple iCal Icon" src="{{ STATIC_URL }}event/icons/ical.png"/> iCal,
-      or <b>Anything Else</b>
+    <div class="right">
+      <div class="header">
+        <img alt="Outlook Icon" src="{{ STATIC_URL }}event/icons/outlook.png"/>
+        <img alt="Apple iCal Icon" src="{{ STATIC_URL }}event/icons/ical.png"/>
+        <b>Anything Else</b>
+      </div>
+      <ul>
+        <li><a href="webcal://{{ all_ics }}" target="_blank">
+            All Events
+        </a></li>
+        <li><a href="webcal://{{ all_classes_ics }}" target="_blank">
+            All Classes
+        </a></li>
+      </ul>
     </div>
-    <ul>
-      <li><a href="webcal://{{ all_ics }}" target="_blank">
-          Subscribe to TX/RX Events Calendar
-      </a></li>
-      <li><a href="webcal://{{ all_classes_ics }}" target="_blank">
-          Subscribe to TX/RX Classes Calendar
-      </a></li>
-    </ul>
+    <button class="btn btn-danger" onclick="$(this).closest('.add_to_calendar').hide()">Cancel</button>
   </div>
+  <div class="fixed_overlay" onclick="$(this).parent().hide();"></div>
 </div>

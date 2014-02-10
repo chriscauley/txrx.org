@@ -22,7 +22,9 @@ class Thing(UserModel,PhotosMixin,ToolsMixin):
   featured = models.BooleanField(default=False)
   active = models.BooleanField(default=False)
   parent_link = models.URLField(null=True,blank=True)
+  parent = models.ForeignKey("self",null=True,blank=True)
   materials = models.ManyToManyField(Material,null=True,blank=True)
+
   __unicode__ = lambda self: self.title
   get_absolute_url = lambda self: reverse('thing_detail',args=[self.id,slugify(self.title)])
   related_by_user = lambda self: Thing.objects.filter(user=self.user).exclude(pk=self.pk)

@@ -1,0 +1,20 @@
+<section class="events_box">
+  <h3 class="block_title">My Classes</h3>
+  {% if request.user.is_authenticated %}
+  <ul class="list-unstyled">
+    {% for session in user_sessions %}
+    <li>
+      <a href="{{ session.get_absolute_url }}"> {{ session.section.course }}</a> ({{ session.first_date|date:"F j" }})
+    </li>
+    {% endfor %}
+  </ul>
+  <div class="alert alert-warning">
+    After you pay for a class it should appear here. If it does not, please email
+    <a href="mailto:txrxlabs@gmail.com">txrxlabs@gmail.com</a>.
+  </div>
+  {% else %}
+  <div class="alert alert-warning">
+    Please <a href="/accounts/login/">Log in</a> to view your classes. If you do not have an account, one will be made when you register and login information will be sent to the email address associated with your PayPal account. If you have questions please email <a href="mailto:txrxlabs@gmail.com">txrxlabs@gmail.com</a>.
+  </div>
+  {% endif %}
+</section>

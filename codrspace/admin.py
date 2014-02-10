@@ -6,7 +6,7 @@ from sorl.thumbnail import get_thumbnail
 from db.admin import SlugModelAdmin, OrderedModelAdmin, OrderedModelInline
 from db.forms import StaffMemberForm
 
-from .models import Post, Photo, SetPhoto, PhotoSet, PhotoSetConnection, MiscFile, TaggedPhoto
+from .models import Post, Photo, SetPhoto, PhotoSet, PhotoSetConnection, MiscFile, TaggedPhoto, PressItem
 
 class PostAdmin(admin.ModelAdmin):
   list_display = ('__unicode__','user','featured','publish_dt','status')
@@ -57,3 +57,4 @@ admin.site.register(Photo,PhotoAdmin)
 admin.site.register(SetPhoto,OrderedModelAdmin)
 admin.site.register(PhotoSet,PhotoSetAdmin)
 admin.site.register(MiscFile)
+admin.site.register(PressItem)

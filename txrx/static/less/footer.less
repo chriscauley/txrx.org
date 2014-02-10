@@ -1,0 +1,19 @@
+footer {
+  border-top: @well-border 1px solid;
+  margin-top: 40px;
+  position: relative;
+  text-align: center;
+  .center, .left, .right { padding: 15px; }
+  .left, .right {
+    position: absolute;
+    top: 0;
+  }
+  .left { left: 0; }
+  .right { right: 0; }
+}
+
+@media (max-width: @screen-xs-max) {
+  footer {
+    .left, .right { position: static; }
+  }
+}

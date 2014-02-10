@@ -30,6 +30,7 @@ section { padding-bottom: 25px; }
   height: 3px;
   width: 100%;
 }
+.dropdown-menu { top: 75%; }
 
 /* txrx overrides */
 body { margin: 0 auto 50px; max-width: 1400px; }
@@ -42,8 +43,6 @@ header, #main {
   padding: 0 15px;
 }
 
-h1 { font-size: 24px; line-height: 24px; }
-
 h1.page_title {
   border-bottom: 2px solid;
   line-height: 37px;
@@ -51,7 +50,6 @@ h1.page_title {
   padding-right: 120px;
   position: relative;
   .calendar_widget {
-    font-size: 24px;
     position: absolute;
     top: 0;
     right: 0;
@@ -107,15 +105,14 @@ form label.required {
 }
 
 #bot_right,#mobileCart {
-  background: white;
   border: double 4px;
   bottom: 0px;
-  padding: 3px 6px;
+  padding: 6px 10px;
   position: fixed;
   z-index: 100;
 }
-#mobileCart { right: 0; }
-#bot_right { left: 0px; }
+#mobileCart { right: 0; margin: 0;}
+#bot_right { background: white; left: 0px; }
 
 /* tools */
 #labs {
@@ -209,8 +206,7 @@ label .help-text {
 .cartHeaders { display: none; }
 
 .checkout-box {
-  text-align: right;
-  padding-right: 30px;
+  text-align: center;
 }
 
 .itemContainer {
@@ -225,6 +221,7 @@ label .help-text {
 .itemName {
   padding-right: 15px;
   font-size: 12px;
+  b { font-size: 1.1em; }
 }
 
 .itemQuantity, .itemPrice {
@@ -232,6 +229,7 @@ label .help-text {
   padding-right: 20px;
 }
 .itemQuantity:before { content: "x"; }
+.simpleCart_finalTotal { font-size: 1.1em; font-weight: bold; }
 
 .itemRemove {
   font-size: 0;
@@ -263,7 +261,7 @@ label .help-text {
 }
 
 .recentAdd {
-  box-shadow: 0 0 5px #5F5;
+  box-shadow: inset 0 0 5px #3ac2f5, 0 0 5px #3ac2f5;
 }
 
 .RsvpLink {
@@ -395,33 +393,50 @@ h3.date {
 .calendar_widget {
   position: relative;
   .add_to_calendar {
-    .floatingBox;
     display:none;
-    font-size: 14px;
-    left: -300px;
-    min-height: 0;
-    overflow: hidden;
-    padding: 10px;
-    top: 100%;
-    width: 600px;
+    .inner {
+      .floatingBox;
+      font-size: 14px;
+      min-height: 0;
+      overflow: hidden;
+      padding: 10px;
+      right: 0;
+      top: 100%;
+      width: 350px;
+      z-index: 25;
+    }
     ul { padding: 0; }
-  }
-  .header {
-    border-bottom: 1px solid black;
-    display: inline-block;
-    margin-bottom: .5em;
-    padding-right: 10px;
-  }
-  ul {
-    list-style: none;
-    margin: 0;
-  }
-  .left, right {
-    float: left;
-    width: 50%;
+    h3 { text-transform: none; margin-bottom: 10px; }
+    .header {
+      border-bottom: 1px solid black;
+      display: inline-block;
+      margin-bottom: .5em;
+      padding-right: 10px;
+    }
+    ul {
+      list-style: none;
+      margin: 0;
+    }
+    .left {
+      float: left;
+      width: 50%;
+    }
+    .right {
+      float: right;
+      width: 46%;
+    }
+    .fixed_overlay {
+      background: #444;
+      background: fade(@gray-light,80%);
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 24;
+    }
   }
 }
-
 .course-detail {
   .left {
     position: relative;

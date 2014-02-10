@@ -37,10 +37,12 @@ def index(request,term_id=None):
   else:
     first_date = datetime.datetime.now()-datetime.timedelta(21)
     sessions = Session.objects.filter(first_date__gte=first_date).select_related(depth=3)
+  user_sessions = []
   if request.user.is_authenticated():
-    user_sessions = [s.id for s in sessions.filter(enrollment__user=request.user.id)]
+    user_sessions = sessions.filter(enrollment__user=request.user.id)
+    us_ids = [s.id for s in user_sessions]
     for session in sessions:
-      if session.id in user_sessions:
+      if session.id in us_ids:
         try:
           session.user_enrollment = session.enrollment_set.filter(user=request.user)[0]
         except IndexError:
@@ -64,6 +66,7 @@ def index(request,term_id=None):
     'filters': [filters['subject']],
     'term': term,
     'all_sessions_closed': all_sessions_closed,
+    'user_sessions': user_sessions,
     }
   return TemplateResponse(request,"course/classes.html",values)
 

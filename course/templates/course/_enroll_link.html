@@ -21,7 +21,7 @@
 <script>
   window.SESSIONS_ON_PAGE = window.SESSIONS_ON_PAGE || {};
   window.SESSIONS_ON_PAGE[{{ session.id }}] = {
-    'name': "{{ session.section.course }} ({{ session.first_date|date:"m/d/Y" }})",
+    'name': "<b>{{ session.section.course }}</b> {{ session.first_date|date:"m/d/Y" }}",
     'fee': "{{ session.section.fee }}",
   };
 </script>

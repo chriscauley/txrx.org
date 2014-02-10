@@ -251,7 +251,6 @@ class Setting(models.Model):
 
   objects = SettingManager()
 
-
 class Profile(models.Model):
   git_access_token = models.CharField(max_length=75, null=True)
   user = models.OneToOneField(User)
@@ -262,3 +261,11 @@ class Profile(models.Model):
     if self.meta:
       return simplejson.loads(self.meta)
     return ''
+
+class PressItem(models.Model):
+  title = models.CharField(max_length=64)
+  url = models.URLField(max_length=256)
+  publish_dt = models.DateField("Date")
+  __unicode__ = lambda self: self.title
+  class Meta:
+    ordering = ('-publish_dt',)

@@ -7,3 +7,23 @@
 {% block content %}
 <div id="flatpage">{{ flatpage.content|explosivo }}</div>
 {% endblock %}
+
+{% block side %}
+{% if request.path == "/about-us/" %}
+<section class="events_box">
+  <h3 class="block_title">Past Press</h3>
+  <ul class="list-unstyled">
+    {% for pressitem in pressitems %}
+    {% ifchanged pressitem.publish_dt.year %}
+    <li><b>{{ pressitem.publish_dt.year }}</b></li>
+    {% endifchanged %}
+    <li style="padding-bottom: 5px;">
+      <a href="{{ pressitem.url }}">{{ pressitem.title }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}

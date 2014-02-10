@@ -6,6 +6,7 @@ from tagging.models import Tag
 
 from event.models import EventOccurrence
 from course.models import ClassTime, Enrollment
+from codrspace.models import PressItem
 
 import datetime,time
 
@@ -19,6 +20,8 @@ def nav(request):
     {'name': 'About TX/RX', 'url': '/about-us/'},
     {'name': 'Bylaws', 'url': '/bylaws/'},
     {'name': 'Meeting Minutes', 'url': '/minutes/'},     
+    {'name': 'Google Groups (Public)', 'url': 'https://groups.google.com/forum/#!forum/txrxlabs'},
+    {'name': 'Google Groups (Members)', 'url': 'https://groups.google.com/forum/#!forum/txrxmembership'},
     ]
   _nav = [
     {"name": "Classes",
@@ -29,11 +32,11 @@ def nav(request):
      "sublinks": blog_sublinks if request.user.is_staff else [],
      },
     {'name': "Join us", "url": "/join-us/"},
-    {'name': "Location", "url": "/map/"},
+    {'name': "Contact", "url": "/map/"},
     {'name': "Events", "url": "/event/"},
-    {"name": "Info",
+    {"name": "About",
      "url": "/about-us/",
-     "sublinks": about_links,
+     "sublinks": about_links if request.user.is_authenticated() else [],
      },
     ]
   for _n in _nav:
@@ -61,6 +64,7 @@ def nav(request):
     all_ics = '%s/event/ics/all_events.ics'%settings.SITE_DOMAIN, #! move to event.context
     google_calendar_url = 'http://www.google.com/calendar/render?cid=', #! move to event.context
     all_classes_ics = '%s/classes/ics/all_classes.ics'%settings.SITE_DOMAIN, #! move to course.context
+    pressitems = PressItem.objects.all(),
     )
 
 def evaluations(request):
