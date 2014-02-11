@@ -16,20 +16,20 @@ Events at TX/RX
   <strong>{{ current_date|date:"F Y" }}</strong>
   <a class="right" href="{% url "event:index" next|date:"Y-m-d" %}">Next Month &raquo;</a>
 </div>
-<div id="calendar" style="margin-left: -35px;">
+<div id="calendar">
   <table>
     <tr style="font-size: 12px;text-align: center;">
       <td></td>
       <td></td>
       <td class="event">
         <p class="m">Monthly event</p>
-        <p class="b">Bi-Monthly event</p>
+      </td>
+      <td class="event">
+        <p class="c">Class session</p>
       </td>
       <td class="event">
         <p class="w">Weekly event</p>
-        <p class="t">Tri-Weekly event</p>
       </td>
-      <td class="event"><p class="c">Class session</p></td>
     </tr>
     {% for week in weeks %}
     <tr>
@@ -40,7 +40,7 @@ Events at TX/RX
           {% for occurrence in occurrences %}
           <p class="event">
             {% if occurrence.event %}{# actual event #}
-            <a class="{{ occurrence.event.repeat|slice:":1" }}" href="{{ occurrence.get_absolute_url }}">{{ occurrence.short_name }}</a>
+            <a class="{{ occurrence.event.repeat|slice:":1"|default_if_none:"n" }}" href="{{ occurrence.get_absolute_url }}">{{ occurrence.short_name }}</a>
             {% else %}{# course.short_name #}
             <a class="c" href="{{ occurrence.get_absolute_url }}">{{ occurrence.short_name }}</a>
             {% endif %}
