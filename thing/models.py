@@ -28,5 +28,9 @@ class Thing(UserModel,PhotosMixin,ToolsMixin):
   __unicode__ = lambda self: self.title
   get_absolute_url = lambda self: reverse('thing_detail',args=[self.id,slugify(self.title)])
   related_by_user = lambda self: Thing.objects.filter(user=self.user).exclude(pk=self.pk)
+  def get_parent_text(self):
+    if "thingiverse.com" in self.parent_link:
+      return "View on Thingiverse!"
+    return "View on %s"%(self.parent_link.split("//")[-1].split('/')[0].split('www.')[-1])
   class Meta:
     ordering = ('-publish_dt',)

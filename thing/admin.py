@@ -6,7 +6,7 @@ from tool.admin import TaggedToolInline
 
 class ThingAdmin(admin.ModelAdmin):
   inlines = [TaggedPhotoInline,TaggedToolInline]
-  raw_id_fields = ('user',)
+  raw_id_fields = ('user','parent')
   list_display = ('title','active','featured','_missing')
   list_editable = ('active','featured')
   filter_horizontal = ('materials',)

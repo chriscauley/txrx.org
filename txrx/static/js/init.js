@@ -26,4 +26,7 @@ $(function() {
       });
     }
   });
+  //$('a').bind('touchend', function(e) {
+  //  $(this).click();
+  //});
 });

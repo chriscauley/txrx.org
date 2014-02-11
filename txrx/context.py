@@ -24,6 +24,10 @@ def nav(request):
     {'name': 'Google Groups (Members)', 'url': 'https://groups.google.com/forum/#!forum/txrxmembership'},
     ]
   _nav = [
+    {"name": "About",
+     "url": "/about-us/",
+     "sublinks": about_links if request.user.is_authenticated() else [],
+     },
     {"name": "Classes",
      "url": "/classes/",
      },
@@ -31,13 +35,9 @@ def nav(request):
      "url": "/blog/",
      "sublinks": blog_sublinks if request.user.is_staff else [],
      },
+    {'name': "Events", "url": "/event/"},
     {'name': "Join us", "url": "/join-us/"},
     {'name': "Contact", "url": "/map/"},
-    {'name': "Events", "url": "/event/"},
-    {"name": "About",
-     "url": "/about-us/",
-     "sublinks": about_links if request.user.is_authenticated() else [],
-     },
     ]
   for _n in _nav:
     if request.path.startswith(_n['url']):
