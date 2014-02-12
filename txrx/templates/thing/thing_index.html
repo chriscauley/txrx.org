@@ -3,19 +3,21 @@
 
 {% block header_content %}Items recently made at TX/RX{% endblock %}
 
-{% block content %}
+{% block main %}
 <div class="thing_index">
   <div class="things">
     {% for thing in paginator.current_list %}
     {# this should probably be merged with similar thing on home #}
     {% thumbnail thing.first_photo|get_override:"square_crop" "300x300" crop="center" as im %}
-    <div class="thing thing{{ forloop.counter }}">
-      <a href="{{ thing.get_absolute_url }}" class="well">
+    <div class="thing thing{{ forloopcounter }} col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a href="{{ thing.get_absolute_url }}">
         <img src="{{ im.url }}" />
-        <div class="title">
-          {{ thing.title }}
+        <div class="hover">
+          <div class="title">
+            {{ thing.title }}
+            <div class="author"> by {{ thing.user }}</div>
+          </div>
         </div>
-        <div class="author"> by {{ thing.user }}</div>
       </a>
     </div>
     {% endthumbnail %}

@@ -1,4 +1,3 @@
-@screen-xs-max: 768px;
 .wmd-panel {margin: 0; }
 section { padding-bottom: 25px; }
 .comment:target > .comment_outer { background-color: @successBackground; }
@@ -20,28 +19,8 @@ section { padding-bottom: 25px; }
   padding: 10px 20px;
   text-transform: none;
 }
-/* bootstrap overrides */
-.navbar-brand { padding: 10px; }
-.navbar-collapse { max-height: none; }
-@media (max-width: @screen-xs-max) {
-  nav li { border-bottom: 1px solid rgba(0,0,0,0.1); }
-  nav > ul > li { border-top: 1px solid rgba(0,0,0,0.1); }
-}
-.navbar-nav > li.current a:after {
-  background: #ecedee;
-  content: "";
-  display: block;
-  height: 3px;
-  width: 100%;
-}
-.dropdown-menu { top: 75%; }
 
 /* txrx overrides */
-body { margin: 0 auto 50px; max-width: 1400px; }
-html, body { overflow-x: hidden; }
-#wrap { margin: 0 55px; }
-@media (max-width: @screen-sm-max) { #wrap { margin: 0 20px; } }
-@media (max-width: @screen-xs-max) { #wrap { margin: 0; } }
 
 header, #main {
   padding: 0 15px;
@@ -54,10 +33,12 @@ header, #main {
 
 h1.page_title {
   border-bottom: 2px solid;
+  font-weight: normal;
   line-height: 37px;
   margin-bottom: 15px;
   padding-right: 120px;
   position: relative;
+  //.navFont;
   .calendar_widget {
     position: absolute;
     top: 0;
@@ -67,9 +48,9 @@ h1.page_title {
 }
 
 h3.block_title {
-  font-weight: normal;
   margin: 0 15px 15px;
   text-transform: uppercase;
+  //.navFont;
 }
 
 #side {

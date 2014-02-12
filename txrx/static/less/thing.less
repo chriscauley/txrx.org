@@ -2,13 +2,24 @@
   .left, .right {
     float: left;
     height: 35px;
-    text-align: right;
   }
   .left {
+    text-align: right;
     width: 40%;
   }
   .right {
+    padding-left: 10px;
+    text-align: left;
     width: 60%;
   }
   .description { clear: both; padding-top: 15px; }
+}
+
+.things .thing {
+  .author {
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow-x: hidden;
+    white-space: nowrap;
+  }
 }

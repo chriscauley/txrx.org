@@ -1,0 +1,44 @@
+/* bootstrap overrides */
+.navbar-brand { padding: 0 10px 0 0; }
+.navbar-collapse { max-height: none; }
+@media (max-width: @screen-xs-max) {
+  nav li { border-bottom: 1px solid rgba(0,0,0,0.1); }
+  nav > ul > li { border-top: 1px solid rgba(0,0,0,0.1); }
+}
+@media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+  .navbar-default .navbar-nav > li > a { font-size: 13px; }
+}
+@media (min-width: @screen-md-min) {
+  nav {
+    margin-top: 5px;
+    padding-top: 25px;
+    position: relative;
+  }
+  .navbar-default .main-nav > li > a {
+    padding-top: 22px;
+    padding-bottom: 0;
+    //.navFont;
+  }
+  .navbar-default .navbar-right {
+    right: 0;
+    position: absolute;
+    top: 0;
+    > li > a { padding-top: 5px; padding-bottom: 0; }
+  }
+.dropdown-menu { top: 100%; }
+}
+.navbar-nav > li.current a:after {
+  background: #ecedee;
+  content: "";
+  display: block;
+  height: 2px;
+  width: 100%;
+}
+.dropdown-menu { top: 75%; }
+.navbar-nav { text-transform: uppercase; }
+.navbar-right {
+  overflow: visible;
+  text-transform: none;
+  white-space: nowrap;
+  width: 125px;
+}
