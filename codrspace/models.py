@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from django.template.defaultfilters import slugify
+from django.template.defaultfilters import slugify, striptags
 from django.utils.hashcompat import md5_constructor
 from django.utils.http import urlquote
 
@@ -191,7 +191,7 @@ class SetModel():
 from feed.models import FeedItemModel
 
 class Post(FeedItemModel,PhotosMixin):
-
+  feed_item_type = 'blog'
   STATUS_CHOICES = (
     ('draft', 'Draft'),
     ('published', 'Published'),
@@ -199,6 +199,8 @@ class Post(FeedItemModel,PhotosMixin):
 
   title = models.CharField(max_length=200, blank=True)
   content = models.TextField(blank=True)
+  short_content = models.TextField(null=True,blank=True)
+  get_short_content = lambda self: self.short_content or striptags(explosivo(self.content))
   slug = models.SlugField(max_length=75)
   status = models.CharField(max_length=30, choices=STATUS_CHOICES, default=0)
   publish_dt = models.DateTimeField("Publish On",null=True)
@@ -230,14 +232,14 @@ class Post(FeedItemModel,PhotosMixin):
   def get_absolute_url(self):
     return ("post_detail", [self.user.username, self.slug])
 
-  def update_feed(self):
+  """def update_feed(self):
     feed_item = FeedItem.get_for_object(self)
     feed_item.title = self.title
     feed_item.thumbnail = prep_thumbnail(self.photo.file)
     feed_item.publish_dt = self.publish_dt
     feed_item.item_type = 'blog'
     feed_item.user = self.user
-    feed_item.save()
+    feed_item.save()"""
 
 tagging.register(Post)
 

@@ -13,7 +13,6 @@
     {% for thing in things %}
     {% thumbnail thing.first_photo|get_override:"square_crop" "300x300" crop="center" as im %}
     <div class="thing thing{{ forloop.counter }} col-xs-6 col-md-4 col-lg-3 hidden246">
-{#{% if forloop.counter > 2 %} hidden-xs{% endif %}{% if forloop.counter > 4 %} hidden-sm{% endif %}{% if forloop.counter > 6 %} hidden-md{% endif %}#}
       <a href="{{ thing.get_absolute_url }}">
         <img src="{{ im.url }}" />
         <div class="hover">
@@ -27,20 +26,31 @@
     {% endthumbnail %}
     {% endfor %}
   </div>
-  <a class="ViewAll" href="{% url "thing_index" %}">View More Projects &raquo;</a>
+  <a class="ViewAll colored-link" href="{% url "thing_index" %}">View More Projects &raquo;</a>
 </section>
 <section class="recent_blogs row">
   <h3 class="block_title">Recent Blogs</h3>
   <div class="blogs">
     {% for post in posts %}
-    {% thumbnail post.photo|get_override:"landscape_crop" "300x200" crop="center" as im %}
-    <div class="blog_well col-sm-12 col-md-6 col-lg-4 hidden112">
+    {% thumbnail post.photo|get_override:"landscape_crop" "200x150" crop="center" as im %}
+    <div class="blog_well col-sm-12">
       <div class="well">
-        <a href="{{ post.get_absolute_url }}">
-          <img src="{{ im.url }}" width="300" height="200" />
-          <div class="title">{{ post }}</div>
-          <div class="date">{{ post.publish_dt|date:"F j, Y" }}</div>
+        <a href="{{ post.get_absolute_url }}" class="photo">
+          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
         </a>
+        <div class="details">
+          <div class="title">
+            <a href="{{ post.get_absolute_url }}">{{ post }}</a>
+          </div>
+          <div class="date">
+            <small><b>{{ post.publish_dt|date:"M j, Y" }}</b></small>
+            by <a href="{% url "post_list" post.user.username %}">{{ post.user }}</a>
+          </div>
+          <div class="text">
+            {{ post.get_short_content|truncatewords:50 }}
+          </div>
+          <a class="read_more colored-link" a href="{{ post.get_absolute_url }}">read more &gt;</a>
+        </div>
       </div>
     </div>
     {% endthumbnail %}

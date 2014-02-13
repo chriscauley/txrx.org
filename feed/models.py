@@ -76,7 +76,7 @@ class FeedItemModel(UserModel):
   """
   def save(self,*args,**kwargs):
     super(FeedItemModel,self).save(*args,**kwargs)
-    self.update_feed()
+    #self.update_feed()
   def update_feed(self):
     feed_item = FeedItem.get_for_object(self)
     feed_item.title = self.title
