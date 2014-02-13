@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load thumbnail crop_util short_codes%}
+{% load mptt_comments_tags %}
+{% load url from future %}
+
+{% block header %}{% endblock %}
+{% block title %}{{ thing }} by {{ thing.user }}{% endblock %}
+
+{% block main %}
+<div class="narrow_page">
+  <div class="col-sm-8">
+    <div class="thing_detail">
+      {% include "widgets/thing_slideshow.html" %}
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <section class="thing_details">
+      <h3 class="block_title">{{ thing }}</h3>
+      <div class="author">
+        by <a href="">{{ thing.user }}</a>
+      </div>
+      <div class="publish_dt"><small><b>{{ thing.publish_dt.date }}</b></small></div>
+      <div class="description">
+        {{ thing.description|public_explosivo }}
+      </div>
+      {% if thing.materials.all %}
+      <p>
+        <b>Material{{ thing.get_materials.all|pluralize:"s" }}:</b>
+        {{ thing.materials.all|join:", " }}
+      </p>
+      {% endif %}
+      {% if thing.get_tools %}
+      <p>
+        <b>Machine{{ thing.get_tools|pluralize:"s" }}:</b>
+        {% for tool in thing.get_tools %}
+        <a href="{{ tool.get_absolute_url }}">{{ tool }}</a>
+        {% endfor %}
+      </p>
+      {% endif %}
+      {% if thing.parent_link %}
+      <p>
+        <b>Reference:</b> <a href="{{ thing.parent_link }}">{{ thing.get_parent_text }}</a>
+      </p>
+      {% endif %}
+    </section>
+  </div>
+</div>
+<div class="col-xs-12">
+  {% display_comment_toplevel_for thing %}
+</div>
+{% endblock %}

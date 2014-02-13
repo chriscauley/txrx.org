@@ -1,4 +1,4 @@
-import os, re, uuid
+import os, re, uuid, datetime, random
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.cache import cache
@@ -15,7 +15,7 @@ from timezones.fields import TimeZoneField
 import tagging
 
 from db.models import SlugModel, OrderedModel, UserModel
-from codrspace.managers import SettingManager
+from .managers import SettingManager
 from .templatetags.short_codes import explosivo
 from instagram.models import InstagramPhoto
 from txrx.utils import cached_method, cached_property
@@ -274,3 +274,31 @@ class PressItem(models.Model):
   __unicode__ = lambda self: self.title
   class Meta:
     ordering = ('-publish_dt',)
+
+WEIGHT_CHOICES = zip(range(1,6),range(1,6))
+
+class BannerManager(models.Manager):
+  def get_random(self,*args,**kwargs):
+    today = datetime.date.today()
+    banners = self.filter(start_date__lte=today,end_date__gte=today,active=True)
+    choices = []
+    for i,banner in enumerate(banners):
+      choices += [i]*banner.weight
+    return banners[random.choice(choices)]
+
+class Banner(models.Model):
+  start_date = models.DateField(default=datetime.date.today)
+  end_date = models.DateField(blank=True)
+  name = models.CharField(max_length=64)
+  header = models.CharField(default="Featured Event",max_length=32)
+  active = models.BooleanField(default=True)
+  src = models.ImageField(upload_to="banners")
+  url = models.CharField(max_length=200)
+  weight = models.IntegerField(choices=WEIGHT_CHOICES)
+  objects = BannerManager()
+  __unicode__ = lambda self: self.name
+  def save(self,*args,**kwargs):
+    self.end_date = self.end_date or datetime.date(2099,1,1)
+    super(Banner,self).save(*args,**kwargs)
+  class Meta:
+    ordering = ('name',)

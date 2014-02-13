@@ -7,6 +7,14 @@
 {% block header %}{% endblock %}
 
 {% block content %}
+{% thumbnail banner.src "700x100" upscale="false" crop="noop" as im %}
+<section class="banner row">
+  {% if banner.header %}<h3 class="block_title">{{ banner.header }}</h3>{% endif %}
+  <div class="col-xs-12">
+    <center><a href="{{ banner.url }}"><img src="{{ im.url }}" /></a></center>
+  </div>
+</section>
+{% endthumbnail %}
 <section class="FeaturedThings row">
   <h3 class="block_title">Featured Projects</h3>
   <div class="things">

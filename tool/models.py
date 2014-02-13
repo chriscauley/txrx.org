@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.contenttypes import generic
+from django.core.urlresolvers import reverse
 
 from south.modelsinspector import add_introspection_rules
 from wmd.models import MarkDownField
@@ -27,8 +28,10 @@ class Tool(SlugModel,OrderedModel):
   model = models.CharField(max_length=32,null=True,blank=True)
   description = MarkDownField(blank=True,null=True)
   photo = models.ForeignKey(Photo,null=True,blank=True)
-  links = lambda self: self.toollink_set.all()
   est_price = models.FloatField(null=True,blank=True)
+
+  links = lambda self: self.toollink_set.all()
+  get_absolute_url = lambda self: reverse("tool_detail",args=[self.lab.slug,self.slug])
   tags = TagField()
   class Meta:
     ordering = ("order",)

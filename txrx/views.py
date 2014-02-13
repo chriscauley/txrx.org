@@ -12,7 +12,7 @@ from django.shortcuts import get_object_or_404
 from NextPlease import pagination
 
 from membership.models import Membership
-from codrspace.models import Post
+from codrspace.models import Post, Banner
 from thing.models import Thing
 
 import random, datetime
@@ -52,7 +52,8 @@ def index(request):
   things = list(Thing.objects.filter(featured=True)[:20])
   values = {
     'things': random.sample(things,min(len(things),8)),
-    'posts': posts[:3],
+    'posts': posts[:5],
+    'banner': Banner.objects.get_random(),
     }
   return TemplateResponse(request,"index.html",values)
 

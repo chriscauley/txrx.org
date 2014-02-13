@@ -1,6 +1,21 @@
 /* bootstrap overrides */
 .navbar-brand { padding: 0 10px 0 0; }
 .navbar-collapse { max-height: none; }
+.navbar-nav > li.current a:after {
+  background: #ecedee;
+  content: "";
+  display: block;
+  height: 2px;
+  width: 100%;
+}
+.dropdown-menu { top: 75%; }
+.navbar-nav { text-transform: uppercase; }
+.navbar-right {
+  overflow: visible;
+  text-transform: none;
+  white-space: nowrap;
+  width: 125px;
+}
 @media (max-width: @screen-xs-max) {
   nav li { border-bottom: 1px solid rgba(0,0,0,0.1); }
   nav > ul > li { border-top: 1px solid rgba(0,0,0,0.1); }
@@ -25,20 +40,6 @@
     top: 0;
     > li > a { padding-top: 5px; padding-bottom: 0; }
   }
-.dropdown-menu { top: 100%; }
+  .dropdown-menu { top: 100%; }
 }
-.navbar-nav > li.current a:after {
-  background: #ecedee;
-  content: "";
-  display: block;
-  height: 2px;
-  width: 100%;
-}
-.dropdown-menu { top: 75%; }
-.navbar-nav { text-transform: uppercase; }
-.navbar-right {
-  overflow: visible;
-  text-transform: none;
-  white-space: nowrap;
-  width: 125px;
-}
+@media (max-width: @screen-xs-max) { .navbar-right { width: 100%; } }
