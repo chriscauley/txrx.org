@@ -75,7 +75,8 @@ urlpatterns += patterns(
 # flat pages
 urlpatterns += patterns(
   '',
-  url(r'^(schoolbot/|map/|about-us/|bylaws/)$','django.contrib.flatpages.views.flatpage',name='map'),
+  url(r'^(about-us)/$','txrx.views.to_template'),
+  url(r'^(schoolbot/|map/|bylaws/)$','django.contrib.flatpages.views.flatpage',name='map'),
 )
 
 if settings.DEBUG:

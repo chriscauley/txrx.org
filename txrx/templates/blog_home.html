@@ -9,10 +9,9 @@
 
 {% block content %} 
 <div class="blog_home">
-  {% include "_paginator.html" %}
-  {% for post in paginator.current_list %}
-  {% include "_post_content.html" with truncate_posts="True" %}
-  {% endfor %}
+  <div class="recent_blogs">
+    {% include "_blog_list.html" with posts=paginator.current_list %}
+  </div>
   {% include "_paginator.html" %}
 </div>
 {% endblock %}

@@ -1,4 +1,7 @@
-.recent_blogs .blogs {
+.recent_blogs {
+  min-height: 0;
+  overflow: hidden;
+  .blogs {
   .well { position: relative; min-height: 160px; }
   .photo {
     left: 5px;
@@ -19,7 +22,7 @@
     right: 5px;
   }
 }
-
+}
 @media (max-width: @screen-sm-max) {
   .recent_blogs .blogs {
     .photo {

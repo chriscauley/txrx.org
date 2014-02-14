@@ -123,6 +123,7 @@ DEFAULT_FROM_EMAIL = "noreply@txrxlabs.org"
 SERVER_EMAIL = "noreply@txrxlabs.org"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
+PER_PAGE = 10
 NEW_STUDENT_PASSWORD = "I am a new student, reset my passwrod asap"
 
 for s_file in ['apps','local']:

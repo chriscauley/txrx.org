@@ -1,11 +1,14 @@
 {% if paginator.has_next or paginator.has_previous %}
-<div class="paginator">
-  {% if paginator.has_previous %}
-  <a class="left" href="?{{ paginator.previous_qs }}">&lt; Previous</a>
-  {% endif %}
-  Page {{ paginator.number }}
-  {% if paginator.has_next %}
-  <a class="right" href="?{{ paginator.next_qs }}">Next &gt;</a>
-  {% endif %}
-</div>
+<center>
+  <ul class="pagination">
+    <li{% if not paginator.has_previous %} class="disabled"{% endif %}>
+      <a href="?{{ paginator.previous_qs }}">&laquo;</a></li>
+    {% for num in paginator.page_range %}
+    <li{% if num == paginator.number %} class="active"{% endif %}>
+      <a href="?page={{ num }}">{{ num }}</a></li>
+    {% endfor %}
+    <li{% if not paginator.has_next %} class="disabled"{% endif %}>
+      <a href="?{{ paginator.next_qs }}">&raquo;</a></li>
+  </ul>
+</center>
 {% endif %}

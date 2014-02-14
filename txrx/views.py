@@ -61,9 +61,12 @@ def index(request):
 def blog_home(request):
   posts = Post.objects.filter(status="published",publish_dt__lte=datetime.datetime.now())
   values = {
-    'posts': posts,
+    "posts": posts,
     }
   return TemplateResponse(request,"blog_home.html",values)
 
 def intentional_500(request):
   arst
+
+def to_template(request,template_name):
+  return TemplateResponse(request,"flatpages/{}.html".format(template_name),{})

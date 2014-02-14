@@ -70,6 +70,15 @@ h3.block_title {
   max-width: 100%;
 }
 
+#flatpage {
+  h3.block_title {
+    margin: 0;
+  }
+  .well {
+    > :last-child { margin-bottom: 0; }
+  }
+}
+
 #memberships {
   text-align: center;
   .membership {
@@ -512,3 +521,5 @@ p.error { color: red; } /* currently only used on login form */
 ul.errorlist { color: red; }
 
 .btn.disabled { color: @gray-light; }
+
+.pagination { display: inline-block; }

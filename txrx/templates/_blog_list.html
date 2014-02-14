@@ -1,0 +1,29 @@
+{% load url from future %}
+{% load thumbnail crop_util %}
+
+<div class="blogs">
+  {% for post in posts %}
+  {% thumbnail post.photo|get_override:"landscape_crop" "200x150" crop="center" as im %}
+  <div class="blog_well col-sm-12">
+    <div class="well">
+      <a href="{{ post.get_absolute_url }}" class="photo">
+        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+      </a>
+      <div class="details">
+        <div class="title">
+          <a href="{{ post.get_absolute_url }}">{{ post }}</a>
+        </div>
+        <div class="date">
+          <small><b>{{ post.publish_dt|date:"M j, Y" }}</b></small>
+          by <a href="{% url "post_list" post.user.username %}">{{ post.user }}</a>
+        </div>
+        <div class="text">
+          {{ post.get_short_content|truncatewords:50 }}
+        </div>
+        <a class="read_more colored-link" a href="{{ post.get_absolute_url }}">read more &gt;</a>
+      </div>
+    </div>
+  </div>
+  {% endthumbnail %}
+  {% endfor %}
+</div>
