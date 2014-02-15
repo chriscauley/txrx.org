@@ -16,10 +16,6 @@ from codrspace.forms import FeedBackForm
 
 import datetime, difflib
 
-#not currently in use, but will be eventually
-def index(request, template_name="home.html"):
-  return TemplateResponse(request, template_name)
-
 def post_detail(request, username, slug, template_name="post_detail.html"):
   user = get_object_or_404(User, username=username)
 

@@ -3,7 +3,8 @@
 
 <div class="blogs">
   {% for post in posts %}
-  {% thumbnail post.photo|get_override:"landscape_crop" "200x150" crop="center" as im %}
+  {% if post.status != "deleted" %}
+  {% thumbnail post.first_photo|get_override:"landscape_crop" "200x150" crop="center" as im %}
   <div class="blog_well col-sm-12">
     <div class="well">
       <a href="{{ post.get_absolute_url }}" class="photo">
@@ -12,6 +13,9 @@
       <div class="details">
         <div class="title">
           <a href="{{ post.get_absolute_url }}">{{ post }}</a>
+          {% if request.user.is_superuser or request.user == post.user %}
+          <a href="{% url "edit" post.pk %}" class="edit"><span class="glyphicon glyphicon-edit"></span></a>
+          {% endif %}
         </div>
         <div class="date">
           <small><b>{{ post.publish_dt|date:"M j, Y" }}</b></small>
@@ -25,5 +29,6 @@
     </div>
   </div>
   {% endthumbnail %}
+  {% endif %}
   {% endfor %}
 </div>

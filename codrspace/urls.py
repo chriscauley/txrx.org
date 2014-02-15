@@ -13,7 +13,6 @@ site_maps = {
 
 urlpatterns = patterns(
   'codrspace.views',
-  url(r'^$', 'index', name="homepage"),
 
   url(r'^admin/add/$', 'edit', name="add"),
   url(r'^admin/edit/(?P<pk>\d+)/$', 'edit', name="edit"),

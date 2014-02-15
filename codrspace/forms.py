@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib import admin
-admin.autodiscover()
 from django.contrib.admin.widgets import ForeignKeyRawIdWidget, AdminSplitDateTime
 from django import forms
 
@@ -13,7 +12,6 @@ from tagging.forms import TagField
 from tagging.models import Tag
 
 from wmd.widgets import MarkDownInput
-
 
 class TaggedModelForm(forms.ModelForm):
   """Provides an easy mixin for adding tags using django-tagging"""

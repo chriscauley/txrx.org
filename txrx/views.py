@@ -1,20 +1,16 @@
-from django.shortcuts import render_to_response
-from django.template.loader import render_to_string
-from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse, Http404
-from django.contrib.auth.models import User
 from django.conf import settings
-from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
-from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import get_object_or_404
-
-from NextPlease import pagination
+from django.contrib.auth.models import User
+from django.db.models import Count
+from django.template.response import TemplateResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 
 from membership.models import Membership
 from codrspace.models import Post, Banner
 from thing.models import Thing
 
+from NextPlease import pagination
+from tagging.models import Tag
 import random, datetime
 
 def members(request,username=None):
@@ -60,8 +56,11 @@ def index(request):
 @pagination("posts")
 def blog_home(request):
   posts = Post.objects.filter(status="published",publish_dt__lte=datetime.datetime.now())
+  _t = Tag.objects.cloud_for_model(Post)
+  tags = sorted([(t,t.count) for t in _t],key=lambda t:-t[1])
   values = {
     "posts": posts,
+    "post_tags": tags,
     }
   return TemplateResponse(request,"blog_home.html",values)
 

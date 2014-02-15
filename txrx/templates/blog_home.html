@@ -1,17 +1,27 @@
 {% extends "base.html" %}
-
-{% load codrspace_tags %}
-{% load cache %}
-
+{% load url from future %}
+{% load tagging_tags %}
 {% block title %}{{ SITE_TAGLINE }}{% endblock %}
 
 {% block extra_head %}{% endblock %}
 
 {% block content %} 
 <div class="blog_home">
-  <div class="recent_blogs">
+  <div class="BlogList row">
     {% include "_blog_list.html" with posts=paginator.current_list %}
   </div>
   {% include "_paginator.html" %}
 </div>
+{% endblock %}
+
+{% block side %}
+<section>
+  <h3 class="block_title">Tags</h3>
+  <div class="tags">
+    {% for tag, count in post_tags %}
+    <div>
+      <a href="{% url "posts_by_tag" tag %}">{{tag.name}} ({{count}})</a>
+    </div>
+    {% endfor %}
+  </div>
 {% endblock %}

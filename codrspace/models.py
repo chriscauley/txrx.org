@@ -210,6 +210,11 @@ class Post(FeedItemModel,PhotosMixin):
   featured = models.BooleanField(default=False,help_text=_h)
   photo = models.ForeignKey("Photo",null=True,blank=True)
   description = property(lambda self: explosivo(self.content))
+  objects = models.Manager()
+
+  @cached_property
+  def first_photo(self):
+    return self.photo or super(Post,self).first_photo
 
   class Meta:
     unique_together = ("slug", "user")

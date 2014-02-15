@@ -7,11 +7,14 @@ from db.admin import SlugModelAdmin, OrderedModelAdmin, OrderedModelInline
 from db.forms import StaffMemberForm
 
 from .models import Post, Photo, SetPhoto, PhotoSet, PhotoSetConnection, MiscFile, TaggedPhoto, PressItem, Banner
+from .forms import PostForm
 
 class PostAdmin(admin.ModelAdmin):
+  form = PostForm
   list_display = ('__unicode__','user','featured','publish_dt','status')
   list_editable = ('featured','status')
   search_fields = ('content',)
+  raw_id_fields = ('photo','user')
 
 class PhotoAdmin(CropAdmin):
   form = StaffMemberForm

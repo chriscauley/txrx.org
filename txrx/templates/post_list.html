@@ -3,54 +3,17 @@
 {% load short_codes codrspace_tags txrx_tags %}
 
 {% block title %}Latest {{ post_type }} by {{ username }}{% endblock %}
+{% block header_content %}Latest {{ post_type }} by {{ username }}{% endblock %}
 
 {% block extra_head %}
 <link rel="alternate" type="application/rss+xml" href="{% url posts_feed username %}" title="TX/RX Labs: Posts by {{ username }}">
 {% endblock %}
 
-{% block nav %}
-    {% include "_nav.html" with page="post_list" %}
-{% endblock %}
-
-{% block header %}{% endblock %}
 
 {% block content %}
 <div id="post-list-page">
-  <div class="row">
-    <div class="page-header">
-      <h1>
-        {% if user_settings.blog_title %}
-        {{ user_settings.blog_title|striptags }}
-        {% else %}
-        {{ SITE_NAME }}
-        {% endif %}
-
-        -
-
-        {% if user_settings.blog_tagline %}
-        {{ user_settings.blog_tagline|striptags }}
-        {% else %}
-        Latest {{ post_type }} by {{ username }}
-        {% endif %}
-      </h1>
-    </div>
-
-    {% for post in posts %}
-    {% if post.status != "deleted" %}
-    {% include "_post_content.html" with post=post %}
-    {% endif %}
-    {% empty %}
-    {% if username == user.username %}
-    <div id="no-posts-message">
-      <p>A little empty ...</p> 
-      <p><a href="{% url add %}">Let's add some posts!</a></p>
-    </div>
-    {% else %}
-    <div id="no-posts-message">
-      <p>This person hasn't posted yet :(</p>
-    </div>                
-    {% endif %}
-    {% endfor %}
+  <div class="BlogList row">
+    {% include "_blog_list.html" %}
   </div>
 </div>
 <div id="popover-content">
