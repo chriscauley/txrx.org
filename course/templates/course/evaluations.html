@@ -8,7 +8,11 @@
 <ul>
   {% for enrollment in pending_evaluations %}
   <li>
-    <a href="{% url "course:evaluation_detail" enrollment.id %}">{{ enrollment.session }}</a>
+    {{ enrollment.session }}
+    <a class="btn btn-success" href="{% url "course:evaluation_detail" enrollment.id %}">
+      Evaluate</a>
+    <a class="btn btn-danger" href="{% url "course:evaluation_refuse" enrollment.id %}">
+      Decline Evaluation</a>
   </li>
   {% empty%}
   <li>You have no pending evaluations</li>

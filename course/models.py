@@ -290,6 +290,5 @@ class Evaluation(UserModel):
 
   class Meta:
     ordering = ('-datetime',)
-  
 
 from .listeners import *

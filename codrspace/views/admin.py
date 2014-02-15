@@ -26,7 +26,7 @@ def delete(request, pk=0, template_name="delete.html"):
             post.status = 'deleted'
             post.save()
 
-            messages.info(request, 'Post deleted', extra_tags='alert-success')
+            messages.success(request, 'Post deleted')
 
             return HttpResponseRedirect('post_list', args=[user.username])
 
@@ -54,7 +54,7 @@ def edit(request, pk=0, template_name="edit.html"):
     form = PostForm(request.POST or None, **kwargs)
     if request.POST and form.is_valid():
         post = form.save()
-        messages.info(request,'Edited post "%s".' % post,extra_tags='alert-success')
+        messages.success(request,'Edited post "%s".' % post)
         return HttpResponseRedirect("/blog/admin/edit/%s/"%post.id)
 
     values = {

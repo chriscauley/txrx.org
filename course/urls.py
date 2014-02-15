@@ -9,6 +9,7 @@ urlpatterns = patterns(
 
   url(r'^evaluations/$','evaluation.index',name='evaluation_index'),
   url(r'^evaluation/(\d+)/$','evaluation.detail',name='evaluation_detail'),
+  url(r'^refuse_evaluation/(\d+)/$','evaluation.refuse',name='evaluation_refuse'),
   url(r'^instructor_evaluations/(\d+)/$','evaluation.instructor_detail',name='instructor_evaluations'),
   url(r'^debug/(?P<id>\d+)/$', 'debug_parsing',name='debug_parsing'),
 

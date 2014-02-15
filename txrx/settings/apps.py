@@ -1,5 +1,5 @@
 INSTALLED_APPS = (
-  'suit',
+  #'suit',
   'django.contrib.auth',
   'django.contrib.contenttypes',
   'django.contrib.sessions',

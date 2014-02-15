@@ -32,6 +32,14 @@ def detail(request,enrollment_id):
   return TemplateResponse(request,"course/evaluation_form.html",values)
 
 @login_required
+def refuse(request,enrollment_id):
+  enrollment = get_object_or_404(Enrollment,pk=enrollment_id,user=request.user)
+  enrollment.evaluated = True
+  enrollment.save()
+  messages.success(request,"You have opted not to evaluate a class.")
+  return HttpResponseRedirect(reverse("course:evaluation_index"))
+
+@login_required
 def instructor_detail(request,instructor_id=None):
   if not request.user.is_staff or (not instructor_id and not request.user.is_superuser):
     return HttpResponseNotAllowed()
