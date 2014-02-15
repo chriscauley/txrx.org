@@ -1,12 +1,13 @@
 {% if form.errors %}
-<div class="alert alert-error">
-    <a class="close" data-dismiss="alert">×</a>
-    {% for field in form %}
-        {% if field.errors %}
-            {% for error in field.errors %}
-                <div>{{ field.label }} Field &ndash; {{ error|lower|capfirst }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endfor %}
+<div class="alert alert-danger">
+  <a class="close" data-dismiss="alert">×</a>
+  <big><b>Please fix the following errors:</b></big>
+  {% for field in form %}
+  {% if field.errors %}
+  {% for error in field.errors %}
+  <div>{{ field.label }} Field &ndash; {{ error|lower|capfirst }}</div>
+  {% endfor %}
+  {% endif %}
+  {% endfor %}
 </div>
 {% endif %}

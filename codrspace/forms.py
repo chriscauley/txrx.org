@@ -6,7 +6,7 @@ from django import forms
 from codrspace.models import Post, Photo, Setting
 from codrspace.utils import localize_date
 
-from datetime import datetime
+import datetime
 
 from tagging.forms import TagField
 from tagging.models import Tag
@@ -40,23 +40,15 @@ class PostForm(TaggedModelForm):
 
   def clean_slug(self):
     slug = self.cleaned_data['slug']
-    count = Post.objects.filter(slug=slug, user=self.user).count()
-
-    if count > 0:
-      if self.instance:
-        posts = Post.objects.filter(slug=slug, user=self.user)
-        for post in posts:
-          if post.pk == self.instance.pk:
-            return slug
-
-      msg = 'You already have a post with this slug'
-      raise forms.ValidationError(msg)
+    if self.instance:
+      if Post.objects.filter(slug=slug, user=self.user).exclude(pk=self.instance.pk).count():
+        raise forms.ValidationError('You already have a post with this slug')
 
     return slug
 
   def save(self,*args,**kwargs):
     if getattr(self,'user',None):
-      self.instance.user = self.user
+      self.instance.user = self.instance.user or self.user
     return super(PostForm,self).save(*args,**kwargs)
 
   def __init__(self, *args, **kwargs):
@@ -64,6 +56,9 @@ class PostForm(TaggedModelForm):
     # localized form
     self.user = None
     self.timezone = None
+    if 'instance' in kwargs:
+      kwargs['initial'] = kwargs.pop('initial',{})
+      kwargs['initial']['publish_dt'] = kwargs['instance'].publish_dt
 
     if 'user' in kwargs:
       self.user = kwargs.pop('user', None)

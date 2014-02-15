@@ -3,16 +3,19 @@
 
 {% block title %}{% if post %}Edit{% else %}Add{% endif %} Post - {% firstof post.title "Untitled" %}{% endblock %}
 
+{% block header_content %}{% if post %}Edit{% else %}Add{% endif %} Post - {% firstof post.title "Untitled" %}{% endblock %}
+
 {% block content %}
-<form action="" method="POST" enctype="multipart/form-data">
+<form action="" method="POST" enctype="multipart/form-data" role="form">
   {% include "_form_messages.html" with form=form %}
   {% csrf_token %}
   <div class="form-vertical">
     {% if post %}
-    <p><a href="{% url "post_detail" user.username post.slug %}" target="_new">View this post <i class="icon-arrow-right"></i></a></p>
+    <p><a href="{% url "post_detail" user.username post.slug %}" target="_new">
+        View this post <span class="glyphicon glyphicon-chevron-right"></span></a></p>
     {% endif %}
     {% for field in form %}
-    <div id="{{ field.name }}" class="control-group">
+    <div id="{{ field.name }}" class="form-group">
       <label for="id_{{ field.name }}">
         <b>{{ field.label }}</b>
       </label>
