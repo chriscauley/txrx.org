@@ -7,7 +7,7 @@
   <h1>{{ membership.name }}</h1>
   <ol class="feed">{% for profile in membership.profiles %}
     <li>
-      <div class="img"><img src="{{ profile|thumbnail:"150x200" }}" /></div>
+      {# <div class="img"><img src="{{ profile|thumbnail:"150x200" }}" /></div> #}
       <div class="details">
 	<h2>{{ profile.name }}</h2>
 	<div class="descripiton">

@@ -36,7 +36,7 @@ def nav(request):
      "sublinks": blog_sublinks if request.user.is_staff else [],
      },
     {'name': "Calendar", "url": "/event/"},
-    {'name': "Facility", "url": "/facility/"},
+    #{'name': "Facility", "url": "/facility/"},
     {'name': "Membership", "url": "/join-us/"},
     {'name': "Contact", "url": "/map/"},
     ]

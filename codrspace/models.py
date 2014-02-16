@@ -286,6 +286,8 @@ class BannerManager(models.Manager):
   def get_random(self,*args,**kwargs):
     today = datetime.date.today()
     banners = self.filter(start_date__lte=today,end_date__gte=today,active=True)
+    if not banners:
+      return
     choices = []
     for i,banner in enumerate(banners):
       choices += [i]*banner.weight
