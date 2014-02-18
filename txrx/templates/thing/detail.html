@@ -17,7 +17,7 @@
     <section class="thing_details">
       <h3 class="block_title">{{ thing }}</h3>
       <div class="author">
-        by <a href="">{{ thing.user }}</a>
+        by {{ thing.user }}
       </div>
       <div class="publish_dt"><small><b>{{ thing.publish_dt.date }}</b></small></div>
       <div class="description">
@@ -33,7 +33,7 @@
       <p>
         <b>Machine{{ thing.get_tools|pluralize:"s" }}:</b>
         {% for tool in thing.get_tools %}
-        <a href="{{ tool.get_absolute_url }}">{{ tool }}</a>
+	{{ tool }}
         {% endfor %}
       </p>
       {% endif %}

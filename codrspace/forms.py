@@ -56,7 +56,7 @@ class PostForm(TaggedModelForm):
     # localized form
     self.user = None
     self.timezone = None
-    if 'instance' in kwargs:
+    if kwargs.get('instance',None):
       kwargs['initial'] = kwargs.pop('initial',{})
       kwargs['initial']['publish_dt'] = kwargs['instance'].publish_dt
 

@@ -113,7 +113,7 @@ class Session(FeedItemModel,PhotosMixin):
   description = property(lambda self: self.section.description)
   @cached_property
   def first_photo(self):
-    return (self.get_photos() or [None])[0]
+    return (self.get_photos() or [super(Session,self).first_photo])[0]
   @cached_method
   def get_photos(self):
     return self._get_photos() or self.section.course.get_photos()

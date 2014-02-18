@@ -7,11 +7,17 @@ default_theme = getattr(settings,"DEFAULT_THEME","default")
 class Theme(object):
   def process_response(self,request,response):
     if getattr(request,'theme',None):
-      response.set_cookie('THEME',request.theme)
+      try:
+        response.set_cookie('THEME',request.theme)
+      except UnicodeEncodeError:
+        pass
     return response
 
   def process_template_response (self, request, response):
-    response.set_cookie('THEME',request.theme)
+    try:
+      response.set_cookie('THEME',request.theme)
+    except UnicodeEncodeError:
+      pass
     return response
     
   def process_request (self, request):
