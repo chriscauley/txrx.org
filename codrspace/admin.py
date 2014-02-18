@@ -6,7 +6,7 @@ from sorl.thumbnail import get_thumbnail
 from db.admin import SlugModelAdmin, OrderedModelAdmin, OrderedModelInline
 from db.forms import StaffMemberForm
 
-from .models import Post, Photo, SetPhoto, PhotoSet, PhotoSetConnection, MiscFile, TaggedPhoto, PressItem, Banner
+from .models import Post, Photo, SetPhoto, PhotoSet, PhotoSetConnection, MiscFile, TaggedPhoto, PressItem, Banner, TaggedFile
 from .forms import PostForm
 
 class PostAdmin(admin.ModelAdmin):
@@ -46,6 +46,11 @@ class PhotoSetConnectionInline(GenericTabularInline):
 class TaggedPhotoInline(GenericTabularInline):
   model = TaggedPhoto
   raw_id_fields = ('photo',)
+  extra = 0
+
+class TaggedFileInline(GenericTabularInline):
+  model = TaggedFile
+  raw_id_fields = ('file',)
   extra = 0
 
 class PhotoSetAdmin(SlugModelAdmin):

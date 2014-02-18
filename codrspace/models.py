@@ -158,6 +158,30 @@ class PhotosMixin():
     return list(Photo.objects.filter(taggedphoto__content_type_id=self._ct_id,
                                      taggedphoto__object_id=self.id).order_by("taggedphoto__order"))
 
+class FilesMixin():
+  @cached_property
+  def first_file(self):
+    try:
+      return self.get_files()[0]
+    except IndexError:
+      return File.objects.get(pk=144)
+  @cached_property
+  def _ct_id(self):
+    return ContentType.objects.get_for_model(self.__class__).id
+  @cached_method
+  def get_files(self):
+    return self._get_files()
+  def _get_files(self):
+    return list(File.objects.filter(taggedfile__content_type_id=self._ct_id,
+                                     taggedfile__object_id=self.id).order_by("taggedfile__order"))
+
+class TaggedFile(models.Model):
+  file = models.ForeignKey(MiscFile)
+  content_type = models.ForeignKey("contenttypes.ContentType")
+  object_id = models.IntegerField()
+  content_object = generic.GenericForeignKey('content_type', 'object_id')
+  order = models.IntegerField(default=9999)
+
 class SetModel():
   """ A model that has a PhotoSetConnection attached to it. """
   photoset = None
