@@ -39,6 +39,7 @@ Events at TX/RX
           <div class="day">{{ day }}</div>
           {% for occurrence in occurrences %}
           <p class="event">
+            <b>{{ occurrence.start|date:"f a" }}</b>
             {% if occurrence.event %}{# actual event #}
             <a class="{{ occurrence.event.repeat|slice:":1"|default_if_none:"n" }}" href="{{ occurrence.get_absolute_url }}">{{ occurrence.short_name }}</a>
             {% else %}{# course.short_name #}
