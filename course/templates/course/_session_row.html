@@ -5,7 +5,7 @@
     {% if not session.course.closed %}data-open{% endif %}
     data-date="{{ session.starttime|date:"Ymd" }}">
   <a href="{% url "course:detail" session.slug %}" class="picture">
-    {% thumbnail session.first_photo|get_override:"landscape_crop" "120x80" crop="center" as im %}
+    {% thumbnail session.first_photo|get_override:"landscape_crop" "298x199" crop="center" as im %}
     <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
     {% endthumbnail %}
   </a>
