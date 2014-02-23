@@ -1,5 +1,5 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-if pidof uwsgi>/dev/null
+if pidof uwsgi-core
 then
     kill -HUP `cat /tmp/uwsgi.pid`
     echo "uwsgi reset"
