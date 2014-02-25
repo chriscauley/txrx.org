@@ -145,5 +145,5 @@ def rsvp(request,session_pk):
       m += "<br /> <b>This event is now full!</b>"
   else:
     q = 1
-    m = "You have RSVP'd for this event If you can't make it, please come back and unenroll."
+    m = "You have RSVP'd for this event. If you can't make it, please come back and unenroll."
   return HttpResponse(simplejson.dumps([q,m,session.full]))
