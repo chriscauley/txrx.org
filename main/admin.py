@@ -31,11 +31,10 @@ class FlatPageAdmin(FlatPageAdmin):
 class UserMembershipInline(admin.StackedInline):
   extra = 0
   has_add_permission = lambda self,request: False
-  has_delete_permission = lambda self,request,obj: False
+  has_delete_permission = lambda self,*args: False
   model = UserMembership
 
 class UserAdmin(UserAdmin):
-  has_delete_permission = lambda self,request,obj: request.user.is_superuser
   inlines = [UserMembershipInline]
 
 admin.site.register(FlatPage,FlatPageAdmin)
