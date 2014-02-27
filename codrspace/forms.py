@@ -36,7 +36,7 @@ class PostForm(TaggedModelForm):
   photo = forms.ModelChoiceField(Photo.objects.all(),required=False)
   class Meta:
     model = Post
-    fields = ('title','slug','content','publish_dt','tags','status','photo')
+    fields = ('title','slug','content','short_content','publish_dt','tags','status','photo')
 
   def clean_slug(self):
     slug = self.cleaned_data['slug']

@@ -9,8 +9,14 @@ from db.forms import StaffMemberForm
 from .models import Post, Photo, SetPhoto, PhotoSet, PhotoSetConnection, MiscFile, TaggedPhoto, PressItem, Banner, TaggedFile
 from .forms import PostForm
 
+class PostAdminForm(PostForm):
+  """ Just like post form, but with user """
+  class Meta:
+    model = Post
+    fields = ('user','title','slug','content','short_content','publish_dt','tags','status','photo')
+
 class PostAdmin(admin.ModelAdmin):
-  form = PostForm
+  form = PostAdminForm
   list_display = ('__unicode__','user','featured','publish_dt','status')
   list_editable = ('featured','status')
   search_fields = ('content',)
