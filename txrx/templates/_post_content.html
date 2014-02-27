@@ -13,9 +13,8 @@
   <span class="label label-{% if post.status == 'published' %}success{% else %}warning{% endif %}">{{ post.status }}</span>
   {% endif %}
   by <a href="{% url "post_list" post.user.username %}" rel="popover" data-original-title="{{ post.user.username }}">{{ post.user.username }}</a> {% if post.status == 'published' %}on {{ post.publish_dt|localize:user }}{% endif %}
-  {% if post.authr == user %}
-  <i class="icon-pencil"></i> <a href="{% url "edit" post.pk %}">edit</a>
-  <i class="icon-trash"></i> <a href="{% url "delete" post.pk %}">delete</a>
+  {% if request.user.is_superuser or request.user == post.user %}
+  <a href="{% url "edit" post.pk %}" class="edit"><span class="glyphicon glyphicon-edit"></span></a>
   {% endif %}
 </div>
 
