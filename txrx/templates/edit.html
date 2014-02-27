@@ -11,7 +11,7 @@
   {% csrf_token %}
   <div class="form-vertical">
     {% if post %}
-    <p><a href="{% url "post_detail" user.username post.slug %}" target="_new">
+    <p><a href="{% url "post_detail" post.user.username post.slug %}" target="_new">
         View this post <span class="glyphicon glyphicon-chevron-right"></span></a></p>
     {% endif %}
     {% for field in form %}

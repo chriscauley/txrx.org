@@ -6,7 +6,7 @@ from sorl.thumbnail import ImageField
 
 from db.models import UserModel
 from codrspace.models import Photo
-from course.models import Session, Term
+from course.models import Session, Term, Course
 from txrx.utils import cached_method, cached_property
 from project.models import Project
 
@@ -180,5 +180,10 @@ class Survey(models.Model):
   skills = models.TextField(blank=True)
   expertise = models.TextField(blank=True)
   questions = models.TextField(blank=True)
+
+class NotifyCourse(UserModel):
+  course = models.ForeignKey(Course)
+  class Meta:
+    unique_together = ('course','user')
 
 from .listeners import *

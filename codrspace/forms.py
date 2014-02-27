@@ -43,8 +43,13 @@ class PostForm(TaggedModelForm):
     if self.instance:
       if Post.objects.filter(slug=slug, user=self.user).exclude(pk=self.instance.pk).count():
         raise forms.ValidationError('You already have a post with this slug')
-
     return slug
+
+  def clean_tags(self):
+    tags = self.cleaned_data['tags']
+    if not ',' in tags:
+      tags = tags + ','
+    return tags
 
   def save(self,*args,**kwargs):
     if getattr(self,'user',None):
