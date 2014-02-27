@@ -164,7 +164,7 @@ class FilesMixin():
     try:
       return self.get_files()[0]
     except IndexError:
-      return File.objects.get(pk=144)
+      return MiscFile.objects.get(pk=144)
   @cached_property
   def _ct_id(self):
     return ContentType.objects.get_for_model(self.__class__).id
@@ -172,7 +172,7 @@ class FilesMixin():
   def get_files(self):
     return self._get_files()
   def _get_files(self):
-    return list(File.objects.filter(taggedfile__content_type_id=self._ct_id,
+    return list(MiscFile.objects.filter(taggedfile__content_type_id=self._ct_id,
                                      taggedfile__object_id=self.id).order_by("taggedfile__order"))
 
 class TaggedFile(models.Model):

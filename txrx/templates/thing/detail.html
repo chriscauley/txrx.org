@@ -33,13 +33,21 @@
       <p>
         <b>Machine{{ thing.get_tools|pluralize:"s" }}:</b>
         {% for tool in thing.get_tools %}
-	{{ tool }}
+	{{ tool }}{% if not forloop.last %}, {% endif %}
         {% endfor %}
       </p>
       {% endif %}
       {% if thing.parent_link %}
       <p>
         <b>Reference:</b> <a href="{{ thing.parent_link }}">{{ thing.get_parent_text }}</a>
+      </p>
+      {% endif %}
+      {% if thing.get_files %}
+      <p>
+        <b>File{{ thing.get_files|pluralize:"s" }}:</b><br />
+        {% for file in thing.get_files %}
+	<a href="{{ file.file.url }}" target="_blank">{{ file }}</a>{% if not forloop.last %}<br /> {% endif %}
+        {% endfor %}
       </p>
       {% endif %}
     </section>

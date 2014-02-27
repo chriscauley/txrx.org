@@ -3,7 +3,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 
 from db.models import UserModel
-from codrspace.models import PhotosMixin
+from codrspace.models import PhotosMixin, FilesMixin
 from tool.models import ToolsMixin
 
 from wmd import models as wmd_models
@@ -14,7 +14,7 @@ class Material(models.Model):
   class Meta:
     ordering = ('name',)
 
-class Thing(UserModel,PhotosMixin,ToolsMixin):
+class Thing(UserModel,PhotosMixin,ToolsMixin,FilesMixin):
   feed_item_type = 'thing'
   title = models.CharField(max_length=128)
   description = wmd_models.MarkDownField(blank=True,null=True)

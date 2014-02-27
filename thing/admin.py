@@ -1,11 +1,11 @@
 from django.contrib import admin
 from .models import Thing, Material
 
-from codrspace.admin import TaggedPhotoInline
+from codrspace.admin import TaggedPhotoInline, TaggedFileInline
 from tool.admin import TaggedToolInline
 
 class ThingAdmin(admin.ModelAdmin):
-  inlines = [TaggedPhotoInline,TaggedToolInline]
+  inlines = [TaggedPhotoInline, TaggedToolInline, TaggedFileInline]
   raw_id_fields = ('user','parent')
   list_display = ('title','active','featured','_missing')
   list_editable = ('active','featured')
