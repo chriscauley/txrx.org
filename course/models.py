@@ -106,7 +106,10 @@ class Session(FeedItemModel,PhotosMixin):
 
   in_progress = property(lambda self: self.archived and self.last_date>datetime.datetime.now())
   closed = property(lambda self: self.cancelled or (self.archived and not self.in_progress))
-  _full = lambda self: sum([e.quantity for e in self.enrollment_set.all()]) >= self.section.max_students
+  @cached_property
+  def total_students(self):
+    return sum([e.quantity for e in self.enrollment_set.all()])
+  _full = lambda self: self.total_students >= self.section.max_students
   full = property(_full)
   archived = property(lambda self: self.first_date<datetime.datetime.now())
   list_users = property(lambda self: [self.user])

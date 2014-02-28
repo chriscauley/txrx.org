@@ -99,6 +99,13 @@ def ics_classes_all(request,fname):
   calendar_object = make_ics(occurrences,title="TX/RX Labs Classes")
   return ics2response(calendar_object,fname=fname)
 
+@staff_member_required
+def course_full(request):
+  values = {
+    'sessions': Session.objects.filter(first_date__gte=datetime.date.today()),
+    }
+  return TemplateResponse(request,"course/occupancy.html",values)
+
 def course_totals(request):
   if not request.user.is_superuser:
     raise Http404
