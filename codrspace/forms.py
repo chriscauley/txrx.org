@@ -52,8 +52,7 @@ class PostForm(TaggedModelForm):
     return tags
 
   def save(self,*args,**kwargs):
-    if getattr(self,'user',None):
-      self.instance.user = self.instance.user or self.user
+    self.instance.user = self.user
     return super(PostForm,self).save(*args,**kwargs)
 
   def __init__(self, *args, **kwargs):

@@ -35,6 +35,7 @@ def delete(request, pk=0, template_name="delete.html"):
 @staff_member_required
 def edit(request, pk=0, template_name="edit.html"):
     """ Edit a post """
+    user = request.user
     post = None
     posts = Post.objects.all()
     if request.user.is_superuser:
@@ -42,15 +43,16 @@ def edit(request, pk=0, template_name="edit.html"):
             post = get_object_or_404(Post, pk=pk)
             posts = Post.objects.exclude(id=post.pk)
         posts = posts.filter(status__in=['draft', 'published'])
-        posts = posts.order_by('-pk')
     else:
         if pk:
             post = get_object_or_404(Post, pk=pk, user=request.user)
             posts = Post.objects.exclude(id=post.pk)
         posts = posts.filter(user=request.user,status__in=['draft', 'published'])
-        posts = posts.order_by('-pk')
 
-    kwargs = dict(instance=post,user=request.user,initial={'publish_dt':datetime.datetime.now()})
+    posts = posts.order_by('-pk')
+    if post:
+        user = post.user
+    kwargs = dict(instance=post,user=user,initial={'publish_dt':datetime.datetime.now()})
     form = PostForm(request.POST or None, **kwargs)
     if request.POST and form.is_valid():
         post = form.save()
