@@ -1,11 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 
-def get_or_none(model,**kwargs):
-  try:
-    return model.objects.get(**kwargs)
-  except model.DoesNotExist:
-    return None
+from db.utils import get_or_none
 
 class EmailOrUsernameModelBackend(object):
   def authenticate(self, username=None, password=None):

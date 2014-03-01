@@ -77,7 +77,7 @@
        {% endif %}
        {% if related_classes %}
        <div class="related_classes">
-         <strong>Can't make it to this class? Checkout these other classes!</strong>
+         <h4>Can't make it to this class? Checkout these other sessions:</h4>
          {% for klass in related_classes %}
          <div>
            {% if klass.full %}<strong class="full">[FULL]</strong>{% endif %}
@@ -86,6 +86,18 @@
          {% endfor %}
        </div>
        {% endif %}
+       <div class="notify_course">
+         {% if notify_course %}
+         <a href="{% url "clear_notification" "notify_course" request.user.id notify_course.id %}">
+           <button class="btn btn-danger">
+             Don't send me emails when this class is scheduled
+           </button>
+         </a>
+         {% else %}
+         <a href="{% url "notify_course" session.id %}"><button class="btn btn-success">
+             Email me the next time this class is scheduled</button></a>
+         {% endif %}
+       </div>
     </div>
     <div style="clear: both;"></div>
     <div class="col-xs-12">{% display_comment_toplevel_for session %}</div>

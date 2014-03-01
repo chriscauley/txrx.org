@@ -183,6 +183,7 @@ class Survey(models.Model):
 
 class NotifyCourse(UserModel):
   course = models.ForeignKey(Course)
+  session = models.ForeignKey(Session)
   class Meta:
     unique_together = ('course','user')
 

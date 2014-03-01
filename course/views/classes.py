@@ -8,8 +8,10 @@ from django.template.response import TemplateResponse
 
 from ..models import Course, Section, Term, Subject, Session, Enrollment, ClassTime
 from ..forms import EmailInstructorForm, EvaluationForm
-from membership.models import UserMembership
+from membership.models import UserMembership, NotifyCourse
+from db.utils import get_or_none
 from event.utils import make_ics,ics2response
+
 
 from paypal.standard.ipn.models import *
 import datetime, simplejson
@@ -73,8 +75,10 @@ def index(request,term_id=None):
 def detail(request,slug):
   session = get_object_or_404(Session,slug=slug)
   enrollment = None
+  notify_course = None
   if request.user.is_authenticated():
     enrollment = Enrollment.objects.filter(session=session,user=request.user)
+    notify_course = get_or_none(NotifyCourse,user=request.user,course=session.section.course)
   kwargs = dict(first_date__gte=datetime.datetime.now(),section__course=session.section.course)
   related_classes = Session.objects.filter(**kwargs).exclude(id=session.id)
   if request.POST:
@@ -91,6 +95,7 @@ def detail(request,slug):
     'session': session,
     'enrollment': enrollment,
     'related_classes': related_classes,
+    'notify_course': notify_course,
     }
   return TemplateResponse(request,"course/detail.html",values)
 

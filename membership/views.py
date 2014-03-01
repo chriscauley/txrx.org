@@ -12,7 +12,7 @@ from .models import Membership, MeetingMinutes, Officer, NotifyCourse
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required
 
-from course.models import Course,CourseCompletion
+from course.models import Course,CourseCompletion, Session
 from txrx.utils import FORBIDDEN
 
 from registration.views import register as _register
@@ -134,7 +134,8 @@ def course_completion(request,year=None,month=None,day=None):
 def notify_course(request,session_id):
   session = Session.objects.get(pk=session_id)
   course = session.section.course
-  _, new = NotifyCourse.objects.get_or_create(user=request.user,course=course)
+  defaults = {'session': session}
+  _, new = NotifyCourse.objects.get_or_create(user=request.user,course=course,defaults=defaults)
   messages.success(request,"You will be emailed next time we teach {}".format(course))
   return HttpResponseRedirect(session.get_absolute_url())
 
@@ -144,8 +145,10 @@ def clear_notification(request,model_string,user_id,model_id):
   model = NotifyCourse
   obj = model.objects.get(pk=model_id,user=request.limited_user)
   course = obj.course
+  session = obj.session
   obj.delete()
   values = {
     'course': course,
     }
-  return TemplateResponse(request,'membership/clear_notification.html',values)
+  messages.success(request,"You will not be emailed the next time we teach {}".format(course))
+  return HttpResponseRedirect(session.get_absolute_url())
