@@ -12,6 +12,12 @@ import datetime
 class Command (BaseCommand):
   @mail_on_fail
   def handle(self, *args, **options):
+    send_mail_plus(
+      'Sending evaluations reminders!',
+      'this is to inform you that they have been sent. Hopefully they did not go twice',
+      settings.DEFAULT_FROM_EMAIL,
+      ['chris@lablackey.com'],
+      )
     yesterday = datetime.datetime.now()-datetime.timedelta(1)
     pe = Enrollment.objects.pending_evaluation()
     pe = pe.filter(evaluation_date__gte=yesterday)
