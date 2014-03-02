@@ -159,3 +159,13 @@ def rsvp(request,session_pk):
     q = 1
     m = "You have RSVP'd for this event. If you can't make it, please come back and unenroll."
   return HttpResponse(simplejson.dumps([q,m,session.full]))
+
+def start_checkout(request):
+  cart_items = simplejson.loads(request.GET['cart'])
+  out = []
+  for cart_item in cart_items:
+    session = Session.objects.get(pk=cart_item['pk'])
+    new_total = session.total_students + cart_item['quantity']
+    if new_total > session.section.max_students:
+      out.append({'pk': session.pk,'remaining': session.section.max_students-session.total_students})
+  return HttpResponse(simplejson.dumps(out))

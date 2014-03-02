@@ -11,8 +11,7 @@ simpleCart.email = "{{ settings.PAYPAL_RECEIVER_EMAIL }}";</script>
       Total: <span class="simpleCart_finalTotal"></span>
     </div>
     <div style="text-align: center;">
-      <a href="javascript:;"
-         onclick="createCookie('checkout_initiated','yes!',10);simpleCart.checkout(); return false">
+      <a href="javascript:;" onclick="startCheckout(); return false">
         <img src="{{ STATIC_URL }}img/paypal.png"></a>
     </div>
   </div>

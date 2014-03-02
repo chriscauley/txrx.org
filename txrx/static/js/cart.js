@@ -55,3 +55,41 @@ function rsvp(session_id,url) {
     "json"
   )
 }
+
+function startCheckout() {
+  var data = [];
+  var cart_items = simpleCart.items;
+  for (id in cart_items) {
+    data.push({pk: id, quantity: cart_items[id].quantity})
+  }
+  $.get(
+    "/classes/start_checkout/",
+    {"cart": JSON.stringify(data)},
+    function (data) { verifyCheckout(data); },
+    "json"
+  )
+}
+
+function verifyCheckout(data) {
+  if (data.length == 0) { createCookie("checkout_initiated","yes!",10);simpleCart.checkout(); return; }
+  var msg = "Sorry, some of the classes you're trying to take have filled since you first loaded this page."
+  msg += "\nThe following have been removed from your cart:"
+  for (var i=0; i < data.length; i++) {
+    var cart_item = simpleCart.items[data[i].pk]
+    var item_name = cart_item.name.replace(/<(?:.|\n)*?>/gm, '');
+    msg += "\n\n"+item_name+" "
+    if (data[i].remaining > 1) {
+      msg += "("+ data[i].remaining+ " slots remaining)"
+    } else if (data[i].remaining == 1) {
+      msg += "(1 slot remaining)"
+    } else {
+      msg += "(class full)"
+    }
+    cart_item.remove();
+  }
+  alert(msg);
+}
+
+$(document).ajaxError(function() {
+  alert("An unknown error has occurred. Please try again or email us at classes@txrxlabs.org")
+});
