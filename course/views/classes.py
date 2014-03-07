@@ -8,7 +8,8 @@ from django.template.response import TemplateResponse
 
 from ..models import Course, Section, Term, Subject, Session, Enrollment, ClassTime
 from ..forms import EmailInstructorForm, EvaluationForm
-from membership.models import UserMembership, NotifyCourse
+from membership.models import UserMembership
+from notify.models import NotifyCourse
 from db.utils import get_or_none
 from event.utils import make_ics,ics2response
 

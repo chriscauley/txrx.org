@@ -45,6 +45,7 @@ INSTALLED_APPS = (
   'event',
   'feed', #TODO!
   'thing',
+  'notify',
 )
 
 SOUTH_TESTS_MIGRATE = False

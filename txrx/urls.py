@@ -63,6 +63,11 @@ urlpatterns += patterns(
   url(r'^api/users/$','user_emails'),
   url(r'^api/courses/$','course_names'),
   url(r'^api/completions/$','course_completion'),
+)
+
+#notify urls
+urlpatterns += patterns(
+  'notify.views',
   url(r'^notify_course/(\d+)/$','notify_course',name='notify_course'),
   url(r'^clear_notification/(notify_course)/(\d+)/(\d+)/$','clear_notification',name='clear_notification'),
 )

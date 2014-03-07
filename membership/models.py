@@ -181,10 +181,4 @@ class Survey(models.Model):
   expertise = models.TextField(blank=True)
   questions = models.TextField(blank=True)
 
-class NotifyCourse(UserModel):
-  course = models.ForeignKey(Course)
-  session = models.ForeignKey(Session)
-  class Meta:
-    unique_together = ('course','user')
-
 from .listeners import *
