@@ -103,43 +103,12 @@ class Photo(FileModel):
   class Meta:
     ordering = ('name',)
 
-class PhotoSetManager(models.Manager):
-  def live(self,*args,**kwargs):
-    return self.filter(*args,**kwargs).filter(active=True,setphotos__isnull=False).distinct()
-
-class PhotoSet(SlugModel,UserModel):
-  setphotos = models.ManyToManyField(Photo,through="SetPhoto")
-  _ht = "If true, this photoset will appear on the photoset index page"
-  active = models.BooleanField(default=False,help_text=_ht)
-  objects = PhotoSetManager()
-  def get_photos(self):
-    return self.setphotos.filter(approved=True)
-  first_photo = property(lambda self: self.get_photos()[0])
-  get_absolute_url = lambda self: reverse('photoset_detail',args=[self.id,unicode(self)])
-
-class SetPhoto(OrderedModel):
-  photo = models.ForeignKey(Photo,null=True,blank=True)
-  photoset = models.ForeignKey(PhotoSet)
-  def get_photo(self):
-    return self.photo
-  def __unicode__(self):
-    return unicode(self.get_photo())
-
 class TaggedPhoto(models.Model):
   photo = models.ForeignKey(Photo)
   content_type = models.ForeignKey("contenttypes.ContentType")
   object_id = models.IntegerField()
   content_object = generic.GenericForeignKey('content_type', 'object_id')
   order = models.IntegerField(default=9999)
-
-class PhotoSetConnection(models.Model):
-  photoset = models.ForeignKey(PhotoSet)
-  content_type = models.ForeignKey("contenttypes.ContentType")
-  object_id = models.IntegerField()
-  content_object = generic.GenericForeignKey('content_type', 'object_id')
-  class Meta:
-    unique_together = ('content_type','object_id')
-  __unicode__ = lambda self: "conection: %s %s"%(self.content_type,self.object_id)
 
 class PhotosMixin():
   @cached_property
@@ -181,36 +150,6 @@ class TaggedFile(models.Model):
   object_id = models.IntegerField()
   content_object = generic.GenericForeignKey('content_type', 'object_id')
   order = models.IntegerField(default=9999)
-
-class SetModel():
-  """ A model that has a PhotoSetConnection attached to it. """
-  photoset = None
-  _photoset_checked = False
-  def get_photoset(self):
-    if self._photoset_checked:
-      return self.photoset
-    self._photoset_checked = True
-    try:
-      content_type = ContentType.objects.get_for_model(self.__class__)
-      self.photoset = PhotoSet.objects.get(
-        photosetconnection__content_type=content_type,
-        photosetconnection__object_id=self.id)
-    except PhotoSet.DoesNotExist:
-      pass
-    return self.photoset
-  def get_or_create_photoset(self):
-    if self.get_photoset():
-      return self.get_photoset()
-    photoset = PhotoSet(
-      title="Photos for %s"%str(self),
-      user_id=getattr(self,'user_id',1)
-      )
-    photoset.save()
-    content_type = ContentType.objects.get_for_model(self.__class__)
-    PhotoSetConnection(content_type=content_type,photoset=photoset,object_id=self.id).save()
-    self._photoset_checked = True
-    self.photoset = photoset
-    return photoset
 
 from feed.models import FeedItemModel
 

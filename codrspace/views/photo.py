@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from codrspace.models import Photo,PhotoSet
+from codrspace.models import Photo
 from codrspace.forms import PhotoForm, PhotoFilterForm, ZipForm
 
 from NextPlease import pagination
@@ -40,27 +40,6 @@ def add_photo(request):
     'form': form,
     }
   return TemplateResponse(request,"codrspace/add_photo.html",values)
-
-@pagination('photosets')
-def photoset_index(request):
-  photosets = PhotoSet.objects.live()
-  values = {
-    'photosets': photosets,
-    }
-  return TemplateResponse(request,'gallery/index.html',values)
-
-def photoset_detail(request,pk,slug):
-  photoset = get_object_or_404(PhotoSet,pk=pk)
-  photos = photoset.get_photos()
-  photo_rows = [photos[i:i+3] for i in range(0,len(photos),3)]
-  values = {
-    'photoset': photoset,
-    'photo_rows': photo_rows,
-    }
-  return TemplateResponse(request,'gallery/detail.html',values)
-
-def modify_photos(request):
-  pass
 
 @staff_member_required
 def upload_zip(request):

@@ -6,7 +6,7 @@ from sorl.thumbnail import get_thumbnail
 from db.admin import SlugModelAdmin, OrderedModelAdmin, OrderedModelInline
 from db.forms import StaffMemberForm
 
-from .models import Post, Photo, SetPhoto, PhotoSet, PhotoSetConnection, MiscFile, TaggedPhoto, PressItem, Banner, TaggedFile
+from .models import Post, Photo, MiscFile, TaggedPhoto, PressItem, Banner, TaggedFile
 from .forms import PostForm
 
 class PostAdminForm(PostForm):
@@ -39,16 +39,6 @@ class PhotoAdmin(CropAdmin):
     return out
   _thumbnail.allow_tags=True
 
-class SetPhotoInline(OrderedModelInline):
-  raw_id_fields = ('photo',)
-  model = SetPhoto
-  extra = 0
-
-class PhotoSetConnectionInline(GenericTabularInline):
-  max_num = 1
-  model = PhotoSetConnection
-  raw_id_fields = ('photoset',)
-
 class TaggedPhotoInline(GenericTabularInline):
   model = TaggedPhoto
   raw_id_fields = ('photo',)
@@ -59,19 +49,8 @@ class TaggedFileInline(GenericTabularInline):
   raw_id_fields = ('file',)
   extra = 0
 
-class PhotoSetAdmin(SlugModelAdmin):
-  inlines = [SetPhotoInline] #,PhotoSetConnectionInline]
-  list_display = ('__unicode__','active','photo_count')
-  list_editable = ('active',)
-  raw_id_fields = ('user',)
-  def photo_count(self,obj):
-    return len(obj.get_photos())
-  photo_count.allow_tags = True
-
 admin.site.register(Post,PostAdmin)
 admin.site.register(Photo,PhotoAdmin)
-admin.site.register(SetPhoto,OrderedModelAdmin)
-admin.site.register(PhotoSet,PhotoSetAdmin)
 admin.site.register(MiscFile)
 admin.site.register(PressItem)
 admin.site.register(Banner)

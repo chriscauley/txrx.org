@@ -90,6 +90,8 @@ class Command(BaseCommand):
       if not user_from_email(user):
         pass #!
       print addr
+      if True:
+        raise NotImplimentedError('need to create modify photos view')
       send_mail(
         'New Photos at TX/RX Labs',
         msg%(count,reverse('modify_photos')),
