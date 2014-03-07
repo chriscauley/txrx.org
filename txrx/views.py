@@ -57,7 +57,7 @@ def index(request):
 def blog_home(request):
   posts = Post.objects.filter(status="published",publish_dt__lte=datetime.datetime.now())
   _t = Tag.objects.cloud_for_model(Post)
-  tags = sorted([(t,t.count) for t in _t],key=lambda t:-t[1])
+  tags = sorted([(t,t.count) for t in _t if t.count > 1],key=lambda t:-t[1])
   values = {
     "posts": posts,
     "post_tags": tags,
