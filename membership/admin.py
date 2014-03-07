@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django import forms
 
-from models import Membership, Feature, UserMembership, MembershipRate, MeetingMinutes, Proposal, Officer
+from models import Membership, Feature, UserMembership, MembershipRate, MeetingMinutes, Proposal, Officer,NotifyCourse
 
 from db.forms import StaffMemberForm
 
@@ -53,3 +53,4 @@ admin.site.register(Membership,MembershipAdmin)
 admin.site.register(UserMembership,UserMembershipAdmin)
 admin.site.register(MeetingMinutes,MeetingMinutesAdmin)
 admin.site.register(Officer,OfficerAdmin)
+admin.site.register(NotifyCourse)
