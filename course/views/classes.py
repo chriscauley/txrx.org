@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -71,6 +72,8 @@ def index(request,term_id=None):
     'all_sessions_closed': all_sessions_closed,
     'user_sessions': user_sessions,
     }
+  if settings.DEBUG:
+    values['cheating'] = request.user.is_superuser and 'cheat' in request.GET
   return TemplateResponse(request,"course/classes.html",values)
 
 def detail(request,slug):
