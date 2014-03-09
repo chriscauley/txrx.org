@@ -1,4 +1,3 @@
-{% load url from future %}
 {% load txrx_tags thumbnail crop_util %}
 <div id="c{{session.id}}" class="course filterable well {% if session.full %} full{% endif %}"
     data-subject="{% for subject in session.subjects %}{{ subject }},{% endfor %}"

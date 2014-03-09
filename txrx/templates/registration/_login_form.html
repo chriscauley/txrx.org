@@ -1,4 +1,3 @@
-{% load url from future %}
 <form action="/accounts/login/" method="post" id="login-form">
   {% csrf_token %}
   {% if form.errors %}<p class="error">Username and password did not match.</p>{% endif %}

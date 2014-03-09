@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load url from future %}
 
 {% block title %}{% if post %}Edit{% else %}Add{% endif %} Post - {% firstof post.title "Untitled" %}{% endblock %}
 
