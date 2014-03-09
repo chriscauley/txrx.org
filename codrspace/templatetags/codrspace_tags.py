@@ -41,22 +41,6 @@ def random_blog(parser, token):
     """
     return RandomBlogNode()
 
-
-@register.inclusion_tag("top_posters.html", takes_context=True)
-def top_posters(context, amount):
-    top_ps = Post.objects.raw("""
-        SELECT id, user_id, count(*) as post_count
-        FROM codrspace_post WHERE status='published'
-        GROUP BY user_id, id ORDER BY post_count DESC
-    """)
-    if top_ps:
-        top_ps = top_ps[:int(amount)]
-    context.update({
-        'top_ps': top_ps
-    })
-    return context
-
-
 @register.inclusion_tag("lastest_posts.html", takes_context=True)
 def latest_posts(context, amount):
     posts = Post.objects.filter(status="published").order_by('-publish_dt')
@@ -64,20 +48,6 @@ def latest_posts(context, amount):
         posts = posts[:int(amount)]
     context.update({
         'posts': posts
-    })
-    return context
-
-
-@register.inclusion_tag("recent_codrs.html", takes_context=True)
-def recent_codrs(context, amount=20):
-    codrs = []
-    posts = Post.objects.all().order_by('-update_dt')[:int(amount)]
-
-    if posts:
-        codrs = list(set([p.user for p in posts]))
-
-    context.update({
-        'codrs': codrs
     })
     return context
 

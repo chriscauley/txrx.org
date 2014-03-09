@@ -6,7 +6,7 @@
 {% block header_content %}Latest {{ post_type }} by {{ username }}{% endblock %}
 
 {% block extra_head %}
-<link rel="alternate" type="application/rss+xml" href="{% url posts_feed username %}" title="TX/RX Labs: Posts by {{ username }}">
+<link rel="alternate" type="application/rss+xml" href="{% url "posts_feed username" %}" title="TX/RX Labs: Posts by {{ username }}">
 {% endblock %}
 
 

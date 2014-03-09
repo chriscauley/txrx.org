@@ -1,7 +1,7 @@
 {% load i18n %}
 {% if not comment.parent %}
 <p class="comment_title">
-  <a class="comment_expand" href="{% url comment-detail comment_id %}">
+  <a class="comment_expand" href="{% url "comment-detail" comment_id %}">
     {% if preview %}
     (PREVIEW)
     {% endif %}
