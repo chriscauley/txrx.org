@@ -15,7 +15,7 @@ from .utils import limited_login_required
 from course.models import Course,CourseCompletion, Session
 from txrx.utils import FORBIDDEN
 
-from registration.views import register as _register
+from registration.backends.default.views import RegistrationView
 import datetime
 
 def join_us(request):
@@ -65,9 +65,10 @@ def register(request,*args,**kwargs):
       m = "An account with that email address already exists. "
       m += "Please use the form below to reset your password. "
       m += "If you believe this is in error, please email chris [{at}] lablackey.com"
-      messages.error(request,m)
+      messages.error(request,m,extra_tags='danger')
       return HttpResponseRedirect(reverse('password_reset'))
-  return _register(request,'registration.backends.default.DefaultBackend',*args,**kwargs)
+  _r = RegistrationView.as_view()
+  return _r(request,*args,**kwargs)
 
 @limited_login_required
 def unsubscribe(request,attr,user_id):

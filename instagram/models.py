@@ -34,7 +34,7 @@ class InstagramUser(FollowableModel):
   profile_picture = models.ImageField(upload_to=photofile_path,null=True,blank=True)
   full_name = models.CharField(max_length=128,null=True,blank=True)
   bio = models.TextField(null=True,blank=True)
-  website = models.URLField(verify_exists=False,null=True,blank=True)
+  website = models.URLField(null=True,blank=True)
   user = models.ForeignKey(User,null=True,blank=True)
 
   feed_url = "https://api.instagram.com/v1/users/search?q=%s&access_token=%s"

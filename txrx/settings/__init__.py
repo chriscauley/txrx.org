@@ -139,4 +139,4 @@ for s_file in ['apps','local']:
     print "Setting file missing. We looked here: %s"%f
 
 if DEBUG:
-  INSTALLED_APPS += ('devserver',)
+  pass#INSTALLED_APPS += ('devserver',)

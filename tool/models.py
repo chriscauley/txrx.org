@@ -39,7 +39,7 @@ class Tool(SlugModel,OrderedModel):
 class ToolLink(OrderedModel):
   tool = models.ForeignKey(Tool)
   title = models.CharField(max_length=64)
-  url = models.URLField(verify_exists=False)
+  url = models.URLField()
   __unicode__ = lambda self: self.title
   class Meta:
     ordering = ("order",)
