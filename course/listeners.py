@@ -37,17 +37,20 @@ def handle_successful_payment(sender, **kwargs):
     else:
       enrollment.quantity += quantity
     enrollment.save()
-    if True: #section_cost != session.section.fee:
-      # email chris for verification
-      l = ["PP cost: %s"%section_cost,
-           "Session Fee: %s"%session.section.fee,
-           "Session Id:%s"%session.id,
-           "Quantity:%s"%enrollment.quantity,
-           "PP Email:%s"%sender.payer_email,
-           "U Email:%s"%user.email,
-      ]
-      m = '\n'.join(l)
-      mail_admins("New course enrollment",m)
+    subject = "New course enrollment"
+    if section_cost != session.section.fee:
+      subject = "BAD COURSE ENROLLMENT"
+    # email chris for verification
+    l = [
+      "PP cost: %s"%section_cost,
+      "Session Fee: %s"%session.section.fee,
+      "Session Id:%s"%session.id,
+      "Quantity:%s"%enrollment.quantity,
+      "PP Email:%s"%sender.payer_email,
+      "U Email:%s"%user.email,
+    ]
+    m = '\n'.join(l)
+    mail_admins(subject,m)
 
 @receiver(payment_was_flagged, dispatch_uid='course.signals.handle_flagged_payment')
 def handle_flagged_payment(sender, **kwargs):

@@ -22,7 +22,7 @@
   window.SESSIONS_ON_PAGE = window.SESSIONS_ON_PAGE || {};
   window.SESSIONS_ON_PAGE[{{ session.id }}] = {
     'name': "<b>{{ session.section.course }}</b> {{ session.first_date|date:"m/d/Y" }}",
-    'fee': "{% if cheating %}1{% else %}{{ session.section.fee }}{% endif %}",
+    'fee': "{{ session.section.fee }}",
   };
 </script>
 {% else %}
