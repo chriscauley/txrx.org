@@ -34,7 +34,6 @@
   <button class="btn btn-default disabled is_full">FULL</button>
   <button class="btn btn-default disabled number_attending unrsvp">
     RSVP'd x {{ session.user_enrollment.quantity }}</button>
-  <button class="btn btn-default disabled rsvp">Not Attending</button>
   <button class="btn btn-success rsvp" onclick="rsvp({{ session.id }},'{{ session.get_rsvp_url }}');">
     RSVP</button>
   <button class="btn btn-success unrsvp not_full" title="Bring a friend!"

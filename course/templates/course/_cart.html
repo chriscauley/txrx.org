@@ -19,35 +19,6 @@ simpleCart.email = "{{ settings.PAYPAL_RECEIVER_EMAIL }}";</script>
 <div class="visible-xs hidden-sm hidden-md hidden-lg">
   <div id="mobileCart" class="alert alert-success"><a href="#cart">View Cart</a></div>
 </div>
-{% comment %}
-<div class="well accordion" id="cart">
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-parent="#cart"
-         data-toggle="collapse" href="#cart-contents">Shopping Cart</a>
-    </div>
-    <div id="cart-contents" class="accordion-body collapse in">
-      <div class="accordion-inner">
-      </div>
-    </div>
-  </div>
-  {% if not small_cart %}
-  {% for group,content in class_faqs %}
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-parent="#cart"
-         data-toggle="collapse" href="#class_faqs{{ forloop.counter }}">{{ group }}</a>
-    </div>
-    <div id="class_faqs{{ forloop.counter }}" class="accordion-body collapse">
-      <div class="accordion-inner">
-        {{ content|safe }}
-      </div>
-    </div>
-  </div>
-  {% endfor %}
-  {% endif %}
-</div>
-{% endcomment %}
 <script type="text/javascript">
 function createCookie(name,value,days) {
   if (days) {
