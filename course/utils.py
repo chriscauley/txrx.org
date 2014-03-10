@@ -4,7 +4,7 @@ from membership.models import UserMembership
 from txrx.utils import reset_password
 
 def get_or_create_student(email,u_id=None):
-  if u_id:
+  if str(u_id).isdigit():
     user = User.objects.get(id=u_id)
     profile = user.usermembership
     profile.email = email
