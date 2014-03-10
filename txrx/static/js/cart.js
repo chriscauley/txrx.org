@@ -50,7 +50,7 @@ function rsvp(session_id,url) {
       else { row.find(".RsvpLink").removeClass("attending"); }
       row.removeClass("full");
       if (data[2]) { row.addClass("full"); }
-      row.find(".message").css("display","block").html(data[1]);
+      if (data[1]) { alert(data[1]); };
     },
     "json"
   )
