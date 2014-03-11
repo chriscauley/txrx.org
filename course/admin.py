@@ -57,6 +57,7 @@ class EnrollmentAdmin(admin.ModelAdmin):
   list_display = ("id",'user', 'session', )
   list_filter = ("session", "user",)
   search_fields = ("user__username","user__email","user__usermembership__paypal_email")
+  raw_id_fields = ("user","session")
 
 admin.site.register(Subject,SubjectAdmin)
 admin.site.register(Course,CourseAdmin)

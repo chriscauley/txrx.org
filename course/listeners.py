@@ -38,7 +38,7 @@ def handle_successful_payment(sender, **kwargs):
       enrollment.quantity += quantity
     enrollment.save()
     subject = "New course enrollment"
-    if section_cost != session.section.fee:
+    if section_cost != session.section.fee * int(quantity):
       subject = "BAD COURSE ENROLLMENT"
     # email chris for verification
     l = [
