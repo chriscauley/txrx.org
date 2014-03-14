@@ -7,7 +7,6 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.template.defaultfilters import slugify, striptags
-from django.utils.hashcompat import md5_constructor
 from django.utils.http import urlquote
 
 from crop_override import CropOverride, OriginalImage
@@ -189,9 +188,6 @@ class Post(FeedItemModel,PhotosMixin):
 
   def save(self, *args, **kwargs):
     super(Post, self).save(*args, **kwargs)
-
-    # Invalidate cache for all individual posts and the list of posts
-    invalidate_cache_key('content', self.pk)
 
   #depracate please
   list_users = property(lambda self: [self.user])
