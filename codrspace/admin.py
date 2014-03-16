@@ -28,6 +28,7 @@ class PhotoAdmin(CropAdmin):
   list_sortable = ('__unicode__','upload_dt')
   list_editable = ('approved',)
   list_filter = ('upload_dt',)
+  search_fields = ('name',)
   raw_id_fields = ('user',)
   fieldsets = (
     (None,{'fields': ('name','file',('user','source'),'caption')}),

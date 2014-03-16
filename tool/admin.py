@@ -7,8 +7,10 @@ from db.admin import SlugModelAdmin,OrderedModelAdmin
 from .models import Lab, Tool, ToolLink, TaggedTool
 
 class LabAdmin(SlugModelAdmin):
+  inlines = (TaggedPhotoInline,)
   list_display = ("__unicode__","order")
   list_editable = ("order",)
+  raw_id_fields = ('photo',)
 
 class ToolLinkInline(admin.TabularInline):
   extra = 0
@@ -17,7 +19,6 @@ class ToolLinkInline(admin.TabularInline):
 
 class ToolAdmin(SlugModelAdmin,OrderedModelAdmin):
   inlines = (ToolLinkInline,TaggedPhotoInline)
-  raw_id_fields = ('photo',)
 
 #See note above corresponding model
 class TaggedToolInline(GenericTabularInline):

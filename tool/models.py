@@ -27,7 +27,6 @@ class Tool(SlugModel,OrderedModel,PhotosMixin):
   make = models.CharField(max_length=64,null=True,blank=True)
   model = models.CharField(max_length=32,null=True,blank=True)
   description = MarkDownField(blank=True,null=True)
-  photo = models.ForeignKey(Photo,null=True,blank=True)
   est_price = models.FloatField(null=True,blank=True)
 
   links = lambda self: self.toollink_set.all()
