@@ -5,21 +5,9 @@
 {% block full_title %}Tools and Equipment at TX/RX Labs{% endblock %}
 
 {% block main %}
-<script type="text/javascript">
-//no longer necessary
-function loadLab(that,slug) {
-  $("#tools").children().hide();
-  if ($("#tool_"+slug).length) { $("#tool_"+slug).show(); return; }
-  $.get(
-    that.href,
-    function(data) { $("#tools").append($(data)); loadLab(that,slug); },
-    "html"
-  )
-}
-</script>
-<div id="labs" class="offset1">
+<div id="labs">
   {% for lab in labs %}
-  {% thumbnail lab.photo|get_override:"landscape_crop" "620x375" crop="center" as im %}
+  {% thumbnail lab.first_photo|get_override:"landscape_crop" "620x375" crop="center" as im %}
   <input type="radio" id="id_{{ lab.slug }}" name="lab-radios" style="display:none;"{% if forloop.first %}
          checked="checked"{% endif %}/>
   <div class="lab carousel-inner" style="height: {{ im.height }}px;">
@@ -37,5 +25,4 @@ function loadLab(that,slug) {
   {% endthumbnail %}
   {% endfor %}
 </div>
-<div id="tools"></div>
 {% endblock %}

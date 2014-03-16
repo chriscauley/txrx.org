@@ -2,6 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.contenttypes.generic import GenericTabularInline
 
+from codrspace.admin import TaggedPhotoInline
 from db.admin import SlugModelAdmin,OrderedModelAdmin
 from .models import Lab, Tool, ToolLink, TaggedTool
 
@@ -15,7 +16,8 @@ class ToolLinkInline(admin.TabularInline):
   fields = ("title","url","order")
 
 class ToolAdmin(SlugModelAdmin,OrderedModelAdmin):
-  inlines = (ToolLinkInline,)
+  inlines = (ToolLinkInline,TaggedPhotoInline)
+  raw_id_fields = ('photo',)
 
 #See note above corresponding model
 class TaggedToolInline(GenericTabularInline):

@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 
 from south.modelsinspector import add_introspection_rules
 from wmd.models import MarkDownField
-from codrspace.models import Photo
+from codrspace.models import Photo, PhotosMixin
 
 from db.models import SlugModel, OrderedModel
 from txrx.utils import cached_property, cached_method
@@ -14,7 +14,7 @@ from tagging.fields import TagField
 
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
 
-class Lab(SlugModel,OrderedModel):
+class Lab(SlugModel,OrderedModel,PhotosMixin):
   photo = models.ForeignKey(Photo,null=True,blank=True)
   description = models.TextField(null=True,blank=True)
   class Meta:
@@ -22,7 +22,7 @@ class Lab(SlugModel,OrderedModel):
 
 _help = "Will default to %s photo if blank"
 
-class Tool(SlugModel,OrderedModel):
+class Tool(SlugModel,OrderedModel,PhotosMixin):
   lab = models.ForeignKey(Lab)
   make = models.CharField(max_length=64,null=True,blank=True)
   model = models.CharField(max_length=32,null=True,blank=True)
