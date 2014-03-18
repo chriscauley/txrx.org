@@ -107,8 +107,9 @@ def ics_classes_all(request,fname):
 
 @staff_member_required
 def course_full(request):
+  dt = datetime.date.today()-datetime.timedelta(14)
   values = {
-    'sessions': Session.objects.filter(first_date__gte=datetime.date.today()).order_by('first_date'),
+    'sessions': Session.objects.filter(first_date__gte=dt).order_by('first_date'),
     }
   return TemplateResponse(request,"course/occupancy.html",values)
 
