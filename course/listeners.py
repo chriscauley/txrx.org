@@ -4,7 +4,10 @@ from django.http import QueryDict
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordResetForm
 from django.core.mail import send_mail, mail_admins
+
 from .utils import get_or_create_student
+from notify.models import NotifyCourse
+
 import traceback
 
 @receiver(payment_was_successful, dispatch_uid='course.signals.handle_successful_payment')
@@ -32,6 +35,12 @@ def handle_successful_payment(sender, **kwargs):
       continue
       
     enrollment,new = Enrollment.objects.get_or_create(user=user, session=session)
+    notifys = NotifyCourse.objects.filter(user=user,course=session.section.course)
+    if notifys:
+      body = "The following NotifyCourse objects have been deleted:\n\n"
+      body += "\n".join([str(n) for n in notifys])
+      mail_admins("Course notification deleted",body)
+      notifys.delete()
     if new:
       enrollment.quantity = quantity
     else:

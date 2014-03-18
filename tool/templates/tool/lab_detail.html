@@ -12,17 +12,13 @@
     {% thumbnail tool.first_photo|get_override:"square_crop" "220x220" crop="center" as im %}
     <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
     {% endthumbnail %}
-    <div class="span5 content">
+    <div class="content">
       <h3>{{ tool }}</h3>
       {% if tool.make or tool.model %}
       <h4>{{ tool.make|default:"" }} {{ tool.model|default:"" }}</h4>
       {% endif %}
-      {{ tool.description|explosivo }}
+      {{ tool.get_short_description|truncate_chars:128 }}
       {% if tool.toollink_set.count %}
-      <h4>Related Links:</h4>
-      {% for link in tool.toollink_set.all %}
-      <a href="{{ link.url }}">{{ link.title }}</a><br />
-      {% endfor %}
       {% endif %}
     </div>
   </div>

@@ -14,6 +14,10 @@
   {% endif %}
 </p>
 <p class="lead">
-  You can undo this by changing your <a href="/accounts/settings/">account settings</a> (login required).
+  {% if attr == "notify_course" %}
+  All of your course notifications have been deleted. We will no longer send you emails about new classes. You can always find out about new classes at <a href="http://classes.txrxlabs.org/">classes.txrxlabs.org</a>.
+  {% else %}
+  You can undo this by changing your <a href="{% url "account_settings" %}">account settings</a> (login required).
+  {% endif %}
 </p>
 {% endblock %}

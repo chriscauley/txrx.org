@@ -35,4 +35,23 @@
     </tr>
   </table>
 </form>
+{% if notify_courses %}
+<h3>Course Notifications:</h3>
+{% for notify_course in notify_courses %}
+<p>
+  <a href="{% url "clear_notification" "notify_course" request.user.id notify_course.id %}?next={{ request.path|urlencode }}">
+    <button class="btn btn-danger">
+      Don't email me about new "{{ notify_course.course }}" sessions
+    </button>
+  </a>
+</p>
+{% endfor %}
+{% if notify_courses|length > 1 %}
+<p>
+  <a href="{% url "unsubscribe" "notify_course" request.user.id %}">
+    <button class="btn btn-danger">DELETE ALL COURSE NOTIFICATIONS</button>
+  </a>
+</p>
+{% endif %}
+{% endif %}
 {% endblock %}

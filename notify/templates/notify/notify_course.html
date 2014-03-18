@@ -1,0 +1,23 @@
+{% load i18n %}{% autoescape off %}
+
+Hello,
+
+You requested us to notify you when we add new sessions of the following classes. I hope you find one that will fit your schedule:
+
+{% for session in new_sessions %}
+{{ session.name }}
+on {{ session.get_short_dates }} with {{ session.user }}
+{{ SITE_URL }}{{ session.get_absolute_url }}
+{% endfor %}
+
+For more information or to checkout all classes visit http://classes.txrxlabs.org/
+
+If you do not want to receive this email again, click on one of the links below:
+
+Unsubscribe from new course notifications:
+{{ SITE_URL }}{% url "unsubscribe" "notify_course" user.id %}?LA_KEY={{ la_key.key }}
+
+Manage your notifications (login required):
+{{ SITE_URL }}{% url "account_settings" %}
+
+{% endautoescape %}

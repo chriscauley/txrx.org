@@ -59,7 +59,6 @@ urlpatterns += patterns(
   url(r'^minutes/(\d+-\d+-\d+)/$', 'minutes', name='meeting_minutes',),
   url(r'^roland_email/$','roland_email',name='roland_email'),
   url(r'^roland_email/(\d+)/(\d+)/(\d+)/$','roland_email',name='roland_email'),
-  url(r'^unsubscribe/(global|comments|classes|sessions)/(\d+)/$', 'unsubscribe', name='unsubscribe'),
   url(r'^api/users/$','user_emails'),
   url(r'^api/courses/$','course_names'),
   url(r'^api/completions/$','course_completion'),
@@ -70,6 +69,8 @@ urlpatterns += patterns(
   'notify.views',
   url(r'^notify_course/(\d+)/$','notify_course',name='notify_course'),
   url(r'^clear_notification/(notify_course)/(\d+)/(\d+)/$','clear_notification',name='clear_notification'),
+  url(r'^unsubscribe/(notify_course|global|comments|classes|sessions)/(\d+)/$',
+      'unsubscribe', name='unsubscribe'),
 )
 
 # todo

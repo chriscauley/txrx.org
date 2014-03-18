@@ -38,6 +38,7 @@ def user_settings(request):
     return HttpResponseRedirect(request.path)
   values = {
     'forms': [user_form, usermembership_form],
+    'notify_courses': user.notifycourse_set.all(),
     }
   return TemplateResponse(request,'membership/settings.html',values)
 
@@ -69,15 +70,6 @@ def register(request,*args,**kwargs):
       return HttpResponseRedirect(reverse('password_reset'))
   _r = RegistrationView.as_view()
   return _r(request,*args,**kwargs)
-
-@limited_login_required
-def unsubscribe(request,attr,user_id):
-  if not str(request.limited_user.id) == user_id:
-    return FORBIDDEN
-  usermembership = request.limited_user.usermembership
-  setattr(usermembership,"notify_"+attr,False)
-  usermembership.save()
-  return TemplateResponse(request,'membership/unsubscribe.html',{'attr':attr})
 
 def roland_email(request,y=2012,m=1,d=1):
   if not request.user.is_superuser:
