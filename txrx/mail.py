@@ -18,13 +18,13 @@ def mail_admins_plus(subject,message,recipient_list=[],from_email=None):
   recipient_list = filter_emails(recipient_list)
   from_email = from_email or settings.DEFAULT_FROM_EMAIL
   if not recipient_list:
-    print message
     return
   send_mail(subject,message,from_email,recipient_list)
 
 def send_mail_plus(subject,message,from_email,recipient_list):
+  all_recipient_list = recipient_list[:]
   recipient_list = filter_emails(recipient_list)
   if not recipient_list:
-    print message
+    print all_recipient_list
     return
   send_mail(subject,message,from_email,recipient_list)
