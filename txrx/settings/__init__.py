@@ -104,26 +104,6 @@ SHORT_CACHE = 10*60 # 10 min
 
 AUTH_PROFILE_MODULE = 'codrspace.Profile'
 
-LOGGING = {
-  'version': 1,
-  'disable_existing_loggers': False,
-  'handlers': {
-    'mail_admins': {
-      'level': 'ERROR',
-      'class': 'django.utils.log.AdminEmailHandler',
-      'filters': [],
-      }
-    },
-  'loggers': {
-    'django.request': {
-      'handlers': ['mail_admins'],
-      'level': 'ERROR',
-      'propagate': True,
-      },
-    }
-  }
-
-
 PAYPAL_RECEIVER_EMAIL = "txrxlabs@gmail.com"
 
 EMAIL_SUBJECT_PREFIX = "[TXRX] "
