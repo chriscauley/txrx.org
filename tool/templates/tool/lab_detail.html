@@ -17,7 +17,7 @@
       {% if tool.make or tool.model %}
       <h4>{{ tool.make|default:"" }} {{ tool.model|default:"" }}</h4>
       {% endif %}
-      {{ tool.get_short_description|truncate_chars:128 }}
+      {{ tool.get_short_description|truncatechars:128 }}
       {% if tool.toollink_set.count %}
       {% endif %}
     </div>
