@@ -30,8 +30,15 @@
       <li class="{{ n.class }}"><a href="{{ n.url }}">{{ n.name }}</a></li>
       {% endif %}
       {% endfor %}
+      <li class="social">
+        {% for n in social_nav %}
+        <a href="{{ n.url }}"><i class="fa fa-{{ n.name }}"></i></a>
+        {% endfor %}
+      </li>
     </ul>
-    <ul class="nav navbar-nav navbar-right">
+    <ul class="nav navbar-nav navbar-right social">
+    </ul>
+    <ul class="nav navbar-nav navbar-right auth">
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           {% if not user.is_authenticated or not pending_evaluations %}
