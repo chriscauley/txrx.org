@@ -14,7 +14,7 @@ import datetime
 class Command (BaseCommand):
   #@mail_on_fail
   def handle(self, *args, **options):
-    dt = datetime.datetime.now()-datetime.timedelta(20)
+    dt = datetime.datetime.now()-datetime.timedelta(2)
     new_sessions = Session.objects.filter(created__gte=dt,first_date__gte=datetime.datetime.now())
 
     if not new_sessions:
