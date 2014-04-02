@@ -23,6 +23,11 @@ def nav(request):
     {'name': 'Google Groups (Public)', 'url': 'https://groups.google.com/forum/#!forum/txrxlabs'},
     {'name': 'Google Groups (Members)', 'url': 'https://groups.google.com/forum/#!forum/txrxmembership'},
     ]
+  social_nav = [
+    {'name': 'facebook','url': 'https://www.facebook.com/TxRxLabs' },
+    #{'name': 'instagram','url': '' },
+    {'name': 'twitter','url': 'https://twitter.com/txrxlabs' },
+  ]
   _nav = [
     {"name": "About",
      "url": "/about-us/",
@@ -54,6 +59,7 @@ def nav(request):
   return dict(
     current = request.path.split('/')[1] or 'home',
     nav = _nav,
+    social_nav = social_nav,
     STATIC_URL = settings.STATIC_URL,
     auth_form = AuthenticationForm,
     app_path = "/admin/login/",
