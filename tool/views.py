@@ -18,4 +18,4 @@ def tool_detail(request,lab_slug,tool_slug):
     'tool': tool,
     'lab': tool.lab,
   }
-  return TemplateResponse(requset,'tool/tool_detail.html',values)
+  return TemplateResponse(request,'tool/tool_detail.html',values)

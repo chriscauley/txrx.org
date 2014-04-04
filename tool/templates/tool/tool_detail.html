@@ -2,17 +2,16 @@
 {% load thumbnail crop_util %}
 {% load short_codes %}
 
-{% block title %}{{ lab }} Tools{% endblock %}
-{% block header_content %}{{ lab }} Tools{% endblock %}
+{% block title %}{{ tool }}{% endblock %}
+{% block header %}{% endblock %}
 
 {% block content %}
-<div id="tool_{{ tool.slug }}">
-  {% thumbnail tool.photo|get_override:"square_crop" "220x220" crop="center" as im %}
+<div id="tool_{{ tool.slug }}" class="row">
   <div class="tool row">
-    <div class="side">
-      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+    <div class="col-sm-6">
+      {% include "widgets/thing_slideshow.html" with thing=tool %}
     </div>
-    <div class="span5 content">
+    <div class="col-sm-6">
       <h2>{{ tool }}</h2>
       {% if tool.make or tool.model %}
       <h4>{{ tool.make|default:"" }} {{ tool.model|default:"" }}</h4>
@@ -26,6 +25,13 @@
       {% endif %}
     </div>
   </div>
-  {% endthumbnail %}
 </div>
+{% endblock %}
+
+{% block side %}
+{% if tool.get_classes or tool.get_things %}
+TODO
+{% else %}
+{{ block.super }}
+{% endif %}
 {% endblock %}

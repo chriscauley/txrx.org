@@ -27,7 +27,7 @@
   <div style="clear: both;"></div>
 </div>
 {% else %}
-<div class="post-content">
+<div class="post-content Detail">
   {% thumbnail post.photo|get_override:"square_crop" "300x300" as im %}
   <a href="{{ post.photo.file.url }}" class="post-image">
     <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
