@@ -17,6 +17,7 @@ urlpatterns = patterns(
   url(r'^rsvp/(\d+)/','classes.rsvp',name='rsvp'),
   url(r'^term/(\d+)/', 'classes.index'),
   url(r'^ics/(all_classes).ics$','classes.ics_classes_all',name='ics_classes_all'),
+  url(r'^ics/(my_classes).ics$','classes.ics_classes_user',name='ics_classes_user'),
   url(r'^totals/$','classes.course_totals',name='course_totals'),
   url(r'^full/$','classes.course_full',name='course_full'),
   url(r'^start_checkout/$','classes.start_checkout',name='start_checkout'),

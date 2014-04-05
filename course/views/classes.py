@@ -105,6 +105,15 @@ def ics_classes_all(request,fname):
   calendar_object = make_ics(occurrences,title="TX/RX Labs Classes")
   return ics2response(calendar_object,fname=fname)
 
+def ics_classes_user(request,fname):
+  enrollments = request.user.enrollment_set.all()
+  sessions = [e.session for e in enrollments]
+  occurrences = []
+  for session in sessions:
+    occurrences += session.classtime_set.all()
+  calendar_object = make_ics(occurrences,title="TX/RX Labs Classes")
+  return ics2response(calendar_object,fname=fname)
+
 @staff_member_required
 def course_full(request):
   dt = datetime.date.today()-datetime.timedelta(14)
