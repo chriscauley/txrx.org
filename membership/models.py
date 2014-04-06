@@ -16,6 +16,10 @@ add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
 
 import datetime, random, string
 
+def rand32():
+  seed = string.letters+string.digits
+  return ''.join([random.choice(seed) for i in range(32)])
+
 class MembershipManager(models.Manager):
   def active(self):
     # only show paying memberships
@@ -68,6 +72,7 @@ class UserMembership(models.Model):
   #roles = models.ManyToManyField(Role,null=True,blank=True)
   photo = models.ForeignKey(Photo,null=True,blank=True)
   bio = models.TextField(null=True,blank=True)
+  api_key = models.CharField(max_length=32,default=rand32)
   _h = "A short description of what you do for the lab."
   by_line = models.CharField(max_length=50,null=True,blank=True,help_text=_h)
   name = lambda self: "%s %s"%(self.user.first_name,self.user.last_name)
@@ -140,8 +145,7 @@ class LimitedAccessKey(UserModel):
 
   @classmethod
   def new(clss,user):
-    seed = string.letters+string.digits
-    key = ''.join([random.choice(seed) for i in range(32)])
+    key = rand32()
     out = clss(key=key,user=user)
     out.save()
     return out

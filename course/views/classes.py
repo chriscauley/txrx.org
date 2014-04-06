@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
@@ -105,8 +106,8 @@ def ics_classes_all(request,fname):
   calendar_object = make_ics(occurrences,title="TX/RX Labs Classes")
   return ics2response(calendar_object,fname=fname)
 
-def ics_classes_user(request,fname):
-  enrollments = request.user.enrollment_set.all()
+def ics_classes_user(request,u_id,api_key,fname):
+  user = get_object_or_404(User,pk=u_id,usermembership__api_key=api_key)
   sessions = [e.session for e in enrollments]
   occurrences = []
   for session in sessions:

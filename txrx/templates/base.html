@@ -102,7 +102,7 @@
       {% endif %}
       {% if "kojo" in request.user.username|lower or request.user.is_superuser %}
       |
-      <a href="http://www.google.com/calendar/render?cid=http://txrxlabs.org/classes/ics/my_classes.ics">
+      <a href="http://www.google.com/calendar/render?cid=http://txrxlabs.org/classes/ics/{{ request.user.id }}/{{ request.user.usermembership.api_key }}/my_classes.ics">
         My class schedule (ics)
       </a>
       {% endif %}

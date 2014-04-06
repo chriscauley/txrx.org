@@ -24,6 +24,7 @@ class UserMembershipAdmin(admin.ModelAdmin):
   list_editable = ('photo',)
   list_filter = ('user__is_staff',)
   search_fields = ('user__email','user__username','paypal_email')
+  readonly_fields = ('api_key',)
 
 class ProposalInline(admin.StackedInline):
   model = Proposal
