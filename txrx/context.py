@@ -56,6 +56,11 @@ def nav(request):
     ('Is this class right for me? Maybe...','Most classes are for beginners, and clicking on the class title will take you to the class detail page. The right column shows <span class="has_notes">prerequisites</span> and <span class="has_notes">requirements</span>. If you mouse over them you will see what is required for that class. Some classes require a brief <span class="has_notes">safety</span> class which is taught 20 minutes before the class. Additionally, there may be <span class="has_notes">fee notes</span> which explain how much of the cost goes towards materials.'),
     ]
 
+  my_classes_ics = None
+  if request.user.is_authenticated():
+    my_classes_ics = "%s/classes/ics/%s/%s/my-classes.ics"
+    my_classes_ics = my_classes_ics%(settings.SITE_DOMAIN,request.user.id,request.user.usermembership.api_key)
+
   return dict(
     current = request.path.split('/')[1] or 'home',
     nav = _nav,
@@ -68,8 +73,9 @@ def nav(request):
     #last_week = EventOccurrence.objects.filter(start__lte=now,photoset__isnull=False),
     tags = Tag.objects.all(),
     class_faqs = class_faqs,
+    my_classes_ics = my_classes_ics,
     all_ics = '%s/event/ics/all_events.ics'%settings.SITE_DOMAIN, #! move to event.context
-    google_calendar_url = 'http://www.google.com/calendar/render?cid=', #! move to event.context
+    calendar_protocols = ['http://www.google.com/calendar/render?cid=http://','webcal://'], #! move to event.context
     all_classes_ics = '%s/classes/ics/all_classes.ics'%settings.SITE_DOMAIN, #! move to course.context
     pressitems = PressItem.objects.all(),
     )

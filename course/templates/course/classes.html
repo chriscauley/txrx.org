@@ -10,7 +10,7 @@
   <div class="calendar_widget">
     <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">
       <span class="glyphicon glyphicon-calendar"></span></a>
-    {% include "event/_subscribe_to_calendar.html" with calendar_event=occurrence %}
+    {% include "course/_add_to_calendar.html" with calendar_event=occurrence calendar_context="classes" %}
   </div>
 </h1>
 {% if request.user.is_authenticated %}

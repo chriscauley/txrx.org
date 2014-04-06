@@ -110,10 +110,11 @@ def ics_classes_user(request,u_id,api_key,fname):
   user = get_object_or_404(User,pk=u_id,usermembership__api_key=api_key)
   enrollments = user.enrollment_set.all()
   sessions = [e.session for e in enrollments]
+  sessions += user.session_set.all()
   occurrences = []
   for session in sessions:
     occurrences += session.classtime_set.all()
-  calendar_object = make_ics(occurrences,title="TX/RX Labs Classes")
+  calendar_object = make_ics(occurrences,title="[TX/RX] My Classes")
   return ics2response(calendar_object,fname=fname)
 
 @staff_member_required

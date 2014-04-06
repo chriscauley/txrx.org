@@ -37,20 +37,25 @@
     display:none;
     .inner {
       .floatingBox;
+      position: fixed;
       font-size: 14px;
+      line-height: 2;
+      left: 50%;
+      margin-left: -200px;
+      max-width: 100%;
       min-height: 0;
       overflow: hidden;
       padding: 10px;
-      right: 0;
-      top: 100%;
-      width: 350px;
+      top: 100px;
+      width: 400px;
       z-index: 25;
+      a { color: #3491bf; }
     }
     ul { padding: 0; }
     h3 { text-transform: none; margin-bottom: 10px; }
     .header {
       border-bottom: 1px solid black;
-      display: inline-block;
+      display: block;
       margin-bottom: .5em;
       padding-right: 10px;
     }
@@ -75,6 +80,17 @@
       left: 0;
       right: 0;
       z-index: 24;
+    }
+  }
+}
+
+@media (max-width: @screen-xs-max) {
+  .calendar_widget .add_to_calendar {
+    .inner {
+      left: 0;
+      margin-left: 0;
+      top: 0;
+      hr { margin: 0.5em 0; }
     }
   }
 }

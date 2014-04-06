@@ -100,12 +100,6 @@
       {% else %}
       <a href="?set_theme=dark">The Darkness Calls</a>
       {% endif %}
-      {% if "kojo" in request.user.username|lower or request.user.is_superuser %}
-      |
-      <a href="http://www.google.com/calendar/render?cid=http://txrxlabs.org/classes/ics/{{ request.user.id }}/{{ request.user.usermembership.api_key }}/my-classes.ics">
-        My class schedule (ics)
-      </a>
-      {% endif %}
     </div>
   </body>
 </html>

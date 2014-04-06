@@ -40,8 +40,9 @@
            {% endfor %}
          </ol>
          <div class="calendar_widget">
-           <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">Add to calendar</a>
-           {% include "course/_add_to_calendar.html" with calendar_event=session %}
+           <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">
+             <span class="glyphicon glyphicon-calendar"></span> Add to calendar</a>
+           {% include "course/_add_to_calendar.html" with calendar_event=session calendar_context="classes" %}
          </div>
          {% if session.branding %}
          {% thumbnail session.branding.image "620x100" as im %}
