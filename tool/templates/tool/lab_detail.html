@@ -9,18 +9,14 @@
 <div id="tool_{{ lab.slug }}" class="row">
   {% for tool in lab.tool_set.all %}
   <div class="tool_well col-sm-4 col-xs-12">
-    {% thumbnail tool.first_photo|get_override:"square_crop" "220x220" crop="center" as im %}
-    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
-    {% endthumbnail %}
-    <div class="content">
-      <h3>{{ tool }}</h3>
-      {% if tool.make or tool.model %}
-      <h4>{{ tool.make|default:"" }} {{ tool.model|default:"" }}</h4>
-      {% endif %}
-      {{ tool.get_short_description|truncatechars:128 }}
-      {% if tool.toollink_set.count %}
-      {% endif %}
-    </div>
+    <a href="{{ tool.get_absolute_url }}" class="well">
+      {% thumbnail tool.first_photo|get_override:"square_crop" "220x220" crop="center" as im %}
+      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+      {% endthumbnail %}
+      <div class="content">
+        <h3>{{ tool }}</h3>
+      </div>
+    </a>
   </div>
   {% endfor %}
   <div style="clear:both;"></div>
