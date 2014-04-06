@@ -108,6 +108,7 @@ def ics_classes_all(request,fname):
 
 def ics_classes_user(request,u_id,api_key,fname):
   user = get_object_or_404(User,pk=u_id,usermembership__api_key=api_key)
+  enrollments = user.enrollment_set.all()
   sessions = [e.session for e in enrollments]
   occurrences = []
   for session in sessions:
