@@ -51,6 +51,7 @@ class SessionAdmin(admin.ModelAdmin):
   _first_date.short_description = 'first classtime'
   exclude = ('time_string','slug','publish_dt')
   inlines = (ClassTimeInline, EnrollmentInline, SessionAttachmentInline, TaggedPhotoInline)
+  search_fields = ("user__username","user__email","section__course__name")
   class Media:
     js = ("js/course_admin.js",)
 

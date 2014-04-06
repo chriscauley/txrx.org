@@ -4,6 +4,13 @@ from django.contrib.auth.models import User
 from localflavor.us.models import USStateField
 from .widgets import LocationField
 
+try:
+  from south.modelsinspector import add_introspection_rules
+  add_introspection_rules([], ["^localflavor\.us\.models\.USStateField"])
+except ImportError:
+  #necessary if you're going to use south
+  pass
+
 class GeoModel(models.Model):
   latlon = LocationField(max_length=500,null=True,blank=True) # stored as lat,lon
   _lat = property(lambda self: float(self.latlon.split(",")[0]))

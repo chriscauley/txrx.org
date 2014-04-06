@@ -49,6 +49,9 @@
         {% endfor %}
       </p>
       {% endif %}
+      {% if thing.session %}
+      <b>Course:</b> <a href="{{ thing.session.get_absolute_url }}">{{ thing.session.section.course }}</a>
+      {% endif %}
     </section>
   </div>
 </div>
