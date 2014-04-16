@@ -1,3 +1,4 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.template.response import TemplateResponse
 
 from course.models import ClassTime
@@ -67,6 +68,7 @@ def get_room_conflicts(td=0):
     out.append((location,location_conflicts))
   return out
 
+@staff_member_required
 def conflicts(request):
   values = {
     'room_conflicts': get_room_conflicts()
