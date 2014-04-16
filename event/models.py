@@ -99,6 +99,7 @@ class EventOccurrence(OccurrenceModel,PhotosMixin):
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
   end = models.DateTimeField(null=True,blank=True)
   get_absolute_url = lambda self: reverse('event:occurrence_detail',args=(self.id,slugify(self.name)))
+  get_admin_url = lambda self: "/admin/event/event/%s/"%self.event.id
   name_override = models.CharField(null=True,blank=True,max_length=128)
   name = property(lambda self: self.name_override or self.event.name)
   short_name = property(lambda self: self.name_override or self.event.get_short_name())

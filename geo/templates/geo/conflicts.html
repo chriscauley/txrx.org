@@ -1,15 +1,22 @@
 {% extends "base.html" %}
 
-{% block main %}
+{% block title %}Conflicting Events{% endblock %}
+{% block header_content %}Conflicting Events{% endblock %}
+
+{% block content %}
+<p class="lead">
+  Potential event conflicts are listed here. Bug Chris for more information.
+</p>
 {% for location,conflicts in room_conflicts %}
-<h2>{{ location }}</h2>
+<h2>{{ location.name }}</h2>
 <dl>
   {% for times,events in conflicts %}
-  <dt>From {{ times.0 }} to {{ times.1 }}</dt>
+  <dt>{{ times.0.date }} ({{ times.0|date:"G:m" }} - {{ times.1|date:"G:m" }})</dt>
   <dd>
     {% for event in events %}
-    <div>{{ event }}</div>
+    <div> [<a href="{{ event.get_absolute_url }}">Detail</a>] [<a href="{{ event.get_admin_url }}">Admin</a>] {{ event.short_name }}</div>
     {% endfor %}
+    <br />
   </dd>
   {% endfor %}
 </dl>

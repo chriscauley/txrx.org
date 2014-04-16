@@ -205,6 +205,7 @@ class ClassTime(OccurrenceModel):
       return self.session.section.course.get_short_name()
     return "%s (%s/%s)"%(self.session.section.course.get_short_name(),times.index(self)+1,len(times))
   get_absolute_url = lambda self: self.session.get_absolute_url()
+  get_admin_url = lambda self: "/admin/course/session/%s/"%self.session.id
   get_location = lambda self: self.session.section.location
   no_conflict = lambda self: self.session.section.no_conflict
   @property
