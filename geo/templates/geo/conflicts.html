@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block main %}
+{% for location,conflicts in room_conflicts %}
+<h2>{{ location }}</h2>
+<dl>
+  {% for times,events in conflicts %}
+  <dt>From {{ times.0 }} to {{ times.1 }}</dt>
+  <dd>
+    {% for event in events %}
+    <div>{{ event }}</div>
+    {% endfor %}
+  </dd>
+  {% endfor %}
+</dl>
+{% endfor %}
+{% endblock %}

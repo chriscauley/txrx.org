@@ -42,6 +42,8 @@ class Event(models.Model,PhotosMixin):
   get_location = lambda self: self.location
   description = wmd_models.MarkDownField(blank=True,null=True)
   repeat = models.CharField(max_length=32,choices=REPEAT_CHOICES,null=True,blank=True)
+  _ht = "If true, this class will not raise conflict warnings for events in the same location."
+  no_conflict = models.BooleanField(default=False,help_text=_ht)
 
   get_short_name = lambda self: self.short_name or self.name
   @property
@@ -103,6 +105,7 @@ class EventOccurrence(OccurrenceModel,PhotosMixin):
   description_override = wmd_models.MarkDownField(blank=True,null=True)
   description = property(lambda self: self.description_override or self.event.description)
   get_location = lambda self: self.event.location
+  no_conflict = property(lambda self: self.event.no_conflict)
   def save(self,*args,**kwargs):
     # set the publish_dt to a week before the event
     self.publish_dt = self.start - datetime.timedelta(7)

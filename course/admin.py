@@ -45,7 +45,7 @@ class SessionAttachmentInline(admin.TabularInline):
 class SessionAdmin(admin.ModelAdmin):
   form = StaffMemberForm
   raw_id_fields = ('section','user')
-  readonly_fields = ('_first_date',)
+  readonly_fields = ('_first_date','get_location')
   list_filter = ("publish_dt",)
   _first_date = lambda self,obj: getattr(obj,'first_date','Will be set on save')
   _first_date.short_description = 'first classtime'

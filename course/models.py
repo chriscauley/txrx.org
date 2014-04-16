@@ -59,6 +59,8 @@ class Section(models.Model):
   safety = models.BooleanField(default=False)
   location = models.ForeignKey(Location,default=1)
   src = ImageField("Logo",max_length=300,upload_to='course/%Y-%m',null=True,blank=True)
+  _ht = "If true, this class will not raise conflict warnings for events in the same location."
+  no_conflict = models.BooleanField(default=False,help_text=_ht)
   #tools = models.ManyToManyField(Tool,blank=True)
   max_students = models.IntegerField(default=40)
 
@@ -106,6 +108,7 @@ class Session(FeedItemModel,PhotosMixin):
 
   in_progress = property(lambda self: self.archived and self.last_date>datetime.datetime.now())
   closed = property(lambda self: self.cancelled or (self.archived and not self.in_progress))
+  get_location = lambda self: self.section.location
   @cached_property
   def total_students(self):
     return sum([e.quantity for e in self.enrollment_set.all()])
@@ -203,6 +206,7 @@ class ClassTime(OccurrenceModel):
     return "%s (%s/%s)"%(self.session.section.course.get_short_name(),times.index(self)+1,len(times))
   get_absolute_url = lambda self: self.session.get_absolute_url()
   get_location = lambda self: self.session.section.location
+  no_conflict = lambda self: self.session.section.no_conflict
   @property
   def description(self):
     return self.session.section.description
