@@ -65,7 +65,7 @@ def repeat_event(request,period,event_id):
   Creates EventOccurrences for an event for one whole year.
   Will delete all upcoming EventOccurrences.
   """
-  event = Event.objects.get(pk=event_id)
+  event = get_object_or_404(Event,pk=event_id)
   occurrences = event.upcoming_occurrences
   start = occurrences[0].start
   end = occurrences[0].end
@@ -91,19 +91,12 @@ def repeat_event(request,period,event_id):
   messages.success(request,message)
   return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
-@staff_member_required
-def edit_photoset(self,_id):
-  pass
-  #occurrence = EventOccurrence.objects.get(pk=_id)
-  #photoset = occurrence.get_photoset()
-  #return HttpResponseRedirect('/admin/codrspace/photoset/%s/'%photoset.id)
-
 def ics(request,module,model_str,pk,fname):
   """Returns an ics file for any `Event` like or `EventOccurrence` like model.
      An `Event` model will add an entry for `Event.all_occurrences()`.
      """
   model = get_model(module,model_str)
-  event = model.objects.get(pk=pk)
+  event = get_object_or_404(model,pk=pk)
   try:
     occurrences = event.all_occurrences
   except AttributeError: # single occurrence

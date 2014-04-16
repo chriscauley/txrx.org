@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from course.models import Session
@@ -9,7 +10,7 @@ from .models import NotifyCourse
 
 @login_required
 def notify_course(request,session_id):
-  session = Session.objects.get(pk=session_id)
+  session = get_object_or_404(Session,pk=session_id)
   course = session.section.course
   defaults = {'session': session}
   _, new = NotifyCourse.objects.get_or_create(user=request.user,course=course,defaults=defaults)
@@ -20,7 +21,7 @@ def notify_course(request,session_id):
 def clear_notification(request,model_string,user_id,model_id):
   #! TODO: generalize
   model = NotifyCourse
-  obj = model.objects.get(pk=model_id,user=request.limited_user)
+  obj = get_object_or_404(model,pk=model_id,user=request.limited_user)
   course = obj.course
   session = obj.session
   obj.delete()

@@ -13,7 +13,6 @@ _urls = lambda *ns: [url(r'^%s/'%n, include('%s.urls'%n, namespace=n, app_name=n
 urlpatterns = patterns(
   '',
   url(r'^$','txrx.views.index',name="home"),
-  url(r'admin/event/edit_photoset/(\d+)/$','event.views.edit_photoset'),
   url(r'^admin/', include(admin.site.urls)),
   url(r'^blog/$','txrx.views.blog_home',name="blog_home"),
   url(r'^blog/',include('codrspace.urls')),
