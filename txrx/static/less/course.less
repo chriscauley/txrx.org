@@ -61,9 +61,6 @@
     font-size: 25px;
   }
   .EnrollLink {
-    bottom: 0;
-    left: 0;
-    position: absolute;
     width: 100%;
   }
   .btn {
@@ -92,6 +89,150 @@
 #cart {
   max-width: 400px;
   margin: 0 auto;
+}
+
+#show_closed,[for=show_closed] { display: inline-block; margin-bottom: 5px; vertical-align: middle; }
+#show_closed { margin-left: 20px; margin-top: 0; }
+.week { margin-bottom: 20px; }
+.related_classes {
+  padding-top: 20px;
+  .full { color: red; }
+}
+
+.has_notes span {
+  border-bottom: dashed 1px;
+  color: #0088cc;
+  cursor: help;
+}
+
+.cartHeaders { display: none; }
+
+.checkout-box {
+  text-align: center;
+}
+
+.itemContainer {
+  padding: 3px;
+  position: relative;
+  margin-bottom: 5px;
+  min-height: 20px;
+  overflow: hidden;
+  &:nth-child(2n+1) { background-color: rgba(0,0,0,0.05); }
+}
+
+.itemName {
+  padding-right: 15px;
+  font-size: 12px;
+  b { font-size: 1.1em; }
+}
+
+.itemQuantity, .itemPrice {
+  display: inline-block;
+  padding-right: 20px;
+}
+.itemQuantity:before { content: "x"; }
+.simpleCart_finalTotal { font-size: 1.1em; font-weight: bold; }
+
+.itemRemove {
+  font-size: 0;
+  right: 0;
+  margin-top: -9px;
+  position: absolute;
+  top: 50%;
+  a {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    margin-top: 1px;
+    line-height: 14px;
+    background-image: url("/static/img/icon_x_red.png");
+    background-repeat: no-repeat;
+  }
+}
+
+.course, .course-detail {
+  .add { display: inline-block; }
+  .drop, &.in-cart .add { display: none; margin: 0 auto; }
+  &.in-cart .drop { display: inline-block; }
+}
+
+.RsvpLink, .EnrollLink {
+  display: block;
+  position: relative;
+  text-align: center;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.recentAdd {
+  box-shadow: inset 0 0 5px #3ac2f5, 0 0 5px #3ac2f5;
+}
+
+.RsvpLink {
+  .is_full,.unrsvp { display: none; }
+  &.attending {
+    .unrsvp { display: inline-block; }
+    .rsvp { display: none; }
+  }
+  .number_attending {
+    bottom: 100%;
+    left: 0;
+    position: absolute;
+  }
+}
+.full .RsvpLink {
+  .rsvp { display: none; }
+  .is_full { display: block; }
+  .not_full { display: none; }
+}
+
+.RsvpLink .message {
+  color: black;
+  bottom: 0;
+  display: none;
+  background: white;
+  box-shadow: inset 0 0 5px #55F;
+  padding: 5px 20px 5px 5px;
+  position: absolute;
+  right: 100%;
+  text-decoration: none;
+  width: 300px;
+  &:after {
+    background: url("/static/img/icon_x_red.png") no-repeat center;
+    color: #F33;
+    content: "";
+    display: block;
+    font-size: 1.5em;
+    position: absolute;
+    height: 10px;
+    line-height: 10px;
+    margin-top: -5px;
+    right: 10px;
+    top: 50%;
+    width: 10px;
+  }
+}
+
+@media (max-width: @screen-sm-max) {
+  .RsvpLink .message {
+    bottom: auto;
+    right: 0;
+    width: 213px;
+  }
+}
+
+.loading .RsvpLink {
+  &:before {
+    background: url(/static/img/loading.gif) center rgba(150,150,150,0.8) no-repeat;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
 }
 
 @media (max-width: @screen-sm-max) {

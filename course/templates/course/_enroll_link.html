@@ -26,7 +26,7 @@
   };
 </script>
 {% else %}
-<div class="price">FREE</div>
+<div class="price">$0</div>
 <div class="RsvpLink{% if session.user_enrollment %} attending{% endif %}">
   {% if session.archived %}
   <button class="btn btn-default disabled">CLOSED</button>
@@ -36,10 +36,10 @@
     RSVP'd x {{ session.user_enrollment.quantity }}</button>
   <button class="btn btn-success rsvp" onclick="rsvp({{ session.id }},'{{ session.get_rsvp_url }}');">
     RSVP</button>
-  <button class="btn btn-success unrsvp not_full" title="Bring a friend!"
-          onclick="rsvp({{ session.id }},'{{ session.get_rsvp_url }}?plus_one=1');">+1 Person</button>
   <button class="btn btn-danger unrsvp" onclick="rsvp({{ session.id }},'{{ session.get_rsvp_url }}?drop=1');">
     un-RSVP</button>
+  <button class="btn btn-success unrsvp not_full" title="Bring a friend!"
+          onclick="rsvp({{ session.id }},'{{ session.get_rsvp_url }}?plus_one=1');">+1 Person</button>
   <a href="javascript:;" onclick="$(this).hide(); return false;" class="message"></a>
   {% else %}
   You must 
