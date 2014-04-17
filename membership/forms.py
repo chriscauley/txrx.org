@@ -59,7 +59,7 @@ class SurveyForm(forms.Form):
 
 class UserMembershipForm(forms.ModelForm):
   def clean_paypal_email(self,*args,**kwargs):
-    user = self.instance
+    user = self.instance.user
     if not verify_unique_email(self.cleaned_data.get('paypal_email'),user=user):
       e = u'Another account is already using this paypal address. Please email us if you believe this is in error.'
       raise forms.ValidationError(e)
