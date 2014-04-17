@@ -23,12 +23,4 @@
     <a class="blue" href="/accounts/register/">Register</a> |
     <a class="blue" href="{% url "password_reset" %}">Reset Password</a>
   </div>
-  {% comment %}
-  <div>
-    <a href="/google_login?next={{ request.path }}" style="vertical-align: botton; display: inline-block; height: 25px; padding-left: 30px">
-      <img src="{{ STATIC_URL }}google_login.png" />
-    </a>
-    Login/register with google 
-  </div>
-  {% endcomment %}
 </form>

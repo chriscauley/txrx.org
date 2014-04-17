@@ -8,15 +8,15 @@
 <form method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   <table class="table">
+    {% for form in forms %}{% for error in form.non_field_errors %}
+    <tr><td colspan="3" class="danger">{{ error }}</td></tr>
+    {% endfor %}{% endfor %}
     {% for form in forms %}{% for field in form %}
-    <tr>
+    <tr{% if field.errors %} class="danger"{% endif %}>
       <td>
         <label for="id_{{ field.name }}"{% if field.field.required %} class="required"{% endif %}>
           {{ field.label }}:
         </label>
-        {% if field.errors %}
-        <span class="text-error">{{ field.errors.0 }}</span>
-        {% endif %}
       </td>
       <td>
         {{ field }}
@@ -27,6 +27,9 @@
         {% endif %}
       </td>
     </tr>
+    {% for error in field.errors %}
+    <tr><td colspan="3" class="danger">{{ error }}</td></tr>
+    {% endfor %}
     {% endfor %}{% endfor %}
     <tr>
       <td></td>

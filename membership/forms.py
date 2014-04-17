@@ -16,12 +16,36 @@ ls = "Skills you desire to learn"
 le = "Skills and area of expertise"
 lq = "Questions or comments"
 
+def verify_unique_email(email,user=None):
+  """
+  Check to make sure that there are no other users with this email.
+  Can be used with email or username.
+  """
+  other_users = User.objects.all()
+  if user:
+    other_users = User.objects.exclude(pk=user.pk)
+  by_email = other_users.filter(email=email)
+  by_username = other_users.filter(username=email)
+  by_paypal_email = other_users.filter(usermembership__paypal_email=email)
+  return not (by_email or by_username or by_paypal_email)
+
 kwargs = dict(widget=forms.Textarea,required=False)
 
 from captcha.fields import ReCaptchaField
 
 class RegistrationForm(RegistrationForm):
   captcha = ReCaptchaField()
+  def clean(self,*args,**kwargs):
+    "Check for duplicate emails. This isn't actually used since users are sent to the password reset page before this."
+    super(RegistrationForm,self).clean(*args,**kwargs)
+    user = self.instance
+    if not verify_unique_email(self.cleaned_data.get('email'),user=user):
+      e = u'Another account is already using this email address. Please email us if you believe this is in error.'
+      raise forms.ValidationError(e)
+    if not verify_unique_email(self.cleaned_data.get('username'),user=user):
+      e = u'Another account is already using this username. Please email us if you believe this is in error.'
+      raise forms.ValidationError(e)
+    return email
 
 class SurveyForm(forms.Form):
   reasons = forms.CharField(label=lr,**kwargs)
@@ -31,6 +55,12 @@ class SurveyForm(forms.Form):
   questions = forms.CharField(label=lq,help_text=q,**kwargs)
 
 class UserMembershipForm(forms.ModelForm):
+  def clean_paypal_email(self,*args,**kwargs):
+    user = self.instance
+    if not verify_unique_email(self.cleaned_data.get('paypal_email'),user=user):
+      e = u'Another account is already using this paypal address. Please email us if you believe this is in error.'
+      raise forms.ValidationError(e)
+    return self.cleaned_data.get('paypal_email')
   class Meta:
     fields = ('by_line','bio','paypal_email','notify_global','notify_classes','notify_comments','notify_sessions')
     model = UserMembership
@@ -41,6 +71,18 @@ class UserForm(forms.ModelForm):
     self.fields['first_name'].required = False
     self.fields['last_name'].required = False
     self.fields['email'].required = True
+  def clean_username(self,*args,**kwargs):
+    username = self.cleaned_data['username']
+    if not verify_unique_email(username,user=self.instance):
+      e = u'Another account is already using this email address. Please email us if you believe this is in error.'
+      raise forms.ValidationError(e)
+    return username
+  def clean_email(self,*args,**kwargs):
+    email = self.cleaned_data['email']
+    if not verify_unique_email(email,user=self.instance):
+      e = u'Another account is already using this username. Please email us if you believe this is in error.'
+      raise forms.ValidationError(e)
+    return email
   class Meta:
     fields = ('username','first_name','last_name','email')
     model = User
