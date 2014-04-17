@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 
 from .models import UserMembership
+from db.forms import PlaceholderModelForm, PlaceholderForm, placeholder_fields
 
 from registration.forms import RegistrationForm
 
@@ -37,6 +38,9 @@ kwargs = dict(widget=forms.Textarea,required=False)
 from captcha.fields import ReCaptchaField
 
 class RegistrationForm(RegistrationForm):
+  def __init__(self,*args,**kwargs):
+    super(RegistrationForm, self).__init__(*args,**kwargs)
+    placeholder_fields(self)
   captcha = ReCaptchaField()
   def clean(self,*args,**kwargs):
     "Check for duplicate emails. This isn't actually used since users are sent to the password reset page before this."
@@ -50,14 +54,14 @@ class RegistrationForm(RegistrationForm):
       raise forms.ValidationError(e)
     return email
 
-class SurveyForm(forms.Form):
+class SurveyForm(PlaceholderForm):
   reasons = forms.CharField(label=lr,**kwargs)
   projects = forms.CharField(label=lp,**kwargs)
   skills = forms.CharField(label=ls,help_text=s,**kwargs)
   expertise = forms.CharField(label=le,help_text=e,**kwargs)
   questions = forms.CharField(label=lq,help_text=q,**kwargs)
 
-class UserMembershipForm(forms.ModelForm):
+class UserMembershipForm(PlaceholderModelForm):
   def clean_paypal_email(self,*args,**kwargs):
     user = self.instance.user
     if not verify_unique_email(self.cleaned_data.get('paypal_email'),user=user):
@@ -68,7 +72,7 @@ class UserMembershipForm(forms.ModelForm):
     fields = ('by_line','bio','paypal_email','notify_global','notify_classes','notify_comments','notify_sessions')
     model = UserMembership
 
-class UserForm(forms.ModelForm):
+class UserForm(PlaceholderModelForm):
   def __init__(self,*args,**kwargs):
     super(UserForm,self).__init__(*args,**kwargs)
     self.fields['first_name'].required = False
@@ -91,6 +95,9 @@ class UserForm(forms.ModelForm):
     model = User
 
 class AuthenticationForm(AuthenticationForm):
+  def __init__(self,*args,**kwargs):
+    super(AuthenticationForm, self).__init__(*args,**kwargs)
+    placeholder_fields(self)
   def clean(self):
     username = self.cleaned_data.get('username')
     password = self.cleaned_data.get('password')
