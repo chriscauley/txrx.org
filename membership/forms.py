@@ -22,6 +22,9 @@ def verify_unique_email(email,user=None):
   Can be used with email or username.
   """
   other_users = User.objects.all()
+  if not email:
+    return True
+  email = email.strip()
   if user:
     other_users = User.objects.exclude(pk=user.pk)
   by_email = other_users.filter(email=email)
