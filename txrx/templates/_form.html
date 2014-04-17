@@ -1,0 +1,18 @@
+{% load txrx_tags %}
+{% for error in form.non_field_errors %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endfor %}
+{% for field in form %}
+<div class="form-group {% if field.errors %}has-error{% endif %}">
+  {{ field }}
+  {% if field|is_checkbox %}{{ field.label_tag }}{% endif %}
+  {% for error in field.errors %}
+  <div class="alert alert-danger">{{ error }}</div>
+  {% endfor %}
+  <div class="help-block">
+    {% if field.help_text %}
+    {{ field.help_text|linebreaks }}
+    {% endif %}
+  </div>
+</div>
+{% endfor %}

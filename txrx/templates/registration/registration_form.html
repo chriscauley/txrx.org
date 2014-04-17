@@ -1,14 +1,9 @@
 {% extends "registration/base.html" %}
 
 {% block content %}
-<form method="POST">
+<form method="POST" class="jvFloatForm">
   {% csrf_token %}
-  <table>
-    {{ form.as_table }}
-    <tr>
-      <td></td>
-      <td><input type="submit" /></td>
-    <tr>
-  </table>
+  {% include "_form.html" %}
+  <input type="submit" />
 </form>
 {% endblock %}

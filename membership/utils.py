@@ -39,3 +39,18 @@ def user_from_email(email):
   except:
     pass
 
+def verify_unique_email(email,user=None):
+  """
+  Check to make sure that there are no other users with this email.
+  Can be used with email or username.
+  """
+  other_users = User.objects.all()
+  if not email:
+    return True
+  email = email.strip()
+  if user:
+    other_users = User.objects.exclude(pk=user.pk)
+  by_email = other_users.filter(email=email)
+  by_username = other_users.filter(username=email)
+  by_paypal_email = other_users.filter(usermembership__paypal_email=email)
+  return not (by_email or by_username or by_paypal_email)

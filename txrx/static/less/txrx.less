@@ -336,12 +336,6 @@ h2.section_title {
   }
 }
 
-.jvFloat {
-  display: block !important;
-  .placeHolder { top: -3px !important; }
-  input { display: block; }
-}
-
 .evaluation_form .top {
   margin: 0 15px 10px 250px;
   min-height: 10px;
@@ -391,6 +385,8 @@ h2.section_title {
   label { margin-bottom: 10px; width: 100%; }
   textarea { height: 75px; width: 100%; }
 }
+
+textarea,input { max-width: 100%; }
 
 p.error { color: red; } /* currently only used on login form */
 ul.errorlist { color: red; }

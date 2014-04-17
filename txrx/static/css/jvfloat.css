@@ -5,10 +5,11 @@
 
 .jvFloat {
 	position: relative;
-	display: inline;
+	display: block; /* CCC 2014/4/17 */
 	margin-top: 1em;
+        padding-top: 3px;
 }
-
+.jvFloat input { display: block; } /* CCC 2014/4/17 */
 .jvFloat .placeHolder.required {
 	color: red;
 }

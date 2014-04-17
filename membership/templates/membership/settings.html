@@ -1,42 +1,18 @@
 {% extends "base.html" %}
+{% load txrx_tags %}
 
 {% block full_title %}Settings - {{ SITE_NAME }}{% endblock %}
 {% block header_content %}Edit your account settings{% endblock %}
 
 {% block main %}
 <p>If you want to change your password click <a href="{% url "auth_password_change" %}">here</a></p>
-<form method="POST" enctype="multipart/form-data">
+<form method="POST" enctype="multipart/form-data" class="jvFloatForm">
   {% csrf_token %}
-  <table class="table">
-    {% for form in forms %}{% for error in form.non_field_errors %}
-    <tr><td colspan="3" class="danger">{{ error }}</td></tr>
-    {% endfor %}{% endfor %}
-    {% for form in forms %}{% for field in form %}
-    <tr{% if field.errors %} class="danger"{% endif %}>
-      <td>
-        <label for="id_{{ field.name }}"{% if field.field.required %} class="required"{% endif %}>
-          {{ field.label }}:
-        </label>
-      </td>
-      <td>
-        {{ field }}
-      </td>
-      <td class="muted">
-        {% if field.help_text %}
-        {{ field.help_text|linebreaks }}
-        {% endif %}
-      </td>
-    </tr>
-    {% for error in field.errors %}
-    <tr><td colspan="3" class="danger">{{ error }}</td></tr>
-    {% endfor %}
-    {% endfor %}{% endfor %}
-    <tr>
-      <td></td>
-      <td><input type="submit" class="btn btn-success" /></td>
-      <td></td>
-    </tr>
-  </table>
+  {% for form in forms %}{% for error in form.non_field_errors %}
+  <div class="alert alert-danger">{{ error }}</div>
+  {% endfor %}{% endfor %}
+  {% for form in forms %}{% include "_form.html" %}{% endfor %}
+  <input type="submit" class="btn btn-success" />
 </form>
 {% if notify_courses %}
 <h3>Course Notifications:</h3>

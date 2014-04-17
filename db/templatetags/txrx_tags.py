@@ -1,4 +1,5 @@
 from django import template
+from django.forms import CheckboxInput
 
 register = template.Library()
 
@@ -9,3 +10,7 @@ def noemail(value):
     return value
   a,b = value.split('@')
   return '%s...@%s'%(a[:len(a)/2],b)
+
+@register.filter(name='is_checkbox')
+def is_checkbox(field):
+  return field.field.widget.__class__.__name__ == CheckboxInput().__class__.__name__

@@ -10,7 +10,7 @@ from django.template.response import TemplateResponse
 
 from .models import Membership, MeetingMinutes, Officer
 from .forms import UserForm, UserMembershipForm, RegistrationForm
-from .utils import limited_login_required
+from .utils import limited_login_required, verify_unique_email
 
 from course.models import Course,CourseCompletion, Session
 from txrx.utils import FORBIDDEN
@@ -59,17 +59,17 @@ def minutes_index(request):
   return TemplateResponse(request,'membership/minutes_index.html',values)
 
 def register(request,*args,**kwargs):
+  kwargs['form_class'] = 'monkey' #RegistrationForm
+  email = request.POST.get('email','')
+  if request.POST and not verify_unique_email(email):
+    m = "An account with that email address already exists. "
+    m += "Please use the form below to reset your password. "
+    m += "If you believe this is in error, please email chris [{at}] lablackey.com"
+    messages.error(request,m,extra_tags='danger')
+    return HttpResponseRedirect(reverse('password_reset'))
   kwargs['form_class'] = RegistrationForm
-  if request.POST and request.POST.get('email',None):
-    email = request.POST.get('email','')
-    if User.objects.filter(email__iexact=email) or User.objects.filter(usermembership__paypal_email__iexact=email):
-      m = "An account with that email address already exists. "
-      m += "Please use the form below to reset your password. "
-      m += "If you believe this is in error, please email chris [{at}] lablackey.com"
-      messages.error(request,m,extra_tags='danger')
-      return HttpResponseRedirect(reverse('password_reset'))
-  _r = RegistrationView.as_view()
-  return _r(request,*args,**kwargs)
+  kwargs['request'] = request
+  return RegistrationView(*args,**kwargs).dispatch(request)
 
 def roland_email(request,y=2012,m=1,d=1):
   if not request.user.is_superuser:

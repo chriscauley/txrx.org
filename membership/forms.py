@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 
 from .models import UserMembership
+from .utils import verify_unique_email
 from db.forms import PlaceholderModelForm, PlaceholderForm, placeholder_fields
 
 from registration.forms import RegistrationForm
@@ -17,22 +18,6 @@ ls = "Skills you desire to learn"
 le = "Skills and area of expertise"
 lq = "Questions or comments"
 
-def verify_unique_email(email,user=None):
-  """
-  Check to make sure that there are no other users with this email.
-  Can be used with email or username.
-  """
-  other_users = User.objects.all()
-  if not email:
-    return True
-  email = email.strip()
-  if user:
-    other_users = User.objects.exclude(pk=user.pk)
-  by_email = other_users.filter(email=email)
-  by_username = other_users.filter(username=email)
-  by_paypal_email = other_users.filter(usermembership__paypal_email=email)
-  return not (by_email or by_username or by_paypal_email)
-
 kwargs = dict(widget=forms.Textarea,required=False)
 
 from captcha.fields import ReCaptchaField
@@ -45,14 +30,12 @@ class RegistrationForm(RegistrationForm):
   def clean(self,*args,**kwargs):
     "Check for duplicate emails. This isn't actually used since users are sent to the password reset page before this."
     super(RegistrationForm,self).clean(*args,**kwargs)
-    user = self.instance
-    if not verify_unique_email(self.cleaned_data.get('email'),user=user):
+    if not verify_unique_email(self.cleaned_data.get('email')):
       e = u'Another account is already using this email address. Please email us if you believe this is in error.'
       raise forms.ValidationError(e)
-    if not verify_unique_email(self.cleaned_data.get('username'),user=user):
+    if not verify_unique_email(self.cleaned_data.get('username')):
       e = u'Another account is already using this username. Please email us if you believe this is in error.'
       raise forms.ValidationError(e)
-    return email
 
 class SurveyForm(PlaceholderForm):
   reasons = forms.CharField(label=lr,**kwargs)
