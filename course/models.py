@@ -11,6 +11,7 @@ from feed.models import FeedItemModel
 from codrspace.models import MiscFile, PhotosMixin
 from geo.models import Location
 from event.models import OccurrenceModel, reverse_ics
+from tool.models import ToolsMixin
 from txrx.utils import cached_method,cached_property
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
@@ -33,7 +34,7 @@ class Term(models.Model):
   class Meta:
     ordering = ('-start',)
 
-class Course(models.Model,PhotosMixin):
+class Course(models.Model,PhotosMixin,ToolsMixin):
   name = models.CharField(max_length=64)
   _ht = "Used for the events page."
   subjects = models.ManyToManyField(Subject)

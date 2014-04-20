@@ -4,6 +4,7 @@ from course.models import Subject, Course, Section, Session, Enrollment, Term, C
 from db.forms import StaffMemberForm
 
 from codrspace.admin import TaggedPhotoInline
+from tool.admin import TaggedToolInline
 
 class SubjectAdmin(admin.ModelAdmin):
   pass
@@ -14,9 +15,13 @@ class CourseCompletionInline(admin.TabularInline):
   raw_id_fields = ('user',)
 
 class CourseAdmin(admin.ModelAdmin):
-  list_display = ("name",)
+  list_display = ("name","tool_count","photo_count")
   filter_horizontal = ("subjects",)
-  inlines = [CourseCompletionInline,TaggedPhotoInline]
+  inlines = [CourseCompletionInline,TaggedPhotoInline,TaggedToolInline]
+  def tool_count(self,obj):
+    return len(obj.get_tools())
+  def photo_count(self,obj):
+    return len(obj.get_photos())
 
 class ClassTimeInline(admin.TabularInline):
   extra = 0

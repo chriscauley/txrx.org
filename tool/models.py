@@ -10,8 +10,6 @@ from codrspace.models import Photo, PhotosMixin
 from db.models import SlugModel, OrderedModel
 from txrx.utils import cached_property, cached_method
 
-from tagging.fields import TagField
-
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
 
 class Lab(SlugModel,OrderedModel,PhotosMixin):
@@ -27,13 +25,10 @@ class Tool(SlugModel,OrderedModel,PhotosMixin):
   make = models.CharField(max_length=64,null=True,blank=True)
   model = models.CharField(max_length=32,null=True,blank=True)
   description = MarkDownField(blank=True,null=True)
-  short_description = models.CharField(max_length=128,null=True,blank=True)
   est_price = models.FloatField(null=True,blank=True)
 
   links = lambda self: self.toollink_set.all()
   get_absolute_url = lambda self: reverse("tool_detail",args=[self.lab.slug,self.slug])
-  get_short_description = lambda self: self.short_description or self.description
-  tags = TagField()
   class Meta:
     ordering = ("order",)
 
