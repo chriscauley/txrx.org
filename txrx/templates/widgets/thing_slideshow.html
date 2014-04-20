@@ -17,7 +17,7 @@
   {% if thing.get_photos|length > 1 %}
   <div class="slide-nav">
     {% for photo in thing.get_photos %}
-    {% thumbnail photo|get_override:"square_crop" "100x100" crop="center" as im %}
+    {% thumbnail photo|get_override:"square_crop" "150x150" crop="center" as im %}
     <a href="javascript:;" onclick="$(this).closest('.slideshow').find('.slide').hide().eq({{ forloop.counter0 }}).show();">
       <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
       {% if photo.external_url %}
