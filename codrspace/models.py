@@ -86,6 +86,11 @@ SOURCE_CHOICES = (
   ('misc','Miscelaneous'),
   )
 
+EXTERNAL_TYPE_CHOICES = (
+  ('gfycat','Gfycat'),
+  ('vortex','Curly Vortex')
+)
+
 class Photo(FileModel):
   file = OriginalImage("Photo",upload_to='uploads/photos/%Y-%m', null=True,max_length=200)
   caption = models.TextField(null=True,blank=True)
@@ -99,6 +104,15 @@ class Photo(FileModel):
   landscape_crop = CropOverride('Landscape Crop (3:2)', aspect='3x2',help_text=_lh,**kwargs)
   _ph = "Usages: None"
   portrait_crop = CropOverride('Portrait Crop (2:3)', aspect='2x3',help_text=_ph,**kwargs)
+  external_url = models.URLField(null=True,blank=True)
+  external_type = models.CharField(max_length=16,null=True,blank=True,choices=EXTERNAL_TYPE_CHOICES)
+  def save(self,*args,**kwargs):
+    self.external_url = self.external_url.replace('youtu.be','youtube.com')
+    if not '/embed/' in self.external_url:
+      self.external_url = self.external_url.replace('youtube.com/','youtube.com/embed/')
+      if not "?" in self.external_url:
+        self.external_url +="?autoplay=1&rel=0"
+    super(Photo,self).save(*args,**kwargs)
   class Meta:
     ordering = ('name',)
 

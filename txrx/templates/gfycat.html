@@ -1,0 +1,19 @@
+<html>
+  <body style="margin:0;background:white;">
+    <style>
+      .wrap { display: table; height:100%; width: 100%; }
+      .wrap2 { display: table-cell; text-align: center; vertical-align: middle; padding-bottom: 20px;}
+    </style>
+    <div class="wrap"><div class="wrap2">
+        <img class="gfyitem" data-id="{{ slug }}" />
+    </div></div>
+    <script>
+      (function(d, t) {
+      var g = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+      g.src = 'http://assets.gfycat.com/js/gfyajax-0.517d.js';
+      s.parentNode.insertBefore(g, s);
+      }(document, 'script'));
+    </script>
+  </body>
+</html>

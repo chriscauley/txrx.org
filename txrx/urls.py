@@ -30,6 +30,7 @@ urlpatterns = patterns(
   url(r'^thing/$','thing.views.thing_index',name='thing_index'),
   url(r'^thing/(\d+)/([\w\d\-\_]+)/$','thing.views.thing_detail',name='thing_detail'),
   url(r'^conflicts/$','geo.views.conflicts',name="conflicts"),
+  url(r'gfycat/$','main.views.gfycat',name='gfycat')
 )
 
 #auth related
