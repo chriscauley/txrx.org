@@ -7,9 +7,8 @@
     <div class="slide"{% if not forloop.first %} style="display:none;"{% endif %}>
       <img src="{{ im.url }}" width="750" height="500" />
       {% if photo.external_url %}
-      <a href="{{ photo.external_url }}" class="external {{ photo.external_type }}"
-         onclick="iframeExternal(this);return false">
-        <span class="glyphicon glyphicon-play"</span></a>
+      <a href="{{ photo.external_url }}" class="glyphicon external {{ photo.external_type }}"
+         onclick="iframeExternal(this);return false"></a>
       {% endif %}
     </div>
     {% endthumbnail %}
@@ -20,7 +19,11 @@
     {% for photo in thing.get_photos %}
     {% thumbnail photo|get_override:"square_crop" "100x100" crop="center" as im %}
     <a href="javascript:;" onclick="$(this).closest('.slideshow').find('.slide').hide().eq({{ forloop.counter0 }}).show();">
-      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" /></a>
+      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+      {% if photo.external_url %}
+      <div class="glyphicon external {{ photo.external_type }}"></div></a>
+      {% endif %}
+    </a>
     {% endthumbnail %}
     {% endfor %}
   </div>

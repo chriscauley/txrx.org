@@ -31,8 +31,7 @@ class PhotoAdmin(CropAdmin):
   search_fields = ('name',)
   raw_id_fields = ('user',)
   fieldsets = (
-    (None,{'fields': ('name','file',('user','source'),'caption')}),
-    ('external media',{'fields': ('external_url','external_type')}),
+    (None,{'fields': ('name','file',('user','source'),'caption','external_url')}),
     ('crops',{'fields': (('square_crop','landscape_crop'),'portrait_crop')}),
     )
   def _thumbnail(self,obj):

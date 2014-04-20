@@ -105,7 +105,12 @@ class Photo(FileModel):
   _ph = "Usages: None"
   portrait_crop = CropOverride('Portrait Crop (2:3)', aspect='2x3',help_text=_ph,**kwargs)
   external_url = models.URLField(null=True,blank=True)
-  external_type = models.CharField(max_length=16,null=True,blank=True,choices=EXTERNAL_TYPE_CHOICES)
+  @property
+  def external_type(self):
+    for t in ['gfycat','youtube','vortex']:
+      if t in self.external_url:
+        return t
+    return 'video'
   def save(self,*args,**kwargs):
     self.external_url = self.external_url.replace('youtu.be','youtube.com')
     if not '/embed/' in self.external_url:
