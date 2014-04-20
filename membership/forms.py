@@ -36,6 +36,7 @@ class RegistrationForm(RegistrationForm):
     if not verify_unique_email(self.cleaned_data.get('username')):
       e = u'Another account is already using this username. Please email us if you believe this is in error.'
       raise forms.ValidationError(e)
+    return self.cleaned_data
 
 class SurveyForm(PlaceholderForm):
   reasons = forms.CharField(label=lr,**kwargs)
