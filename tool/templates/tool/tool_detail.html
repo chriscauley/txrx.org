@@ -13,6 +13,10 @@
     </div>
     <div class="col-sm-6">
       <h2>{{ tool }}</h2>
+      <div><b>Status:</b> {{ tool.get_status }}</div>
+      {% if not tool.functional %}
+      <div><b>Estimated Repair Date:</b> {{ tool.repair_date|default_if_none:"TBD" }}</div>
+      {% endif %}
       {% if tool.make or tool.model %}
       <h4>{{ tool.make|default:"" }} {{ tool.model|default:"" }}</h4>
       {% endif %}
@@ -21,6 +25,12 @@
       <h4>Related Links:</h4>
       {% for link in tool.toollink_set.all %}
       <a href="{{ link.url }}">{{ link.title }}</a><br />
+      {% endfor %}
+      {% endif %}
+      {% if tool.consumables.all %}
+      <h4>Materials used</h4>
+      {% for material in tool.materials.all %}
+      <a href="{{ material }}">{{ material }}</a><br />
       {% endfor %}
       {% endif %}
     </div>

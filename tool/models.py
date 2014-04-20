@@ -28,7 +28,11 @@ class Tool(SlugModel,OrderedModel,PhotosMixin):
   description = MarkDownField(blank=True,null=True)
   est_price = models.FloatField(null=True,blank=True)
   links = lambda self: self.toollink_set.all()
+  materials = models.ManyToManyField("thing.Material",null=True,blank=True)
   get_absolute_url = lambda self: reverse("tool_detail",args=[self.lab.slug,self.slug])
+  functional = models.BooleanField(default=True)
+  repair_date = models.DateField(null=True,blank=True)
+  get_status = lambda self: "Functional" if self.functional else "Non-functional"
   class Meta:
     ordering = ("order",)
   # Abstract the next two!

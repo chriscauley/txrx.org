@@ -19,6 +19,7 @@ class ToolLinkInline(admin.TabularInline):
 
 class ToolAdmin(SlugModelAdmin,OrderedModelAdmin):
   inlines = (ToolLinkInline,TaggedPhotoInline)
+  filter_horizontal = ('materials',)
 
 #See note above corresponding model
 class TaggedToolInline(GenericTabularInline):
