@@ -43,6 +43,7 @@ class Course(models.Model,PhotosMixin,ToolsMixin):
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   get_short_name = lambda self: self.short_name or self.name
   __unicode__ = lambda self: self.name
+  get_absolute_url = lambda self: Session.objects.filter(section__course=self)[0].get_absolute_url()
   class Meta:
     ordering = ("name",)
 

@@ -1,0 +1,16 @@
+{% load thumbnail crop_util %}
+{% if items %}
+<section class="generic_box">
+  <h3 class="block_title">{{ title }}</h3>
+  {% for item in items %}
+  {% thumbnail item.first_photo|get_override:"square_crop" "75x75" crop="center" as im %}
+  <div class="well">
+    <a href="{{ item.get_absolute_url }}">
+      <img src="{{ im.url }}" />
+      {{ item }}
+    </a>
+  </div>
+  {% endthumbnail %}
+  {% endfor %}
+</section>
+{% endif %}

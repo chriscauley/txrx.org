@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 
 from south.modelsinspector import add_introspection_rules
@@ -26,11 +27,21 @@ class Tool(SlugModel,OrderedModel,PhotosMixin):
   model = models.CharField(max_length=32,null=True,blank=True)
   description = MarkDownField(blank=True,null=True)
   est_price = models.FloatField(null=True,blank=True)
-
   links = lambda self: self.toollink_set.all()
   get_absolute_url = lambda self: reverse("tool_detail",args=[self.lab.slug,self.slug])
   class Meta:
     ordering = ("order",)
+  # Abstract the next two!
+  @cached_property
+  def courses(self):
+    ct_id = ContentType.objects.get(name="course").id
+    tagged = list(TaggedTool.objects.filter(content_type__id=ct_id,tool=self))
+    return [t.content_object for t in tagged]
+  @cached_property
+  def things(self):
+    ct_id = ContentType.objects.get(name="thing").id
+    tagged = list(TaggedTool.objects.filter(content_type__id=ct_id,tool=self))
+    return [t.content_object for t in tagged]
 
 class ToolLink(OrderedModel):
   tool = models.ForeignKey(Tool)

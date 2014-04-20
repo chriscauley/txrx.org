@@ -29,8 +29,9 @@
 {% endblock %}
 
 {% block side %}
-{% if tool.get_classes or tool.get_things %}
-TODO
+{% if tool.courses or tool.things %}
+{% include "_generic_box.html" with items=tool.courses title="Related Courses" %}
+{% include "_generic_box.html" with items=tool.things title="Related Things" %}
 {% else %}
 {{ block.super }}
 {% endif %}
