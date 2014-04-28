@@ -10,7 +10,7 @@ def placeholder_fields(self):
   for field_name in self.fields:
     field = self.fields.get(field_name)
     if field and field.label:
-      attrs = {'placeholder': field.label,'title': field.label}
+      attrs = {'class':'form-control', 'placeholder': field.label,'title': field.label}
       if type(field.widget) in (forms.TextInput, forms.DateInput):
         field.widget = forms.TextInput(attrs=attrs)
       if type(field.widget) == (forms.PasswordInput):

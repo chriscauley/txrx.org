@@ -11,7 +11,7 @@
   {% endfor %}
   <div class="help-block">
     {% if field.help_text %}
-    {{ field.help_text|linebreaks }}
+    {{ field.help_text|safe|linebreaksbr }}
     {% endif %}
   </div>
 </div>

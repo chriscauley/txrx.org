@@ -41,6 +41,9 @@ h1.page_title {
     right: 0;
   }
 }
+@media (max-width: @screen-sm-max) {
+  h1.page_title { padding-right: 0; }
+}
 
 h3.block_title {
   color: @gray-dark;
@@ -336,7 +339,19 @@ h2.section_title {
   }
 }
 
-.evaluation_form .top {
+.evaluation_form {
+  textarea {
+    display: block;
+    height: 6em;
+  }
+  [name=visuals_comments], [name=content_comments], [name=presentation_comments] {
+    display: inline-block;
+    height: 4em;
+    width: 300px;
+  }
+}
+
+/*.evaluation_form .top {
   margin: 0 15px 10px 250px;
   min-height: 10px;
   overflow: hidden;
@@ -347,14 +362,19 @@ h2.section_title {
 }
 
 .evaluation_form {
-  ._row { margin-bottom: 10px; }
   ul {
     display: inline-block;
-    margin: 0;
-    padding: 0 0 0 50px;
+    padding: 0;
+    margin: 0 0 0 50px;
     width: 350px;
     label { position: relative; width: 100%; }
-    input { position: absolute; left: 50%; margin-left: -10px; top: 100%; width: 20px; }
+    input {
+      position: absolute;
+      left: 50%;
+      margin-left: -10px;
+      top: 100%;
+      width: 20px;
+    }
     &.errorlist {
       color: red;
       font-weight: bold;
@@ -377,7 +397,7 @@ h2.section_title {
   .help_text { font-size: 0.8em; width: 250px; }
   .comments {
     margin-bottom: 30px;
-    input { margin-left: -100px; width: 500px; }
+    input { margin-left: -100px; width: 500px; max-width: 100%; }
   }
 }
 
@@ -385,7 +405,7 @@ h2.section_title {
   label { margin-bottom: 10px; width: 100%; }
   textarea { height: 75px; width: 100%; }
 }
-
+*/
 textarea,input { max-width: 100%; }
 
 p.error { color: red; } /* currently only used on login form */

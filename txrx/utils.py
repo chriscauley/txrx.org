@@ -26,6 +26,14 @@ def mail_on_fail(target):
       mail_admins_plus("Error occurred via 'mail_on_fail'",'\n'.join(lines))
   return wrapper
 
+if settings.DEBUG:
+  def mail_on_fail(target):
+    def wrapper(*args,**kwargs):
+      return target(*args,**kwargs)
+    return wrapper
+
+  
+
 def cached_method(target,name=None):
   target.__name__ = name or target.__name__
   if target.__name__ == "<lambda>":

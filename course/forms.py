@@ -2,6 +2,7 @@ from django import forms
 from django.core.mail import send_mail
 
 from .models import Evaluation, FIVE_CHOICES
+from db.forms import PlaceholderModelForm
 
 class RequestForm(forms.Form):
   """
@@ -41,8 +42,9 @@ class EmailInstructorForm(RequestForm):
       to_addresses.append('chris@lablackey.com')
     send_mail(subject,body,from_address,to_addresses)
 
-class EvaluationForm(forms.ModelForm):
-  _kwargs = dict(choices=FIVE_CHOICES,widget=forms.RadioSelect)
+class EvaluationForm(PlaceholderModelForm):
+  _kwargs = dict(choices=(('','-------'),)+FIVE_CHOICES)
+  _kwargs = dict(choices=(('','-------'),)+FIVE_CHOICES)
   presentation = forms.ChoiceField(label="Instructor Presentation",help_text=Evaluation.p_ht,**_kwargs)
   content = forms.ChoiceField(label="Course Content",help_text=Evaluation.c_ht,**_kwargs)
   visuals = forms.ChoiceField(label="Handouts/Audio/Visuals",help_text=Evaluation.v_ht,**_kwargs)

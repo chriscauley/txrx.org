@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block header_content %}Registration Complete{% endblock %}
+
+{% block content %}
+<p>
+  You are now registered for the following class{{ sessions|pluralize:"es" }}.
+</p>
+
+<table class="striped-table">
+  {% for session in sessions %}
+  <tr>
+    <td>
+      <a href="{{ section.get_absolute_url }}">{{ session.name }}</a>
+      {% if session.section.requirements %}
+      <p><b>Requirements</b>: {{ session.section.requirements }}</p>
+      {% endif %}
+    </td>
+    <td>{{ session.get_short_dates }}</td>
+    <td>${{ session.section.fee }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

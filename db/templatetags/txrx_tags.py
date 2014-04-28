@@ -1,9 +1,9 @@
 from django import template
-from django.forms import CheckboxInput
+from django.forms import CheckboxInput, Select
 
 register = template.Library()
 
-@register.filter(name='noemail')
+@register.filter
 def noemail(value):
   """Google groups style email obfuscation."""
   if not '@' in value:
@@ -11,6 +11,10 @@ def noemail(value):
   a,b = value.split('@')
   return '%s...@%s'%(a[:len(a)/2],b)
 
-@register.filter(name='is_checkbox')
+@register.filter
 def is_checkbox(field):
-  return field.field.widget.__class__.__name__ == CheckboxInput().__class__.__name__
+  return field.field.widget.__class__.__name__ == CheckboxInput.__name__
+
+@register.filter
+def is_select(field):
+  return field.field.widget.__class__.__name__ == Select.__name__
