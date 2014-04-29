@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.core.validators import MaxLengthValidator
 from django.template.defaultfilters import slugify
 from db.models import UserModel
 from sorl.thumbnail import ImageField
@@ -264,20 +265,22 @@ FIVE_CHOICES = (
 )
 
 class Evaluation(UserModel):
+  _kwargs = dict(validators=[MaxLengthValidator(512)],max_length=512,null=True,blank=True)
+
   enrollment = models.ForeignKey(Enrollment,unique=True)
   datetime = models.DateTimeField(auto_now_add=True)
 
   p_ht = "Rate the instructor on subject knowledge, pace of the course and communication skills"
   presentation = models.IntegerField("Instructor Presentation",choices=FIVE_CHOICES,help_text=p_ht)
-  presentation_comments = models.TextField("Comments",max_length=512,null=True,blank=True)
+  presentation_comments = models.TextField("Comments",**_kwargs)
 
   c_ht = "How well did the course content cover the subject area you were interested in?"
   content = models.IntegerField("Course Content",choices=FIVE_CHOICES,help_text=c_ht)
-  content_comments = models.TextField("Comments",max_length=512,null=True,blank=True)
+  content_comments = models.TextField("Comments",**_kwargs)
 
   v_ht = "How helpful did you find the handouts and audiovisuals presented in this course?"
   visuals = models.IntegerField("Handouts/Audio/Visuals",choices=FIVE_CHOICES,help_text=v_ht)
-  visuals_comments = models.TextField("Comments",max_length=512,null=True,blank=True)
+  visuals_comments = models.TextField("Comments",**_kwargs)
 
   question1 = models.TextField("What did you like best about this class?",null=True,blank=True)
   question2 = models.TextField("How could this class be improved?",null=True,blank=True)
