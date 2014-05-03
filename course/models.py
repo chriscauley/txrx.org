@@ -257,11 +257,11 @@ class CourseCompletion(UserModel):
   created = models.DateTimeField(auto_now_add=True)
 
 FIVE_CHOICES = (
-  (1,'1'),
+  (1,'1 - Did not meet expectations'),
   (2,'2'),
-  (3,'3'),
+  (3,'3 - Met expectations'),
   (4,'4'),
-  (5,'5'),
+  (5,'5 - Exceeded expectations'),
 )
 
 class Evaluation(UserModel):
