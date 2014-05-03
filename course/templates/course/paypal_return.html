@@ -7,7 +7,28 @@
   You are now registered for the following class{{ sessions|pluralize:"es" }}.
 </p>
 
-<table class="striped-table">
+{% if not request.user.is_authenticated %}
+<div class="alert alert-danger">
+  <p>
+    Because you are not logged in,
+    {% if matched_user %}
+    we looked up your paypal email and will assign your classes to the user with username "{{ matched_user }}".
+    {% else %}
+    we will create a new account using your paypal email: "{{ email }}".
+    {% endif %}
+  </p>
+  <p>
+    If this is wrong, please sent an email with the subject "{{ request.REQUEST.txn_id }}" to <a href="mailto:{{ settings.CONTACT_EMAIL }}?subject=Transaction {{ request.REQUEST.txn_id }}">{{ settings.CONTACT_EMAIL }}</a>.
+  </p>
+</div>
+{% endif %}
+
+<table class="table table-striped" style="max-width: 400px;">
+  <tr>
+    <th>Course</th>
+    <th>Date(s)</th>
+    <th>Cost</th>
+  </tr>
   {% for session in sessions %}
   <tr>
     <td>

@@ -1,11 +1,16 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.contrib.sites.models import RequestSite
+from django.contrib.sites.models import Site
+
+from registration.models import RegistrationProfile
 
 from .models import UserMembership
 from .utils import verify_unique_email
 from db.forms import PlaceholderModelForm, PlaceholderForm, placeholder_fields
 
+from registration import signals
 from registration.forms import RegistrationForm
 
 s = "What do you to hope accomplish at the hackerspace? What classes do you want to take? What classes are no offered that you'd like to see offered?"
@@ -20,13 +25,12 @@ lq = "Questions or comments"
 
 kwargs = dict(widget=forms.Textarea,required=False)
 
-from captcha.fields import ReCaptchaField
-
 class RegistrationForm(RegistrationForm):
+  _ht = "<b>If different than the email address above.\nThis is necessary to record when you register for a class.</b>"
+  paypal_email = forms.EmailField(required=False,label="PayPal Email - Optional",help_text=_ht)
   def __init__(self,*args,**kwargs):
     super(RegistrationForm, self).__init__(*args,**kwargs)
     placeholder_fields(self)
-  captcha = ReCaptchaField()
   def clean(self,*args,**kwargs):
     "Check for duplicate emails. This isn't actually used since users are sent to the password reset page before this."
     super(RegistrationForm,self).clean(*args,**kwargs)
@@ -37,6 +41,16 @@ class RegistrationForm(RegistrationForm):
       e = u'Another account is already using this username. Please email us if you believe this is in error.'
       raise forms.ValidationError(e)
     return self.cleaned_data
+  def save(self,request):
+    cleaned_data = self.cleaned_data
+    username, email, password = cleaned_data['username'], cleaned_data['email'], cleaned_data['password1']
+    if Site._meta.installed:
+      site = Site.objects.get_current()
+    else:
+      site = RequestSite(request)
+    new_user = RegistrationProfile.objects.create_inactive_user(username, email, password, site)
+    signals.user_registered.send(sender=self.__class__,user=new_user,request=request)
+    return new_user
 
 class SurveyForm(PlaceholderForm):
   reasons = forms.CharField(label=lr,**kwargs)

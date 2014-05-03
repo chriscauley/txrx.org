@@ -4,12 +4,18 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.forms import *
+from django.core.urlresolvers import reverse
 from django import forms
 
 from codrspace.admin import TaggedPhotoInline
 from membership.models import UserMembership
+
+from paypal.standard.ipn.models import PayPalIPN
+from paypal.standard.ipn.admin import PayPalIPNAdmin
+
 admin.site.unregister(FlatPage)
 admin.site.unregister(User)
+admin.site.unregister(PayPalIPN)
 
 TEMPLATE_CHOICES = (
   ('','HTML'),
@@ -37,7 +43,21 @@ class UserMembershipInline(admin.StackedInline):
 class UserAdmin(UserAdmin):
   inlines = [UserMembershipInline]
 
+class CustomIPNAdmin(PayPalIPNAdmin):
+  fieldsets = PayPalIPNAdmin.fieldsets
+  fieldsets[0][1]['fields'].append('view_redirect')
+  fieldsets[0][1]['fields'].append('view_IPN')
+  readonly_fields = PayPalIPNAdmin.readonly_fields + ('view_redirect','view_IPN')
+  def view_redirect(self,obj):
+    link = '<a href="%s">View Redirect</a>'
+    return link%(reverse('paypal_redirect')+"?"+obj.query)
+  view_redirect.allow_tags = True
+  def view_IPN(self,obj):
+    pass
+  view_IPN.allow_tags = True
+
 admin.site.register(FlatPage,FlatPageAdmin)
 admin.site.register(User,UserAdmin)
+admin.site.register(PayPalIPN,CustomIPNAdmin)
 
 from .signals import *

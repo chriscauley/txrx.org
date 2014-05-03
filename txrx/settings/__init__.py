@@ -106,6 +106,8 @@ AUTH_PROFILE_MODULE = 'codrspace.Profile'
 
 PAYPAL_RECEIVER_EMAIL = "txrxlabs@gmail.com"
 
+CONTACT_EMAIL = "webmaster@txrxlabs.org"
+CONTACT_LINK = "<a href='%s'>%s</a>"%(CONTACT_EMAIL,CONTACT_EMAIL)
 EMAIL_SUBJECT_PREFIX = "[TXRX] "
 DEFAULT_FROM_EMAIL = "noreply@txrxlabs.org"
 SERVER_EMAIL = "noreply@txrxlabs.org"

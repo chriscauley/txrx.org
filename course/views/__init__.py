@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.http import QueryDict, Http404, HttpResponseRedirect
@@ -8,8 +9,9 @@ from django.template.response import TemplateResponse
 
 from ..models import Course, Section, Term, Subject, Session, Enrollment, ClassTime
 from ..forms import EmailInstructorForm, EvaluationForm
-from membership.models import UserMembership
+from db.utils import get_or_none
 from event.utils import make_ics,ics2response
+from membership.models import UserMembership
 
 from paypal.standard.ipn.models import *
 
@@ -72,3 +74,20 @@ def debug_parsing(request, id):
     course_info.append((session_id, section_cost))
 
     return TemplateResponse(request,"course/debug.html",locals())
+
+def paypal_return(request):
+  session_ids = [v for k,v in request.REQUEST.items() if k.startswith('item_number')]
+  if not ('payer_email' in request.REQUEST) or not session_ids:
+    raise Http404
+  email = request.REQUEST['payer_email']
+  sessions = Session.objects.filter(pk__in=session_ids)
+  matched_user = None
+  if not request.user.is_authenticated():
+    matched_user = get_or_none(User,email=email)
+    matched_user = matched_user or get_or_none(User,usermembership__paypal_email=email)
+  values = {
+    'email': email,
+    'sessions': sessions,
+    'matched_user': matched_user,
+  }
+  return TemplateResponse(request,"course/paypal_return.html",values)

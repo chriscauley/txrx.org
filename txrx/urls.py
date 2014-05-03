@@ -50,6 +50,7 @@ urlpatterns += patterns(
   url(r'^instructors/$','instructor.index',name='instructor_index'),
   url(r'^instructors/([^/]+)/$','instructor.detail',name='instructor_detail'),
   url(r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
+  url(r'^tx/rx/return/$','paypal_return',name='paypal_redirect'),
 )
 
 #membership urls

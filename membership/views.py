@@ -15,7 +15,6 @@ from .utils import limited_login_required, verify_unique_email
 from course.models import Course,CourseCompletion, Session
 from txrx.utils import FORBIDDEN
 
-from registration.backends.default.views import RegistrationView
 import datetime
 
 def join_us(request):
@@ -59,17 +58,26 @@ def minutes_index(request):
   return TemplateResponse(request,'membership/minutes_index.html',values)
 
 def register(request,*args,**kwargs):
-  kwargs['form_class'] = 'monkey' #RegistrationForm
   email = request.POST.get('email','')
+  m = "Please use the form below to reset your password. "
+  m += "<br />If you believe this is in error, please email %s"%settings.CONTACT_LINK
   if request.POST and not verify_unique_email(email):
-    m = "An account with that email address already exists. "
-    m += "Please use the form below to reset your password. "
-    m += "If you believe this is in error, please email chris [{at}] lablackey.com"
+    m = "An account with the email address %s already exists. %s"%(email,m)
     messages.error(request,m,extra_tags='danger')
     return HttpResponseRedirect(reverse('password_reset'))
-  kwargs['form_class'] = RegistrationForm
-  kwargs['request'] = request
-  return RegistrationView(*args,**kwargs).dispatch(request)
+  paypal_email = request.POST.get('paypal_email','')
+  if request.POST and not verify_unique_email(paypal_email):
+    m = "An account with the paypal email address %s already exists. "%(paypal_email,m)
+    messages.error(request,m,extra_tags='danger')
+    return HttpResponseRedirect(reverse('password_reset'))
+  form = RegistrationForm(request.POST or None)
+  if form.is_valid():
+    user = form.save(request)
+    return HttpResponseRedirect(reverse('registration_complete'))
+  values = {
+    'form': form,
+  }
+  return TemplateResponse(request,'registration/registration_form.html',values)
 
 def roland_email(request,y=2012,m=1,d=1):
   if not request.user.is_superuser:

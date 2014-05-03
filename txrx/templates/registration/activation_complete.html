@@ -5,7 +5,5 @@
   You have successfully registered.
   Please <a href="/accounts/login/">login in</a>.
 </p>
-{% if request.user.is_authenticated %}
-<script>window.location="/"</script>
-{% endif %}
+{% if request.user.is_authenticated %}<script>window.location="/"</script>{% endif %}
 {% endblock %}

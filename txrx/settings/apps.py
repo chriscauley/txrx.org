@@ -15,7 +15,6 @@ INSTALLED_APPS = (
 
   # 3rd party
   'south',
-  'captcha',
 
   #'devserver',
   'sorl.thumbnail',
