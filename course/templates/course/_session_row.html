@@ -1,8 +1,7 @@
 {% load txrx_tags thumbnail crop_util %}
-<div id="c{{session.id}}" class="course filterable well {% if session.full %} full{% endif %}"
-    data-subject="{% for subject in session.subjects %}{{ subject }},{% endfor %}"
-    {% if not session.course.closed %}data-open{% endif %}
-    data-date="{{ session.starttime|date:"Ymd" }}">
+<div class="course filterable well{% if session.full %} full{% endif %}{% if session.last_date < yesterday %} past{% endif %}"
+     id="c{{session.id}}" data-subject="{% for subject in session.subjects %}{{ subject }},{% endfor %}"
+     data-date="{{ session.first_date|date:"Ymd" }}">
   <a href="{% url "course:detail" session.slug %}" class="picture">
     {% thumbnail session.first_photo|get_override:"landscape_crop" "298x199" crop="center" as im %}
     <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />

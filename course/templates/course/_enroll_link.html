@@ -2,11 +2,11 @@
 <div class="price">${{ session.section.fee }}</div>
 <div class="EnrollLink">
   {% if session.user_enrollment.quantity == 1 %}
-  <button class="btn btn-default disabled">ENROLLED</button>
+  <button class="btn btn-default disabled">Enrolled</button>
   {% elif session.user_enrollment %}
-  <button class="btn btn-default disabled">ENROLLED x {{ session.user_enrollment.quantity }}</button>
+  <button class="btn btn-default disabled">Enrolled x {{ session.user_enrollment.quantity }}</button>
   {% elif session.closed %}
-  <button class="btn btn-default disabled">{{ session.closed_string }}</button>
+  <button class="btn btn-default disabled">{{ session.closed_string|title }}</button>
   {% elif session.full %}
   <button class="btn btn-default disabled">FULL</button>
   {% else %}
@@ -29,7 +29,7 @@
 <div class="price">FREE</div>
 <div class="RsvpLink{% if session.user_enrollment %} attending{% endif %}">
   {% if session.archived %}
-  <button class="btn btn-default disabled">CLOSED</button>
+  <button class="btn btn-default disabled">Closed</button>
   {% elif request.user %}
   <button class="btn btn-default disabled is_full">FULL</button>
   <button class="btn btn-default disabled number_attending unrsvp">

@@ -52,25 +52,13 @@ def index(request,term_id=None):
         except IndexError:
           pass
   sessions = sorted(list(sessions),key=lambda s: s.first_date)
-  current_week = None
-  weeks = {}
-  all_sessions_closed = True
-  for session in sessions:
-    if current_week != session.get_week():
-      current_week = session.get_week()
-      weeks[current_week] = { 'open': 'closed', 0: current_week[0], 1: current_week[1], 'sessions': [] }
-    weeks[current_week]['sessions'].append(session)
-    if not session.closed:
-      weeks[current_week]['open'] = 'open'
-      all_sessions_closed = False
 
   values = {
-    'weeks': sorted(weeks.values(),key=lambda i: i[0]),
     'sessions': sessions,
     'filters': [filters['subject']],
     'term': term,
-    'all_sessions_closed': all_sessions_closed,
     'user_sessions': user_sessions,
+    'yesterday':datetime.datetime.now()-datetime.timedelta(0.5),
     }
   return TemplateResponse(request,"course/classes.html",values)
 

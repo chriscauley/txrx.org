@@ -22,15 +22,11 @@
 </p>
 {% endif %}
 {% include "widgets/filters.html" %}
-{% for week in weeks %}
-<div class="week {{ week.open }}">
-  <div class="table table-hover class-table">
-    {% for session in week.sessions %}
-    {% include "course/_session_row.html" %}
-    {% endfor %}
-  </div>
+<div class="course_list">
+  {% for session in sessions %}
+  {% include "course/_session_row.html" %}
+  {% endfor %}
 </div>
-{% endfor %}
 {% endblock %}
 
 {% block side %}

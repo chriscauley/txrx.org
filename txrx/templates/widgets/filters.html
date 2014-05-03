@@ -5,7 +5,6 @@
     <option value="{{ o.value }}">{{ o }}</option>{% endfor %}
   </select>
   {% endfor %}
-  {% if not all_sessions_closed %}
   <span>
     <input id="show_closed" type="checkbox" onchange="toggleClosed(this);" />
     <label for="show_closed">Show Past Sections</label>
@@ -13,7 +12,6 @@
       $(document).ready(function() { $("#show_closed").change() });
     </script>
   </span>
-  {% endif %}
 </form>
 <script type="text/javascript">
 function applyFilters(that) {
@@ -25,7 +23,7 @@ function applyFilters(that) {
   }).hide();
 }
 function toggleClosed(that) {
-  if (!$(that).attr("checked")) { $(".week.closed").hide(); return; }
-  $(".week").show()
+  if (!$(that).attr("checked")) { $(".course_list .past").hide(); return; }
+  $(".course_list .course").show()
 }
 </script>
