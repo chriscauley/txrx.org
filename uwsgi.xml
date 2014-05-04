@@ -12,4 +12,5 @@
   <socket-timeout>180</socket-timeout>
   <pidfile>/tmp/uwsgi.pid</pidfile>
   <module>django_uwsgi:application</module>
+  <logto>/home/django/uwsgi.log</logto>
 </uwsgi>
