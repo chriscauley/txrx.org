@@ -6,14 +6,14 @@
       <div class="accordion-heading">
         <a class="accordion-toggle" data-parent="#instructor_panel"
            data-toggle="collapse" href="#student_list">
-          Student List ({{ session.enrollment_set.count }} students)
+          Student List ({{ session.total_students }}/{{ session.section.max_students }} students)
         </a>
       </div>
       <div id="student_list" class="accordion-body collapse in">
         <div class="accordion-inner">
-          <ul>
+          <ul style="padding-left: 15px;">
             {% for enrollment in session.enrollment_set.all %}
-            <li>{{ enrollment.user.email }}</li>
+            <li{% if enrollment.quantity != 1 %} data-before="{{ enrollment.quantity }}x "{% endif %}>{{ enrollment.user.email }}</li>
             {% endfor %}
           </ul>
         </div>

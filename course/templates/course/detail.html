@@ -104,9 +104,10 @@
   </div>
  </div>
  <div class="col-sm-3" id="side">
-   {% if request.user == session.user %}
+   {% if request.user.is_staff %}
    {% include "course/_instructor_panel.html" %}
-   {% elif enrollment %}
+   {% endif %}
+   {% if enrollment %}
    <div class="well">
      <h2>You are enrolled in this course</h2>
    </div>
