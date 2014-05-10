@@ -306,6 +306,14 @@ h2.section_title {
 
 .center { text-align: center; }
 
+[data-before] {
+  &:before {
+    color: red;
+    content: attr(data-before);
+    font-weight: bold;
+  }
+}
+
 [data-tooltip] {
   position: relative;
   z-index: 10;
