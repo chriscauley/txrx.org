@@ -112,8 +112,8 @@ class Photo(FileModel):
         return t
     return 'video'
   def save(self,*args,**kwargs):
-    self.external_url = self.external_url.replace('youtu.be','youtube.com')
     if self.external_url and not '/embed/' in self.external_url:
+      self.external_url = self.external_url.replace('youtu.be','youtube.com')
       self.external_url = self.external_url.replace('youtube.com/','youtube.com/embed/')
       if not "?" in self.external_url:
         self.external_url +="?autoplay=1&rel=0"
