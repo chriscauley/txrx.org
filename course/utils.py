@@ -4,12 +4,13 @@ from membership.models import UserMembership
 from txrx.utils import reset_password
 
 def get_or_create_student(email,u_id=None):
+  new = False
   if str(u_id).isdigit():
     user = User.objects.get(id=u_id)
     profile = user.usermembership
     profile.email = email
     profile.save()
-    return user
+    return user,new
   try:
     user = User.objects.get(usermembership__paypal_email=email)
   except User.DoesNotExist:
@@ -25,4 +26,4 @@ def get_or_create_student(email,u_id=None):
       user.set_password(settings.NEW_STUDENT_PASSWORD)
       user.save()
       reset_password(user,**kwargs)
-  return user
+  return user,new

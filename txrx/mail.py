@@ -1,30 +1,18 @@
-from django.core.mail import send_mail
 from django.conf import settings
+from django.core.mail.backends.smtp import EmailBackend
+
+class DebugBackend(EmailBackend):
+  def send_messages(self,email_messages):
+    if not settings.DEBUG:
+      return super(DebugBackend,self).send_messages(email_messages)
+    for message in email_messages:
+      message.to = filter_emails(message.to) or [getattr(settings,'ALLOWED_EMAILS',[])[0]]
+      message.cc = filter_emails(message.cc)
+      message.bcc = filter_emails(message.bcc)
+    return super(DebugBackend,self).send_messages(email_messages)
 
 def filter_emails(emails):
   if settings.DEBUG:
     #only email certain people from dev server!
     return [e for e in emails if e in getattr(settings,'ALLOWED_EMAILS',[])]
   return emails
-
-def filter_users(users):
-  if settings.DEBUG:
-    #only email certain people from dev server!
-    return users.filter(email__in=getattr(settings,'ALLOWED_EMAILS',[]))
-  return users
-
-def mail_admins_plus(subject,message,recipient_list=[],from_email=None):
-  recipient_list += [email for name,email in settings.ADMINS if not email in recipient_list]
-  recipient_list = filter_emails(recipient_list)
-  from_email = from_email or settings.DEFAULT_FROM_EMAIL
-  if not recipient_list:
-    return
-  send_mail(subject,message,from_email,recipient_list)
-
-def send_mail_plus(subject,message,from_email,recipient_list):
-  all_recipient_list = recipient_list[:]
-  recipient_list = filter_emails(recipient_list)
-  if not recipient_list:
-    print all_recipient_list
-    return
-  send_mail(subject,message,from_email,recipient_list)

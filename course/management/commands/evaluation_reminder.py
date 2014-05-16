@@ -1,9 +1,9 @@
+from django.core.mail import send_mail
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.template.loader import render_to_string
 
 from course.models import Enrollment
-from txrx.mail import send_mail_plus
 from txrx.utils import mail_on_fail
 from membership.models import LimitedAccessKey
 
@@ -12,7 +12,7 @@ import datetime
 class Command (BaseCommand):
   @mail_on_fail
   def handle(self, *args, **options):
-    send_mail_plus(
+    send_mail(
       'Sending evaluations reminders!',
       'this is to inform you that they have been sent. Hopefully they did not go twice',
       settings.DEFAULT_FROM_EMAIL,
@@ -30,7 +30,7 @@ class Command (BaseCommand):
         'la_key': LimitedAccessKey.new(evaluation.user),
         'domain': settings.SITE_URL
         }
-      send_mail_plus(
+      send_mail(
         "Please evaluate the class you took from TX/RX",
         render_to_string("email/pending_evaluation.html",_dict),
         settings.DEFAULT_FROM_EMAIL,

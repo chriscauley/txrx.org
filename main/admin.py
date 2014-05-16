@@ -53,7 +53,16 @@ class CustomIPNAdmin(PayPalIPNAdmin):
     return link%(reverse('paypal_redirect')+"?"+obj.query)
   view_redirect.allow_tags = True
   def view_IPN(self,obj):
-    pass
+    lines = [
+      "django.jQuery.post(",
+      "'/tx/rx/ipn/handler/',"
+      "django.jQuery('#id_query').val(),"
+      "function(){django.jQuery('#emulate_ipn').replaceWith('Done')}"
+      ")"
+    ]
+    onclick = ''.join(lines)
+    link = '<a href="javascript:;" id="emulate_ipn" onclick="%s">Emulate Post</a>'%onclick
+    return link
   view_IPN.allow_tags = True
 
 admin.site.register(FlatPage,FlatPageAdmin)

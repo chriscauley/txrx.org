@@ -15,8 +15,6 @@ INSTALLED_APPS = (
 
   # 3rd party
   'south',
-
-  #'devserver',
   'sorl.thumbnail',
   'registration',
   'paypal.standard.ipn',

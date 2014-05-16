@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -5,7 +6,6 @@ from django.template.loader import render_to_string
 from course.models import ClassTime
 from membership.models import LimitedAccessKey
 
-from txrx.mail import send_mail_plus
 from txrx.utils import mail_on_fail
 
 import datetime
@@ -30,7 +30,7 @@ class Command (BaseCommand):
         if user.email in sent:
           continue
         sent.append(user.email)
-        send_mail_plus(
+        send_mail(
           "[TX/RX] Class today!",
           render_to_string("email/course_reminder.html",_dict),
           settings.DEFAULT_FROM_EMAIL,

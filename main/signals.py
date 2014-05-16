@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import send_mail, mail_admins
 from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
 
@@ -11,7 +11,6 @@ from .var import admin_comment_email, comment_response_email
 _u = lambda s: settings.SITE_URL + s
 
 def new_comment_connection(sender, instance=None, created=False,**kwargs):
-  from txrx.mail import mail_admins_plus
   if not created:
     return
   _dict = {
@@ -48,6 +47,6 @@ def new_comment_connection(sender, instance=None, created=False,**kwargs):
     except AttributeError:
       pass
 
-  mail_admins_plus('New Comment',admin_comment_email%_dict,users)
+  mail_admins('New Comment',admin_comment_email%_dict,users)
 
 post_save.connect(new_comment_connection, sender=MpttComment)

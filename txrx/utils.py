@@ -1,8 +1,7 @@
 from django.conf import settings
-from django.http import HttpResponseForbidden
 from django.contrib.auth.forms import PasswordResetForm
-
-from txrx.mail import mail_admins_plus
+from django.core.mail import mail_admins
+from django.http import HttpResponseForbidden
 
 import traceback, sys
 
@@ -23,7 +22,7 @@ def mail_on_fail(target):
         "",
         "traceback:\n%s"%traceback.format_exc(),
         ]
-      mail_admins_plus("Error occurred via 'mail_on_fail'",'\n'.join(lines))
+      mail_admins("Error occurred via 'mail_on_fail'",'\n'.join(lines))
   return wrapper
 
 if settings.DEBUG:
@@ -31,8 +30,6 @@ if settings.DEBUG:
     def wrapper(*args,**kwargs):
       return target(*args,**kwargs)
     return wrapper
-
-  
 
 def cached_method(target,name=None):
   target.__name__ = name or target.__name__
