@@ -40,13 +40,6 @@ LOGOUT_URL = "/accounts/logout/"
 SECRET_KEY = '^f_fn6)^e5^)+p-rjcrcdf(7iwz4@5z9thx92%^=e_)$jly7mc'
 MAPS_API_KEY = 'ABQIAAAAeppD1h9lB7H61ozR18SeZRS_YqHDtehKcRTrrAGjc25rDMjatxT8nvoX4-jJXcRPaT4I-RdMYv3fJA'
 
-TEMPLATE_LOADERS = (
-  ('django.template.loaders.cached.Loader', (
-      'django.template.loaders.filesystem.Loader',
-      'django.template.loaders.app_directories.Loader',
-      )),
-)
-
 MIDDLEWARE_CLASSES = (
   'django.middleware.common.CommonMiddleware',
   'django.contrib.sessions.middleware.SessionMiddleware',
@@ -123,5 +116,15 @@ for s_file in ['apps','local']:
   except IOError:
     print "Setting file missing. We looked here: %s"%f
 
+
+
 if DEBUG:
   pass#INSTALLED_APPS += ('devserver',)
+else:
+  TEMPLATE_LOADERS = (
+    ('django.template.loaders.cached.Loader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+        )),
+    )
+
