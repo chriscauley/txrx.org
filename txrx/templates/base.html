@@ -44,10 +44,10 @@
     {% block analytics %}{{ ANALYTICS_CODE|safe }}{% endblock %}
   </head>
   <body>
-    {% block nav %}{% include "_nav.html" with page="home" %}{% endblock %}
-    <div id="wrap">
+    <div class="container">
+      {% block nav %}{% include "_nav.html" with page="home" %}{% endblock %}
       {% block messages %}{% include "_messages.html" %}{% endblock %}
-
+      
       <div class="row" id="main">
         {% block main %}
         <div class="col-sm-6 col-md-8">
@@ -61,7 +61,7 @@
         </div>
         {% endblock %}
       </div>
-
+      
       {% block footer %}
       <footer>
         {% include "footer.html" %}

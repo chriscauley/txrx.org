@@ -8,18 +8,10 @@
 body { margin: 0 auto 50px; width: 100%; }
 html, body { overflow-x: hidden; }
 
-nav,#wrap { width: @screen-lg-min; margin: 0 auto; }
-@media (max-width: @screen-lg-min) {
-  nav,#wrap { width: @screen-md-max; }
-}
-@media (max-width: @screen-md-max) {
-  nav,#wrap { width: @screen-sm-max; }
-}
-@media (max-width: @screen-sm-max) {
-  nav,#wrap { width: 500px; }
-}
 @media (max-width: @screen-xs-max) {
-  nav,#wrap { width: @screen-xs-min; }
+  .container{
+    max-width:@screen-xs-min;
+  }
 }
 
 @media (max-width: @screen-xs-max) {

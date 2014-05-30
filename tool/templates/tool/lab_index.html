@@ -5,22 +5,16 @@
 {% block full_title %}Tools and Equipment at TX/RX Labs{% endblock %}
 
 {% block main %}
-<div id="labs">
+<div id="labs" class="row">
   {% for lab in labs %}
-  {% thumbnail lab.first_photo|get_override:"landscape_crop" "620x375" crop="center" as im %}
-  <input type="radio" id="id_{{ lab.slug }}" name="lab-radios" style="display:none;"{% if forloop.first %}
-         checked="checked"{% endif %}/>
-  <div class="lab carousel-inner" style="height: {{ im.height }}px;">
-    <div class="wrapper">
-      <label for="id_{{ lab.slug }}">{{ lab.title }}</label>
-      <a href="{% url "lab_detail" lab.slug %}">
-        <img src="{{ im.url }}" alt="" width="{{ im.width }}" height="{{ im.height }}" />
-        <div class="carousel-caption">
-          <p>{{ lab.description }}</p>
-          <p>Click here to see all tools for this lab</p>
-        </div>
-      </a>
-    </div>
+  {% thumbnail lab.first_photo|get_override:"landscape_crop" "400x300" crop="center" as im %}
+  <div class="lab col-md-4 col-sm-6 col-xs-12">
+    <a href="{% url "lab_detail" lab.slug %}">
+      <img class="bg" src="{{ im.url }}" alt="" />
+      <div class="bottom">
+        <div class="title">{{ lab.title }}</div>
+      </div>
+    </a>
   </div>
   {% endthumbnail %}
   {% endfor %}

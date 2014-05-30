@@ -120,12 +120,6 @@ form label.required {
 #mobileCart { right: 0; margin: 0;}
 #bot_right { background: white; left: 0px; }
 
-/* tools */
-#labs {
-  height: 375px;
-  overflow: hidden;
-}
-
 .vertical-gradient(@color1,@color2) {
   background: @color1;
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(@color2), to(@color1));
@@ -135,38 +129,28 @@ form label.required {
   background: -o-linear-gradient(top, @color1, @color2);
 }
 
-.lab {
-  float: left;
-  margin-bottom: 0;
-  -webkit-transition: width 0.25s ease-in;
-  transition: width 0.25s ease-in;
-  width: 50px;
-  .carousel-caption { margin-left: 50px; }
-  .wrapper {
-    position: relative;
-    width: 620px;
-  }
-  label {
-    .vertical-gradient(rgba(55,55,55,.75),rgba(0,0,0,.75));
-    color: white;
-    cursor: pointer;
-    height: 51px;
-    font-size: 25px;
-    left: -380px;
-    line-height: 50px;
-    position: absolute;
-    text-transform: uppercase;
-    text-align: center;
-    top: -2px;
-    -webkit-transform: rotate(-90deg);
-    transform: rotate(-90deg);
-    -webkit-transform-origin: top right;
-    transform-origin: top right;
-    width: 380px;
+#labs {
+  .lab {
+    .bg { width: 100%; }
+    a {
+      display: block;
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .bottom {
+      bottom: 0;
+      color: white;
+      font-size: 18px;
+      padding: 30px 15px 5px;
+      position: absolute;
+      text-align: center;
+      text-shadow: 1px 1px black;
+      width: 100%;
+      .vertical-gradient(transparent,rgba(150,150,150,0.75));
+    }
   }
 }
 
-[type=radio]:checked + .lab { width: 620px; }
 img { max-width: 100%; }
 
 /* blog */
