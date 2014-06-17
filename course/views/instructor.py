@@ -4,6 +4,8 @@ from django.template.response import TemplateResponse
 from ..models import Session
 from ..forms import EmailInstructorForm
 from membership.models import UserMembership
+from thing.models import Thing
+from codrspace.models import Post
 
 def index(request,username=None):
   instructors = UserMembership.objects.list_instructors()
@@ -12,8 +14,14 @@ def index(request,username=None):
 
 def detail(request,username=None):
   profile = get_object_or_404(UserMembership,user__username=username)
+  things = Thing.objects.filter(user=profile.user,active=True)
+  posts = Post.objects.filter(user=profile.user, status = 'published').order_by("-publish_dt")
   values = {
-    'profile': profile
+    'thing_header': profile.user.username + "'s Things",
+    'post_header' : profile.user.username + "'s Blog Posts",
+    'profile': profile,
+    'things': things,
+    'posts': posts
     }
   return TemplateResponse(request,"course/instructor_detail.html",values)
 

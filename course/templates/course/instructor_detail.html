@@ -15,6 +15,7 @@
   </div>
 </section>
 <section>
+
   <div>
     <div class="accordion" id="instructor_classes">
       {% for term,sessions in profile.get_term_sessions %}
@@ -44,4 +45,11 @@
     </div>
   </div>
 </section>
+{% endblock %}
+
+{% block side %}
+  <div>
+    {% include "_generic_box.html" with items=things title=thing_header %}
+    {% include "_generic_box.html" with items=posts title=post_header %}
+  </div>
 {% endblock %}
