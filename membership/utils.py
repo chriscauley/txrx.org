@@ -50,7 +50,7 @@ def verify_unique_email(email,user=None):
   email = email.strip()
   if user:
     other_users = User.objects.exclude(pk=user.pk)
-  by_email = other_users.filter(email=email)
-  by_username = other_users.filter(username=email)
-  by_paypal_email = other_users.filter(usermembership__paypal_email=email)
+  by_email = other_users.filter(email__iexact=email)
+  by_username = other_users.filter(username__iexact=email)
+  by_paypal_email = other_users.filter(usermembership__paypal_email__iexact=email)
   return not (by_email or by_username or by_paypal_email)
