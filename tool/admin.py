@@ -17,6 +17,7 @@ class ToolLinkInline(admin.TabularInline):
 
 class ToolAdmin(OrderedModelAdmin):
   inlines = (ToolLinkInline,TaggedPhotoInline)
+  list_display = ('__unicode__','make','model','order')
   filter_horizontal = ('materials',)
 
 #See note above corresponding model
