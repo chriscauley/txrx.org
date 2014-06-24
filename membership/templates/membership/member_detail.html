@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load thumbnail crop_util %}
+
+{% block title %}Bio: {{ profile.name }}{% endblock %}
+{% block header_content %}Bio: {{ profile.name }}{% endblock %}
+
+{% block content %}
+<section class="instructor-bio">
+  <div class="descripiton">
+    {% thumbnail profile.get_photo|get_override:"portrait_crop" "150x200" crop="center" as im %}
+    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" style="float: left; margin: 0 20px 15px 0;" />
+    {% endthumbnail %}
+    <p>{{ profile.bio }}</p>
+    <div style="clear: both"></div>
+  </div>
+</section>
+{% if profile.get_term_sessions %}
+<h2>Classes taught</h2>
+<section>
+  <ul class="nav nav-tabs">
+    {% for term,sessions in profile.get_term_sessions %}
+    {% if sessions %}
+    <li{% if forloop.first %} class="active"{% endif %}>
+      <a data-toggle="tab" href="#instructor_classes_{{ term.id }}">
+        <h3>{{ term }}</h3></a>
+    </li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+  <div class="tab-content">
+    {% for term,sessions in profile.get_term_sessions %}
+    {% if sessions %}
+    <div id="instructor_classes_{{ term.id }}" class="tab-pane{% if forloop.first %} active{% endif %}">
+      <ul class="unstyled">
+        {% for session in sessions %}
+        <li><a href="{{ session.get_absolute_url }}">
+            {{ session.section.course.name }}
+        </a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block side %}
+<div>
+  {% include "_generic_box.html" with items=things title=thing_header %}
+  {% include "_generic_box.html" with items=posts title=post_header %}
+</div>
+{% endblock %}

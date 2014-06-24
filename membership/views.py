@@ -8,11 +8,13 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .models import Membership, MeetingMinutes, Officer
+from .models import Membership, MeetingMinutes, Officer, UserMembership
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required, verify_unique_email
 
+from codrspace.models import Post
 from course.models import Course,CourseCompletion, Session
+from thing.models import Thing
 from txrx.utils import FORBIDDEN
 
 import datetime
@@ -130,3 +132,22 @@ def course_completion(request,year=None,month=None,day=None):
   for c in completions:
     out.append(','.join([str(c.course.id),str(c.user.id)]))
   return HttpResponse('\n'.join(out))
+
+def member_index(request,username=None):
+  instructors = UserMembership.objects.list_instructors()
+  values = { 'instructors': instructors }
+  return TemplateResponse(request,"membership/member_index.html",values)
+
+def member_detail(request,username=None):
+  user = get_object_or_404(User,username=username)
+  things = Thing.objects.filter(user=user,active=True)
+  posts = Post.objects.filter(user=user, status = 'published').order_by("-publish_dt")
+  values = {
+    'thing_header': user.username + "'s Things",
+    'post_header' : user.username + "'s Blog Posts",
+    'user': user,
+    'profile': user.usermembership,
+    'things': things,
+    'posts': posts
+    }
+  return TemplateResponse(request,"membership/member_detail.html",values)

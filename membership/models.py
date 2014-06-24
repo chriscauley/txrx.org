@@ -89,6 +89,9 @@ class UserMembership(models.Model):
 
   __unicode__ = lambda self: "%s's Membership"%self.user
   objects = UserMembershipManager()
+  @cached_method
+  def get_photo(self):
+    return self.photo or Photo.objects.get(pk=144)
 
   @cached_method
   def get_term_sessions(self):
@@ -96,7 +99,7 @@ class UserMembership(models.Model):
     out = []
     for term in terms:
       out.append((term,Session.objects.filter(user=self.user,section__term=term)))
-    return out
+    return [t for t in out if t[1]]
   @cached_method
   def get_projects(self):
     return Project.objects.filter(author=self.user)

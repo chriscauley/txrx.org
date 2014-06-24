@@ -4,7 +4,6 @@ urlpatterns = patterns(
   'course.views',
   url(r'^my-sessions/$', 'my_sessions',name='my_sessions'),
   url(r'^all-sessions/$', 'all_sessions',name='all_sessions'),
-  url(r'^instructor/([^/]+)/$', 'instructor.detail',name='instructor_detail'),
   url(r'^email/instructor/(\d+)/$','instructor.email',name='email_instructor'),
 
   url(r'^evaluations/$','evaluation.index',name='evaluation_index'),

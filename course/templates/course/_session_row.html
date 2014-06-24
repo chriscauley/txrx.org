@@ -18,7 +18,7 @@
       {{ session.section.course }}</a>
     <div class="dates"><small>
         {{ session.get_short_dates }}
-        with <a href="{% url "instructor_detail" session.user.username %}">
+        with <a href="{% url "member_detail" session.user.username %}">
           <i class="icon-user"></i>{{ session.get_instructor_name|noemail }}</a>
     </small></div>
     <div class="bottom">

@@ -47,8 +47,6 @@ urlpatterns += patterns(
 urlpatterns += patterns(
   'course.views',
   url(r'^classes/', include('course.urls',namespace='course',app_name='course')),
-  url(r'^instructors/$','instructor.index',name='instructor_index'),
-  url(r'^instructors/([^/]+)/$','instructor.detail',name='instructor_detail'),
   url(r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
   url(r'^tx/rx/return/$','paypal_return',name='paypal_redirect'),
 )
@@ -64,6 +62,10 @@ urlpatterns += patterns(
   url(r'^api/users/$','user_emails'),
   url(r'^api/courses/$','course_names'),
   url(r'^api/completions/$','course_completion'),
+  url(r'^instructors/$','member_index',name='instructor_index'),
+  url(r'^instructors/([^/]+)/$','member_detail',name='instructor_detail'),
+  url(r'^u/$','member_index',name='member_index'),
+  url(r'^u/([^/]+)/$','member_detail',name='member_detail'),
 )
 
 #notify urls
