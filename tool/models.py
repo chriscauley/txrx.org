@@ -42,7 +42,7 @@ class Tool(OrderedModel,PhotosMixin):
   repair_date = models.DateField(null=True,blank=True)
   get_status = lambda self: "Functional" if self.functional else "Non-functional"
   class Meta:
-    ordering = ("order",)
+    ordering = ("lab","order")
   # Abstract the next two!
   @cached_property
   def courses(self):
