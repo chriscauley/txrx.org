@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
+from django.template.defaultfilters import slugify
 
 from south.modelsinspector import add_introspection_rules
 from wmd.models import MarkDownField
@@ -13,15 +14,22 @@ from txrx.utils import cached_property, cached_method
 
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
 
-class Lab(SlugModel,OrderedModel,PhotosMixin):
+class Lab(OrderedModel,PhotosMixin):
+  title = models.CharField(max_length=128)
+  __unicode__ = lambda self: self.title
+  slug = property(lambda self: slugify(self.title))
   photo = models.ForeignKey(Photo,null=True,blank=True)
   description = models.TextField(null=True,blank=True)
+  url = lambda self: reverse("lab_detail",args=[self.slug,self.id])
   class Meta:
     ordering = ("order",)
 
 _help = "Will default to %s photo if blank"
 
-class Tool(SlugModel,OrderedModel,PhotosMixin):
+class Tool(OrderedModel,PhotosMixin):
+  title = models.CharField(max_length=128)
+  __unicode__ = lambda self: self.title
+  slug = property(lambda self: slugify(self.title))
   lab = models.ForeignKey(Lab)
   make = models.CharField(max_length=64,null=True,blank=True)
   model = models.CharField(max_length=32,null=True,blank=True)
@@ -29,7 +37,7 @@ class Tool(SlugModel,OrderedModel,PhotosMixin):
   est_price = models.FloatField(null=True,blank=True)
   links = lambda self: self.toollink_set.all()
   materials = models.ManyToManyField("thing.Material",null=True,blank=True)
-  get_absolute_url = lambda self: reverse("tool_detail",args=[self.lab.slug,self.slug])
+  get_absolute_url = lambda self: reverse("tool_detail",args=[self.slug,self.id])
   functional = models.BooleanField(default=True)
   repair_date = models.DateField(null=True,blank=True)
   get_status = lambda self: "Functional" if self.functional else "Non-functional"

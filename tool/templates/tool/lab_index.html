@@ -9,7 +9,7 @@
   {% for lab in labs %}
   {% thumbnail lab.first_photo|get_override:"landscape_crop" "400x300" crop="center" as im %}
   <div class="lab col-md-4 col-sm-6 col-xs-12">
-    <a href="{% url "lab_detail" lab.slug %}">
+    <a href="{% url "lab_detail" lab.slug lab.id %}">
       <img class="bg" src="{{ im.url }}" alt="" />
       <div class="bottom">
         <div class="title">{{ lab.title }}</div>

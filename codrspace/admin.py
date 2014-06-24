@@ -43,7 +43,15 @@ class PhotoAdmin(CropAdmin):
 class TaggedPhotoInline(GenericTabularInline):
   model = TaggedPhoto
   raw_id_fields = ('photo',)
+  fields = ('photo','_thumbnail')
+  readonly_fields = ('_thumbnail',)
   extra = 0
+  def _thumbnail(self,obj):
+    im = get_thumbnail(obj.photo.file,'100x100',crop='center')
+    out = '<img src="%s" width="%s" height="%s" />'%(im.url,im.width,im.height)
+    return out
+  _thumbnail.allow_tags=True
+
 
 class TaggedFileInline(GenericTabularInline):
   model = TaggedFile

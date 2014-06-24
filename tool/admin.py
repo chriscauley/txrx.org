@@ -3,13 +3,11 @@ from django.contrib import admin
 from django.contrib.contenttypes.generic import GenericTabularInline
 
 from codrspace.admin import TaggedPhotoInline
-from db.admin import SlugModelAdmin,OrderedModelAdmin
+from db.admin import OrderedModelAdmin
 from .models import Lab, Tool, ToolLink, TaggedTool
 
-class LabAdmin(SlugModelAdmin):
+class LabAdmin(OrderedModelAdmin):
   inlines = (TaggedPhotoInline,)
-  list_display = ("__unicode__","order")
-  list_editable = ("order",)
   raw_id_fields = ('photo',)
 
 class ToolLinkInline(admin.TabularInline):
@@ -17,7 +15,7 @@ class ToolLinkInline(admin.TabularInline):
   model = ToolLink
   fields = ("title","url","order")
 
-class ToolAdmin(SlugModelAdmin,OrderedModelAdmin):
+class ToolAdmin(OrderedModelAdmin):
   inlines = (ToolLinkInline,TaggedPhotoInline)
   filter_horizontal = ('materials',)
 
