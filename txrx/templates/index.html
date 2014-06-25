@@ -17,7 +17,7 @@
 <section class="FeaturedThings row">
   <h3 class="block_title">Featured Projects</h3>
   <div class="things">
-    {% for thing in things %}
+    {% for thing in things %}{# this needs to be unified with tool_detail and generalized #}
     {% thumbnail thing.first_photo|get_override:"square_crop" "300x300" crop="center" as im %}
     <div class="thing thing{{ forloop.counter }} col-xs-6 col-md-4 col-lg-3 hidden246">
       <a href="{{ thing.get_absolute_url }}">

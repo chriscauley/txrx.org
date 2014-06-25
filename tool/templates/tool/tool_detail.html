@@ -36,7 +36,26 @@
     {% endfor %}
     {% endif %}
     {% include "_generic_box.html" with items=tool.courses title="Related Courses" %}
-    {% include "_generic_box.html" with items=tool.things title="Related Things" %}
+    {% if tool.things %}
+    <div class="things">
+      <h3 class="block_title">Related Projects</h3>
+      {% for thing in tool.things|slice:":6" %}
+      {% thumbnail thing.first_photo|get_override:"square_crop" "300x300" crop="center" as im %}
+      <div class="thing thing{{ forloop.counter }} col-xs-6">
+        <a href="{{ thing.get_absolute_url }}">
+          <img src="{{ im.url }}" />
+          <div class="hover">
+            <div class="title">
+              {{ thing.title }}
+              <div class="author"> by {{ thing.user }}</div>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endthumbnail %}
+      {% endfor %}
+    </div>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
