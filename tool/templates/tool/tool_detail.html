@@ -22,18 +22,16 @@
     </div>
     {% endif %}
     {{ tool.description|explosivo }}
-    <hr />
     {% if tool.toollink_set.all %}
-    <div>Related Links:</div>
+    <h4>Related Links:</h4>
     {% for link in tool.toollink_set.all %}
     <a href="{{ link.url }}">{{ link.title }}</a><br />
     {% endfor %}
     {% endif %}
     {% if tool.materials.all %}
-    <h4>Materials used</h4>
-    {% for material in tool.materials.all %}
-    <a href="{{ material }}">{{ material }}</a><br />
-    {% endfor %}
+    <h4>Material{{ tool.materials.all|pluralize:"s" }} used</h4>
+    {{ tool.materials.all|join:", " }}
+    <hr />
     {% endif %}
     {% include "_generic_box.html" with items=tool.courses title="Related Courses" %}
     {% if tool.things %}
