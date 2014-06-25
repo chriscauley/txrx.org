@@ -22,6 +22,7 @@
     </div>
     {% endif %}
     {{ tool.description|explosivo }}
+    <hr />
     {% if tool.toollink_set.all %}
     <h4>Related Links:</h4>
     {% for link in tool.toollink_set.all %}
@@ -31,7 +32,6 @@
     {% if tool.materials.all %}
     <h4>Material{{ tool.materials.all|pluralize:"s" }} used</h4>
     {{ tool.materials.all|join:", " }}
-    <hr />
     {% endif %}
     {% include "_generic_box.html" with items=tool.courses title="Related Courses" %}
     {% if tool.things %}
