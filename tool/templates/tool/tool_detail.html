@@ -22,8 +22,9 @@
     </div>
     {% endif %}
     {{ tool.description|explosivo }}
+    <hr />
     {% if tool.toollink_set.all %}
-    <h4>Related Links:</h4>
+    <div>Related Links:</div>
     {% for link in tool.toollink_set.all %}
     <a href="{{ link.url }}">{{ link.title }}</a><br />
     {% endfor %}
@@ -34,17 +35,8 @@
     <a href="{{ material }}">{{ material }}</a><br />
     {% endfor %}
     {% endif %}
+    {% include "_generic_box.html" with items=tool.courses title="Related Courses" %}
+    {% include "_generic_box.html" with items=tool.things title="Related Things" %}
   </div>
 </div>
 {% endblock %}
-
-{% comment %}
-{% block side %}
-{% if tool.courses or tool.things %}
-{% include "_generic_box.html" with items=tool.courses title="Related Courses" %}
-{% include "_generic_box.html" with items=tool.things title="Related Things" %}
-{% else %}
-{{ block.super }}
-{% endif %}
-{% endblock %}
-{% endcomment %}
