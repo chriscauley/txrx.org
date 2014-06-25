@@ -5,39 +5,40 @@
 {% block title %}{{ tool }}{% endblock %}
 {% block header %}{% endblock %}
 
-{% block content %}
-<div id="tool_{{ tool.slug }}" class="row">
-  <div class="tool row">
-    <div class="col-sm-6">
-      {% include "widgets/thing_slideshow.html" with thing=tool %}
+{% block main %}
+<div id="tool_{{ tool.slug }}" class="row tool">
+  <div class="col-sm-8">
+    {% include "widgets/thing_slideshow.html" with thing=tool %}
+  </div>
+  <div class="col-sm-4">
+    {% if tool.make or tool.model %}
+    <h4>{{ tool.make|default:"" }} {{ tool.model|default:"" }}</h4>
+    {% endif %}
+    <h2>{{ tool }}</h2>
+    {% if not tool.functional %}
+    <div class="alert alert-danger">
+      <h4>This tool is not functional at this time</h4>
+      <b>Estimated Repair Date:</b> {{ tool.repair_date|default_if_none:"Unknown" }}
     </div>
-    <div class="col-sm-6">
-      <h2>{{ tool }}</h2>
-      <div><b>Status:</b> {{ tool.get_status }}</div>
-      {% if not tool.functional %}
-      <div><b>Estimated Repair Date:</b> {{ tool.repair_date|default_if_none:"TBD" }}</div>
-      {% endif %}
-      {% if tool.make or tool.model %}
-      <h4>{{ tool.make|default:"" }} {{ tool.model|default:"" }}</h4>
-      {% endif %}
-      {{ tool.description|explosivo }}
-      {% if tool.toollink_set.all %}
-      <h4>Related Links:</h4>
-      {% for link in tool.toollink_set.all %}
-      <a href="{{ link.url }}">{{ link.title }}</a><br />
-      {% endfor %}
-      {% endif %}
-      {% if tool.consumables.all %}
-      <h4>Materials used</h4>
-      {% for material in tool.materials.all %}
-      <a href="{{ material }}">{{ material }}</a><br />
-      {% endfor %}
-      {% endif %}
-    </div>
+    {% endif %}
+    {{ tool.description|explosivo }}
+    {% if tool.toollink_set.all %}
+    <h4>Related Links:</h4>
+    {% for link in tool.toollink_set.all %}
+    <a href="{{ link.url }}">{{ link.title }}</a><br />
+    {% endfor %}
+    {% endif %}
+    {% if tool.consumables.all %}
+    <h4>Materials used</h4>
+    {% for material in tool.materials.all %}
+    <a href="{{ material }}">{{ material }}</a><br />
+    {% endfor %}
+    {% endif %}
   </div>
 </div>
 {% endblock %}
 
+{% comment %}
 {% block side %}
 {% if tool.courses or tool.things %}
 {% include "_generic_box.html" with items=tool.courses title="Related Courses" %}
@@ -46,3 +47,4 @@
 {{ block.super }}
 {% endif %}
 {% endblock %}
+{% endcomment %}
