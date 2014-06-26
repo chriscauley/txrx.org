@@ -17,9 +17,16 @@ class ToolLinkInline(admin.TabularInline):
 
 class ToolAdmin(OrderedModelAdmin):
   inlines = (ToolLinkInline,TaggedPhotoInline)
-  list_display = ('__unicode__','make','model',"lab",'order')
+  list_display = ('__unicode__','has_links','has_description','make','model',"lab",'order')
   list_filter = ('lab',)
   filter_horizontal = ('materials',)
+  readonly_fields = ('has_links','has_description')
+  def has_links(self,obj):
+    return bool(obj.links())
+  has_links.boolean = True
+  def has_description(self,obj):
+    return bool(obj.description)
+  has_description.boolean = True
 
 #See note above corresponding model
 class TaggedToolInline(GenericTabularInline):
