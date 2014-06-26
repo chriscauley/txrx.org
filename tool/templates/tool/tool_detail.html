@@ -24,7 +24,7 @@
     {{ tool.description|explosivo }}
     <hr />
     {% if tool.toollink_set.all %}
-    <h4>Related Links:</h4>
+    <h4>Related Links</h4>
     {% for link in tool.toollink_set.all %}
     <a href="{{ link.url }}">{{ link.title }}</a><br />
     {% endfor %}
