@@ -5,7 +5,7 @@
 {% block title %}{{ lab }} Tools{% endblock %}
 {% block header_content %}{{ lab }} Tools{% endblock %}
 
-{% block content %}
+{% block main %}
 <div id="tool_{{ lab.slug }}" class="row">
   {% for tool in lab.tool_set.all %}
   <div class="tool_well col-sm-4 col-xs-12">
