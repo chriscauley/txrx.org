@@ -83,6 +83,9 @@ h3.block_title {
     > :last-child { margin-bottom: 0; }
   }
 }
+.well.success {
+  background-color: #d6e9c6;
+}
 
 #memberships {
   text-align: center;
@@ -411,7 +414,12 @@ textarea,input { max-width: 100%; }
 p.error { color: red; } /* currently only used on login form */
 ul.errorlist { color: red; }
 
-.btn.disabled { color: @gray-light; }
+.btn.disabled {
+  color: @gray-light;
+  &.btn-success {
+    color: white;
+  }
+}
 
 .pagination { display: inline-block; }
 

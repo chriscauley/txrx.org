@@ -52,6 +52,7 @@ def index(request,term_id=None):
         except IndexError:
           pass
   sessions = sorted(list(sessions),key=lambda s: s.first_date)
+  user_sessions = sorted(list(user_sessions),key=lambda s: s.first_date)
 
   values = {
     'sessions': sessions,
