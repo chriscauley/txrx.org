@@ -2,9 +2,9 @@
 <div class="price">${{ session.section.fee }}</div>
 <div class="EnrollLink">
   {% if session.user_enrollment.quantity == 1 %}
-  <button class="btn btn-success disabled">Enrolled</button>
+  <button class="btn btn-default disabled">Enrolled</button>
   {% elif session.user_enrollment %}
-  <button class="btn btn-success disabled">Enrolled x {{ session.user_enrollment.quantity }}</button>
+  <button class="btn btn-default disabled">Enrolled x {{ session.user_enrollment.quantity }}</button>
   {% elif session.closed %}
   <button class="btn btn-default disabled">{{ session.closed_string|title }}</button>
   {% elif session.full %}
