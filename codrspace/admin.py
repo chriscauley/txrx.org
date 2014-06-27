@@ -43,7 +43,7 @@ class PhotoAdmin(CropAdmin):
 class TaggedPhotoInline(GenericTabularInline):
   model = TaggedPhoto
   raw_id_fields = ('photo',)
-  fields = ('photo','_thumbnail')
+  fields = ('order','_thumbnail','photo')
   readonly_fields = ('_thumbnail',)
   extra = 0
   def _thumbnail(self,obj):
