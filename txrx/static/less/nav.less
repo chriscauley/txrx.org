@@ -14,7 +14,7 @@
   overflow: visible;
   text-transform: none;
   white-space: nowrap;
-  width: 125px;
+  width: auto;
 }
 .nav > li.social {
   > a {
@@ -34,6 +34,12 @@
   .navbar-default .navbar-nav > li > a { font-size: 13px; }
 }
 @media (min-width: @screen-md-min) {
+  .nav > li.social {
+    margin-right: 15px;
+    border-right: 2px solid rgba(0,0,0,0.3);
+    padding-right: 10px;
+    margin-top: 2px;
+  }
   nav {
     margin-top: 5px;
     padding-top: 25px;

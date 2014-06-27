@@ -36,6 +36,7 @@ def nav(request):
     {"name": "Classes",
      "url": "/classes/",
      },
+    {'name': "Tools", "url": "/tools/"},
     {"name": "Blog",
      "url": "/blog/",
      "sublinks": blog_sublinks if request.user.is_staff else [],
