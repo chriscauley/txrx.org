@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin.widgets import ForeignKeyRawIdWidget, AdminSplitDateTime
+from django.core.exceptions import ObjectDoesNotExist
 from django import forms
 
 from codrspace.models import Post, Photo, Setting
@@ -52,7 +53,10 @@ class PostForm(TaggedModelForm):
     return tags
 
   def save(self,*args,**kwargs):
-    self.instance.user = self.instance.user or self.user
+    try:
+      self.instance.user
+    except ObjectDoesNotExist:
+      self.instance.user = self.user
     return super(PostForm,self).save(*args,**kwargs)
 
   def __init__(self, *args, **kwargs):
