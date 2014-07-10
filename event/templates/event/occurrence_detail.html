@@ -3,11 +3,11 @@
 {% load thumbnail %}
 
 {% block title %}{{ occurrence.name }}{% endblock %}
-{% block header_content %}{{ occurrence.name }}{% endblock %}
 
 {% block main %}
 {% with photos=occurrence.get_photos %}
 <div class="col-sm-6">
+  <h3 class="block_title">{{ occurrence.name }}</h3>
   <p class="lead">{{ occurrence.start }}{% if occurrence.end %} - {{ occurrence.end.time }}{% endif %}</p>
   <div class="calendar_widget">
     <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">Add to calendar</a>
