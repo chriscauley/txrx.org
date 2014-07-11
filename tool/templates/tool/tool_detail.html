@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load thumbnail crop_util %}
+{% load mptt_comments_tags %}
 {% load short_codes %}
 
 {% block title %}{{ tool }}{% endblock %}
@@ -48,6 +49,9 @@
       {% endfor %}
     </div>
     {% endif %}
+  </div>
+  <div class="col-xs-12">
+    {% display_comment_toplevel_for tool %}
   </div>
 </div>
 {% endblock %}
