@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load thumbnail crop_util %}
+{% load short_codes %}
 
 {% block title %}Bio: {{ profile.name }}{% endblock %}
 {% block header_content %}Bio: {{ profile.name }}{% endblock %}
@@ -10,7 +11,7 @@
     {% thumbnail profile.get_photo|get_override:"portrait_crop" "150x200" crop="center" as im %}
     <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" style="float: left; margin: 0 20px 15px 0;" />
     {% endthumbnail %}
-    <p>{{ profile.bio }}</p>
+    <p>{{ profile.bio|explosivo }}</p>
     <div style="clear: both"></div>
   </div>
 </section>

@@ -71,7 +71,7 @@ class UserMembership(models.Model):
 
   #roles = models.ManyToManyField(Role,null=True,blank=True)
   photo = models.ForeignKey(Photo,null=True,blank=True)
-  bio = models.TextField(null=True,blank=True)
+  bio = MarkDownField(null=True,blank=True)
   api_key = models.CharField(max_length=32,default=rand32)
   _h = "A short description of what you do for the lab."
   by_line = models.CharField(max_length=50,null=True,blank=True,help_text=_h)
