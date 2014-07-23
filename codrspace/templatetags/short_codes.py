@@ -25,6 +25,7 @@ def explosivo(value,safe_mode=False):
   """
   Search text for any references to supported short codes and explode them
   """
+  value = value or ""
 
   # Round-robin through all functions as if they are filter methods so we
   # don't have to update some silly list of available ones when they are
