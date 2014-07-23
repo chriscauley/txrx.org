@@ -17,6 +17,7 @@
     min-height: 130px;
     padding: 5px  0 0;
   }
+  .mini-month { display: none; }
   .event {
     .m { .calVariant(@state-danger-bg; @state-danger-border; @state-danger-text); }
     .c { .calVariant(@state-info-bg; @state-info-border; @state-info-text); }
@@ -29,6 +30,36 @@
     }
   }
   td.event { line-height: 13px; }
+}
+
+@media (max-width: @screen-xs-max) {
+  #calendar {
+    table,tbody,tr,td {
+      display: block;
+      width: 100%;
+    }
+    .day {
+      font-size: 1.5em;
+      text-align: center;
+    }
+    .mini-month { display: inline; }
+    td .d0:before { content: "Sunday "; }
+    td .d1:before { content: "Monday "; }
+    td .d2:before { content: "Tuesday "; }
+    td .d3:before { content: "Wednesday "; }
+    td .d4:before { content: "Thursday "; }
+    td .d5:before { content: "Friday "; }
+    td .d6:before { content: "Saturday "; }
+    .events {
+      min-height: 0;
+      padding-bottom: 20px;
+      &.empty { display: none; }
+    }
+  }
+  .paginator {
+    padding-top: 20px;
+    strong { margin-top: 20px; }
+  }
 }
 
 .calendar_widget {
@@ -90,6 +121,7 @@
       left: 0;
       margin-left: 0;
       top: 0;
+      width: 100%;
       hr { margin: 0.5em 0; }
     }
   }

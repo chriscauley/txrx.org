@@ -36,8 +36,10 @@ Events at TX/RX
     <tr>
       {% for day,occurrences in week %}
       <td style="vertical-align:top;{% if day %} border: 1px gray solid{% endif %}">
-        <div class="events">
-          <div class="day">{{ day }}</div>
+        <div class="events{% if not day %} empty{% endif %}">
+          <div class="day d{{ forloop.counter0 }}">
+            <div class="mini-month">{{ current_date|date:"n/" }}</div>{{ day }}
+          </div>
           {% for occurrence in occurrences %}
           <p class="event">
             <b>{{ occurrence.start|date:"f a" }}</b>
