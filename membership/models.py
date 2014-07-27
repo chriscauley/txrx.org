@@ -32,6 +32,7 @@ class Membership(models.Model):
   rates = cached_property(lambda self: self.membershiprate_set.all(),name="rates")
   monthly_rate = lambda self: self.rates.filter(months=1)[0]
   yearly_rate = lambda self: self.rates.filter(months=12)[0]
+  discount_percentage = models.IntegerField(default=0)
   def profiles(self):
     return self.profile_set.all()
   class Meta:

@@ -93,3 +93,18 @@ function verifyCheckout(data) {
 $(document).ajaxError(function() {
   alert("An unknown error has occurred. Please try again or email us at classes@txrxlabs.org")
 });
+$(function() {
+  if (simpleCart && simpleCart.items && window.SESSIONS_ON_PAGE){
+    var undiscounted = 0, discounted = 0;
+    for (id in simpleCart.items) {
+      var cart_price = simpleCart.items[id].price;
+      var session_price = window.SESSIONS_ON_PAGE[id].fee;
+      if (cart_price < session_price) { undiscounted++; }
+      if (cart_price > session_price) { discounted++; }
+      simpleCart.items[id].price = session_price;
+    }
+    simpleCart.update();
+    if (discounted) { $("#main").prepend("<div class='alert alert-success'>The price of " + discounted + " classes in your cart have decreased. This is most likely because your membership level has changed (eg: you logged out). Please notify <a href='mailto:classes@txrxlabs.org'>classes@txrxlabs.org</a> if you believe this is in error.</div>"); }
+    if (undiscounted) { $("#main").prepend("<div class='alert alert-success'>The price of " + undiscounted + " classes in your cart have increased. This is most likely becaus your membership level has changed (eg: you logged in). Please notify <a href='mailto:classes@txrxlabs.org'>classes@txrxlabs.org</a> if you believe this is in error.</div>"); }
+  }
+});
