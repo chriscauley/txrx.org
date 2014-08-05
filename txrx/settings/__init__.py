@@ -119,7 +119,7 @@ for s_file in ['apps','local']:
 
 
 if DEBUG:
-  pass#INSTALLED_APPS += ('devserver',)
+  INSTALLED_APPS += ('devserver',)
 else:
   TEMPLATE_LOADERS = (
     ('django.template.loaders.cached.Loader', (

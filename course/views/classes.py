@@ -24,14 +24,14 @@ filters = {
     "options": Term.objects.exclude(section__term__name__icontains='test'),
     "name": "Term",
     "slug": "term"
-    },
+  },
   "subject": lambda: {
     "model": Subject,
     "options": Subject.objects.all(),
     "name": "Subject",
     "slug": "subject"
-    }
   }
+}
 
 def index(request,term_id=None):
   term = Term.objects.all()[0]
@@ -42,6 +42,9 @@ def index(request,term_id=None):
     first_date = datetime.datetime.now()-datetime.timedelta(21)
     sessions = Session.objects.filter(first_date__gte=first_date).select_related(depth=3)
   user_sessions = []
+  for session in sessions:
+    session.set_user_fee(request.user)
+    x = session.user_fee
   if request.user.is_authenticated():
     user_sessions = sessions.filter(enrollment__user=request.user.id)
     us_ids = [s.id for s in user_sessions]
@@ -60,18 +63,22 @@ def index(request,term_id=None):
     'term': term,
     'user_sessions': user_sessions,
     'yesterday':datetime.datetime.now()-datetime.timedelta(0.5),
-    }
+  }
   return TemplateResponse(request,"course/classes.html",values)
 
 def detail(request,slug):
   session = get_object_or_404(Session,slug=slug)
+  session.set_user_fee(request.user)
   enrollment = None
   notify_course = None
   if request.user.is_authenticated():
     enrollment = Enrollment.objects.filter(session=session,user=request.user)
     notify_course = get_or_none(NotifyCourse,user=request.user,course=session.section.course)
   kwargs = dict(first_date__gte=datetime.datetime.now(),section__course=session.section.course)
-  related_classes = Session.objects.filter(**kwargs).exclude(id=session.id)
+  alternate_sessions = Session.objects.filter(**kwargs).exclude(id=session.id)
+  kwargs = dict(first_date__gte=datetime.datetime.now(),
+                section__course__subjects__in=session.section.course.subjects.all())
+  related_sessions = Session.objects.filter(**kwargs).exclude(id=session.id)
   if request.POST:
     if not (request.user.is_superuser or request.user == session.user):
       messages.error(request,"Only an instructor can do that")
@@ -85,9 +92,10 @@ def detail(request,slug):
   values = {
     'session': session,
     'enrollment': enrollment,
-    'related_classes': related_classes,
+    'alternate_sessions': alternate_sessions,
+    'related_sessions': related_sessions,
     'notify_course': notify_course,
-    }
+  }
   return TemplateResponse(request,"course/detail.html",values)
 
 def ics_classes_all(request,fname):

@@ -97,6 +97,7 @@ $(function() {
   if (simpleCart && simpleCart.items && window.SESSIONS_ON_PAGE){
     var undiscounted = 0, discounted = 0;
     for (id in simpleCart.items) {
+      if (!window.SESSIONS_ON_PAGE[id]) { continue; }
       var cart_price = simpleCart.items[id].price;
       var session_price = window.SESSIONS_ON_PAGE[id].fee;
       if (cart_price < session_price) { undiscounted++; }

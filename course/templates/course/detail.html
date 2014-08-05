@@ -75,10 +75,10 @@
          {% endfor %}
        </div>
        {% endif %}
-       {% if related_classes %}
-       <div class="related_classes">
+       {% if alternate_sessions %}
+       <div class="alternate_sessions">
          <h4>Can't make it to this class? Checkout these other sessions:</h4>
-         {% for klass in related_classes %}
+         {% for klass in alternate_sessions %}
          <div>
            {% if klass.full %}<strong class="full">[FULL]</strong>{% endif %}
            <a href="{{ klass.get_absolute_url }}">{{ klass }}</a>
@@ -114,6 +114,17 @@
    {# {% include "course/_student_panel.html" %} #}
    {% else %}
    {% include "course/_cart.html" with small_cart="1" %}
-  {% endif %}
+   {% endif %}
+   {% if related_sessions %}
+   <div class="related_sessions">
+     <h4>Checkout these similar classes!</h4>
+     {% for klass in related_sessions %}
+     <div>
+       {% if klass.full %}<strong class="full">[FULL]</strong>{% endif %}
+       <a href="{{ klass.get_absolute_url }}">{{ klass }}</a>
+     </div>
+     {% endfor %}
+   </div>
+   {% endif %}
 </div>
 {% endblock %}

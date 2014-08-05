@@ -121,6 +121,10 @@ class Session(FeedItemModel,PhotosMixin):
   archived = property(lambda self: self.first_date<datetime.datetime.now())
   list_users = property(lambda self: [self.user])
   description = property(lambda self: self.section.description)
+  def set_user_fee(self,user):
+    self.user_fee = self.section.fee
+    if user.is_authenticated():
+      self.user_fee = self.user_fee*(100-user.usermembership.membership.discount_percentage)//100
   @cached_property
   def first_photo(self):
     return (self.get_photos() or [super(Session,self).first_photo])[0]
