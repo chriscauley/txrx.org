@@ -120,7 +120,6 @@
      <h4>Checkout these similar classes!</h4>
      {% for klass in related_sessions %}
      <div>
-       {% if klass.full %}<strong class="full">[FULL]</strong>{% endif %}
        <a href="{{ klass.get_absolute_url }}">{{ klass }}</a>
      </div>
      {% endfor %}

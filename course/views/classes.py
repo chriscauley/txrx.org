@@ -79,6 +79,7 @@ def detail(request,slug):
   kwargs = dict(first_date__gte=datetime.datetime.now(),
                 section__course__subjects__in=session.section.course.subjects.all())
   related_sessions = Session.objects.filter(**kwargs).exclude(id=session.id)
+  related_sessions = [s for s in related_sessions if not (s.closed or s.full)]
   if request.POST:
     if not (request.user.is_superuser or request.user == session.user):
       messages.error(request,"Only an instructor can do that")
