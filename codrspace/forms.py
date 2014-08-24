@@ -4,7 +4,7 @@ from django.contrib.admin.widgets import ForeignKeyRawIdWidget, AdminSplitDateTi
 from django.core.exceptions import ObjectDoesNotExist
 from django import forms
 
-from codrspace.models import Post, Photo, Setting
+from codrspace.models import Post, PhotoTag, Photo, Setting
 from codrspace.utils import localize_date
 
 import datetime
@@ -106,7 +106,6 @@ class SettingForm(forms.ModelForm):
       if isinstance(field, forms.fields.CharField):
         field.widget.attrs.update({'class': 'span10'})
 
-
 class FeedBackForm(forms.Form):
   email = forms.EmailField(required=True)
   comments = forms.CharField(widget=forms.Textarea(), required=True)
@@ -125,3 +124,12 @@ class PhotoFilterForm(forms.Form):
 
 class ZipForm(forms.Form):
   zip_file = forms.FileField()
+
+class PhotoTagForm(forms.ModelForm):
+  def clean_name(self):
+    name = self.cleaned_data['name'].lower()
+    if PhotoTag.objects.filter(name=name):
+      raise forms.ValidationError("A Tag with that name already exists")
+    return name
+  class Meta:
+    model = PhotoTag

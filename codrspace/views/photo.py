@@ -1,11 +1,14 @@
 """Main codrspace views"""
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib import messages
 from django.core.paginator import Paginator
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.views.decorators.csrf import csrf_exempt
 
-from codrspace.models import Photo
-from codrspace.forms import PhotoForm, PhotoFilterForm, ZipForm
+from codrspace.models import Photo, PhotoTag
+from codrspace.forms import PhotoForm, PhotoFilterForm, ZipForm, PhotoTagForm
 
 from NextPlease import pagination
 
@@ -54,3 +57,33 @@ def upload_zip(request):
     with open('tmp', 'wb+') as destination:
       for chunk in f.chunks():
         destination.write(request.FILES['zip_file'])
+
+@staff_member_required
+def bulk_tag_index(request):
+  phototags = PhotoTag.objects.all()
+  form = PhotoTagForm(request.POST or None)
+  if form.is_valid():
+    phototag = form.save()
+    messages.success(request,"New PhotoTag created: %s"%phototag)
+    return HttpResponseRedirect(request.get_full_path())
+  values = {'phototags': phototags,'form': form}
+  return TemplateResponse(request,"photo/bulk_tag_index.html",values)
+
+@csrf_exempt
+@staff_member_required
+@pagination('photos',per_page=96,orphans=5)
+def bulk_tag_detail(request,tag_id):
+  phototag = PhotoTag.objects.get(pk=tag_id)
+  if request.POST:
+    photo = Photo.objects.get(pk=request.POST['photo_pk'])
+    if request.POST['checked'] == 'true':
+      photo.tags.add(phototag)
+    else:
+      photo.tags.remove(phototag)
+    photo.save()
+    return HttpResponse('{success:true}')
+  values = {
+    'phototag': phototag,
+    'photos': Photo.objects.all()
+  }
+  return TemplateResponse(request,"photo/bulk_tag_detail.html",values)

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block main %}
+<table class="table">
+  <tr>
+    <td>Tag</td>
+    <td>Photo count</td>
+  </tr>
+  {% for phototag in phototags %}
+  <tr>
+    <td><a href="{% url "bulk_tag_detail" phototag.pk %}">{{ phototag }}</a></td>
+    <td>{{ phototag.photo_set.count }}</td>
+  </tr>
+  {% endfor %}
+</table>
+<form method="POST">
+  {% csrf_token %}
+  {{ form }}
+  <input type="submit" value="Create New Tag" />
+</form>
+{% endblock %}

@@ -6,7 +6,7 @@ from sorl.thumbnail import get_thumbnail
 from db.admin import SlugModelAdmin, OrderedModelAdmin, OrderedModelInline
 from db.forms import StaffMemberForm
 
-from .models import Post, Photo, MiscFile, TaggedPhoto, PressItem, Banner, TaggedFile
+from .models import Post, PhotoTag, Photo, MiscFile, TaggedPhoto, PressItem, Banner, TaggedFile
 from .forms import PostForm
 
 class PostAdminForm(PostForm):
@@ -27,7 +27,7 @@ class PhotoAdmin(CropAdmin):
   list_display = ('__unicode__','_thumbnail','approved','upload_dt')
   list_sortable = ('__unicode__','upload_dt')
   list_editable = ('approved',)
-  list_filter = ('upload_dt',)
+  list_filter = ('upload_dt','tags',)
   search_fields = ('name',)
   raw_id_fields = ('user',)
   fieldsets = (
@@ -58,8 +58,14 @@ class TaggedFileInline(GenericTabularInline):
   raw_id_fields = ('file',)
   extra = 0
 
+class PhotoTagAdmin(admin.ModelAdmin):
+  list_display = ("__unicode__","bulk_link")
+  bulk_link = lambda self, obj: "<a href='/blog/photo/bulk_tag/%s'>Bulk Tag %s Photos</a>"%(obj.pk,obj)
+  bulk_link.allow_tags = True
+
 admin.site.register(Post,PostAdmin)
 admin.site.register(Photo,PhotoAdmin)
 admin.site.register(MiscFile)
 admin.site.register(PressItem)
 admin.site.register(Banner)
+admin.site.register(PhotoTag,PhotoTagAdmin)

@@ -60,4 +60,4 @@ def reset_password(user,
       email_template_name=email_template_name)
     
   else:
-    print form.errorsform.save(email_template_name=email_template_name)
+    print form.errors

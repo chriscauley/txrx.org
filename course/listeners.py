@@ -3,7 +3,6 @@ from django.dispatch import receiver
 from django.http import QueryDict
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import PasswordResetForm
 from django.core.mail import send_mail, mail_admins
 from django.template.loader import render_to_string
 

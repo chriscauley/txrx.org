@@ -186,6 +186,37 @@ label .help-text {
   margin-left: 25px;
 }
 
+.hidden_checkbox {
+  display: none;
+  &:checked + label {
+    background-color: @brand-success;
+    img { opacity: 0.5; }
+    h3 { color: white; }
+  }
+  + label {
+    cursor: pointer;
+    max-width: 100%;
+    position: relative;
+    h3 {
+      height: 56px; // should match aesthetic of the tool lab detail page
+      overflow: hidden;
+      word-wrap: break-word;
+    }
+    &.loading:before {
+      background: fade(@well-bg,90%);
+      content: "Loading...";
+      display: block;
+      height: 100%;
+      left: 0;
+      line-height: 200px;
+      position: absolute;
+      text-align: center;
+      top: 0;
+      width: 100%;
+    }
+  }
+}
+
 #wmd-input {
   height: 300px;
 }

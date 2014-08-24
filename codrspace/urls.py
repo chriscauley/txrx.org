@@ -9,7 +9,7 @@ site_maps = {
   'default': DefaultMap,
   'posts': PostMap,
   'users': UserMap
-  }
+}
 
 urlpatterns = patterns(
   'codrspace.views',
@@ -26,7 +26,9 @@ urlpatterns = patterns(
 
   url(r'^photo/insert/$','insert_photo',name='insert_photo'),
   url(r'^photo/add/$','add_photo',name='add_photo'),
-  )
+  url(r'^photo/bulk_tag/$','bulk_tag_index',name='bulk_tag_index'),
+  url(r'^photo/bulk_tag/(\d+)/$','bulk_tag_detail',name='bulk_tag_detail'),
+)
 
 username_regex = '(?P<username>[\w\d\-\.\@\_]+)'
 urlpatterns += patterns(
@@ -41,4 +43,4 @@ urlpatterns += patterns(
   '',
   (r'^robots\.txt$', lambda r: HttpResponse("User-agent: *\nCrawl-delay: 5", mimetype="text/plain")),
   (r'^sitemap\.xml$', cache_page(86400)(sitemaps_views.sitemap), {'sitemaps': site_maps})
-  )
+)

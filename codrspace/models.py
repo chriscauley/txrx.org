@@ -91,12 +91,19 @@ EXTERNAL_TYPE_CHOICES = (
   ('vortex','Curly Vortex')
 )
 
+class PhotoTag(models.Model):
+  name = models.CharField(max_length=32)
+  __unicode__ = lambda self: self.name
+  class Meta:
+    ordering = ('-name',)
+
 class Photo(FileModel):
   file = OriginalImage("Photo",upload_to='uploads/photos/%Y-%m', null=True,max_length=200)
   caption = models.TextField(null=True,blank=True)
   instagramphoto = models.ForeignKey(InstagramPhoto,null=True,blank=True)
   approved = models.BooleanField(default=False)
   source = models.CharField(choices=SOURCE_CHOICES,default="web",max_length=16)
+  tags = models.ManyToManyField(PhotoTag,blank=True)
   kwargs = dict(upload_to='uploads/photos/%Y-%m', original='file')
   _sh = "Usages: Blog Photo, Tool Photo"
   square_crop = CropOverride('Square Crop (1:1)', aspect='1x1',help_text=_sh,**kwargs)
