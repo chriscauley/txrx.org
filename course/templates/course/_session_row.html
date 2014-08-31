@@ -23,7 +23,7 @@
     </small></div>
     <div class="bottom">
       <div class="subjects">
-        {% for subject in session.section.course.subjects.all %}
+        {% for subject in session.subjects %}
         {{ subject|upper }}
         {% endfor %}
       </div>

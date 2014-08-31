@@ -23,6 +23,14 @@ class CourseAdmin(admin.ModelAdmin):
   def photo_count(self,obj):
     return len(obj.get_photos())
 
+  # duplicated from models.py because of how the admin handles M2M
+  def save_related(self, request, form, formsets, change):
+    super(CourseAdmin, self).save_related(request, form, formsets, change)
+    subjects = form.instance.subjects.all()
+    for subject in subjects:
+      if subject.parent and not (subject.parent in subjects):
+        form.instance.subjects.add(subject.parent)
+
 class ClassTimeInline(admin.TabularInline):
   extra = 0
   model = ClassTime

@@ -19,8 +19,12 @@ _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
 class Subject(models.Model):
   name = models.CharField(max_length=32)
+  parent = models.ForeignKey("self",null=True,blank=True)
   value = lambda self: self.name
-  __unicode__ = lambda self: self.name
+  def __unicode__(self):
+    if self.parent:
+      return "(%s) %s"%(self.parent,self.name)
+    return self.name
   class Meta:
     ordering = ('name',)
 
@@ -45,6 +49,13 @@ class Course(models.Model,PhotosMixin,ToolsMixin):
   get_short_name = lambda self: self.short_name or self.name
   __unicode__ = lambda self: self.name
   get_absolute_url = lambda self: Session.objects.filter(section__course=self)[0].get_absolute_url()
+  def save(self,*args,**kwargs):
+    super(Course,self).save(*args,**kwargs)
+    #this has to be repeated in the admin because of how that works
+    subjects = self.subjects.all()
+    for subject in subjects:
+      if subject.parent and not (subject.parent in subjects):
+        self.subjects.add(subject.parent)
   class Meta:
     ordering = ("name",)
 
@@ -150,7 +161,11 @@ class Session(FeedItemModel,PhotosMixin):
   def get_week(self):
     sunday = self.first_date.date()-datetime.timedelta(self.first_date.weekday())
     return (sunday,sunday+datetime.timedelta(6))
-  subjects = property(lambda self: self.section.course.subjects.all())
+  
+  subjects = cached_property(lambda self: self.section.course.subjects.filter(parent__isnull=True),name="subjects")
+  @cached_property
+  def related_sessions(self):
+    sessions = Session.objects.filter(first_date__gte=datetime.datetime.now())
   @property
   def closed_string(self):
     if self.cancelled:

@@ -1,8 +1,15 @@
 <form class="filters">
   {% for f in filters %}
   <select id="{{ f.slug }}" name="{{ f.slug }}" onchange="applyFilters(this);">
-    <option value="">All {{ f.name }}s</option>{% for o in f.options %}
-    <option value="{{ o.value }}">{{ o }}</option>{% endfor %}
+    <option value="">All {{ f.name }}s</option>
+    {% for o in f.options %}
+    <option value="{{ o.value }}"{% if not o.active_classes %} disabled="disabled"{% endif %}>
+      {{ o }} ({{ o.active_classes }})</option>
+    {% for s in o.subfilters %}
+    <option value="{{ s.value }}"{% if not s.active_classes %} disabled="disabled"{% endif %}>
+      -- {{ s }} ({{ s.active_classes }})</option>
+    {% endfor %}
+    {% endfor %}
   </select>
   {% endfor %}
   <span>

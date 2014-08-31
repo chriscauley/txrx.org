@@ -27,7 +27,7 @@ filters = {
   },
   "subject": lambda: {
     "model": Subject,
-    "options": Subject.objects.all(),
+    "options": Subject.objects.filter(parent__isnull=True),
     "name": "Subject",
     "slug": "subject"
   }
@@ -42,9 +42,20 @@ def index(request,term_id=None):
     first_date = datetime.datetime.now()-datetime.timedelta(21)
     sessions = Session.objects.filter(first_date__gte=first_date).select_related(depth=3)
   user_sessions = []
+  subject_filters = filters['subject']()
+  active_subjects = {}
   for session in sessions:
     session.set_user_fee(request.user)
     x = session.user_fee
+    for subject in session.subjects.all():
+      active_subjects[subject.pk] = active_subjects.get(subject.pk,0) + 1
+  for subject in subject_filters['options']:
+    subject.active_classes = active_subjects.get(subject.pk,0)
+    subject.subfilters = []
+    for child in subject.subject_set.all():
+      subject.active_classes += active_subjects.get(child.pk,0)
+      child.active_classes = active_subjects.get(child.pk,0) + 1
+      subject.subfilters.append(child)
   if request.user.is_authenticated():
     user_sessions = sessions.filter(enrollment__user=request.user.id)
     us_ids = [s.id for s in user_sessions]
@@ -59,7 +70,7 @@ def index(request,term_id=None):
 
   values = {
     'sessions': sessions,
-    'filters': [filters['subject']],
+    'filters': [subject_filters],
     'term': term,
     'user_sessions': user_sessions,
     'yesterday':datetime.datetime.now()-datetime.timedelta(0.5),
