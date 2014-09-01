@@ -9,7 +9,7 @@ from sorl.thumbnail import ImageField
 import datetime
 
 from feed.models import FeedItemModel
-from codrspace.models import MiscFile, PhotosMixin
+from codrspace.models import FilesMixin, PhotosMixin
 from geo.models import Location
 from event.models import OccurrenceModel, reverse_ics
 from tool.models import ToolsMixin
@@ -17,16 +17,30 @@ from txrx.utils import cached_method,cached_property
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
+def to_base32(s):
+  key = '-abcdefghijklmnopqrstuvwxyz'
+  return int("0x"+"".join([hex(key.find(i))[2:].zfill(2) for i in (slugify(s)+"----")[:4]]),16)
+
 class Subject(models.Model):
   name = models.CharField(max_length=32)
   parent = models.ForeignKey("self",null=True,blank=True)
+  order = models.FloatField(default=0)
   value = lambda self: self.name
+  def get_order(self):
+    max_num = to_base32("zzzz")
+    if self.parent:
+      return to_base32(self.parent.name) + to_base32(self.name)/float(max_num)
+    return to_base32(self.name)
+  def save(self,*args,**kwargs):
+    self.order = self.get_order()
+    super(Subject,self).save(*args,**kwargs)
+
   def __unicode__(self):
     if self.parent:
       return "(%s) %s"%(self.parent,self.name)
     return self.name
   class Meta:
-    ordering = ('name',)
+    ordering = ('order',)
 
 class Term(models.Model):
   name = models.CharField(max_length=32)
@@ -39,7 +53,7 @@ class Term(models.Model):
   class Meta:
     ordering = ('-start',)
 
-class Course(models.Model,PhotosMixin,ToolsMixin):
+class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   name = models.CharField(max_length=64)
   _ht = "Used for the events page."
   subjects = models.ManyToManyField(Subject)
@@ -62,7 +76,7 @@ class Course(models.Model,PhotosMixin,ToolsMixin):
 class CourseSubscription(UserModel):
   course = models.ForeignKey(Course)
 
-class Section(models.Model):
+class Section(models.Model,FilesMixin):
   course = models.ForeignKey(Course)
   term = models.ForeignKey("Term")
   fee = models.IntegerField(null=True,blank=True)
@@ -142,6 +156,10 @@ class Session(FeedItemModel,PhotosMixin):
   @cached_method
   def get_photos(self):
     return self._get_photos() or self.section.course.get_photos()
+  # course can have files or session can override them
+  @cached_method
+  def get_files(self):
+    return self.section.get_files() or self.section.course.get_files()
 
   #calendar crap
   name = property(lambda self: self.section.course.name)
@@ -166,6 +184,13 @@ class Session(FeedItemModel,PhotosMixin):
   @cached_property
   def related_sessions(self):
     sessions = Session.objects.filter(first_date__gte=datetime.datetime.now())
+    sessions = sessions.exclude(section__course=self.section.course)
+    sub_subjects = self.section.course.subjects.filter(parent__isnull=False)
+    sub_sessions = list(sessions.filter(section__course__subjects__in=sub_subjects).distinct())
+    if len(sub_sessions) >= 5:
+      return sub_sessions
+    sessions = list(sessions.filter(section__course__subjects__in=self.subjects.all()).distinct())
+    return list(set(sub_sessions + sessions))
   @property
   def closed_string(self):
     if self.cancelled:
@@ -211,13 +236,6 @@ class Session(FeedItemModel,PhotosMixin):
   class Meta:
     ordering = ('section',)
 
-class SessionAttachment(models.Model):
-  session = models.ForeignKey(Session)
-  attachment = models.ForeignKey(MiscFile)
-  order = models.IntegerField(default=0)
-  class Meta:
-    ordering = ('order',)
-
 class ClassTime(OccurrenceModel):
   session = models.ForeignKey(Session)
   start = models.DateTimeField()
@@ -231,12 +249,8 @@ class ClassTime(OccurrenceModel):
   get_admin_url = lambda self: "/admin/course/session/%s/"%self.session.id
   get_location = lambda self: self.session.section.location
   no_conflict = lambda self: self.session.section.no_conflict
-  @property
-  def description(self):
-    return self.session.section.description
-  @property
-  def name(self):
-    return self.session.section.course.name
+  description = cached_property(lambda self:self.session.section.course.description,name="description")
+  name = cached_property(lambda self:self.session.section.course.name,name="name")
   @property
   def end(self):
     return self.start.replace(hour=self.end_time.hour,minute=self.end_time.minute)
