@@ -249,7 +249,7 @@ class ClassTime(OccurrenceModel):
   get_admin_url = lambda self: "/admin/course/session/%s/"%self.session.id
   get_location = lambda self: self.session.section.location
   no_conflict = lambda self: self.session.section.no_conflict
-  description = cached_property(lambda self:self.session.section.course.description,name="description")
+  description = cached_property(lambda self:self.session.section.description,name="description")
   name = cached_property(lambda self:self.session.section.course.name,name="name")
   @property
   def end(self):
