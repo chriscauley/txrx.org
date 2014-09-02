@@ -5,8 +5,8 @@
     {% for o in f.options %}
     <option value="{{ o.value }}"{% if not o.active_classes %} disabled="disabled"{% endif %}>
       {{ o }} ({{ o.active_classes }})</option>
-    {% for s in o.subfilters %}
-    <option value="{{ s.value }}"{% if not s.active_classes %} disabled="disabled"{% endif %}>
+    {% for s in o.subfilters %}{# These won't appear if empty #}
+    <option value="{{ s.value }}">
       -- {{ s }} ({{ s.active_classes }})</option>
     {% endfor %}
     {% endfor %}

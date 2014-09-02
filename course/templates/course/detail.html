@@ -112,15 +112,14 @@
      <h2>You are enrolled in this course</h2>
    </div>
    {# {% include "course/_student_panel.html" %} #}
-   {% else %}
    {% include "course/_cart.html" with small_cart="1" %}
    {% endif %}
-   {% if related_sessions %}
+   {% if session.related_sessions %}
    <div class="related_sessions">
      <h4>Checkout these similar classes!</h4>
      {% for s in session.related_sessions|slice:":5" %}
      <div>
-       <a href="{{ s.get_absolute_url }}">{{ s }}</a>
+       <a href="{{ s.get_absolute_url }}"><b>[{{ s.first_date|date:"M j" }}]</b> {{ s.section.course.get_short_name }}</a>
      </div>
      {% endfor %}
    </div>

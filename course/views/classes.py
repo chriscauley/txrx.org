@@ -46,16 +46,15 @@ def index(request,term_id=None):
   active_subjects = {}
   for session in sessions:
     session.set_user_fee(request.user)
-    x = session.user_fee
-    for subject in session.subjects.all():
+    for subject in session.all_subjects:
       active_subjects[subject.pk] = active_subjects.get(subject.pk,0) + 1
   for subject in subject_filters['options']:
     subject.active_classes = active_subjects.get(subject.pk,0)
     subject.subfilters = []
     for child in subject.subject_set.all():
-      subject.active_classes += active_subjects.get(child.pk,0)
-      child.active_classes = active_subjects.get(child.pk,0) + 1
-      subject.subfilters.append(child)
+      child.active_classes = active_subjects.get(child.pk,0)
+      if child.active_classes:
+        subject.subfilters.append(child)
   if request.user.is_authenticated():
     user_sessions = sessions.filter(enrollment__user=request.user.id)
     us_ids = [s.id for s in user_sessions]

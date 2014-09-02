@@ -36,6 +36,9 @@ class City(GeoModel):
 
 class Location(GeoModel):
   name = models.CharField(max_length=128,null=True,blank=True)
+  _ht = "Optional. Alternative name for the calendar."
+  short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
+  get_short_name = lambda self: self.short_name or self.name
   address = models.CharField(max_length=64,null=True,blank=True)
   address2 = models.CharField(max_length=64,null=True,blank=True)
   city = models.ForeignKey(City,default=1)

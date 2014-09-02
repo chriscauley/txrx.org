@@ -180,7 +180,9 @@ class Session(FeedItemModel,PhotosMixin):
     sunday = self.first_date.date()-datetime.timedelta(self.first_date.weekday())
     return (sunday,sunday+datetime.timedelta(6))
   
-  subjects = cached_property(lambda self: self.section.course.subjects.filter(parent__isnull=True),name="subjects")
+  subjects = cached_property(lambda self: self.section.course.subjects.filter(parent__isnull=True),
+                             name="subjects")
+  all_subjects = cached_property(lambda self: self.section.course.subjects.all(),name="all_subjects")
   @cached_property
   def related_sessions(self):
     sessions = Session.objects.filter(first_date__gte=datetime.datetime.now())
@@ -189,8 +191,9 @@ class Session(FeedItemModel,PhotosMixin):
     sub_sessions = list(sessions.filter(section__course__subjects__in=sub_subjects).distinct())
     if len(sub_sessions) >= 5:
       return sub_sessions
-    sessions = list(sessions.filter(section__course__subjects__in=self.subjects.all()).distinct())
-    return list(set(sub_sessions + sessions))
+    sessions = sessions.filter(section__course__subjects__in=self.subjects.all())
+    sessions = list(sessions.exclude(section__course__subjects__in=sub_subjects))
+    return sub_sessions + sessions
   @property
   def closed_string(self):
     if self.cancelled:
