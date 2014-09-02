@@ -50,4 +50,9 @@ class EvaluationForm(PlaceholderModelForm):
   visuals = forms.ChoiceField(label="Handouts/Audio/Visuals",help_text=Evaluation.v_ht,**_kwargs)
   class Meta:
     model = Evaluation
-    exclude = ('user','enrollment')
+    fields = (
+      'presentation','presentation_comments',
+      'content','content_comments',
+      'visuals','visuals_comments',
+      'question1','question2','question3','question4'
+    )

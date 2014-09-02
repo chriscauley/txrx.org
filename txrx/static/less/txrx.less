@@ -92,11 +92,10 @@ h3.block_title {
   text-align: center;
   .membership {
     display: inline-block;
-    margin: 0 10px 20px;
     max-width: 100%;
     padding: 15px 20px;
     text-align: left; 
-    width: 420px;
+    width: 350px;
     .membership_features {
       height: 180px;
       list-style: none;
@@ -110,6 +109,10 @@ h3.block_title {
   .button_box { padding-top: 15px; }
   form { text-align: center; }
   select { width: 250px; max-width: 100%; }
+}
+
+@media (min-width: @screen-lg-min) {
+  #memberships .membership { width: 420px; }
 }
 
 @media (max-width: @screen-sm-min) {

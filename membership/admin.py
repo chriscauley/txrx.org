@@ -2,13 +2,14 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django import forms
 
-from models import Membership, Feature, UserMembership, MembershipRate, MeetingMinutes, Proposal, Officer
+from models import MembershipGroup, Membership, Feature, MembershipFeature, UserMembership, MembershipRate, MeetingMinutes, Proposal, Officer
 
 from db.forms import StaffMemberForm
 
-class FeatureInline(admin.TabularInline):
+class MembershipFeatureInline(admin.TabularInline):
   extra = 0
-  model = Feature
+  raw_id_fields = ('membership','feature')
+  model = MembershipFeature
 
 class MembershipRateInline(admin.TabularInline):
   extra = 0
@@ -17,7 +18,7 @@ class MembershipRateInline(admin.TabularInline):
 class MembershipAdmin(admin.ModelAdmin):
   list_display = ("name","order")
   list_editable = ("order",)
-  inlines = (FeatureInline,MembershipRateInline)
+  inlines = (MembershipFeatureInline,MembershipRateInline)
 
 class UserMembershipAdmin(admin.ModelAdmin):
   list_display = ("__unicode__",'photo')
@@ -54,3 +55,5 @@ admin.site.register(Membership,MembershipAdmin)
 admin.site.register(UserMembership,UserMembershipAdmin)
 admin.site.register(MeetingMinutes,MeetingMinutesAdmin)
 admin.site.register(Officer,OfficerAdmin)
+admin.site.register(Feature)
+admin.site.register(MembershipGroup)

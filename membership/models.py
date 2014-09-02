@@ -20,19 +20,24 @@ def rand32():
   seed = string.letters+string.digits
   return ''.join([random.choice(seed) for i in range(32)])
 
-class MembershipManager(models.Manager):
-  def active(self):
-    # only show paying memberships
-    return self.filter(membershiprate__isnull=False).distinct()
+class MembershipGroup(models.Model):
+  name = models.CharField(max_length=64)
+  order = models.IntegerField(default=0)
+  __unicode__ = lambda self: self.name
+  active_memberships = lambda self: self.membership_set.filter(membershiprate__isnull=False).distinct()
+  class Meta:
+    ordering = ("order",)
 
 class Membership(models.Model):
   name = models.CharField(max_length=64)
   order = models.IntegerField("Level")
-  objects = MembershipManager()
   rates = cached_property(lambda self: self.membershiprate_set.all(),name="rates")
   monthly_rate = lambda self: self.rates.filter(months=1)[0]
   yearly_rate = lambda self: self.rates.filter(months=12)[0]
   discount_percentage = models.IntegerField(default=0)
+  membershipgroup = models.ForeignKey(MembershipGroup,null=True,blank=True)
+  features = cached_property(lambda self:[a.feature for a in self.membershipfeature_set.all()],
+                             name="features")
   def profiles(self):
     return self.profile_set.all()
   class Meta:
@@ -53,8 +58,14 @@ class Role(models.Model):
   name = models.CharField(max_length=64)
 
 class Feature(models.Model):
-  membership = models.ForeignKey(Membership)
   text = models.CharField(max_length=128)
+  __unicode__ = lambda self: self.text
+  class Meta:
+    ordering = ('text',)
+
+class MembershipFeature(models.Model):
+  feature = models.ForeignKey(Feature)
+  membership = models.ForeignKey(Membership)
   order = models.IntegerField(default=0)
   class Meta:
     ordering = ("order",)

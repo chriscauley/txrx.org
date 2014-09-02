@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .models import Membership, MeetingMinutes, Officer, UserMembership
+from .models import Membership, MembershipGroup, MeetingMinutes, Officer, UserMembership
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required, verify_unique_email
 
@@ -21,10 +21,10 @@ import datetime
 
 def join_us(request):
   values = {
-    'memberships': Membership.objects.active(),
+    'groups': MembershipGroup.objects.all(),
     'flatpage':lambda:FlatPage.objects.get(url='/join-us/'),
     }
-  return TemplateResponse(request,"membership/join-us.html",values)
+  return TemplateResponse(request,"membership/memberships.html",values)
 
 @login_required
 def user_settings(request):
