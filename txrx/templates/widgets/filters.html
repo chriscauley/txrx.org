@@ -4,10 +4,10 @@
     <option value="">All {{ f.name }}s</option>
     {% for o in f.options %}
     <option value="{{ o.value }}"{% if not o.active_classes %} disabled="disabled"{% endif %}>
-      {{ o }} ({{ o.active_classes }})</option>
+      {{ o.name }} ({{ o.active_classes }})</option>
     {% for s in o.subfilters %}{# These won't appear if empty #}
     <option value="{{ s.value }}">
-      -- {{ s }} ({{ s.active_classes }})</option>
+      -- {{ s.name }} ({{ s.active_classes }})</option>
     {% endfor %}
     {% endfor %}
   </select>
