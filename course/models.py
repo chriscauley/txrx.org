@@ -19,6 +19,7 @@ _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
 def to_base32(s):
   key = '-abcdefghijklmnopqrstuvwxyz'
+  s = s.strip('0987654321')
   return int("0x"+"".join([hex(key.find(i))[2:].zfill(2) for i in (slugify(s)+"----")[:4]]),16)
 
 class Subject(models.Model):
