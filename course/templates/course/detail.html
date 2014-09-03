@@ -53,18 +53,13 @@
            {{ session.section.description|explosivo|removetags:"script,style" }}
          </div>
          {% if session.section.fee_notes %}
-         <span class="notes"><b>* Fee Notes:</b> {{ session.section.fee_notes }}</span>
+         <p class="notes"><b>* Fee Notes:</b> {{ session.section.fee_notes }}</p>
          {% endif %}
          {% if session.section.requirements %}
-         <span class="notes">
-           <b>Requirements:</b> {{ session.section.requirements }}
-         </span>
+         <p class="notes"><b>Requirements:</b> {{ session.section.requirements }}</p>
          {% endif %}
          {% if session.section.prerequisites %}
-         <span class="notes">
-           <b>Prerequisites:</b>
-           {{ session.section.prerequisites }}
-         </span>
+         <p class="notes"><b>Prerequisites:</b> {{ session.section.prerequisites }}</p>
          {% endif %}
        </div>
        {% if session.get_files %}
