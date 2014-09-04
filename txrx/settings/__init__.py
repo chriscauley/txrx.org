@@ -28,10 +28,10 @@ SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
 
-MEDIA_ROOT = os.path.join(SPATH, '../media')
+MEDIA_ROOT = os.path.join(SPATH, '../.media')
 MEDIA_URL = '/media/'
 UPLOAD_DIR = 'uploads'
-STATIC_ROOT = os.path.join(SPATH,'../static')
+STATIC_ROOT = os.path.join(SPATH,'../.static')
 STATIC_URL = '/static/'
 
 LOGIN_URL = "/accounts/login/"
