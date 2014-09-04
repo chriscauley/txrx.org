@@ -71,17 +71,17 @@
        </div>
        {% endif %}
        {% if alternate_sessions %}
-       <div class="alternate_sessions">
-         <h4>Can't make it to this class? Checkout these other sessions:</h4>
-         {% for klass in alternate_sessions %}
+       <p class="alternate_sessions">
+         <h4>Can't&nbsp;make&nbsp;it&nbsp;to&nbsp;this&nbsp;class? Checkout&nbsp;these&nbsp;other&nbsp;sessions:</h4>
+         {% for s in alternate_sessions %}
          <div>
-           {% if klass.full %}<strong class="full">[FULL]</strong>{% endif %}
-           <a href="{{ klass.get_absolute_url }}">{{ klass }}</a>
+           {% if s.full %}<strong class="full">[FULL]</strong>{% endif %}
+           <a href="{{ s.get_absolute_url }}"><b>[{{ s.first_date|date:"M j" }}]</b> {{ s.section.course.get_short_name }}</a>
          </div>
          {% endfor %}
-       </div>
+       </p>
        {% endif %}
-       <div class="notify_course">
+       <p class="notify_course">
          {% if notify_course %}
          <a href="{% url "clear_notification" "notify_course" request.user.id notify_course.id %}">
            <button class="btn btn-danger">
@@ -92,7 +92,7 @@
          <a href="{% url "notify_course" session.id %}"><button class="btn btn-success">
              Email me the next time this class is scheduled</button></a>
          {% endif %}
-       </div>
+       </p>
     </div>
     <div style="clear: both;"></div>
     <div class="col-xs-12">{% display_comment_toplevel_for session %}</div>
