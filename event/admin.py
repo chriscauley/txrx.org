@@ -9,7 +9,7 @@ import datetime
 
 class EventOccurrenceInline(admin.TabularInline):
   model = EventOccurrence
-  fields = ('name_override','start','end')
+  fields = ('name_override','start','end_time')
   def queryset(self,request):
     qs = super(EventOccurrenceInline,self).queryset(request)
     return qs.filter(start__gte=datetime.datetime.now())

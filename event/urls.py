@@ -4,7 +4,6 @@ urlpatterns = patterns(
   'event.views',
   url(r'^$', 'index', name="index"),
   url(r'^(\d+\-\d+\-\d+)/$', 'index', name="index"),
-  url(r'^repeat/(monthly|weekly)/(\d+)/$','repeat_event',name='repeat_event'),
   url(r'^occurrence/(\d+)/$','occurrence_detail',name='occurrence_detail'),
   url(r'^(\d+)/(.+)/$','occurrence_detail',name='occurrence_detail'),
   url(r'ics/([^/]+)/([^/]+)/(\d+)/(.+).ics','ics',name="ics"),
@@ -14,4 +13,7 @@ urlpatterns = patterns(
   #url(r'^(?P<page_number>\d+)/$', 'index', name="event_list"),
   #url(r'^tagged/(?P<slug>[^/]+)/(?P<page_number>\d+)/$', 'index', name="tagged"),
   #url(r'^detail/(\d+)/$', 'detail', name="detail"),
-  )
+
+  # Depracated
+  #url(r'^repeat/(monthly|weekly)/(\d+)/$','repeat_event',name='repeat_event'),
+)

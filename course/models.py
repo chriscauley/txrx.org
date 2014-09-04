@@ -242,8 +242,6 @@ class Session(FeedItemModel,PhotosMixin):
 
 class ClassTime(OccurrenceModel):
   session = models.ForeignKey(Session)
-  start = models.DateTimeField()
-  end_time = models.TimeField()
   def short_name(self):
     times = list(self.session.classtime_set.all())
     if len(times) == 1:
@@ -255,9 +253,6 @@ class ClassTime(OccurrenceModel):
   no_conflict = lambda self: self.session.section.no_conflict
   description = cached_property(lambda self:self.session.section.description,name="description")
   name = cached_property(lambda self:self.session.section.course.name,name="name")
-  @property
-  def end(self):
-    return self.start.replace(hour=self.end_time.hour,minute=self.end_time.minute)
   class Meta:
     ordering = ("start",)
 

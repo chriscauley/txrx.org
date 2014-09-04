@@ -41,7 +41,8 @@ class Event(models.Model,PhotosMixin):
   location = models.ForeignKey(Location)
   get_location = lambda self: self.location
   description = wmd_models.MarkDownField(blank=True,null=True)
-  repeat = models.CharField(max_length=32,choices=REPEAT_CHOICES,null=True,blank=True)
+  _ht = "If your changing this, you will need to manually delete all future incorrect events. Repeating events are auto-generated every night."
+  repeat = models.CharField(max_length=32,choices=REPEAT_CHOICES,null=True,blank=True,help_text=_ht)
   _ht = "If true, this class will not raise conflict warnings for events in the same location."
   no_conflict = models.BooleanField(default=False,help_text=_ht)
 
@@ -73,11 +74,16 @@ class OccurrenceModel(models.Model):
   The goal is to eventually make this very general so that it can reach accross many models to be put into a feed.
   Occurrences need a start (DateTime), end (DateTime, optional), name (str), description (str), and get_absolute_url (str).
   """
+  start = models.DateTimeField()
+  end_time = models.TimeField()
   __unicode__ = lambda self: "%s - %s"%(self.name,date(self.start,'l F d, Y'))
   created = models.DateTimeField(auto_now_add=True)
 
   get_ics_url = lambda self: reverse_ics(self)
 
+  @property
+  def end(self):
+    return self.start.replace(hour=self.end_time.hour,minute=self.end_time.minute)
   @property
   def google_link(self):
     d = {
@@ -95,9 +101,7 @@ class OccurrenceModel(models.Model):
 
 class EventOccurrence(OccurrenceModel,PhotosMixin):
   event = models.ForeignKey(Event)
-  start = models.DateTimeField()
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
-  end = models.DateTimeField(null=True,blank=True)
   get_absolute_url = lambda self: reverse('event:occurrence_detail',args=(self.id,slugify(self.name)))
   get_admin_url = lambda self: "/admin/event/event/%s/"%self.event.id
   name_override = models.CharField(null=True,blank=True,max_length=128)
@@ -110,7 +114,7 @@ class EventOccurrence(OccurrenceModel,PhotosMixin):
   def save(self,*args,**kwargs):
     # set the publish_dt to a week before the event
     self.publish_dt = self.start - datetime.timedelta(7)
-    super(OccurrenceModel,self).save(*args,**kwargs)
+    super(EventOccurrence,self).save(*args,**kwargs)
   class Meta:
     ordering = ('start',)
 

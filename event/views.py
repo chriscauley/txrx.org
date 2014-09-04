@@ -60,11 +60,9 @@ def occurrence_detail(request,occurrence_id,slug=None):
     }
   return TemplateResponse(request,'event/occurrence_detail.html',values)
 
+# depracated 9/2014
+"""
 def repeat_event(request,period,event_id):
-  """
-  Creates EventOccurrences for an event for one whole year.
-  Will delete all upcoming EventOccurrences.
-  """
   event = get_object_or_404(Event,pk=event_id)
   occurrences = event.upcoming_occurrences
   start = occurrences[0].start
@@ -90,6 +88,7 @@ def repeat_event(request,period,event_id):
   messages.success(request,"All upcoming occurrences have been deleted.")
   messages.success(request,message)
   return HttpResponseRedirect(request.META['HTTP_REFERER'])
+"""
 
 def ics(request,module,model_str,pk,fname):
   """Returns an ics file for any `Event` like or `EventOccurrence` like model.

@@ -49,22 +49,20 @@ class Command (BaseCommand):
       try:
         last_occurrence = list(event.eventoccurrence_set.all())[-1]
         while last_occurrence.start < year_from_now:
+          end_time = last_occurrence.end_time
           occurrences = []
           if 'weekly' in event.repeat:
             _map = {'weekly':2,'biweekly':3,'triweekly':4}
             for i in range(1,_map[event.repeat]):
               last_occurrence = list(event.eventoccurrence_set.all())[-i]
               start = last_occurrence.start+datetime.timedelta(7)
-              end = last_occurrence.end + datetime.timedelta(7)
-              occurrences.append({'start':start,'end':end})
+              occurrences.append({'start':start,'end_time':end_time})
           if event.repeat =='month-dow':
             start = add_month_dow(last_occurrence.start)
-            end = add_month_dow(last_occurrence.end)
-            occurrences.append({'start':start,'end':end})
+            occurrences.append({'start':start,'end_time':end_time})
           if event.repeat == 'month-number':
             start = add_month(last_occurrence.start)
-            end = add_month(last_occurrence.end)
-            occurrences.append({'start':start,'end':end})
+            occurrences.append({'start':start,'end_time':end_time})
           for occurrence in occurrences:
             last_occurrence = EventOccurrence(event=event,**occurrence)
             last_occurrence.save()
@@ -75,3 +73,5 @@ class Command (BaseCommand):
         errors.append("%s error: \n%s"%(event,traceback.format_exc()))
     if errors:
       mail_admins("event errors",'\n'.join(errors))
+    if success:
+      mail_admins("event success",'\n'.join(success))
