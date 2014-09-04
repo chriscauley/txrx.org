@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
 
 from db.models import UserModel
-from codrspace.models import Photo
+from media.models import Photo
 from course.models import Session, Term, Course
 from txrx.utils import cached_method, cached_property
 from project.models import Project

@@ -7,7 +7,7 @@ from django.contrib.flatpages.forms import *
 from django.core.urlresolvers import reverse
 from django import forms
 
-from codrspace.admin import TaggedPhotoInline
+from media.admin import TaggedPhotoInline
 from membership.models import UserMembership
 
 from paypal.standard.ipn.models import PayPalIPN

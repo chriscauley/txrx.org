@@ -3,7 +3,7 @@ from django import forms
 from course.models import Subject, Course, Section, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseCompletion
 from db.forms import StaffMemberForm
 
-from codrspace.admin import TaggedPhotoInline, TaggedFileInline
+from media.admin import TaggedPhotoInline, TaggedFileInline
 from tool.admin import TaggedToolInline
 
 class SubjectAdmin(admin.ModelAdmin):

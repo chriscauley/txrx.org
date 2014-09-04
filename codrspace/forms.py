@@ -4,8 +4,9 @@ from django.contrib.admin.widgets import ForeignKeyRawIdWidget, AdminSplitDateTi
 from django.core.exceptions import ObjectDoesNotExist
 from django import forms
 
-from codrspace.models import Post, PhotoTag, Photo, Setting
+from codrspace.models import Post, Setting
 from codrspace.utils import localize_date
+from media.models import Photo
 
 import datetime
 
@@ -86,14 +87,6 @@ class PostForm(TaggedModelForm):
           )
         else:
           field.widget.attrs['class'] = 'span8'
-
-class PhotoForm(forms.ModelForm):
-
-  class  Meta:
-    fields = ('file','name')
-    model = Photo
-
-
 class SettingForm(forms.ModelForm):
 
   class  Meta:
@@ -116,20 +109,3 @@ class FeedBackForm(forms.Form):
     for field in self.fields.values():
       if isinstance(field, forms.fields.CharField):
         field.widget.attrs.update({'class': 'span10'})
-
-class PhotoFilterForm(forms.Form):
-  search = forms.CharField(max_length=40)
-  mine = forms.BooleanField()
-  page = forms.IntegerField(required=False,widget=forms.HiddenInput())
-
-class ZipForm(forms.Form):
-  zip_file = forms.FileField()
-
-class PhotoTagForm(forms.ModelForm):
-  def clean_name(self):
-    name = self.cleaned_data['name'].lower()
-    if PhotoTag.objects.filter(name=name):
-      raise forms.ValidationError("A Tag with that name already exists")
-    return name
-  class Meta:
-    model = PhotoTag

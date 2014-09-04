@@ -5,12 +5,12 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 
-from south.modelsinspector import add_introspection_rules
-from wmd.models import MarkDownField
-from codrspace.models import Photo, PhotosMixin
-
 from db.models import SlugModel, OrderedModel
+from media.models import Photo, PhotosMixin
+from south.modelsinspector import add_introspection_rules
 from txrx.utils import cached_property, cached_method
+from wmd.models import MarkDownField
+
 
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
 

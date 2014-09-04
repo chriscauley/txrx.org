@@ -1,4 +1,3 @@
-"""Main codrspace views"""
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -7,11 +6,12 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from codrspace.models import Photo, PhotoTag
-from codrspace.forms import PhotoForm, PhotoFilterForm, ZipForm, PhotoTagForm
+from .models import Photo, PhotoTag
+from .forms import PhotoForm, PhotoFilterForm, ZipForm, PhotoTagForm
 
 from NextPlease import pagination
 
+#! TODO pagination
 @staff_member_required
 def insert_photo(request):
   photos = Photo.objects.all()

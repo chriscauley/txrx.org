@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify, date, urlencode
 
-from codrspace.models import PhotosMixin
+from media.models import PhotosMixin
 from wmd import models as wmd_models
 from geo.models import Location
 

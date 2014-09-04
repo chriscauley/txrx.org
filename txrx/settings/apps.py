@@ -29,6 +29,7 @@ INSTALLED_APPS = (
   # blarg
   'wmd',
   'codrspace',
+  'media',
 
   # this project
   'db',

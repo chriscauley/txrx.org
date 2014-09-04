@@ -3,7 +3,7 @@ from django.contrib.contenttypes.generic import GenericTabularInline
 from django.core.urlresolvers import reverse
 
 from .models import Event, EventOccurrence
-from codrspace.admin import TaggedPhotoInline
+from media.admin import TaggedPhotoInline
 
 import datetime
 

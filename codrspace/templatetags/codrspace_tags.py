@@ -1,23 +1,20 @@
+#! This entire file can be depracated 9/2014
 from django.template import Library, TemplateSyntaxError, Variable, Node
 from django.template.defaulttags import token_kwargs
 from django.contrib.auth.models import User
-from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.conf import settings
-from codrspace.models import Post, Setting, Photo
 from codrspace.utils import localize_date
 
 register = Library()
 
-
 @register.filter(name='localize')
 def localize(dt, user):
-    from_tz = settings.TIME_ZONE
-    to_tz = "US/Central"
-
     if not dt:
         return None
+    from_tz = settings.TIME_ZONE
+    to_tz = "US/Central"
 
     # get the users timezone
     if not user.is_anonymous():
@@ -26,12 +23,10 @@ def localize(dt, user):
 
     return localize_date(dt, from_tz=from_tz, to_tz=to_tz)
 
-
 class RandomBlogNode(Node):
     def render(self, context):
         random_user = User.objects.order_by('?')[0]
         return reverse('post_list', args=[random_user.username])
-
 
 @register.tag
 def random_blog(parser, token):
@@ -50,9 +45,3 @@ def latest_posts(context, amount):
         'posts': posts
     })
     return context
-
-#depracated 2014/1/20
-@register.filter
-def get_photos(obj):
-    content_type = ContentType.objects.get_for_model(obj.__class__)
-    return Photo.objects.filter(taggedphoto__content_type=content_type,taggedphoto__object_id=obj.id)

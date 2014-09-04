@@ -3,7 +3,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 
 from db.models import UserModel
-from codrspace.models import PhotosMixin, FilesMixin
+from media.models import PhotosMixin, FilesMixin
 from course.models import Session
 from tool.models import ToolsMixin
 

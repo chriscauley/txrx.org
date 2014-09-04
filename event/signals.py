@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 
-from codrspace.models import Photo
+from media.models import Photo
 from instagram.models import InstagramPhoto
 from .models import EventOccurrence
 

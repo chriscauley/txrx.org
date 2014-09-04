@@ -7,7 +7,6 @@
 .DS_Store
 
 #site generated content
-media/*
 static/*
 .media/*
 .static/*

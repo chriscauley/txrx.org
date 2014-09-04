@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.contenttypes.generic import GenericTabularInline
 
-from codrspace.admin import TaggedPhotoInline
+from media.admin import TaggedPhotoInline
 from db.admin import OrderedModelAdmin
 from .models import Lab, Tool, ToolLink, TaggedTool
 

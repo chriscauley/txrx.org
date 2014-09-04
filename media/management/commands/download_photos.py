@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core.urlresolvers import reverse
 from django.conf import settings
 
-from codrspace.models import Photo
+from media.models import Photo
 from membership.utils import user_from_email
 
 import email, imaplib, os, datetime, time, re

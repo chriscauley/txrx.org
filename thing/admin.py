@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Thing, Material
 
-from codrspace.admin import TaggedPhotoInline, TaggedFileInline
+from media.admin import TaggedPhotoInline, TaggedFileInline
 from tool.admin import TaggedToolInline
 
 class ThingAdmin(admin.ModelAdmin):

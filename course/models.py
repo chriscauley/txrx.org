@@ -9,7 +9,7 @@ from sorl.thumbnail import ImageField
 import datetime
 
 from feed.models import FeedItemModel
-from codrspace.models import FilesMixin, PhotosMixin
+from media.models import FilesMixin, PhotosMixin
 from geo.models import Location
 from event.models import OccurrenceModel, reverse_ics
 from tool.models import ToolsMixin
