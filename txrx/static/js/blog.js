@@ -2,11 +2,11 @@ function insertImage(chunk,callback) {
   window.wmd_chunk = chunk;
   window.current_modal = "#image-modal";
   window.iframe_callback = callback;
-  $("#image-modal iframe").attr("src","/blog/photo/insert/");
+  $("#image-modal iframe").attr("src","/media_files/photo/insert/");
   $("#image-modal").modal('show');
 }
 function addImage() {
-  $("#image-modal iframe").attr("src","/blog/photo/add/");
+  $("#image-modal iframe").attr("src","/media_files/photo/add/");
 }
 function insertShortCode(obj) {
   var out = wmd_chunk.before.trimRight()+"\n\n";
