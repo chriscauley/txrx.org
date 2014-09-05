@@ -31,7 +31,12 @@ urlpatterns = patterns(
   url(r'^thing/$','thing.views.thing_index',name='thing_index'),
   url(r'^thing/(\d+)/([\w\d\-\_]+)/$','thing.views.thing_detail',name='thing_detail'),
   url(r'^conflicts/$','geo.views.conflicts',name="conflicts"),
-  url(r'gfycat/$','main.views.gfycat',name='gfycat')
+  url(r'gfycat/$','main.views.gfycat',name='gfycat'),
+  url(r'^tools/',include('tool.urls')),
+  url('', include('social.apps.django_app.urls', namespace='social')),
+  url(r'^classes/', include('course.urls',namespace='course',app_name='course')),
+  url(r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
+  url(r'^tx/rx/return/$','course.views.paypal_return',name='paypal_redirect'),
 )
 
 #auth related
@@ -42,14 +47,6 @@ urlpatterns += patterns(
   url(r'^accounts/', include('registration.backends.default.urls')),
   url(r'^auth/',include('django.contrib.auth.urls')),
   url(r'^force_login/(\d+)/$', 'txrx.views.force_login'),
-)
-
-#class related
-urlpatterns += patterns(
-  'course.views',
-  url(r'^classes/', include('course.urls',namespace='course',app_name='course')),
-  url(r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
-  url(r'^tx/rx/return/$','paypal_return',name='paypal_redirect'),
 )
 
 #membership urls
@@ -82,7 +79,6 @@ urlpatterns += patterns(
 urlpatterns += patterns(
   '',
   (r'^survey/$','txrx.views.survey'),
-  url(r'^tools/',include('tool.urls')),
 )
 
 # flat pages

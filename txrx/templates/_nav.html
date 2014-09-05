@@ -40,7 +40,7 @@
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           {% if not user.is_authenticated or not pending_evaluations %}
-          <i class="glyphicon glyphicon-user"></i>
+          <i class="fa fa-user"></i>
           {% else %}
           <span data-reddot="{{ pending_evaluations.count }}"></span>
           {% endif %}
@@ -62,11 +62,19 @@
                  href="{% url "course:evaluation_index" %}"> Evaluations</a></li>
           {% endif %}
           {% else %}
-          <li><a href="/accounts/register/">Register</a></li>
-          <li><a href="/accounts/login/?next={{ request.path|urlencode }}">
-              Log in with Username
-          </a></li>
-          {#<li><a href="{% url "signin_start" %}?next={{ request.path }}">Log in with GitHub</a></li>#}
+          <li><a class="fa-hover txrx" href="/accounts/register/">
+              <i class="fa fa-user"></i> Register</a></li>
+          <li><a class="fa-hover txrx" href="/accounts/login/?next={{ request.path|urlencode }}">
+              <i class="fa fa-user"></i> Log in with Username</a></li>
+          {% if "pyauth" in request.GET %}
+          <li><center>--- or ---</center></li>
+          <li><a class="fa-hover google" href="{% url "social:begin" "google-oauth2" %}?next={{ request.path }}">
+              <i class="fa fa-google-plus"></i> Connect with Google</a></li>
+          <li><a class="fa-hover github" href="{% url "social:begin" "github" %}?next={{ request.path }}">
+              <i class="fa fa-github"></i> Connect with GitHub</a></li>
+          <li><a class="fa-hover facebook" href="{% url "social:begin" "facebook" %}?next={{ request.path }}">
+              <i class="fa fa-facebook"></i> Connect with Facebook</a></li>
+          {% endif %}
           {% endif %}
         </ul>
       </li>

@@ -33,3 +33,4 @@ django-tagging
 
 django-next-please
 icalendar
+python-social-auth

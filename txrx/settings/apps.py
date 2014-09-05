@@ -21,6 +21,7 @@ INSTALLED_APPS = (
   'compressor',
   'tagging',
   'crop_override',
+  'social.apps.django_app.default',
 
   # comments
   'mptt',
