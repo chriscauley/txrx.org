@@ -7,3 +7,20 @@
 @red: #9d261d;
 @grayLight: #999;
 @borderGray: #b8baba;
+
+.fa-hover {
+  .fa { position: relative; text-align: center; width: 1.5em; }
+  &:hover {
+    color: white !important;
+    .fa {
+      font-size: 1.5em;
+      line-height: 0.6;
+      top: 0.2em;
+      width: 1em;
+    }
+  }
+  &.facebook:hover { background: #3b5998 !important; }
+  &.github:hover { background: #333333 !important; }
+  &.txrx:hover { background: #333333 !important; }
+  &.google:hover { background: #d34836 !important; }
+}
