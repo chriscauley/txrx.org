@@ -29,7 +29,6 @@ INSTALLED_APPS = (
 
   # blarg
   'wmd',
-  'codrspace',
   'blog',
   'media',
 
