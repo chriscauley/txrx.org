@@ -11,9 +11,7 @@ from django.template.response import TemplateResponse
 
 from tagging.models import Tag
 
-from blog.models import Post, Setting
-from blog.forms import FeedBackForm
-
+from blog.models import Post
 import datetime, difflib
 
 def post_detail(request, username, slug, template_name="post_detail.html"):
@@ -21,29 +19,17 @@ def post_detail(request, username, slug, template_name="post_detail.html"):
 
   post = get_object_or_404(Post,user=user,slug=slug)
 
-  try:
-    user_settings = Setting.objects.get(user=user)
-  except:
-    user_settings = None
-
   if post.status == 'draft' and post.user != request.user and not request.user.is_superuser:
     raise Http404
 
   return TemplateResponse(request, template_name, {
     'username': username,
     'post': post,
-    'meta': user.profile.get_meta(),
-    'user_settings': user_settings
   })
 
 def post_list(request, username, post_type='published',
         template_name="post_list.html"):
   user = get_object_or_404(User, username=username)
-
-  try:
-    user_settings = Setting.objects.get(user=user)
-  except Setting.DoesNotExist:
-    user_settings = None
 
   if post_type == 'published':
     post_type = 'posts'
@@ -63,35 +49,6 @@ def post_list(request, username, post_type='published',
     'username': username,
     'posts': posts,
     'post_type': post_type,
-    'meta': user.profile.get_meta(),
-    'user_settings': user_settings
-  })
-
-@login_required
-def feedback(request, template_name='feedback.html'):
-  """ Send Feed back """
-  user = get_object_or_404(User, username=request.user.username)
-
-  form = FeedBackForm(initial={'email': user.email})
-
-  if request.method == 'POST':
-    form = FeedBackForm(request.POST)
-    if form.is_valid():
-      msg = "Thanks for send us feedback. We hope to make the product better."
-      messages.info(request, msg, extra_tags='alert-success')
-
-      print dir(form)
-      subject = 'Blog feedback from %s' % user.username
-      message = '%s (%s), %s' % (
-        request.user.username,
-        form.cleaned_data['email'],
-        form.cleaned_data['comments'],
-      )
-
-      mail_admins(subject, message, fail_silently=False)
-
-  return TemplateResponse(request, template_name, {
-    'form': form,
   })
 
 def posts_by_tag(request,name):

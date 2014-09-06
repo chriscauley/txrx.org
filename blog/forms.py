@@ -4,7 +4,7 @@ from django.contrib.admin.widgets import ForeignKeyRawIdWidget, AdminSplitDateTi
 from django.core.exceptions import ObjectDoesNotExist
 from django import forms
 
-from .models import Post, Setting
+from .models import Post
 from .utils import localize_date
 from media.models import Photo
 
@@ -87,25 +87,3 @@ class PostForm(TaggedModelForm):
           )
         else:
           field.widget.attrs['class'] = 'span8'
-class SettingForm(forms.ModelForm):
-
-  class  Meta:
-    model = Setting
-
-  def __init__(self, *args, **kwargs):
-    super(SettingForm, self).__init__(*args, **kwargs)
-
-    for field in self.fields.values():
-      if isinstance(field, forms.fields.CharField):
-        field.widget.attrs.update({'class': 'span10'})
-
-class FeedBackForm(forms.Form):
-  email = forms.EmailField(required=True)
-  comments = forms.CharField(widget=forms.Textarea(), required=True)
-
-  def __init__(self, *args, **kwargs):
-    super(FeedBackForm, self).__init__(*args, **kwargs)
-
-    for field in self.fields.values():
-      if isinstance(field, forms.fields.CharField):
-        field.widget.attrs.update({'class': 'span10'})

@@ -8,7 +8,6 @@ from django.template.defaultfilters import slugify, striptags
 from timezones.fields import TimeZoneField
 import tagging
 
-from .managers import SettingManager
 from .templatetags.short_codes import explosivo
 from txrx.utils import cached_property
 from feed.models import FeedItemModel
@@ -86,30 +85,6 @@ class Post(FeedItemModel,PhotosMixin):
     feed_item.save()"""
 
 tagging.register(Post)
-
-class Setting(models.Model):
-  """
-  Settings model for specific blog settings
-  """
-  blog_title = models.CharField(max_length=75, null=True, blank=True)
-  blog_tagline = models.CharField(max_length=150, null=True, blank=True)
-  name = models.CharField(max_length=30, null=True, blank=True)
-  bio = models.TextField(null=True, blank=True)
-  user = models.ForeignKey(User, editable=False)
-  timezone = TimeZoneField(default="US/Central")
-
-  objects = SettingManager()
-
-class Profile(models.Model):
-  git_access_token = models.CharField(max_length=75, null=True)
-  user = models.OneToOneField(User)
-  meta = models.TextField(null=True)
-
-  def get_meta(self):
-    from django.utils import simplejson
-    if self.meta:
-      return simplejson.loads(self.meta)
-    return ''
 
 class PressItem(models.Model):
   title = models.CharField(max_length=64)

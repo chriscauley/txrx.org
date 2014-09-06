@@ -3,17 +3,13 @@
 {% load short_codes %}
 
 {% block pre_title %}
-{% if user_settings.blog_title %}
-    {{ user_settings.blog_title|striptags }} - 
-{% else %}
-    {{ SITE_NAME }}:
-{% endif %}
+{{ SITE_NAME }}:
 {% endblock %}
 
 {% block title %}Delete {% firstof post.title "Untitled" %} by {{ post.user.username }}{% endblock %}
 
 {% block nav %}
-    {% include "_nav.html" with page="post_detail" %}
+{% include "_nav.html" with page="post_detail" %}
 {% endblock %}
 
 {% block header %}{% endblock %}
