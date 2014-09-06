@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
 
 from db.models import UserModel
@@ -76,7 +75,7 @@ class UserMembershipManager(models.Manager):
     return set([s.user.usermembership for s in Session.objects.filter(**kwargs)])
 
 class UserMembership(models.Model):
-  user = models.OneToOneField(User)
+  user = models.OneToOneField(settings.AUTH_USER_MODEL)
   membership = models.ForeignKey(Membership,default=1)
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
@@ -167,9 +166,9 @@ class LimitedAccessKey(UserModel):
 
 class MeetingMinutes(models.Model):
   date = models.DateField(default=datetime.date.today,unique=True)
-  voters_present = models.ManyToManyField(User,null=True,blank=True)
-  inactive_present = models.ManyToManyField(User,null=True,blank=True,related_name="meetings_inactive")
-  nonvoters_present = models.ManyToManyField(User,null=True,blank=True,related_name="+")
+  voters_present = models.ManyToManyField(settings.AUTH_USER_MODEL,null=True,blank=True)
+  inactive_present = models.ManyToManyField(settings.AUTH_USER_MODEL,null=True,blank=True,related_name="meetings_inactive")
+  nonvoters_present = models.ManyToManyField(settings.AUTH_USER_MODEL,null=True,blank=True,related_name="+")
   content = MarkDownField()
   _ht = "Used only when an exact list of members is unavailable (eg legacy minutes)"
   member_count = models.IntegerField(default=0,help_text=_ht)
@@ -193,7 +192,7 @@ class Proposal(UserModel):
     ordering = ('order',)
 
 class Survey(models.Model):
-  user = models.ForeignKey(User,unique=True)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL,unique=True)
   reasons = models.TextField(blank=True)
   projects = models.TextField(blank=True)
   skills = models.TextField(blank=True)

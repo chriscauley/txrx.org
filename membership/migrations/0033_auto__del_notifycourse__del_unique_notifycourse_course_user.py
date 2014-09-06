@@ -4,12 +4,12 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
-depends_on = (
-    ('notify', '0002_auto__add_notifycourse__add_unique_notifycourse_course_user'),
-)
 
 class Migration(SchemaMigration):
 
+    depends_on = (
+        ('notify', '0002_auto__add_notifycourse__add_unique_notifycourse_course_user'),
+    )
     def forwards(self, orm):
         pass
 

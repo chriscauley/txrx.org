@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from django.template.defaultfilters import striptags
 from django.template.loader import render_to_string
@@ -13,6 +13,7 @@ import datetime
 class Command (BaseCommand):
   @mail_on_fail
   def handle(self, *args, **options):
+    user = get_user_model()
     dt = datetime.datetime.now() + datetime.timedelta(-16)
     new_sessions = Session.objects.filter(created__gte=dt,first_date__gte=datetime.datetime.now())
     if not new_sessions:

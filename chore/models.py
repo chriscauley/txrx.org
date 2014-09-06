@@ -1,6 +1,6 @@
+from django.conf import settings
 from django.db import models
 from django.template.defaultfilters import slugify
-from django.contrib.auth.models import User
 import datetime
 
 class Tag(models.Model):
@@ -49,9 +49,9 @@ class Occurrence(models.Model):
 
 class Assignment(models.Model):
   occurrence = models.ForeignKey(Occurrence)
-  user = models.ForeignKey(User)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
 class Completion(models.Model):
   occurrence = models.ForeignKey(Occurrence)
-  user = models.ForeignKey(User)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL)
   datetime = models.DateTimeField(auto_now_add=True)

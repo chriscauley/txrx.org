@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 
 class ModelBackend(object):
@@ -9,6 +9,7 @@ class ModelBackend(object):
     supports_anonymous_user = True
 
     def authenticate(self, username=None, password=None, user=None):
+        User = get_user_model()
         """
         Modified version of django's authenticate.
 

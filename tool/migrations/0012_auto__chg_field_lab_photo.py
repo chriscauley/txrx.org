@@ -4,9 +4,9 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
-depends_on = (('codrspace','0033_create_media_app'),)
 
 class Migration(SchemaMigration):
+    depends_on = (('codrspace','0033_create_media_app'),)
 
     def forwards(self, orm):
 

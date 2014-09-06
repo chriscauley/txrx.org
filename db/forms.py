@@ -1,10 +1,10 @@
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 class StaffMemberForm(forms.ModelForm):
   def __init__(self,*args,**kwargs):
     super(StaffMemberForm,self).__init__(*args,**kwargs)
-    self.fields['user'].queryset = User.objects.filter(is_staff=True)
+    self.fields['user'].queryset = get_user_model().objects.filter(is_staff=True)
 
 def placeholder_fields(self):
   for field_name in self.fields:

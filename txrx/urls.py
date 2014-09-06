@@ -44,7 +44,7 @@ urlpatterns += patterns(
   '',
   url(r'^accounts/settings/$','membership.views.user_settings',name='account_settings'),
   url(r'^accounts/register/$','membership.views.register'),
-  url(r'^accounts/', include('registration.backends.default.urls')),
+  url(r'^accounts/', include('registration.urls')),
   url(r'^auth/',include('django.contrib.auth.urls')),
   url(r'^force_login/(\d+)/$', 'txrx.views.force_login'),
 )

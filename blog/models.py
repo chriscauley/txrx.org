@@ -1,6 +1,5 @@
 import os, re, uuid, datetime, random
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.template.defaultfilters import slugify, striptags
@@ -12,7 +11,7 @@ from .templatetags.short_codes import explosivo
 from txrx.utils import cached_property
 from feed.models import FeedItemModel
 from media.models import Photo, PhotosMixin
-from db.models import SlugModel, OrderedModel, UserModel
+from db.models import SlugModel, OrderedModel
 
 try:
   from south.modelsinspector import add_introspection_rules

@@ -1,6 +1,4 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
-from django.contrib.auth.admin import UserAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.forms import *
@@ -14,7 +12,6 @@ from paypal.standard.ipn.models import PayPalIPN
 from paypal.standard.ipn.admin import PayPalIPNAdmin
 
 admin.site.unregister(FlatPage)
-admin.site.unregister(User)
 admin.site.unregister(PayPalIPN)
 
 TEMPLATE_CHOICES = (
@@ -40,9 +37,6 @@ class UserMembershipInline(admin.StackedInline):
   has_delete_permission = lambda self,*args: False
   model = UserMembership
 
-class UserAdmin(UserAdmin):
-  inlines = [UserMembershipInline]
-
 class CustomIPNAdmin(PayPalIPNAdmin):
   fieldsets = PayPalIPNAdmin.fieldsets
   fieldsets[0][1]['fields'].append('view_redirect')
@@ -66,7 +60,6 @@ class CustomIPNAdmin(PayPalIPNAdmin):
   view_IPN.allow_tags = True
 
 admin.site.register(FlatPage,FlatPageAdmin)
-admin.site.register(User,UserAdmin)
 admin.site.register(PayPalIPN,CustomIPNAdmin)
 
 from .signals import *

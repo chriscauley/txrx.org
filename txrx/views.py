@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
@@ -20,7 +20,7 @@ def members(request,username=None):
   return TemplateResponse(request,"members.html",values)
 
 def member(request,username=None):
-  member = get_object_or_404(User,username=username)
+  member = get_object_or_404(get_user_model(),username=username)
   values = {'member':member}
   return TemplateResponse(request,"member.html",values)
 
@@ -38,7 +38,7 @@ def survey(request):
 def force_login(request,uid):
   if not request.user.is_superuser:
     raise Http404()
-  u = get_object_or_404(User,pk=uid)
+  u = get_object_or_404(get_user_model(),pk=uid)
   from django.contrib.auth import login
   u.backend='django.contrib.auth.backends.ModelBackend'
   login(request,u)

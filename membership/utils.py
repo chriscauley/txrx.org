@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 
 from .models import LimitedAccessKey
@@ -30,6 +30,7 @@ def limited_login_required(function):
   return wrap
 
 def user_from_email(email):
+  user = get_user_model()
   try:
     return User.objects.get(email=email)
   except User.DoesNotExist:
@@ -40,10 +41,7 @@ def user_from_email(email):
     pass
 
 def verify_unique_email(email,user=None):
-  """
-  Check to make sure that there are no other users with this email.
-  Can be used with email or username.
-  """
+  user = get_user_model()
   other_users = User.objects.all()
   if not email:
     return True

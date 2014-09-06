@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import User
 from localflavor.us.models import USStateField
 from .widgets import LocationField
 

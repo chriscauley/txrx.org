@@ -6,17 +6,47 @@ from django.db import models
 
 
 class Migration(SchemaMigration):
-    depends_on = (('codrspace','0033_create_media_app'),)
+    depends_on = (('user','0001_initial'),)
 
     def forwards(self, orm):
 
-        # Changing field 'UserMembership.photo'
-        db.alter_column(u'membership_usermembership', 'photo_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['media.Photo'], null=True))
+        # Changing field 'LimitedAccessKey.user'
+        db.alter_column(u'membership_limitedaccesskey', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User']))
+
+        # Changing field 'Survey.user'
+        db.alter_column(u'membership_survey', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User'], unique=True))
+
+        # Changing field 'Officer.user'
+        db.alter_column(u'membership_officer', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User']))
+
+        # Changing field 'UnsubscribeLink.user'
+        db.alter_column(u'membership_unsubscribelink', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User']))
+
+        # Changing field 'UserMembership.user'
+        db.alter_column(u'membership_usermembership', 'user_id', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['user.User'], unique=True))
+
+        # Changing field 'Proposal.user'
+        db.alter_column(u'membership_proposal', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User']))
 
     def backwards(self, orm):
 
-        # Changing field 'UserMembership.photo'
-        db.alter_column(u'membership_usermembership', 'photo_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['codrspace.Photo'], null=True))
+        # Changing field 'LimitedAccessKey.user'
+        db.alter_column(u'membership_limitedaccesskey', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User']))
+
+        # Changing field 'Survey.user'
+        db.alter_column(u'membership_survey', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], unique=True))
+
+        # Changing field 'Officer.user'
+        db.alter_column(u'membership_officer', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User']))
+
+        # Changing field 'UnsubscribeLink.user'
+        db.alter_column(u'membership_unsubscribelink', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User']))
+
+        # Changing field 'UserMembership.user'
+        db.alter_column(u'membership_usermembership', 'user_id', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True))
+
+        # Changing field 'Proposal.user'
+        db.alter_column(u'membership_proposal', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User']))
 
     models = {
         u'auth.group': {
@@ -31,22 +61,6 @@ class Migration(SchemaMigration):
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        },
-        u'auth.user': {
-            'Meta': {'ordering': "['username']", 'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
-            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
-            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
@@ -96,7 +110,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'iid': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
             'profile_picture': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']", 'null': 'True', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'website': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
@@ -116,7 +130,7 @@ class Migration(SchemaMigration):
             'square_crop': ('crop_override.field.CropOverride', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['media.PhotoTag']", 'symmetrical': 'False', 'blank': 'True'}),
             'upload_dt': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']", 'null': 'True', 'blank': 'True'})
         },
         u'media.phototag': {
             'Meta': {'ordering': "('-name',)", 'object_name': 'PhotoTag'},
@@ -134,17 +148,17 @@ class Migration(SchemaMigration):
             'expires': ('django.db.models.fields.DateField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'key': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']"})
         },
         u'membership.meetingminutes': {
             'Meta': {'ordering': "('-date',)", 'object_name': 'MeetingMinutes'},
             'content': ('wmd.models.MarkDownField', [], {}),
             'date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date.today', 'unique': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'inactive_present': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'meetings_inactive'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['auth.User']"}),
+            'inactive_present': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'meetings_inactive'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['user.User']"}),
             'member_count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'nonvoters_present': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'+'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['auth.User']"}),
-            'voters_present': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'})
+            'nonvoters_present': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'+'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['user.User']"}),
+            'voters_present': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['user.User']", 'null': 'True', 'blank': 'True'})
         },
         u'membership.membership': {
             'Meta': {'ordering': "('order',)", 'object_name': 'Membership'},
@@ -183,7 +197,7 @@ class Migration(SchemaMigration):
             'order': ('django.db.models.fields.IntegerField', [], {'default': '999'}),
             'position': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'start': ('django.db.models.fields.DateField', [], {'default': 'datetime.date.today'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']"})
         },
         u'membership.proposal': {
             'Meta': {'ordering': "('order',)", 'object_name': 'Proposal'},
@@ -193,7 +207,7 @@ class Migration(SchemaMigration):
             'order': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'original': ('wmd.models.MarkDownField', [], {}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']"})
         },
         u'membership.role': {
             'Meta': {'object_name': 'Role'},
@@ -208,18 +222,18 @@ class Migration(SchemaMigration):
             'questions': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'reasons': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'skills': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'unique': 'True'})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']", 'unique': 'True'})
         },
         u'membership.unsubscribelink': {
             'Meta': {'object_name': 'UnsubscribeLink'},
             'created': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'key': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']"})
         },
         u'membership.usermembership': {
             'Meta': {'object_name': 'UserMembership'},
-            'api_key': ('django.db.models.fields.CharField', [], {'default': "'kApIYvI7zOsGOX1AbkxyzSQ9Q5mYmJey'", 'max_length': '32'}),
+            'api_key': ('django.db.models.fields.CharField', [], {'default': "'aSnfd9c9UlW5pHTSEC6zB00UZuWfF1HW'", 'max_length': '32'}),
             'bio': ('wmd.models.MarkDownField', [], {'null': 'True', 'blank': 'True'}),
             'by_line': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -231,8 +245,24 @@ class Migration(SchemaMigration):
             'paypal_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
             'photo': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['media.Photo']", 'null': 'True', 'blank': 'True'}),
             'suspended': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True'}),
+            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['user.User']", 'unique': 'True'}),
             'voting_rights': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+        },
+        u'user.user': {
+            'Meta': {'object_name': 'User'},
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '254'}),
+            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
+            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         }
     }
 

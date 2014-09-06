@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import User
 import datetime, requests, simplejson, os, re
 
 photofile_path = getattr(settings,"INSTAGRAM_DIR",'uploads/instagram')
@@ -35,7 +34,7 @@ class InstagramUser(FollowableModel):
   full_name = models.CharField(max_length=128,null=True,blank=True)
   bio = models.TextField(null=True,blank=True)
   website = models.URLField(null=True,blank=True)
-  user = models.ForeignKey(User,null=True,blank=True)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
 
   feed_url = "https://api.instagram.com/v1/users/search?q=%s&access_token=%s"
   feed_param = property(lambda self: self.iid)

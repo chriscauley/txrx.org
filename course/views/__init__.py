@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.http import QueryDict, Http404, HttpResponseRedirect
@@ -76,6 +76,7 @@ def debug_parsing(request, id):
     return TemplateResponse(request,"course/debug.html",locals())
 
 def paypal_return(request):
+  User = get_user_model()
   session_ids = [v for k,v in request.REQUEST.items() if k.startswith('item_number')]
   if not ('payer_email' in request.REQUEST) or not session_ids:
     raise Http404

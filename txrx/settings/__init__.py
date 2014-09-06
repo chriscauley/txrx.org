@@ -49,6 +49,8 @@ MIDDLEWARE_CLASSES = (
   'theme.middleware.Theme',
 )
 
+AUTH_USER_MODEL = 'user.User'
+
 AUTHENTICATION_BACKENDS = (
   'txrx.backends.EmailOrUsernameModelBackend',
   #'social.backends.open_id.OpenIdAuth',

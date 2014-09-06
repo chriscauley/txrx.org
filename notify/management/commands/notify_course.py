@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from django.core.mail import send_mail, mail_admins
 from django.template.defaultfilters import striptags
@@ -21,7 +21,7 @@ class Command (BaseCommand):
       mail_admins("No classes","No new classes to email anyone about :(")
       return
     courses = list(set([s.section.course for s in new_sessions]))
-    users = User.objects.filter(notifycourse__course__in=courses).distinct()
+    users = get_user_model().objects.filter(notifycourse__course__in=courses).distinct()
     for user in users:
       sessions = [s for s in new_sessions if user.notifycourse_set.filter(course=s.section.course)]
       _dict = {

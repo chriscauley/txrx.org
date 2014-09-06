@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django import forms
 
 from models import MembershipGroup, Membership, Feature, MembershipFeature, UserMembership, MembershipRate, MeetingMinutes, Proposal, Officer
@@ -33,6 +33,7 @@ class ProposalInline(admin.StackedInline):
   extra = 0
 
 class MeetingMinutesForm(forms.ModelForm):
+  User = get_user_model()
   kwargs = dict(widget=forms.CheckboxSelectMultiple(),required=False)
   _q = User.objects.filter(usermembership__voting_rights=True,usermembership__suspended=False)
   voters_present = forms.ModelMultipleChoiceField(queryset=_q,**kwargs)

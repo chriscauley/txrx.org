@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
@@ -115,7 +115,7 @@ def ics_classes_all(request,fname):
   return ics2response(calendar_object,fname=fname)
 
 def ics_classes_user(request,u_id,api_key,fname):
-  user = get_object_or_404(User,pk=u_id,usermembership__api_key=api_key)
+  user = get_object_or_404(get_user_model(),pk=u_id,usermembership__api_key=api_key)
   enrollments = user.enrollment_set.all()
   sessions = [e.session for e in enrollments]
   sessions += user.session_set.all()

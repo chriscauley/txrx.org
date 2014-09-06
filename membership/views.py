@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.flatpages.models import FlatPage
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404, HttpResponse
@@ -91,7 +91,7 @@ def roland_email(request,y=2012,m=1,d=1):
   response['Content-Disposition'] = 'attachment; filename="txrx_emails_%s-%s-%s.csv"'%(y,m,d)
 
   writer = csv.writer(response)
-  for user in User.objects.filter(date_joined__gt=dt,is_active=True):
+  for user in get_user_model().objects.filter(date_joined__gt=dt,is_active=True):
     writer.writerow([user.email,user.username,str(user.date_joined)])
 
   return response
@@ -108,7 +108,7 @@ def verify_api(request):
 def user_emails(request):
   verify_api(request)
   out = []
-  for u in User.objects.all():
+  for u in get_user_model().objects.all():
     out.append(','.join([str(u.id),u.email or '',u.usermembership.paypal_email or '']))
   return HttpResponse('\n'.join(out))
 
@@ -139,7 +139,7 @@ def member_index(request,username=None):
   return TemplateResponse(request,"membership/member_index.html",values)
 
 def member_detail(request,username=None):
-  user = get_object_or_404(User,username=username)
+  user = get_object_or_404(get_user_model(),username=username)
   things = Thing.objects.filter(user=user,active=True)
   posts = Post.objects.filter(user=user, status = 'published').order_by("-publish_dt")
   values = {

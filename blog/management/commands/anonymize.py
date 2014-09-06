@@ -1,8 +1,9 @@
 from django.core.management.base import BaseCommand, CommandError
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 class Command(BaseCommand):
   def handle(self, *args, **options):
+    User = get_user_model()
     from membership.models import UserMembership
     password = None
     user_list = [u.username for u in User.objects.order_by('id')]

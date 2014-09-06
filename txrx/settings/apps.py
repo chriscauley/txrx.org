@@ -16,7 +16,7 @@ INSTALLED_APPS = (
   # 3rd party
   'south',
   'sorl.thumbnail',
-  'registration',
+  #'registration',
   'paypal.standard.ipn',
   'compressor',
   'tagging',
@@ -33,6 +33,7 @@ INSTALLED_APPS = (
   'media',
 
   # this project
+  'user',
   'db',
   'geo',
   #'project',

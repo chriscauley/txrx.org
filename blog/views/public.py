@@ -1,7 +1,7 @@
 """Main blog views"""
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import mail_admins
@@ -15,7 +15,7 @@ from blog.models import Post
 import datetime, difflib
 
 def post_detail(request, username, slug, template_name="post_detail.html"):
-  user = get_object_or_404(User, username=username)
+  user = get_object_or_404(get_user_model(), username=username)
 
   post = get_object_or_404(Post,user=user,slug=slug)
 
@@ -29,7 +29,7 @@ def post_detail(request, username, slug, template_name="post_detail.html"):
 
 def post_list(request, username, post_type='published',
         template_name="post_list.html"):
-  user = get_object_or_404(User, username=username)
+  user = get_object_or_404(get_user_model(), username=username)
 
   if post_type == 'published':
     post_type = 'posts'

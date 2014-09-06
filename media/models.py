@@ -1,7 +1,7 @@
-from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.db import models
 
 from crop_override import CropOverride, OriginalImage
 
@@ -14,7 +14,7 @@ class FileModel(models.Model):
   """An abstract file model. Needs a file field which will be a models.FileField"""
   filename = models.CharField(max_length=200,editable=False)
   name = models.CharField(null=True,blank=True,max_length=500)
-  user = models.ForeignKey(User,null=True,blank=True)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
   upload_dt = models.DateTimeField(auto_now_add=True)
   __unicode__ = lambda self: self.name or self.filename
 
