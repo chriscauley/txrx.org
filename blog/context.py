@@ -1,10 +1,7 @@
 from django.conf import settings
 
 
-def codrspace_contexts(request):
-    """
-    All custom context vars for codrspace
-    """
+def process(request):
     contexts = {}
 
     # add SITE_TAGLINE, and SITE_NAME, and VERSION to the context

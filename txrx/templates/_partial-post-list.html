@@ -1,5 +1,3 @@
-{% load codrspace_tags %}
-
 {% if posts %}
 <ul id="post-list">
   {% for post in posts|slice:":10" %}
@@ -10,14 +8,14 @@
     <a href="{% url "edit" post.pk %}" rel="tooltip" data-original-title="Edit `{% firstof post.title "Untitled" %}`" title="Edit `{% firstof post.title "Untitled" %}`">
       {% firstof post.title "Untitled" %}
     </a>
-    <span class="post-list-date">{{ post.publish_dt|localize:user }}</span>
+    <span class="post-list-date">{{ post.publish_dt }}</span>
     {% endif %}
     {% if post.status == 'draft' %}
     <span class="label label-warning">{{ post.status }}</span>
     <a href="{% url "edit" post.pk %}" rel="tooltip" data-original-title="Edit `{% firstof post.title "Untitled" %}`" title="Edit `{% firstof post.title "Untitled" %}`">
       {% firstof post.title "Untitled" %}
     </a>
-    <span class="post-list-date">{{ post.update_dt|localize:user }}</span>
+    <span class="post-list-date">{{ post.update_dt }}
     {% endif %}
   </li>
   {% endif %}

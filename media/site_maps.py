@@ -1,7 +1,7 @@
 from django.contrib.sitemaps import Sitemap
 from django.contrib.auth.models import User
 from django.conf import settings
-from codrspace.models import Post
+from blog.models import Post
 
 
 class DefaultMap(Sitemap):

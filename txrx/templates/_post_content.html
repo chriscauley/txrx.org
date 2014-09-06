@@ -1,4 +1,4 @@
-{% load codrspace_tags thumbnail short_codes crop_util %}
+{% load thumbnail short_codes crop_util %}
 <div class="post-tags">
   {% for tag in post.tags %}
   <a href="{% url "posts_by_tag" tag %}">{{ tag.name|upper }}</a>
@@ -11,7 +11,7 @@
   {% if post.user == user %}
   <span class="label label-{% if post.status == 'published' %}success{% else %}warning{% endif %}">{{ post.status }}</span>
   {% endif %}
-  by <a href="{% url "post_list" post.user.username %}" rel="popover" data-original-title="{{ post.user.username }}">{{ post.user.username }}</a> {% if post.status == 'published' %}on {{ post.publish_dt|localize:user }}{% endif %}
+  by <a href="{% url "post_list" post.user.username %}" rel="popover" data-original-title="{{ post.user.username }}">{{ post.user.username }}</a> {% if post.status == 'published' %}on {{ post.publish_dt }}{% endif %}
   {% if request.user.is_superuser or request.user == post.user %}
   <a href="{% url "edit" post.pk %}" class="edit"><span class="glyphicon glyphicon-edit"></span></a>
   {% endif %}

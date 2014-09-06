@@ -26,7 +26,7 @@ function extractor(query) {
   return '';
 }
 
-function initCodrspace() {
+function initBlag() {
   /* a function to initialize blog javascript */
   $("#id_tags").attr("autocomplete","off");
 

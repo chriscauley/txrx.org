@@ -12,7 +12,7 @@ from .models import Membership, MembershipGroup, MeetingMinutes, Officer, UserMe
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required, verify_unique_email
 
-from codrspace.models import Post
+from blog.models import Post
 from course.models import Course,CourseCompletion, Session
 from thing.models import Thing
 from txrx.utils import FORBIDDEN

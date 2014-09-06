@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-{% load short_codes %}
-{% load codrspace_tags %}
-{% load mptt_comments_tags %}
+{% load short_codes mptt_comments_tags %}
 
 {% block title %}{% firstof post.title "Untitled" %} by {{ post.user.username }}{% endblock %}
 

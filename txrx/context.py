@@ -6,7 +6,7 @@ from tagging.models import Tag
 
 from event.models import EventOccurrence
 from course.models import ClassTime, Enrollment
-from codrspace.models import PressItem
+from blog.models import PressItem
 
 import datetime,time
 

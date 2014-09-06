@@ -8,10 +8,9 @@ from pygments.lexers import get_lexer_by_name, \
         guess_lexer, \
         ClassNotFound, \
         get_all_lexers
-from codrspace.pygments.styles.github import GithubStyle
+from blog.pygments.styles.github import GithubStyle
 
 register = template.Library()
-
 
 def get_lexer_list():
     lexers = []

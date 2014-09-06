@@ -60,7 +60,7 @@
 </form>
 <script type="text/javascript">
   var tagsAutocomplete = [{% for tag in tags %}"{{ tag }}"{% if not forloop.last %},{% endif %}{% endfor %}];
-  $(document).ready(function () {initCodrspace()});
+  $(document).ready(function () {initBlag()});
 </script>
 {% endblock %}
 
@@ -77,5 +77,5 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-typeahead.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}jquery.insertat.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}jquery.hotkeys.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}codrspace_admin.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}blog_admin.js"></script>
 {% endblock %}

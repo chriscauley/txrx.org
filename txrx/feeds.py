@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse
 
-from codrspace.models import Post
+from blog.models import Post
 from course.models import Session
 from event.models import EventOccurrence
 

@@ -1,4 +1,4 @@
-"""Main codrspace views"""
+"""Main blog views"""
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
@@ -11,8 +11,8 @@ from django.template.response import TemplateResponse
 
 from tagging.models import Tag
 
-from codrspace.models import Post, Setting
-from codrspace.forms import FeedBackForm
+from blog.models import Post, Setting
+from blog.forms import FeedBackForm
 
 import datetime, difflib
 
@@ -81,7 +81,7 @@ def feedback(request, template_name='feedback.html'):
       messages.info(request, msg, extra_tags='alert-success')
 
       print dir(form)
-      subject = 'Codrspace feedback from %s' % user.username
+      subject = 'Blog feedback from %s' % user.username
       message = '%s (%s), %s' % (
         request.user.username,
         form.cleaned_data['email'],
@@ -96,13 +96,13 @@ def feedback(request, template_name='feedback.html'):
 
 def posts_by_tag(request,name):
   tag = get_object_or_404(Tag,name=name)
-  items = tag.items.filter(content_type__app_label="codrspace",content_type__name="post",object_id__isnull=False)
+  items = tag.items.filter(content_type__app_label="blog",content_type__name="post",object_id__isnull=False)
   posts = [item.object for item in items]
   values = {
     "posts": posts,
     "tag": tag,
     }
-  return TemplateResponse(request,"codrspace/posts_by_tag.html",values)
+  return TemplateResponse(request,"blog/posts_by_tag.html",values)
 
 def post_redirect(request,y,m,d,slug):
   date = datetime.datetime.strptime('%s-%s-%s'%(y,m,d),'%Y-%m-%d').date()

@@ -6,8 +6,8 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 
+from blog.models import Post, Banner
 from membership.models import Membership
-from codrspace.models import Post, Banner
 from thing.models import Thing
 
 from NextPlease import pagination

@@ -1,7 +1,5 @@
-django==1.5
-south==0.7.6
+django==1.7
 # PIL==1.1.7 #install me with apt-get!
-django-grappelli
 simplejson==2.1.2
 django-devserver
 django-registration

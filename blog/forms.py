@@ -4,8 +4,8 @@ from django.contrib.admin.widgets import ForeignKeyRawIdWidget, AdminSplitDateTi
 from django.core.exceptions import ObjectDoesNotExist
 from django import forms
 
-from codrspace.models import Post, Setting
-from codrspace.utils import localize_date
+from .models import Post, Setting
+from .utils import localize_date
 from media.models import Photo
 
 import datetime

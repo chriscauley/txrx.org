@@ -1,4 +1,4 @@
-{% load codrspace_tags %}
+{% load %}
 <nav class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
@@ -55,7 +55,7 @@
         <ul class="dropdown-menu">
           {% if user.is_authenticated %}
           {% if user.is_staff %}<li><a href="/admin/"><i class="icon-cog"></i> Admin</a></li>{% endif %}
-          <li><a href="{% url "signout" %}"><i class="icon-off"></i> Log out</a></li>
+          <li><a href="{% url "logout" %}"><i class="icon-off"></i> Log out</a></li>
           <li><a href="{% url "account_settings" %}"><i class="icon-cog"></i> Settings</a></li>
           {% if pending_evaluations %}
           <li><a data-reddot="{{ pending_evaluations.count }}"

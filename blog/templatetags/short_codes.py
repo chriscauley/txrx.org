@@ -1,6 +1,3 @@
-"""Custom filters to grab code from the web via short codes"""
-
-
 import requests
 import mimetypes
 import re
@@ -13,7 +10,7 @@ from django import template
 from django.utils.safestring import mark_safe
 from settings import MEDIA_ROOT
 
-from codrspace.templatetags.syntax_color import _colorize_table
+from .syntax_color import _colorize_table
 
 register = template.Library()
 

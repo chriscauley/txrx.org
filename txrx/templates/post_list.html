@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% load short_codes codrspace_tags txrx_tags %}
+{% load short_codes txrx_tags %}
 
 {% block title %}Latest {{ post_type }} by {{ username }}{% endblock %}
 {% block header_content %}Latest {{ post_type }} by {{ username }}{% endblock %}
 
 {% block extra_head %}
-<link rel="alternate" type="application/rss+xml" href="{% url "posts_feed" username %}" title="TX/RX Labs: Posts by {{ username }}">
+{#! this should be added back in. Removed 9/6/2014 <link rel="alternate" type="application/rss+xml" href="{% url "posts_feed" username %}" title="TX/RX Labs: Posts by {{ username }}">#}
 {% endblock %}
 
 
@@ -30,7 +30,7 @@
 {% endblock %}
 
 {% block extra_body %}
-<script type="text/javascript" src="{{ STATIC_URL }}bootstrap-popover.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-popover.js"></script>
 <script type="text/javascript">
   $('a[rel=popover]').popover({
   content: $('#popover-content').html()

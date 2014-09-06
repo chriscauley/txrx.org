@@ -27,7 +27,7 @@ def insert_photo(request):
     "photos": photos,
     "form": form,
     }
-  return TemplateResponse(request,"codrspace/insert_photo.html",values)
+  return TemplateResponse(request,"photo/insert_photo.html",values)
 
 @staff_member_required
 def add_photo(request):
@@ -42,7 +42,7 @@ def add_photo(request):
     'photo': photo,
     'form': form,
     }
-  return TemplateResponse(request,"codrspace/add_photo.html",values)
+  return TemplateResponse(request,"photo/add_photo.html",values)
 
 @staff_member_required
 def upload_zip(request):

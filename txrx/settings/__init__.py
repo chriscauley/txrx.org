@@ -89,7 +89,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   'txrx.context.nav',
   'txrx.context.motd',
   'txrx.context.evaluations',
-  'codrspace.context_processors.codrspace_contexts',
+  'blog.context.process',
 )
 
 ROOT_URLCONF = 'txrx.urls'
@@ -118,8 +118,6 @@ WEBMASTER = "chris@lablackey.com"
 
 LONG_CACHE = 60*60 # 1h
 SHORT_CACHE = 10*60 # 10 min
-
-AUTH_PROFILE_MODULE = 'codrspace.Profile'
 
 PAYPAL_RECEIVER_EMAIL = "txrxlabs@gmail.com"
 

@@ -1,4 +1,3 @@
-"""Main codrspace views"""
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
@@ -6,8 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.template.response import TemplateResponse
 
-from codrspace.models import Post
-from codrspace.forms import PostForm
+from blog.models import Post
+from blog.forms import PostForm
 
 import datetime
 
