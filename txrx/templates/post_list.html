@@ -6,7 +6,7 @@
 {% block header_content %}Latest {{ post_type }} by {{ username }}{% endblock %}
 
 {% block extra_head %}
-{#! this should be added back in. Removed 9/6/2014 <link rel="alternate" type="application/rss+xml" href="{% url "posts_feed" username %}" title="TX/RX Labs: Posts by {{ username }}">#}
+{#! this should be added back in. Removed 9/6/2014 <link rel="alternate" type="application/rss+xml" href="{% url "posts_feed" username %}" title="TXRX Labs: Posts by {{ username }}">#}
 {% endblock %}
 
 
@@ -16,26 +16,4 @@
     {% include "_blog_list.html" %}
   </div>
 </div>
-<div id="popover-content">
-  <div id="popover-wrap">
-    <a href="{{ meta.html_url }}"><img class="user-detail-image" src="{{ meta.avatar_url }}" alt="GitHub &ndash; {{ meta.login }}"/></a>
-    <p>{% firstof user_settings.name meta.name meta.login %}</p>
-    {% if meta.location %}
-    <p>{{ meta.location }}</p>
-    {% endif %}
-    <p>{% filter striptags|truncatewords:15 %}{% firstof user_settings.bio meta.bio %}{% endfilter %}</p>
-  </div>
-  <div class="clear"><!-- ie --></div>
-</div>
 {% endblock %}
-
-{% block extra_body %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-popover.js"></script>
-<script type="text/javascript">
-  $('a[rel=popover]').popover({
-  content: $('#popover-content').html()
-  });
-</script>
-{% endblock %}
-
-{% block footer %}{% endblock %}

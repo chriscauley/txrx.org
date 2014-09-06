@@ -19,27 +19,6 @@
   {% endif %}
   {% display_comment_toplevel_for post %}
 </div>
-<div id="popover-content">
-  <div id="popover-wrap">
-    <a href="{{ meta.html_url }}">
-      <img class="user-detail-image" src="{{ meta.avatar_url }}" alt="GitHub &ndash; {{ meta.login }}" /></a>
-    <p>{% firstof user_settings.name meta.name meta.login %}</p>
-    {% if meta.location %}
-    <p>{{ meta.location }}</p>
-    {% endif %}
-    <p>{% filter striptags|truncatewords:15 %}{% firstof user_settings.bio meta.bio %}{% endfilter %}</p>
-  </div>
-  <div class="clear"><!-- ie --></div>
-</div>
-{% endblock %}
-
-{% block extra_body %}
-<script type="text/javascript" src="{{ STATIC_URL }}bootstrap-popover.js"></script>
-<script type="text/javascript">
-  $('a[rel=popover]').popover({
-  content: $('#popover-content').html()
-  });
-</script>
 {% endblock %}
 
 {% block footer %}{% endblock %}
