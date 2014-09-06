@@ -4,6 +4,7 @@
 {% endfor %}
 {% for field in form %}
 <div class="form-group {% if field.errors %}has-error{% endif %}">
+  {% if not field.field.widget.attrs.placeholder %}{{ field.label_tag }}{% endif %}
   {{ field }}
   {% if field|is_checkbox %}{{ field.label_tag }}{% endif %}
   {% for error in field.errors %}
@@ -16,3 +17,4 @@
   </div>
 </div>
 {% endfor %}
+{{ form.media }}
