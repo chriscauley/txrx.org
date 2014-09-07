@@ -82,7 +82,8 @@ def nav(request):
     calendar_protocols = ['http://www.google.com/calendar/render?cid=http://','webcal://'], #! move to event.context
     all_classes_ics = '%s/classes/ics/all_classes.ics'%settings.SITE_DOMAIN, #! move to course.context
     pressitems = PressItem.objects.all(),
-    )
+    login_redirect = "/" if "auth" in request.path else request.path
+  )
 
 def evaluations(request):
   _e = []

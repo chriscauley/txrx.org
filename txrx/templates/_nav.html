@@ -64,15 +64,15 @@
           {% else %}
           <li><a class="fa-hover txrx" href="/accounts/register/">
               <i class="fa fa-user"></i> Register</a></li>
-          <li><a class="fa-hover txrx" href="/accounts/login/?next={{ request.path|urlencode }}">
+          <li><a class="fa-hover txrx" href="/accounts/login/?next={{ login_redirect }}">
               <i class="fa fa-user"></i> Log in with Username</a></li>
           <li><center>--- or ---</center></li>
-          <li><a class="fa-hover google" href="{% url "social:begin" "google-oauth2" %}?next={{ request.path }}">
+          <li><a class="fa-hover google" href="{% url "social:begin" "google-oauth2" %}?next={{ login_redirect }}">
               <i class="fa fa-google-plus"></i> Connect with Google</a></li>
-          <li><a class="fa-hover github" href="{% url "social:begin" "github" %}?next={{ request.path }}">
+          <li><a class="fa-hover github" href="{% url "social:begin" "github" %}?next={{ login_redirect }}">
               <i class="fa fa-github"></i> Connect with GitHub</a></li>
           {% if "pyauth" in request.GET %}
-          <li><a class="fa-hover facebook" href="{% url "social:begin" "facebook" %}?next={{ request.path }}">
+          <li><a class="fa-hover facebook" href="{% url "social:begin" "facebook" %}?next={{ login_redirect }}">
               <i class="fa fa-facebook"></i> Connect with Facebook</a></li>
           {% endif %}
           {% endif %}
