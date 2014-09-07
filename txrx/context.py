@@ -64,6 +64,10 @@ def nav(request):
     my_classes_ics = my_classes_ics%(settings.SITE_DOMAIN,request.user.id,request.user.usermembership.api_key)
     member_discount = (100.-request.user.usermembership.membership.discount_percentage)/100
 
+  login_redirect = request.path
+  if 'auth' in request.path or 'accounts' in request.path:
+    login_redirect = "/"
+
   return dict(
     current = request.path.split('/')[1] or 'home',
     nav = _nav,
