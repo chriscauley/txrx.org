@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth.models import get_user_model
+from django.contrib.auth import get_user_model
 
 from db.utils import get_or_none
 
