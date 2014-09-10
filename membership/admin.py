@@ -20,12 +20,13 @@ class MembershipAdmin(admin.ModelAdmin):
   list_editable = ("order",)
   inlines = (MembershipFeatureInline,MembershipRateInline)
 
-class UserMembershipAdmin(admin.ModelAdmin):
+class UserMembershipInline(admin.StackedInline):
   list_display = ("__unicode__",'photo')
   list_editable = ('photo',)
   list_filter = ('user__is_staff',)
   search_fields = ('user__email','user__username','paypal_email')
   readonly_fields = ('api_key',)
+  model = UserMembership
 
 class ProposalInline(admin.StackedInline):
   model = Proposal
@@ -53,7 +54,6 @@ class OfficerAdmin(admin.ModelAdmin):
   form = StaffMemberForm
 
 admin.site.register(Membership,MembershipAdmin)
-admin.site.register(UserMembership,UserMembershipAdmin)
 admin.site.register(MeetingMinutes,MeetingMinutesAdmin)
 admin.site.register(Officer,OfficerAdmin)
 admin.site.register(Feature)

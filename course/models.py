@@ -90,7 +90,7 @@ class Section(models.Model,FilesMixin):
   _ht = "If true, this class will not raise conflict warnings for events in the same location."
   no_conflict = models.BooleanField(default=False,help_text=_ht)
   #tools = models.ManyToManyField(Tool,blank=True)
-  max_students = models.IntegerField(default=40)
+  max_students = models.IntegerField(default=16)
 
   __unicode__ = lambda self: "%s - %s"%(self.course.name,self.term)
 
