@@ -6,7 +6,7 @@ from django.db import models
 
 
 class Migration(SchemaMigration):
-    depends_on = (('codrspace','0033_create_media_app'),)
+
 
     def forwards(self, orm):
 

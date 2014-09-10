@@ -41,7 +41,7 @@ def user_from_email(email):
     pass
 
 def verify_unique_email(email,user=None):
-  user = get_user_model()
+  User = get_user_model()
   other_users = User.objects.all()
   if not email:
     return True

@@ -61,19 +61,15 @@ def minutes_index(request):
 
 def register(request,*args,**kwargs):
   email = request.POST.get('email','')
-  m = "Please use the form below to reset your password. "
-  m += "<br />If you believe this is in error, please email %s"%settings.CONTACT_LINK
-  if request.POST and not verify_unique_email(email):
-    m = "An account with the email address %s already exists. %s"%(email,m)
-    messages.error(request,m,extra_tags='danger')
-    return HttpResponseRedirect(reverse('password_reset'))
   paypal_email = request.POST.get('paypal_email','')
-  if request.POST and not verify_unique_email(paypal_email):
-    m = "An account with the paypal email address %s already exists. "%(paypal_email,m)
-    messages.error(request,m,extra_tags='danger')
-    return HttpResponseRedirect(reverse('password_reset'))
-  form = RegistrationForm(request.POST or None)
+  form = RegistrationForm(request,request.POST or None)
   if form.is_valid():
+    if request.POST and not (verify_unique_email(email) and verify_unique_email(paypal_email)):
+      m = "Please use the form below to reset your password. "
+      m += "<br />If you believe this is in error, please email %s"%settings.CONTACT_LINK
+      m = "An account with the email address %s already exists. %s"%(email,m)
+      messages.error(request,m,extra_tags='danger')
+      return HttpResponseRedirect(reverse('password_reset'))
     user = form.save(request)
     return HttpResponseRedirect(reverse('registration_complete'))
   values = {
