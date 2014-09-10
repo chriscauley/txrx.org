@@ -24,5 +24,6 @@ class UserAdmin(UserAdmin):
   list_display = ('username', 'first_name', 'last_name', 'is_staff')
   search_fields = ('username', 'email', 'first_name', 'last_name')
   ordering = ('username',)
+  readonly_fields = ('last_login','date_joined')
 
 admin.site.register(User, UserAdmin)

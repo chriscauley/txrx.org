@@ -52,7 +52,6 @@ MIDDLEWARE_CLASSES = (
 AUTH_USER_MODEL = 'user.User'
 
 AUTHENTICATION_BACKENDS = (
-  'txrx.backends.EmailOrUsernameModelBackend',
   #'social.backends.open_id.OpenIdAuth',
   #'social.backends.google.GoogleOpenId',
   'social.backends.google.GoogleOAuth2',
@@ -61,6 +60,7 @@ AUTHENTICATION_BACKENDS = (
   #'social.backends.google.GoogleOAuth',
   #'social.backends.twitter.TwitterOAuth',
   #'social.backends.yahoo.YahooOpenId',
+  'txrx.backends.EmailOrUsernameModelBackend',
   'django.contrib.auth.backends.ModelBackend'
 )
 

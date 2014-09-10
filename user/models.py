@@ -7,7 +7,22 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 class UserManager(BaseUserManager):
-  pass
+
+  def _create_user(self, username,  email, password, is_staff, is_superuser, **extra_fields):
+    if not email:
+      raise ValueError('The given email must be set')
+    email = self.normalize_email(email)
+    user = self.model(username=username, email=email, is_staff=is_staff, is_active=True,
+                      is_superuser=is_superuser, **extra_fields)
+    user.set_password(password)
+    user.save(using=self._db)
+    return user
+
+  def create_user(self, username, email, password=None, **extra_fields):
+    return self._create_user(username, email, password, False, False,**extra_fields)
+
+  def create_superuser(self, username, email, password, **extra_fields):
+    return self._create_user(username, email, password, True, True,**extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
   kwargs = dict(
@@ -27,7 +42,7 @@ class User(AbstractBaseUser, PermissionsMixin):
   _ht = _('Designates whether the user can log into this admin site.')
   is_staff = models.BooleanField(_('staff status'), default=False, help_text=_ht)
   is_active = models.BooleanField(_('active'), default=True)
-  date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+  date_joined = models.DateTimeField(_('date joined'),auto_now_add=True)
 
   objects = UserManager()
 

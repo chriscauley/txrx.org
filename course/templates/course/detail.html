@@ -101,14 +101,13 @@
  <div class="col-sm-3" id="side">
    {% if request.user.is_staff %}
    {% include "course/_instructor_panel.html" %}
-   {% endif %}
-   {% if enrollment %}
+   {% elif enrollment %}
    <div class="well">
      <h2>You are enrolled in this course</h2>
    </div>
    {# {% include "course/_student_panel.html" %} #}
-   {% include "course/_cart.html" with small_cart="1" %}
    {% endif %}
+   {% include "course/_cart.html" %}
    {% if session.related_sessions %}
    <div class="related_sessions">
      <h4>Checkout these similar classes!</h4>
