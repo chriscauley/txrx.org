@@ -31,6 +31,11 @@ class RegistrationForm(RegistrationForm):
   def __init__(self,*args,**kwargs):
     super(RegistrationForm, self).__init__(*args,**kwargs)
     placeholder_fields(self)
+  def clean_username(self,*args,**kwargs):
+    username = self.cleaned_data.get("username",'')
+    if "@" in username:
+      raise forms.ValidationError("The @ character is not allowed in your username")
+    return username
   def clean(self,*args,**kwargs):
     "Check for duplicate emails. This isn't actually used since users are sent to the password reset page before this."
     super(RegistrationForm,self).clean(*args,**kwargs)

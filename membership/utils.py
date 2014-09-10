@@ -41,13 +41,12 @@ def user_from_email(email):
     pass
 
 def verify_unique_email(email,user=None):
-  User = get_user_model()
-  other_users = User.objects.all()
   if not email:
     return True
+  other_users = get_user_model().objects.all()
   email = email.strip()
   if user:
-    other_users = User.objects.exclude(pk=user.pk)
+    other_users = other_users.exclude(pk=user.pk)
   by_email = other_users.filter(email__iexact=email)
   by_username = other_users.filter(username__iexact=email)
   by_paypal_email = other_users.filter(usermembership__paypal_email__iexact=email)

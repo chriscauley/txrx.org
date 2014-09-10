@@ -51,6 +51,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 AUTH_USER_MODEL = 'user.User'
+REGISTRATION_IGNORE_DOTS = True
 
 AUTHENTICATION_BACKENDS = (
   #'social.backends.open_id.OpenIdAuth',
