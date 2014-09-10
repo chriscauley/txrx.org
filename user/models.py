@@ -26,12 +26,12 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
   kwargs = dict(
-    help_text=_('Required. 30 characters or fewer. Letters, digits, and @/./+/-/_ only.'),
+    help_text=_('Required. 30 characters or fewer. Letters, digits, and ./+/-/_ only.'),
     validators=[
       validators.RegexValidator(
-        r'^[\w.@+-]+$',
+        r'^[\w\.+-]+$',
         _('Enter a valid username. This value may contain only letters, numbers '
-          'and @/./+/-/_ characters.'), 'invalid'),
+          'and ./+/-/_ characters.'), 'invalid'),
     ],
     error_messages={'unique': _("A user with that username already exists."),}
   )

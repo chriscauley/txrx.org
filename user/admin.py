@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
 from .models import User
-from .forms import UserChangeForm, UserCreationForm
+from .forms import UserChangeForm, CustomUserCreationForm
 
 class UserAdmin(UserAdmin):
   fieldsets = (
@@ -20,7 +20,7 @@ class UserAdmin(UserAdmin):
     ),
   )
   form = UserChangeForm
-  add_form = UserCreationForm
+  add_form = CustomUserCreationForm
   list_display = ('username', 'first_name', 'last_name', 'is_staff')
   search_fields = ('username', 'email', 'first_name', 'last_name')
   ordering = ('username',)
