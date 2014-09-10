@@ -97,3 +97,62 @@ THUMBNAIL_DUMMY_RATIO = "1.5"
 
 RECAPTCHA_PUBLIC_KEY = '6Lc53egSAAAAAFuu4PgoRVw_2ONjTTCfwkfDCFxF'
 RECAPTCHA_PRIVATE_KEY = '6Lc53egSAAAAACCvXuucwYu_M3mn-ZQsOlc4Ly_0'
+
+# Django Suit configuration example
+SUIT_CONFIG = {
+  # header
+  'ADMIN_NAME': 'TXRX Labs',
+  # 'HEADER_DATE_FORMAT': 'l, j. F Y',
+  # 'HEADER_TIME_FORMAT': 'H:i',
+
+  # forms
+  # 'SHOW_REQUIRED_ASTERISK': True,  # Default True
+  # 'CONFIRM_UNSAVED_CHANGES': True, # Default True
+
+  # menu
+  # 'SEARCH_URL': '/admin/auth/user/',
+  # 'MENU_ICONS': {
+  #  'sites': 'icon-leaf',
+  #  'auth': 'icon-lock',
+  # },
+  # 'MENU_OPEN_FIRST_CHILD': True, # Default True
+  # 'MENU_EXCLUDE': ('auth.group',),
+  'MENU': (
+    {'app': 'auth', 'icon':'icon-lock', 'models': ('user.user', 'group')},
+    'blog',
+    'course',
+    'default',
+    'event',
+    'feed',
+    'flatpages',
+    'geo',
+    #'ipn',
+    'media',
+    'membership',
+    'mptt_comments'
+    'notify',
+    'registration',
+    #'sites',
+    'tagging',
+    'thing',
+    'tool',
+    #{'label': 'Settings', 'icon':'icon-cog', 'models': ('auth.user', 'auth.group')},
+    #{'label': 'Support', 'icon':'icon-question-sign', 'url': '/support/'},
+  ),
+
+  # misc
+  'LIST_PER_PAGE': 100
+}
+"""
+Instagram
+Ipn
+Media
+Membership
+Mptt_Comments
+Notify
+Registration
+Sites
+Tagging
+Thing
+Tool
+"""
