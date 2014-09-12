@@ -28,8 +28,14 @@
                 <ul class="actionlist">
                   {% for event in events %}
                   <li> 
-                    <a href="{{ event.get_absolute_url }}"><i class="icon-share" title="View on Site"></i></a>
-                    <a href="{{ event.get_admin_url }}"><i class="icon-edit" title="Edit in Admin"></i></a>
+                    <a href="{{ event.get_absolute_url }}">
+                      <i class="icon-share" title="View on Site"></i></a>
+                    <a href="{{ event.get_admin_url }}">
+                      <i class="icon-edit" title="Edit Event in Admin"></i></a>
+                    {% if event.session %}
+                    <a href="{{ event.session.section.get_admin_url }}">
+                      <i class="icon-pencil" title="Edit Section in Admin"></i></a>
+                    {% endif %}
                     {{ event.short_name }}
                   </li>
                   {% endfor %}

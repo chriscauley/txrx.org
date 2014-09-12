@@ -55,6 +55,7 @@ class Term(models.Model):
 
 class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   name = models.CharField(max_length=64)
+  active = models.BooleanField(default=True) # only used with the reshedule view
   _ht = "Used for the events page."
   subjects = models.ManyToManyField(Subject)
   _folder = settings.UPLOAD_DIR+'/course/%Y-%m'
@@ -62,7 +63,14 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   get_short_name = lambda self: self.short_name or self.name
   __unicode__ = lambda self: self.name
-  get_absolute_url = lambda self: Session.objects.filter(section__course=self)[0].get_absolute_url()
+  get_absolute_url = lambda self: self.sessions[0].get_absolute_url()
+  sessions = lambda self: Session.objects.filter(section__course=self)
+  sessions = cached_property(sessions,name="sessions")
+  @cached_property
+  def open_sessions(self):
+    if self.sessions:
+      return [s for s in self.sessions if not s.closed and not s.full]
+  last_session = lambda self: (self.sessions or [None])[0]
   def save(self,*args,**kwargs):
     super(Course,self).save(*args,**kwargs)
     #this has to be repeated in the admin because of how that works
@@ -89,8 +97,8 @@ class Section(models.Model,FilesMixin):
   src = ImageField("Logo",max_length=300,upload_to='course/%Y-%m',null=True,blank=True)
   _ht = "If true, this class will not raise conflict warnings for events in the same location."
   no_conflict = models.BooleanField(default=False,help_text=_ht)
-  #tools = models.ManyToManyField(Tool,blank=True)
   max_students = models.IntegerField(default=16)
+  get_admin_url = lambda self: "/admin/course/section/%s/"%self.id
 
   __unicode__ = lambda self: "%s - %s"%(self.course.name,self.term)
 
