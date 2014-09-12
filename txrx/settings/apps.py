@@ -119,12 +119,32 @@ SUIT_CONFIG = {
   # 'MENU_EXCLUDE': ('auth.group',),
   'MENU': (
     'blog',
-    'course',
+    {'app': 'course',
+     'icon':'icon-calendarhttp://theonion.github.io/comcastifyjs/',
+     'models': (
+       #'course.branding', #accessible thorugh course.course
+       'course.course',
+       'course.enrollment',
+       'course.evaluation',
+       'geo.location',
+       'course.section',
+       'course.session',
+       'course.subject',
+       #'course.term', #accessible through course.session
+     )
+    },
     #'default', # social-auth
-    'event',
+    {'app': 'event',
+     'icon':'icon-calendar',
+     'models': (
+       'event.event',
+       'event.eventoccurrence',
+       'geo.location',
+     )
+    },
     #'feed', # not implimented
     'flatpages',
-    'geo',
+    #'geo', #occurs in several other places
     #'ipn', #paypal ipns
     'media',
     {'app': 'membership',
@@ -141,7 +161,7 @@ SUIT_CONFIG = {
     'notify',
     'registration',
     #'sites',
-    'tagging',
+    #'tagging',
     'thing',
     'tool',
     #{'label': 'Settings', 'icon':'icon-cog', 'models': ('auth.user', 'auth.group')},

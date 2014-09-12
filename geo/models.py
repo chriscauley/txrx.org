@@ -31,6 +31,7 @@ class City(GeoModel):
   def __unicode__(self):
     return "%s, %s"%(self.name,self.state)
   class Meta:
+    ordering = ('name',)
     verbose_name_plural = "Cities"
 
 class Location(GeoModel):
@@ -43,6 +44,8 @@ class Location(GeoModel):
   address2 = models.CharField(max_length=64,null=True,blank=True)
   city = models.ForeignKey(City,default=1)
   zip_code = models.IntegerField(default=77007)
+  class Meta:
+    ordering = ('name',)
 
   def print_address(self):
     l = [self.name,self.address,self.address2,self.city.__unicode__(),self.zip_code]
