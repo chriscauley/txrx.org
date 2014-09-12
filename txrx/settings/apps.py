@@ -120,7 +120,7 @@ SUIT_CONFIG = {
   'MENU': (
     'blog',
     {'app': 'course',
-     'icon':'icon-calendarhttp://theonion.github.io/comcastifyjs/',
+     'icon':'icon-calendar',
      'models': (
        #'course.branding', #accessible thorugh course.course
        'course.course',
