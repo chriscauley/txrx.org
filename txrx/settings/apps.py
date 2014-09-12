@@ -118,7 +118,6 @@ SUIT_CONFIG = {
   # 'MENU_OPEN_FIRST_CHILD': True, # Default True
   # 'MENU_EXCLUDE': ('auth.group',),
   'MENU': (
-    {'app': 'auth', 'icon':'icon-lock', 'models': ('user.user', 'group')},
     'blog',
     'course',
     'default',
@@ -128,7 +127,16 @@ SUIT_CONFIG = {
     'geo',
     #'ipn',
     'media',
-    'membership',
+    {'app': 'membership',
+     'icon':'icon-user',
+     'models': (
+       'membership.meetingminutes',
+       'membership.levels',
+       'membership.membershipgroup',
+       'membership.officer',
+       'user.user'
+     )
+    },
     'mptt_comments'
     'notify',
     'registration',

@@ -35,6 +35,7 @@ class City(GeoModel):
 
 class Location(GeoModel):
   name = models.CharField(max_length=128,null=True,blank=True)
+  parent = models.ForeignKey("self",null=True,blank=True)
   _ht = "Optional. Alternative name for the calendar."
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   get_short_name = lambda self: self.short_name or self.name
@@ -47,5 +48,6 @@ class Location(GeoModel):
     l = [self.name,self.address,self.address2,self.city.__unicode__(),self.zip_code]
     return '\n'.join([str(li) for li in l if li])
   def __unicode__(self):
-    items = [self.name, self.address, self.address2, self.city, self.zip_code]
-    return ', '.join([str(i) for i in items if i])
+    if self.parent:
+      return "%s @ %s"%(self.name,self.parent.name)
+    return self.name

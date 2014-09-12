@@ -35,7 +35,6 @@ $(document).ready(function(){
         map.className = "location_picker_map";
 	$(this).parent().append($("<a href='javascript:;' onclick='loadAddress(this);' style='padding-left:5px;'>Guess</a><br/>"));
         $(this).parent().append(map);
-	map.style.marginLeft = "100px";
         //$(this).css('display','none');
 
         var lat = 29.76019;
