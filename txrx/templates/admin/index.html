@@ -23,7 +23,7 @@
         <tr><td>
             <dl>
               {% for times,events in conflicts %}
-              <dt>{{ times.0.date }} ({{ times.0|date:"G:m" }} - {{ times.1|date:"G:m" }})</dt>
+              <dt>{{ times.0.date }} ({{ times.0|date:"G:i" }} - {{ times.1|date:"G:i" }})</dt>
               <dd>
                 <ul class="actionlist">
                   {% for event in events %}
@@ -41,7 +41,7 @@
                   {% endfor %}
                 </ul>
               </dd>
-              <br />
+              {% if not forloop.last %}<br />{% endif %}
               {% endfor %}
             </dl>
         </td></tr>

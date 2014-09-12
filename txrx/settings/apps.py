@@ -120,12 +120,12 @@ SUIT_CONFIG = {
   'MENU': (
     'blog',
     'course',
-    'default',
+    #'default', # social-auth
     'event',
-    'feed',
+    #'feed', # not implimented
     'flatpages',
     'geo',
-    #'ipn',
+    #'ipn', #paypal ipns
     'media',
     {'app': 'membership',
      'icon':'icon-user',

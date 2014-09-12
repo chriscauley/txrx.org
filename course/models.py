@@ -259,7 +259,8 @@ class ClassTime(OccurrenceModel):
   get_location = lambda self: self.session.section.location
   no_conflict = lambda self: self.session.section.no_conflict
   description = cached_property(lambda self:self.session.section.description,name="description")
-  name = cached_property(lambda self:self.session.section.course.name,name="name")
+  name = cached_property(lambda self: self.session.section.course.name,name="name")
+  location = cached_property(lambda self: self.session.section.location,name="location")
   class Meta:
     ordering = ("start",)
 

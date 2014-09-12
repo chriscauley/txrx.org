@@ -39,6 +39,7 @@ class SectionAdmin(admin.ModelAdmin):
   save_as = True
   list_display = ("__unicode__","prerequisites","requirements","max_students")
   list_editable = ("prerequisites","requirements","max_students")
+  list_filter = ("course__active","location")
   inlines = [TaggedFileInline]
   def has_change_permission(self,request,obj=None):
     if not obj:

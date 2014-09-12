@@ -6,6 +6,7 @@ from django.template.defaultfilters import slugify, date, urlencode
 from media.models import PhotosMixin
 from wmd import models as wmd_models
 from geo.models import Location
+from txrx.utils import cached_property
 
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
@@ -109,7 +110,8 @@ class EventOccurrence(OccurrenceModel,PhotosMixin):
   short_name = property(lambda self: self.name_override or self.event.get_short_name())
   description_override = wmd_models.MarkDownField(blank=True,null=True)
   description = property(lambda self: self.description_override or self.event.description)
-  get_location = lambda self: self.event.location
+  get_location = lambda self: self.event.location #! depracate me! infavor of EO.location
+  location = cached_property(lambda self: self.event.location,name="location")
   no_conflict = property(lambda self: self.event.no_conflict)
   def save(self,*args,**kwargs):
     # set the publish_dt to a week before the event
