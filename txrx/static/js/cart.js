@@ -4,7 +4,7 @@ function showLogin() {
 }
 
 simpleCart.successURL = window.location.origin+"/classes/?success"
-simpleCart.cartHeaders = ["Name", "Price", "Quantity", "Remove"]
+simpleCart.cartHeaders = ["Name", "Price", "Decrement", "Increment","Quantity", "Remove"]
 
 function showCart() {
   $("#cart-modal").modal({width: 400, modal: true, minHight: 300});

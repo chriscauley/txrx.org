@@ -1,0 +1,47 @@
+{% if session.section.fee %}
+<div class="EnrollLink">
+  {% if session.user_enrollment.quantity == 1 %}
+  <button class="btn btn-default disabled">Enrolled</button>
+  {% elif session.user_enrollment %}
+  <button class="btn btn-default disabled">Enrolled x {{ session.user_enrollment.quantity }}</button>
+  {% elif session.closed %}
+  <button class="btn btn-default disabled">{{ session.closed_string|title }}</button>
+  {% elif session.full %}
+  <button class="btn btn-default disabled">FULL</button>
+  {% else %}
+  <button class="btn btn-primary add" onclick="addClass({{ session.id }});">
+    {% if session.in_progress %}In Progress{% else %}Enroll{% endif %}</button>
+  <button class="btn btn-danger drop" onclick="simpleCart.remove('{{ session.id }}'); toggleCourses();">
+    Drop</button>
+  {% endif %}
+</div>
+<script>
+  window.SESSIONS_ON_PAGE = window.SESSIONS_ON_PAGE || {};
+  window.SESSIONS_ON_PAGE[{{ session.id }}] = {
+    'name': "<b>{{ session.section.course }}</b> {{ session.first_date|date:"m/d/Y" }}",
+    'fee': {{ member_discount }}*{{ session.section.fee }},
+  };
+</script>
+{% else %}
+<div class="price">FREE</div>
+<div class="RsvpLink{% if session.user_enrollment %} attending{% endif %}">
+  {% if session.archived %}
+  <button class="btn btn-default disabled">Closed</button>
+  {% elif request.user %}
+  <button class="btn btn-default disabled is_full">FULL</button>
+  <button class="btn btn-default disabled number_attending unrsvp">
+    RSVP'd x {{ session.user_enrollment.quantity }}</button>
+  <button class="btn btn-success rsvp" onclick="rsvp({{ session.id }},'{{ session.get_rsvp_url }}');">
+    RSVP</button>
+  <button class="btn btn-danger unrsvp" onclick="rsvp({{ session.id }},'{{ session.get_rsvp_url }}?drop=1');">
+    un-RSVP</button>
+  <button class="btn btn-success unrsvp not_full" title="Bring a friend!"
+          onclick="rsvp({{ session.id }},'{{ session.get_rsvp_url }}?plus_one=1');">+1 Person</button>
+  <a href="javascript:;" onclick="$(this).hide(); return false;" class="message"></a>
+  {% else %}
+  You must 
+  <a href="/accounts/login/?next={{ session.get_absolute_url|urlencode }}">Login</a>
+  to RSVP
+  {% endif %}
+</div>
+{% endif %}

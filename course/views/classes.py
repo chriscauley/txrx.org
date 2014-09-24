@@ -18,20 +18,89 @@ from event.utils import make_ics,ics2response
 from paypal.standard.ipn.models import *
 import datetime, simplejson
 
-filters = {
-  "term": lambda: {
+get_filters = lambda: {
+  "term": {
     "model": Term,
     "options": Term.objects.exclude(section__term__name__icontains='test'),
     "name": "Term",
     "slug": "term"
   },
-  "subject": lambda: {
+  "subject": {
     "model": Subject,
     "options": Subject.objects.filter(parent__isnull=True),
     "name": "Subject",
     "slug": "subject"
   }
 }
+
+def new_index(request):
+  term = Term.objects.all()[0]
+  first_date = datetime.datetime.now()-datetime.timedelta(21)
+  courses = Course.objects.filter(section__session__first_date__gte=first_date).distinct()
+  subject_filters = get_filters()['subject']
+  active_subjects = {}
+  for course in courses:
+    for subject in course.subjects.all():
+      active_subjects[subject.pk] = active_subjects.get(subject.pk,0) + 1
+  for subject in subject_filters['options']:
+    subject.active_classes = active_subjects.get(subject.pk,0)
+    subject.subfilters = []
+    for child in subject.subject_set.all():
+      child.active_classes = active_subjects.get(child.pk,0)
+      if child.active_classes:
+        subject.subfilters.append(child)
+  user_courses = []
+  user_sessions = []
+  if request.user.is_authenticated():
+    sessions = Session.objects.filter(first_date__gte=first_date).select_related(depth=3)
+    user_sessions = sessions.filter(enrollment__user=request.user.id)
+    us_ids = [s.id for s in user_sessions]
+    for session in user_sessions:
+      user_courses.append(session)
+  user_sessions = sorted(list(user_sessions),key=lambda s: s.first_date)
+  
+  values = {
+    'courses': courses,
+    'filters': [subject_filters],
+    'term': term,
+    'user_sessions': user_sessions,
+    'user_courses': user_courses,
+    'yesterday':datetime.datetime.now()-datetime.timedelta(0.5),
+  }
+  return TemplateResponse(request,"course/index.html",values)
+
+def new_detail(request,pk,slug):
+  session = get_object_or_404(Session,slug=slug)
+  session.set_user_fee(request.user)
+  enrollment = None
+  notify_course = None
+  if request.user.is_authenticated():
+    enrollment = Enrollment.objects.filter(session=session,user=request.user)
+    notify_course = get_or_none(NotifyCourse,user=request.user,course=session.section.course)
+  kwargs = dict(first_date__gte=datetime.datetime.now(),section__course=session.section.course)
+  alternate_sessions = Session.objects.filter(**kwargs).exclude(id=session.id)
+  kwargs = dict(first_date__gte=datetime.datetime.now(),
+                section__course__subjects__in=session.section.course.subjects.all())
+  related_sessions = Session.objects.filter(**kwargs).exclude(id=session.id)
+  related_sessions = [s for s in related_sessions if not (s.closed or s.full)]
+  if request.POST:
+    if not (request.user.is_superuser or request.user == session.user):
+      messages.error(request,"Only an instructor can do that")
+      return HttpResponseRedirect(request.path)
+    ids = [int(i) for i in request.POST.getlist('completed')]
+    for enrollment in session.enrollment_set.all():
+      enrollment.completed = enrollment.id in ids
+      enrollment.save()
+    messages.success(request,"Course completion status saved for all students in this class.")
+    return HttpResponseRedirect(request.path)
+  values = {
+    'session': session,
+    'enrollment': enrollment,
+    'alternate_sessions': alternate_sessions,
+    'related_sessions': related_sessions,
+    'notify_course': notify_course,
+  }
+  return TemplateResponse(request,"course/detail.html",values)
 
 def index(request,term_id=None):
   term = Term.objects.all()[0]
@@ -42,7 +111,7 @@ def index(request,term_id=None):
     first_date = datetime.datetime.now()-datetime.timedelta(21)
     sessions = Session.objects.filter(first_date__gte=first_date).select_related(depth=3)
   user_sessions = []
-  subject_filters = filters['subject']()
+  subject_filters = get_filters()['subject']
   active_subjects = {}
   for session in sessions:
     session.set_user_fee(request.user)

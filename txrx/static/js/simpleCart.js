@@ -618,10 +618,10 @@ function Cart(){
       outputValue = me.valueToCurrencyString(parseFloat(item.price)*parseInt(item.quantity,10) );
       break;
     case "increment":
-      outputValue = me.valueToLink( "+" , "javascript:;" , "onclick=\"simpleCart.items[\'" + item.id + "\'].increment();\"" );
+      outputValue = me.valueToLink( "+1 person" , "javascript:;" , "onclick=\"simpleCart.items[\'" + item.id + "\'].increment();\"" );
       break;
     case "decrement":
-      outputValue = me.valueToLink( "-" , "javascript:;" , "onclick=\"simpleCart.items[\'" + item.id + "\'].decrement();\"" );
+      outputValue = me.valueToLink( "-1 person" , "javascript:;" , "onclick=\"simpleCart.items[\'" + item.id + "\'].decrement();\"" );
       break;
     case "remove":
       outputValue = me.valueToLink( "Remove" , "javascript:;" , "onclick=\"simpleCart.items[\'" + item.id + "\'].remove();\"" );

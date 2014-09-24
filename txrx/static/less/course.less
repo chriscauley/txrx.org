@@ -76,6 +76,33 @@
   float: right;
 }
 
+.course.new {
+  .details {
+    padding-right: 0;
+    .title {
+      height: auto;
+      min-height: 0;
+      padding-bottom: 10px;
+    }
+  }
+  .CartBox {
+    display: inline-block;
+    float: none;
+    height: 26px;
+    position: relative;
+    right: initial;
+    top: initial;
+    vertical-align: middle;
+  }
+  .session {
+    padding-bottom: 5px;
+    small {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+}
+
 .course-detail {
   .subjects { padding-bottom: 5px; }
   .CartBox {
@@ -125,7 +152,7 @@
   b { font-size: 1.1em; }
 }
 
-.itemQuantity, .itemPrice {
+.itemQuantity, .itemPrice, .itemIncrement, .itemDecrement {
   display: inline-block;
   padding-right: 20px;
 }

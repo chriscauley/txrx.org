@@ -55,6 +55,7 @@ class Term(models.Model):
 
 class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   name = models.CharField(max_length=64)
+  slug = lambda self: slugify(self.name)
   active = models.BooleanField(default=True) # only used with the reshedule view
   _ht = "Used for the events page."
   subjects = models.ManyToManyField(Subject)
@@ -66,6 +67,12 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   get_absolute_url = lambda self: self.sessions[0].get_absolute_url()
   sessions = lambda self: Session.objects.filter(section__course=self)
   sessions = cached_property(sessions,name="sessions")
+  @cached_property
+  def active_sessions(self):
+    first_date = datetime.datetime.now()-datetime.timedelta(21)
+    return list(self.sessions.filter(first_date__gte=first_date))
+  first_date = property(lambda self: self.active_sessions[0].first_date)
+  last_date = property(lambda self: self.active_sessions[-1].last_date)
   @cached_property
   def open_sessions(self):
     if self.sessions:
@@ -245,7 +252,7 @@ class Session(FeedItemModel,PhotosMixin):
     return ', '.join(out)
     
   class Meta:
-    ordering = ('section',)
+    ordering = ('first_date',)
 
 class ClassTime(OccurrenceModel):
   session = models.ForeignKey(Session)
