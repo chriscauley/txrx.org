@@ -13,6 +13,7 @@
 
 {% block content %}
   <div id="content-main">
+    {% if request.path == "/admin/" %}
     {% get_room_conflicts %}
     {% if room_conflicts %}
     <h1>Potential room conflicts</h1>
@@ -49,7 +50,7 @@
     </div>
     {% endfor %}
     {% endif %}
-    {% comment %}
+    {% else %} {# not at "/admin/" #}
     {% if app_list %}
       {% for app in app_list %}
         <div class="module">
@@ -81,7 +82,7 @@
     {% else %}
       <p>{% trans "You don't have permission to edit anything." %}</p>
     {% endif %}
-    {% endcomment %}
+    {% endif %}
   </div>
 {% endblock %}
 
