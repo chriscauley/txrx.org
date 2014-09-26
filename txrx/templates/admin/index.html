@@ -53,7 +53,7 @@
     {% endif %}
     {% get_courses_needed %}
     {% if courses_needed %}
-    <h1>Courses Needed</h1>
+    <h1>Courses Needed (x{{ courses_needed|length }})</h1>
     {% for course in courses_needed %}
     <div class="module" style="width: 375px;">
       <table class="table-overview applist" summary="{% blocktrans %}Conflicting classes and events.{% endblocktrans %}"
