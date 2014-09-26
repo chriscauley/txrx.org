@@ -53,6 +53,17 @@ class Term(models.Model):
   class Meta:
     ordering = ('-start',)
 
+class CourseManager(models.Manager):
+  def courses_needed(self,*args,**kwargs):
+    # must only look at active courses
+    kwargs['active'] = kwargs.get('active',True)
+    kwargs['reschedule_on__lte'] = datetime.date.today()
+    query_set = self.filter(*args,**kwargs)
+
+    # select only courses with only full and closed sessions
+    courses = [course for course in query_set if not course.open_sessions]
+    return courses
+
 class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   name = models.CharField(max_length=64)
   active = models.BooleanField(default=True) # only used with the reshedule view
@@ -66,6 +77,9 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   get_absolute_url = lambda self: self.sessions[0].get_absolute_url()
   sessions = lambda self: Session.objects.filter(section__course=self)
   sessions = cached_property(sessions,name="sessions")
+  _ht = "The dashboard (/admin/) won't bug you to reschedule until after this date"
+  reschedule_on = models.DateField(default=datetime.date.today,help_text=_ht)
+  objects = CourseManager()
   @cached_property
   def open_sessions(self):
     if self.sessions:
@@ -221,6 +235,7 @@ class Session(FeedItemModel,PhotosMixin):
   @cached_method
   def get_absolute_url(self):
     return reverse('course:detail',args=[self.slug])
+  get_admin_url = lambda self: "/admin/course/session/%s/"%self.id
   get_rsvp_url = cached_method(lambda self: reverse('course:rsvp',args=[self.id]),name="get_rsvp_url")
   @cached_property
   def last_date(self):

@@ -14,7 +14,6 @@ from notify.models import NotifyCourse
 from db.utils import get_or_none
 from event.utils import make_ics,ics2response
 
-
 from paypal.standard.ipn.models import *
 import datetime, simplejson
 
@@ -194,3 +193,13 @@ def start_checkout(request):
     if new_total > session.section.max_students:
       out.append({'pk': session.pk,'remaining': session.section.max_students-session.total_students})
   return HttpResponse(simplejson.dumps(out))
+
+def delay_reschedule(request,course_pk,n_months):
+  user = request.user
+  if not (user.is_superuser or user.groups.filter(name="Class Coordinator")):
+    raise Http404()
+  course = get_object_or_404(Course,pk=course_pk)
+  course.reschedule_on = datetime.datetime.now()+datetime.timedelta(int(n_months)*30)
+  course.save()
+  messages.success(request,"%s has been delayed for %s months"%(course,n_months))
+  return HttpResponseRedirect(reverse("admin:index"))
