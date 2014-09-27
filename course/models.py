@@ -12,7 +12,7 @@ from media.models import FilesMixin, PhotosMixin
 from geo.models import Location
 from event.models import OccurrenceModel, reverse_ics
 from tool.models import ToolsMixin
-from txrx.utils import cached_method,cached_property
+from txrx.utils import cached_method, cached_property, latin1_to_ascii
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
@@ -154,7 +154,7 @@ class Session(FeedItemModel,PhotosMixin):
   time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
   branding = models.ForeignKey(Branding,null=True,blank=True)
 
-  __unicode__ = lambda self: "%s (%s - %s)"%(self.section, self.user,self.first_date.date())
+  __unicode__ = lambda self: latin1_to_ascii("%s (%s - %s)"%(self.section, self.user,self.first_date.date()))
   title = property(lambda self: "%s (%s)"%(self.section.course.name,self.first_date.date()))
 
   in_progress = property(lambda self: self.archived and self.last_date>datetime.datetime.now())
