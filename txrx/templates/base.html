@@ -38,10 +38,18 @@
       });
     </script>
     {% block head %}{% endblock %}
+    <meta property="og:title" content="{% block fb_title %}TXRX Labs: Houston's Hackerspace{% endblock %}" />
+    <meta property="og:site_name" content="{{ SITE_NAME }}" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+    <meta property="og:description" content="{% block fb_description %}A project-based team of makers with backgrounds in the creative arts: electronics, metalworking, woodworking, rapid prototyping, computer science and security, screenprinting, fashion design, and even haute cuisine.{% endblock %}" />
+    {#! <meta property="og:image" content="https:///txrxlabs.org/" /> #}
+    <meta property="fb:app_id" content="" />
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     {% block analytics %}{{ ANALYTICS_CODE|safe }}{% endblock %}
+    <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">stLight.options({publisher: "56794c5c-23aa-4e30-b62c-dcc177306755", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
   </head>
   <body>
     <div class="container">

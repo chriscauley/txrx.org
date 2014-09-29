@@ -1,11 +1,12 @@
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.template.defaultfilters import slugify
+from django.template.defaultfilters import slugify, strip_tags
 
 from db.models import UserModel
 from media.models import PhotosMixin, FilesMixin
 from course.models import Session
 from tool.models import ToolsMixin
+from blog.templatetags.short_codes import explosivo
 
 from wmd import models as wmd_models
 
@@ -29,6 +30,7 @@ class Thing(UserModel,PhotosMixin,ToolsMixin,FilesMixin):
 
   __unicode__ = lambda self: self.title
   get_absolute_url = lambda self: reverse('thing_detail',args=[self.id,slugify(self.title)])
+  get_short_description = lambda self: strip_tags(explosivo(self.description))
   related_by_user = lambda self: Thing.objects.filter(user=self.user).exclude(pk=self.pk)
   def get_parent_text(self):
     if "thingiverse.com" in self.parent_link:
