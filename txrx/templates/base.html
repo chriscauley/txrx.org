@@ -20,7 +20,7 @@
     {% compress js %}
     <script src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
     <script src="{{ STATIC_URL }}js/init.js"></script>
-    <script src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
+    <script src="{{ STATIC_URL }}lightbox/js/lightbox.min.js"></script>
     <script src="{{ STATIC_URL }}js/jsi18n.js"></script>
     <script src="{{ STATIC_URL }}mptt_comments/js/mptt_comments.js"></script>
     <script src="{{ STATIC_URL }}js/favico.js"></script>
@@ -48,7 +48,7 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     {% block analytics %}{{ ANALYTICS_CODE|safe }}{% endblock %}
-    <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript" src="//w.sharethis.com/button/buttons.js"></script>
     <script type="text/javascript">stLight.options({publisher: "56794c5c-23aa-4e30-b62c-dcc177306755", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
   </head>
   <body>
