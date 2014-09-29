@@ -5,6 +5,9 @@
 {% block title %}{{ session.section.course }}{% endblock %}
 {% block header %}{% endblock %}
 
+{% block fb_title %}{{ session.section.course }} - TXRX Labs{% endblock %}
+{% block fb_description %}{{ session.section.description|implosivo|escape }}{% endblock %}
+
 {% block main %}
 <div class="col-sm-9">
   <div class="course-detail row" data-subject="{{ session.subjects|join:"," }}" id="c{{ session.id }}"
@@ -50,7 +53,7 @@
          {% endthumbnail %}
          {% endif %}
          <div class="description">
-           {{ session.section.description|explosivo|removetags:"script,style" }}
+           {{ session.section.description|explosivo }}
          </div>
          {% if session.section.fee_notes %}
          <p class="notes"><b>* Fee Notes:</b> {{ session.section.fee_notes }}</p>

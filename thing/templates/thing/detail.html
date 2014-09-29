@@ -5,7 +5,7 @@
 {% block header %}{% endblock %}
 {% block title %}{{ thing }} by {{ thing.user }}{% endblock %}
 {% block fb_title %}{{ thing }} by {{ thing.user }}{% endblock %}
-{% block fb_description %}{{ thing.get_short_description|escape }}{% endblock %}
+{% block fb_description %}{{ thing.get_short_description|implosivo|escape }}{% endblock %}
 {% block main %}
 <div class="row">
   <div class="col-sm-8">
