@@ -6,6 +6,8 @@
     {% thumbnail photo|get_override:"landscape_crop" "750x500" crop="center" as im %}
     <div class="slide"{% if not forloop.first %} style="display:none;"{% endif %}>
       <img src="{{ im.url }}" width="750" height="500" />
+      <a href="{{ photo.file.url }}" class="full-screen" data-lightbox="slideshow">
+        <i class="fa fa-search-plus"></i></a>
       {% if photo.external_url %}
       <a href="{{ photo.external_url }}" class="glyphicon external {{ photo.external_type }}"
          onclick="iframeExternal(this);return false"></a>
