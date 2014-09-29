@@ -12,6 +12,8 @@ from wmd import models as wmd_models
 
 class Material(models.Model):
   name = models.CharField(max_length=64)
+  count = lambda self: self.thing_set.count()
+  value = property(lambda self: self.pk)
   __unicode__ = lambda self: self.name
   class Meta:
     ordering = ('name',)

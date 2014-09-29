@@ -48,11 +48,11 @@ def index(request,term_id=None):
     for subject in session.all_subjects:
       active_subjects[subject.pk] = active_subjects.get(subject.pk,0) + 1
   for subject in subject_filters['options']:
-    subject.active_classes = active_subjects.get(subject.pk,0)
+    subject.count = active_subjects.get(subject.pk,0)
     subject.subfilters = []
     for child in subject.subject_set.all():
-      child.active_classes = active_subjects.get(child.pk,0)
-      if child.active_classes:
+      child.count = active_subjects.get(child.pk,0)
+      if child.count:
         subject.subfilters.append(child)
   if request.user.is_authenticated():
     user_sessions = sessions.filter(enrollment__user=request.user.id)

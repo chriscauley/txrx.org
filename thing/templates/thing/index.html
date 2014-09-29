@@ -5,6 +5,15 @@
 
 {% block main %}
 <h1 class="page_title">Items recently made at TXRX</h1>
+<form class="filters">
+{% include "widgets/filters.html" %}
+{% if "material" in request.GET %}
+<script>$("[name=material] [value={{ request.GET.material }}]").attr("selected","selected")</script>
+{% endif %}
+{% if "tool" in request.GET %}
+<script>$("[name=tool] [value={{ request.GET.tool }}]").attr("selected","selected")</script>
+{% endif %}
+</form>
 <div class="thing_index">
   <div class="things">
     {% for thing in paginator.current_list %}

@@ -15,9 +15,9 @@ from wmd.models import MarkDownField
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
 
 class Lab(OrderedModel,PhotosMixin):
-  title = models.CharField(max_length=128)
-  __unicode__ = lambda self: self.title
-  slug = property(lambda self: slugify(self.title))
+  name = models.CharField(max_length=128)
+  __unicode__ = lambda self: self.name
+  slug = property(lambda self: slugify(self.name))
   photo = models.ForeignKey(Photo,null=True,blank=True)
   description = models.TextField(null=True,blank=True)
   url = lambda self: reverse("lab_detail",args=[self.slug,self.id])
@@ -27,9 +27,10 @@ class Lab(OrderedModel,PhotosMixin):
 _help = "Will default to %s photo if blank"
 
 class Tool(OrderedModel,PhotosMixin):
-  title = models.CharField(max_length=128)
-  __unicode__ = lambda self: self.title
-  slug = property(lambda self: slugify(self.title))
+  name = models.CharField(max_length=128)
+  __unicode__ = lambda self: self.name
+  value = property(lambda self: self.pk)
+  slug = property(lambda self: slugify(self.name))
   lab = models.ForeignKey(Lab)
   make = models.CharField(max_length=64,null=True,blank=True)
   model = models.CharField(max_length=32,null=True,blank=True)

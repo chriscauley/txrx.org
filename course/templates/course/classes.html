@@ -21,7 +21,16 @@
   If not, an account will be automatically created when you first pay for a class.
 </p>
 {% endif %}
+<form onsubmit="applyFilters(this);return false;" class="filters">
 {% include "widgets/filters.html" %}
+<span>
+  <input id="show_closed" type="checkbox" onchange="$(this).closest('form').submit();" />
+  <label for="show_closed">Show Past Sections</label>
+  <script type="text/javascript">
+    $(document).ready(function() { $("#show_closed").change() });
+  </script>
+</span>
+</form>
 <div class="course_list">
   {% for session in sessions %}
   {% include "course/_session_row.html" %}
