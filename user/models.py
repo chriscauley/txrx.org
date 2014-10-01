@@ -52,6 +52,7 @@ class User(AbstractBaseUser, PermissionsMixin):
   class Meta:
     verbose_name = _('user')
     verbose_name_plural = _('users')
+    ordering = ('username',)
 
   def get_absolute_url(self):
     return "/users/%s/" % urlquote(self.email)

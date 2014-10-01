@@ -48,6 +48,9 @@ class PhotoTagAdmin(admin.ModelAdmin):
   bulk_link = lambda self, obj: "<a href='/media_files/photo/bulk_tag/%s'>Bulk Tag %s Photos</a>"%(obj.pk,obj)
   bulk_link.allow_tags = True
 
+class MiscFileAdmin(admin.ModelAdmin):
+  form = StaffMemberForm
+
 admin.site.register(Photo,PhotoAdmin)
-admin.site.register(MiscFile)
+admin.site.register(MiscFile,MiscFileAdmin)
 admin.site.register(PhotoTag,PhotoTagAdmin)
