@@ -139,5 +139,6 @@ def get_room_conflicts(base_occurrence=None):
         events += e
       events = list(set(events))
       location_conflicts.append((times,events))
-    out.append((location,location_conflicts))
+    if location_conflicts:
+      out.append((location,location_conflicts))
   return out
