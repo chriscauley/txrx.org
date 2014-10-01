@@ -132,6 +132,8 @@ def get_room_conflicts(base_occurrence=None):
     for conflict_spots in reshuffled_conflicts:
       times,_event_mess = zip(*conflict_spots)
       times = [times[0], times[-1]]
+      if (times[-1] - times[0]).total_seconds() < 30*60:
+        continue
       events = []
       for e in _event_mess:
         events += e
