@@ -1,36 +1,13 @@
-<form class="filters">
-  {% for f in filters %}
-  <select id="{{ f.slug }}" name="{{ f.slug }}" onchange="applyFilters(this);">
-    <option value="">All {{ f.name }}s</option>
-    {% for o in f.options %}
-    <option value="{{ o.value }}"{% if not o.active_classes %} disabled="disabled"{% endif %}>
-      {{ o.name }} ({{ o.active_classes }})</option>
-    {% for s in o.subfilters %}{# These won't appear if empty #}
-    <option value="{{ s.value }}">
-      -- {{ s.name }} ({{ s.active_classes }})</option>
-    {% endfor %}
-    {% endfor %}
-  </select>
+{% for f in filters %}
+<select id="{{ f.slug }}" name="{{ f.slug }}" onchange="$(this).closest('form').submit();">
+  <option value="">All {{ f.name }}s</option>
+  {% for o in f.options %}
+  <option value="{{ o.value }}"{% if not o.count %} disabled="disabled"{% endif %}>
+    {{ o.name }} {% if o.count %}({{ o.count }}){% endif %}</option>
+  {% for s in o.subfilters %}{# These won't appear if empty #}
+  <option value="{{ s.value }}">
+    -- {{ s.name }} ({{ s.count }})</option>
   {% endfor %}
-  <span>
-    <input id="show_closed" type="checkbox" onchange="toggleClosed(this);" />
-    <label for="show_closed">Show Past Sections</label>
-    <script type="text/javascript">
-      $(document).ready(function() { $("#show_closed").change() });
-    </script>
-  </span>
-</form>
-<script type="text/javascript">
-function applyFilters(that) {
-  var filters = $(that).closest("form").find("select");
-  var items = $(".filterable").show();
-  var subject = $("[name=subject]").val();
-  items.filter(function() {
-      return $(this).data("subject").search(subject)<0;
-  }).hide();
-}
-function toggleClosed(that) {
-  if (!$(that).attr("checked")) { $(".course_list .past").hide(); return; }
-  $(".course_list .course").show()
-}
-</script>
+  {% endfor %}
+</select>
+{% endfor %}

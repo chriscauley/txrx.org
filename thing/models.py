@@ -6,11 +6,14 @@ from db.models import UserModel
 from media.models import PhotosMixin, FilesMixin
 from course.models import Session
 from tool.models import ToolsMixin
+from blog.templatetags.short_codes import explosivo
 
 from wmd import models as wmd_models
 
 class Material(models.Model):
   name = models.CharField(max_length=64)
+  count = lambda self: self.thing_set.count()
+  value = property(lambda self: self.pk)
   __unicode__ = lambda self: self.name
   class Meta:
     ordering = ('name',)
@@ -29,6 +32,7 @@ class Thing(UserModel,PhotosMixin,ToolsMixin,FilesMixin):
 
   __unicode__ = lambda self: self.title
   get_absolute_url = lambda self: reverse('thing_detail',args=[self.id,slugify(self.title)])
+  get_short_description = lambda self: self.description
   related_by_user = lambda self: Thing.objects.filter(user=self.user).exclude(pk=self.pk)
   def get_parent_text(self):
     if "thingiverse.com" in self.parent_link:

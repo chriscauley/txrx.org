@@ -11,7 +11,7 @@
       {% if settings.DEBUG %}
       var _NOTIFY_URL = "http://dev.txrxlabs.org:8009/tx/rx/ipn/handler/"
       {% else %}
-      var _NOTIFY_URL = "http://txrxlabs.org/tx/rx/ipn/handler/"
+      var _NOTIFY_URL = "https://txrxlabs.org/tx/rx/ipn/handler/"
       {% endif %}
       var _USER_NUMBER = "{{ request.user.pk }}";
     </script>
@@ -20,7 +20,7 @@
     {% compress js %}
     <script src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
     <script src="{{ STATIC_URL }}js/init.js"></script>
-    <script src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
+    <script src="{{ STATIC_URL }}lightbox/js/lightbox.min.js"></script>
     <script src="{{ STATIC_URL }}js/jsi18n.js"></script>
     <script src="{{ STATIC_URL }}mptt_comments/js/mptt_comments.js"></script>
     <script src="{{ STATIC_URL }}js/favico.js"></script>
@@ -38,10 +38,18 @@
       });
     </script>
     {% block head %}{% endblock %}
+    <meta property="og:title" content="{% block fb_title %}TXRX Labs: Houston's Hackerspace{% endblock %}" />
+    <meta property="og:site_name" content="{{ SITE_NAME }}" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+    <meta property="og:description" content="{% block fb_description %}A project-based team of makers with backgrounds in the creative arts: electronics, metalworking, woodworking, rapid prototyping, computer science and security, screenprinting, fashion design, and even haute cuisine.{% endblock %}" />
+    {#! <meta property="og:image" content="https:///txrxlabs.org/" /> #}
+    <meta property="fb:app_id" content="" />
     <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     {% block analytics %}{{ ANALYTICS_CODE|safe }}{% endblock %}
+    <script type="text/javascript" src="//ws.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">stLight.options({publisher: "56794c5c-23aa-4e30-b62c-dcc177306755", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
   </head>
   <body>
     <div class="container">

@@ -4,12 +4,13 @@
 
 {% block header %}{% endblock %}
 {% block title %}{{ thing }} by {{ thing.user }}{% endblock %}
-
+{% block fb_title %}{{ thing }} by {{ thing.user }}{% endblock %}
+{% block fb_description %}{{ thing.get_short_description|implosivo|escape }}{% endblock %}
 {% block main %}
 <div class="row">
   <div class="col-sm-8">
     <div class="thing_detail">
-      {% include "widgets/thing_slideshow.html" %}
+      {% include "widgets/thing_slideshow.html" with show_bigger=1 %}
     </div>
   </div>
   <div class="col-sm-4">
@@ -52,6 +53,14 @@
       {% if thing.session %}
       <b>Course:</b> <a href="{{ thing.session.get_absolute_url }}">{{ thing.session.section.course }}</a>
       {% endif %}
+      <h3>Like what you see? Please Share</h3>
+      <p style="text-align: center; margin: 10px 0">
+        <span class="st_facebook_large" displayText="Facebook"></span>
+        <span class="st_twitter_large" displayText="Tweet" st_via="TXRXLabs"></span>
+        <span class="st_pinterest_large" displayText="Pinterest"></span>
+        <span class="st_googleplus_large" displayText="Google +"></span>
+        <span class="st_reddit_large" displayText="Reddit"></span>
+      </p>
     </section>
   </div>
 </div>

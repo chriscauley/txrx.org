@@ -6,6 +6,12 @@
     {% thumbnail photo|get_override:"landscape_crop" "750x500" crop="center" as im %}
     <div class="slide"{% if not forloop.first %} style="display:none;"{% endif %}>
       <img src="{{ im.url }}" width="750" height="500" />
+      {% if show_bigger %}
+      {% thumbnail photo.file "1200" crop="noop" as bigger %}
+      <a href="{{ bigger.url }}" class="full-screen" data-lightbox="slideshow">
+        <i class="fa fa-search-plus"></i></a>
+      {% endthumbnail %}
+      {% endif %}
       {% if photo.external_url %}
       <a href="{{ photo.external_url }}" class="glyphicon external {{ photo.external_type }}"
          onclick="iframeExternal(this);return false"></a>

@@ -35,6 +35,17 @@ function toggleCourses(name) {
   })
 }
 
+function applyFilters(that) {
+  var filters = $(that).closest("form").find("select");
+  var items = $(".filterable").show();
+  var subject = $("[name=subject]").val();
+  if ($("#show_closed").attr("checked")) { $(".course_list .past").show(); }
+  else { $(".course_list .past").hide(); }
+  items.filter(function() {
+      return $(this).data("subject").search(subject)<0;
+  }).hide();
+}
+
 function rsvp(session_id,url) {
   var row = $("#c"+session_id);
   row.addClass("loading");

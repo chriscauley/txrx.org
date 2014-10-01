@@ -5,9 +5,10 @@ import os
 import markdown
 from hashlib import md5
 
-from django.utils import simplejson
 from django import template
+from django.template.defaultfilters import striptags
 from django.utils.safestring import mark_safe
+from django.utils import simplejson
 from settings import MEDIA_ROOT
 
 from .syntax_color import _colorize_table
@@ -57,6 +58,11 @@ def explosivo(value,safe_mode=False):
 @register.filter
 def public_explosivo(value):
   return explosivo(value,safe_mode='escape')
+
+@register.filter
+def implosivo(value):
+  # like explosivo but it renders the page as plain text
+  return striptags(explosivo(value))
 
 def filter_jsfiddle(value):
   """Used to insert fiddle iframe. format: [jsfiddle "username/id" opt1=val1,opt2=val2...]"""

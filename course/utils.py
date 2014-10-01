@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 
 from membership.models import UserMembership
 from txrx.utils import reset_password
+import random
 
 def get_or_create_student(email,u_id=None):
   User = get_user_model()
@@ -16,7 +17,11 @@ def get_or_create_student(email,u_id=None):
   try:
     user = User.objects.get(usermembership__paypal_email=email)
   except User.DoesNotExist:
-    user, new = User.objects.get_or_create(email=email,defaults={'username':email[:30]})
+    username = email.split("@")[0]
+    if User.objects.filter(username=username):
+      # iff the username is taken, use this instead:
+      username = username + str(random.randint(1000,10000))
+    user, new = User.objects.get_or_create(email=email,defaults={'username':username})
     if new:
       profile = user.usermembership
       profile.paypal_email=profile.paypal_email or email

@@ -12,7 +12,7 @@ from media.models import FilesMixin, PhotosMixin
 from geo.models import Location
 from event.models import OccurrenceModel, reverse_ics
 from tool.models import ToolsMixin
-from txrx.utils import cached_method,cached_property
+from txrx.utils import cached_method, cached_property, latin1_to_ascii
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
@@ -53,6 +53,17 @@ class Term(models.Model):
   class Meta:
     ordering = ('-start',)
 
+class CourseManager(models.Manager):
+  def courses_needed(self,*args,**kwargs):
+    # must only look at active courses
+    kwargs['active'] = kwargs.get('active',True)
+    kwargs['reschedule_on__lte'] = datetime.date.today()
+    query_set = self.filter(*args,**kwargs)
+
+    # select only courses with only full and closed sessions
+    courses = [course for course in query_set if not course.open_sessions]
+    return courses
+
 class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   name = models.CharField(max_length=64)
   slug = lambda self: slugify(self.name)
@@ -67,6 +78,9 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   get_absolute_url = lambda self: self.sessions[0].get_absolute_url()
   sessions = lambda self: Session.objects.filter(section__course=self)
   sessions = cached_property(sessions,name="sessions")
+  _ht = "The dashboard (/admin/) won't bug you to reschedule until after this date"
+  reschedule_on = models.DateField(default=datetime.date.today,help_text=_ht)
+  objects = CourseManager()
   @cached_property
   def active_sessions(self):
     first_date = datetime.datetime.now()-datetime.timedelta(21)
@@ -147,7 +161,7 @@ class Session(FeedItemModel,PhotosMixin):
   time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
   branding = models.ForeignKey(Branding,null=True,blank=True)
 
-  __unicode__ = lambda self: "%s (%s - %s)"%(self.section, self.user,self.first_date.date())
+  __unicode__ = lambda self: latin1_to_ascii("%s (%s - %s)"%(self.section, self.user,self.first_date.date()))
   title = property(lambda self: "%s (%s)"%(self.section.course.name,self.first_date.date()))
 
   in_progress = property(lambda self: self.archived and self.last_date>datetime.datetime.now())
@@ -228,6 +242,7 @@ class Session(FeedItemModel,PhotosMixin):
   @cached_method
   def get_absolute_url(self):
     return reverse('course:detail',args=[self.slug])
+  get_admin_url = lambda self: "/admin/course/session/%s/"%self.id
   get_rsvp_url = cached_method(lambda self: reverse('course:rsvp',args=[self.id]),name="get_rsvp_url")
   @cached_property
   def last_date(self):

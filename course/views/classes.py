@@ -14,7 +14,6 @@ from notify.models import NotifyCourse
 from db.utils import get_or_none
 from event.utils import make_ics,ics2response
 
-
 from paypal.standard.ipn.models import *
 import datetime, simplejson
 
@@ -118,11 +117,11 @@ def index(request,term_id=None):
     for subject in session.all_subjects:
       active_subjects[subject.pk] = active_subjects.get(subject.pk,0) + 1
   for subject in subject_filters['options']:
-    subject.active_classes = active_subjects.get(subject.pk,0)
+    subject.count = active_subjects.get(subject.pk,0)
     subject.subfilters = []
     for child in subject.subject_set.all():
-      child.active_classes = active_subjects.get(child.pk,0)
-      if child.active_classes:
+      child.count = active_subjects.get(child.pk,0)
+      if child.count:
         subject.subfilters.append(child)
   if request.user.is_authenticated():
     user_sessions = sessions.filter(enrollment__user=request.user.id)
@@ -263,3 +262,17 @@ def start_checkout(request):
     if new_total > session.section.max_students:
       out.append({'pk': session.pk,'remaining': session.section.max_students-session.total_students})
   return HttpResponse(simplejson.dumps(out))
+
+def delay_reschedule(request,course_pk,n_months):
+  user = request.user
+  if not (user.is_superuser or user.groups.filter(name="Class Coordinator")):
+    raise Http404()
+  course = get_object_or_404(Course,pk=course_pk)
+  if n_months == "close":
+    course.active = False
+    messages.success(request,"%s has been marked as inactive"%course)
+  else:
+    course.reschedule_on = datetime.datetime.now()+datetime.timedelta(int(n_months)*30)
+    messages.success(request,"%s has been delayed for %s months"%(course,n_months))
+  course.save()
+  return HttpResponseRedirect(reverse("admin:index"))
