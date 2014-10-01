@@ -199,7 +199,11 @@ def delay_reschedule(request,course_pk,n_months):
   if not (user.is_superuser or user.groups.filter(name="Class Coordinator")):
     raise Http404()
   course = get_object_or_404(Course,pk=course_pk)
-  course.reschedule_on = datetime.datetime.now()+datetime.timedelta(int(n_months)*30)
+  if n_months == "close":
+    course.active = False
+    messages.success(request,"%s has been marked as inactive"%course)
+  else:
+    course.reschedule_on = datetime.datetime.now()+datetime.timedelta(int(n_months)*30)
+    messages.success(request,"%s has been delayed for %s months"%(course,n_months))
   course.save()
-  messages.success(request,"%s has been delayed for %s months"%(course,n_months))
   return HttpResponseRedirect(reverse("admin:index"))

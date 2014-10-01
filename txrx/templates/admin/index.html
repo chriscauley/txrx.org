@@ -93,6 +93,9 @@
                   <button class="btn btn-warning" title="Delay for {{ n }} Months">
                     <i class="icon-plus"></i>{{ n }} Mo</button></a>
                 {% endfor %}
+                <a href="{% url "course:delay_reschedule" course.pk "close" %}">
+                  <button class="btn btn-warning" title="Delay for {{ n }} Months">
+                    Deactivate</button></a>
               </dd>
             </dl>
         </td></tr>
