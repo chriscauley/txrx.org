@@ -16,13 +16,19 @@ class CourseCompletionInline(admin.TabularInline):
 
 class CourseAdmin(admin.ModelAdmin):
   list_display = ("name","tool_count","photo_count")
+  readonly_fields = ("_notifies",)
   filter_horizontal = ("subjects",)
   inlines = [CourseCompletionInline, TaggedPhotoInline, TaggedToolInline, TaggedFileInline]
   def tool_count(self,obj):
     return len(obj.get_tools())
   def photo_count(self,obj):
     return len(obj.get_photos())
-
+  def _notifies(self,obj):
+    out = ''
+    for notify in obj.notifycourse_set.all():
+      out += "%s<br/>"%notify.user.email
+    return out
+  _notifies.allow_tags = True
   # duplicated from models.py because of how the admin handles M2M
   def save_related(self, request, form, formsets, change):
     super(CourseAdmin, self).save_related(request, form, formsets, change)
