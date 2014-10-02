@@ -14,6 +14,7 @@ function addClass(session_id) {
   var session = window.SESSIONS_ON_PAGE[session_id];
   addItem(session.name,session.fee,session_id);
   toggleCourses(session.name);
+  $("#cartModal").modal({show:true})
 }
 
 function addItem(name,price,id) {
@@ -22,11 +23,11 @@ function addItem(name,price,id) {
 
 function toggleCourses(name) {
   $(".in-cart").removeClass("in-cart");
-  for (id in simpleCart.items) { $("#c"+id).addClass("in-cart") }
+  for (id in simpleCart.items) { $("#s"+id).addClass("in-cart"); console.log("#s"+id) }
   simpleCart.update();
   $("#cartEmpty").hide();
-  if ($("#cart .itemContainer").length == 0) { $("#cartEmpty").show(); $("#mobileCart").hide() }
-  else { $("#mobileCart").show(); }
+  if ($("#cart .itemContainer").length == 0) { $("#cartEmpty").show(); $("#mobileCart,.btn-cart").hide() }
+  else { $("#mobileCart,btn-cart").show(); }
   $(".recentAdd").removeClass("recentAdd");
   $(".itemContainer").each(function() {
     if ($(this).find(".itemName").text() == name) {

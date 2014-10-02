@@ -32,6 +32,13 @@
       {% endfor %}
     </ul>
     <ul class="nav navbar-nav navbar-right auth">
+      <li>
+        <button class="btn btn-primary btn-cart" data-toggle="modal" data-target="#cartModal">
+          <i class="fa fa-shopping-cart"></i>
+          <span class="simpleCart_quantity"></span> items
+          (<span class="simpleCart_total"></span>)
+        </button>
+      </li>
       <li class="social">
         {% for n in social_nav %}
         <a href="{{ n.url }}"><i class="fa fa-{{ n.name }}"></i></a>
