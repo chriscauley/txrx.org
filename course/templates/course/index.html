@@ -16,22 +16,25 @@
     </div>
   </h1>
 </div>
+<div style="clear:both;"></div>
 <div class="col-sm-6 col-md-4 col-lg-3" id="side">
-<form onsubmit="applyFilters(this);return false;" class="filters">
-  <div>
-    <input id="show_closed" type="checkbox" onchange="$(this).closest('form').submit();" />
-    <label for="show_closed">Show Past Sections</label>
-    <script type="text/javascript">
-      $(document).ready(function() { $("#show_closed").change() });
-    </script>
-  </div>
-  {% include "course/_filters.html" %}
-</form>
+  <input type="checkbox" id="toggle_filters" />
+  <label for="toggle_filters" class="btn btn-success">Filter by Subject</label>
+  <form onsubmit="applyFilters(this);return false;" class="filters course_filters">
+    <div>
+      <input id="show_closed" type="checkbox" onchange="$(this).closest('form').submit();" />
+      <label for="show_closed">Show Past Sections</label>
+      <script type="text/javascript">
+        $(document).ready(function() { $("#show_closed").change() });
+      </script>
+    </div>
+    {% include "course/_filters.html" %}
+  </form>
 </div>
 <div class="col-sm-6 col-md-8 col-lg-9">
   <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#all_classes" role="tab" data-toggle="tab">All Classes</a></li>
-    <li><a href="#my_classes" role="tab" data-toggle="tab">My Classes ({{ user_session|length }})</a></li>
+    <li><a href="#my_classes" role="tab" data-toggle="tab">My Classes ({{ user_sessions|length }})</a></li>
   </ul>
   <div class="tab-content">
     <div class="tab-pane active" id="all_classes">

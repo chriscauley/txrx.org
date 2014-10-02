@@ -127,6 +127,14 @@ form label.required {
 
 form.filters { margin-bottom: 10px; }
 
+#toggle_filters,[for=toggle_filters] { display:none; }
+
+@media (max-width: @screen-xs-max) {
+  .course_filters { max-height: 0; overflow: hidden; transition: 0.5s; }
+  [for=toggle_filters] { display: block; margin-bottom: 10px; }
+  #toggle_filters:checked ~ .course_filters { max-height: 1000px; }
+}
+
 .list_filter {
   [type=radio] { display: none; }
   label {
