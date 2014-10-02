@@ -1,0 +1,26 @@
+{% for f in filters %}
+<div id="filter_{{ f.slug }}" onchange="$(this).closest('form').submit();" class="list_filter btn-group-vertical">
+  <input type="radio" value="" for="all_{{ f.slug }}" checked="checked" name="{{ f.slug }}"/>
+  <label for="all_{{ f.slug }}" class="btn btn-default">
+    All {{ f.name }}s
+  </label>
+  {% for o in f.options %}
+  <input type="radio" value="{{ o.value }}" id="filter_{{ f.slug }}_{{ o.value }}" name="{{ f.slug }}"/>
+  <label class="btn btn-default" for="filter_{{ f.slug }}_{{ o.value }}"{% if not o.count %}
+         disabled="disabled"{% endif %}>
+    {{ o.name }} {% if o.count or o.count == 0 %}({{ o.count }}){% endif %}
+  </label>
+  {% for s in o.subfilters %}{# These will not appear if empty #}
+  <input type="radio" value="{{ s.value }}" id="filter_{{ f.slug }}_{{ s.value }}" name="{{ f.slug }}"/>
+  <label for="filter_{{ f.slug }}_{{ s.value }}" class="btn btn-default">
+    -- {{ s.name }} ({{ s.count }})
+  </label>
+  {% endfor %}
+  {% endfor %}
+</div>
+<script>
+  $.ready(function() {
+    $("#filter_{{ f.slug }} [name={{ f.slug }}]").change(function() { $(this).closest("form").submit(); });
+  });
+</script>
+{% endfor %}

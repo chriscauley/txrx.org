@@ -5,10 +5,8 @@
 {% block header %}{% endblock %}
 
 {% block main %}
-<div class="col-sm-6 col-md-4" id="side">
-  {% include "widgets/filters.html" %}
-</div>
-<div class="col-sm-6 col-md-8">
+<div style="display:none;">{% include "course/_cart.html" %}</div>
+<div class="col-xs-12">
   <h1 class="page_title">
     {{ term.name }} Classes
     <div class="calendar_widget">
@@ -17,6 +15,20 @@
       {% include "course/_add_to_calendar.html" with calendar_event=occurrence calendar_context="classes" %}
     </div>
   </h1>
+</div>
+<div class="col-sm-6 col-md-4 col-lg-3" id="side">
+<form onsubmit="applyFilters(this);return false;" class="filters">
+  <div>
+    <input id="show_closed" type="checkbox" onchange="$(this).closest('form').submit();" />
+    <label for="show_closed">Show Past Sections</label>
+    <script type="text/javascript">
+      $(document).ready(function() { $("#show_closed").change() });
+    </script>
+  </div>
+  {% include "course/_filters.html" %}
+</form>
+</div>
+<div class="col-sm-6 col-md-8 col-lg-9">
   <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#all_classes" role="tab" data-toggle="tab">All Classes</a></li>
     <li><a href="#my_classes" role="tab" data-toggle="tab">My Classes ({{ user_session|length }})</a></li>

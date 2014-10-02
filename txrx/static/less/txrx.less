@@ -127,6 +127,16 @@ form label.required {
 
 form.filters { margin-bottom: 10px; }
 
+.list_filter {
+  [type=radio] { display: none; }
+  label {
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+  }
+  input:checked + label { font-weight: bold; }
+}
+
 #bot_right,#mobileCart {
   border: double 4px;
   bottom: 0px;

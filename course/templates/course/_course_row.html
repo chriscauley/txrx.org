@@ -17,6 +17,10 @@
       {% endif %}
       {{ course }}</a>
     {% for session in course.active_sessions %}
+    {% if forloop.counter == 4 and course.active_sessions|length > 4 %}
+    <input type="checkbox" id="show_sessions_{{ course.pk }}" class="session_toggle" />
+    <label for="show_sessions_{{ course.pk }}"> {{ course.active_sessions|length|add:-4 }} more sessions</label>
+    {% endif %}
     <div class="session">
       <div class="CartBox">
         {% include "course/_new_enroll_link.html" %}
@@ -31,7 +35,7 @@
     <div class="bottom">
       <div class="subjects">
         {% for subject in course.subjects.all %}
-        {{ subject|upper }}
+        <div>{{ subject.name|upper }}</div>
         {% endfor %}
       </div>
       {#! todo not implimented #}

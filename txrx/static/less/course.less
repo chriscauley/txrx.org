@@ -40,10 +40,21 @@
       display: inline-block;
       min-height: 1em;
       vertical-align: top;
-      width: 49%;
     }
     .subjects { color: @borderGray; overflow: hidden; }
     .has_notes { float: right; padding: 0 10px; }
+  }
+  .session_toggle {
+    display: none;
+    ~ label {
+      cursor: pointer;
+      &:before { content: "Show"; }
+    }
+    ~ .session { display: none; }
+    &:checked {
+      ~ label { &:before { content: "Hide"; } }
+      ~ .session { display: block; }
+    }
   }
 }
 

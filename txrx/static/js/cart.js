@@ -36,14 +36,20 @@ function toggleCourses(name) {
 }
 
 function applyFilters(that) {
-  var filters = $(that).closest("form").find("select");
+  // Controls filters found in widgets/filters.html and course/_filters.html
+  var form = $(that);
+  var data = form.serializeArray();
   var items = $(".filterable").show();
-  var subject = $("[name=subject]").val();
   if ($("#show_closed").attr("checked")) { $(".course_list .past").show(); }
   else { $(".course_list .past").hide(); }
-  items.filter(function() {
-      return $(this).data("subject").search(subject)<0;
-  }).hide();
+  for (var i=0; i<data.length;i++) {
+    var name = data[i].name;
+    var value = data[i].value;
+    if (!value) { continue }
+    items.filter(function() {
+      return $(this).data(name).search(value)<0;
+    }).hide();
+  }
 }
 
 function rsvp(session_id,url) {

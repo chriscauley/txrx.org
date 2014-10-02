@@ -38,15 +38,19 @@ def new_index(request):
   courses = Course.objects.filter(section__session__first_date__gte=first_date).distinct()
   subject_filters = get_filters()['subject']
   active_subjects = {}
+  closed_subjects = {}
+  yesterday = datetime.datetime.now()-datetime.timedelta(0.5)
   for course in courses:
     for subject in course.subjects.all():
-      active_subjects[subject.pk] = active_subjects.get(subject.pk,0) + 1
+      closed_subjects[subject.pk] = closed_subjects.get(subject.pk,0) + 1
+      if not course.last_date < yesterday:
+        active_subjects[subject.pk] = active_subjects.get(subject.pk,0) + 1
   for subject in subject_filters['options']:
-    subject.active_classes = active_subjects.get(subject.pk,0)
+    subject.count = active_subjects.get(subject.pk,0)
     subject.subfilters = []
     for child in subject.subject_set.all():
-      child.active_classes = active_subjects.get(child.pk,0)
-      if child.active_classes:
+      if active_subjects.get(child.pk,0):
+        child.count = active_subjects.get(child.pk,0)
         subject.subfilters.append(child)
   user_courses = []
   user_sessions = []
@@ -64,7 +68,7 @@ def new_index(request):
     'term': term,
     'user_sessions': user_sessions,
     'user_courses': user_courses,
-    'yesterday':datetime.datetime.now()-datetime.timedelta(0.5),
+    'yesterday': yesterday,
   }
   return TemplateResponse(request,"course/index.html",values)
 
