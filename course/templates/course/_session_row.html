@@ -1,4 +1,4 @@
-{% load txrx_tags thumbnail crop_util %}
+{% load thumbnail crop_util %}
 <div class="course filterable well{% if session.full %} full{% endif %}{% if session.last_date < yesterday %} past{% endif %}{% if session in user_sessions %} success{% endif %}"
      id="c{{session.id}}" data-subject="{% for subject in session.all_subjects %}{{ subject }},{% endfor %}"
      data-date="{{ session.first_date|date:"Ymd" }}">
@@ -19,7 +19,7 @@
     <div class="dates"><small>
         {{ session.get_short_dates }}
         with <a href="{% url "member_detail" session.user.username %}">
-          <i class="icon-user"></i>{{ session.get_instructor_name|noemail }}</a>
+          <i class="icon-user"></i>{{ session.get_instructor_name }}</a>
     </small></div>
     <div class="bottom">
       <div class="subjects">

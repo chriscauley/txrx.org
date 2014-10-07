@@ -41,6 +41,7 @@ def new_index(request):
   closed_subjects = {}
   yesterday = datetime.datetime.now()-datetime.timedelta(0.5)
   for course in courses:
+    course.set_user_fee(request.user)
     for subject in course.subjects.all():
       closed_subjects[subject.pk] = closed_subjects.get(subject.pk,0) + 1
       if not course.last_date < yesterday:
@@ -61,7 +62,7 @@ def new_index(request):
     for session in user_sessions:
       user_courses.append(session)
   user_sessions = sorted(list(user_sessions),key=lambda s: s.first_date)
-  
+  courses = sorted(courses,key=lambda c: c.first_date)
   values = {
     'courses': courses,
     'filters': [subject_filters],
@@ -73,19 +74,17 @@ def new_index(request):
   return TemplateResponse(request,"course/index.html",values)
 
 def new_detail(request,pk,slug):
-  session = get_object_or_404(Session,slug=slug)
-  session.set_user_fee(request.user)
+  course = get_object_or_404(Course,pk=pk)
+  course.set_user_fee(request.user)
   enrollment = None
   notify_course = None
   if request.user.is_authenticated():
-    enrollment = Enrollment.objects.filter(session=session,user=request.user)
-    notify_course = get_or_none(NotifyCourse,user=request.user,course=session.section.course)
-  kwargs = dict(first_date__gte=datetime.datetime.now(),section__course=session.section.course)
-  alternate_sessions = Session.objects.filter(**kwargs).exclude(id=session.id)
-  kwargs = dict(first_date__gte=datetime.datetime.now(),
-                section__course__subjects__in=session.section.course.subjects.all())
-  related_sessions = Session.objects.filter(**kwargs).exclude(id=session.id)
-  related_sessions = [s for s in related_sessions if not (s.closed or s.full)]
+    enrollment = Enrollment.objects.filter(session__section__course=course,user=request.user)
+    notify_course = get_or_none(NotifyCourse,user=request.user,course=course)
+  kwargs = dict(section__session__first_date__gte=datetime.datetime.now(),
+                subjects__in=course.subjects.all())
+  related_courses = Course.objects.filter(**kwargs).exclude(id=course.id)
+  #! broken for the time
   if request.POST:
     if not (request.user.is_superuser or request.user == session.user):
       messages.error(request,"Only an instructor can do that")
@@ -97,10 +96,9 @@ def new_detail(request,pk,slug):
     messages.success(request,"Course completion status saved for all students in this class.")
     return HttpResponseRedirect(request.path)
   values = {
-    'session': session,
+    'course': course,
     'enrollment': enrollment,
-    'alternate_sessions': alternate_sessions,
-    'related_sessions': related_sessions,
+    'related_courses': related_courses,
     'notify_course': notify_course,
   }
   return TemplateResponse(request,"course/detail.html",values)

@@ -1,15 +1,14 @@
 @cartWidth: 100px;
-@pictureWidth: 120px;
+@pictureWidth: 150px;
 
 .course {
-  min-height: 92px;
+  min-height: 112px;
   overflow: hidden;
   position: relative;
   width: 100%;
 }
 
 .course .picture {
-  height: 80px;
   left: 5px;
   position: absolute;
   top: 5px;
@@ -19,7 +18,7 @@
 }
 
 .course .details {
-  padding: 0 @cartWidth+10px 0 @pictureWidth+10px;
+  padding: 0 65px 0 @pictureWidth+10px;
   position: relative;
   .title {
     display: block;
@@ -30,6 +29,14 @@
   }
   .dates {
     border-bottom: 1px @borderGray solid;
+  }
+  .price {
+    color: black;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    width: 65px;
   }
   .bottom {
     line-height: 1;
@@ -89,7 +96,6 @@
 
 .course.new {
   .details {
-    padding-right: 0;
     .title {
       height: auto;
       min-height: 0;
@@ -279,10 +285,13 @@
 
 @media (max-width: @screen-sm-max) {
   .course {
-    .price { background: rgba(255,255,255,0.5); }
-    height: auto;
     .details {
       padding: 0;
+      .price {
+        background: rgba(255,255,255,0.5);
+        bottom: 100%;
+        top: auto;
+      }
     }
     .picture {
       height: auto;

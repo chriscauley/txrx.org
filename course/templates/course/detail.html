@@ -30,8 +30,8 @@
        <div class="details">
          <div class="instructor">
            Taught by
-           <a href="{% url "instructor_detail" session.user.username %}">
-             <i class="icon-user"></i>{{ session.get_instructor_name }}</a>
+           <a href="{% url "instructor_detail" course.last_session.user.username %}">
+             <i class="icon-user"></i>{{ course.last_session.get_instructor_name }}</a>
          </div>
          <ol class="dates">
            {% for classtime in session.classtime_set.all %}
@@ -92,7 +92,7 @@
            </button>
          </a>
          {% else %}
-         <a href="{% url "notify_course" session.id %}"><button class="btn btn-success">
+         <a href="{% url "notify_course" course.id %}"><button class="btn btn-success">
              Email me the next time this class is scheduled</button></a>
          {% endif %}
        </p>

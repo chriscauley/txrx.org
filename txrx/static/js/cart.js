@@ -41,6 +41,7 @@ function applyFilters(that) {
   var form = $(that);
   var data = form.serializeArray();
   var items = $(".filterable").show();
+  console.log($(".course_list .past").length);
   if ($("#show_closed").attr("checked")) { $(".course_list .past").show(); }
   else { $(".course_list .past").hide(); }
   for (var i=0; i<data.length;i++) {

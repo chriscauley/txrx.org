@@ -81,6 +81,10 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   _ht = "The dashboard (/admin/) won't bug you to reschedule until after this date"
   reschedule_on = models.DateField(default=datetime.date.today,help_text=_ht)
   objects = CourseManager()
+  def set_user_fee(self,user):
+    self.user_fee = self.last_session.section.fee
+    if user.is_authenticated():
+      self.user_fee = self.user_fee*(100-user.usermembership.membership.discount_percentage)//100
   @cached_property
   def active_sessions(self):
     first_date = datetime.datetime.now()-datetime.timedelta(21)
@@ -91,7 +95,7 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   def open_sessions(self):
     if self.sessions:
       return [s for s in self.sessions if not s.closed and not s.full]
-  last_session = lambda self: (self.sessions or [None])[0]
+  last_session = property(lambda self: (self.sessions or [None])[0])
   def save(self,*args,**kwargs):
     super(Course,self).save(*args,**kwargs)
     #this has to be repeated in the admin because of how that works
