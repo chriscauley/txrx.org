@@ -2,131 +2,128 @@
 {% load mptt_comments_tags thumbnail %}
 {% load short_codes %}
 
-{% block title %}{{ session.section.course }}{% endblock %}
+{% block title %}{{ course }}{% endblock %}
 {% block header %}{% endblock %}
 
-{% block fb_title %}{{ session.section.course }} at TXRX Labs{% endblock %}
+{% block fb_title %}{{ course }} at TXRX Labs{% endblock %}
 {% block fb_description %}{{ session.section.description|implosivo|escape }}{% endblock %}
 
 {% block main %}
-<div class="col-sm-9">
-  <div class="course-detail row" data-subject="{{ session.subjects|join:"," }}" id="c{{ session.id }}"
-       {%if not session.course.closed%}data-open{%endif%}
-       data-date="{{ session.starttime|date:"Ymd" }}">
-    <div class="col-xs-12">
-      <h1 class="page_title">{{ session.section.course }}</h1>
-      <div class="subjects">
-        <b>Subject{{ session.subjects|pluralize:"s" }}</b>:
-        {{ session.subjects|join:", " }}
+<h1 class="page_title">
+  {{ course }}
+</h1>
+<div class="row">
+  <div class="course-detail col-sm-7 col-md-8" data-subject="{{ session.subjects|join:"," }}" id="c{{ session.id }}"
+       {%if not session.course.closed%}data-open{%endif%} data-date="{{ session.starttime|date:"Ymd" }}">
+    {% include "widgets/thing_slideshow.html" with thing=course %}
+    <div class="details">
+      <div class="subjects pull-right">
+        <b>Subject{{ course.subjects.all|pluralize:"s" }}</b>:
+        {{ course.subjects.all|join:", " }}
       </div>
-      <div class="CartBox">
+      <ol class="dates">
+      </ol>
+      <div class="calendar_widget">
+        <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">
+          <span class="glyphicon glyphicon-calendar"></span> Add to calendar</a>
+        {% include "course/_add_to_calendar.html" with calendar_event=session calendar_context="classes" %}
+      </div>
+      {% if session.branding %}
+      {% thumbnail session.branding.image "620x100" as im %}
+      <img src="{{ im.url }}" width="620" />
+      {% endthumbnail %}
+      {% endif %}
+      {% with section=course.last_section %}
+      <div class="description">
+        {{ section.description|explosivo }}
+      </div>
+      {% if section.fee_notes %}
+      <p class="notes"><b>* Fee Notes:</b> {{ section.fee_notes }}</p>
+      {% endif %}
+      {% if section.requirements %}
+      <p class="notes"><b>Requirements:</b> {{ section.requirements }}</p>
+      {% endif %}
+      {% if section.prerequisites %}
+      <p class="notes"><b>Prerequisites:</b> {{ section.prerequisites }}</p>
+      {% endif %}
+      {% endwith %}
+    </div>
+    {% if session.get_files %}
+    <div>
+      <h2>Relevant files</h2>
+      {% for f in session.get_files %}
+      <a href="{{ f.file.url }}" target="_blank">{{ f.name }}</a><br/>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if alternate_sessions %}
+    <p class="alternate_sessions">
+      <h4>Can't&nbsp;make&nbsp;it&nbsp;to&nbsp;this&nbsp;class? Checkout&nbsp;these&nbsp;other&nbsp;sessions:</h4>
+      {% for s in alternate_sessions %}
+      <div>
+        {% if s.full %}<strong class="full">[FULL]</strong>{% endif %}
+        <a href="{{ s.get_absolute_url }}"><b>[{{ s.first_date|date:"M j" }}]</b> {{ s.section.course.get_short_name }}</a>
+      </div>
+      {% endfor %}
+    </p>
+    {% endif %}
+    <div style="clear: both;"></div>
+    <div class="col-xs-12">{% display_comment_toplevel_for course %}</div>
+  </div>
+  <div class="col-sm-5 col-md-4" id="side">
+    {% if enrollment %}
+    <div class="well">
+      <h2>You are enrolled in this course</h2>
+    </div>
+    {# {% include "course/_student_panel.html" %} #}
+    {% else %}
+    <div class="SessionList">
+      <h3>
+        {% if course.active_sessions %}
+        {{ course.active_sessions|length }} upcoming session{{ course.active_sessions|pluralize }}:
+        {% else %}
+        There are no upcoming sessions.
+        {% endif %}
+      </h3>
+      {% for session in course.active_sessions %}
+      <div class="well session">
+        <ul class="dates">
+          {% for classtime in session.classtime_set.all %}
+          <li>
+            {{ classtime.start|date:"l F j<\b\r /> g:i A"|safe }}
+            -
+            {{ classtime.end_time|time:"g:i A" }}
+          </li>
+          {% endfor %}
+          <li>with {{ session.user.username }}</li>
+        </ul>
         {% include "course/_enroll_link.html" %}
       </div>
+      {% endfor %}
+      <p class="notify_course">
+        {% if notify_course %}
+        <a href="{% url "clear_notification" "notify_course" request.user.id notify_course.id %}">
+          <button class="btn btn-danger">
+            Don't send me emails when this class is scheduled
+          </button>
+        </a>
+        {% else %}
+        <a href="{% url "notify_course" course.id %}"><button class="btn btn-success">
+            Email me the next time this class is scheduled</button></a>
+        {% endif %}
+      </p>
     </div>
-    <div class="col-sm-6">
-      {% include "widgets/thing_slideshow.html" with thing=session %}
-    </div>
-    <div class="col-sm-6">
-       <div class="details">
-         <div class="instructor">
-           Taught by
-           <a href="{% url "instructor_detail" course.last_session.user.username %}">
-             <i class="icon-user"></i>{{ course.last_session.get_instructor_name }}</a>
-         </div>
-         <ol class="dates">
-           {% for classtime in session.classtime_set.all %}
-           <li>
-             {{ classtime.start|date:"l F j, g:i" }}
-             -
-             {{ classtime.end_time|time:"g:i A" }}
-           </li>
-           {% endfor %}
-         </ol>
-         <div class="calendar_widget">
-           <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">
-             <span class="glyphicon glyphicon-calendar"></span> Add to calendar</a>
-           {% include "course/_add_to_calendar.html" with calendar_event=session calendar_context="classes" %}
-         </div>
-         {% if session.branding %}
-         {% thumbnail session.branding.image "620x100" as im %}
-         <img src="{{ im.url }}" width="620" />
-         {% endthumbnail %}
-         {% endif %}
-         <div class="description">
-           {{ session.section.description|explosivo }}
-         </div>
-         {% if session.section.fee_notes %}
-         <p class="notes"><b>* Fee Notes:</b> {{ session.section.fee_notes }}</p>
-         {% endif %}
-         {% if session.section.requirements %}
-         <p class="notes"><b>Requirements:</b> {{ session.section.requirements }}</p>
-         {% endif %}
-         {% if session.section.prerequisites %}
-         <p class="notes"><b>Prerequisites:</b> {{ session.section.prerequisites }}</p>
-         {% endif %}
-       </div>
-       {% if session.get_files %}
-       <div>
-         <h2>Relevant files</h2>
-         {% for f in session.get_files %}
-         <a href="{{ f.file.url }}" target="_blank">{{ f.name }}</a><br/>
-         {% endfor %}
-       </div>
-       {% endif %}
-       {% if alternate_sessions %}
-       <p class="alternate_sessions">
-         <h4>Can't&nbsp;make&nbsp;it&nbsp;to&nbsp;this&nbsp;class? Checkout&nbsp;these&nbsp;other&nbsp;sessions:</h4>
-         {% for s in alternate_sessions %}
-         <div>
-           {% if s.full %}<strong class="full">[FULL]</strong>{% endif %}
-           <a href="{{ s.get_absolute_url }}"><b>[{{ s.first_date|date:"M j" }}]</b> {{ s.section.course.get_short_name }}</a>
-         </div>
-         {% endfor %}
-       </p>
-       {% endif %}
-       <p class="notify_course">
-         {% if notify_course %}
-         <a href="{% url "clear_notification" "notify_course" request.user.id notify_course.id %}">
-           <button class="btn btn-danger">
-             Don't send me emails when this class is scheduled
-           </button>
-         </a>
-         {% else %}
-         <a href="{% url "notify_course" course.id %}"><button class="btn btn-success">
-             Email me the next time this class is scheduled</button></a>
-         {% endif %}
-       </p>
-    </div>
-    <div style="clear: both;"></div>
-    <div class="col-xs-12">{% display_comment_toplevel_for session %}</div>
+    {% endif %}
+    <center>
+      <span class="st_facebook_large" displayText="Facebook"></span>
+      <span class="st_twitter_large" displayText="Tweet" st_via="TXRXLabs"></span>
+      <span class="st_pinterest_large" displayText="Pinterest"></span>
+      <span class="st_googleplus_large" displayText="Google +"></span>
+      <span class="st_reddit_large" displayText="Reddit"></span>
+    </center>
+    {% if request.user.is_staff %}
+    {% include "course/_instructor_panel.html" %}
+    {% endif %}
   </div>
-</div>
-<div class="col-sm-3" id="side">
-  <center>
-    <span class="st_facebook_large" displayText="Facebook"></span>
-    <span class="st_twitter_large" displayText="Tweet" st_via="TXRXLabs"></span>
-    <span class="st_pinterest_large" displayText="Pinterest"></span>
-    <span class="st_googleplus_large" displayText="Google +"></span>
-    <span class="st_reddit_large" displayText="Reddit"></span>
-  </center>
-  {% if request.user.is_staff %}
-  {% include "course/_instructor_panel.html" %}
-  {% elif enrollment %}
-  <div class="well">
-    <h2>You are enrolled in this course</h2>
-  </div>
-  {# {% include "course/_student_panel.html" %} #}
-  {% endif %}
-  {% include "course/_cart.html" %}
-  {% if session.related_sessions %}
-  <div class="related_sessions">
-    <h4>Checkout these similar classes!</h4>
-    {% for s in session.related_sessions|slice:":5" %}
-    <div>
-      <a href="{{ s.get_absolute_url }}"><b>[{{ s.first_date|date:"M j" }}]</b> {{ s.section.course.get_short_name }}</a>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
 </div>
 {% endblock %}

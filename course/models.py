@@ -96,6 +96,7 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
     if self.sessions:
       return [s for s in self.sessions if not s.closed and not s.full]
   last_session = property(lambda self: (self.sessions or [None])[0])
+  last_section = property(lambda self: self.last_session.section if self.last_session else None)
   def save(self,*args,**kwargs):
     super(Course,self).save(*args,**kwargs)
     #this has to be repeated in the admin because of how that works

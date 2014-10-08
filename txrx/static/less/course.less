@@ -65,6 +65,7 @@
   }
 }
 
+// Depracated #!
 .CartBox {
   font-size: 20px;
   height: 80px;
@@ -86,6 +87,85 @@
     font-size: 18px;
     line-height: 1;
     padding: 3px;
+    width: 100%;
+  }
+}
+
+.SessionList {
+  .session {
+    position: relative;
+    .RsvpLink, .EnrollLink {
+      text-align: center;
+    }
+    .title {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .drop { display: none; }
+  }
+}
+/*
+.RsvpLink {
+  .is_full,.unrsvp { display: none; }
+  &.attending {
+    .unrsvp { display: inline-block; }
+    .rsvp { display: none; }
+  }
+  .number_attending {
+    bottom: 100%;
+    left: 0;
+    position: absolute;
+  }
+}
+.full .RsvpLink {
+  .rsvp { display: none; }
+  .is_full { display: block; }
+  .not_full { display: none; }
+}
+*/
+.RsvpLink .message {
+  color: black;
+  bottom: 0;
+  display: none;
+  background: white;
+  box-shadow: inset 0 0 5px #55F;
+  padding: 5px 20px 5px 5px;
+  position: absolute;
+  right: 100%;
+  text-decoration: none;
+  width: 300px;
+  &:after {
+    background: url("/static/img/icon_x_red.png") no-repeat center;
+    color: #F33;
+    content: "";
+    display: block;
+    font-size: 1.5em;
+    position: absolute;
+    height: 10px;
+    line-height: 10px;
+    margin-top: -5px;
+    right: 10px;
+    top: 50%;
+    width: 10px;
+  }
+}
+
+@media (max-width: @screen-sm-max) {
+  .RsvpLink .message {
+    bottom: auto;
+    right: 0;
+    width: 213px;
+  }
+}
+
+.loading .RsvpLink {
+  &:before {
+    background: url(/static/img/loading.gif) center rgba(150,150,150,0.8) no-repeat;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
     width: 100%;
   }
 }
@@ -204,83 +284,8 @@
   .btn { white-space: normal; }
 }
 
-.RsvpLink, .EnrollLink {
-  display: block;
-  position: relative;
-  text-align: center;
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  width: 100%;
-}
-
 .recentAdd {
   box-shadow: inset 0 0 5px #3ac2f5, 0 0 5px #3ac2f5;
-}
-
-.RsvpLink {
-  .is_full,.unrsvp { display: none; }
-  &.attending {
-    .unrsvp { display: inline-block; }
-    .rsvp { display: none; }
-  }
-  .number_attending {
-    bottom: 100%;
-    left: 0;
-    position: absolute;
-  }
-}
-.full .RsvpLink {
-  .rsvp { display: none; }
-  .is_full { display: block; }
-  .not_full { display: none; }
-}
-
-.RsvpLink .message {
-  color: black;
-  bottom: 0;
-  display: none;
-  background: white;
-  box-shadow: inset 0 0 5px #55F;
-  padding: 5px 20px 5px 5px;
-  position: absolute;
-  right: 100%;
-  text-decoration: none;
-  width: 300px;
-  &:after {
-    background: url("/static/img/icon_x_red.png") no-repeat center;
-    color: #F33;
-    content: "";
-    display: block;
-    font-size: 1.5em;
-    position: absolute;
-    height: 10px;
-    line-height: 10px;
-    margin-top: -5px;
-    right: 10px;
-    top: 50%;
-    width: 10px;
-  }
-}
-
-@media (max-width: @screen-sm-max) {
-  .RsvpLink .message {
-    bottom: auto;
-    right: 0;
-    width: 213px;
-  }
-}
-
-.loading .RsvpLink {
-  &:before {
-    background: url(/static/img/loading.gif) center rgba(150,150,150,0.8) no-repeat;
-    content: "";
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-  }
 }
 
 @media (max-width: @screen-sm-max) {
