@@ -55,7 +55,9 @@ def new_index(request):
         subject.subfilters.append(child)
   user_courses = []
   user_sessions = []
+  instructor_sessions = []
   if request.user.is_authenticated():
+    instructor_sessions = Session.objects.filter(user=request.user).reverse()
     sessions = Session.objects.filter(first_date__gte=first_date).select_related(depth=3)
     user_sessions = sessions.filter(enrollment__user=request.user.id)
     us_ids = [s.id for s in user_sessions]
@@ -69,6 +71,7 @@ def new_index(request):
     'term': term,
     'user_sessions': user_sessions,
     'user_courses': user_courses,
+    'instructor_sessions': instructor_sessions,
     'yesterday': yesterday,
   }
   return TemplateResponse(request,"course/index.html",values)
@@ -84,17 +87,6 @@ def new_detail(request,pk,slug):
   kwargs = dict(section__session__first_date__gte=datetime.datetime.now(),
                 subjects__in=course.subjects.all())
   related_courses = Course.objects.filter(**kwargs).exclude(id=course.id)
-  #! broken for the time
-  if request.POST:
-    if not (request.user.is_superuser or request.user == session.user):
-      messages.error(request,"Only an instructor can do that")
-      return HttpResponseRedirect(request.path)
-    ids = [int(i) for i in request.POST.getlist('completed')]
-    for enrollment in session.enrollment_set.all():
-      enrollment.completed = enrollment.id in ids
-      enrollment.save()
-    messages.success(request,"Course completion status saved for all students in this class.")
-    return HttpResponseRedirect(request.path)
   values = {
     'course': course,
     'enrollment': enrollment,

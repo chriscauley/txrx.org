@@ -5,6 +5,7 @@ urlpatterns = patterns(
   url(r'^my-sessions/$', 'my_sessions',name='my_sessions'),
   url(r'^all-sessions/$', 'all_sessions',name='all_sessions'),
   url(r'^email/instructor/(\d+)/$','instructor.email',name='email_instructor'),
+  url(r'^instructor_session/(\d+)/$','instructor.session',name='instructor_session'),
 
   url(r'^evaluations/$','evaluation.index',name='evaluation_index'),
   url(r'^evaluation/(\d+)/$','evaluation.detail',name='evaluation_detail'),

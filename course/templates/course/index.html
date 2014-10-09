@@ -31,6 +31,10 @@
   <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#all_classes" role="tab" data-toggle="tab">All Classes</a></li>
     <li><a href="#my_classes" role="tab" data-toggle="tab">My Classes ({{ user_sessions|length }})</a></li>
+    {% if instructor_sessions %}
+    <li><a href="#instructor_sessions" role="tab" data-toggle="tab">
+        Instructor ({{ instructor_sessions|length }})</a></li>
+    {% endif %}
   </ul>
   <div class="tab-content">
     <div class="tab-pane active" id="all_classes">
@@ -52,6 +56,24 @@
       </p>
       {% endif %}
     </div>
+    {% if instructor_sessions %}
+    <div class="tab-pane" id="instructor_sessions">
+      <ul>
+        {% for session in instructor_sessions %}
+        <li>
+          <a href="{% url "course:instructor_session" session.pk %}">
+            {{ session.section.course.name }}
+          </a>
+          <br />
+          {{ session.get_short_dates }}
+          <br />
+          ({{ session.total_students }}/{{ session.section.max_students }} students)
+          <br />&nbsp;
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
   </div>
 </div>
 <script type="text/javascript">

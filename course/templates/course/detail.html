@@ -97,7 +97,14 @@
           {% endfor %}
           <li>with {{ session.user.username }}</li>
         </ul>
+        {% if request.user == session.user %}
+        <center>
+          <a href="{% url "course:instructor_session" session.pk %}" class="btn btn-primary">
+            View instructor page</a>
+        </center>
+        {% else %}
         {% include "course/_enroll_link.html" %}
+        {% endif %}
       </div>
       {% endfor %}
       <p class="notify_course">
