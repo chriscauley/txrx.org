@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.template.defaultfilters import slugify
 
 from course.models import ClassTime
-from geo.models import Location
+from geo.models import Room
 from .models import EventOccurrence
 
 import icalendar, datetime, math
@@ -50,7 +50,7 @@ def make_ics(occurrences=None,title=None):
     vevent.add('x-microsoft-cdo-importance', '1')
     vevent.add('priority', '5')
     vevent.add('description', occ.description)
-    vevent.add('location', str(occ.get_location()))
+    vevent.add('room', str(occ.get_room()))
 
     calObj.add_component(vevent)
 
@@ -81,34 +81,34 @@ def get_room_conflicts(base_occurrence=None):
   if base_occurrence:
     start_time = base_occurrence.start-datetime.timedelta(0,block_size)
     end_time = base_occurrence.end+datetime.timedelta(0,block_size)
-    location = base_occurrence.location
+    room = base_occurrence.room
     class_times = ClassTime.objects.filter(start__gte=start_time,start__lte=end_time,
                                            session__section__no_conflict=False,
-                                           session__section__location=location)
+                                           session__section__room=room)
     occurrences = EventOccurrence.objects.filter(start__gte=start_time,event__no_conflict=False,
-                                                 event__location=location)
-    locations = [base_occurrence.location]
+                                                 event__room=room)
+    rooms = [base_occurrence.room]
   else:
     start_time = datetime.datetime.now()-datetime.timedelta(0,block_size)
     end_time = datetime.datetime.now()+datetime.timedelta(60)
     class_times = ClassTime.objects.filter(start__gte=start_time,start__lte=end_time,
                                            session__section__no_conflict=False)
     occurrences = EventOccurrence.objects.filter(start__gte=start_time,event__no_conflict=False)
-    locations = Location.objects.all()
-  schedule = {location:{} for location in locations}
+    rooms = Room.objects.all()
+  schedule = {room:{} for room in rooms}
   event_tuples = []
 
   # combine events and classes because they have similar enough APIs to treat them the same 
   for class_time in class_times:
-    event_tuples.append((class_time,class_time.session.section.location))
+    event_tuples.append((class_time,class_time.session.section.room))
   for occurrence in occurrences:
-    event_tuples.append((occurrence, occurrence.get_location()))
+    event_tuples.append((occurrence, occurrence.get_room()))
 
-  # iterate over 30 minute chunks and group chunks by time and location
-  for event,location in event_tuples:
+  # iterate over 30 minute chunks and group chunks by time and room
+  for event,room in event_tuples:
     for time in iter_times(event.start,event.end):
-      schedule[location][time] = schedule[location].get(time,[])
-      schedule[location][time].append(event)
+      schedule[room][time] = schedule[room].get(time,[])
+      schedule[room][time].append(event)
 
   #for k,v in sorted(schedule.values()[0].items()):
   #  if len(v) > 1:
@@ -116,15 +116,15 @@ def get_room_conflicts(base_occurrence=None):
 
   # remove all slots with only one for fewer events in a given room
   room_conflicts = {}
-  for location,event_slots in schedule.items():
-    room_conflicts[location] = [(dt,events) for dt,events in event_slots.items() if events and len(events)>1]
+  for room,event_slots in schedule.items():
+    room_conflicts[room] = [(dt,events) for dt,events in event_slots.items() if events and len(events)>1]
 
   # re-group the 30 minute chunks by consecutive slots in a given room
   room_conflicts = [r for r in room_conflicts.items() if r[1]]
   out = []
-  for location,conflicts in room_conflicts:
+  for room,conflicts in room_conflicts:
     reshuffled_conflicts = []
-    location_conflicts = []
+    room_conflicts = []
     conflicts.sort(key=lambda i:i[0])
     func = lambda (i,(dt,events)): dt-datetime.timedelta(0,i*60*30)
     for k,g in groupby(enumerate(conflicts),key=func):
@@ -138,7 +138,7 @@ def get_room_conflicts(base_occurrence=None):
       for e in _event_mess:
         events += e
       events = list(set(events))
-      location_conflicts.append((times,events))
-    if location_conflicts:
-      out.append((location,location_conflicts))
+      room_conflicts.append((times,events))
+    if room_conflicts:
+      out.append((room,room_conflicts))
   return out

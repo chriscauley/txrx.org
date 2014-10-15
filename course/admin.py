@@ -45,7 +45,7 @@ class SectionAdmin(admin.ModelAdmin):
   save_as = True
   list_display = ("__unicode__","prerequisites","requirements","max_students")
   list_editable = ("prerequisites","requirements","max_students")
-  list_filter = ("course__active",'no_conflict',"location")
+  list_filter = ("course__active",'no_conflict',"room")
   inlines = [TaggedFileInline]
   def has_change_permission(self,request,obj=None):
     if not obj:
@@ -62,7 +62,7 @@ class EnrollmentInline(admin.TabularInline):
 class SessionAdmin(admin.ModelAdmin):
   form = StaffMemberForm
   raw_id_fields = ('section','user')
-  readonly_fields = ('_first_date','get_location')
+  readonly_fields = ('_first_date','get_room')
   list_search = ('section__course__name','user__username')
   list_filter = ("publish_dt",)
   _first_date = lambda self,obj: getattr(obj,'first_date','Will be set on save')

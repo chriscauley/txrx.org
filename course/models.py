@@ -9,7 +9,7 @@ import datetime
 
 from feed.models import FeedItemModel
 from media.models import FilesMixin, PhotosMixin
-from geo.models import Location
+from geo.models import Room
 from event.models import OccurrenceModel, reverse_ics
 from tool.models import ToolsMixin
 from txrx.utils import cached_method, cached_property, latin1_to_ascii
@@ -107,9 +107,9 @@ class Section(models.Model,FilesMixin):
   prerequisites = models.CharField(max_length=256,null=True,blank=True)
   description = models.TextField(null=True,blank=True)
   safety = models.BooleanField(default=False)
-  location = models.ForeignKey(Location,default=1)
+  room = models.ForeignKey(Room,default=1)
   src = ImageField("Logo",max_length=300,upload_to='course/%Y-%m',null=True,blank=True)
-  _ht = "If true, this class will not raise conflict warnings for events in the same location."
+  _ht = "If true, this class will not raise conflict warnings for events in the same room."
   no_conflict = models.BooleanField(default=False,help_text=_ht)
   max_students = models.IntegerField(default=16)
   get_admin_url = lambda self: "/admin/course/section/%s/"%self.id
@@ -159,7 +159,7 @@ class Session(FeedItemModel,PhotosMixin):
 
   in_progress = property(lambda self: self.archived and self.last_date>datetime.datetime.now())
   closed = property(lambda self: self.cancelled or (self.archived and not self.in_progress))
-  get_location = lambda self: self.section.location
+  get_room = lambda self: self.section.room
   @cached_property
   def total_students(self):
     return sum([e.quantity for e in self.enrollment_set.all()])
@@ -271,11 +271,11 @@ class ClassTime(OccurrenceModel):
     return "%s (%s/%s)"%(self.session.section.course.get_short_name(),times.index(self)+1,len(times))
   get_absolute_url = lambda self: self.session.get_absolute_url()
   get_admin_url = lambda self: "/admin/course/session/%s/"%self.session.id
-  get_location = lambda self: self.session.section.location
+  get_room = lambda self: self.session.section.room
   no_conflict = lambda self: self.session.section.no_conflict
   description = cached_property(lambda self:self.session.section.description,name="description")
   name = cached_property(lambda self: self.session.section.course.name,name="name")
-  location = cached_property(lambda self: self.session.section.location,name="location")
+  room = cached_property(lambda self: self.session.section.room,name="room")
   class Meta:
     ordering = ("start",)
 

@@ -54,3 +54,12 @@ class Location(GeoModel):
     if self.parent:
       return "%s @ %s"%(self.name,self.parent.name)
     return self.name
+
+class Room(models.Model):
+  name = models.CharField(max_length=128,null=True,blank=True)
+  location = models.ForeignKey(Location)
+  _ht = "Optional. Alternative name for the calendar."
+  short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
+  get_short_name = lambda self: self.short_name or self.name
+  class Meta:
+    ordering = ('name',)

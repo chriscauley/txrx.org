@@ -5,7 +5,7 @@ from django.template.defaultfilters import slugify, date, urlencode
 
 from media.models import PhotosMixin
 from wmd import models as wmd_models
-from geo.models import Location
+from geo.models import Location, Room
 from txrx.utils import cached_property
 
 from south.modelsinspector import add_introspection_rules
@@ -40,11 +40,12 @@ class Event(models.Model,PhotosMixin):
   _ht = "Optional. Alternative name for the calendar."
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   location = models.ForeignKey(Location)
-  get_location = lambda self: self.location
+  room = models.ForeignKey(Room,null=True,blank=True) #! remove ntbt when you remove location.
+  get_room = lambda self: self.room
   description = wmd_models.MarkDownField(blank=True,null=True)
   _ht = "If your changing this, you will need to manually delete all future incorrect events. Repeating events are auto-generated every night."
   repeat = models.CharField(max_length=32,choices=REPEAT_CHOICES,null=True,blank=True,help_text=_ht)
-  _ht = "If true, this class will not raise conflict warnings for events in the same location."
+  _ht = "If true, this class will not raise conflict warnings for events in the same room."
   no_conflict = models.BooleanField(default=False,help_text=_ht)
 
   get_short_name = lambda self: self.short_name or self.name
@@ -62,11 +63,11 @@ class Event(models.Model,PhotosMixin):
     return self.upcoming_occurrences[0]
 
   def get_name(self):
-    return self.name or self.location
+    return self.name or self.room
 
   get_ics_url = lambda self: reverse_ics(self)
 
-  __unicode__ = lambda self: "%s@%s"%(self.name,self.location)
+  __unicode__ = lambda self: "%s@%s"%(self.name,self.room)
   class Meta:
     pass
 
@@ -110,8 +111,8 @@ class EventOccurrence(OccurrenceModel,PhotosMixin):
   short_name = property(lambda self: self.name_override or self.event.get_short_name())
   description_override = wmd_models.MarkDownField(blank=True,null=True)
   description = property(lambda self: self.description_override or self.event.description)
-  get_location = lambda self: self.event.location #! depracate me! infavor of EO.location
-  location = cached_property(lambda self: self.event.location,name="location")
+  get_room = lambda self: self.event.room #! depracate me
+  room = cached_property(lambda self: self.event.room,name="room")
   no_conflict = property(lambda self: self.event.no_conflict)
   def save(self,*args,**kwargs):
     # set the publish_dt to a week before the event

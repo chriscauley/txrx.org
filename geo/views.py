@@ -3,7 +3,7 @@ from django.template.response import TemplateResponse
 
 from course.models import ClassTime
 from event.models import EventOccurrence
-from geo.models import Location
+from geo.models import Location, Room
 
 import datetime, math
 from itertools import groupby
@@ -22,37 +22,37 @@ def get_room_conflicts(td=0):
   end_time = datetime.datetime.now()+datetime.timedelta(60-td)
   class_times = ClassTime.objects.filter(start__gte=start_time,start__lte=end_time,session__section__no_conflict=False)
   occurrences = EventOccurrence.objects.filter(start__gte=start_time,event__no_conflict=False)
-  locations = Location.objects.all()
-  schedule = {location:{} for location in locations}
+  rooms = Room.objects.all()
+  schedule = {room:{} for room in rooms}
   event_tuples = []
 
   # combine events and classes because they have similar enough APIs to treat them the same
   for class_time in class_times:
-    event_tuples.append((class_time,class_time.session.section.location))
+    event_tuples.append((class_time,class_time.session.section.room))
   for occurrence in occurrences:
-    event_tuples.append((occurrence, occurrence.get_location()))
+    event_tuples.append((occurrence, occurrence.get_room()))
 
-  # iterate over 30 minute chunks and group chunks by time and location
-  for event,location in event_tuples:
+  # iterate over 30 minute chunks and group chunks by time and room
+  for event,room in event_tuples:
     for time in iter_times(event.start,event.end):
-      schedule[location][time] = schedule[location].get(time,[])
-      schedule[location][time].append(event)
+      schedule[room][time] = schedule[room].get(time,[])
+      schedule[room][time].append(event)
 
   # remove all slots with only one for fewer events in a given room
   room_conflicts = {}
-  for location,event_slots in schedule.items():
-    room_conflicts[location] = []
+  for room,event_slots in schedule.items():
+    room_conflicts[room] = []
     for dt,events in event_slots.items():
       if not events or len(events) == 1:
         continue
-      room_conflicts[location].append((dt,events))
+      room_conflicts[room].append((dt,events))
 
   # re-group the 30 minute chunks by consecutive slots in a given room
   room_conflicts = [r for r in room_conflicts.items() if r[1]]
   out = []
-  for location,conflicts in room_conflicts:
+  for room,conflicts in room_conflicts:
     reshuffled_conflicts = []
-    location_conflicts = []
+    room_conflicts = []
     conflicts.sort(key=lambda i:i[0])
     func = lambda (i,(dt,events)): dt-datetime.timedelta(0,i*60*30)
     for k,g in groupby(enumerate(conflicts),key=func):
@@ -64,8 +64,8 @@ def get_room_conflicts(td=0):
       for e in _event_mess:
         events += e
       events = list(set(events))
-      location_conflicts.append((times,events))
-    out.append((location,location_conflicts))
+      room_conflicts.append((times,events))
+    out.append((room,room_conflicts))
   return out
 
 @staff_member_required
