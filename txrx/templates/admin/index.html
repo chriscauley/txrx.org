@@ -17,11 +17,11 @@
     {% get_room_conflicts %}
     {% if room_conflicts %}
     <h1>Potential room conflicts</h1>
-    {% for location,conflicts in room_conflicts %}
+    {% for room,conflicts in room_conflicts %}
     <div class="module" style="width: 375px;">
       <table class="table-overview applist" summary="{% blocktrans %}Conflicting classes and events.{% endblocktrans %}"
              style="width: 100%">
-        <caption>Conflict at {{ location.name }}</caption>
+        <caption>Conflict at {{ room.name }}</caption>
         <tr><td>
             <dl>
               {% for times,events in conflicts %}
