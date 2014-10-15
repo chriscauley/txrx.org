@@ -5,7 +5,7 @@ from django.template.defaultfilters import slugify, date, urlencode
 
 from media.models import PhotosMixin
 from wmd import models as wmd_models
-from geo.models import Location, Room
+from geo.models import Room
 from txrx.utils import cached_property
 
 from south.modelsinspector import add_introspection_rules
@@ -39,7 +39,6 @@ class Event(models.Model,PhotosMixin):
   name = models.CharField(max_length=128,null=True,blank=True)
   _ht = "Optional. Alternative name for the calendar."
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
-  location = models.ForeignKey(Location)
   room = models.ForeignKey(Room,null=True,blank=True) #! remove ntbt when you remove location.
   get_room = lambda self: self.room
   description = wmd_models.MarkDownField(blank=True,null=True)

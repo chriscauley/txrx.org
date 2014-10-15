@@ -1,21 +1,23 @@
 # -*- coding: utf-8 -*-
 import datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
 
-class Migration(DataMigration):
-    depends_on = (('geo','0005_move_room'),)
+
+class Migration(SchemaMigration):
+
     def forwards(self, orm):
-        for section in orm['course.Section'].objects.all():
-            if section.location.parent:
-                section.room = orm['geo.Room'].objects.get(name=section.location.name)
-            else:
-                section.room = orm['geo.Room'].objects.get(name='')
-            section.save()
+        # Deleting field 'Section.location'
+        db.delete_column(u'course_section', 'location_id')
+
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        # Adding field 'Section.location'
+        db.add_column(u'course_section', 'location',
+                      self.gf('django.db.models.fields.related.ForeignKey')(default=1, to=orm['geo.Location']),
+                      keep_default=False)
+
 
     models = {
         u'auth.group': {
@@ -111,7 +113,6 @@ class Migration(DataMigration):
             'fee': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'fee_notes': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'location': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'to': u"orm['geo.Location']"}),
             'max_students': ('django.db.models.fields.IntegerField', [], {'default': '16'}),
             'no_conflict': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'prerequisites': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
@@ -168,7 +169,7 @@ class Migration(DataMigration):
             'zip_code': ('django.db.models.fields.IntegerField', [], {'default': '77007'})
         },
         u'geo.room': {
-            'Meta': {'ordering': "('name',)", 'object_name': 'Room'},
+            'Meta': {'ordering': "('name',)", 'unique_together': "(('name', 'location'),)", 'object_name': 'Room'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'location': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['geo.Location']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
@@ -193,4 +194,3 @@ class Migration(DataMigration):
     }
 
     complete_apps = ['course']
-    symmetrical = True

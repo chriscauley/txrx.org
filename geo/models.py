@@ -44,16 +44,13 @@ class Location(GeoModel):
   address2 = models.CharField(max_length=64,null=True,blank=True)
   city = models.ForeignKey(City,default=1)
   zip_code = models.IntegerField(default=77007)
+  __unicode__ = lambda self: self.name
   class Meta:
     ordering = ('name',)
 
   def print_address(self):
     l = [self.name,self.address,self.address2,self.city.__unicode__(),self.zip_code]
     return '\n'.join([str(li) for li in l if li])
-  def __unicode__(self):
-    if self.parent:
-      return "%s @ %s"%(self.name,self.parent.name)
-    return self.name
 
 class Room(models.Model):
   name = models.CharField(max_length=128,null=True,blank=True)
@@ -61,5 +58,10 @@ class Room(models.Model):
   _ht = "Optional. Alternative name for the calendar."
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   get_short_name = lambda self: self.short_name or self.name
+  def __unicode__(self):
+    if self.name:
+      return "%s @ %s"%(self.name,self.location)
+    return "%s"%self.location
   class Meta:
     ordering = ('name',)
+    unique_together = ('name','location')

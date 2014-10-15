@@ -7,11 +7,16 @@ from django.db import models
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        locations = orm['geo.Location'].objects.filter(parent__isnull=False)
+        locations = orm['geo.Location'].objects.all()
         for location in locations:
+            name = ''
+            l = location
+            if location.parent:
+                name = location.name
+                l = location.parent
             room,new = orm['geo.Room'].objects.get_or_create(
-                location=location.parent,
-                name=location.name,
+                location=l,
+                name=name,
                 short_name=location.short_name
             )
             if new:

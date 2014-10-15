@@ -1,28 +1,29 @@
 # -*- coding: utf-8 -*-
 import datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
 
-class Migration(DataMigration):
-    depends_on = (('geo','0005_move_room'),)
+
+class Migration(SchemaMigration):
+
     def forwards(self, orm):
-        for event in orm['event.Event'].objects.all():
-            if event.location.parent:
-                event.room = orm['geo.Room'].objects.get(name=event.location.name)
-            else:
-                event.room = orm['geo.Room'].objects.get(name='')
-            event.save()
+        # Deleting field 'Event.location'
+        db.delete_column(u'event_event', 'location_id')
+
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        # Adding field 'Event.location'
+        db.add_column(u'event_event', 'location',
+                      self.gf('django.db.models.fields.related.ForeignKey')(default=1, to=orm['geo.Location']),
+                      keep_default=False)
+
 
     models = {
         u'event.event': {
             'Meta': {'object_name': 'Event'},
             'description': ('wmd.models.MarkDownField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['geo.Location']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'no_conflict': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'repeat': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
@@ -60,7 +61,7 @@ class Migration(DataMigration):
             'zip_code': ('django.db.models.fields.IntegerField', [], {'default': '77007'})
         },
         u'geo.room': {
-            'Meta': {'ordering': "('name',)", 'object_name': 'Room'},
+            'Meta': {'ordering': "('name',)", 'unique_together': "(('name', 'location'),)", 'object_name': 'Room'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'location': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['geo.Location']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
@@ -69,4 +70,3 @@ class Migration(DataMigration):
     }
 
     complete_apps = ['event']
-    symmetrical = True
