@@ -44,6 +44,8 @@ class Location(GeoModel):
   address2 = models.CharField(max_length=64,null=True,blank=True)
   city = models.ForeignKey(City,default=1)
   zip_code = models.IntegerField(default=77007)
+  dxf = models.FileField(upload_to="floorplans",null=True,blank=True)
+  src = models.ImageField(upload_to="floorplans",null=True,blank=True)
   __unicode__ = lambda self: self.name
   class Meta:
     ordering = ('name',)
@@ -58,6 +60,7 @@ class Room(models.Model):
   _ht = "Optional. Alternative name for the calendar."
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   get_short_name = lambda self: self.short_name or self.name
+  geometry = models.CharField(max_length=32,null=True,blank=True)
   def __unicode__(self):
     if self.name:
       return "%s @ %s"%(self.name,self.location)
