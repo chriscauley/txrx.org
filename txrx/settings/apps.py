@@ -127,6 +127,7 @@ SUIT_CONFIG = {
        'course.enrollment',
        'course.evaluation',
        'geo.location',
+       'geo.room',
        'course.section',
        'course.session',
        'course.subject',
@@ -140,6 +141,7 @@ SUIT_CONFIG = {
        'event.event',
        'event.eventoccurrence',
        'geo.location',
+       'geo.room',
      )
     },
     #'feed', # not implimented
@@ -169,7 +171,7 @@ SUIT_CONFIG = {
   ),
 
   # misc
-  'LIST_PER_PAGE': 100
+  'LIST_PER_PAGE': 200
 }
 """
 Instagram

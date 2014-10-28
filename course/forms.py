@@ -10,7 +10,7 @@ class RequestForm(forms.Form):
   Takes GET/POST and FILES from request, so you should NOT pass these in.
   Attaches request to form for later use.
 
-  example_form = RequestForm(request,initial={'location':'Houston'})
+  example_form = RequestForm(request,initial={'city':'Houston'})
   user = example_form.request.user
 
   """

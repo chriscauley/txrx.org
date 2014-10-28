@@ -16,13 +16,19 @@ class CourseCompletionInline(admin.TabularInline):
 
 class CourseAdmin(admin.ModelAdmin):
   list_display = ("name","tool_count","photo_count")
+  readonly_fields = ("_notifies",)
   filter_horizontal = ("subjects",)
   inlines = [CourseCompletionInline, TaggedPhotoInline, TaggedToolInline, TaggedFileInline]
   def tool_count(self,obj):
     return len(obj.get_tools())
   def photo_count(self,obj):
     return len(obj.get_photos())
-
+  def _notifies(self,obj):
+    out = ''
+    for notify in obj.notifycourse_set.all():
+      out += "%s<br/>"%notify.user.email
+    return out
+  _notifies.allow_tags = True
   # duplicated from models.py because of how the admin handles M2M
   def save_related(self, request, form, formsets, change):
     super(CourseAdmin, self).save_related(request, form, formsets, change)
@@ -39,7 +45,7 @@ class SectionAdmin(admin.ModelAdmin):
   save_as = True
   list_display = ("__unicode__","prerequisites","requirements","max_students")
   list_editable = ("prerequisites","requirements","max_students")
-  list_filter = ("course__active",'no_conflict',"location")
+  list_filter = ("course__active",'no_conflict',"room")
   inlines = [TaggedFileInline]
   def has_change_permission(self,request,obj=None):
     if not obj:
@@ -56,7 +62,7 @@ class EnrollmentInline(admin.TabularInline):
 class SessionAdmin(admin.ModelAdmin):
   form = StaffMemberForm
   raw_id_fields = ('section','user')
-  readonly_fields = ('_first_date','get_location')
+  readonly_fields = ('_first_date','get_room')
   list_search = ('section__course__name','user__username')
   list_filter = ("publish_dt",)
   _first_date = lambda self,obj: getattr(obj,'first_date','Will be set on save')
