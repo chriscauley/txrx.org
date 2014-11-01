@@ -61,6 +61,7 @@ class EnrollmentInline(admin.TabularInline):
 
 class SessionAdmin(admin.ModelAdmin):
   form = StaffMemberForm
+  ordering = ('-first_date',)
   raw_id_fields = ('section','user')
   readonly_fields = ('_first_date','get_room')
   list_search = ('section__course__name','user__username')
