@@ -2,8 +2,6 @@ from django.conf.urls.defaults import patterns, url, include
 
 urlpatterns = patterns(
   'course.views',
-  url(r'^my-sessions/$', 'my_sessions',name='my_sessions'),
-  url(r'^all-sessions/$', 'all_sessions',name='all_sessions'),
   url(r'^email/instructor/(\d+)/$','instructor.email',name='email_instructor'),
   url(r'^instructor_session/(\d+)/$','instructor.session',name='instructor_session'),
 

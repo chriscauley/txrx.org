@@ -103,6 +103,8 @@ def index(request,term_id=None):
   else:
     first_date = datetime.datetime.now()-datetime.timedelta(21)
     sessions = Session.objects.filter(first_date__gte=first_date).select_related(depth=3)
+  if not request.user.is_superuser:
+    sessions = sessions.filter(active=True)
   user_sessions = []
   subject_filters = get_filters()['subject']
   active_subjects = {}
@@ -139,17 +141,22 @@ def index(request,term_id=None):
   return TemplateResponse(request,"course/classes.html",values)
 
 def detail(request,slug):
-  session = get_object_or_404(Session,slug=slug)
+  if request.user.is_superuser:
+    session = get_object_or_404(Session,slug=slug)
+  else:
+    session = get_object_or_404(Session,slug=slug,active=True)
   session.set_user_fee(request.user)
   enrollment = None
   notify_course = None
   if request.user.is_authenticated():
     enrollment = Enrollment.objects.filter(session=session,user=request.user)
     notify_course = get_or_none(NotifyCourse,user=request.user,course=session.section.course)
-  kwargs = dict(first_date__gte=datetime.datetime.now(),section__course=session.section.course)
+  kwargs = dict(first_date__gte=datetime.datetime.now(),section__course=session.section.course,
+                active=True)
   alternate_sessions = Session.objects.filter(**kwargs).exclude(id=session.id)
   kwargs = dict(first_date__gte=datetime.datetime.now(),
-                section__course__subjects__in=session.section.course.subjects.all())
+                section__course__subjects__in=session.section.course.subjects.all(),
+                active=True)
   related_sessions = Session.objects.filter(**kwargs).exclude(id=session.id)
   related_sessions = [s for s in related_sessions if not (s.closed or s.full)]
   if request.POST:

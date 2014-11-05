@@ -157,6 +157,7 @@ class Session(FeedItemModel,PhotosMixin):
   section = models.ForeignKey(Section)
   slug = models.CharField(max_length=255)
   cancelled = models.BooleanField(default=False)
+  active = models.BooleanField(default=True)
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
   _ht = "This will be automatically updated when you save the model. Do not change"
   first_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering

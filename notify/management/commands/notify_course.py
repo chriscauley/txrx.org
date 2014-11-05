@@ -15,7 +15,7 @@ class Command (BaseCommand):
   #@mail_on_fail
   def handle(self, *args, **options):
     dt = datetime.datetime.now()-datetime.timedelta(2)
-    new_sessions = Session.objects.filter(created__gte=dt,first_date__gte=datetime.datetime.now())
+    new_sessions = Session.objects.filter(created__gte=dt,first_date__gte=datetime.datetime.now(),active=True)
 
     if not new_sessions:
       mail_admins("No classes","No new classes to email anyone about :(")
