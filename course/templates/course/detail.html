@@ -10,6 +10,11 @@
 
 {% block main %}
 <div class="col-sm-9">
+  {% if not session.active %}
+  <div class="alert alert-danger">
+    This session is not active. You can view it because you're logged in as a superuser
+  </div>
+  {% endif %}
   <div class="course-detail row" data-subject="{{ session.subjects|join:"," }}" id="c{{ session.id }}"
        {%if not session.course.closed%}data-open{%endif%}
        data-date="{{ session.starttime|date:"Ymd" }}">

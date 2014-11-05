@@ -39,4 +39,7 @@
   <div class="CartBox">
     {% include "course/_enroll_link.html" %}
   </div>
+  {% if not session.active %}
+  <div class="alert alert-danger">This class is not active, you only see it because you are logged in as a superuser</div>
+  {% endif %}
 </div>
