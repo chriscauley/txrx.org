@@ -32,10 +32,12 @@ get_filters = lambda: {
   }
 }
 
-def new_index(request):
+def index(request):
   term = Term.objects.all()[0]
-  first_date = datetime.datetime.now()-datetime.timedelta(21)
-  courses = Course.objects.filter(section__session__first_date__gte=first_date).distinct()
+  now = datetime.datetime.now()
+  all_courses = Course.objects.filter(active=True)
+  courses = all_courses.filter(section__session__first_date__gte=now).distinct()
+  unscheduled_courses = all_courses.filter(section__session__first_date__lt=now)
   subject_filters = get_filters()['subject']
   active_subjects = {}
   closed_subjects = {}
@@ -58,8 +60,7 @@ def new_index(request):
   instructor_sessions = []
   if request.user.is_authenticated():
     instructor_sessions = Session.objects.filter(user=request.user).reverse()
-    sessions = Session.objects.filter(first_date__gte=first_date).select_related(depth=3)
-    user_sessions = sessions.filter(enrollment__user=request.user.id)
+    user_sessions = Session.objects.filter(enrollment__user=request.user.id).select_related(depth=3)
     us_ids = [s.id for s in user_sessions]
     for session in user_sessions:
       user_courses.append(session)
@@ -76,7 +77,7 @@ def new_index(request):
   }
   return TemplateResponse(request,"course/index.html",values)
 
-def new_detail(request,pk,slug):
+def detail(request,pk,slug):
   course = get_object_or_404(Course,pk=pk)
   course.set_user_fee(request.user)
   enrollment = None
@@ -91,89 +92,6 @@ def new_detail(request,pk,slug):
     'course': course,
     'enrollment': enrollment,
     'related_courses': related_courses,
-    'notify_course': notify_course,
-  }
-  return TemplateResponse(request,"course/detail.html",values)
-
-def index(request,term_id=None):
-  term = Term.objects.all()[0]
-  if term_id:
-    term = Term.objects.get(pk=term_id)
-    sessions = Session.objects.filter(section__term=term).select_related(depth=3)
-  else:
-    first_date = datetime.datetime.now()-datetime.timedelta(21)
-    sessions = Session.objects.filter(first_date__gte=first_date).select_related(depth=3)
-  if not request.user.is_superuser:
-    sessions = sessions.filter(active=True)
-  user_sessions = []
-  subject_filters = get_filters()['subject']
-  active_subjects = {}
-  for session in sessions:
-    session.set_user_fee(request.user)
-    for subject in session.all_subjects:
-      active_subjects[subject.pk] = active_subjects.get(subject.pk,0) + 1
-  for subject in subject_filters['options']:
-    subject.count = active_subjects.get(subject.pk,0)
-    subject.subfilters = []
-    for child in subject.subject_set.all():
-      child.count = active_subjects.get(child.pk,0)
-      if child.count:
-        subject.subfilters.append(child)
-  if request.user.is_authenticated():
-    user_sessions = sessions.filter(enrollment__user=request.user.id)
-    us_ids = [s.id for s in user_sessions]
-    for session in sessions:
-      if session.id in us_ids:
-        try:
-          session.user_enrollment = session.enrollment_set.filter(user=request.user)[0]
-        except IndexError:
-          pass
-  sessions = sorted(list(sessions),key=lambda s: s.first_date)
-  user_sessions = sorted(list(user_sessions),key=lambda s: s.first_date)
-
-  values = {
-    'sessions': sessions,
-    'filters': [subject_filters],
-    'term': term,
-    'user_sessions': user_sessions,
-    'yesterday':datetime.datetime.now()-datetime.timedelta(0.5),
-  }
-  return TemplateResponse(request,"course/classes.html",values)
-
-def detail(request,slug):
-  if request.user.is_superuser:
-    session = get_object_or_404(Session,slug=slug)
-  else:
-    session = get_object_or_404(Session,slug=slug,active=True)
-  session.set_user_fee(request.user)
-  enrollment = None
-  notify_course = None
-  if request.user.is_authenticated():
-    enrollment = Enrollment.objects.filter(session=session,user=request.user)
-    notify_course = get_or_none(NotifyCourse,user=request.user,course=session.section.course)
-  kwargs = dict(first_date__gte=datetime.datetime.now(),section__course=session.section.course,
-                active=True)
-  alternate_sessions = Session.objects.filter(**kwargs).exclude(id=session.id)
-  kwargs = dict(first_date__gte=datetime.datetime.now(),
-                section__course__subjects__in=session.section.course.subjects.all(),
-                active=True)
-  related_sessions = Session.objects.filter(**kwargs).exclude(id=session.id)
-  related_sessions = [s for s in related_sessions if not (s.closed or s.full)]
-  if request.POST:
-    if not (request.user.is_superuser or request.user == session.user):
-      messages.error(request,"Only an instructor can do that")
-      return HttpResponseRedirect(request.path)
-    ids = [int(i) for i in request.POST.getlist('completed')]
-    for enrollment in session.enrollment_set.all():
-      enrollment.completed = enrollment.id in ids
-      enrollment.save()
-    messages.success(request,"Course completion status saved for all students in this class.")
-    return HttpResponseRedirect(request.path)
-  values = {
-    'session': session,
-    'enrollment': enrollment,
-    'alternate_sessions': alternate_sessions,
-    'related_sessions': related_sessions,
     'notify_course': notify_course,
   }
   return TemplateResponse(request,"course/detail.html",values)

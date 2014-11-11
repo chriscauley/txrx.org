@@ -1,8 +1,8 @@
 {% load thumbnail crop_util %}
 <div class="course new filterable well{% if course.last_date < yesterday %} past{% endif %}{% if course in user_courses %} success{% endif %}"
      id="c{{session.id}}" data-subject="{% for subject in course.subjects.all %}{{ subject }},{% endfor %}"
-     data-date="{{ course.first_date|date:"Ymd" }}">
-  <a href="{% url "course:new_detail" course.pk course.slug %}" class="picture">
+     data-date="{{ course.first_date|date:"Ymd" }}" data-title="{{ course }}">
+  <a href="{% url "course:detail" course.pk course.slug %}" class="picture">
     {% thumbnail course.first_photo|get_override:"landscape_crop" "298x199" crop="center" as im %}
     <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
     {% endthumbnail %}
@@ -13,7 +13,7 @@
       <span style="margin-right: 10px;">{{ subject.name|upper }}</span>
       {% endfor %}
     </div>
-    <a href="{% url "course:new_detail" course.pk course.slug %}" class="title">
+    <a href="{% url "course:detail" course.pk course.slug %}" class="title">
       {% if course.branding %} {#! todo not implimented #}
       {% thumbnail course.branding.get_small_image "150x40" crop="center" as im %}
       <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"
@@ -23,13 +23,14 @@
       {{ course }}
       <div class="price">${{ course.user_fee }}</div>
     </a>
-    {% if course.active_sessions|length > 1 %}
-    <b>{{ course.active_sessions|length }} classes:</b>
+    {% if course.future_sessions|length > 1 %}
+    <b>{{ course.future_sessions|length }} classes:</b>
     {% endif %}
-    {% for session in course.active_sessions %}
-    {% if forloop.counter == 4 and course.active_sessions|length > 4 %}
+    {% for session in course.future_sessions %}
+    {% if forloop.counter == 3 and course.future_sessions|length > 2 %}
     <input type="checkbox" id="show_sessions_{{ course.pk }}" class="session_toggle" />
-    <label for="show_sessions_{{ course.pk }}"> {{ course.active_sessions|length|add:-4 }} more sessions</label>
+    <label for="show_sessions_{{ course.pk }}">
+      {{ course.future_sessions|length|add:-2 }} more sessions</label>
     {% endif %}
     <div class="session">
       <small>

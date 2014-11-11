@@ -86,11 +86,16 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
     if user.is_authenticated():
       self.user_fee = self.user_fee*(100-user.usermembership.membership.discount_percentage)//100
   @cached_property
-  def active_sessions(self):
-    first_date = datetime.datetime.now()-datetime.timedelta(21)
-    return list(self.sessions.filter(first_date__gte=first_date))
-  first_date = property(lambda self: self.active_sessions[0].first_date)
-  last_date = property(lambda self: self.active_sessions[-1].last_date)
+  def active_sessions(self): #sessions that haven't finished (or even started)
+    return list(self.sessions.filter(last_date__gte=datetime.datetime.now()))
+  @cached_property
+  def past_sessions(self): #sessions that have ended
+    return list(self.sessions.filter(last_date__lte=datetime.datetime.now()))
+  @cached_property
+  def future_sessions(self): # sessions that haven't started
+    return list(self.sessions.filter(first_date__gte=datetime.datetime.now()))
+  first_date = property(lambda self: self.future_sessions[0].first_date)
+  last_date = property(lambda self: self.future_sessions[-1].last_date)
   @cached_property
   def open_sessions(self):
     if self.sessions:
@@ -161,6 +166,7 @@ class Session(FeedItemModel,PhotosMixin):
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
   _ht = "This will be automatically updated when you save the model. Do not change"
   first_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
+  last_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
   created = models.DateTimeField(auto_now_add=True) # for emailing new classes
   # depracated?
   ts_help = "Only used to set dates on creation."
@@ -201,11 +207,16 @@ class Session(FeedItemModel,PhotosMixin):
   @cached_property
   def all_occurrences(self):
     # this sets self.first_date to the first ClassTime.start if they aren't equal
+    # also sets self.last_date to the last ClassTime.end
     # handled in the admin by /static/js/course_admin.js
-    _a = self.classtime_set.all()
+    _a = list(self.classtime_set.all())
     if not _a[0].start == self.first_date:
       print "setting first_date"
       self.first_date = _a[0].start
+      self.save()
+    if not _a[-1].end == self.last_date:
+      print "setting first_date"
+      self.last_date = _a[-1].end
       self.save()
     return _a
   get_ics_url = lambda self: reverse_ics(self)
@@ -250,11 +261,6 @@ class Session(FeedItemModel,PhotosMixin):
     return reverse('course:detail',args=[self.slug])
   get_admin_url = lambda self: "/admin/course/session/%s/"%self.id
   get_rsvp_url = cached_method(lambda self: reverse('course:rsvp',args=[self.id]),name="get_rsvp_url")
-  @cached_property
-  def last_date(self):
-    if self.all_occurrences:
-      return list(self.all_occurrences)[-1].end
-    return datetime.datetime(2000,1,1)
   def get_instructor_name(self):
     instructor = self.user
     if self.user.first_name and self.user.last_name:

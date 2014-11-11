@@ -63,11 +63,13 @@ class SessionAdmin(admin.ModelAdmin):
   form = StaffMemberForm
   ordering = ('-first_date',)
   raw_id_fields = ('section','user')
-  readonly_fields = ('_first_date','get_room')
+  readonly_fields = ('_first_date','_last_date','get_room')
   list_search = ('section__course__name','user__username')
   list_filter = ("publish_dt",)
   _first_date = lambda self,obj: getattr(obj,'first_date','Will be set on save')
   _first_date.short_description = 'first classtime'
+  _last_date = lambda self,obj: getattr(obj,'last_date','Will be set on save')
+  _last_date.short_description = 'last classtime'
   exclude = ('time_string','slug','publish_dt')
   inlines = (ClassTimeInline, EnrollmentInline, TaggedPhotoInline)
   search_fields = ("user__username","user__email","section__course__name")
