@@ -107,33 +107,6 @@
         {% endif %}
       </div>
       {% endfor %}
-      {% if class.past_sessions %}
-      <input type="checkbox" id="show_sessions_{{ course.pk }}" class="session_toggle" />
-      <label for="show_sessions_{{ course.pk }}">
-        view {{ course.past_sessions|length }} past sessions</label>
-      {% endif %}
-      {% for session in course.past_sessions %}
-      <div class="well session">
-        <ul class="dates">
-          {% for classtime in session.classtime_set.all %}
-          <li>
-            {{ classtime.start|date:"l F j<\b\r /> g:i A"|safe }}
-            -
-            {{ classtime.end_time|time:"g:i A" }}
-          </li>
-          {% endfor %}
-          <li>with {{ session.user.username }}</li>
-        </ul>
-        {% if request.user == session.user %}
-        <center>
-          <a href="{% url "course:instructor_session" session.pk %}" class="btn btn-primary">
-            View instructor page</a>
-        </center>
-        {% else %}
-        {% include "course/_enroll_link.html" %}
-        {% endif %}
-      </div>
-      {% endfor %}
       <p class="notify_course">
         {% if notify_course %}
         <a href="{% url "clear_notification" "notify_course" request.user.id notify_course.id %}">

@@ -77,6 +77,10 @@ def index(request):
   }
   return TemplateResponse(request,"course/index.html",values)
 
+def detail_redirect(request,slug):
+  session = get_object_or_404(Session,slug=slug)
+  return HttpResponseRedirect(session.section.course.get_absolute_url())
+
 def detail(request,pk,slug):
   course = get_object_or_404(Course,pk=pk)
   course.set_user_fee(request.user)

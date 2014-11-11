@@ -20,5 +20,6 @@ urlpatterns = patterns(
   url(r'^full/$','classes.course_full',name='course_full'),
   url(r'^start_checkout/$','classes.start_checkout',name='start_checkout'),
   url(r'^delay_reschedule/(\d+)/(\d|close)/$', 'classes.delay_reschedule',name='delay_reschedule'),
+  url(r'^([\w\d\-\_]+)/$','classes.detail_redirect',name='detail_redirect'),
   url(r'^(\d+)/([\w\d\-\_]+)/$','classes.detail',name='detail'),
 )

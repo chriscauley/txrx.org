@@ -66,7 +66,7 @@ class CourseManager(models.Manager):
 
 class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   name = models.CharField(max_length=64)
-  slug = lambda self: slugify(self.name)
+  slug = property(lambda self: slugify(self.name))
   active = models.BooleanField(default=True) # only used with the reshedule view
   _ht = "Used for the events page."
   subjects = models.ManyToManyField(Subject)
@@ -75,7 +75,7 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   get_short_name = lambda self: self.short_name or self.name
   __unicode__ = lambda self: self.name
-  get_absolute_url = lambda self: self.sessions[0].get_absolute_url()
+  get_absolute_url = lambda self: reverse("course:detail",args=[self.pk,self.slug])
   sessions = lambda self: Session.objects.filter(section__course=self)
   sessions = cached_property(sessions,name="sessions")
   _ht = "The dashboard (/admin/) won't bug you to reschedule until after this date"
@@ -258,7 +258,7 @@ class Session(FeedItemModel,PhotosMixin):
     
   @cached_method
   def get_absolute_url(self):
-    return reverse('course:detail',args=[self.slug])
+    return self.section.course.get_absolute_url()
   get_admin_url = lambda self: "/admin/course/session/%s/"%self.id
   get_rsvp_url = cached_method(lambda self: reverse('course:rsvp',args=[self.id]),name="get_rsvp_url")
   def get_instructor_name(self):
