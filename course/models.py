@@ -89,9 +89,6 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   def active_sessions(self): #sessions that haven't finished (or even started)
     return list(self.sessions.filter(last_date__gte=datetime.datetime.now()))
   @cached_property
-  def past_sessions(self): #sessions that have ended
-    return list(self.sessions.filter(last_date__lte=datetime.datetime.now()))
-  @cached_property
   def future_sessions(self): # sessions that haven't started
     return list(self.sessions.filter(first_date__gte=datetime.datetime.now()))
   first_date = property(lambda self: self.future_sessions[0].first_date)
