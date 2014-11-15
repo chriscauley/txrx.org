@@ -18,6 +18,12 @@ class Command (BaseCommand):
     class_times = ClassTime.objects.filter(start__gte=today,start__lte=tomorrow)
     for class_time in class_times:
       sent = []
+      send_mail(
+        "[TX/RX] You're teaching today at %s!"%class_time.start.time().strformat("%I:%M"),
+        render_to_string("email/teaching_reminder.html",_dict),
+        settings.DEFAULT_FROM_EMAIL,
+        [session.user.email],
+      )
       for enrollment in class_time.session.enrollment_set.all():
         user = enrollment.user
         _dict = {
@@ -36,10 +42,3 @@ class Command (BaseCommand):
           settings.DEFAULT_FROM_EMAIL,
           [user.email],
           )
-        send_mail(
-          "[TX/RX] You're teaching today at %s!"%class_time.start.time().strformat("%I:%M"),
-          render_to_string("email/teaching_reminder.html",_dict),
-          settings.DEFAULT_FROM_EMAIL,
-          [user.email],
-          )
-      
