@@ -36,3 +36,10 @@ class Command (BaseCommand):
           settings.DEFAULT_FROM_EMAIL,
           [user.email],
           )
+        send_mail(
+          "[TX/RX] You're teaching today at %s!"%class_time.start.time().strformat("%I:%M"),
+          render_to_string("email/teaching_reminder.html",_dict),
+          settings.DEFAULT_FROM_EMAIL,
+          [user.email],
+          )
+      
