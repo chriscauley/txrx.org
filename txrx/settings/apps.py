@@ -36,6 +36,7 @@ INSTALLED_APPS = (
   'user',
   'db',
   'geo',
+  'misc',
   #'project',
   'instagram',
   'tool',

@@ -32,6 +32,7 @@ urlpatterns = patterns(
   url(r'^thing/(\d+)/([\w\d\-\_]+)/$','thing.views.thing_detail',name='thing_detail'),
   url(r'^gfycat/$','main.views.gfycat',name='gfycat'),
   url(r'^tools/',include('tool.urls')),
+  url(r'room_picker/(\d+)/$','geo.views.room_picker',name='room_picker'),
   url('', include('social.apps.django_app.urls', namespace='social')),
   url(r'^classes/', include('course.urls',namespace='course',app_name='course')),
   url(r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),

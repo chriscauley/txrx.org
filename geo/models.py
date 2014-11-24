@@ -1,8 +1,9 @@
 from django.db import models
 from django.conf import settings
 from localflavor.us.models import USStateField
-from .widgets import LocationField
 
+from .widgets import LocationField
+from txrx.utils import cached_property
 try:
   from south.modelsinspector import add_introspection_rules
   add_introspection_rules([], ["^localflavor\.us\.models\.USStateField"])
@@ -54,6 +55,13 @@ class Location(GeoModel):
     l = [self.name,self.address,self.address2,self.city.__unicode__(),self.zip_code]
     return '\n'.join([str(li) for li in l if li])
 
+COLOR_CHOICES = [
+  ('blue','blue'),
+  ('green','green'),
+  ('yellow','yellow'),
+  ('red','red'),
+]
+
 class Room(models.Model):
   name = models.CharField(max_length=128,null=True,blank=True)
   location = models.ForeignKey(Location)
@@ -61,6 +69,13 @@ class Room(models.Model):
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   get_short_name = lambda self: self.short_name or self.name
   geometry = models.CharField(max_length=32,null=True,blank=True)
+  _xywh = cached_property(lambda self: self.geometry.split(','),name='_xywh')
+  in_calendar = models.BooleanField("can be scheduled for events",default=True)
+  color = models.CharField(max_length=32,choices=COLOR_CHOICES,null=True,blank=True)
+  x = property(lambda self: self._xywh[0])
+  y = property(lambda self: self._xywh[0])
+  w = property(lambda self: self._xywh[0])
+  h = property(lambda self: self._xywh[0])
   def __unicode__(self):
     if self.name:
       return "%s @ %s"%(self.name,self.location)
