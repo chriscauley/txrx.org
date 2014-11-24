@@ -68,7 +68,7 @@ class Room(models.Model):
   _ht = "Optional. Alternative name for the calendar."
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   get_short_name = lambda self: self.short_name or self.name
-  geometry = models.CharField(max_length=32,null=True,blank=True)
+  geometry = models.CharField(max_length=64,null=True,blank=True)
   _xywh = cached_property(lambda self: self.geometry.split(','),name='_xywh')
   in_calendar = models.BooleanField("can be scheduled for events",default=True)
   color = models.CharField(max_length=32,choices=COLOR_CHOICES,null=True,blank=True)

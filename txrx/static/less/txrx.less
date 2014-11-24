@@ -462,7 +462,13 @@ ul.errorlist { color: red; }
 
 .nav-tabs { margin-bottom: 15px; }
 #location_form {
-  .room_form { display:none; }
-  :checked + .room_form { display: block; }
-  //[name=room_selector] { display:none; }
+  .room_form {
+    display:none;
+    label { vertical-align: middle; width: 135px; }
+  }
+  :checked + label {
+    outline: 1px solid grey;
+    + .room_form { display: block; }
+  }
+  [name=room_selector] { display:none; }
 }

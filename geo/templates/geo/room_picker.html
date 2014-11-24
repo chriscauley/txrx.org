@@ -1,42 +1,90 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 {% block main %}
-{% thumbnail location.src "100000x100000" crop="noop" upscale=False as im %}
-<img src="{{ im.url }} " id="location_map" style="display:none" width="{{ im.width }}" height="{{ im.height }}" />
+{% thumbnail location.src "1068" crop="noop" upscale=True as im %}
+<img src="{{ im.url }} " id="location_map" style="display:none"
+     width="{{ im.width }}" height="{{ im.height }}" />
 {% endthumbnail %}
-<canvas id="location_canvas"></canvas>
-<form method="POST" id="location_form">
-  {{ formset.management_form }}
-  {% for form in form_set %}
-  <label for="room{{ form.instance.id }}">
-    {{ form.instance.name|default_if_none:"New" }}
-  </label>
-  <input type="radio" id="room{{ form.instance.id }}" name="room_selector" />
-  <div class="room_form">
-    {{ form.as_p }}
-  </div>
-  {% endfor %}
-</form>
+<div class="col-sm-12">
+  <form method="POST" id="location_form">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    {% for form in formset %}
+    <div>
+    {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+      <input type="radio" id="room{{ form.instance.id }}" name="room_selector"
+             value="{% if form.instance %}{{ form.instance.id }}{% else %}new{{ forloop.counter0 }}{% endif %}"/>
+      <label for="room{{ form.instance.id }}">
+        {{ form.instance.name|default_if_none:"New" }}
+      </label>
+      <div class="room_form well">
+        {{ form.as_p }}
+      </div>
+    </div>
+    {% endfor %}
+    <input type="submit" />
+  </form>
+</div>
+<div class="col-sm-12">
+  <canvas id="location_canvas"></canvas>
+</div>
 <script>
-function Room(_o) {
-  return {
-    x: _o.x,
-    y: _o.y,
+function Room(form) {
+  var room = {};
+  room.form = form;
+  room.inputs = {};
+  var inputs = room.form.querySelectorAll("input,select");
+  for (var i=0;i<inputs.length;i++) {
+    if (inputs[i].name.match('geometry')) { room.inputs.geometry = inputs[i] }
+    if (inputs[i].name.match('color')) { room.inputs.color = inputs[i] }
+    if (inputs[i].name.match('id')) { room.inputs.id = inputs[i] }
   }
+  room.id = room.inputs.id.value;
+  room.geometry = JSON.parse(room.inputs.geometry.value || "{}");
+  if (room.geometry) {
+    room.x = room.geometry.x;
+    room.y = room.geometry.y;
+    room.w = room.geometry.w;
+    room.h = room.geometry.h;
+  }
+  console.log(room);
+  room.color = room.inputs.color.value;
+  room.inputs.color.addEventListener("change",function (){
+    room.color = room.inputs.color.value;
+  });
+
+  room.set_geometry = function(value) {
+    if (!value) {
+      value = {
+        x: room.x,
+        y: room.y,
+        w: room.w,
+        h: room.h
+      }
+    }
+    room.geometry = value;
+    room.inputs.geometry.value = JSON.stringify(value);
+  }
+  return room;
 }
 function LocationPicker(_o) {
   _o = _o || {};
   _o.editable = _o.editable || false;
-  _o.rooms = _o.rooms || [];
   var img = document.getElementById("location_map");
   var canvas = document.getElementById("location_canvas");
   var context = canvas.getContext("2d");
   var mouse_down = false;
-  var current_object;
-  function drawRoom(r,color) {
+  var current_room;
+  var room_forms = document.querySelectorAll(".room_form");
+  rooms = {};
+  for (var i=0;i<room_forms.length;i++) {
+    var room = new Room(room_forms[i]);
+    rooms[room.id] = room;
+  }
+  function drawRoom(r) {
     context.beginPath();
     context.rect(r.x,r.y,r.w,r.h);
-    context.fillStyle = color;
+    context.fillStyle = r.color;
     context.fill();
     context.lineWidth = 2;
     context.strokeStyle = 'gray';
@@ -49,25 +97,32 @@ function LocationPicker(_o) {
       canvas.height = img.height;
     }
     context.drawImage(img,0,0);
-    for (var i=0;i<_o.rooms.length;i++) {
-      drawRoom(_o.rooms[i],'yellow');
+    for (var key in rooms) {
+      if (room.geometry) { drawRoom(rooms[key]); }
     }
-    if (current_object) { drawRoom(current_object,'pink') }
+  }
+  function get_current_room() {
+    var checkbox = document.querySelector("[name=room_selector]:checked");
+    if (checkbox) { return rooms[checkbox.value]; }
   }
   var interval = setInterval(draw,100);
   function mouseDown(event) {
     mouse_down = true;
-    current_object = new Room({x:event.layerX,y: event.layerY,w:0,h:0});
-    console.log(current_object)
+    current_room = get_current_room();
+    if (!current_room) { return event; }
+    current_room.x = event.layerX;
+    current_room.y = event.layerY;
+    current_room.w = 0;
+    current_room.h = 0;
   }
   function mouseMove(event) {
-    if (!current_object) { return event; }
-    current_object.w = event.layerX - current_object.x;
-    current_object.h = event.layerY - current_object.y;
+    if (!current_room) { return event; }
+    current_room.w = event.layerX - current_room.x;
+    current_room.h = event.layerY - current_room.y;
   }
   function mouseUp(event) {
-    _o.rooms.push(current_object);
-    current_object = null;
+    current_room.set_geometry();
+    current_room = null;
   }
   if (_o.editable) {
     canvas.addEventListener("mousedown",mouseDown);
@@ -75,7 +130,7 @@ function LocationPicker(_o) {
     canvas.addEventListener("mousemove",mouseMove)
   }
 }
-map_options = {editable: true,rooms: []};
+map_options = {editable: true};
 var picker = new LocationPicker(map_options);
 </script>
 {% endblock %}

@@ -1,4 +1,5 @@
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib import messages
 from django.template.response import TemplateResponse
 
 from course.models import ClassTime
@@ -20,12 +21,17 @@ def iter_times(start,end):
 
 def room_picker(request,pk):
   location = Location.objects.get(pk=pk)
-  form_set = RoomFormSet(
+  formset = RoomFormSet(
     request.POST or None,
     queryset=location.room_set.all()
   )
+  if formset.is_valid():
+    formset.save()
+    messages.success(request,"Forms Saved")
+  elif request.method == "POST":
+    messages.error(request,"Something seems to be wrong, check all fields and try again.")
   values = {
     'location': location,
-    'form_set': form_set,
+    'formset': formset,
   }
   return TemplateResponse(request,'geo/room_picker.html',values)
