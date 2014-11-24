@@ -19,6 +19,7 @@ def iter_times(start,end):
   blocks = int(math.ceil(td.total_seconds()/(block_size))) #half hours that this runs
   return [start+datetime.timedelta(0,block_size*i) for i in range(blocks)]
 
+@staff_member_required
 def room_picker(request,pk):
   location = Location.objects.get(pk=pk)
   formset = RoomFormSet(
