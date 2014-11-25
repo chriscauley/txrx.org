@@ -3,7 +3,7 @@ from django.core.mail.backends.smtp import EmailBackend
 
 class DebugBackend(EmailBackend):
   def send_messages(self,email_messages):
-    if not settings.DEBUG:
+    if True:# not settings.DEBUG:
       return super(DebugBackend,self).send_messages(email_messages)
     for message in email_messages:
       message.to = filter_emails(message.to) or [getattr(settings,'ALLOWED_EMAILS',[])[0]]
