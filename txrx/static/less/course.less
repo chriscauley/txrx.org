@@ -18,13 +18,24 @@
 }
 
 .course .details {
-  padding: 0 65px 0 @pictureWidth+10px;
-  position: relative;
+  min-height: 82px;
+  .price {
+    color: black;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 10px;
+    width: 70px;
+  }
   .title {
     display: block;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 1.2em;
     min-height: 46px;
+    overflow-x: visible;
+    overflow-y: hidden;
+    padding: 10px 70px 10px 0;
+    position: relative;
     text-transform: uppercase;
   }
   .dates {
@@ -64,30 +75,22 @@
     }
   }
 }
-
-// Depracated #!
-.CartBox {
-  font-size: 20px;
-  height: 80px;
-  line-height: 1;
-  position: absolute;
-  right: 5px;
-  text-align: center;
-  top: 5px;
-  width: @cartWidth;
-  z-index: 1;
-  .price {
-    font-size: 25px;
-  }
-  .EnrollLink {
+.course {
+  .picture {
+    height: auto;
+    min-height: 110px;
+    padding: 0 105px 10px 0;
+    position: static;
     width: 100%;
+    img {
+      width: 100%;
+      height: auto;
+    }
   }
-  .btn {
-    border-radius: 0;
-    font-size: 18px;
-    line-height: 1;
-    padding: 3px;
-    width: 100%;
+  .CartBox {
+    position: absolute;
+    top: 20px;
+    right: 5px;
   }
 }
 
@@ -104,25 +107,6 @@
     .drop { display: none; }
   }
 }
-/*
-.RsvpLink {
-  .is_full,.unrsvp { display: none; }
-  &.attending {
-    .unrsvp { display: inline-block; }
-    .rsvp { display: none; }
-  }
-  .number_attending {
-    bottom: 100%;
-    left: 0;
-    position: absolute;
-  }
-}
-.full .RsvpLink {
-  .rsvp { display: none; }
-  .is_full { display: block; }
-  .not_full { display: none; }
-}
-*/
 .RsvpLink .message {
   color: black;
   bottom: 0;
@@ -173,33 +157,6 @@
 .course .CartBox {
   float: right;
 }
-
-.course.new {
-  .details {
-    .title {
-      height: auto;
-      min-height: 0;
-      padding-bottom: 10px;
-    }
-  }
-  .CartBox {
-    display: inline-block;
-    float: none;
-    height: 26px;
-    position: relative;
-    right: initial;
-    top: initial;
-    vertical-align: middle;
-  }
-  .session {
-    padding-bottom: 5px;
-    small {
-      display: inline-block;
-      vertical-align: middle;
-    }
-  }
-}
-
 .course-detail {
   .subjects { padding-bottom: 5px; }
   .CartBox {
@@ -288,31 +245,65 @@
   box-shadow: inset 0 0 5px #3ac2f5, 0 0 5px #3ac2f5;
 }
 
-@media (max-width: @screen-sm-max) {
-  .course {
-    .details {
-      padding: 0;
-      .price {
-        background: rgba(255,255,255,0.5);
-        bottom: 100%;
-        top: auto;
-      }
-    }
-    .picture {
-      height: auto;
-      min-height: 110px;
-      padding: 0 105px 10px 0;
-      position: static;
-      width: 100%;
-      img {
-	width: 100%;
-	height: auto;
-      }
-    }
-    .CartBox {
-      position: absolute;
-      top: 20px;
-      right: 5px;
-    }
+.RsvpLink {
+  .is_full,.unrsvp { display: none; }
+  &.attending {
+    .unrsvp { display: inline-block; }
+    .rsvp { display: none; }
+  }
+  .number_attending {
+    bottom: 100%;
+    left: 0;
+    position: absolute;
+  }
+}
+.full .RsvpLink {
+  .rsvp { display: none; }
+  .is_full { display: block; }
+  .not_full { display: none; }
+}
+
+.RsvpLink .message {
+  color: black;
+  bottom: 0;
+  display: none;
+  background: white;
+  box-shadow: inset 0 0 5px #55F;
+  padding: 5px 20px 5px 5px;
+  position: absolute;
+  right: 100%;
+  text-decoration: none;
+  width: 300px;
+  &:after {
+    background: url("/static/img/icon_x_red.png") no-repeat center;
+    color: #F33;
+    content: "";
+    display: block;
+    font-size: 1.5em;
+    position: absolute;
+    height: 10px;
+    line-height: 10px;
+    margin-top: -5px;
+    right: 10px;
+    top: 50%;
+    width: 10px;
+  }
+}
+
+.RsvpLink .message {
+  bottom: auto;
+  right: 0;
+  width: 213px;
+}
+
+.loading .RsvpLink {
+  &:before {
+    background: url(/static/img/loading.gif) center rgba(150,150,150,0.8) no-repeat;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
   }
 }

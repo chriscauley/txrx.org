@@ -36,9 +36,15 @@
   <div class="tab-content">
     <div class="tab-pane active" id="all_classes">
       <div class="course_list">
-        {% for course in courses %}
-        {% include "course/_course_row.html" %}
-        {% endfor %}
+        <div class="row">
+          {% for course in courses %}
+          {% include "course/_course_row.html" %}
+          {% if forloop.counter|divisibleby:2 and not forloop.last %}
+        </div>
+        <div class="row">
+          {% endif %}
+          {% endfor %}
+        </div>
       </div>
     </div>
     <div class="tab-pane" id="my_classes">

@@ -81,24 +81,25 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   _ht = "The dashboard (/admin/) won't bug you to reschedule until after this date"
   reschedule_on = models.DateField(default=datetime.date.today,help_text=_ht)
   objects = CourseManager()
-  def set_user_fee(self,user):
-    self.user_fee = self.last_session.section.fee
-    if user.is_authenticated():
-      self.user_fee = self.user_fee*(100-user.usermembership.membership.discount_percentage)//100
+  first_date = property(lambda self: self.active_sessions[0].first_date)
+  last_date = property(lambda self: self.active_sessions[-1].last_date)
   @cached_property
-  def active_sessions(self): #sessions that haven't finished (or even started)
-    return list(self.sessions.filter(last_date__gte=datetime.datetime.now()))
-  @cached_property
-  def future_sessions(self): # sessions that haven't started
-    return list(self.sessions.filter(first_date__gte=datetime.datetime.now()))
-  first_date = property(lambda self: self.future_sessions[0].first_date)
-  last_date = property(lambda self: self.future_sessions[-1].last_date)
+  def active_sessions(self):
+    first_date = datetime.datetime.now()-datetime.timedelta(21)
+    return list(self.sessions.filter(first_date__gte=first_date))
   @cached_property
   def open_sessions(self):
     if self.sessions:
       return [s for s in self.sessions if not s.closed and not s.full]
-  last_session = property(lambda self: (self.sessions or [None])[0])
-  last_section = property(lambda self: self.last_session.section if self.last_session else None)
+  last_session = lambda self: (self.sessions or [None])[0]
+  def set_user_fee(self,user):
+    if hasattr(self,'user_fee') or not self.last_session:
+      return
+    session = self.last_session()
+    self.user_fee = session.section.fee
+    if user.is_authenticated():
+      self.user_fee = self.user_fee*(100-user.usermembership.membership.discount_percentage)//100
+    return
   def save(self,*args,**kwargs):
     super(Course,self).save(*args,**kwargs)
     #this has to be repeated in the admin because of how that works
@@ -184,6 +185,7 @@ class Session(FeedItemModel,PhotosMixin):
   archived = property(lambda self: self.first_date<datetime.datetime.now())
   list_users = property(lambda self: [self.user])
   description = property(lambda self: self.section.description)
+  #! deprecated after course remodel
   def set_user_fee(self,user):
     self.user_fee = self.section.fee
     if user.is_authenticated():
