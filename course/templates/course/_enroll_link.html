@@ -22,6 +22,10 @@
 <div class="RsvpLink{% if session.user_enrollment %} attending{% endif %}">
   {% if session.archived %}
   <button class="btn btn-default disabled">Closed</button>
+  {% elif not request.user.is_authenticated %}
+  You must
+  <a href="/accounts/login/?next={{ session.get_absolute_url|urlencode }}">Login</a>
+  to RSVP
   {% else %}
   <button class="btn btn-default disabled is_full">FULL</button>
   <button class="btn btn-success rsvp" onclick="rsvp({{ session.id }},'{{ session.get_rsvp_url }}');">

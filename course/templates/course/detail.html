@@ -86,14 +86,10 @@
         {% endif %}
       </h3>
       {% for session in course.active_sessions %}
-      <div class="well session">
+      <div class="well session" id="s{{ session.id }}">
         <ul class="dates">
           {% for classtime in session.classtime_set.all %}
-          <li>
-            {{ classtime.start|date:"l F j<\b\r /> g:i A"|safe }}
-            -
-            {{ classtime.end_time|time:"g:i A" }}
-          </li>
+          <li>{{ classtime.start|date:"l F j g:i A"|safe }} - {{ classtime.end_time|time:"g:i A" }}</li>
           {% endfor %}
           <li>with {{ session.user.username }}</li>
         </ul>

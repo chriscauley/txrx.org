@@ -85,8 +85,12 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   last_date = property(lambda self: self.active_sessions[-1].last_date)
   @cached_property
   def active_sessions(self):
-    first_date = datetime.datetime.now()-datetime.timedelta(21)
-    return list(self.sessions.filter(first_date__gte=first_date))
+    # sessions haven't ended yet (and maybe haven't started)
+    first_date = datetime.datetime.now()+datetime.timedelta(1)
+    active_sessions = list(self.sessions.filter(last_date__gte=first_date))
+    if not active_sessions:
+      [s for s in Session.objects.filter(section__course=self)]
+    return active_sessions or list(self.sessions.filter(last_date__gte=first_date))
   @cached_property
   def open_sessions(self):
     if self.sessions:
@@ -156,6 +160,24 @@ class Branding(models.Model):
   __unicode__ = lambda self: self.name
 
 class Session(FeedItemModel,PhotosMixin):
+  def __init__(self,*args,**kwargs):
+    super(Session,self).__init__(*args,**kwargs)
+    if self.pk:
+      # this sets self.first_date to the first ClassTime.start if they aren't equal
+      # also sets self.last_date to the last ClassTime.end
+      # handled in the admin by /static/js/course_admin.js
+      _a = self.all_occurrences
+      if not _a:
+        return
+      if not _a[0].start == self.first_date:
+        print "setting first_date"
+        self.first_date = _a[0].start
+        self.save()
+      if not _a[-1].end == self.last_date:
+        print "setting first_date"
+        self.last_date = _a[-1].end
+        self.save()
+  get_ics_url = lambda self: reverse_ics(self)
   feed_item_type = 'session'
   section = models.ForeignKey(Section)
   slug = models.CharField(max_length=255)
@@ -203,21 +225,8 @@ class Session(FeedItemModel,PhotosMixin):
 
   #calendar crap
   name = property(lambda self: self.section.course.name)
-  @cached_property
-  def all_occurrences(self):
-    # this sets self.first_date to the first ClassTime.start if they aren't equal
-    # also sets self.last_date to the last ClassTime.end
-    # handled in the admin by /static/js/course_admin.js
-    _a = list(self.classtime_set.all())
-    if not _a[0].start == self.first_date:
-      print "setting first_date"
-      self.first_date = _a[0].start
-      self.save()
-    if not _a[-1].end == self.last_date:
-      print "setting first_date"
-      self.last_date = _a[-1].end
-      self.save()
-    return _a
+  all_occurrences = cached_property(lambda self:list(self.classtime_set.all()),
+                                    name='all_occurrences')
   get_ics_url = lambda self: reverse_ics(self)
 
   @cached_method

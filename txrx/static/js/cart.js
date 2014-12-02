@@ -23,11 +23,11 @@ function addItem(name,price,id) {
 
 function toggleCourses(name) {
   $(".in-cart").removeClass("in-cart");
-  for (id in simpleCart.items) { $("#s"+id).addClass("in-cart"); console.log("#s"+id) }
+  var has_items = false;
+  for (id in simpleCart.items) { $("#s"+id).addClass("in-cart"); has_items = true; }
   simpleCart.update();
-  $("#cartEmpty").hide();
-  if ($("#cart .itemContainer").length == 0) { $("#cartEmpty").show(); $("#mobileCart,.btn-cart").hide() }
-  else { $("#mobileCart,btn-cart").show(); }
+  if (has_items) { $("#mobileCart,.btn-cart").show(); }
+  else { $("#mobileCart,.btn-cart").hide(); }
   $(".recentAdd").removeClass("recentAdd");
   $(".itemContainer").each(function() {
     if ($(this).find(".itemName").text() == name) {
@@ -41,7 +41,6 @@ function applyFilters(that) {
   var form = $(that);
   var data = form.serializeArray();
   var items = $(".filterable").show();
-  console.log($(".course_list .past").length);
   if ($("#show_closed").attr("checked")) { $(".course_list .past").show(); }
   else { $(".course_list .past").hide(); }
   for (var i=0; i<data.length;i++) {
