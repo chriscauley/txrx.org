@@ -4,7 +4,8 @@ from django.core.urlresolvers import reverse
 from django.core.validators import MaxLengthValidator
 from django.template.defaultfilters import slugify
 from db.models import UserModel
-from sorl.thumbnail import ImageField
+from sorl.thumbnail import ImageField, get_thumbnail
+from crop_override import get_override
 import datetime
 
 from feed.models import FeedItemModel
@@ -13,6 +14,8 @@ from geo.models import Room
 from event.models import OccurrenceModel, reverse_ics
 from tool.models import ToolsMixin
 from txrx.utils import cached_method, cached_property, latin1_to_ascii
+
+from simplejson import dumps
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
@@ -83,6 +86,20 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   objects = CourseManager()
   first_date = property(lambda self: self.active_sessions[0].first_date)
   last_date = property(lambda self: self.active_sessions[-1].last_date)
+  @property
+  def dumps_json(self):
+    image = get_thumbnail(get_override(self.first_photo,'landscape_crop'),"298x199",crop="center")
+    return dumps({
+      'id': self.pk,
+      'url': self.get_absolute_url(),
+      'im': {
+        'width': image.width,
+        'height': image.height,
+        'url': image.url
+      },
+      'fee': self.last_session().section.fee,
+      'active_sessions': [s.dumps_json for s in self.active_sessions],
+    })
   @cached_property
   def active_sessions(self):
     # sessions haven't ended yet (and maybe haven't started)
@@ -199,6 +216,14 @@ class Session(FeedItemModel,PhotosMixin):
   in_progress = property(lambda self: self.archived and self.last_date>datetime.datetime.now())
   closed = property(lambda self: self.cancelled or (self.archived and not self.in_progress))
   get_room = lambda self: self.section.room
+  @property
+  def dumps_json(self):
+    return {
+      'closed_status': self.closed_string if (self.closed or self.full) else None,
+      'short_dates': self.get_short_dates(),
+      'instructor_name': self.get_instructor_name(),
+      'instructor_pk': self.user_id
+    }
   @cached_property
   def total_students(self):
     return sum([e.quantity for e in self.enrollment_set.all()])

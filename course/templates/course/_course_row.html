@@ -1,42 +1,26 @@
 {% load txrx_tags thumbnail crop_util %}
+{% verbatim %}
 <div class=" col-sm-12 col-lg-6">
-  <div class="course new filterable well{% if course.last_date < yesterday %} past{% endif %}{% if course in user_courses %} success{% endif %}"
-       id="c{{session.id}}" data-subject="{% for subject in course.subjects.all %}{{ subject }},{% endfor %}"
-       data-date="{{ course.first_date|date:"Ymd" }}">
-    <a href="{% url "course:detail" course.pk course.slug %}" class="picture">
-      {% thumbnail course.first_photo|get_override:"landscape_crop" "298x199" crop="center" as im %}
-      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
-      {% endthumbnail %}
+  <div class="course new filterable well" id="c{{ course.id }}">
+    <a href="{{ course.url }}" class="picture">
+      <img src="{{ course.im.url }}" width="{{ course.im.width }}" height="{{ course.im.height }}" />
     </a>
     <div class="details">
-      <a href="{% url "course:detail" course.pk course.slug %}" class="title">
-        {% if course.branding %} {#! todo not implimented #}
-        {% thumbnail course.branding.get_small_image "150x40" crop="center" as im %}
-        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"
-             style="float:left;margin: 5px 10px 0 0;" />
-        {% endthumbnail %}
-        {% endif %}
+      <a href="{{ couse.url }}" class="title">
         {{ course }}
         <div class="price">$ {{ course.user_fee }}</div>
       </a>
-      {% for session in course.active_sessions %}
-      {% if forloop.counter == 3 and course.active_sessions|length > 3 %}
-      <input type="checkbox" id="show_sessions_{{ course.pk }}" class="session_toggle" />
-      <label for="show_sessions_{{ course.pk }}">
-        {{ course.active_sessions|length|add:-2 }} more sessions</label>
-      {% endif %}
-      <div class="session">
-        <small>
-          {% if session.full or session.closed %}
-          <b style="color: red;">
-            [{% if session.full %}FULL{% else %}{{ session.closed_string }}{% endif %}]</b>
-          {% endif %}
-          {{ session.get_short_dates }}
-          with <a href="{% url "member_detail" session.user.username %}">
-            <i class="icon-user"></i>{{ session.get_instructor_name }}</a>
-        </small>
+      <div class="sessions" data-ng-repeat="session in course.active_sessions">
+        <div class="session">
+          <small>
+            <b class="closed_string" ngif="session.closed_status">{{ session.closed_string }}</b>
+            {{ session.get_short_dates }}
+            with <a href="">
+              <i class="icon-user"></i>{{ session.instructor_name }}</a>
+          </small>
+        </div>
       </div>
-      {% endfor %}
     </div>
   </div>
 </div>
+{% endverbatim %}
