@@ -6,6 +6,43 @@
 <div class="col-sm-12">
   <h1 class="page-title">{{ session.section.course.name }} - {{ session.get_short_dates }}</h1>
 </div>
+{% if session.get_evaluations %}
+<div class="col-sm-12">
+  <div class="well">
+    <h3>Course Evaluations</h3>
+    <div class="accordion" id="evaluation_panel">
+      <div class="accordion-group">
+        {% for evaluation in session.get_evaluations.all %}
+        <div class="accordion-heading">
+          <a class="accordion-toggle row" data-parent="#evaluation_panel"
+             data-toggle="collapse" href="#evaluation_number_{{ evaluation.id }}">
+            {% for name,number,comments in evaluation.get_number_tuples %}
+            <span class="span3">
+              <b>{{ name }}</b> {{ number }}
+              {% if comments %} + COMMENTS{% endif %}
+            </span>
+            {% endfor %}
+            {% if evaluation.get_question_tuples %}
+            <span class="span2">+ {{ evaluation.get_question_tuples|length }} Feedbacks</span>
+            {% endif %}
+          </a>
+        </div>
+        <div id="evaluation_number_{{ evaluation.id }}" class="accordion-body collapse">{{ forloop.parent }}
+          <div class="accordion-inner">
+            {% for question,answer in evaluation.get_question_tuples %}
+            <div>
+              <b>{{ question }}</b>
+              <p>{{ answer }}</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 <div class="col-sm-6">
   <div class="well">
     <h2>Student List ({{ session.total_students }}/{{ session.section.max_students }} students)</h2>

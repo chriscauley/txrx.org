@@ -285,7 +285,8 @@ class Session(FeedItemModel,PhotosMixin):
       else:
         out.append(d.strftime("%e"))
     return ', '.join(out)
-    
+  def get_evaluations(self):
+    return Evaluation.objects.filter(enrollment__session=self)
   class Meta:
     ordering = ('first_date',)
 
