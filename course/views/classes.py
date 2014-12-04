@@ -34,7 +34,8 @@ get_filters = lambda: {
 
 def json(request):
   values = {
-    'courses':Course.objects.filter(active=True),
+    'courses': simplejson.dumps([c.as_json for c in Course.objects.filter(active=True)]),
+    'subjects': simplejson.dumps([s.as_json for s in Subject.objects.filter(parent=None)]),
   }
   return TemplateResponse(request,'course/classes.json',values)
 

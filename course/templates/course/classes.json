@@ -3,4 +3,5 @@ function compare_classes(a,b) {
   if (a.next_time<b.next_time) { return -1 }
   return 0;
 }
-ALL_CLASSES = [{% for course in courses %}{{ course.dumps_json|safe }}{% if not forloop.last %},{% endif %}{% endfor %}].sort(compare_classes);
+ALL_CLASSES = {{ courses|safe }}.sort(compare_classes);
+CLASS_SUBJECTS = {{ subjects|safe }};

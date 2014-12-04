@@ -11,17 +11,45 @@
 {% endblock %}
 {% block extrajs %}
 <script>
-var myApp = angular.module('myApp', ['infinite-scroll']);
+var myApp = angular.module("myApp", ["infinite-scroll"]);
 
-myApp.controller('DemoController', function($scope) {
+myApp.controller("DemoController", function($scope) {
   $scope.courses = ALL_CLASSES;
+  $scope.subjects = CLASS_SUBJECTS;
 
-  $scope.open_courses = $scope.courses.slice(0,10);
-  $scope._vi = 10;
+  $scope._vi = 8;
+  var active_courses = [];
+  var inactive_courses = [];
+  var active_subjects = {};
+  var inactive_subjects = {};
+  for (var i=0;i<$scope.courses.length;i++) {
+    var c = $scope.courses[i];
+    if (c.next_time == 0) {
+      inactive_courses.push(c);
+      s = inactive_subjects;
+    } else {
+      active_courses.push(c);
+      s = active_subjects;
+    }
+    for (var si=0;si<c.subjects.length;si++) {
+      s[c.subjects[si]] = (s[c.subjects[si]] || 0) + 1;
+    }
+  }
+  for (var si=0;si<$scope.subjects.length;si++) {
+    var s = $scope.subjects[si];
+    s.active_courses = active_subjects[s.id] || 0;
+    s.inactive_courses = inactive_subjects[s.id] || 0;
+    for (var ci=0;ci<s.children.length;ci++) {
+      var c = s.children[ci];
+      c.active_courses = active_subjects[c.id] || 0;
+      c.inactive_courses = inactive_subjects[c.id] || 0;      
+    }
+  }
+  $scope.display_courses = $scope.courses.slice(0,$scope._vi);
   $scope.loadMore = function() {
-    if ($scope._vi == $scope.courses.length) {return }
-    $scope.open_courses = $scope.courses.slice(0,$scope.open_courses.length+6);
-    $scope._vi = $scope.open_courses.length
+    if ($scope._vi >= $scope.courses.length) {return }
+    $scope._vi = Math.min($scope.display_courses.length+6,$scope.courses.length);
+    $scope.display_courses = $scope.courses.slice(0,$scope._vi);
     console.log($scope._vi);
   };
 });
@@ -39,7 +67,8 @@ myApp.controller('DemoController', function($scope) {
     </div>
   </h1>
 </div>
-<div style="clear:both;"></div>
+<div>style="clear:both;"></div>
+<div ng-app="myApp" ng-controller="DemoController">
 <div class="col-sm-6 col-md-4 col-lg-3" id="side">
   <input type="checkbox" id="toggle_filters" />
   <label for="toggle_filters" class="btn btn-success">Filter by Subject</label>
@@ -59,12 +88,10 @@ myApp.controller('DemoController', function($scope) {
   </ul>
   <div class="tab-content">
     <div class="tab-pane active" class="course_list">
-      <div ng-app='myApp' ng-controller='DemoController'>
-        <div infinite-scroll='loadMore()' infinite-scroll-distance='2'>
-          <div class="row">
-            <div ng-repeat='course in open_courses track by $index'>
-              {% include "course/_course_row.html" %}
-            </div>
+      <div infinite-scroll="loadMore()" infinite-scroll-distance="2">
+        <div class="row">
+          <div ng-repeat="course in active_courses">
+            {% include "course/_course_row.html" %}
           </div>
         </div>
       </div>
@@ -100,5 +127,6 @@ myApp.controller('DemoController', function($scope) {
     </div>
     {% endif %}
   </div>
+</div>
 </div>
 {% endblock %}

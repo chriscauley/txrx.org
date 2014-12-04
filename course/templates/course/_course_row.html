@@ -8,7 +8,7 @@
     <div class="details">
       <a href="{{ couse.url }}" class="title">
         {{ course.name }}
-        <div class="price">$ {{ course.fee }}</div>
+        <div class="price">{{ course.fee }}</div>
       </a>
       <div class="sessions" data-ng-repeat="session in course.active_sessions">
         <div class="session">

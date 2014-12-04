@@ -37,6 +37,16 @@ class Subject(models.Model):
   def save(self,*args,**kwargs):
     self.order = self.get_order()
     super(Subject,self).save(*args,**kwargs)
+  @property
+  def as_json(self):
+    return {
+      'id': self.pk,
+      'name': self.name,
+      'children': [s.as_json for s in self.subject_set.all()],
+      'value': self.pk,
+      'active_courses': 0,
+      'inactive_courses': 0
+    }
 
   def __unicode__(self):
     if self.parent:
@@ -87,9 +97,9 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   first_date = property(lambda self: self.active_sessions[0].first_date)
   last_date = property(lambda self: self.active_sessions[-1].last_date)
   @property
-  def dumps_json(self):
+  def as_json(self):
     image = get_thumbnail(get_override(self.first_photo,'landscape_crop'),"298x199",crop="center")
-    return dumps({
+    return {
       'id': self.pk,
       'name': self.name,
       'subjects': [s.pk for s in self.subjects.all()],
@@ -99,10 +109,10 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
         'height': image.height,
         'url': image.url
       },
-      'next_time': time.mktime(self.first_date.timetuple()) if self.active_sessions else 1e10,
-      'fee': self.last_session().section.fee,
-      'active_sessions': [s.dumps_json for s in self.active_sessions],
-    })
+      'next_time': time.mktime(self.first_date.timetuple()) if self.active_sessions else 0,
+      'fee': self.last_session().section.fee if self.last_session() else None,
+      'active_sessions': [s.as_json for s in self.active_sessions],
+    }
   @cached_property
   def active_sessions(self):
     # sessions haven't ended yet (and maybe haven't started)
@@ -220,7 +230,7 @@ class Session(FeedItemModel,PhotosMixin):
   closed = property(lambda self: self.cancelled or (self.archived and not self.in_progress))
   get_room = lambda self: self.section.room
   @property
-  def dumps_json(self):
+  def as_json(self):
     return {
       'closed_status': self.closed_string if (self.closed or self.full) else None,
       'short_dates': self.get_short_dates(),
