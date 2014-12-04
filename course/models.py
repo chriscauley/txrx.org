@@ -297,7 +297,6 @@ class Session(FeedItemModel,PhotosMixin):
   get_admin_url = lambda self: "/admin/course/session/%s/"%self.id
   get_rsvp_url = cached_method(lambda self: reverse('course:rsvp',args=[self.id]),name="get_rsvp_url")
   def get_instructor_name(self):
-    instructor = self.user
     if self.user.first_name and self.user.last_name:
       return "%s %s."%(self.user.first_name, self.user.last_name[0])
     return self.user.username

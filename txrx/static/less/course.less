@@ -19,6 +19,13 @@
 
 .course .details {
   min-height: 82px;
+  .closed_string {
+    color: red;
+    text-transform: uppercase;
+    &:before { content: "["; }
+    &:after { content: "]"; }
+    &:empty { display: none; }
+  }
   .price {
     color: black;
     position: absolute;

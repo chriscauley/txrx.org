@@ -7,14 +7,14 @@
     </a>
     <div class="details">
       <a href="{{ couse.url }}" class="title">
-        {{ course.title }}
-        <div class="price">$ {{ course.user_fee }}</div>
+        {{ course.name }}
+        <div class="price">$ {{ course.fee }}</div>
       </a>
       <div class="sessions" data-ng-repeat="session in course.active_sessions">
         <div class="session">
           <small>
-            <b class="closed_string" ngif="session.closed_status">{{ session.closed_string }}</b>
-            {{ session.get_short_dates }}
+            <b class="closed_string">{{ session.closed_status }}</b>
+            {{ session.short_dates }}
             with <a href="">
               <i class="icon-user"></i>{{ session.instructor_name }}</a>
           </small>
