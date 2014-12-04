@@ -17,14 +17,13 @@ myApp.controller('DemoController', function($scope) {
     {% for course in courses %}{{ course.dumps_json|safe }}{% if not forloop.last %},{% endif %}{% endfor %}
   ]
 
-  $scope._vi = 0;
-  $scope.open_courses = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+  $scope.open_courses = $scope.courses.slice(0,10);
+  $scope._vi = 10;
   $scope.loadMore = function() {
-    if ($scope.open_courses.length > 30) {return}
-    var last = $scope.open_courses[$scope.open_courses.length - 1];
-    for(var i = 1; i <= 8; i++) {
-      $scope.open_courses.push($scope.courses[i].name);
-    }
+    if ($scope._vi == $scope.courses.length) {return }
+    $scope.open_courses = $scope.courses.slice(0,$scope.open_courses.length+6);
+    $scope._vi = $scope.open_courses.length
+    console.log($scope._vi);
   };
 });
 
@@ -67,21 +66,16 @@ ngTXRX.controller('CourseController', function($scope) {
     {% endif %}
   </ul>
   <div class="tab-content">
-    <div class="tab-pane active">
-      {% verbatim %}
+    <div class="tab-pane active" class="course_list">
       <div ng-app='myApp' ng-controller='DemoController'>
         <div infinite-scroll='loadMore()' infinite-scroll-distance='2'>
-          <h1 ng-repeat='course in open_courses track by $index'>{{ course }}
+          <div class="row">
+            <div ng-repeat='course in open_courses track by $index'>
+              {% include "course/_course_row.html" %}
+            </div>
+          </div>
         </div>
       </div>
-      {% endverbatim %}
-      {% comment %}
-      <div class="course_list" infinite-scroll="loadMore()" infinite-scroll-distance="2">
-        <div class="row" ng-repeat="course in visible_courses">
-          {% include "course/_course_row.html" %}
-        </div>
-      </div>
-      {% endcomment %}
     </div>
     <div class="tab-pane" id="my_classes">
       {% if request.user.is_authenticated %}
