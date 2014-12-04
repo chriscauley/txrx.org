@@ -91,6 +91,8 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
     image = get_thumbnail(get_override(self.first_photo,'landscape_crop'),"298x199",crop="center")
     return dumps({
       'id': self.pk,
+      'name': self.name,
+      'subjects': [s.pk for s in self.subjects.all()],
       'url': self.get_absolute_url(),
       'im': {
         'width': image.width,

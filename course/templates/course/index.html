@@ -1,4 +1,4 @@
-{% extends "base2.html" %}
+{% extends "base.html" %}
 {% load thumbnail %}
 
 {% block title %}Classes {{ term.name }}{% endblock %}
@@ -13,12 +13,17 @@
 var myApp = angular.module('myApp', ['infinite-scroll']);
 
 myApp.controller('DemoController', function($scope) {
-  console.log('arst')
-  $scope.images = [1, 2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20];
+  $scope.courses = [
+    {% for course in courses %}{{ course.dumps_json|safe }}{% if not forloop.last %},{% endif %}{% endfor %}
+  ]
+
+  $scope._vi = 0;
+  $scope.open_courses = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
   $scope.loadMore = function() {
-    var last = $scope.images[$scope.images.length - 1];
+    if ($scope.open_courses.length > 30) {return}
+    var last = $scope.open_courses[$scope.open_courses.length - 1];
     for(var i = 1; i <= 8; i++) {
-      $scope.images.push(last + i);
+      $scope.open_courses.push($scope.courses[i].name);
     }
   };
 });
@@ -28,14 +33,6 @@ myApp.controller('DemoController', function($scope) {
 });
 
 ngTXRX.controller('CourseController', function($scope) {
-  $scope.courses = [
-    {% for course in courses %}{{ course.dumps_json|safe }}{% if not forloop.last %},{% endif %}{% endfor %}
-  ]
-  $scope._vi = 10;
-  function loadMore() {
-    $scope._vi += 10;
-    $scope.visible_courses = $scope.course.slice(0,$scope._vi);
-  }
 });*/
 </script>
 {% endblock %}
@@ -69,23 +66,23 @@ ngTXRX.controller('CourseController', function($scope) {
         Instructor ({{ instructor_sessions|length }})</a></li>
     {% endif %}
   </ul>
-  {% verbatim %}
-  <div ng-app='myApp' ng-controller='DemoController'>
-    <div infinite-scroll='loadMore()' infinite-scroll-distance='2'>
-      <img ng-repeat='image in images' ng-src='http://placehold.it/225x250&text={{image}}'>
-    </div>
-  </div>
-  {% endverbatim %}
   <div class="tab-content">
-    {% comment %}
-    <div class="tab-pane active" id="all_classes" ng-app="ngTXRX" ng-controller="CourseController">
+    <div class="tab-pane active">
+      {% verbatim %}
+      <div ng-app='myApp' ng-controller='DemoController'>
+        <div infinite-scroll='loadMore()' infinite-scroll-distance='2'>
+          <h1 ng-repeat='course in open_courses track by $index'>{{ course }}
+        </div>
+      </div>
+      {% endverbatim %}
+      {% comment %}
       <div class="course_list" infinite-scroll="loadMore()" infinite-scroll-distance="2">
         <div class="row" ng-repeat="course in visible_courses">
           {% include "course/_course_row.html" %}
         </div>
       </div>
+      {% endcomment %}
     </div>
-    {% endcomment %}
     <div class="tab-pane" id="my_classes">
       {% if request.user.is_authenticated %}
       {% include "course/_myclasses.html" %}

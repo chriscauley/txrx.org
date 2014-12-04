@@ -19,8 +19,6 @@
   {% endfor %}
 </div>
 <script>
-  $.ready(function() {
-    $("#filter_{{ f.slug }} [name={{ f.slug }}]").change(function() { $(this).closest("form").submit(); });
-  });
+  $("#filter_{{ f.slug }} [name={{ f.slug }}]").change(function() { $(this).closest("form").submit(); });
 </script>
 {% endfor %}
