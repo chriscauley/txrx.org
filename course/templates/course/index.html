@@ -45,11 +45,11 @@ myApp.controller("DemoController", function($scope) {
       c.inactive_courses = inactive_subjects[c.id] || 0;      
     }
   }
-  $scope.display_courses = $scope.courses.slice(0,$scope._vi);
+  $scope.display_courses = active_courses.slice(0,$scope._vi);
   $scope.loadMore = function() {
     if ($scope._vi >= $scope.courses.length) {return }
     $scope._vi = Math.min($scope.display_courses.length+6,$scope.courses.length);
-    $scope.display_courses = $scope.courses.slice(0,$scope._vi);
+    $scope.display_courses = active_courses.slice(0,$scope._vi);
     console.log($scope._vi);
   };
 });
@@ -67,7 +67,7 @@ myApp.controller("DemoController", function($scope) {
     </div>
   </h1>
 </div>
-<div>style="clear:both;"></div>
+<div style="clear:both;"></div>
 <div ng-app="myApp" ng-controller="DemoController">
 <div class="col-sm-6 col-md-4 col-lg-3" id="side">
   <input type="checkbox" id="toggle_filters" />
@@ -90,7 +90,7 @@ myApp.controller("DemoController", function($scope) {
     <div class="tab-pane active" class="course_list">
       <div infinite-scroll="loadMore()" infinite-scroll-distance="2">
         <div class="row">
-          <div ng-repeat="course in active_courses">
+          <div ng-repeat="course in display_courses">
             {% include "course/_course_row.html" %}
           </div>
         </div>

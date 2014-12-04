@@ -17,21 +17,6 @@ from event.utils import make_ics,ics2response
 from paypal.standard.ipn.models import *
 import datetime, simplejson
 
-get_filters = lambda: {
-  "term": {
-    "model": Term,
-    "options": Term.objects.exclude(section__term__name__icontains='test'),
-    "name": "Term",
-    "slug": "term"
-  },
-  "subject": {
-    "model": Subject,
-    "options": Subject.objects.filter(parent__isnull=True),
-    "name": "Subject",
-    "slug": "subject"
-  }
-}
-
 def json(request):
   values = {
     'courses': simplejson.dumps([c.as_json for c in Course.objects.filter(active=True)]),
@@ -41,27 +26,6 @@ def json(request):
 
 def index(request):
   term = Term.objects.all()[0]
-  now = datetime.datetime.now()
-  all_courses = Course.objects.filter(active=True)
-  courses = all_courses.filter(section__session__first_date__gte=now).distinct()
-  unscheduled_courses = all_courses.filter(section__session__first_date__lt=now)
-  subject_filters = get_filters()['subject']
-  active_subjects = {}
-  closed_subjects = {}
-  yesterday = datetime.datetime.now()-datetime.timedelta(0.5)
-  for course in courses:
-    course.set_user_fee(request.user)
-    for subject in course.subjects.all():
-      closed_subjects[subject.pk] = closed_subjects.get(subject.pk,0) + 1
-      if not course.last_date < yesterday:
-        active_subjects[subject.pk] = active_subjects.get(subject.pk,0) + 1
-  for subject in subject_filters['options']:
-    subject.count = active_subjects.get(subject.pk,0)
-    subject.subfilters = []
-    for child in subject.subject_set.all():
-      if active_subjects.get(child.pk,0):
-        child.count = active_subjects.get(child.pk,0)
-        subject.subfilters.append(child)
   user_courses = []
   user_sessions = []
   instructor_sessions = []
@@ -72,15 +36,11 @@ def index(request):
     for session in user_sessions:
       user_courses.append(session)
   user_sessions = sorted(list(user_sessions),key=lambda s: s.first_date)
-  courses = sorted(courses,key=lambda c: c.first_date)
   values = {
-    'courses': courses,
-    'filters': [subject_filters],
     'term': term,
     'user_sessions': user_sessions,
     'user_courses': user_courses,
     'instructor_sessions': instructor_sessions,
-    'yesterday': yesterday,
   }
   return TemplateResponse(request,"course/index.html",values)
 
