@@ -144,6 +144,8 @@ form.filters { margin-bottom: 10px; }
     width: 100%;
   }
   input:checked + label { font-weight: bold; }
+  .child { display:none; }
+  input:checked ~ .child { display: block; }
 }
 
 #bot_right,#mobileCart {
