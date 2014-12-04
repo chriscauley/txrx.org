@@ -32,6 +32,12 @@ get_filters = lambda: {
   }
 }
 
+def json(request):
+  values = {
+    'courses':Course.objects.filter(active=True),
+  }
+  return TemplateResponse(request,'course/classes.json',values)
+
 def index(request):
   term = Term.objects.all()[0]
   now = datetime.datetime.now()

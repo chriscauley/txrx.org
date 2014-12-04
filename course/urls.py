@@ -11,6 +11,7 @@ urlpatterns = patterns(
   url(r'^debug/(?P<id>\d+)/$', 'debug_parsing',name='debug_parsing'),
 
   url(r'^$', 'classes.index'),
+  url(r'^classes.json$','classes.json',name='classes_json'),
   url(r'^rsvp/(\d+)/','classes.rsvp',name='rsvp'),
   url(r'^term/(\d+)/', 'classes.index'),
   url(r'^ics/(all_classes).ics$','classes.ics_classes_all',name='ics_classes_all'),

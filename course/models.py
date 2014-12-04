@@ -6,7 +6,7 @@ from django.template.defaultfilters import slugify
 from db.models import UserModel
 from sorl.thumbnail import ImageField, get_thumbnail
 from crop_override import get_override
-import datetime
+import datetime, time
 
 from feed.models import FeedItemModel
 from media.models import FilesMixin, PhotosMixin
@@ -99,6 +99,7 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
         'height': image.height,
         'url': image.url
       },
+      'next_time': time.mktime(self.first_date.timetuple()) if self.active_sessions else 1e10,
       'fee': self.last_session().section.fee,
       'active_sessions': [s.dumps_json for s in self.active_sessions],
     })

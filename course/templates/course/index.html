@@ -7,15 +7,14 @@
 {% block head %}
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
 <script src="{{ STATIC_URL }}js/ng-infinite-scroll.js"></script>
+<script src="{% url "course:classes_json" %}"></script>
 {% endblock %}
 {% block extrajs %}
 <script>
 var myApp = angular.module('myApp', ['infinite-scroll']);
 
 myApp.controller('DemoController', function($scope) {
-  $scope.courses = [
-    {% for course in courses %}{{ course.dumps_json|safe }}{% if not forloop.last %},{% endif %}{% endfor %}
-  ]
+  $scope.courses = ALL_CLASSES;
 
   $scope.open_courses = $scope.courses.slice(0,10);
   $scope._vi = 10;
