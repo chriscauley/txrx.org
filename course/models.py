@@ -80,6 +80,16 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   _ht = "The dashboard (/admin/) won't bug you to reschedule until after this date"
   reschedule_on = models.DateField(default=datetime.date.today,help_text=_ht)
   objects = CourseManager()
+  first_date = property(lambda self: self.active_sessions[0].first_date)
+  last_date = property(lambda self: self.active_sessions[-1].last_date)
+  @cached_property
+  def active_sessions(self):
+    # sessions haven't ended yet (and maybe haven't started)
+    first_date = datetime.datetime.now()+datetime.timedelta(1)
+    active_sessions = list(self.sessions.filter(last_date__gte=first_date))
+    if not active_sessions:
+      [s for s in Session.objects.filter(section__course=self)]
+    return active_sessions or list(self.sessions.filter(last_date__gte=first_date))
   @cached_property
   def open_sessions(self):
     if self.sessions:
@@ -141,6 +151,24 @@ class Branding(models.Model):
   __unicode__ = lambda self: self.name
 
 class Session(FeedItemModel,PhotosMixin):
+  def __init__(self,*args,**kwargs):
+    super(Session,self).__init__(*args,**kwargs)
+    if not self.pk:
+      return
+    # this sets self.first_date to the first ClassTime.start if they aren't equal
+    # also sets self.last_date to the last ClassTime.end
+    # handled in the admin by /static/js/course_admin.js
+    _a = self.all_occurrences
+    if not _a:
+      return
+    if _a[0].start != self.first_date:
+      print "setting first_date"
+      self.first_date = _a[0].start
+      self.save()
+    if _a[-1].end != self.last_date:
+      print "setting first_date"
+      self.last_date = _a[-1].end
+      self.save()
   feed_item_type = 'session'
   section = models.ForeignKey(Section)
   slug = models.CharField(max_length=255)
@@ -149,6 +177,7 @@ class Session(FeedItemModel,PhotosMixin):
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
   _ht = "This will be automatically updated when you save the model. Do not change"
   first_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
+  last_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
   created = models.DateTimeField(auto_now_add=True) # for emailing new classes
   # depracated?
   ts_help = "Only used to set dates on creation."
@@ -186,16 +215,8 @@ class Session(FeedItemModel,PhotosMixin):
 
   #calendar crap
   name = property(lambda self: self.section.course.name)
-  @cached_property
-  def all_occurrences(self):
-    # this sets self.first_date to the first ClassTime.start if they aren't equal
-    # handled in the admin by /static/js/course_admin.js
-    _a = self.classtime_set.all()
-    if not _a[0].start == self.first_date:
-      print "setting first_date"
-      self.first_date = _a[0].start
-      self.save()
-    return _a
+  all_occurrences = cached_property(lambda self:list(self.classtime_set.all()),
+                                    name='all_occurrences')
   get_ics_url = lambda self: reverse_ics(self)
 
   @cached_method
@@ -232,17 +253,12 @@ class Session(FeedItemModel,PhotosMixin):
     super(Session,self).save(*args,**kwargs)
     self.slug = slugify("%s_%s"%(self.section,self.id))
     return super(Session,self).save(*args,**kwargs)
-    
+
   @cached_method
   def get_absolute_url(self):
     return reverse('course:detail',args=[self.slug])
   get_admin_url = lambda self: "/admin/course/session/%s/"%self.id
   get_rsvp_url = cached_method(lambda self: reverse('course:rsvp',args=[self.id]),name="get_rsvp_url")
-  @cached_property
-  def last_date(self):
-    if self.all_occurrences:
-      return list(self.all_occurrences)[-1].end
-    return datetime.datetime(2000,1,1)
   def get_instructor_name(self):
     instructor = self.user
     if self.user.first_name and self.user.last_name:
@@ -259,9 +275,11 @@ class Session(FeedItemModel,PhotosMixin):
       else:
         out.append(d.strftime("%e"))
     return ', '.join(out)
-    
+  def get_evaluations(self):
+    return Evaluation.objects.filter(enrollment__session=self)
+
   class Meta:
-    ordering = ('section',)
+    ordering = ('first_date',)
 
 class ClassTime(OccurrenceModel):
   session = models.ForeignKey(Session)
