@@ -38,11 +38,11 @@ class Tool(OrderedModel,PhotosMixin):
   est_price = models.FloatField(null=True,blank=True)
   links = lambda self: self.toollink_set.all()
   materials = models.ManyToManyField("thing.Material",null=True,blank=True)
+  room = models.ForeignKey(Room,null=True,blank=True)
   get_absolute_url = lambda self: reverse("tool_detail",args=[self.slug,self.id])
   functional = models.BooleanField(default=True)
   repair_date = models.DateField(null=True,blank=True)
   get_status = lambda self: "Functional" if self.functional else "Non-functional"
-  room = models.ForeignKey(Room,null=True,blank=True)
   class Meta:
     ordering = ("lab","order")
   # Abstract the next two!
@@ -86,3 +86,10 @@ class ToolsMixin():
   def _get_tools(self):
     return list(Tool.objects.filter(taggedtool__content_type_id=self._ct_id,
                                      taggedtool__object_id=self.id).order_by("taggedtool__order"))
+
+class ToolCertification(models.Model):
+  name = models.CharField(max_length=32)
+  tool = models.ForeignKey(Tool)
+  safety = models.BooleanField(default=False)
+  waiver = models.BooleanField(default=False)
+  room = models.ForeignKey(Room)
