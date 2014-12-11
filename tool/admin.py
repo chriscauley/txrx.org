@@ -29,7 +29,10 @@ class ToolAdmin(OrderedModelAdmin):
     return bool(obj.description)
   has_description.boolean = True
   def _materials(self,obj):
-    return obj.materials.count() or '<img src="/static/admin/img/icon-no.gif" alt="False">'
+    m = obj.materials
+    if not m.count():
+      return'<img src="/static/admin/img/icon-no.gif" alt="False">'
+    return "%s (%s)"%(m.filter(parent__isnull=True),m.filter(parent__isnull=False))
   _materials.allow_tags = True
 
 #See note above corresponding model

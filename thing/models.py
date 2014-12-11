@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 
-from db.models import UserModel
+from db.models import UserModel,NamedTreeModel
 from media.models import PhotosMixin, FilesMixin
 from course.models import Session
 from tool.models import ToolsMixin
@@ -10,13 +10,11 @@ from blog.templatetags.short_codes import explosivo
 
 from wmd import models as wmd_models
 
-class Material(models.Model):
-  name = models.CharField(max_length=64)
+class Material(NamedTreeModel):
   count = lambda self: self.thing_set.count()
   value = property(lambda self: self.pk)
-  __unicode__ = lambda self: self.name
   class Meta:
-    ordering = ('name',)
+    ordering = ('order',)
 
 class Thing(UserModel,PhotosMixin,ToolsMixin,FilesMixin):
   feed_item_type = 'thing'

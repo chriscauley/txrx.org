@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.validators import MaxLengthValidator
 from django.template.defaultfilters import slugify
-from db.models import UserModel
+from db.models import UserModel, NamedTreeModel
 from sorl.thumbnail import ImageField
 import datetime
 
@@ -21,24 +21,8 @@ def to_base32(s):
   s = s.strip('0987654321')
   return int("0x"+"".join([hex(key.find(i))[2:].zfill(2) for i in (slugify(s)+"----")[:4]]),16)
 
-class Subject(models.Model):
-  name = models.CharField(max_length=32)
-  parent = models.ForeignKey("self",null=True,blank=True)
-  order = models.FloatField(default=0)
+class Subject(NamedTreeModel):
   value = lambda self: self.name
-  def get_order(self):
-    max_num = to_base32("zzzz")
-    if self.parent:
-      return to_base32(self.parent.name) + to_base32(self.name)/float(max_num)
-    return to_base32(self.name)
-  def save(self,*args,**kwargs):
-    self.order = self.get_order()
-    super(Subject,self).save(*args,**kwargs)
-
-  def __unicode__(self):
-    if self.parent:
-      return "(%s) %s"%(self.parent,self.name)
-    return self.name
   class Meta:
     ordering = ('order',)
 

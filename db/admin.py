@@ -23,3 +23,6 @@ class SlugModelInline(admin.TabularInline):
 
 class ColumnModelAdmin(admin.ModelAdmin):
   list_filter = ('column',)
+
+class NamedTreeModelAdmin(admin.ModelAdmin):
+  exclude = ('order',)

@@ -13,6 +13,31 @@ class OrderedModel(models.Model):
   class Meta:
     abstract = True
 
+def to_base32(s):
+  key = '-abcdefghijklmnopqrstuvwxyz'
+  s = s.strip('0987654321')
+  return int("0x"+"".join([hex(key.find(i))[2:].zfill(2) for i in (slugify(s)+"----")[:4]]),16)
+
+class NamedTreeModel(models.Model):
+  name = models.CharField(max_length=64)
+  parent = models.ForeignKey("self",null=True,blank=True)
+  order = models.FloatField(default=0)
+  def get_order(self):
+    max_num = to_base32("zzzz")
+    if self.parent:
+      return to_base32(self.parent.name) + to_base32(self.name)/float(max_num)
+    return to_base32(self.name)
+  def save(self,*args,**kwargs):
+    self.order = self.get_order()
+    super(NamedTreeModel,self).save(*args,**kwargs)
+
+  def __unicode__(self):
+    if self.parent:
+      return "(%s) %s"%(self.parent,self.name)
+    return self.name
+  class Meta:
+    abstract = True
+
 class SlugModel(models.Model):
   title = models.CharField(max_length=128)
   __unicode__ = lambda self: self.title

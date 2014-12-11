@@ -6,13 +6,13 @@
 
 {% block main %}
 <div id="labs" class="row">
-  {% for lab in labs %}
-  {% thumbnail lab.first_photo|get_override:"landscape_crop" "600x450" crop="center" as im %}
+  {% for room in rooms %}
+  {% thumbnail room.first_photo|get_override:"landscape_crop" "600x450" crop="center" as im %}
   <div class="lab col-md-4 col-sm-6 col-xs-12">
-    <a href="{% url "lab_detail" lab.slug lab.id %}">
+    <a href="{% url "room_detail" room.slug room.id %}">
       <img class="bg" src="{{ im.url }}" alt="" />
       <div class="bottom">
-        <div class="title">{{ lab.name }}</div>
+        <div class="title">{{ room.name }}</div>
       </div>
     </a>
   </div>

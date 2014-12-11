@@ -2,12 +2,10 @@ from django.contrib import admin
 from django import forms
 from course.models import Subject, Course, Section, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseCompletion
 from db.forms import StaffMemberForm
+from db.admin import NamedTreeModelAdmin
 
 from media.admin import TaggedPhotoInline, TaggedFileInline
 from tool.admin import TaggedToolInline
-
-class SubjectAdmin(admin.ModelAdmin):
-  exclude = ('order',)
 
 class CourseCompletionInline(admin.TabularInline):
   model = CourseCompletion
@@ -80,7 +78,7 @@ class EnrollmentAdmin(admin.ModelAdmin):
   search_fields = ("user__username","user__email","user__usermembership__paypal_email")
   raw_id_fields = ("user","session")
 
-admin.site.register(Subject,SubjectAdmin)
+admin.site.register(Subject,NamedTreeModelAdmin)
 admin.site.register(Course,CourseAdmin)
 admin.site.register(Section,SectionAdmin)
 admin.site.register(Enrollment,EnrollmentAdmin)
