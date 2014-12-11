@@ -10,7 +10,7 @@ from media.models import Photo, PhotosMixin
 from south.modelsinspector import add_introspection_rules
 from txrx.utils import cached_property, cached_method
 from wmd.models import MarkDownField
-
+from geo.models import Room
 
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
 
@@ -42,6 +42,7 @@ class Tool(OrderedModel,PhotosMixin):
   functional = models.BooleanField(default=True)
   repair_date = models.DateField(null=True,blank=True)
   get_status = lambda self: "Functional" if self.functional else "Non-functional"
+  room = models.ForeignKey(Room,null=True,blank=True)
   class Meta:
     ordering = ("lab","order")
   # Abstract the next two!
