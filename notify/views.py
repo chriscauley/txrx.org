@@ -27,7 +27,7 @@ def clear_notification(request,model_string,user_id,model_id):
     'course': course,
     }
   messages.success(request,"You will not be emailed the next time we teach {}".format(course))
-  return HttpResponseRedirect(request.GET.get('next',session.get_absolute_url()))
+  return HttpResponseRedirect(request.GET.get('next',course.last_session().get_absolute_url()))
 
 @limited_login_required
 def unsubscribe(request,attr,user_id):
