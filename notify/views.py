@@ -22,7 +22,6 @@ def clear_notification(request,model_string,user_id,model_id):
   model = NotifyCourse
   obj = get_object_or_404(model,pk=model_id,user=request.limited_user)
   course = obj.course
-  session = obj.session
   obj.delete()
   values = {
     'course': course,
