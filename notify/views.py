@@ -12,8 +12,7 @@ from .models import NotifyCourse
 def notify_course(request,session_id):
   session = get_object_or_404(Session,pk=session_id)
   course = session.section.course
-  defaults = {'session': session}
-  _, new = NotifyCourse.objects.get_or_create(user=request.user,course=course,defaults=defaults)
+  _, new = NotifyCourse.objects.get_or_create(user=request.user,course=course)
   messages.success(request,"You will be emailed next time we teach {}".format(course))
   return HttpResponseRedirect(session.get_absolute_url())
 
