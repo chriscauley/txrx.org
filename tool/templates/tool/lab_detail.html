@@ -2,11 +2,11 @@
 {% load thumbnail crop_util %}
 {% load short_codes %}
 
-{% block title %}{{ room }} Tools{% endblock %}
+{% block title %}{{ lab }} Tools{% endblock %}
 {% block main %}
-<h1 class="page_title">{{ room }} Tools</h1>
-<div id="tool_{{ room.slug }}" class="row">
-  {% for tool in room.tool_set.all %}
+<h1 class="page_title">{{ lab }} Tools</h1>
+<div id="tool_{{ lab.slug }}" class="row">
+  {% for tool in lab.tool_set.all %}
   <div class="tool_well col-lg-3 col-sm-4 col-xs-12">
     <a href="{{ tool.get_absolute_url }}" class="well">
       {% thumbnail tool.first_photo|get_override:"square_crop" "320x320" crop="center" as im %}
