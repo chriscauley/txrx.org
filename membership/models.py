@@ -79,7 +79,9 @@ class UserMembership(models.Model):
   membership = models.ForeignKey(Membership,default=1)
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
+  safety = models.BooleanField(default=False)
   waiver = models.FileField("Waivers",upload_to="waivers/",null=True,blank=True)
+  rfid = models.CharField(max_length=64,null=True,blank=True)
 
   #roles = models.ManyToManyField(Role,null=True,blank=True)
   photo = models.ForeignKey(Photo,null=True,blank=True)

@@ -26,6 +26,23 @@ class Lab(OrderedModel,PhotosMixin):
 
 _help = "Will default to %s photo if blank"
 
+class ToolCertification(models.Model):
+  name = models.CharField(max_length=32)
+  safety = models.BooleanField(default=False)
+  waiver = models.BooleanField(default=False)
+  room = models.ForeignKey(Room)
+  def user_has_certification(self,user):
+    membership = user.usermembership
+    courses = self.course_set.all()
+    course_requirement_met = any([user.course_completion_set.filter(course=course) for course in courses])
+    if not courses:
+      course_requirement_met = True
+    return all([
+      membership.safety or not self.safety,
+      membership.waiver or not self.waiver,
+      course_requirement_met
+    ])
+
 class Tool(OrderedModel,PhotosMixin):
   name = models.CharField(max_length=128)
   __unicode__ = lambda self: self.name
@@ -39,6 +56,7 @@ class Tool(OrderedModel,PhotosMixin):
   links = lambda self: self.toollink_set.all()
   materials = models.ManyToManyField("thing.Material",null=True,blank=True)
   room = models.ForeignKey(Room,null=True,blank=True)
+  certification = models.ForeignKey(ToolCertification,null=True,blank=True)
   get_absolute_url = lambda self: reverse("tool_detail",args=[self.slug,self.id])
   functional = models.BooleanField(default=True)
   repair_date = models.DateField(null=True,blank=True)
@@ -86,10 +104,3 @@ class ToolsMixin():
   def _get_tools(self):
     return list(Tool.objects.filter(taggedtool__content_type_id=self._ct_id,
                                      taggedtool__object_id=self.id).order_by("taggedtool__order"))
-
-class ToolCertification(models.Model):
-  name = models.CharField(max_length=32)
-  tool = models.ForeignKey(Tool)
-  safety = models.BooleanField(default=False)
-  waiver = models.BooleanField(default=False)
-  room = models.ForeignKey(Room)
