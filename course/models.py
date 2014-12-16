@@ -351,7 +351,8 @@ class Evaluation(UserModel):
     return [(f,getattr(self,f),getattr(self,f+"_comments")) for f in self.number_fields]
   question_fields = property(lambda self: ['question'+str(i) for i in range(1,5)])
   def get_question_tuples(self):
-    _t = [(self._meta.get_field(q).verbose_name,getattr(self,q)) for q in self.question_fields]
+    _t = [(s.title()+" comments",getattr(self,s+'_comments')) for s in self.number_fields]
+    _t += [(self._meta.get_field(q).verbose_name,getattr(self,q)) for q in self.question_fields]
     return [t for t in _t if t[1]] #filter out unanswered quesions
 
   def save(self,*args,**kwargs):

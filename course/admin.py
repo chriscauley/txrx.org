@@ -78,6 +78,9 @@ class EnrollmentAdmin(admin.ModelAdmin):
   search_fields = ("user__username","user__email","user__usermembership__paypal_email")
   raw_id_fields = ("user","session")
 
+class EvaluationAdmin(admin.ModelAdmin):
+  raw_id_fields = ('user','enrollment')
+
 admin.site.register(Subject,NamedTreeModelAdmin)
 admin.site.register(Course,CourseAdmin)
 admin.site.register(Section,SectionAdmin)
@@ -85,4 +88,4 @@ admin.site.register(Enrollment,EnrollmentAdmin)
 admin.site.register(Session,SessionAdmin)
 admin.site.register(Term)
 admin.site.register(Branding)
-admin.site.register(Evaluation)
+admin.site.register(Evaluation,EvaluationAdmin)

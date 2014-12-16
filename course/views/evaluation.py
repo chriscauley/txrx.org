@@ -45,7 +45,7 @@ def instructor_detail(request,instructor_id=None):
     return HttpResponseNotAllowed()
   if not instructor_id:
     instructor_id = request.user.id
-  sessions = Session.objects.filter(user_id=instructor_id)
+  sessions = Session.objects.filter(user_id=instructor_id).order_by("-first_date")
   session_evaluations = []
   for session in sessions:
     evaluations = Evaluation.objects.filter(enrollment__session=session)
