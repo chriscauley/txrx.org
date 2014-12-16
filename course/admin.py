@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django import forms
-from course.models import Subject, Course, Section, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseCompletion
 from db.forms import StaffMemberForm
 from db.admin import NamedTreeModelAdmin
 
+from .models import Subject, Course, Section, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseCompletion
+from event.admin import OccurrenceModelInline
 from media.admin import TaggedPhotoInline, TaggedFileInline
 from tool.admin import TaggedToolInline
 
@@ -35,7 +36,7 @@ class CourseAdmin(admin.ModelAdmin):
       if subject.parent and not (subject.parent in subjects):
         form.instance.subjects.add(subject.parent)
 
-class ClassTimeInline(admin.TabularInline):
+class ClassTimeInline(OccurrenceModelInline):
   extra = 0
   model = ClassTime
 
