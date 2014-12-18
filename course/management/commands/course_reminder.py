@@ -6,16 +6,18 @@ from django.template.loader import render_to_string
 from course.models import ClassTime
 from membership.models import LimitedAccessKey
 
-from txrx.utils import mail_on_fail
+from txrx.utils import print_to_mail
 
 import datetime
 
-class Command (BaseCommand):
-  @mail_on_fail
+class Command(BaseCommand):
+  @print_to_mail(subject='[LOG] Course Notify')
   def handle(self, *args, **options):
     tomorrow = datetime.datetime.now().replace(hour=6)+datetime.timedelta(1)
     next_day = tomorrow + datetime.timedelta(1)
     class_times = ClassTime.objects.filter(start__gte=tomorrow,start__lte=next_day)
+    if not class_times:
+      return
     print "showing classes from %s to %s"%(tomorrow,next_day)
     print "reminding %s class times"%len(class_times)
     instructor_count = 0
@@ -56,5 +58,4 @@ class Command (BaseCommand):
           settings.DEFAULT_FROM_EMAIL,
           [user.email],
           )
-    body = "emailed %s instructors and %s students"%(instructor_count,student_count)
-    mail_admins("Course reminders",body)
+    print "\n\n\nemailed %s instructors and %s students"%(instructor_count,student_count)
