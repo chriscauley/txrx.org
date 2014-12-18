@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.contrib.auth.forms import PasswordResetForm
-from django.core.mail import mail_admins
+from django.core.mail import mail_admins, send_mail
 from django.http import HttpResponseForbidden
 
+from cStringIO import StringIO
 import traceback, sys
 
 m = "You are not authorized to do this. If you believe this is in error, please email %s"%settings.WEBMASTER
@@ -25,8 +26,28 @@ def mail_on_fail(target):
       mail_admins("Error occurred via 'mail_on_fail'",'\n'.join(lines))
   return wrapper
 
+def print_to_mail(target,subject='Unnamed message',to=[settings.ADMINS[0][1]],notify_empty=lambda:True):
+  def wrapper(*args,**kwargs):
+    old_stdout = sys.stdout
+    sys.stdout = mystdout = StringIO()
+    mail_on_fail(target)(*args,**kwargs)
+
+    sys.stdout = old_stdout
+    output = mystdout.getvalue()
+    if output:
+      send_mail(subject,output,settings.DEFAULT_FROM_EMAIL,to)
+    elif notify_empty():
+      send_mail(subject,"Output was empty",settings.DEFAULT_FROM_EMAIL,to)
+
+  return wrapper
+
 if settings.DEBUG:
   def mail_on_fail(target):
+    def wrapper(*args,**kwargs):
+      return target(*args,**kwargs)
+    return wrapper
+
+  def print_to_mail(target):
     def wrapper(*args,**kwargs):
       return target(*args,**kwargs)
     return wrapper
