@@ -8,15 +8,23 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Session.last_date'
-        db.add_column(u'course_session', 'last_date',
-                      self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now),
+        # Adding field 'Material.parent'
+        db.add_column(u'thing_material', 'parent',
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['thing.Material'], null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Material.order'
+        db.add_column(u'thing_material', 'order',
+                      self.gf('django.db.models.fields.FloatField')(default=0),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'Session.last_date'
-        db.delete_column(u'course_session', 'last_date')
+        # Deleting field 'Material.parent'
+        db.delete_column(u'thing_material', 'parent_id')
+
+        # Deleting field 'Material.order'
+        db.delete_column(u'thing_material', 'order')
 
 
     models = {
@@ -47,14 +55,6 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
             'small_image_override': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'})
         },
-        u'course.classtime': {
-            'Meta': {'ordering': "('start',)", 'object_name': 'ClassTime'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'end_time': ('django.db.models.fields.TimeField', [], {}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'session': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['course.Session']"}),
-            'start': ('django.db.models.fields.DateTimeField', [], {})
-        },
         u'course.course': {
             'Meta': {'ordering': "('name',)", 'object_name': 'Course'},
             'active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
@@ -64,47 +64,6 @@ class Migration(SchemaMigration):
             'short_name': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             'src': (u'sorl.thumbnail.fields.ImageField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'}),
             'subjects': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['course.Subject']", 'symmetrical': 'False'})
-        },
-        u'course.coursecompletion': {
-            'Meta': {'object_name': 'CourseCompletion'},
-            'course': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['course.Course']"}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']"})
-        },
-        u'course.coursesubscription': {
-            'Meta': {'object_name': 'CourseSubscription'},
-            'course': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['course.Course']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']"})
-        },
-        u'course.enrollment': {
-            'Meta': {'ordering': "('-datetime',)", 'object_name': 'Enrollment'},
-            'completed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'datetime': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'evaluated': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'evaluation_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'quantity': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
-            'session': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['course.Session']"}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']"})
-        },
-        u'course.evaluation': {
-            'Meta': {'ordering': "('-datetime',)", 'object_name': 'Evaluation'},
-            'content': ('django.db.models.fields.IntegerField', [], {}),
-            'content_comments': ('django.db.models.fields.TextField', [], {'max_length': '512', 'null': 'True', 'blank': 'True'}),
-            'datetime': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'enrollment': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['course.Enrollment']", 'unique': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'presentation': ('django.db.models.fields.IntegerField', [], {}),
-            'presentation_comments': ('django.db.models.fields.TextField', [], {'max_length': '512', 'null': 'True', 'blank': 'True'}),
-            'question1': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'question2': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'question3': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'question4': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']"}),
-            'visuals': ('django.db.models.fields.IntegerField', [], {}),
-            'visuals_comments': ('django.db.models.fields.TextField', [], {'max_length': '512', 'null': 'True', 'blank': 'True'})
         },
         u'course.section': {
             'Meta': {'ordering': "('term', 'course')", 'object_name': 'Section'},
@@ -140,7 +99,7 @@ class Migration(SchemaMigration):
         u'course.subject': {
             'Meta': {'ordering': "('order',)", 'object_name': 'Subject'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'order': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['course.Subject']", 'null': 'True', 'blank': 'True'})
         },
@@ -174,18 +133,34 @@ class Migration(SchemaMigration):
         },
         u'geo.room': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('name', 'location'),)", 'object_name': 'Room'},
-<<<<<<< HEAD
-            'geometry': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-=======
             'color': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
             'geometry': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'in_calendar': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
->>>>>>> master
             'location': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['geo.Location']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'short_name': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'})
+        },
+        u'thing.material': {
+            'Meta': {'ordering': "('order',)", 'object_name': 'Material'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
+            'order': ('django.db.models.fields.FloatField', [], {'default': '0'}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['thing.Material']", 'null': 'True', 'blank': 'True'})
+        },
+        u'thing.thing': {
+            'Meta': {'ordering': "('-publish_dt',)", 'object_name': 'Thing'},
+            'active': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'description': ('wmd.models.MarkDownField', [], {'null': 'True', 'blank': 'True'}),
+            'featured': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'materials': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['thing.Material']", 'null': 'True', 'blank': 'True'}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['thing.Thing']", 'null': 'True', 'blank': 'True'}),
+            'parent_link': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'publish_dt': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'session': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['course.Session']", 'null': 'True', 'blank': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']"})
         },
         u'user.user': {
             'Meta': {'ordering': "('username',)", 'object_name': 'User'},
@@ -205,4 +180,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['course']
+    complete_apps = ['thing']

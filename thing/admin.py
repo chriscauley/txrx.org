@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Thing, Material
 
+from db.admin import NamedTreeModelAdmin
 from media.admin import TaggedPhotoInline, TaggedFileInline
 from tool.admin import TaggedToolInline
 
@@ -19,4 +20,4 @@ class ThingAdmin(admin.ModelAdmin):
     return out
 
 admin.site.register(Thing,ThingAdmin)
-admin.site.register(Material)
+admin.site.register(Material,NamedTreeModelAdmin)

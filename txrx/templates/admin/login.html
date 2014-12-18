@@ -49,7 +49,7 @@
                   {% if not form.this_is_the_login_form.errors and form.password.errors %}<div class="help-block">{{ form.password.errors }}</div>{% endif %}
                     <input type="hidden" name="this_is_the_login_form" value="1"/>
                     <input type="hidden" name="next"
-                           value="{% if next == "/admin/login" %}{{ next }}{% else %}/admin/{% endif %}"/>
+                           value="{% if next == "/admin/login" %}/admin/{% else %}{{ next }}{% endif %}"/>
                 </div>
                 {% url "password_reset" as password_reset_url %}
                 {% if password_reset_url %}

@@ -1,13 +1,12 @@
 from django.contrib import admin
 from django import forms
-from course.models import Subject, Course, Section, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseCompletion
 from db.forms import StaffMemberForm
+from db.admin import NamedTreeModelAdmin
 
+from .models import Subject, Course, Section, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseCompletion
+from event.admin import OccurrenceModelInline
 from media.admin import TaggedPhotoInline, TaggedFileInline
 from tool.admin import TaggedToolInline
-
-class SubjectAdmin(admin.ModelAdmin):
-  exclude = ('order',)
 
 class CourseCompletionInline(admin.TabularInline):
   model = CourseCompletion
@@ -37,7 +36,7 @@ class CourseAdmin(admin.ModelAdmin):
       if subject.parent and not (subject.parent in subjects):
         form.instance.subjects.add(subject.parent)
 
-class ClassTimeInline(admin.TabularInline):
+class ClassTimeInline(OccurrenceModelInline):
   extra = 0
   model = ClassTime
 
@@ -82,11 +81,14 @@ class EnrollmentAdmin(admin.ModelAdmin):
   search_fields = ("user__username","user__email","user__usermembership__paypal_email")
   raw_id_fields = ("user","session")
 
-admin.site.register(Subject,SubjectAdmin)
+class EvaluationAdmin(admin.ModelAdmin):
+  raw_id_fields = ('user','enrollment')
+
+admin.site.register(Subject,NamedTreeModelAdmin)
 admin.site.register(Course,CourseAdmin)
 admin.site.register(Section,SectionAdmin)
 admin.site.register(Enrollment,EnrollmentAdmin)
 admin.site.register(Session,SessionAdmin)
 admin.site.register(Term)
 admin.site.register(Branding)
-admin.site.register(Evaluation)
+admin.site.register(Evaluation,EvaluationAdmin)

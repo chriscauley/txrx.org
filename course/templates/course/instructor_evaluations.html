@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Course Evaluations{% endblock %}
+
+{% block main %}
+<ul>
+  {% for session,evaluations in session_evaluations %}
+  <li>
+    <h3>{{ session.section.course.name }} on {{ session.first_date }}</h3>
+    <div class="accordion" id="evaluation_panel">
+      <div class="accordion-group">
+        {% for evaluation in evaluations %}
+        <div class="accordion-heading">
+          <a class="accordion-toggle row" data-parent="#evaluation_panel"
+             data-toggle="collapse" href="#evaluation_number_{{ evaluation.id }}">
+            {% for name,number,comments in evaluation.get_number_tuples %}
+            <span class="span3">
+              <b>{{ name }}</b> {{ number }}
+              {% if comments %} + COMMENTS{% endif %}
+            </span>
+            {% endfor %}
+            {% if evaluation.get_question_tuples %}
+            <span class="span2">+ {{ evaluation.get_question_tuples|length }} Feedbacks</span>
+            {% endif %}
+          </a>
+        </div>
+        <div id="evaluation_number_{{ evaluation.id }}" class="accordion-body collapse">{{ forloop.parent }}
+          <div class="accordion-inner">
+            {% for question,answer in evaluation.get_question_tuples %}
+            <div>
+              <b>{{ question }}</b>
+              <p>{{ answer }}</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -3,10 +3,10 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.validators import MaxLengthValidator
 from django.template.defaultfilters import slugify
-from db.models import UserModel
+from db.models import UserModel, NamedTreeModel
 from sorl.thumbnail import ImageField, get_thumbnail
 from crop_override import get_override
-import datetime, time
+import datetime
 
 from feed.models import FeedItemModel
 from media.models import FilesMixin, PhotosMixin
@@ -24,10 +24,7 @@ def to_base32(s):
   s = s.strip('0987654321')
   return int("0x"+"".join([hex(key.find(i))[2:].zfill(2) for i in (slugify(s)+"----")[:4]]),16)
 
-class Subject(models.Model):
-  name = models.CharField(max_length=32)
-  parent = models.ForeignKey("self",null=True,blank=True)
-  order = models.FloatField(default=0)
+class Subject(NamedTreeModel):
   value = lambda self: self.name
   def get_order(self):
     max_num = to_base32("zzzz")
@@ -204,7 +201,7 @@ class Session(FeedItemModel,PhotosMixin):
         self.first_date = _a[0].start
         self.save()
       if not _a[-1].end == self.last_date:
-        print "setting first_date"
+        print "setting last_date"
         self.last_date = _a[-1].end
         self.save()
   get_ics_url = lambda self: reverse_ics(self)
@@ -301,7 +298,7 @@ class Session(FeedItemModel,PhotosMixin):
     super(Session,self).save(*args,**kwargs)
     self.slug = slugify("%s_%s"%(self.section,self.id))
     return super(Session,self).save(*args,**kwargs)
-    
+
   @cached_method
   def get_absolute_url(self):
     return self.section.course.get_absolute_url()
@@ -324,6 +321,7 @@ class Session(FeedItemModel,PhotosMixin):
     return ', '.join(out)
   def get_evaluations(self):
     return Evaluation.objects.filter(enrollment__session=self)
+
   class Meta:
     ordering = ('first_date',)
 
@@ -413,7 +411,8 @@ class Evaluation(UserModel):
     return [(f,getattr(self,f),getattr(self,f+"_comments")) for f in self.number_fields]
   question_fields = property(lambda self: ['question'+str(i) for i in range(1,5)])
   def get_question_tuples(self):
-    _t = [(self._meta.get_field(q).verbose_name,getattr(self,q)) for q in self.question_fields]
+    _t = [(s.title()+" comments",getattr(self,s+'_comments')) for s in self.number_fields]
+    _t += [(self._meta.get_field(q).verbose_name,getattr(self,q)) for q in self.question_fields]
     return [t for t in _t if t[1]] #filter out unanswered quesions
 
   def save(self,*args,**kwargs):

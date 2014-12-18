@@ -38,3 +38,19 @@ def refuse(request,enrollment_id):
   enrollment.save()
   messages.success(request,"You have opted not to evaluate a class.")
   return HttpResponseRedirect(reverse("course:evaluation_index"))
+
+@login_required
+def instructor_detail(request,instructor_id=None):
+  if not request.user.is_staff or (not instructor_id and not request.user.is_superuser):
+    return HttpResponseNotAllowed()
+  if not instructor_id:
+    instructor_id = request.user.id
+  sessions = Session.objects.filter(user_id=instructor_id).order_by("-first_date")
+  session_evaluations = []
+  for session in sessions:
+    evaluations = Evaluation.objects.filter(enrollment__session=session)
+    if not evaluations:
+      continue
+    session_evaluations.append((session,evaluations))
+  values = {'session_evaluations': session_evaluations}
+  return TemplateResponse(request,"course/instructor_evaluations.html",values)

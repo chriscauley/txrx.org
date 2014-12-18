@@ -89,12 +89,6 @@ def nav(request):
     login_redirect = login_redirect
   )
 
-def evaluations(request):
-  _e = []
-  if request.user.is_authenticated():
-    _e = Enrollment.objects.pending_evaluation(user=request.user)
-  return {'pending_evaluations': _e}
-
 def motd(request):
   if True:
     return {}

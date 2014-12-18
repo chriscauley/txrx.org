@@ -92,7 +92,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   'social.apps.django_app.context_processors.login_redirect',
   'txrx.context.nav',
   'txrx.context.motd',
-  'txrx.context.evaluations',
   'blog.context.process',
 )
 

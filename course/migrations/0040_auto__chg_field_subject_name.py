@@ -8,16 +8,14 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Session.last_date'
-        db.add_column(u'course_session', 'last_date',
-                      self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now),
-                      keep_default=False)
 
+        # Changing field 'Subject.name'
+        db.alter_column(u'course_subject', 'name', self.gf('django.db.models.fields.CharField')(max_length=64))
 
     def backwards(self, orm):
-        # Deleting field 'Session.last_date'
-        db.delete_column(u'course_session', 'last_date')
 
+        # Changing field 'Subject.name'
+        db.alter_column(u'course_subject', 'name', self.gf('django.db.models.fields.CharField')(max_length=32))
 
     models = {
         u'auth.group': {
@@ -140,7 +138,7 @@ class Migration(SchemaMigration):
         u'course.subject': {
             'Meta': {'ordering': "('order',)", 'object_name': 'Subject'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'order': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['course.Subject']", 'null': 'True', 'blank': 'True'})
         },
@@ -174,15 +172,10 @@ class Migration(SchemaMigration):
         },
         u'geo.room': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('name', 'location'),)", 'object_name': 'Room'},
-<<<<<<< HEAD
-            'geometry': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-=======
             'color': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
             'geometry': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'in_calendar': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
->>>>>>> master
             'location': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['geo.Location']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'short_name': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'})
