@@ -11,7 +11,7 @@ from txrx.utils import print_to_mail
 import datetime
 
 class Command(BaseCommand):
-  @print_to_mail(subject='[LOG] Course Notify')
+  @print_to_mail(subject="[LOG] Course reminders")
   def handle(self, *args, **options):
     tomorrow = datetime.datetime.now().replace(hour=6)+datetime.timedelta(1)
     next_day = tomorrow + datetime.timedelta(1)
