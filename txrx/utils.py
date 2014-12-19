@@ -26,28 +26,30 @@ def mail_on_fail(target):
       mail_admins("Error occurred via 'mail_on_fail'",'\n'.join(lines))
   return wrapper
 
-def print_to_mail(target,subject='Unnamed message',to=[settings.ADMINS[0][1]],notify_empty=lambda:True):
-  def wrapper(*args,**kwargs):
-    old_stdout = sys.stdout
-    sys.stdout = mystdout = StringIO()
-    mail_on_fail(target)(*args,**kwargs)
+def print_to_mail(subject='Unnamed message',to=[settings.ADMINS[0][1]],notify_empty=lambda:True):
+  def wrap(target):
+    def wrapper(*args,**kwargs):
+      old_stdout = sys.stdout
+      sys.stdout = mystdout = StringIO()
+      mail_on_fail(target)(*args,**kwargs)
+      
+      sys.stdout = old_stdout
+      output = mystdout.getvalue()
+      if output:
+        send_mail(subject,output,settings.DEFAULT_FROM_EMAIL,to)
+      elif notify_empty():
+        send_mail(subject,"Output was empty",settings.DEFAULT_FROM_EMAIL,to)
 
-    sys.stdout = old_stdout
-    output = mystdout.getvalue()
-    if output:
-      send_mail(subject,output,settings.DEFAULT_FROM_EMAIL,to)
-    elif notify_empty():
-      send_mail(subject,"Output was empty",settings.DEFAULT_FROM_EMAIL,to)
+    return wrapper
+  return wrap
 
-  return wrapper
-
-if settings.DEBUG:
-  def mail_on_fail(target):
+if False: #settings.DEBUG:
+  def mail_on_fail(target,*args,**kwargs):
     def wrapper(*args,**kwargs):
       return target(*args,**kwargs)
     return wrapper
 
-  def print_to_mail(target):
+  def print_to_mail(target,*args,**kwargs):
     def wrapper(*args,**kwargs):
       return target(*args,**kwargs)
     return wrapper
