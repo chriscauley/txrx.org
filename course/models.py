@@ -6,7 +6,7 @@ from django.template.defaultfilters import slugify
 from db.models import UserModel, NamedTreeModel
 from sorl.thumbnail import ImageField, get_thumbnail
 from crop_override import get_override
-import datetime
+import datetime, time
 
 from feed.models import FeedItemModel
 from media.models import FilesMixin, PhotosMixin
