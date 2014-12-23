@@ -3,7 +3,7 @@ from django import forms
 from db.forms import StaffMemberForm
 from db.admin import NamedTreeModelAdmin
 
-from .models import Subject, Course, Section, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseCompletion
+from .models import Subject, Course, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseCompletion
 from event.admin import OccurrenceModelInline
 from media.admin import TaggedPhotoInline, TaggedFileInline
 from tool.admin import TaggedToolInline
@@ -40,19 +40,6 @@ class ClassTimeInline(OccurrenceModelInline):
   extra = 0
   model = ClassTime
 
-class SectionAdmin(admin.ModelAdmin):
-  save_as = True
-  list_display = ("__unicode__","prerequisites","requirements","max_students")
-  list_editable = ("prerequisites","requirements","max_students")
-  list_filter = ("course__active",'no_conflict',"room")
-  inlines = [TaggedFileInline]
-  def has_change_permission(self,request,obj=None):
-    if not obj:
-      return request.user.is_superuser
-    return request.user.is_superuser or (request.user in obj.list_users)
-  def has_delete_permission(self,request,obj=None):
-    return request.user.is_superuser
-
 class EnrollmentInline(admin.TabularInline):
   model = Enrollment
   readonly_fields = ('user',)
@@ -61,15 +48,15 @@ class EnrollmentInline(admin.TabularInline):
 class SessionAdmin(admin.ModelAdmin):
   form = StaffMemberForm
   ordering = ('-first_date',)
-  raw_id_fields = ('section','user')
+  raw_id_fields = ('course','user')
   readonly_fields = ('_first_date','get_room')
-  list_search = ('section__course__name','user__username')
+  #list_search = ('course__course__name','user__username')
   list_filter = ("publish_dt",)
   _first_date = lambda self,obj: getattr(obj,'first_date','Will be set on save')
   _first_date.short_description = 'first classtime'
   exclude = ('time_string','slug','publish_dt')
   inlines = (ClassTimeInline, EnrollmentInline, TaggedPhotoInline)
-  search_fields = ("user__username","user__email","section__course__name")
+  search_fields = ("user__username","user__email","course__name")
   class Media:
     js = ("js/course_admin.js",)
 
@@ -84,7 +71,6 @@ class EvaluationAdmin(admin.ModelAdmin):
 
 admin.site.register(Subject,NamedTreeModelAdmin)
 admin.site.register(Course,CourseAdmin)
-admin.site.register(Section,SectionAdmin)
 admin.site.register(Enrollment,EnrollmentAdmin)
 admin.site.register(Session,SessionAdmin)
 admin.site.register(Term)

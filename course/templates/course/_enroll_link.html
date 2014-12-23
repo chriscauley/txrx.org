@@ -1,4 +1,4 @@
-{% if session.section.fee %}
+{% if session.course.fee %}
 <div class="price">${{ session.user_fee }}</div>
 <div class="EnrollLink">
   {% if session.user_enrollment.quantity == 1 %}
@@ -21,8 +21,8 @@
 <script>
   window.SESSIONS_ON_PAGE = window.SESSIONS_ON_PAGE || {};
   window.SESSIONS_ON_PAGE[{{ session.id }}] = {
-    'name': "<b>{{ session.section.course }}</b> {{ session.first_date|date:"m/d/Y" }}",
-    'fee': {{ member_discount }}*{{ session.section.fee }},
+    'name': "<b>{{ session.course }}</b> {{ session.first_date|date:"m/d/Y" }}",
+    'fee': {{ member_discount }}*{{ session.course.fee }},
   };
 </script>
 {% else %}

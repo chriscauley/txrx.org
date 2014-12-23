@@ -7,7 +7,7 @@ from django.http import QueryDict, Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from ..models import Course, Section, Term, Subject, Session, Enrollment, ClassTime
+from ..models import Course, Term, Subject, Session, Enrollment, ClassTime
 from ..forms import EmailInstructorForm, EvaluationForm
 from membership.models import UserMembership
 from notify.models import NotifyCourse
@@ -20,7 +20,7 @@ import datetime, simplejson
 filters = {
   "term": lambda: {
     "model": Term,
-    "options": Term.objects.exclude(section__term__name__icontains='test'),
+    "options": Term.objects.exclude(term__name__icontains='test'),
     "name": "Term",
     "slug": "term"
   },
@@ -36,7 +36,7 @@ def index(request,term_id=None):
   term = Term.objects.all()[0]
   if term_id:
     term = Term.objects.get(pk=term_id)
-    sessions = Session.objects.filter(section__term=term).select_related(depth=3)
+    sessions = Session.objects.filter(term=term).select_related(depth=3)
   else:
     first_date = datetime.datetime.now()-datetime.timedelta(21)
     sessions = Session.objects.filter(first_date__gte=first_date).select_related(depth=3)
@@ -87,12 +87,12 @@ def detail(request,slug):
   notify_course = None
   if request.user.is_authenticated():
     enrollment = Enrollment.objects.filter(session=session,user=request.user)
-    notify_course = get_or_none(NotifyCourse,user=request.user,course=session.section.course)
-  kwargs = dict(first_date__gte=datetime.datetime.now(),section__course=session.section.course,
+    notify_course = get_or_none(NotifyCourse,user=request.user,course=session.course)
+  kwargs = dict(first_date__gte=datetime.datetime.now(),course=session.course,
                 active=True)
   alternate_sessions = Session.objects.filter(**kwargs).exclude(id=session.id)
   kwargs = dict(first_date__gte=datetime.datetime.now(),
-                section__course__subjects__in=session.section.course.subjects.all(),
+                course__subjects__in=session.course.subjects.all(),
                 active=True)
   related_sessions = Session.objects.filter(**kwargs).exclude(id=session.id)
   related_sessions = [s for s in related_sessions if not (s.closed or s.full)]
@@ -143,7 +143,7 @@ def course_totals(request):
   if not request.user.is_superuser:
     raise Http404
   term_list = []
-  args = ('session','session__section','session__section__course','session__section__term')
+  args = ('session','session__course')
   enrollments = Enrollment.objects.select_related(*args)
   for term in Term.objects.all():
     _dict = {
@@ -152,13 +152,13 @@ def course_totals(request):
       'money': 0,
       'attendance': 0,
       }
-    _enrollments = enrollments.filter(session__section__term=term)
+    _enrollments = enrollments.filter(session__term=term)
     for e in _enrollments:
       session_dict = _dict['sessions'].get(e.session,{})
-      session_dict['money'] = session_dict.get('money',0) + e.session.section.fee
+      session_dict['money'] = session_dict.get('money',0) + e.session.course.fee
       session_dict['attendance'] = session_dict.get('attendance',0) + e.quantity
       _dict['sessions'][e.session] = session_dict
-      _dict['money'] += e.session.section.fee
+      _dict['money'] += e.session.course.fee
       _dict['attendance'] += e.quantity
     term_list.append(_dict)
   values = { 'term_list': term_list }
@@ -166,7 +166,7 @@ def course_totals(request):
 
 def rsvp(request,session_pk):
   session = get_object_or_404(Session,pk=session_pk)
-  if session.section.fee > 0:
+  if session.course.fee > 0:
     raise ValueError("Some one tried to rsvp for a class that costs money!")
   if not request.user.is_authenticated():
     m = "You must be logged in to rsvp. Click the icon at the top right of the page to login or register"
@@ -197,8 +197,8 @@ def start_checkout(request):
   for cart_item in cart_items:
     session = Session.objects.get(pk=cart_item['pk'])
     new_total = session.total_students + cart_item['quantity']
-    if new_total > session.section.max_students:
-      out.append({'pk': session.pk,'remaining': session.section.max_students-session.total_students})
+    if new_total > session.course.max_students:
+      out.append({'pk': session.pk,'remaining': session.course.max_students-session.total_students})
   return HttpResponse(simplejson.dumps(out))
 
 def delay_reschedule(request,course_pk,n_months):

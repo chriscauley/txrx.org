@@ -6,7 +6,7 @@
 <ul>
   {% for session,evaluations in session_evaluations %}
   <li>
-    <h3>{{ session.section.course.name }} on {{ session.first_date }}</h3>
+    <h3>{{ session.course.name }} on {{ session.first_date }}</h3>
     <div class="accordion" id="evaluation_panel">
       <div class="accordion-group">
         {% for evaluation in evaluations %}

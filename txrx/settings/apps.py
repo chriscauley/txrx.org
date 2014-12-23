@@ -129,7 +129,6 @@ SUIT_CONFIG = {
        'course.evaluation',
        'geo.location',
        'geo.room',
-       'course.section',
        'course.session',
        'course.subject',
        #'course.term', #accessible through course.session

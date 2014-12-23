@@ -25,7 +25,7 @@ def handle_successful_payment(sender, **kwargs):
   error_sessions = []
   admin_subject = "New course enrollment"
   for i in range(1, class_count+1):
-    section_cost = int(float(params['mc_gross_%d'%i]))
+    course_cost = int(float(params['mc_gross_%d'%i]))
     quantity = int(params['quantity%s'%i])
 
     try:
@@ -38,7 +38,7 @@ def handle_successful_payment(sender, **kwargs):
       continue
 
     enrollment,new = Enrollment.objects.get_or_create(user=user, session=session)
-    notifys = NotifyCourse.objects.filter(user=user,course=session.section.course)
+    notifys = NotifyCourse.objects.filter(user=user,course=session.course)
     if notifys:
       notifys.delete()
     if new:
@@ -47,10 +47,10 @@ def handle_successful_payment(sender, **kwargs):
       enrollment.quantity += quantity
     enrollment.save()
     enrollments.append(enrollment)
-    if section_cost != session.section.fee * int(quantity):
+    if course_cost != session.course.fee * int(quantity):
       l = [
-        "PP cost: %s"%section_cost,
-        "Session Fee: %s"%session.section.fee,
+        "PP cost: %s"%course_cost,
+        "Session Fee: %s"%session.course.fee,
         "Session Id:%s"%session.id,
         "Quantity:%s"%enrollment.quantity,
         "PP Email:%s"%sender.payer_email,

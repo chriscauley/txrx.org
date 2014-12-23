@@ -6,7 +6,7 @@ from django.http import QueryDict, Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from ..models import Course, Section, Term, Subject, Session, Enrollment, ClassTime, Evaluation
+from ..models import Course, Term, Subject, Session, Enrollment, ClassTime, Evaluation
 from ..forms import EmailInstructorForm, EvaluationForm
 from membership.models import UserMembership
 from event.utils import make_ics,ics2response

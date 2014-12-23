@@ -15,7 +15,7 @@
            style="float:left;margin: 5px 10px 0 0;" />
       {% endthumbnail %}
       {% endif %}
-      {{ session.section.course }}</a>
+      {{ session.course }}</a>
     <div class="dates"><small>
         {{ session.get_short_dates }}
         with <a href="{% url "member_detail" session.user.username %}">
@@ -27,9 +27,9 @@
         {{ subject|upper }}
         {% endfor %}
       </div>
-      {% if session.section.get_notes %}
+      {% if session.course.get_notes %}
       <div class="notes">
-        {% for note,title in session.section.get_notes %}
+        {% for note,title in session.course.get_notes %}
         <small class="has_notes" data-tooltip="{{ title }}"><span>{{ note }}</span></small>
         {% endfor %}
       </div>

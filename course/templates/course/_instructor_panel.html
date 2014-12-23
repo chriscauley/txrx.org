@@ -1,12 +1,12 @@
 <div class="well">
   <h2>Instructor Panel</h2>
   <div class="accordion" id="instructor_panel">
-    <a href="/admin/course/section/{{ session.section.id }}/">Edit Details</a>
+    <a href="{{ session.course.get_admin_url }}">Edit Details</a>
     <div class="accordion-group">
       <div class="accordion-heading">
         <a class="accordion-toggle" data-parent="#instructor_panel"
            data-toggle="collapse" href="#student_list">
-          Student List ({{ session.total_students }}/{{ session.section.max_students }} students)
+          Student List ({{ session.total_students }}/{{ session.course.max_students }} students)
         </a>
       </div>
       <div id="student_list" class="accordion-body collapse in">

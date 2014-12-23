@@ -35,8 +35,8 @@
                     <a href="{{ event.get_admin_url }}">
                       <i class="icon-edit" title="Edit Event in Admin"></i></a>
                     {% if event.session %}
-                    <a href="{{ event.session.section.get_admin_url }}">
-                      <i class="icon-pencil" title="Edit Section in Admin"></i></a>
+                    <a href="{{ event.course.get_admin_url }}">
+                      <i class="icon-pencil" title="Edit Course in Admin"></i></a>
                     {% endif %}
                     {{ event.short_name }}
                   </li>

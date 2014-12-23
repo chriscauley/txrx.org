@@ -107,11 +107,9 @@ class UserMembership(models.Model):
 
   @cached_method
   def get_term_sessions(self):
-    terms = Term.objects.exclude(name__icontains='test')
-    out = []
-    for term in terms:
-      out.append((term,Session.objects.filter(user=self.user,section__term=term)))
-    return [t for t in out if t[1]]
+    #! Needs to be separated by something now that term is depracated!
+    term = Term.objects.all()[0]
+    return [(term,Session.objects.filter(user=self.user))]
   @cached_method
   def get_projects(self):
     return Project.objects.filter(author=self.user)

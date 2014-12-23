@@ -2,11 +2,11 @@
 {% load mptt_comments_tags thumbnail %}
 {% load short_codes %}
 
-{% block title %}{{ session.section.course }}{% endblock %}
+{% block title %}{{ session.course }}{% endblock %}
 {% block header %}{% endblock %}
 
-{% block fb_title %}{{ session.section.course }} at TXRX Labs{% endblock %}
-{% block fb_description %}{{ session.section.description|implosivo|escape }}{% endblock %}
+{% block fb_title %}{{ session.course }} at TXRX Labs{% endblock %}
+{% block fb_description %}{{ session.course.description|implosivo|escape }}{% endblock %}
 
 {% block main %}
 <div class="col-sm-9">
@@ -19,7 +19,7 @@
        {%if not session.course.closed%}data-open{%endif%}
        data-date="{{ session.starttime|date:"Ymd" }}">
     <div class="col-xs-12">
-      <h1 class="page_title">{{ session.section.course }}</h1>
+      <h1 class="page_title">{{ session.course }}</h1>
       <div class="subjects">
         <b>Subject{{ session.subjects|pluralize:"s" }}</b>:
         {{ session.subjects|join:", " }}
@@ -58,16 +58,16 @@
          {% endthumbnail %}
          {% endif %}
          <div class="description">
-           {{ session.section.description|explosivo }}
+           {{ session.course.description|explosivo }}
          </div>
-         {% if session.section.fee_notes %}
-         <p class="notes"><b>* Fee Notes:</b> {{ session.section.fee_notes }}</p>
+         {% if session.course.fee_notes %}
+         <p class="notes"><b>* Fee Notes:</b> {{ session.course.fee_notes }}</p>
          {% endif %}
-         {% if session.section.requirements %}
-         <p class="notes"><b>Requirements:</b> {{ session.section.requirements }}</p>
+         {% if session.course.requirements %}
+         <p class="notes"><b>Requirements:</b> {{ session.course.requirements }}</p>
          {% endif %}
-         {% if session.section.prerequisites %}
-         <p class="notes"><b>Prerequisites:</b> {{ session.section.prerequisites }}</p>
+         {% if session.course.prerequisites %}
+         <p class="notes"><b>Prerequisites:</b> {{ session.course.prerequisites }}</p>
          {% endif %}
        </div>
        {% if session.get_files %}
@@ -84,7 +84,7 @@
          {% for s in alternate_sessions %}
          <div>
            {% if s.full %}<strong class="full">[FULL]</strong>{% endif %}
-           <a href="{{ s.get_absolute_url }}"><b>[{{ s.first_date|date:"M j" }}]</b> {{ s.section.course.get_short_name }}</a>
+           <a href="{{ s.get_absolute_url }}"><b>[{{ s.first_date|date:"M j" }}]</b> {{ s.course.get_short_name }}</a>
          </div>
          {% endfor %}
        </p>
@@ -128,7 +128,7 @@
     <h4>Checkout these similar classes!</h4>
     {% for s in session.related_sessions|slice:":5" %}
     <div>
-      <a href="{{ s.get_absolute_url }}"><b>[{{ s.first_date|date:"M j" }}]</b> {{ s.section.course.get_short_name }}</a>
+      <a href="{{ s.get_absolute_url }}"><b>[{{ s.first_date|date:"M j" }}]</b> {{ s.course.get_short_name }}</a>
     </div>
     {% endfor %}
   </div>

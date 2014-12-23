@@ -116,7 +116,7 @@ $(function() {
       simpleCart.items[id].price = session_price;
     }
     simpleCart.update();
-    if (discounted) { $("#main").prepend("<div class='alert alert-success'>The price of " + discounted + " classes in your cart have decreased. This is most likely because your membership level has changed (eg: you logged out). Please notify <a href='mailto:classes@txrxlabs.org'>classes@txrxlabs.org</a> if you believe this is in error.</div>"); }
-    if (undiscounted) { $("#main").prepend("<div class='alert alert-success'>The price of " + undiscounted + " classes in your cart have increased. This is most likely becaus your membership level has changed (eg: you logged in). Please notify <a href='mailto:classes@txrxlabs.org'>classes@txrxlabs.org</a> if you believe this is in error.</div>"); }
+    if (discounted) { $("#main").prepend("<div class='alert alert-success'>The price of " + discounted + " classes in your cart have decreased. This is most likely because your membership level has changed (eg: you logged in). Please notify <a href='mailto:classes@txrxlabs.org'>classes@txrxlabs.org</a> if you believe this is in error.</div>"); }
+    if (undiscounted) { $("#main").prepend("<div class='alert alert-success'>The price of " + undiscounted + " classes in your cart have increased. This is most likely becaus your membership level has changed (eg: you logged out). Please notify <a href='mailto:classes@txrxlabs.org'>classes@txrxlabs.org</a> if you believe this is in error.</div>"); }
   }
 });

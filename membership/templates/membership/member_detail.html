@@ -34,9 +34,9 @@
     <div id="instructor_classes_{{ term.id }}" class="tab-pane{% if forloop.first %} active{% endif %}">
       <ul class="unstyled">
         {% for session in sessions %}
-        {% ifchanged session.section %}
+        {% ifchanged session.course %}
         <li><a href="{{ session.get_absolute_url }}">
-            {{ session.section.course.name }}
+            {{ session.course.name }}
         </a></li>
         {% endifchanged %}
         {% endfor %}
