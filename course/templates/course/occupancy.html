@@ -4,7 +4,7 @@
 <table style="width: 100%">
 {% for session in sessions %}
 <tr {% if session.full %} style="color: red;"{% endif %}>
-  <td>{{ session.total_students }}/ {{ session.section.max_students }}</td>
+  <td>{{ session.total_students }}/ {{ session.course.max_students }}</td>
   <td><a href="{{ session.get_absolute_url }}" target="_blank">
       {{ session }}
   </a></td>

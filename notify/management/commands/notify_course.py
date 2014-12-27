@@ -20,10 +20,10 @@ class Command (BaseCommand):
     if not new_sessions:
       mail_admins("No classes","No new classes to email anyone about :(")
       return
-    courses = list(set([s.section.course for s in new_sessions]))
+    courses = list(set([s.course for s in new_sessions]))
     users = get_user_model().objects.filter(notifycourse__course__in=courses).distinct()
     for user in users:
-      sessions = [s for s in new_sessions if user.notifycourse_set.filter(course=s.section.course)]
+      sessions = [s for s in new_sessions if user.notifycourse_set.filter(course=s.course)]
       _dict = {
         'user': user,
         'la_key': LimitedAccessKey.new(user),

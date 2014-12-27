@@ -14,16 +14,6 @@ from NextPlease import pagination
 from tagging.models import Tag
 import random, datetime
 
-def members(request,username=None):
-  memberships = Membership.objects.active()[::-1]
-  values = {'memberships':memberships}
-  return TemplateResponse(request,"members.html",values)
-
-def member(request,username=None):
-  member = get_object_or_404(get_user_model(),username=username)
-  values = {'member':member}
-  return TemplateResponse(request,"member.html",values)
-
 @login_required
 def survey(request):
   from membership.models import Survey

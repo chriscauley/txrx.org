@@ -79,18 +79,13 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   slug = property(lambda self: slugify(self.name))
   active = models.BooleanField(default=True) # only used with the reshedule view
   _ht = "Used for the events page."
-  subjects = models.ManyToManyField(Subject)
-  _folder = settings.UPLOAD_DIR+'/course/%Y-%m'
-  src = ImageField("Logo",max_length=300,upload_to=_folder,null=True,blank=True)
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   get_short_name = lambda self: self.short_name or self.name
-  __unicode__ = lambda self: self.name
-  get_absolute_url = lambda self: reverse("course:detail",args=[self.pk,self.slug])
-  sessions = lambda self: Session.objects.filter(section__course=self)
-  sessions = cached_property(sessions,name="sessions")
+  subjects = models.ManyToManyField(Subject)
+  sessions = cached_property(lambda self: self.session_set.all(),name="sessions")
+
   _ht = "The dashboard (/admin/) won't bug you to reschedule until after this date"
   reschedule_on = models.DateField(default=datetime.date.today,help_text=_ht)
-  objects = CourseManager()
   first_date = property(lambda self: self.active_sessions[0].first_date)
   last_date = property(lambda self: self.active_sessions[-1].last_date)
   @property
@@ -107,17 +102,37 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
         'url': image.url
       },
       'next_time': time.mktime(self.first_date.timetuple()) if self.active_sessions else 0,
-      'fee': self.last_session().section.fee if self.last_session() else None,
+      'fee': self.fee if self.last_session() else None,
       'active_sessions': [s.as_json for s in self.active_sessions],
     }
+
+  fee = models.IntegerField(null=True,blank=True)
+  fee_notes = models.CharField(max_length=256,null=True,blank=True)
+  requirements = models.CharField(max_length=256,null=True,blank=True)
+  prerequisites = models.CharField(max_length=256,null=True,blank=True)
+  description = models.TextField(null=True,blank=True)
+  safety = models.BooleanField(default=False)
+  room = models.ForeignKey(Room,default=1)
+  _ht = "If true, this class will not raise conflict warnings for events in the same room."
+  no_conflict = models.BooleanField(default=False,help_text=_ht)
+  max_students = models.IntegerField(default=16)
+
+  objects = CourseManager()
+  __unicode__ = lambda self: self.name
+  get_absolute_url = lambda self: reverse("course:detail",args=[self.pk,self.slug])
+  get_admin_url = lambda self: "/admin/course/course/%s/"%self.id
+
   @cached_property
   def active_sessions(self):
     # sessions haven't ended yet (and maybe haven't started)
     first_date = datetime.datetime.now()+datetime.timedelta(1)
     active_sessions = list(self.sessions.filter(last_date__gte=first_date))
     if not active_sessions:
-      [s for s in Session.objects.filter(section__course=self)]
+      [s for s in Session.objects.filter(course=self)]
     return active_sessions or list(self.sessions.filter(last_date__gte=first_date))
+
+  sessions = lambda self: Session.objects.filter(course=self)
+  sessions = cached_property(sessions,name="sessions")
   @cached_property
   def open_sessions(self):
     if self.sessions:
@@ -127,7 +142,7 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
     if hasattr(self,'user_fee') or not self.last_session:
       return
     session = self.last_session()
-    self.user_fee = session.section.fee
+    self.user_fee = self.fee
     if user.is_authenticated():
       self.user_fee = self.user_fee*(100-user.usermembership.membership.discount_percentage)//100
     return
@@ -138,30 +153,8 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
     for subject in subjects:
       if subject.parent and not (subject.parent in subjects):
         self.subjects.add(subject.parent)
-  class Meta:
-    ordering = ("name",)
 
-class CourseSubscription(UserModel):
-  course = models.ForeignKey(Course)
-
-class Section(models.Model,FilesMixin):
-  course = models.ForeignKey(Course)
-  term = models.ForeignKey("Term")
-  fee = models.IntegerField(null=True,blank=True)
-  fee_notes = models.CharField(max_length=256,null=True,blank=True)
-  requirements = models.CharField(max_length=256,null=True,blank=True)
-  prerequisites = models.CharField(max_length=256,null=True,blank=True)
-  description = models.TextField(null=True,blank=True)
-  safety = models.BooleanField(default=False)
-  room = models.ForeignKey(Room,default=1)
-  src = ImageField("Logo",max_length=300,upload_to='course/%Y-%m',null=True,blank=True)
-  _ht = "If true, this class will not raise conflict warnings for events in the same room."
-  no_conflict = models.BooleanField(default=False,help_text=_ht)
-  max_students = models.IntegerField(default=16)
-  get_admin_url = lambda self: "/admin/course/section/%s/"%self.id
-
-  __unicode__ = lambda self: "%s - %s"%(self.course.name,self.term)
-
+  #! inherited from section, may not be necessary
   def get_notes(self):
     notes = []
     if self.requirements:
@@ -177,7 +170,10 @@ class Section(models.Model,FilesMixin):
   def list_users(self):
     return list(set([s.user for s in self.session_set.all()]))
   class Meta:
-    ordering = ("term","course")
+    ordering = ("name",)
+
+class CourseSubscription(UserModel):
+  course = models.ForeignKey(Course)
 
 class Branding(models.Model):
   name = models.CharField(max_length=32)
@@ -206,7 +202,7 @@ class Session(FeedItemModel,PhotosMixin):
         self.save()
   get_ics_url = lambda self: reverse_ics(self)
   feed_item_type = 'session'
-  section = models.ForeignKey(Section)
+  course = models.ForeignKey(Course,null=True,blank=True)
   slug = models.CharField(max_length=255)
   cancelled = models.BooleanField(default=False)
   active = models.BooleanField(default=True)
@@ -220,12 +216,11 @@ class Session(FeedItemModel,PhotosMixin):
   time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
   branding = models.ForeignKey(Branding,null=True,blank=True)
 
-  __unicode__ = lambda self: latin1_to_ascii("%s (%s - %s)"%(self.section, self.user,self.first_date.date()))
-  title = property(lambda self: "%s (%s)"%(self.section.course.name,self.first_date.date()))
+  __unicode__ = lambda self: latin1_to_ascii("%s (%s - %s)"%(self.course, self.user,self.first_date.date()))
+  title = property(lambda self: "%s (%s)"%(self.course.name,self.first_date.date()))
 
   in_progress = property(lambda self: self.archived and self.last_date>datetime.datetime.now())
   closed = property(lambda self: self.cancelled or (self.archived and not self.in_progress))
-  get_room = lambda self: self.section.room
   @property
   def as_json(self):
     return {
@@ -234,17 +229,20 @@ class Session(FeedItemModel,PhotosMixin):
       'instructor_name': self.get_instructor_name(),
       'instructor_pk': self.user_id
     }
+  get_room = lambda self: self.course.room
+
   @cached_property
   def total_students(self):
     return sum([e.quantity for e in self.enrollment_set.all()])
-  _full = lambda self: self.total_students >= self.section.max_students
+  _full = lambda self: self.total_students >= self.course.max_students
   full = property(_full)
   archived = property(lambda self: self.first_date<datetime.datetime.now())
   list_users = property(lambda self: [self.user])
-  description = property(lambda self: self.section.description)
+
   #! deprecated after course remodel
+  description = property(lambda self: self.course.description)
   def set_user_fee(self,user):
-    self.user_fee = self.section.fee
+    self.user_fee = self.course.fee
     if user.is_authenticated():
       self.user_fee = self.user_fee*(100-user.usermembership.membership.discount_percentage)//100
   @cached_property
@@ -252,14 +250,14 @@ class Session(FeedItemModel,PhotosMixin):
     return (self.get_photos() or [super(Session,self).first_photo])[0]
   @cached_method
   def get_photos(self):
-    return self._get_photos() or self.section.course.get_photos()
+    return self._get_photos() or self.course.get_photos()
   # course can have files or session can override them
   @cached_method
   def get_files(self):
-    return self.section.get_files() or self.section.course.get_files()
+    return self.course.get_files() or self.course.get_files()
 
   #calendar crap
-  name = property(lambda self: self.section.course.name)
+  name = property(lambda self: self.course.name)
   all_occurrences = cached_property(lambda self:list(self.classtime_set.all()),
                                     name='all_occurrences')
   get_ics_url = lambda self: reverse_ics(self)
@@ -269,19 +267,19 @@ class Session(FeedItemModel,PhotosMixin):
     sunday = self.first_date.date()-datetime.timedelta(self.first_date.weekday())
     return (sunday,sunday+datetime.timedelta(6))
   
-  subjects = cached_property(lambda self: self.section.course.subjects.filter(parent__isnull=True),
+  subjects = cached_property(lambda self: self.course.subjects.filter(parent__isnull=True),
                              name="subjects")
-  all_subjects = cached_property(lambda self: self.section.course.subjects.all(),name="all_subjects")
+  all_subjects = cached_property(lambda self: self.course.subjects.all(),name="all_subjects")
   @cached_property
   def related_sessions(self):
     sessions = Session.objects.filter(first_date__gte=datetime.datetime.now())
-    sessions = sessions.exclude(section__course=self.section.course)
-    sub_subjects = self.section.course.subjects.filter(parent__isnull=False)
-    sub_sessions = list(sessions.filter(section__course__subjects__in=sub_subjects).distinct())
+    sessions = sessions.exclude(course=self.course)
+    sub_subjects = self.course.subjects.filter(parent__isnull=False)
+    sub_sessions = list(sessions.filter(course__subjects__in=sub_subjects).distinct())
     if len(sub_sessions) >= 5:
       return sub_sessions
-    sessions = sessions.filter(section__course__subjects__in=self.subjects.all())
-    sessions = list(sessions.exclude(section__course__subjects__in=sub_subjects))
+    sessions = sessions.filter(course__subjects__in=self.subjects.all())
+    sessions = list(sessions.exclude(course__subjects__in=sub_subjects))
     return sub_sessions + sessions
   @property
   def closed_string(self):
@@ -296,12 +294,12 @@ class Session(FeedItemModel,PhotosMixin):
     profile,_ = UserMembership.objects.get_or_create(user=self.user)
     self.slug = self.slug or 'arst' # can't save without one, we'll set this below
     super(Session,self).save(*args,**kwargs)
-    self.slug = slugify("%s_%s"%(self.section,self.id))
+    self.slug = slugify("%s_%s"%(self.course,self.id))
     return super(Session,self).save(*args,**kwargs)
 
   @cached_method
   def get_absolute_url(self):
-    return self.section.course.get_absolute_url()
+    return self.course.get_absolute_url()
   get_admin_url = lambda self: "/admin/course/session/%s/"%self.id
   get_rsvp_url = cached_method(lambda self: reverse('course:rsvp',args=[self.id]),name="get_rsvp_url")
   def get_instructor_name(self):
@@ -330,15 +328,15 @@ class ClassTime(OccurrenceModel):
   def short_name(self):
     times = list(self.session.classtime_set.all())
     if len(times) == 1:
-      return self.session.section.course.get_short_name()
-    return "%s (%s/%s)"%(self.session.section.course.get_short_name(),times.index(self)+1,len(times))
+      return self.session.course.get_short_name()
+    return "%s (%s/%s)"%(self.session.course.get_short_name(),times.index(self)+1,len(times))
   get_absolute_url = lambda self: self.session.get_absolute_url()
   get_admin_url = lambda self: "/admin/course/session/%s/"%self.session.id
-  get_room = lambda self: self.session.section.room
-  no_conflict = lambda self: self.session.section.no_conflict
-  description = cached_property(lambda self:self.session.section.description,name="description")
-  name = cached_property(lambda self: self.session.section.course.name,name="name")
-  room = cached_property(lambda self: self.session.section.room,name="room")
+  get_room = lambda self: self.session.course.room
+  no_conflict = lambda self: self.session.course.no_conflict
+  description = cached_property(lambda self:self.session.course.description,name="description")
+  name = cached_property(lambda self: self.session.course.name,name="name")
+  room = cached_property(lambda self: self.session.course.room,name="room")
   class Meta:
     ordering = ("start",)
 
@@ -366,7 +364,7 @@ class Enrollment(UserModel):
       self.evaluation_date = list(self.session.all_occurrences)[-1].start
     super(Enrollment,self).save(*args,**kwargs)
     if self.completed:
-      CourseCompletion.objects.get_or_create(user=self.user,course=self.session.section.course)
+      CourseCompletion.objects.get_or_create(user=self.user,course=self.session.course)
   class Meta:
     ordering = ('-datetime',)
 

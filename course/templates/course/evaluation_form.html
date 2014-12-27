@@ -2,9 +2,7 @@
 {% load txrx_tags %}
 
 {% block full_title %}Course Evaluation{% endblock %}
-{% block header_content %}
-Evaluate {{ enrollment.session.section.course }}
-{% endblock %}
+{% block header_content %}Evaluate {{ enrollment.session.course }}{% endblock %}
 
 {% block content %}
 <h3>{{ enrollment.session.first_date }}</h3>

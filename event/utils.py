@@ -83,8 +83,8 @@ def get_room_conflicts(base_occurrence=None):
     end_time = base_occurrence.end+datetime.timedelta(0,block_size)
     room = base_occurrence.room
     class_times = ClassTime.objects.filter(start__gte=start_time,start__lte=end_time,
-                                           session__section__no_conflict=False,
-                                           session__section__room=room)
+                                           session__course__no_conflict=False,
+                                           session__course__room=room)
     occurrences = EventOccurrence.objects.filter(start__gte=start_time,event__no_conflict=False,
                                                  event__room=room)
     rooms = [base_occurrence.room]
@@ -92,7 +92,7 @@ def get_room_conflicts(base_occurrence=None):
     start_time = datetime.datetime.now()-datetime.timedelta(0,block_size)
     end_time = datetime.datetime.now()+datetime.timedelta(60)
     class_times = ClassTime.objects.filter(start__gte=start_time,start__lte=end_time,
-                                           session__section__no_conflict=False)
+                                           session__course__no_conflict=False)
     occurrences = EventOccurrence.objects.filter(start__gte=start_time,event__no_conflict=False)
     rooms = Room.objects.all()
   schedule = {room:{} for room in rooms}
@@ -100,7 +100,7 @@ def get_room_conflicts(base_occurrence=None):
 
   # combine events and classes because they have similar enough APIs to treat them the same 
   for class_time in class_times:
-    event_tuples.append((class_time,class_time.session.section.room))
+    event_tuples.append((class_time,class_time.session.course.room))
   for occurrence in occurrences:
     event_tuples.append((occurrence, occurrence.get_room()))
 

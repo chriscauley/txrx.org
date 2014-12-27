@@ -2,19 +2,19 @@
 {% load mptt_comments_tags thumbnail %}
 {% load short_codes %}
 
+<<<<<<< HEAD
 {% block title %}{{ course }}{% endblock %}
 {% block header %}{% endblock %}
 
 {% block fb_title %}{{ course }} at TXRX Labs{% endblock %}
-{% block fb_description %}{{ session.section.description|implosivo|escape }}{% endblock %}
+{% block fb_description %}{{ course.description|implosivo|escape }}{% endblock %}
 
 {% block main %}
 <h1 class="page_title">
   {{ course }}
 </h1>
 <div class="row">
-  <div class="course-detail col-sm-7 col-md-8" data-subject="{{ session.subjects|join:"," }}" id="c{{ session.id }}"
-       {%if not session.course.closed%}data-open{%endif%} data-date="{{ session.starttime|date:"Ymd" }}">
+  <div class="course-detail col-sm-7 col-md-8">
     {% include "widgets/thing_slideshow.html" with thing=course %}
     <div class="details">
       <div class="subjects pull-right">
@@ -33,20 +33,18 @@
       <img src="{{ im.url }}" width="620" />
       {% endthumbnail %}
       {% endif %}
-      {% with section=course.last_section %}
       <div class="description">
-        {{ section.description|explosivo }}
+        {{ course.description|explosivo }}
       </div>
-      {% if section.fee_notes %}
-      <p class="notes"><b>* Fee Notes:</b> {{ section.fee_notes }}</p>
+      {% if course.fee_notes %}
+      <p class="notes"><b>* Fee Notes:</b> {{ course.fee_notes }}</p>
       {% endif %}
-      {% if section.requirements %}
-      <p class="notes"><b>Requirements:</b> {{ section.requirements }}</p>
+      {% if course.requirements %}
+      <p class="notes"><b>Requirements:</b> {{ course.requirements }}</p>
       {% endif %}
-      {% if section.prerequisites %}
-      <p class="notes"><b>Prerequisites:</b> {{ section.prerequisites }}</p>
+      {% if course.prerequisites %}
+      <p class="notes"><b>Prerequisites:</b> {{ course.prerequisites }}</p>
       {% endif %}
-      {% endwith %}
     </div>
     {% if session.get_files %}
     <div>
@@ -62,7 +60,7 @@
       {% for s in alternate_sessions %}
       <div>
         {% if s.full %}<strong class="full">[FULL]</strong>{% endif %}
-        <a href="{{ s.get_absolute_url }}"><b>[{{ s.first_date|date:"M j" }}]</b> {{ s.section.course.get_short_name }}</a>
+        <a href="{{ s.get_absolute_url }}"><b>[{{ s.first_date|date:"M j" }}]</b> {{ s.course.get_short_name }}</a>
       </div>
       {% endfor %}
     </p>

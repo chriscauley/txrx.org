@@ -7,7 +7,7 @@
 <br />
 
 {% for session in sessions %}
-<h3>{{ session.section.course.name }} - {{ session.enrollment_set.count }} students</h3>
+<h3>{{ session.course.name }} - {{ session.enrollment_set.count }} students</h3>
 <ol>
   {% for enrollment in session.enrollment_set.all %}
   <li>

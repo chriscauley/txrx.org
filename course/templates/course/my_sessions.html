@@ -20,7 +20,7 @@
           <dl>
             <dt>
               <a href="{{session.get_absolute_url }}">
-                {{ session.section.course.name }}
+                {{ session.course.name }}
               </a>
             </dt>
             <dd>{{ session.enrollment_set.count }} students</dd>
@@ -54,7 +54,7 @@
           <dl>
             <dt>
               <a href="{{enrollment.session.get_absolute_url }}">
-                {{ enrollment.session.section.course.name }}
+                {{ enrollment.session.course.name }}
               </a>
             </dt>
             <dd>with {{ enrollment.session.user }}</dd>
