@@ -93,7 +93,7 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   def open_sessions(self):
     if self.sessions:
       return [s for s in self.sessions if not s.closed and not s.full]
-  last_session = lambda self: (self.sessions or [None])[0]
+  last_session = lambda self: (list(self.sessions) or [None])[-1]
   def save(self,*args,**kwargs):
     super(Course,self).save(*args,**kwargs)
     #this has to be repeated in the admin because of how that works
@@ -341,7 +341,7 @@ class Evaluation(UserModel):
   question3 = models.TextField("What motivated you to take this class?",null=True,blank=True)
   question4 = models.TextField("What classes would you like to see offered in the future?",null=True,blank=True)
 
-  __unicode__ = lambda self: "%s evaluation for %s"%(self.user,self.enrollment.session)
+  __unicode__ = lambda self: "Evaluation for %s"%self.enrollment.session
   number_fields = ["presentation","content","visuals"]
   def get_number_tuples(self):
     return [(f,getattr(self,f),getattr(self,f+"_comments")) for f in self.number_fields]
