@@ -4,7 +4,7 @@
   <ul class="list-unstyled">
     {% for session in user_sessions %}
     <li>
-      <a href="{{ session.get_absolute_url }}"> {{ session.course }}</a> ({{ session.first_date|date:"F j" }})
+      <a href="{{ session.get_absolute_url }}"> {{ session.course }}</a> ({{ session.get_short_dates }})
     </li>
     {% endfor %}
   </ul>

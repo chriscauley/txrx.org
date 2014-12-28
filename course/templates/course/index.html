@@ -87,7 +87,7 @@ myApp.controller("DemoController", function($scope) {
     {% endif %}
   </ul>
   <div class="tab-content">
-    <div class="tab-pane active" class="course_list">
+    <div class="tab-pane active course_list" id="all_classes">
       <div infinite-scroll="loadMore()" infinite-scroll-distance="2">
         <div class="row">
           <div ng-repeat="course in display_courses">

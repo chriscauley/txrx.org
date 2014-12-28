@@ -54,7 +54,8 @@ def detail(request,pk,slug):
   enrollment = None
   notify_course = None
   if request.user.is_authenticated():
-    enrollment = Enrollment.objects.filter(session__course=course,user=request.user)
+    _e = Enrollment.objects.filter(session__course=course,user=request.user)
+    enrollment = (_e or [None])[0]
     notify_course = get_or_none(NotifyCourse,user=request.user,course=course)
   kwargs = dict(active=True,subjects__in=course.subjects.all())
   related_courses = Course.objects.filter(**kwargs).exclude(id=course.id)

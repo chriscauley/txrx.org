@@ -2,7 +2,6 @@
 {% load mptt_comments_tags thumbnail %}
 {% load short_codes %}
 
-<<<<<<< HEAD
 {% block title %}{{ course }}{% endblock %}
 {% block header %}{% endblock %}
 
@@ -54,24 +53,15 @@
       {% endfor %}
     </div>
     {% endif %}
-    {% if alternate_sessions %}
-    <p class="alternate_sessions">
-      <h4>Can't&nbsp;make&nbsp;it&nbsp;to&nbsp;this&nbsp;class? Checkout&nbsp;these&nbsp;other&nbsp;sessions:</h4>
-      {% for s in alternate_sessions %}
-      <div>
-        {% if s.full %}<strong class="full">[FULL]</strong>{% endif %}
-        <a href="{{ s.get_absolute_url }}"><b>[{{ s.first_date|date:"M j" }}]</b> {{ s.course.get_short_name }}</a>
-      </div>
-      {% endfor %}
-    </p>
-    {% endif %}
     <div style="clear: both;"></div>
-    <div class="col-xs-12">{% display_comment_toplevel_for course %}</div>
   </div>
   <div class="col-sm-5 col-md-4" id="side">
     {% if enrollment %}
     <div class="well">
       <h2>You are enrolled in this course</h2>
+      {% for classtime in enrollment.session.classtime_set.all %}
+      <h4>{{ classtime.start|date:"l F j g:i A"|safe }} - {{ classtime.end_time|time:"g:i A" }}</h4>
+      {% endfor %}
     </div>
     {# {% include "course/_student_panel.html" %} #}
     {% else %}
@@ -85,12 +75,12 @@
       </h3>
       {% for session in course.active_sessions %}
       <div class="well session" id="s{{ session.id }}">
-        <ul class="dates">
+        <div class="dates">
           {% for classtime in session.classtime_set.all %}
-          <li>{{ classtime.start|date:"l F j g:i A"|safe }} - {{ classtime.end_time|time:"g:i A" }}</li>
+          <h4>{{ classtime.start|date:"l F j g:i A"|safe }} - {{ classtime.end_time|time:"g:i A" }}</h4>
           {% endfor %}
-          <li>with {{ session.user.username }}</li>
-        </ul>
+          with {{ session.user.username }}
+        </div>
         {% if request.user == session.user %}
         <center>
           <a href="{% url "course:instructor_session" session.pk %}" class="btn btn-primary">
@@ -101,6 +91,7 @@
         {% endif %}
       </div>
       {% endfor %}
+      <h3>Can't make it to any of these sessions?</h3>
       <p class="notify_course">
         {% if notify_course %}
         <a href="{% url "clear_notification" "notify_course" request.user.id notify_course.id %}">
@@ -126,5 +117,6 @@
     {% include "course/_instructor_panel.html" %}
     {% endif %}
   </div>
+  <div class="col-xs-12">{% display_comment_toplevel_for course %}</div>
 </div>
 {% endblock %}

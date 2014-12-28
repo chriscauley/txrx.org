@@ -13,12 +13,12 @@ def get_notifications(request):
     return []
   out = []
   evaluations = Evaluation.objects.filter(enrollment__session__user=request.user)
-  if evaluations:
+  """if evaluations:
     out.append({
       'url': reverse('course:instructor_evaluations',args=[request.user.pk]),
       'link_text': "Course Evaluations",
       'new_count': 0
-    })
+    })"""
   pending_evaluations = Enrollment.objects.pending_evaluation(user=request.user)
   if pending_evaluations:
     out.append({

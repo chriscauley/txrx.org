@@ -145,7 +145,7 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
 
   sessions = lambda self: Session.objects.filter(course=self)
   sessions = cached_property(sessions,name="sessions")
-  last_session = lambda self: (self.sessions or [None])[-1]
+  last_session = lambda self: (list(self.sessions) or [None])[-1]
   def set_user_fee(self,user):
     if hasattr(self,'user_fee') or not self.last_session:
       return
