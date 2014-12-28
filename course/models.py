@@ -145,7 +145,7 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
 
   sessions = lambda self: Session.objects.filter(course=self)
   sessions = cached_property(sessions,name="sessions")
-  last_session = lambda self: (self.sessions or [None])[0]
+  last_session = lambda self: (self.sessions or [None])[-1]
   def set_user_fee(self,user):
     if hasattr(self,'user_fee') or not self.last_session:
       return
@@ -411,7 +411,7 @@ class Evaluation(UserModel):
   question3 = models.TextField("What motivated you to take this class?",null=True,blank=True)
   question4 = models.TextField("What classes would you like to see offered in the future?",null=True,blank=True)
 
-  __unicode__ = lambda self: "%s evaluation for %s"%(self.user,self.enrollment.session)
+  __unicode__ = lambda self: "Evaluation for %s"%self.enrollment.session
   number_fields = ["presentation","content","visuals"]
   def get_number_tuples(self):
     return [(f,getattr(self,f),getattr(self,f+"_comments")) for f in self.number_fields]

@@ -14,7 +14,7 @@ class CourseCompletionInline(admin.TabularInline):
   raw_id_fields = ('user',)
 
 class CourseAdmin(admin.ModelAdmin):
-  list_display = ("name","tool_count","photo_count")
+  list_display = ("name","active","tool_count","photo_count")
   readonly_fields = ("_notifies",)
   filter_horizontal = ("subjects",)
   inlines = [CourseCompletionInline, TaggedPhotoInline, TaggedToolInline, TaggedFileInline]
@@ -68,7 +68,7 @@ class EnrollmentAdmin(admin.ModelAdmin):
   raw_id_fields = ("user","session")
 
 class EvaluationAdmin(admin.ModelAdmin):
-  raw_id_fields = ('user','enrollment')
+  exclude = ('user','enrollment')
 
 admin.site.register(Subject,NamedTreeModelAdmin)
 admin.site.register(Course,CourseAdmin)
