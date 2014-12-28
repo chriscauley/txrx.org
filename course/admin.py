@@ -67,7 +67,8 @@ class EnrollmentAdmin(admin.ModelAdmin):
   raw_id_fields = ("user","session")
 
 class EvaluationAdmin(admin.ModelAdmin):
-  exclude = ('user','enrollment')
+  exclude = ('user','enrollment','anonymous')
+  readonly_fields = ('get_user',)
 
 admin.site.register(Subject,NamedTreeModelAdmin)
 admin.site.register(Course,CourseAdmin)

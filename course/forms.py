@@ -54,5 +54,6 @@ class EvaluationForm(PlaceholderModelForm):
       'presentation','presentation_comments',
       'content','content_comments',
       'visuals','visuals_comments',
-      'question1','question2','question3','question4'
+      'question1','question2','question3','question4',
+      'anonymous'
     )

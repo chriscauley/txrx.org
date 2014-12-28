@@ -15,7 +15,11 @@ from paypal.standard.ipn.models import *
 
 @login_required
 def index(request):
-  return TemplateResponse(request,"course/evaluations.html",{})
+  pending_evaluations = Enrollment.objects.pending_evaluation(user=request.user)
+  values = {
+    'pending_evaluations': pending_evaluations
+  }
+  return TemplateResponse(request,"course/evaluations.html",values)
 
 @login_required
 def detail(request,enrollment_id):
