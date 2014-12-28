@@ -1,6 +1,6 @@
 {% load txrx_tags thumbnail crop_util %}
 {% verbatim %}
-<div class=" col-sm-12 col-lg-6">
+<div class=" col-xs-12 col-md-6 col-lg-4">
   <div class="course well" id="c{{ course.id }}">
     <a href="{{ course.url }}" class="picture">
       <img src="{{ course.im.url }}" width="{{ course.im.width }}" height="{{ course.im.height }}" />
@@ -10,13 +10,14 @@
         {{ course.name }}
         <div class="price">{{ course.fee }}</div>
       </a>
-      <div class="sessions" data-ng-repeat="session in course.active_sessions">
+      <div class="sessions" ng-if="course.visible_session">
         <div class="session">
           <small>
-            <b class="closed_string">{{ session.closed_status }}</b>
-            {{ session.short_dates }}
-            with <a href="">
-              <i class="icon-user"></i>{{ session.instructor_name }}</a>
+            <b class="closed_string">{{ course.visible_session.closed_status }}</b>
+            {{ course.visible_session.short_dates }}
+            <div class="pull-right" ng-if="course.open_sessions.length > 1" style="padding-top: 3px;">
+              and {{ course.open_sessions.length - 1 }} other sessions
+            </div>
           </small>
         </div>
       </div>

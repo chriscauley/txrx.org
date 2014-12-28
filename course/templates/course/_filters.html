@@ -8,12 +8,12 @@
 <div ng-repeat="subject in subjects" class="list_filter btn-group-vertical">
   <input type="radio" value="{{ subject.value }}" id="filter_subject_{{ subject.value }}" name="subject" />
   <label class="btn btn-default" for="filter_subject_{{ subject.value }}">
-    {{ subject.name }} ({{ subject.active_courses }} {{ subject.inactive_courses }})
+    {{ subject.name }}
   </label>
   <div ng-repeat="child in subject.children" class="child">
     <input type="radio" value="{{ child.value }}" id="filter_subject_{{ child.value }}" name="subject"/>
     <label for="filter_subject_{{ child.value }}" class="btn btn-default">
-      -- {{ child.name }} ({{ child.active_courses }} {{ child.inactive_courses }})
+      -- {{ child.name }}
     </label>
   </div>
 </div>

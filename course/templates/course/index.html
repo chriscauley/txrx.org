@@ -69,7 +69,7 @@ myApp.controller("DemoController", function($scope) {
 </div>
 <div style="clear:both;"></div>
 <div ng-app="myApp" ng-controller="DemoController">
-<div class="col-sm-6 col-md-4 col-lg-3" id="side">
+<div class="col-sm-5 col-md-3 col-lg-2" id="side">
   <input type="checkbox" id="toggle_filters" />
   <label for="toggle_filters" class="btn btn-success">Filter by Subject</label>
   <form onsubmit="applyFilters(this);return false;" class="filters course_filters">
@@ -77,7 +77,7 @@ myApp.controller("DemoController", function($scope) {
     {% include "course/_filters.html" %}
   </form>
 </div>
-<div class="col-sm-6 col-md-8 col-lg-9">
+<div class="col-sm-7 col-md-9 col-lg-10">
   <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#all_classes" role="tab" data-toggle="tab">All Classes</a></li>
     <li><a href="#my_classes" role="tab" data-toggle="tab">My Classes ({{ user_sessions|length }})</a></li>

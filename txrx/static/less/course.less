@@ -18,7 +18,7 @@
 }
 
 .course .details {
-  min-height: 82px;
+  min-height: 72px;
   .closed_string {
     color: red;
     text-transform: uppercase;
@@ -31,8 +31,8 @@
     position: absolute;
     right: 0;
     text-align: center;
-    top: 10px;
     width: 70px;
+    z-index: 1;
     &:before { content: "$"; }
     &:empty { display: none; }
   }
@@ -40,22 +40,20 @@
     display: block;
     font-size: 18px;
     line-height: 1.2em;
-    min-height: 46px;
-    overflow-x: visible;
-    overflow-y: hidden;
-    padding: 10px 70px 10px 0;
+    min-height: 41px;
+    padding: 10px 10px 0 0;
     position: relative;
-    text-transform: uppercase;
   }
   .dates {
     border-bottom: 1px @borderGray solid;
   }
   .price {
+    background: white;
+    bottom: 100%;
     color: black;
     position: absolute;
     right: 0;
     text-align: center;
-    top: 7px;
     width: 65px;
   }
   .bottom {

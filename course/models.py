@@ -91,7 +91,7 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   @property
   def as_json(self):
     image = get_thumbnail(get_override(self.first_photo,'landscape_crop'),"298x199",crop="center")
-    return {
+    out = {
       'id': self.pk,
       'name': self.name,
       'subjects': [s.pk for s in self.subjects.all()],
@@ -102,9 +102,13 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
         'url': image.url
       },
       'next_time': time.mktime(self.first_date.timetuple()) if self.active_sessions else 0,
-      'fee': self.fee if self.last_session() else None,
+      'fee': self.fee,
       'active_sessions': [s.as_json for s in self.active_sessions],
+      'open_sessions': [s.as_json for s in self.open_sessions],
+      'full_sessions': [s.as_json for s in self.full_sessions],
     }
+    out['visible_session'] = (out['open_sessions']+out['full_sessions']+[None])[0]
+    return out
 
   fee = models.IntegerField(null=True,blank=True)
   fee_notes = models.CharField(max_length=256,null=True,blank=True)
@@ -131,12 +135,16 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
       [s for s in Session.objects.filter(course=self)]
     return active_sessions or list(self.sessions.filter(last_date__gte=first_date))
 
-  sessions = lambda self: Session.objects.filter(course=self)
-  sessions = cached_property(sessions,name="sessions")
   @cached_property
   def open_sessions(self):
-    if self.sessions:
-      return [s for s in self.sessions if not s.closed and not s.full]
+    return [s for s in self.active_sessions if not s.full]
+
+  @cached_property
+  def full_sessions(self):
+    return [s for s in self.active_sessions if s.full]
+
+  sessions = lambda self: Session.objects.filter(course=self)
+  sessions = cached_property(sessions,name="sessions")
   last_session = lambda self: (self.sessions or [None])[0]
   def set_user_fee(self,user):
     if hasattr(self,'user_fee') or not self.last_session:
