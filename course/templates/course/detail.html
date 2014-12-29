@@ -20,15 +20,13 @@
         <b>Subject{{ course.subjects.all|pluralize:"s" }}</b>:
         {{ course.subjects.all|join:", " }}
       </div>
-      <ol class="dates">
-      </ol>
       <div class="calendar_widget">
         <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">
           <span class="glyphicon glyphicon-calendar"></span> Add to calendar</a>
-        {% include "course/_add_to_calendar.html" with calendar_event=session calendar_context="classes" %}
+        {% include "course/_add_to_calendar.html" with calendar_event=session calendar_context="classes" %}{#! this needs to be fixed #}
       </div>
-      {% if session.branding %}
-      {% thumbnail session.branding.image "620x100" as im %}
+      {% if course.branding %}
+      {% thumbnail course.branding.image "620x100" as im %}
       <img src="{{ im.url }}" width="620" />
       {% endthumbnail %}
       {% endif %}
@@ -45,10 +43,10 @@
       <p class="notes"><b>Prerequisites:</b> {{ course.prerequisites }}</p>
       {% endif %}
     </div>
-    {% if session.get_files %}
+    {% if course.get_files %}
     <div>
       <h2>Relevant files</h2>
-      {% for f in session.get_files %}
+      {% for f in course.get_files %}
       <a href="{{ f.file.url }}" target="_blank">{{ f.name }}</a><br/>
       {% endfor %}
     </div>
@@ -67,13 +65,13 @@
     {% else %}
     <div class="SessionList">
       <h3>
-        {% if course.active_sessions %}
-        {{ course.active_sessions|length }} upcoming session{{ course.active_sessions|pluralize }}:
+        {% if course.open_sessions %}
+        {{ course.open_sessions|length }} upcoming session{{ course.open_sessions|pluralize }}:
         {% else %}
         There are no upcoming sessions.
         {% endif %}
       </h3>
-      {% for session in course.active_sessions %}
+      {% for session in course.open_sessions %}
       <div class="well session" id="s{{ session.id }}">
         <div class="dates">
           {% for classtime in session.classtime_set.all %}
@@ -104,6 +102,29 @@
             Email me the next time this class is scheduled</button></a>
         {% endif %}
       </p>
+      {% if course.full_sessions %}
+      <h3>
+        There are also {{ course.full_sessions|length }} full session{{ course.full_sessions|pluralize }}:
+      </h3>
+      {% endif %}
+      {% for session in course.full_sessions %}
+      <div class="well session" id="s{{ session.id }}">
+        <div class="dates">
+          {% for classtime in session.classtime_set.all %}
+          <h4>{{ classtime.start|date:"l F j g:i A"|safe }} - {{ classtime.end_time|time:"g:i A" }}</h4>
+          {% endfor %}
+          with {{ session.user.username }}
+        </div>
+        {% if request.user == session.user %}
+        <center>
+          <a href="{% url "course:instructor_session" session.pk %}" class="btn btn-primary">
+            View instructor page</a>
+        </center>
+        {% else %}
+        {% include "course/_enroll_link.html" %}
+        {% endif %}
+      </div>
+      {% endfor %}
     </div>
     {% endif %}
     <center>
