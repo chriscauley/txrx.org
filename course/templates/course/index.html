@@ -16,6 +16,18 @@ var myApp = angular.module("myApp", ["infinite-scroll"]);
 myApp.controller("DemoController", function($scope) {
   $scope.courses = ALL_CLASSES;
   $scope.subjects = CLASS_SUBJECTS;
+  $scope.discount = MEMBER_DISCOUNT
+
+  for (var si=0; si<USER_SESSIONS.length;si++) {
+    session = USER_SESSIONS[si];
+    for (var ci=0; ci<ALL_CLASSES.length;ci++) {
+      c = ALL_CLASSES[ci];
+      if (c.id == session.course_id) {
+        c.enrolled_status = session.enrolled_status;
+        c.well_class = "enrolled";
+      }
+    }
+  }
 
   $scope._vi = 8;
   var active_courses = [];
@@ -53,6 +65,11 @@ myApp.controller("DemoController", function($scope) {
     console.log($scope._vi);
   };
 });
+var USER_SESSIONS = [
+  {% for session in user_sessions %}
+  {{ session.json|safe }}{% if not forloop.last %},{% endif %}{% endfor %}
+]
+USER_COURSE_IDS = [];
 </script>
 {% endblock %}
 
@@ -69,7 +86,7 @@ myApp.controller("DemoController", function($scope) {
 </div>
 <div style="clear:both;"></div>
 <div ng-app="myApp" ng-controller="DemoController">
-<div class="col-sm-5 col-md-3 col-lg-2" id="side">
+<div class="col-sm-5 col-md-2 col-lg-2" id="side">
   <input type="checkbox" id="toggle_filters" />
   <label for="toggle_filters" class="btn btn-success">Filter by Subject</label>
   <form onsubmit="applyFilters(this);return false;" class="filters course_filters">
@@ -77,10 +94,11 @@ myApp.controller("DemoController", function($scope) {
     {% include "course/_filters.html" %}
   </form>
 </div>
-<div class="col-sm-7 col-md-9 col-lg-10">
+<div class="col-sm-7 col-md-10 col-lg-10">
   <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#all_classes" role="tab" data-toggle="tab">All Classes</a></li>
-    <li><a href="#my_classes" role="tab" data-toggle="tab">My Classes ({{ user_sessions|length }})</a></li>
+    <li><a href="#my_classes" role="tab" data-toggle="tab">
+        My Classes ({{ user_sessions|length }})</a></li>
     {% if instructor_sessions %}
     <li><a href="#instructor_sessions" role="tab" data-toggle="tab">
         Instructor ({{ instructor_sessions|length }})</a></li>
@@ -90,9 +108,7 @@ myApp.controller("DemoController", function($scope) {
     <div class="tab-pane active course_list" id="all_classes">
       <div infinite-scroll="loadMore()" infinite-scroll-distance="2">
         <div class="row">
-          <div ng-repeat="course in display_courses">
-            {% include "course/_course_row.html" %}
-          </div>
+          {% include "course/_course_row.html" %}
         </div>
       </div>
     </div>

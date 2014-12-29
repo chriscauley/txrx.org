@@ -231,12 +231,20 @@ class Session(FeedItemModel,PhotosMixin):
   closed = property(lambda self: self.cancelled or (self.archived and not self.in_progress))
   @property
   def as_json(self):
+    short_dates = self.get_short_dates()
+    enrolled_status = "Enrolled: %s"%short_dates
+    if datetime.datetime.now() > self.last_date:
+      d = self.last_date
+      enrolled_status = "Completed: %s/%s/%s"%(d.month,d.day,d.year)
     return {
       'closed_status': self.closed_string if (self.closed or self.full) else None,
-      'short_dates': self.get_short_dates(),
+      'short_dates': short_dates,
       'instructor_name': self.get_instructor_name(),
-      'instructor_pk': self.user_id
+      'instructor_pk': self.user_id,
+      'course_id': self.course_id,
+      'enrolled_status': enrolled_status
     }
+  json = property(lambda self: dumps(self.as_json))
   get_room = lambda self: self.course.room
 
   @cached_property

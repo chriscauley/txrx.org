@@ -1,27 +1,35 @@
 {% load txrx_tags thumbnail crop_util %}
 {% verbatim %}
-<div class=" col-xs-12 col-md-6 col-lg-4">
-  <div class="course well" id="c{{ course.id }}">
-    <a href="{{ course.url }}" class="picture">
-      <img src="{{ course.im.url }}" width="{{ course.im.width }}" height="{{ course.im.height }}" />
-    </a>
+<div class="col-sm-12 col-md-6" ng-repeat="course in display_courses" ng-cloak>
+  <a href="{{ course.url }}" class="course well {{ course.well_class }}" id="c{{ course.id }}">
+    <div class="picture">
+      <img ng-src="{{ course.im.url }}" width="{{ course.im.width }}"
+           height="{{ course.im.height }}" />
+      <div class="enrolled-status" ng-if="course.enrolled_status">
+        {{ course.enrolled_status }}
+      </div>
+      <div class="price">{{ course.fee*discount|number:0 }}</div>
+    </div>
     <div class="details">
-      <a href="{{ course.url }}" class="title">
+      <div class="title">
         {{ course.name }}
-        <div class="price">{{ course.fee }}</div>
-      </a>
-      <div class="sessions" ng-if="course.visible_session">
-        <div class="session">
+      </div>
+      <ul class="sessions" ng-if="course.open_sessions">
+        <li class="session" ng-repeat="session in course.open_sessions.slice(0,4)">
           <small>
-            <b class="closed_string">{{ course.visible_session.closed_status }}</b>
-            {{ course.visible_session.short_dates }}
-            <div class="pull-right" ng-if="course.open_sessions.length > 1" style="padding-top: 3px;">
-              and {{ course.open_sessions.length - 1 }} other sessions
-            </div>
+            <b class="closed_string">{{ session.closed_status }}</b>
+            {{ session.short_dates }}
           </small>
-        </div>
+        </li>
+      </ul>
+      <div ng-show="!course.open_sessions.length" style="list-style:none;">
+        There are no upcoming open sessions.</div>
+      <div class="full_sessions" ng-if="course.full_sessions">
+        <span ng-if="course.full_sessions.length == 1"> and 1 full session</span>
+        <span ng-if="course.full_sessions.length > 1">
+          and {{ course.full_sessions.length }} full sessions</span>
       </div>
     </div>
-  </div>
+  </a>
 </div>
 {% endverbatim %}
