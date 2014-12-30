@@ -23,7 +23,7 @@ class CourseAdmin(admin.ModelAdmin):
   def photo_count(self,obj):
     return len(obj.get_photos())
   def _notifies(self,obj):
-    out = ''
+    out = "<b>%s notifies</b><br />"%obj.notifycourse_set.count()
     for notify in obj.notifycourse_set.all():
       out += "%s<br/>"%notify.user.email
     return out
