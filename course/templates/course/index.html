@@ -32,8 +32,10 @@ myApp.controller("DemoController", function($scope) {
 
   $scope.filterSubjects = function(value) {
     if (value != $scope.active_subject) {
-      $scope.display_courses = [];
-      $scope._vi = 0;
+      $scope.scheduled_courses = []; // visible "active" courses
+      $scope._vsi = 0; // number of visible scheduled courses
+      $scope.unscheduled_courses = []; // visible "inactive"
+      $scope._vui = 0; // number of visible unscheduled courses
     }
     $scope.active_subject = value;
       
@@ -53,10 +55,13 @@ myApp.controller("DemoController", function($scope) {
   }
 
   $scope.loadMore = function() {
-    console.log($scope._vi);
-    if ($scope._vi >= $scope.active_courses.length) {return }
-    $scope._vi = Math.min($scope.display_courses.length+6,$scope.active_courses.length);
-    $scope.display_courses = $scope.active_courses.slice(0,$scope._vi);
+    console.log('scrolling');
+    if ($scope._vui >= $scope.inactive_courses.length) {return }
+    $scope._vsi = Math.min($scope.scheduled_courses.length+6,$scope.active_courses.length);
+    $scope.scheduled_courses = $scope.active_courses.slice(0,$scope._vsi);
+    if ($scope._vsi < $scope.active_courses.length) { return }
+    $scope._vui = Math.min($scope.unscheduled_courses.length+6,$scope.inactive_courses.length);
+    $scope.unscheduled_courses = $scope.inactive_courses.slice(0,$scope._vui);
   };
 
   $scope.filterSubjects();
@@ -102,10 +107,8 @@ USER_COURSE_IDS = [];
   </ul>
   <div class="tab-content">
     <div class="tab-pane active course_list" id="all_classes">
-      <div infinite-scroll="loadMore()" infinite-scroll-distance="2">
-        <div class="row">
-          {% include "course/_course_row.html" %}
-        </div>
+      <div infinite-scroll="loadMore()" infinite-scroll-distance="1">
+        {% include "course/_course_row.html" %}
       </div>
     </div>
     <div class="tab-pane" id="my_classes">

@@ -1,35 +1,43 @@
 {% load txrx_tags thumbnail crop_util %}
 {% verbatim %}
-<div class="col-sm-12 col-md-6" ng-repeat="course in display_courses" ng-cloak>
-  <a href="{{ course.url }}" class="course well {{ course.well_class }}" id="c{{ course.id }}">
-    <div class="picture">
-      <img ng-src="{{ course.im.url }}" width="{{ course.im.width }}"
-           height="{{ course.im.height }}" />
-      <div class="enrolled-status" ng-if="course.enrolled_status">
-        {{ course.enrolled_status }}
+<div class="row" ng-repeat="_courses in [scheduled_courses,unscheduled_courses]">
+  <div class="col-xs-12 course_divider" ng-if="_courses.length && _courses[0].next_time == 0">
+    <h2>Classes not Scheduled</h2>
+    <p class="alert alert-warning">
+      The classes below are not currently scheduled but have been taught in the past. If you want to know when a class will be scheduled, go to the class page and click the "Email me next time this class is scheduled" button and you'll be notified when the class is scheduled.
+    </p>
+  </div>
+  <div class="col-sm-12 col-md-6" ng-repeat="course in _courses" ng-cloak>
+    <a href="{{ course.url }}" class="course well {{ course.well_class }}" id="c{{ course.id }}">
+      <div class="picture">
+        <img ng-src="{{ course.im.url }}" width="{{ course.im.width }}"
+             height="{{ course.im.height }}" />
+        <div class="enrolled-status" ng-if="course.enrolled_status">
+          {{ course.enrolled_status }}
+        </div>
+        <div class="price">{{ course.fee*discount|number:0 }}</div>
       </div>
-      <div class="price">{{ course.fee*discount|number:0 }}</div>
-    </div>
-    <div class="details">
-      <div class="title">
-        {{ course.name }}
+      <div class="details">
+        <div class="title">
+          {{ course.name }}
+        </div>
+        <ul class="sessions" ng-if="course.open_sessions">
+          <li class="session" ng-repeat="session in course.open_sessions.slice(0,4)">
+            <small>
+              <b class="closed_string">{{ session.closed_status }}</b>
+              {{ session.short_dates }}
+            </small>
+          </li>
+        </ul>
+        <div ng-show="!course.open_sessions.length" style="list-style:none;">
+          There are no upcoming open sessions.</div>
+        <div class="full_sessions" ng-if="course.full_sessions">
+          <span ng-if="course.full_sessions.length == 1"> and 1 full session</span>
+          <span ng-if="course.full_sessions.length > 1">
+            and {{ course.full_sessions.length }} full sessions</span>
+        </div>
       </div>
-      <ul class="sessions" ng-if="course.open_sessions">
-        <li class="session" ng-repeat="session in course.open_sessions.slice(0,4)">
-          <small>
-            <b class="closed_string">{{ session.closed_status }}</b>
-            {{ session.short_dates }}
-          </small>
-        </li>
-      </ul>
-      <div ng-show="!course.open_sessions.length" style="list-style:none;">
-        There are no upcoming open sessions.</div>
-      <div class="full_sessions" ng-if="course.full_sessions">
-        <span ng-if="course.full_sessions.length == 1"> and 1 full session</span>
-        <span ng-if="course.full_sessions.length > 1">
-          and {{ course.full_sessions.length }} full sessions</span>
-      </div>
-    </div>
-  </a>
+    </a>
+  </div>
 </div>
 {% endverbatim %}

@@ -1,14 +1,20 @@
 {% verbatim %}
 <div class="list_filter btn-group-vertical">
+  <input type="radio" value="" for="all_subjects" checked="checked" name="subject" />
   <label for="all_subjects" class="btn btn-default" ng-click="filterSubjects('')">
-    All Subjects</label>
+    All Subjects
+  </label>
 </div>
 <div ng-repeat="subject in subjects" class="list_filter btn-group-vertical" ng-cloak>
+  <input type="radio" value="{{ subject.value }}" id="filter_subject_{{ subject.value }}"
+         name="subject" />
   <label class="btn btn-default" for="filter_subject_{{ subject.value }}"
          ng-click="filterSubjects(subject.value)">{{ subject.name }}</label>
   <div ng-repeat="child in subject.children" class="child">
-    <label class="btn btn-default" ng-click="filterSubjects(child.value)">
-      -- {{ child.name }}</label>
+    <input type="radio" value="{{ child.value }}" id="filter_subject_{{ child.value }}"
+           name="subject" />
+    <label for="filter_subject_{{ child.value }}" class="btn btn-default"
+           ng-click="filterSubjects(child.value)">-- {{ child.name }}</label>
   </div>
 </div>
 {% endverbatim %}
