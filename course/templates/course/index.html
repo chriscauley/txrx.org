@@ -16,7 +16,8 @@ var myApp = angular.module("myApp", ["infinite-scroll"]);
 myApp.controller("DemoController", function($scope) {
   $scope.courses = ALL_CLASSES;
   $scope.subjects = CLASS_SUBJECTS;
-  $scope.discount = MEMBER_DISCOUNT
+  $scope.discount = MEMBER_DISCOUNT;
+  $scope.active_subject = "";
 
   for (var si=0; si<USER_SESSIONS.length;si++) {
     session = USER_SESSIONS[si];
@@ -29,41 +30,36 @@ myApp.controller("DemoController", function($scope) {
     }
   }
 
-  $scope._vi = 8;
-  var active_courses = [];
-  var inactive_courses = [];
-  var active_subjects = {};
-  var inactive_subjects = {};
-  for (var i=0;i<$scope.courses.length;i++) {
-    var c = $scope.courses[i];
-    if (c.next_time == 0) {
-      inactive_courses.push(c);
-      s = inactive_subjects;
-    } else {
-      active_courses.push(c);
-      s = active_subjects;
+  $scope.filterSubjects = function(value) {
+    if (value != $scope.active_subject) {
+      $scope.display_courses = [];
+      $scope._vi = 0;
     }
-    for (var si=0;si<c.subjects.length;si++) {
-      s[c.subjects[si]] = (s[c.subjects[si]] || 0) + 1;
+    $scope.active_subject = value;
+      
+    $scope.active_courses = [];
+    $scope.inactive_courses = [];
+    for (var i=0;i<$scope.courses.length;i++) {
+      var c = $scope.courses[i];
+      if (!!value && c.subjects.indexOf(value) == -1) { continue }
+      if (c.next_time == 0) {
+        $scope.inactive_courses.push(c);
+      } else {
+        $scope.active_courses.push(c);
+      }
     }
+    console.log($scope.active_courses.length + " courses found");
+    $scope.loadMore();
   }
-  for (var si=0;si<$scope.subjects.length;si++) {
-    var s = $scope.subjects[si];
-    s.active_courses = active_subjects[s.id] || 0;
-    s.inactive_courses = inactive_subjects[s.id] || 0;
-    for (var ci=0;ci<s.children.length;ci++) {
-      var c = s.children[ci];
-      c.active_courses = active_subjects[c.id] || 0;
-      c.inactive_courses = inactive_subjects[c.id] || 0;      
-    }
-  }
-  $scope.display_courses = active_courses.slice(0,$scope._vi);
+
   $scope.loadMore = function() {
-    if ($scope._vi >= $scope.courses.length) {return }
-    $scope._vi = Math.min($scope.display_courses.length+6,$scope.courses.length);
-    $scope.display_courses = active_courses.slice(0,$scope._vi);
     console.log($scope._vi);
+    if ($scope._vi >= $scope.active_courses.length) {return }
+    $scope._vi = Math.min($scope.display_courses.length+6,$scope.active_courses.length);
+    $scope.display_courses = $scope.active_courses.slice(0,$scope._vi);
   };
+
+  $scope.filterSubjects();
 });
 var USER_SESSIONS = [
   {% for session in user_sessions %}
