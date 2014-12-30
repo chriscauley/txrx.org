@@ -14,7 +14,7 @@ class CourseCompletionInline(admin.TabularInline):
   raw_id_fields = ('user',)
 
 class CourseAdmin(admin.ModelAdmin):
-  list_display = ("name","active","tool_count","photo_count")
+  list_display = ("name","_notifies_count","active","tool_count","photo_count")
   readonly_fields = ("_notifies",)
   filter_horizontal = ("subjects",)
   inlines = [CourseCompletionInline, TaggedPhotoInline, TaggedToolInline, TaggedFileInline]
@@ -22,8 +22,10 @@ class CourseAdmin(admin.ModelAdmin):
     return len(obj.get_tools())
   def photo_count(self,obj):
     return len(obj.get_photos())
+  def _notifies_count(self,obj):
+    return obj.notifycourse_set.count()
   def _notifies(self,obj):
-    out = "<b>%s notifies</b><br />"%obj.notifycourse_set.count()
+    out = "<b>%s notifies</b><br />"%self._notifies_count(obj)
     for notify in obj.notifycourse_set.all():
       out += "%s<br/>"%notify.user.email
     return out
