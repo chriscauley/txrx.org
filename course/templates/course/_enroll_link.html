@@ -6,8 +6,7 @@
   <button class="btn btn-default disabled">FULL</button>
   {% else %}
   <button class="btn btn-primary add" onclick="addClass({{ session.id }});">
-    {% if session.in_progress %}In Progress{% else %}Enroll{% endif %} - 
-    $<script>document.write({{ member_discount }}*{{ session.course.fee }})</script></button>
+    {% if session.in_progress %}In Progress{% else %}Enroll{% endif %}</button>
   <button class="btn btn-danger drop" onclick="simpleCart.remove('{{ session.id }}'); toggleCourses();">
     Drop</button>
   {% endif %}

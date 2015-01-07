@@ -41,6 +41,21 @@
   }
 }
 
+.page_title {
+  .fee {
+    background: white;
+    color: black;
+    float: right;
+    font-size: 1.5em;
+    margin: 20px;
+    text-align: center;
+    width: 60px;
+    z-index: 1;
+    &:before { content: "$"; }
+    &:empty { display: none; }
+  }
+}
+
 .course .picture {
   .price {
     background: white;

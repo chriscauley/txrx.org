@@ -11,10 +11,10 @@
 {% block main %}
 <h1 class="page_title">
   {{ course }}
+  <div class="fee"><script>document.write({{ member_discount }}*{{ course.fee }});</script></div>
 </h1>
-<div class="row">
-  <div class="course-detail col-sm-7 col-md-8">
-    {% include "widgets/thing_slideshow.html" with thing=course %}
+<div class="course-detail row">
+  <div class="col-sm-4 col-md-5">
     <div class="details">
       <div class="subjects pull-right">
         <b>Subject{{ course.subjects.all|pluralize:"s" }}</b>:
@@ -30,19 +30,25 @@
       <img src="{{ im.url }}" width="620" />
       {% endthumbnail %}
       {% endif %}
-      <div class="description">
-        {{ course.description|explosivo }}
-      </div>
-      {% if course.fee_notes %}
-      <p class="notes"><b>* Fee Notes:</b> {{ course.fee_notes }}</p>
-      {% endif %}
-      {% if course.requirements %}
-      <p class="notes"><b>Requirements:</b> {{ course.requirements }}</p>
-      {% endif %}
-      {% if course.prerequisites %}
-      <p class="notes"><b>Prerequisites:</b> {{ course.prerequisites }}</p>
-      {% endif %}
     </div>
+    <div class="slide-wrapper">
+      {% include "widgets/thing_slideshow.html" with thing=course %}
+      <div class="fee"><script>document.write({{ member_discount }}*{{ course.fee }});</script></div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="description">
+      {{ course.description|explosivo }}
+    </div>
+    {% if course.fee_notes %}
+    <p class="notes"><b>* Fee Notes:</b> {{ course.fee_notes }}</p>
+      {% endif %}
+    {% if course.requirements %}
+    <p class="notes"><b>Requirements:</b> {{ course.requirements }}</p>
+    {% endif %}
+    {% if course.prerequisites %}
+    <p class="notes"><b>Prerequisites:</b> {{ course.prerequisites }}</p>
+    {% endif %}
     {% if course.get_files %}
     <div>
       <h2>Relevant files</h2>
@@ -51,9 +57,22 @@
       {% endfor %}
     </div>
     {% endif %}
+    <h3>Can't make it to any of these sessions?</h3>
+    <p class="notify_course">
+      {% if notify_course %}
+      <a href="{% url "clear_notification" "notify_course" request.user.id notify_course.id %}">
+        <button class="btn btn-danger">
+          Don't send me emails when this class is scheduled
+        </button>
+      </a>
+      {% else %}
+      <a href="{% url "notify_course" course.id %}"><button class="btn btn-success">
+          Email me the next time this class is scheduled</button></a>
+      {% endif %}
+    </p>
     <div style="clear: both;"></div>
   </div>
-  <div class="col-sm-5 col-md-4" id="side">
+  <div class="col-sm-4 col-md-3" id="side">
     {% if enrollment %}
     <div class="well">
       <h2>You are enrolled in this course</h2>
@@ -75,7 +94,7 @@
       <div class="well session" id="s{{ session.id }}">
         <div class="dates">
           {% for classtime in session.classtime_set.all %}
-          <h4>{{ classtime.start|date:"l F j g:i A"|safe }} - {{ classtime.end_time|time:"g:i A" }}</h4>
+          <h4>{{ classtime.start|date:"b j P"|title }} - {{ classtime.end|date:"P (D)"|title }}</h4>
           {% endfor %}
           with {{ session.user.username }}
         </div>
@@ -89,19 +108,6 @@
         {% endif %}
       </div>
       {% endfor %}
-      <h3>Can't make it to any of these sessions?</h3>
-      <p class="notify_course">
-        {% if notify_course %}
-        <a href="{% url "clear_notification" "notify_course" request.user.id notify_course.id %}">
-          <button class="btn btn-danger">
-            Don't send me emails when this class is scheduled
-          </button>
-        </a>
-        {% else %}
-        <a href="{% url "notify_course" course.id %}"><button class="btn btn-success">
-            Email me the next time this class is scheduled</button></a>
-        {% endif %}
-      </p>
       {% if course.full_sessions %}
       <h3>
         There are also {{ course.full_sessions|length }} full session{{ course.full_sessions|pluralize }}:
