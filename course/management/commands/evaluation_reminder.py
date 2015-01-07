@@ -12,7 +12,7 @@ import datetime
 class Command (BaseCommand):
   @print_to_mail(subject="[LOG] Evaluation Reminder")
   def handle(self, *args, **options):
-    yesterday = datetime.datetime.now()-datetime.timedelta(20)
+    yesterday = datetime.datetime.now()-datetime.timedelta(1)
     pe = Enrollment.objects.pending_evaluation()
     pe = pe.filter(evaluation_date__gte=yesterday)
     if pe.count:
