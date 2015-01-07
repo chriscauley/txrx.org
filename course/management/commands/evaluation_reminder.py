@@ -12,23 +12,26 @@ import datetime
 class Command (BaseCommand):
   @print_to_mail(subject="[LOG] Evaluation Reminder")
   def handle(self, *args, **options):
-    yesterday = datetime.datetime.now()-datetime.timedelta(1)
+    yesterday = datetime.datetime.now()-datetime.timedelta(20)
     pe = Enrollment.objects.pending_evaluation()
     pe = pe.filter(evaluation_date__gte=yesterday)
     if pe.count:
       print "sending %s evaluation emails"%pe.count()
-    for evaluation in pe:
-      if not evaluation.user.email:
+    for enrollment in pe:
+      if not enrollment.user.email:
         continue
       _dict = {
-        'evaluation': evaluation,
-        'la_key': LimitedAccessKey.new(evaluation.user),
+        'evaluation': enrollment,
+        'la_key': LimitedAccessKey.new(enrollment.user),
         'domain': settings.SITE_URL
       }
       send_mail(
         "Please evaluate the class you took from TX/RX",
         render_to_string("email/pending_evaluation.html",_dict),
         settings.DEFAULT_FROM_EMAIL,
-        [evaluation.user.email]
+        [enrollment.user.email]
       )
-      print "Emailed %s about %s"%(evaluation.email,evaluation.session)
+      enrollment.emailed=True
+      enrollment.save()
+      
+      print "Emailed %s about %s"%(enrollment.user.email,enrollment.session)

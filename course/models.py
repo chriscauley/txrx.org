@@ -283,6 +283,7 @@ class EnrollmentManager(models.Manager):
     kwargs['evaluation_date__lte'] = datetime.datetime.now()
     kwargs['evaluation_date__gte'] = datetime.datetime.now()-datetime.timedelta(30)
     kwargs['evaluated'] = False
+    kwargs['emailed'] = False
     return self.filter(*args,**kwargs)
 
 class Enrollment(UserModel):
@@ -292,6 +293,7 @@ class Enrollment(UserModel):
 
   completed = models.BooleanField(default=False)
   evaluated = models.BooleanField(default=False)
+  emailed = models.BooleanField(default=False)
   evaluation_date = models.DateTimeField(null=True,blank=True)
 
   objects = EnrollmentManager()
