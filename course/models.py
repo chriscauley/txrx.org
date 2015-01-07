@@ -361,6 +361,7 @@ class EnrollmentManager(models.Manager):
     kwargs['evaluation_date__lte'] = datetime.datetime.now()
     kwargs['evaluation_date__gte'] = datetime.datetime.now()-datetime.timedelta(30)
     kwargs['evaluated'] = False
+    kwargs['emailed'] = False
     return self.filter(*args,**kwargs)
 
 class Enrollment(UserModel):
@@ -370,6 +371,7 @@ class Enrollment(UserModel):
 
   completed = models.BooleanField(default=False)
   evaluated = models.BooleanField(default=False)
+  emailed = models.BooleanField(default=False)
   evaluation_date = models.DateTimeField(null=True,blank=True)
 
   objects = EnrollmentManager()
@@ -419,7 +421,12 @@ class Evaluation(UserModel):
   question3 = models.TextField("What motivated you to take this class?",null=True,blank=True)
   question4 = models.TextField("What classes would you like to see offered in the future?",null=True,blank=True)
 
-  __unicode__ = lambda self: "Evaluation for %s"%self.enrollment.session
+  _ht = "If checked your evaluation will be anonymous. If so the staff will not be able to respond to any questions you may have."
+  anonymous = models.BooleanField("Evaluate Anonymously",default=False,help_text=_ht)
+  def get_user(self):
+    return "Anonymous" if self.anonymous else str(self.user.email)
+
+  __unicode__ = lambda self: "%s Evaluation for %s"%(self.get_user(),self.enrollment.session)
   number_fields = ["presentation","content","visuals"]
   def get_number_tuples(self):
     return [(f,getattr(self,f),getattr(self,f+"_comments")) for f in self.number_fields]
