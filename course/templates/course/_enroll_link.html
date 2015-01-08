@@ -2,13 +2,13 @@
 <div class="EnrollLink">
   {% if session.closed %}
   <button class="btn btn-default disabled">{{ session.closed_string|title }}</button>
-  {% elif session.full %}
-  <button class="btn btn-default disabled">FULL</button>
-  {% else %}
+  {% elif not session.full %}
   <button class="btn btn-primary add" onclick="addClass({{ session.id }});">
     {% if session.in_progress %}In Progress{% else %}Enroll{% endif %}</button>
-  <button class="btn btn-danger drop" onclick="simpleCart.remove('{{ session.id }}'); toggleCourses();">
-    Drop</button>
+  <button class="btn btn-primary btn-cart drop" data-toggle="modal" data-target="#cartModal">
+    <i class="fa fa-shopping-cart"></i>
+    View Cart
+  </button>
   {% endif %}
 </div>
 <script>

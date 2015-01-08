@@ -91,7 +91,7 @@ USER_COURSE_IDS = [];
   <input type="checkbox" id="toggle_filters" />
   <label for="toggle_filters" class="btn btn-success">Filter by Subject</label>
   <form onsubmit="applyFilters(this);return false;" class="filters course_filters">
-    <input name="q" class="form-control" placeholder="Search Classes">
+    {#! NotImplimented <input name="q" class="form-control" placeholder="Search Classes">#}
     {% include "course/_filters.html" %}
   </form>
 </div>
@@ -129,12 +129,12 @@ USER_COURSE_IDS = [];
         {% for session in instructor_sessions %}
         <li>
           <a href="{% url "course:instructor_session" session.pk %}">
-            {{ session.section.course.name }}
+            {{ session.course.name }}
           </a>
           <br />
           {{ session.get_short_dates }}
           <br />
-          ({{ session.total_students }}/{{ session.section.max_students }} students)
+          ({{ session.total_students }}/{{ session.course.max_students }} students)
           <br />&nbsp;
         </li>
         {% endfor %}

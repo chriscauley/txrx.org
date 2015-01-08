@@ -41,18 +41,20 @@
   }
 }
 
-.page_title {
+.SessionList {
+  position: relative;
   .fee {
-    background: white;
-    color: black;
-    float: right;
-    font-size: 1.5em;
-    margin: 20px;
-    text-align: center;
-    width: 60px;
-    z-index: 1;
-    &:before { content: "$"; }
-    &:empty { display: none; }
+    border-color: transparent;
+    position: absolute;
+    right: 0;
+    top: -54px;
+  }
+}
+
+@media (max-width: @screen-sm-max) {
+  .SessionList .fee {
+    position: static;
+    text-align: right;
   }
 }
 
@@ -68,8 +70,6 @@
     top: 0;
     width: 60px;
     z-index: 1;
-    &:before { content: "$"; }
-    &:empty { display: none; }
   }
   .enrolled-status {
     background: @brand-success;
@@ -131,17 +131,36 @@
 }
 
 .SessionList {
-  .session {
-    margin: 10px 10px 20px;
+  .RsvpLink, .EnrollLink {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  label {
+    display: block;
+    font-weight: inherit;
     position: relative;
-    .RsvpLink, .EnrollLink {
-      text-align: center;
+    text-align: right;
+    .fa-check {
+      color: @brand-success;
+      display: none;
     }
-    .title {
-      display: inline-block;
-      vertical-align: middle;
+    .fa-dot-circle-o { display: none; }
+    .fa-check,.fa-circle-o,.fa-dot-circle-o {
+      position: absolute;
+      top: 7px;
+      left: 7px;
     }
-    .drop { display: none; }
+    .full { color: @brand-danger; }
+  }
+  .error { display: none; }
+  [type="radio"] {
+    display:none;
+    + label { cursor: pointer; }
+    &:checked + label {
+      background-color: @successBackground;
+      .fa-check,.fa-dot-circle-o { display: block; }
+      .fa-circle-o { display: none; }
+    }
   }
 }
 .RsvpLink .message {
@@ -260,11 +279,12 @@
 
 .SessionList {
   .add { display: inline-block; }
-  .drop, .in-cart .add { display: none; margin: 0 auto; }
-  .in-cart .drop { display: inline-block; }
+  .drop, &.in-cart .add { display: none; margin: 0 auto; }
+  &.in-cart .drop { display: inline-block; }
 }
 
 .notify_course {
+  margin-top: 10px;
   text-align: center;
   .btn { white-space: normal; }
 }

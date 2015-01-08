@@ -11,6 +11,9 @@ function showCart() {
 }
 
 function addClass(session_id) {
+  $(".SessionList .error").hide();
+  if (!session_id) { session_id = $(".SessionList").find("[name=session_id]:checked").val(); }
+  if (!session_id) { $(".SessionList .error").show(); return; }
   var session = window.SESSIONS_ON_PAGE[session_id];
   addItem(session.name,session.fee,session_id);
   toggleCourses(session.name);
@@ -24,10 +27,17 @@ function addItem(name,price,id) {
 function toggleCourses(name) {
   $(".in-cart").removeClass("in-cart");
   var has_items = false;
-  for (id in simpleCart.items) { $("#s"+id).addClass("in-cart"); has_items = true; }
+  for (id in simpleCart.items) {
+    console.log($("#id_session_"+id).length);
+    if ($("#id_session_"+id).length) {
+      $(".SessionList").addClass("in-cart");
+      $("#id_session_"+id).prop('checked', true);
+    }
+    has_items = true;
+  }
   simpleCart.update();
-  if (has_items) { $("#mobileCart,.btn-cart").show(); }
-  else { $("#mobileCart,.btn-cart").hide(); }
+  if (has_items) { $("#mobileCart,nav .btn-cart").show(); }
+  else { $("#mobileCart,nav .btn-cart").hide(); }
   $(".recentAdd").removeClass("recentAdd");
   $(".itemContainer").each(function() {
     if ($(this).find(".itemName").text() == name) {

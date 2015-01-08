@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load mptt_comments_tags thumbnail %}
-{% load short_codes %}
+{% load short_codes txrx_tags %}
 
 {% block title %}{{ course }}{% endblock %}
 {% block header %}{% endblock %}
@@ -11,30 +11,40 @@
 {% block main %}
 <h1 class="page_title">
   {{ course }}
-  <div class="fee"><script>document.write({{ member_discount }}*{{ course.fee }});</script></div>
 </h1>
 <div class="course-detail row">
-  <div class="col-sm-4 col-md-5">
-    <div class="details">
-      <div class="subjects pull-right">
-        <b>Subject{{ course.subjects.all|pluralize:"s" }}</b>:
-        {{ course.subjects.all|join:", " }}
-      </div>
-      <div class="calendar_widget">
-        <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">
-          <span class="glyphicon glyphicon-calendar"></span> Add to calendar</a>
-        {% include "course/_add_to_calendar.html" with calendar_event=session calendar_context="classes" %}{#! this needs to be fixed #}
-      </div>
-      {% if course.branding %}
-      {% thumbnail course.branding.image "620x100" as im %}
-      <img src="{{ im.url }}" width="620" />
-      {% endthumbnail %}
-      {% endif %}
+  {% if enrollment %}
+  <div class="col-sm-4 col-md-3 col-xs-12 pull-right">
+    <div class="well">
+      <h2>You are enrolled in this course</h2>
+      {% for classtime in enrollment.session.classtime_set.all %}
+      <div>{{ classtime|format_classtime }}</div>
+      {% endfor %}
     </div>
+  </div>
+  {% endif %}
+  <div class="col-sm-4 col-md-5">
+    {% comment %}
+    <div class="subjects pull-right">
+      <b>Subject{{ course.subjects.all|pluralize:"s" }}</b>:
+      {{ course.subjects.all|join:", " }}
+    </div>
+    {% endcomment %}
+    {% if course.branding %}
+    {% thumbnail course.branding.image "620x100" as im %}
+    <img src="{{ im.url }}" width="620" />
+    {% endthumbnail %}
+    {% endif %}
     <div class="slide-wrapper">
       {% include "widgets/thing_slideshow.html" with thing=course %}
-      <div class="fee"><script>document.write({{ member_discount }}*{{ course.fee }});</script></div>
     </div>
+    {% comment %}
+    <div class="calendar_widget">
+      <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">
+        <span class="glyphicon glyphicon-calendar"></span> Add to calendar</a>
+      {% include "course/_add_to_calendar.html" with calendar_event=session calendar_context="classes" %}{#! this needs to be fixed #}
+    </div>
+    {% endcomment %}
   </div>
   <div class="col-sm-4">
     <div class="description">
@@ -72,65 +82,63 @@
     </p>
     <div style="clear: both;"></div>
   </div>
-  <div class="col-sm-4 col-md-3" id="side">
+  <div class="col-xs-12 col-sm-4 col-md-3 pull-right" id="side">
     {% if enrollment %}
-    <div class="well">
-      <h2>You are enrolled in this course</h2>
-      {% for classtime in enrollment.session.classtime_set.all %}
-      <h4>{{ classtime.start|date:"l F j g:i A"|safe }} - {{ classtime.end_time|time:"g:i A" }}</h4>
-      {% endfor %}
-    </div>
     {# {% include "course/_student_panel.html" %} #}
     {% else %}
     <div class="SessionList">
-      <h3>
-        {% if course.open_sessions %}
-        {{ course.open_sessions|length }} upcoming session{{ course.open_sessions|pluralize }}:
+      <h1 class="fee page_title">
+        {% if course.fee %}
+        $<script>document.write(Math.round({{ member_discount }}*{{ course.fee }},2));</script>
         {% else %}
-        There are no upcoming sessions.
+        Free
         {% endif %}
-      </h3>
-      {% for session in course.open_sessions %}
-      <div class="well session" id="s{{ session.id }}">
-        <div class="dates">
-          {% for classtime in session.classtime_set.all %}
-          <h4>{{ classtime.start|date:"b j P"|title }} - {{ classtime.end|date:"P (D)"|title }}</h4>
-          {% endfor %}
-          with {{ session.user.username }}
-        </div>
-        {% if request.user == session.user %}
-        <center>
-          <a href="{% url "course:instructor_session" session.pk %}" class="btn btn-primary">
-            View instructor page</a>
-        </center>
-        {% else %}
-        {% include "course/_enroll_link.html" %}
-        {% endif %}
-      </div>
-      {% endfor %}
-      {% if course.full_sessions %}
-      <h3>
-        There are also {{ course.full_sessions|length }} full session{{ course.full_sessions|pluralize }}:
-      </h3>
+      </h1>
+      {% for session in course.active_sessions %}
+      {% if not session.full %}
+      <input type="radio" name="session_id" {% ifchanged 1 %} checked="checked"{% endifchanged %}
+             id="id_session_{{ session.id }}" value="{{ session.id }}" />
       {% endif %}
-      {% for session in course.full_sessions %}
-      <div class="well session" id="s{{ session.id }}">
-        <div class="dates">
-          {% for classtime in session.classtime_set.all %}
-          <h4>{{ classtime.start|date:"l F j g:i A"|safe }} - {{ classtime.end_time|time:"g:i A" }}</h4>
-          {% endfor %}
-          with {{ session.user.username }}
-        </div>
-        {% if request.user == session.user %}
-        <center>
-          <a href="{% url "course:instructor_session" session.pk %}" class="btn btn-primary">
-            View instructor page</a>
-        </center>
-        {% else %}
-        {% include "course/_enroll_link.html" %}
+      <label class="well session" for="id_session_{{ session.id }}">
+        {% if not session.full %}
+        {#<i class="fa fa-check"></i> #}
+        <i class="fa fa-circle-o"></i>
+        <i class="fa fa-dot-circle-o"></i>
         {% endif %}
-      </div>
+        <div class="dates">
+          {% if session.full %}
+          <b class="full">This session is full</b>
+          {% else %}
+          with {{ session.user.username }}
+          {% endif %}
+          {% for classtime in session.classtime_set.all %}
+          <div>{{ classtime|format_classtime }}</div>
+          {% endfor %}
+        </div>
+      </label>
+      <script>
+      window.SESSIONS_ON_PAGE = window.SESSIONS_ON_PAGE || {};
+        window.SESSIONS_ON_PAGE[{{ session.id }}] = {
+        'name': "<b>{{ session.course }}</b> {{ session.first_date|date:"m/d/Y" }}",
+        'fee': {{ member_discount }}*{{ session.course.fee }},
+        };
+      </script>
       {% endfor %}
+      <div class="EnrollLink">
+        {% if session.closed %}
+        <button class="btn btn-default disabled">{{ session.closed_string|title }}</button>
+        {% elif not session.full %}
+        <button class="btn btn-primary add" onclick="addClass();">
+          {% if session.in_progress %}In Progress{% else %}Enroll{% endif %}</button>
+        <button class="btn btn-primary btn-cart drop" data-toggle="modal" data-target="#cartModal">
+          <i class="fa fa-shopping-cart"></i>
+          View Cart
+        </button>
+      </div>
+      <div class="error alert alert-danger">
+        Please choose a session above and click enroll to add the session to your cart
+      </div>
+      {% endif %}
     </div>
     {% endif %}
     <center>
@@ -141,9 +149,9 @@
       <span class="st_reddit_large" displayText="Reddit"></span>
     </center>
     {% if request.user.is_staff %}
-    {% include "course/_instructor_panel.html" %}
+    {# {% include "course/_instructor_panel.html" %} #}
     {% endif %}
   </div>
-  <div class="col-xs-12">{% display_comment_toplevel_for course %}</div>
+  <div class="col-xs-12 col-sm-8 col-md-9">{% display_comment_toplevel_for course %}</div>
 </div>
 {% endblock %}

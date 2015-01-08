@@ -15,7 +15,8 @@
         <div class="enrolled-status" ng-if="course.enrolled_status">
           {{ course.enrolled_status }}
         </div>
-        <div class="price">{{ course.fee*discount|number:0 }}</div>
+        <div class="price" ng-if="course.fee > 0">$ {{ course.fee*discount|number:0 }}</div>
+        <div class="price" ng-if="course.fee == 0">FREE</div>
       </div>
       <div class="details">
         <div class="title">
@@ -29,7 +30,7 @@
             </small>
           </li>
         </ul>
-        <div ng-show="!course.open_sessions.length" style="list-style:none;">
+        <div ng-if="!course.open_sessions.length && course.next_time != 0">
           There are no upcoming open sessions.</div>
         <div class="full_sessions" ng-if="course.full_sessions">
           <span ng-if="course.full_sessions.length == 1"> and 1 full session</span>

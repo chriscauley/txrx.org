@@ -31,7 +31,7 @@ def index(request):
   instructor_sessions = []
   if request.user.is_authenticated():
     instructor_sessions = Session.objects.filter(user=request.user).reverse()
-    user_sessions = Session.objects.filter(enrollment__user=request.user.id).select_related(depth=3)
+    user_sessions = Session.objects.filter(enrollment__user=request.user.id)
     us_ids = [s.id for s in user_sessions]
     for session in user_sessions:
       user_courses.append(session)
