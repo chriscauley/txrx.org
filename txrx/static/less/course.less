@@ -32,7 +32,6 @@
   }
   .price {
     font-size: 25px;
-    font-weight: bold;
     position: absolute;
     right: 5px;
     text-align: center;
@@ -41,15 +40,18 @@
   }
   [data-status] {
     background: @brand-primary;
-    bottom: -3px;
     color: white;
     font-weight: bold;
     padding: 3px 8px;
     position: absolute;
-    right: 0;
     text-transform: uppercase;
     &:before { content: attr(data-status); }
   }
+  .details [data-status] {
+    bottom: -3px;
+    right: 0;
+  }    
+  .picture [data-status] { display: none; }
 }
 
 .SessionList {
@@ -59,13 +61,6 @@
     position: absolute;
     right: 0;
     top: -54px;
-  }
-}
-
-@media (max-width: @screen-sm-max) {
-  .SessionList .fee {
-    position: static;
-    text-align: right;
   }
 }
 
@@ -83,9 +78,12 @@
     font-size: 18px;
     font-weight: bold;
     line-height: 1.1em;
-    padding: 0 0 5px 0;
+    overflow: hidden;
+    padding: 0 70px 5px 0;
     position: relative;
+    text-overflow: ellipsis;
     text-transform: uppercase;
+    white-space: nowrap;
   }
   .sessions {
     border-top: 1px solid;
@@ -108,21 +106,50 @@
 @media (max-width: @screen-sm-max) {
   .course {
     max-height: none;
-    .details .title {
-      padding-right: 70px;
+    .picture [data-status] {
+      bottom: 0;
+      display: block;
+      left: 0;
     }
-    [data-status],.subjects { display: none; }
+    .picture [data-status=Enroll], [data-status=Enroll] { display: none; }
+    .details {
+      [data-status] { display: none; }
+      .subjects { display: none; }
+      .description { padding-right: 0; }
+      .title {
+        padding-right: 0;
+        white-space: normal;
+      }
+    }
+    .price {
+      background: rgba(255,255,255,0.85);
+      left: 5px;
+      margin: 5px;
+    }
+  }
+}
+
+@media (max-width: @screen-sm-max) {
+  .SessionList .fee {
+    position: static;
+    text-align: right;
   }
 }
 
 @media (max-width: @screen-xs-max) {
   .course {
-    .picture, .details {
-      float: left;
-      position: static;
-      width: 50%;
+    .picture {
+      top: 0;
+      left: 0;
+      width: 100%;
     }
-    .details { padding-left: 10px; }
+    .picture, .details {
+      position: relative;;
+    }
+    .details {
+      margin: 20px 0 0;
+      padding-left: 10px;
+    }
   }
 }
 
