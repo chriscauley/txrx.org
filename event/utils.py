@@ -106,6 +106,8 @@ def get_room_conflicts(base_occurrence=None):
 
   # iterate over 30 minute chunks and group chunks by time and room
   for event,room in event_tuples:
+    if not room:
+      continue
     for time in iter_times(event.start,event.end):
       schedule[room][time] = schedule[room].get(time,[])
       schedule[room][time].append(event)
