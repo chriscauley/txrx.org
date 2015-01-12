@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.validators import MaxLengthValidator
-from django.template.defaultfilters import slugify
+from django.template.defaultfilters import slugify, truncatewords, striptags
 from db.models import UserModel, NamedTreeModel
 from sorl.thumbnail import ImageField, get_thumbnail
 from crop_override import get_override
@@ -94,7 +94,8 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
     out = {
       'id': self.pk,
       'name': self.name,
-      'subjects': [s.pk for s in self.subjects.all()],
+      'subject_names': [s.name for s in self.subjects.all()],
+      'subject_ids': [s.pk for s in self.subjects.all()],
       'url': self.get_absolute_url(),
       'im': {
         'width': image.width,
@@ -106,6 +107,8 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
       'active_sessions': [s.as_json for s in self.active_sessions],
       'open_sessions': [s.as_json for s in self.open_sessions],
       'full_sessions': [s.as_json for s in self.full_sessions],
+      'short_description': self.get_short_description(),
+      'enrolled_status': "Enroll",
     }
     out['visible_session'] = (out['open_sessions']+out['full_sessions']+[None])[0]
     return out
@@ -115,6 +118,8 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   requirements = models.CharField(max_length=256,null=True,blank=True)
   prerequisites = models.CharField(max_length=256,null=True,blank=True)
   description = models.TextField(null=True,blank=True)
+  short_description = models.TextField(null=True,blank=True)
+  get_short_description = lambda self: self.short_description or truncatewords(striptags(self.description),40)
   safety = models.BooleanField(default=False)
   room = models.ForeignKey(Room,default=1)
   _ht = "If true, this class will not raise conflict warnings for events in the same room."

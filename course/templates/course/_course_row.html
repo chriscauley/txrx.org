@@ -7,36 +7,30 @@
       The classes below are not currently scheduled but have been taught in the past. If you want to know when a class will be scheduled, go to the class page and click the "Email me next time this class is scheduled" button and you'll be notified when the class is scheduled.
     </p>
   </div>
-  <div class="col-sm-12 col-md-6" ng-repeat="course in _courses" ng-cloak>
+  <div ng-repeat="course in _courses" ng-cloak>
     <a href="{{ course.url }}" class="course well {{ course.well_class }}" id="c{{ course.id }}">
       <div class="picture">
         <img ng-src="{{ course.im.url }}" width="{{ course.im.width }}"
              height="{{ course.im.height }}" />
-        <div class="enrolled-status" ng-if="course.enrolled_status">
-          {{ course.enrolled_status }}
-        </div>
-        <div class="price" ng-if="course.fee > 0">$ {{ course.fee*discount|number:0 }}</div>
-        <div class="price" ng-if="course.fee == 0">FREE</div>
       </div>
       <div class="details">
-        <div class="title">
-          {{ course.name }}
+        <div class="subjects"><span ng-repeat="subject in course.subject_names">
+            {{ subject }}</span></div>
+        <div class="title">{{ course.name }}</div>
+        <div class="description">{{ course.short_description }}</div>
+        <div class="sessions" ng-if="course.active_sessions.length > 0">
+          <span class="next_session" ng-if="course.open_sessions">
+            {{ course.open_sessions.0.short_dates }}</span>
+          <span class="open_sessions" ng-if="course.open_sessions.length == 2">
+            +1 Open Session</span>
+          <span class="open_sessions" ng-if="course.open_sessions.length > 2">
+            +{{ course.open_sessions.length - 1 }} Open Sessions</span>
+          <span class="full_sessions" ng-if="course.full_sessions.length > 0">
+            +{{ course.full_sessions.length }} Full Sessions</span>
         </div>
-        <ul class="sessions" ng-if="course.open_sessions">
-          <li class="session" ng-repeat="session in course.open_sessions.slice(0,4)">
-            <small>
-              <b class="closed_string">{{ session.closed_status }}</b>
-              {{ session.short_dates }}
-            </small>
-          </li>
-        </ul>
-        <div ng-if="!course.open_sessions.length && course.next_time != 0">
-          There are no upcoming open sessions.</div>
-        <div class="full_sessions" ng-if="course.full_sessions">
-          <span ng-if="course.full_sessions.length == 1"> and 1 full session</span>
-          <span ng-if="course.full_sessions.length > 1">
-            and {{ course.full_sessions.length }} full sessions</span>
-        </div>
+        <div class="enrolled-status" data-status="{{ course.enrolled_status }}"></div>
+        <div class="price" ng-if="course.fee > 0">${{ course.fee*discount|number:0 }}</div>
+        <div class="price" ng-if="course.fee == 0">FREE</div>
       </div>
     </a>
   </div>

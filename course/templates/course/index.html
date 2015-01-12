@@ -43,7 +43,7 @@ myApp.controller("DemoController", function($scope) {
     $scope.inactive_courses = [];
     for (var i=0;i<$scope.courses.length;i++) {
       var c = $scope.courses[i];
-      if (!!value && c.subjects.indexOf(value) == -1) { continue }
+      if (!!value && c.subject_ids.indexOf(value) == -1) { continue }
       if (c.next_time == 0) {
         $scope.inactive_courses.push(c);
       } else {
@@ -87,7 +87,7 @@ USER_COURSE_IDS = [];
 </div>
 <div style="clear:both;"></div>
 <div ng-app="myApp" ng-controller="DemoController">
-<div class="col-sm-5 col-md-2 col-lg-2" id="side">
+<div class="col-sm-4 col-md-2 col-lg-2" id="side">
   <input type="checkbox" id="toggle_filters" />
   <label for="toggle_filters" class="btn btn-success">Filter by Subject</label>
   <form onsubmit="applyFilters(this);return false;" class="filters course_filters">
@@ -95,7 +95,7 @@ USER_COURSE_IDS = [];
     {% include "course/_filters.html" %}
   </form>
 </div>
-<div class="col-sm-7 col-md-10 col-lg-10">
+<div class="col-sm-8 col-md-10 col-lg-10">
   <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#all_classes" role="tab" data-toggle="tab">All Classes</a></li>
     <li><a href="#my_classes" role="tab" data-toggle="tab">

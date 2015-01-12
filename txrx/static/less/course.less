@@ -12,7 +12,22 @@
   &.enrolled { background: #A9CEE0; }
 }
 
-.course { // layout the two boxes
+.course {
+  &:hover:before {
+    content: "Gaby said change this so I did";
+    background: fade(@brand-primary,75);
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    text-align: center;
+    color: white;
+    line-height: 152px;
+    font-size: 20px;
+    top: 0;
+    left: 0;
+    z-index: 10;
+  }
   .picture {
     left: 5px;
     position: absolute;
@@ -25,7 +40,28 @@
   }
   .details {
     min-height: 140px;
-    padding-left: @pictureWidth + 10px;
+    margin-left: @pictureWidth + 10px;
+    position: relative;
+    .name, .description { padding-right: 80px; }
+  }
+  .price {
+    font-size: 25px;
+    position: absolute;
+    right: 5px;
+    text-align: center;
+    top: 5px;
+    width: 70px;
+  }
+  [data-status] {
+    background: @brand-primary;
+    bottom: -3px;
+    color: white;
+    font-weight: bold;
+    padding: 3px 8px;
+    position: absolute;
+    right: 0;
+    text-transform: uppercase;
+    &:before { content: attr(data-status); }
   }
 }
 
@@ -58,29 +94,6 @@
   }
 }
 
-.course .picture {
-  .price {
-    background: white;
-    color: black;
-    font-size: 1.2em;
-    left: 0;
-    margin: 5px;
-    position: absolute;
-    text-align: center;
-    top: 0;
-    width: 60px;
-    z-index: 1;
-  }
-  .enrolled-status {
-    background: @brand-success;
-    bottom: 0;
-    color: white;
-    font-weight: bold;
-    padding: 5px 10px;
-    position: absolute;
-  }
-}
-
 .course .details {
   .closed_string {
     color: red;
@@ -94,39 +107,26 @@
     display: block;
     font-size: 18px;
     font-weight: bold;
-    line-height: 1.2em;
-    padding: 0 0 10px 0;
+    line-height: 1.1em;
+    padding: 0 0 5px 0;
     position: relative;
+    text-transform: uppercase;
   }
   .sessions {
+    border-top: 1px solid;
+    bottom: 0;
+    line-height: 1em;
     margin: 0;
-    padding: 0 0 10px 20px;
+    padding: 10px 0 2px;
+    position: absolute;
+    width: 100%;
+    .open_sessions { color: @brand-success; }
+    .full_sessions { color: @brand-danger; }
   }
-  //the rest of this is probably depracated
-  .bottom {
-    line-height: 1;
-    margin-bottom: -2px;
-    position: relative;
-    top: 2px;
-    .subjects,.notes {
-      display: inline-block;
-      min-height: 1em;
-      vertical-align: top;
-    }
-    .subjects { color: @borderGray; overflow: hidden; }
-    .has_notes { float: right; padding: 0 10px; }
-  }
-  .session_toggle {
-    display: none;
-    ~ label {
-      cursor: pointer;
-      &:before { content: "Show"; }
-    }
-    ~ .session { display: none; }
-    &:checked {
-      ~ label { &:before { content: "Hide"; } }
-      ~ .session { display: block; }
-    }
+  .subjects {
+    color: @borderGray;
+    text-transform: uppercase;
+    span { display: inline-block; padding-right: 15px; }
   }
 }
 
