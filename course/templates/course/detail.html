@@ -124,10 +124,8 @@
         };
       </script>
       {% endfor %}
+      {% if course.open_sessions %}
       <div class="EnrollLink">
-        {% if session.closed %}
-        <button class="btn btn-default disabled">{{ session.closed_string|title }}</button>
-        {% elif not session.full %}
         <button class="btn btn-primary add" onclick="addClass();">
           {% if session.in_progress %}In Progress{% else %}Enroll{% endif %}</button>
         <button class="btn btn-primary btn-cart drop" data-toggle="modal" data-target="#cartModal">

@@ -13,21 +13,6 @@
 }
 
 .course {
-  &:hover:before {
-    content: "Gaby said change this so I did";
-    background: fade(@brand-primary,75);
-    width: 100%;
-    height: 100%;
-    display: block;
-    position: absolute;
-    text-align: center;
-    color: white;
-    line-height: 152px;
-    font-size: 20px;
-    top: 0;
-    left: 0;
-    z-index: 10;
-  }
   .picture {
     left: 5px;
     position: absolute;
@@ -41,11 +26,13 @@
   .details {
     min-height: 140px;
     margin-left: @pictureWidth + 10px;
+    padding-bottom: 30px;
     position: relative;
     .name, .description { padding-right: 80px; }
   }
   .price {
     font-size: 25px;
+    font-weight: bold;
     position: absolute;
     right: 5px;
     text-align: center;
@@ -62,18 +49,6 @@
     right: 0;
     text-transform: uppercase;
     &:before { content: attr(data-status); }
-  }
-}
-
-@media (max-width: @screen-xs-max) {
-  .course {
-    max-height: none;
-    .picture, .details {
-      float: left;
-      position: static;
-      width: 50%;
-    }
-    .details { padding-left: 10px; }
   }
 }
 
@@ -127,6 +102,27 @@
     color: @borderGray;
     text-transform: uppercase;
     span { display: inline-block; padding-right: 15px; }
+  }
+}
+
+@media (max-width: @screen-sm-max) {
+  .course {
+    max-height: none;
+    .details .title {
+      padding-right: 70px;
+    }
+    [data-status],.subjects { display: none; }
+  }
+}
+
+@media (max-width: @screen-xs-max) {
+  .course {
+    .picture, .details {
+      float: left;
+      position: static;
+      width: 50%;
+    }
+    .details { padding-left: 10px; }
   }
 }
 
@@ -211,6 +207,7 @@
 }
 
 .course-detail {
+  .fee { padding-right: 0; }
   .subjects { padding-bottom: 5px; }
 }
 

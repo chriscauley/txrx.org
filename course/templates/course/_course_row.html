@@ -22,11 +22,12 @@
           <span class="next_session" ng-if="course.open_sessions">
             {{ course.open_sessions.0.short_dates }}</span>
           <span class="open_sessions" ng-if="course.open_sessions.length == 2">
-            +1 Open Session</span>
+            + 1 Open Session</span>
           <span class="open_sessions" ng-if="course.open_sessions.length > 2">
-            +{{ course.open_sessions.length - 1 }} Open Sessions</span>
+            + {{ course.open_sessions.length - 1 }} Open Sessions</span>
           <span class="full_sessions" ng-if="course.full_sessions.length > 0">
-            +{{ course.full_sessions.length }} Full Sessions</span>
+            <span ng-if="course.open_sessions">+</span> {{ course.full_sessions.length }}
+            Full Session<span ng-if="course.full_sessions.length >1">s</span></span>
         </div>
         <div class="enrolled-status" data-status="{{ course.enrolled_status }}"></div>
         <div class="price" ng-if="course.fee > 0">${{ course.fee*discount|number:0 }}</div>
