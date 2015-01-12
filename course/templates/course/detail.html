@@ -94,28 +94,21 @@
         Free
         {% endif %}
       </h1>
+      <h2>Choose a session:</h2><br />
       {% for session in course.active_sessions %}
-      {% if not session.full %}
-      <input type="radio" name="session_id" {% ifchanged 1 %} checked="checked"{% endifchanged %}
-             id="id_session_{{ session.id }}" value="{{ session.id }}" />
-      {% endif %}
-      <label class="well session" for="id_session_{{ session.id }}">
-        {% if not session.full %}
-        {#<i class="fa fa-check"></i> #}
-        <i class="fa fa-circle-o"></i>
-        <i class="fa fa-dot-circle-o"></i>
-        {% endif %}
+      <div class="session{% if not session.full %} btn btn-primary{% else %} well{% endif %}" {% if not session.full %}
+           onclick="addClass({{ session.id }});"{% endif %}>
         <div class="dates">
+          {% for classtime in session.classtime_set.all %}
+          <div>{{ classtime|format_classtime }}</div>
+          {% endfor %}
           {% if session.full %}
           <b class="full">This session is full</b>
           {% else %}
           with {{ session.user.username }}
           {% endif %}
-          {% for classtime in session.classtime_set.all %}
-          <div>{{ classtime|format_classtime }}</div>
-          {% endfor %}
         </div>
-      </label>
+      </div>
       <script>
       window.SESSIONS_ON_PAGE = window.SESSIONS_ON_PAGE || {};
         window.SESSIONS_ON_PAGE[{{ session.id }}] = {
@@ -124,19 +117,6 @@
         };
       </script>
       {% endfor %}
-      {% if course.open_sessions %}
-      <div class="EnrollLink">
-        <button class="btn btn-primary add" onclick="addClass();">
-          {% if session.in_progress %}In Progress{% else %}Enroll{% endif %}</button>
-        <button class="btn btn-primary btn-cart drop" data-toggle="modal" data-target="#cartModal">
-          <i class="fa fa-shopping-cart"></i>
-          View Cart
-        </button>
-      </div>
-      <div class="error alert alert-danger">
-        Please choose a session above and click enroll to add the session to your cart
-      </div>
-      {% endif %}
     </div>
     {% endif %}
     <center>
