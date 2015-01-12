@@ -96,21 +96,23 @@
       </h1>
       <h2>Choose a session:</h2><br />
       {% for session in course.active_sessions %}
-      <div class="session{% if not session.full %} btn btn-primary{% else %} well{% endif %}" {% if not session.full %}
-           onclick="addClass({{ session.id }});"{% endif %}>
+      <div class="session well">
         <div class="dates">
           {% for classtime in session.classtime_set.all %}
           <div>{{ classtime|format_classtime }}</div>
           {% endfor %}
-          {% if session.full %}
-          <b class="full">This session is full</b>
-          {% else %}
-          with {{ session.user.username }}
-          {% endif %}
         </div>
+        {% if session.full %}
+        <b class="full">This session is full</b>
+        {% else %}
+        <center>
+          <button class="btn btn-primary" onclick="addClass({{ session.id }});">
+            Enroll in this Session</button>
+        </center>
+        {% endif %}
       </div>
       <script>
-      window.SESSIONS_ON_PAGE = window.SESSIONS_ON_PAGE || {};
+        window.SESSIONS_ON_PAGE = window.SESSIONS_ON_PAGE || {};
         window.SESSIONS_ON_PAGE[{{ session.id }}] = {
         'name': "<b>{{ session.course }}</b> {{ session.first_date|date:"m/d/Y" }}",
         'fee': {{ member_discount }}*{{ session.course.fee }},

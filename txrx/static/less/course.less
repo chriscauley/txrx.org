@@ -29,6 +29,11 @@
     padding-bottom: 30px;
     position: relative;
     .name, .description { padding-right: 80px; }
+    .description {
+      max-height: 4.2em;
+      line-height: 1.4em;
+      overflow: hidden;
+    }
   }
   .price {
     font-size: 25px;
@@ -66,6 +71,7 @@
     margin-bottom: 20px;
     text-align: right;
     width: 100%;
+    .dates { margin-bottom: 10px; }
     .full { color: @brand-danger; }
   }
 }
@@ -121,7 +127,10 @@
     .details {
       [data-status] { display: none; }
       .subjects { display: none; }
-      .description { padding-right: 0; }
+      .description {
+        padding-right: 0;
+        max-height: none;
+      }
       .title {
         padding-right: 0;
         white-space: normal;
@@ -135,7 +144,7 @@
   }
 }
 
-@media (max-width: @screen-sm-max) {
+@media (max-width: @screen-xs-max) {
   .SessionList .fee {
     position: static;
     text-align: right;
