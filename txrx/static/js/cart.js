@@ -27,12 +27,14 @@ function addItem(name,price,id) {
 function toggleCourses(name) {
   $(".in-cart").removeClass("in-cart");
   var has_items = false;
+  $("#cartEmpty").show();
   for (id in simpleCart.items) {
     console.log($("#id_session_"+id).length);
     if ($("#id_session_"+id).length) {
       $(".SessionList").addClass("in-cart");
       $("#id_session_"+id).prop('checked', true);
     }
+    $("#cartEmpty").hide();
     has_items = true;
   }
   simpleCart.update();
