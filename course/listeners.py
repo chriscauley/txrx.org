@@ -5,17 +5,19 @@ from django.conf import settings
 from django.core.mail import send_mail, mail_admins
 from django.template.loader import render_to_string
 
-from .utils import get_or_create_student
+from .utils import get_or_create_student, reset_classes_json
 from notify.models import NotifyCourse
 
 import traceback
 
-@receiver(payment_was_successful, dispatch_uid='course.signals.handle_successful_payment')
+_duid='course.signals.handle_successful_payment'
+@receiver(payment_was_successful, dispatch_uid=_duid)
 def handle_successful_payment(sender, **kwargs):
   from course.models import Enrollment, Session
   #add them to the classes they're enrolled in
   params = QueryDict(sender.query)
-  user,new_user = get_or_create_student(sender.payer_email,u_id=params.get('custom',None))
+  _uid = params.get('custom',None)
+  user,new_user = get_or_create_student(sender.payer_email,u_id=_uid)
   try:
     class_count = int(params['num_cart_items'])
   except:
@@ -68,6 +70,7 @@ def handle_successful_payment(sender, **kwargs):
   send_mail("Course enrollment confirmation",body,settings.DEFAULT_FROM_EMAIL,['chris@lablackey.com'])
   if error_sessions:
     mail_admins("Enrollment Error","\n\n".join(error_sessions))
+  reset_classes_json("classes reset during course enrollment")
 
 @receiver(payment_was_flagged, dispatch_uid='course.signals.handle_flagged_payment')
 def handle_flagged_payment(sender, **kwargs):

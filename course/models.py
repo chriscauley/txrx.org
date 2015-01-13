@@ -167,6 +167,9 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
       if subject.parent and not (subject.parent in subjects):
         self.subjects.add(subject.parent)
 
+    from course.utils import reset_classes_json
+    reset_classes_json("Classes reset during course save")
+
   #! inherited from section, may not be necessary
   def get_notes(self):
     notes = []
@@ -316,8 +319,11 @@ class Session(FeedItemModel,PhotosMixin):
     self.slug = self.slug or 'arst' # can't save without one, we'll set this below
     super(Session,self).save(*args,**kwargs)
     self.slug = slugify("%s_%s"%(self.course,self.id))
-    return super(Session,self).save(*args,**kwargs)
+    super(Session,self).save(*args,**kwargs)
 
+    #now reset classe json just in case anything changed
+    from course.utils import reset_classes_json
+    reset_classes_json("classes reset during session save")
   @cached_method
   def get_absolute_url(self):
     return self.course.get_absolute_url()
