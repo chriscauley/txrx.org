@@ -1,13 +1,13 @@
 {% load txrx_tags thumbnail crop_util %}
 {% verbatim %}
-<div class="row" ng-repeat="_courses in [scheduled_courses,unscheduled_courses]">
+<div class="row" ng-repeat="_courses in [scheduled_courses,unscheduled_courses]" ng-cloak>
   <div class="col-xs-12 course_divider" ng-if="_courses.length && _courses[0].next_time == 0">
     <h2>Classes not Scheduled</h2>
     <p class="alert alert-warning">
-      The classes below are not currently scheduled but have been taught in the past. If you want to know when a class will be scheduled, go to the class page and click the "Email me next time this class is scheduled" button and you'll be notified when the class is scheduled.
+      The classes below are not currently scheduled but are classes taught at TXRX. Click the "Email me the next time this class is scheduled" button on the class page to be notified when a new session is posted.
     </p>
   </div>
-  <div ng-repeat="course in _courses" ng-cloak>
+  <div ng-repeat="course in _courses">
     <a href="{{ course.url }}" class="course well {{ course.well_class }}" id="c{{ course.id }}">
       <div class="picture">
         <img ng-src="{{ course.im.url }}" width="{{ course.im.width }}"

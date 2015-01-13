@@ -59,6 +59,11 @@
   .picture [data-status] { display: none; }
 }
 
+// classes that are not scheduled
+.course_divider ~ div .course {
+  [data-status]:before { content: "details"; }
+}
+
 .SessionList {
   position: relative;
   .fee {
