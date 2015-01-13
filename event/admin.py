@@ -48,9 +48,11 @@ class EventOccurrenceInline(OccurrenceModelInline):
 class EventAdmin(admin.ModelAdmin):
   list_display = ("__unicode__","repeat")
   inlines = [EventOccurrenceInline,TaggedPhotoInline]
+  search_fields = ['name']
 
 class EventOccurrenceAdmin(admin.ModelAdmin):
   inlines = [TaggedPhotoInline]
+  search_fields = ['event__name']
 
 admin.site.register(Event,EventAdmin)
 admin.site.register(EventOccurrence,EventOccurrenceAdmin)
