@@ -3,6 +3,7 @@ from django.contrib.contenttypes.generic import GenericTabularInline
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.forms.models import BaseInlineFormSet
+from django.utils.translation import ugettext_lazy as _
 
 from .models import Event, EventOccurrence
 from event.utils import get_room_conflicts
@@ -38,6 +39,22 @@ class OccurrenceModelInline(admin.TabularInline):
     form_class.request = request
     return form_class
 
+class FuturePastListFilter(admin.SimpleListFilter):
+  title = _('Filter by Date')
+  parameter_name = 'futurepast'
+
+  def lookups(self, request, model_admin):
+    return (
+      ('future', _('Hide Past Events')),
+      ('past', _('Past Events Only')),
+    )
+    
+  def queryset(self, request, queryset):
+    if self.value() == 'future':
+      return queryset.filter(start__gte=datetime.date.today())
+    if self.value() == 'past':
+      return queryset.filter(start__lt=datetime.date.today())
+
 class EventOccurrenceInline(OccurrenceModelInline):
   model = EventOccurrence
   fields = ('name_override','start','end_time')
@@ -53,6 +70,7 @@ class EventAdmin(admin.ModelAdmin):
 class EventOccurrenceAdmin(admin.ModelAdmin):
   inlines = [TaggedPhotoInline]
   search_fields = ['event__name']
+  list_filter = (FuturePastListFilter,)
 
 admin.site.register(Event,EventAdmin)
 admin.site.register(EventOccurrence,EventOccurrenceAdmin)
