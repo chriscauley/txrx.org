@@ -12,7 +12,7 @@ function showCart() {
 
 function addClass(session_id) {
   $(".SessionList .error").hide();
-  if (!session_id) { session_id = $(".SessionList").find("[name=session_id]:checked").val(); }
+  if (!session_id) { session_id = $("#session_selector").val(); }
   if (!session_id) { $(".SessionList .error").show(); return; }
   var session = window.SESSIONS_ON_PAGE[session_id];
   addItem(session.name,session.fee,session_id);

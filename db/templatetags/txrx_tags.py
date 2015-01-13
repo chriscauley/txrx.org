@@ -24,3 +24,7 @@ def format_classtime(classtime):
   end = classtime.end
   s = start.strftime("%b %e, %%s - %%s (%a)")%(_ptime(start),_ptime(end))
   return s.replace("AM","am").replace("PM","pm")
+
+@register.filter
+def format_session_classtimes(session):
+  return "|".join([format_classtime(ct) for ct in session.classtime_set.all()])
