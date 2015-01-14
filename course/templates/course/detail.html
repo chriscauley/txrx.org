@@ -16,7 +16,11 @@
   {% if enrollment %}
   <div class="col-sm-4 col-md-3 col-xs-12 pull-right">
     <div class="well">
-      <h2>You are enrolled in this course</h2>
+      {% if enrollment.session.past %}
+      <h2>Course Completed</h2>
+      {% else %}
+      <h2>You are enrolled:</h2>
+      {% endif %}
       {% for classtime in enrollment.session.classtime_set.all %}
       <div>{{ classtime|format_classtime }}</div>
       {% endfor %}
@@ -83,9 +87,7 @@
     <div style="clear: both;"></div>
   </div>
   <div class="col-xs-12 col-sm-4 col-md-3 pull-right" id="side">
-    {% if enrollment %}
-    {# {% include "course/_student_panel.html" %} #}
-    {% else %}
+    {% if not enrollment %}
     <div class="SessionList">
       <h1 class="fee page_title">
         {% if course.fee %}

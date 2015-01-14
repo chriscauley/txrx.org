@@ -112,30 +112,27 @@ USER_COURSE_IDS = [];
       </div>
     </div>
     <div class="tab-pane" id="my_classes">
-      {% if request.user.is_authenticated %}
       {% include "course/_myclasses.html" %}
-      {% else %}
-      <p class="alert alert-error">
-        Already signed up?
-        <a href="/accounts/login/?next={{ request.path|urlencode }}{{ "#my_classes"|urlencode }}">Log in</a>
-        to see your classes.<br />
-        If not, an account will be automatically created when you first pay for a class.
-      </p>
-      {% endif %}
     </div>
     {% if instructor_sessions %}
     <div class="tab-pane" id="instructor_sessions">
       <ul>
         {% for session in instructor_sessions %}
+        {% ifchanged session.past %} {% if session.past %}
+        <li><h3 class="block_title margin-top">Past Courses</h3></li>
+        {% endif %}{% endifchanged %}
         <li>
-          <a href="{% url "course:instructor_session" session.pk %}">
-            {{ session.course.name }}
-          </a>
-          <br />
-          {{ session.get_short_dates }}
-          <br />
-          ({{ session.total_students }}/{{ session.course.max_students }} students)
-          <br />&nbsp;
+          <a href="{% url "course:instructor_session" session.pk %}"> {{ session.course }}</a>
+          ({{ session.get_short_dates }} - {{ session.first_date.year }})
+          <p>
+            {% if session.past %}
+            {{ session.evaluated_students }}/{{ session.total_students }} students evaluated
+            <br />
+            {{ session.completed_students }}/{{ session.total_students }} students marked completed
+            {% else %}
+            {{ session.total_students }}/{{ session.course.max_students }} students
+            {% endif %}
+          </p>
         </li>
         {% endfor %}
       </ul>

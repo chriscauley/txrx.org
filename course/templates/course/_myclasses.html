@@ -3,8 +3,11 @@
   <h3 class="block_title">My Classes</h3>
   <ul class="list-unstyled">
     {% for session in user_sessions %}
+    {% ifchanged session.past %} {% if session.past %}
+    <li><h3 class="block_title margin-top">Past Courses</h3></li>
+    {% endif %}{% endifchanged %}
     <li>
-      <a href="{{ session.get_absolute_url }}"> {{ session.course }}</a> ({{ session.get_short_dates }})
+      <a href="{{ session.get_absolute_url }}"> {{ session.course }}</a> ({{ session.get_short_dates }} - {{ session.first_date.year }})
     </li>
     {% endfor %}
   </ul>
@@ -13,4 +16,11 @@
     <a href="mailto:txrxlabs@gmail.com">txrxlabs@gmail.com</a>.
   </div>
 </section>
+{% else %}
+<p class="alert alert-error">
+  Already signed up?
+  <a href="/accounts/login/?next={{ request.path|urlencode }}{{ "#my_classes"|urlencode }}">Log in</a>
+  to see your classes.<br />
+  If not, an account will be automatically created when you first pay for a class.
+</p>
 {% endif %}

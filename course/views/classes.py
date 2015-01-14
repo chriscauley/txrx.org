@@ -35,7 +35,7 @@ def index(request):
     us_ids = [s.id for s in user_sessions]
     for session in user_sessions:
       user_courses.append(session)
-  user_sessions = sorted(list(user_sessions),key=lambda s: s.first_date)
+  user_sessions = sorted(list(user_sessions),key=lambda s: s.first_date,reverse=True)
   values = {
     'term': term,
     'user_sessions': user_sessions,
