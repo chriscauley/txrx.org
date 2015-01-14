@@ -32,8 +32,8 @@
         </div>
         <div class="enrolled-status" data-status="{{ course.enrolled_status }}"></div>
       </div>
-      <div class="price" ng-if="course.fee > 0">${{ course.fee }}</div>
-      <div class="price" ng-if="course.fee == 0">FREE</div>
+      <div class="price" ng-if="course.fee > 0 && course.next_time != 0">${{ course.fee }}</div>
+      <div class="price" ng-if="course.fee == 0 && course.next_time != 0">FREE</div>
     </a>
   </div>
 </div>

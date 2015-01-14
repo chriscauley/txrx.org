@@ -4,7 +4,6 @@
 .course {
   &:hover {
     background: fade(@brand-primary,20);
-    
   }
   color: inherit;
   display: block;
@@ -15,6 +14,11 @@
   &.enrolled { background: #A9CEE0; }
 }
  
+.course, .SessionList .session {
+  &:hover {
+    background: fade(@brand-primary,20);
+  }
+}
 .needs_ajax {
   &:before { content: "Loading..."; }
 }
@@ -80,7 +84,7 @@
     top: -54px;
   }
   .session {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     text-align: center;
     width: 100%;
     .full { color: @brand-danger; }
@@ -252,7 +256,6 @@
 
 .course-detail {
   .fee { padding-right: 0; }
-  .subjects { padding-bottom: 5px; }
 }
 
 #cart {
@@ -311,7 +314,7 @@
 }
 .itemTotal {
   font-weight: bold;
-  &:before { content: "Subtotal: "; font-weight: normal; }
+  &:before { content: "Item Total: "; font-weight: normal; }
 }
 .simpleCart_finalTotal { font-size: 1.1em; font-weight: bold; }
 
@@ -350,6 +353,7 @@
 .SessionList {
   .add { display: inline-block; }
   .view-cart, .add-to-cart {
+    font-size: 12px;
     margin: 5px auto 0;
     padding: 3px 6px;
     text-transform: uppercase;
