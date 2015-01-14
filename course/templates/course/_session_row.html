@@ -1,5 +1,9 @@
 {% load txrx_tags %}
 <div class="session well" id="s{{ session.id }}">
+  {% if request.user.is_superuser or request.user == session.user %}
+  <a href="{% url "course:instructor_session" session.pk %}" class="instructor-link">
+    <i class="fa fa-edit"></i></a>
+  {% endif %}
   <div class="dates">
     {% for classtime in session.classtime_set.all %}
     <div>{{ classtime|format_classtime }}</div>
