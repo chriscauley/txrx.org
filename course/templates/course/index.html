@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 
-{% block title %}Classes {{ term.name }}{% endblock %}
+{% block title %}Classes + Workshops{% endblock %}
 {% block header %}{% endblock %}
 
 {% block head %}
@@ -77,7 +77,7 @@ USER_COURSE_IDS = [];
 {% block main %}
 <div class="col-xs-12">
   <h1 class="page_title">
-    {{ term.name }} Classes
+    Classes and Workshops
     <div class="calendar_widget">
       <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">
         <span class="glyphicon glyphicon-calendar"></span></a>

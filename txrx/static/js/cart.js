@@ -64,21 +64,18 @@ function applyFilters(that) {
 }
 
 function rsvp(session_id,url) {
-  var row = $("#c"+session_id);
+  var row = $("#s"+session_id);
   row.addClass("loading");
   row.find(".message").hide();
   $.get(
     url,
     function(data) {
       row.removeClass("loading");
+      row.find(".RsvpLink").removeClass("attending");
       if (data[0]>0) {
 	row.find(".RsvpLink").addClass("attending");
-	row.find(".number_attending").text("RSVP'd x "+data[0])
       }
-      else { row.find(".RsvpLink").removeClass("attending"); }
-      row.removeClass("full");
-      if (data[2]) { row.addClass("full"); }
-      if (data[1]) { row.find(".RsvpLink .message").html(data[1]).show(); };
+      $(".class-enrollment").hide();
     },
     "json"
   )

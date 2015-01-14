@@ -13,20 +13,6 @@
   {{ course }}
 </h1>
 <div class="course-detail row">
-  {% if enrollment %}
-  <div class="col-sm-4 col-md-3 col-xs-12 pull-right">
-    <div class="well">
-      {% if enrollment.session.past %}
-      <h2>Course Completed</h2>
-      {% else %}
-      <h2>You are enrolled:</h2>
-      {% endif %}
-      {% for classtime in enrollment.session.classtime_set.all %}
-      <div>{{ classtime|format_classtime }}</div>
-      {% endfor %}
-    </div>
-  </div>
-  {% endif %}
   <div class="col-sm-4 col-md-5">
     {% if course.branding %}
     {% thumbnail course.branding.image "620x100" as im %}
@@ -45,6 +31,18 @@
     {% endcomment %}
   </div>
   <div class="col-sm-4">
+    {% if enrollment %}
+    <div class="alert alert-success class-enrollment">
+      {% if enrollment.session.past %}
+      <h3>You completed this class:</h3>
+      {% else %}
+      <h3>You are enrolled in this class:</h3>
+      {% endif %}
+      {% for classtime in enrollment.session.classtime_set.all %}
+      <div>{{ classtime|format_classtime }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
     <div class="description">
       {{ course.description|explosivo }}
     </div>
@@ -80,7 +78,6 @@
     <div style="clear: both;"></div>
   </div>
   <div class="col-xs-12 col-sm-4 col-md-3 pull-right" id="side">
-    {% if not enrollment %}
     <div class="SessionList">
       {% if course.active_sessions %}
       <h1 class="fee page_title">
@@ -93,32 +90,9 @@
       {% endif %}
       <h3>Upcoming Sessions:</h3>
       {% for session in course.active_sessions %}
-      <div class="session well" id="s{{ session.id }}">
-        <div class="dates">
-          {% for classtime in session.classtime_set.all %}
-          <div>{{ classtime|format_classtime }}</div>
-          {% endfor %}
-        </div>
-        {% if session.full %}
-        <b class="full">This session is full</b>
-        {% else %}
-        with <a href="{{ session.user.get_absolute_url }}">{{ session.user }}</a>
-        <button class="btn btn-primary add-to-cart" onclick="addClass({{ session.id }});">
-          Add this session to cart</button>
-        <button class="btn btn-primary view-cart"  data-toggle="modal" data-target="#cartModal">
-          <i class="fa fa-shopping-cart"></i> View Cart</button>
-        {% endif %}
-      </div>
-      <script>
-        window.SESSIONS_ON_PAGE = window.SESSIONS_ON_PAGE || {};
-        window.SESSIONS_ON_PAGE[{{ session.id }}] = {
-        'name': "<b>{{ session.course }}</b> {{ session.first_date|date:"m/d/Y" }}",
-        'fee': {{ session.course.fee }},
-        };
-      </script>
+      {% include "course/_session_row.html" %}
       {% endfor %}
     </div>
-    {% endif %}
     <center>
       <span class="st_facebook_large" displayText="Facebook"></span>
       <span class="st_twitter_large" displayText="Tweet" st_via="TXRXLabs"></span>
