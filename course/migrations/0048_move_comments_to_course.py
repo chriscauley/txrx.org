@@ -73,6 +73,7 @@ class Migration(DataMigration):
             'reschedule_on': ('django.db.models.fields.DateField', [], {'default': 'datetime.date.today'}),
             'room': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'to': u"orm['geo.Room']"}),
             'safety': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'short_description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'short_name': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             'subjects': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['course.Subject']", 'symmetrical': 'False'})
         },
@@ -198,4 +199,3 @@ class Migration(DataMigration):
     }
 
     complete_apps = ['course']
-    symmetrical = True
