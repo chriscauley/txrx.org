@@ -7,10 +7,10 @@
 {% block head %}
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
 <script src="{{ STATIC_URL }}js/ng-infinite-scroll.js"></script>
-<script src="{{ STATIC_URL }}js/course.js"></script>
 <script src="{{ STATIC_URL }}classes.json"></script>
 {% endblock %}
 {% block extrajs %}
+<script src="{{ STATIC_URL }}js/course.js"></script>
 <script>
 var USER_SESSIONS = [
   {% for session in user_sessions %}

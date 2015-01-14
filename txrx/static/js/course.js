@@ -12,7 +12,7 @@ myApp.controller("DemoController", function($scope) {
       c = ALL_CLASSES[ci];
       if (c.id == session.course_id) {
         c.enrolled_status = session.enrolled_status;
-        c.well_class = "enrolled";
+        c.well_class = session.closed_status || "enrolled";
       }
     }
   }
