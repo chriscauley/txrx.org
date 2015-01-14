@@ -139,3 +139,18 @@ $(function() {
     if (undiscounted) { $("#main").prepend("<div class='alert alert-success'>The price of " + undiscounted + " classes in your cart have increased. This is most likely becaus your membership level has changed (eg: you logged out). Please notify <a href='mailto:classes@txrxlabs.org'>classes@txrxlabs.org</a> if you believe this is in error.</div>"); }
   }
 });
+
+$(function() {
+  $('[data-toggle="tab"]').click(function(e) {
+    var $this = $(this), loadurl = $this.data('href'), targ = $($this.attr('href'));
+    if (!loadurl) { return true; }
+
+    $this.removeData('href');
+
+    if (targ.hasClass("needs_ajax")) {
+      $.get(loadurl, function(data) {
+        targ.html(data).removeClass("needs_ajax");
+      });
+    }
+  });
+});

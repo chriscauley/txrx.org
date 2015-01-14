@@ -24,25 +24,30 @@ def json(request):
   }
   return TemplateResponse(request,'course/classes.json',values)
 
-def index(request):
+def get_course_values(user):
   term = Term.objects.all()[0]
   user_courses = []
   user_sessions = []
   instructor_sessions = []
-  if request.user.is_authenticated():
-    instructor_sessions = Session.objects.filter(user=request.user).reverse()
-    user_sessions = Session.objects.filter(enrollment__user=request.user.id)
+  if user.is_authenticated():
+    instructor_sessions = Session.objects.filter(user=user).reverse()
+    user_sessions = Session.objects.filter(enrollment__user=user.id)
     us_ids = [s.id for s in user_sessions]
     for session in user_sessions:
       user_courses.append(session)
   user_sessions = sorted(list(user_sessions),key=lambda s: s.first_date,reverse=True)
-  values = {
+  return {
     'term': term,
     'user_sessions': user_sessions,
     'user_courses': user_courses,
     'instructor_sessions': instructor_sessions,
   }
-  return TemplateResponse(request,"course/index.html",values)
+
+def index(request):
+  return TemplateResponse(request,"course/index.html",get_course_values(request.user))
+
+def user_ajax(request,template):
+  return TemplateResponse(request,"course/_%s.html"%template,get_course_values(request.user))
 
 def detail_redirect(request,slug):
   session = get_object_or_404(Session,slug=slug)

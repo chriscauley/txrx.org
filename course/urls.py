@@ -12,6 +12,8 @@ urlpatterns = patterns(
 
   url(r'^$', 'classes.index'),
   url(r'^classes.json$','classes.json',name='classes_json'),
+  url(r'^(instructor|myclasses)/$','classes.user_ajax',name='user_ajax'),
+
   url(r'^rsvp/(\d+)/','classes.rsvp',name='rsvp'),
   url(r'^term/(\d+)/', 'classes.index'),
   url(r'^ics/(all_classes).ics$','classes.ics_classes_all',name='ics_classes_all'),
