@@ -7,7 +7,8 @@ simpleCart.email = "{{ settings.PAYPAL_RECEIVER_EMAIL }}";</script>
     <div id="cartEmpty">Your cart is empty</div>
     <div class="simpleCart_items"></div>
     <div class="checkout-box">
-      Total: <span class="simpleCart_finalTotal"></span>
+      <div class="subtotals"></div>
+      Final Total: <span class="simpleCart_finalTotal"></span>
     </div>
   </div>
   <center><button class="btn btn-danger return_policy" onclick="$('.return_policy').toggle();return false;">View our return policy</button></center>
@@ -49,6 +50,7 @@ function simple_cart_ready() {
   toggleCourses();
 };
 simpleCart.cartHeaders = ["Name", "Quantity", "Increment", "Decrement", "Total", "Remove"];
+simpleCart.discount = {{ member_discount }};
 simpleCart.ready(simple_cart_ready)
 $(".itemRemove a").live("click",toggleCourses);
 </script>

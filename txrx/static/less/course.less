@@ -81,7 +81,7 @@
   }
   .session {
     margin-bottom: 20px;
-    text-align: right;
+    text-align: center;
     width: 100%;
     .full { color: @brand-danger; }
   }
@@ -276,11 +276,7 @@
 .cartHeaders { display: none; }
 
 .checkout-box {
-  border-top: 1px solid @borderGray;
-  margin: 10px auto 0;
-  padding-top: 5px;
   text-align: center;
-  width: 75%;
 }
 
 .itemContainer {
@@ -335,10 +331,31 @@
   }
 }
 
+.subtotals {
+  border-top: 1px solid @borderGray;
+  margin: 10px auto 0;
+  padding-top: 5px;
+  width: 75%;
+}
+
+.cartSubtotal, .cartDiscount {
+  font-weight: bold;
+  text-align: center;
+  &:before { font-weight: normal; }
+}
+
+.cartSubtotal:before { content: "Cart Subtotal: "; }
+.cartDiscount:before { content: "Discount: "; }
+
 .SessionList {
   .add { display: inline-block; }
-  .drop, &.in-cart .add { display: none; margin: 0 auto; }
-  &.in-cart .drop { display: inline-block; }
+  .view-cart, .add-to-cart {
+    margin: 5px auto 0;
+    padding: 3px 6px;
+    text-transform: uppercase;
+  }
+  .in-cart .add-to-cart, .view-cart { display: none; }
+  .add-to-cart, .in-cart .view-cart { display: block; }
 }
 
 .notify_course {

@@ -91,28 +91,16 @@
     <div class="SessionList">
       <h1 class="fee page_title">
         {% if course.fee %}
-        $<script>document.write(Math.round({{ member_discount }}*{{ course.fee }},2));</script>
+        ${{ course.fee }}
         {% else %}
         Free
         {% endif %}
       </h1>
       <h2>Choose a session:</h2>
-      {% if course.open_sessions %}
-      <div class="add_session_box" id="s{{ session.id }}">
-        <select id="session_selector">
-          {% for session in course.open_sessions %}
-          <option value="{{ session.id }}">
-            {{ session.get_short_dates }} with {{ session.user }}
-          {% endfor %}
-        </select>
-        <button class="btn btn-primary add-class" onclick="addClass();">
-          <i class="fa fa-cart"></i> Add to Cart</button>
-        <button class="btn btn-primary view-cart"  data-toggle="modal" data-target="#cartModal"
-          <i class="fa fa-cart"></i> View Cart</button>
-      </div>
-      {% endif %}
       {% for session in course.active_sessions %}
-      <div class="session well">
+      <div class="session well" id="s{{ session.id }}">
+        {{ session.classtime_set.count }} days with
+        <a href="{{ session.user.get_absolute_url }}">{{ session.user }}</a>
         <div class="dates">
           {% for classtime in session.classtime_set.all %}
           <div>{{ classtime|format_classtime }}</div>
@@ -121,13 +109,18 @@
         {% if session.full %}
         <b class="full">This session is full</b>
         {% else %}
+        </select>
+        <button class="btn btn-primary add-to-cart" onclick="addClass({{ session.id }});">
+          Add this session to cart</button>
+        <button class="btn btn-primary view-cart"  data-toggle="modal" data-target="#cartModal">
+          <i class="fa fa-shopping-cart"></i> View Cart</button>
         {% endif %}
       </div>
       <script>
         window.SESSIONS_ON_PAGE = window.SESSIONS_ON_PAGE || {};
         window.SESSIONS_ON_PAGE[{{ session.id }}] = {
         'name': "<b>{{ session.course }}</b> {{ session.first_date|date:"m/d/Y" }}",
-        'fee': {{ member_discount }}*{{ session.course.fee }},
+        'fee': {{ session.course.fee }},
         };
       </script>
       {% endfor %}

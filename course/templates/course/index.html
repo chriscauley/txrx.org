@@ -16,7 +16,6 @@ var myApp = angular.module("myApp", ["infinite-scroll"]);
 myApp.controller("DemoController", function($scope) {
   $scope.courses = ALL_CLASSES;
   $scope.subjects = CLASS_SUBJECTS;
-  $scope.discount = MEMBER_DISCOUNT;
   $scope.active_subject = "";
 
   for (var si=0; si<USER_SESSIONS.length;si++) {

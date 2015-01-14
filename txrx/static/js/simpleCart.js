@@ -602,12 +602,28 @@ function Cart(){
 	  div.removeChild( div.childNodes[0] );
 	}
 	
-
+        
 	for(var j=0, jLen = newRows.length; j<jLen; j++){
 	  div.appendChild( newRows[j] );
 	}
       }
 
+    }
+
+    var subtotals = document.querySelector(".checkout-box .subtotals");
+    subtotals.innerHTML = "";
+    if (me.discount != 1 && me.total) {
+      var e = document.createElement("div");
+      _total = Math.round(me.total/me.discount,2);
+      var subtotal = document.createElement("div");
+      subtotal.className = "cartSubtotal";
+      subtotal.innerHTML = "$" + _total;
+      var discount = document.createElement("div");
+      discount.className = "cartDiscount";
+      discount.innerHTML = "$" + Math.round(_total*(1-me.discount),2) + " ("+Math.round(100*(1-me.discount))+"%)";
+      e.appendChild(subtotal);
+      e.appendChild(discount);
+      subtotals.appendChild(e);
     }
   };
   
@@ -918,6 +934,9 @@ function Cart(){
       }
       
     });
+    if (me.discount) {
+      me.total = me.total * me.discount;
+    }
     me.shippingCost = me.shipping();
     me.taxCost = parseFloat(me.total)*me.taxRate;
     me.finalTotal = me.shippingCost + me.taxCost + me.total;

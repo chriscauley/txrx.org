@@ -29,10 +29,8 @@ function toggleCourses(name) {
   var has_items = false;
   $("#cartEmpty").show();
   for (id in simpleCart.items) {
-    console.log($("#id_session_"+id).length);
-    if ($("#id_session_"+id).length) {
-      $(".SessionList").addClass("in-cart");
-      $("#id_session_"+id).prop('checked', true);
+    if ($("#s"+id).length) {
+      $("#s"+id).addClass("in-cart");
     }
     $("#cartEmpty").hide();
     has_items = true;
