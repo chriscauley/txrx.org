@@ -2,13 +2,16 @@
 @pictureWidth: 206px;
 
 .course {
+  &:hover {
+    background: fade(@brand-primary,20);
+    
+  }
   color: inherit;
   display: block;
   max-height: 153px;
   overflow: hidden;
   position: relative;
   width: 100%;
-  &:hover .title { text-decoration: underline; }
   &.enrolled { background: #A9CEE0; }
 }
 
@@ -121,7 +124,7 @@
     .full_sessions { color: @brand-danger; }
   }
   .subjects {
-    color: @borderGray;
+    color: darken(@borderGray,10%);
     text-transform: uppercase;
     span { display: inline-block; padding-right: 15px; }
   }
