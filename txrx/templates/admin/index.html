@@ -64,7 +64,7 @@
               <dd>
                 <div>
                   {% if course.last_session %}
-                  {% if course.last_session.archived %}
+                  {% if course.last_session.past %}
                   Last taught
                   {% else %}
                   <b style="color:red">[{{ course.last_session.closed_string|upper }}]</b> with

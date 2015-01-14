@@ -235,8 +235,9 @@ class Session(FeedItemModel,PhotosMixin):
   __unicode__ = lambda self: latin1_to_ascii("%s (%s - %s)"%(self.course, self.user,self.first_date.date()))
   title = property(lambda self: "%s (%s)"%(self.course.name,self.first_date.date()))
 
-  in_progress = property(lambda self: self.archived and self.last_date>datetime.datetime.now())
-  closed = property(lambda self: self.cancelled or (self.archived and not self.in_progress))
+  in_progress = property(lambda self: self.first_date<datetime.datetime.now()<self.last_date)
+  past = property(lambda self: datetime.datetime.now() > self.last_date)
+  closed = property(lambda self: self.cancelled or (self.past and not self.in_progress))
   @property
   def as_json(self):
     short_dates = self.get_short_dates()
@@ -255,15 +256,14 @@ class Session(FeedItemModel,PhotosMixin):
   json = property(lambda self: dumps(self.as_json))
   get_room = lambda self: self.course.room
 
-  @cached_property
-  def total_students(self):
-    return sum([e.quantity for e in self.enrollment_set.all()])
+  total_students = property(lambda self: sum([e.quantity for e in self.enrollment_set.all()]))
+  evaluated_students = property(lambda self: self.enrollment_set.filter(evaluated=True).count())
+  completed_students = property(lambda self: self.enrollment_set.filter(completed=True).count())
   _full = lambda self: self.total_students >= self.course.max_students
   full = property(_full)
-  archived = property(lambda self: self.first_date<datetime.datetime.now())
   list_users = property(lambda self: [self.user])
 
-  #! deprecated after course remodel
+  #! much of this if deprecated after course remodel
   description = property(lambda self: self.course.description)
   def set_user_fee(self,user):
     self.user_fee = self.course.fee
@@ -306,11 +306,11 @@ class Session(FeedItemModel,PhotosMixin):
     sessions = list(sessions.exclude(course__subjects__in=sub_subjects))
     return sub_sessions + sessions
   @property
-  def closed_string(self):
+  def closed_string(self): #! may be depracated
     if self.cancelled:
       return "cancelled"
-    if self.archived:
-      return "closed"
+    if self.past:
+      return "past"
     return "full"
   def save(self,*args,**kwargs):
     #this may be depracated, basically the site fails hard if instructors don't have membership profiles
