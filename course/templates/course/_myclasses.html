@@ -1,6 +1,6 @@
 {% if request.user.is_authenticated %}
 <section class="events_box">
-  <h3 class="block_title">My Classes</h3>
+  <h3 class="block_title">Upcoming Classes</h3>
   <ul class="list-unstyled">
     {% for session in user_sessions %}
     {% ifchanged session.past %} {% if session.past %}

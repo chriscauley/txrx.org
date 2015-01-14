@@ -55,6 +55,7 @@ myApp.controller("DemoController", function($scope) {
   }
 
   $scope.loadMore = function() {
+    if (!$("#all_classes_tab").hasClass("active")) { return; }
     console.log('scrolling');
     if ($scope._vui >= $scope.inactive_courses.length) {return }
     $scope._vsi = Math.min($scope.scheduled_courses.length+6,$scope.active_courses.length);
@@ -97,7 +98,8 @@ USER_COURSE_IDS = [];
 </div>
 <div class="col-sm-9 col-md-10 col-lg-10">
   <ul class="nav nav-tabs" role="tablist">
-    <li class="active"><a href="#all_classes" role="tab" data-toggle="tab">All Classes</a></li>
+    <li class="active" id="all_classes_tab"><a href="#all_classes" role="tab" data-toggle="tab">
+        All Classes</a></li>
     <li><a href="#myclasses" role="tab" data-toggle="tab"
            data-href="{% url "course:user_ajax" "myclasses" %}">
         My Classes ({{ user_sessions|length }})</a></li>

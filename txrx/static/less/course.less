@@ -276,7 +276,11 @@
 .cartHeaders { display: none; }
 
 .checkout-box {
+  border-top: 1px solid @borderGray;
+  margin: 10px auto 0;
+  padding-top: 5px;
   text-align: center;
+  width: 75%;
 }
 
 .itemContainer {
@@ -285,28 +289,41 @@
   margin-bottom: 5px;
   min-height: 20px;
   overflow: hidden;
+  text-align: center;
   &:nth-child(2n+1) { background-color: rgba(0,0,0,0.05); }
 }
 
 .itemName {
-  padding-right: 15px;
   font-size: 12px;
+  padding-right: 15px;
+  text-align: left;
   b { font-size: 1.1em; }
 }
 
-.itemQuantity, .itemPrice, .itemIncrement, .itemDecrement {
+.itemQuantity, .itemDecrement, .itemIncrement {
   display: inline-block;
-  padding-right: 20px;
+  line-height: 1em;
+  vertical-align: middle;
 }
-.itemQuantity:before { content: "x"; }
+.itemQuantity, .itemDecrement { padding-right: 10px; }
+.itemIncrement { padding-right: 5px; }
+.itemDecrement, .itemIncrement { font-size: 1.2em; }
+
+.itemQuantity {
+  font-weight: bold;
+  &:before { content: "Quantity: "; font-weight: normal; }
+}
+.itemTotal {
+  font-weight: bold;
+  &:before { content: "Subtotal: "; font-weight: normal; }
+}
 .simpleCart_finalTotal { font-size: 1.1em; font-weight: bold; }
 
 .itemRemove {
   font-size: 0;
   right: 0;
-  margin-top: -9px;
   position: absolute;
-  top: 50%;
+  top: 6px;
   a {
     display: inline-block;
     width: 11px;

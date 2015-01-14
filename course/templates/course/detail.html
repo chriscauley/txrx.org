@@ -98,15 +98,17 @@
       </h1>
       <h2>Choose a session:</h2>
       {% if course.open_sessions %}
-      <div class="add_session_box">
+      <div class="add_session_box" id="s{{ session.id }}">
         <select id="session_selector">
           {% for session in course.open_sessions %}
           <option value="{{ session.id }}">
             {{ session.get_short_dates }} with {{ session.user }}
           {% endfor %}
         </select>
-        <button class="btn btn-primary" onclick="addClass();">
-          Add to Cart</button>
+        <button class="btn btn-primary add-class" onclick="addClass();">
+          <i class="fa fa-cart"></i> Add to Cart</button>
+        <button class="btn btn-primary view-cart"  data-toggle="modal" data-target="#cartModal"
+          <i class="fa fa-cart"></i> View Cart</button>
       </div>
       {% endif %}
       {% for session in course.active_sessions %}
