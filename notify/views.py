@@ -9,9 +9,8 @@ from membership.utils import limited_login_required
 from .models import NotifyCourse
 
 @login_required
-def notify_course(request,session_id):
-  session = get_object_or_404(Session,pk=session_id)
-  course = session.course
+def notify_course(request,course_id):
+  course = get_object_or_404(Course,pk=course_id)
   _, new = NotifyCourse.objects.get_or_create(user=request.user,course=course)
   messages.success(request,"You will be emailed next time we teach {}".format(course))
   return HttpResponseRedirect(course.get_absolute_url())
