@@ -9,6 +9,7 @@
   <input type="radio" value="{{ subject.value }}" id="filter_subject_{{ subject.value }}"
          name="subject" />
   <label class="btn btn-default" for="filter_subject_{{ subject.value }}"
+         ng-if="(subject.active_courses + subject.inactive_courses) > 0"
          ng-click="filterSubjects(subject.value)">{{ subject.name }}</label>
   <div ng-repeat="child in subject.children" class="child">
     <input type="radio" value="{{ child.value }}" id="filter_subject_{{ child.value }}"
