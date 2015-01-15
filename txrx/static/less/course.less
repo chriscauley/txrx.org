@@ -244,16 +244,41 @@
     width: 213px;
   }
 }
-
-.loading .RsvpLink {
-  &:before {
-    background: url(/static/img/loading.gif) center rgba(150,150,150,0.8) no-repeat;
-    content: "";
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
+.session {
+  &.loading {
+    &:before {
+      background: rgba(0,0,0,0.25);
+      content: '';
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: 1;
+    }
+    // mostly from font-awesome
+    &:after {
+      -webkit-animation: fa-spin 1.5s infinite linear;
+      animation: fa-spin 1.5s infinite linear;
+      color: white;
+      display: inline-block;
+      font: normal normal normal 14px/1 FontAwesome;
+      font-size: inherit;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      content: "\f110";
+      font-size: 3em;
+      height: 0;
+      left: 50%;
+      line-height: 0;
+      margin-left: -0.5em;
+      position: absolute;
+      text-align: center;
+      top: 50%;
+      width: 1em;
+      z-index: 2
+    }
   }
 }
 
@@ -416,16 +441,4 @@
   bottom: auto;
   right: 0;
   width: 213px;
-}
-
-.loading .RsvpLink {
-  &:before {
-    background: url(/static/img/loading.gif) center rgba(150,150,150,0.8) no-repeat;
-    content: "";
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-  }
 }
