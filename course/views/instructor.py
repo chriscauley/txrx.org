@@ -21,10 +21,10 @@ def email(request,session_pk):
 def session(request,session_pk):
   allowed = request.user.groups.filter(name="Class Coordinator")
   allowed = allowed or request.user.is_superuser
+  session = get_object_or_404(Session,pk=session_pk)
   allowed = allowed or request.user == session.user
   if not allowed:
     return FORBIDDEN
-  session = get_object_or_404(Session,pk=session_pk)
   values = {'session': session}
   if request.POST:
     if not (request.user.is_superuser or request.user == session.user):
