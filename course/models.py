@@ -151,14 +151,6 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   sessions = lambda self: Session.objects.filter(course=self)
   sessions = cached_property(sessions,name="sessions")
   last_session = lambda self: (list(self.sessions) or [None])[-1]
-  def set_user_fee(self,user):
-    if hasattr(self,'user_fee') or not self.last_session:
-      return
-    session = self.last_session()
-    self.user_fee = self.fee
-    if user.is_authenticated():
-      self.user_fee = self.user_fee*(100-user.usermembership.membership.discount_percentage)//100
-    return
   def save(self,*args,**kwargs):
     super(Course,self).save(*args,**kwargs)
     #this has to be repeated in the admin because of how that works
@@ -265,10 +257,6 @@ class Session(FeedItemModel,PhotosMixin):
 
   #! much of this if deprecated after course remodel
   description = property(lambda self: self.course.description)
-  def set_user_fee(self,user):
-    self.user_fee = self.course.fee
-    if user.is_authenticated():
-      self.user_fee = self.user_fee*(100-user.usermembership.membership.discount_percentage)//100
   @cached_property
   def first_photo(self):
     return (self.get_photos() or [super(Session,self).first_photo])[0]

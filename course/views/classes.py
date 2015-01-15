@@ -55,7 +55,6 @@ def detail_redirect(request,slug):
 
 def detail(request,pk,slug):
   course = get_object_or_404(Course,pk=pk)
-  course.set_user_fee(request.user)
   enrollment = None
   notify_course = None
   if request.user.is_authenticated():
