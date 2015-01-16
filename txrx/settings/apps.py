@@ -121,6 +121,7 @@ SUIT_CONFIG = {
   # 'MENU_EXCLUDE': ('auth.group',),
   'MENU': (
     'blog',
+    'contact',
     {'app': 'course',
      'icon':'icon-calendar',
      'models': (

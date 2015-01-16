@@ -9,12 +9,16 @@ class ContactPerson(models.Model):
   __unicode__ = lambda self: str(self.user or self.email)
   def get_email(self):
     return self.user.email if (self.user and self.user.email) else self.email
+  class Meta:
+    verbose_name = "Person"
 
 class ContactSubject(models.Model):
   subject = models.CharField(max_length=128)
   contactperson = models.ForeignKey(ContactPerson)
   __unicode__ = lambda self: self.subject
   get_email = lambda self: self.contactperson.get_email()
+  class Meta:
+    verbose_name = "Subject"
 
 class ContactMessage(models.Model):
   from_name = models.CharField("Name",max_length=128)
@@ -32,3 +36,5 @@ class ContactMessage(models.Model):
   def send(self):
     send_mail(self.subject,"Message from: %s\n\n%s"%(self.from_name,self.message),
               self.from_email,[self.contactsubject.get_email()])
+  class Meta:
+    verbose_name = "Message"
