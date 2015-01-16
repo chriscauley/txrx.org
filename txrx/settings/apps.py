@@ -40,6 +40,7 @@ INSTALLED_APPS = (
   #'project',
   'instagram',
   'tool',
+  'contact',
   'course',
   'membership',
   'main',

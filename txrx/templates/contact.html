@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="POST" class="jvFloatForm">
+  {% csrf_token %}
+  {% include "_form.html" %}
+  <input type="submit" class="btn btn-primary" />
+</form>
+{% endblock %}

@@ -17,6 +17,9 @@ def placeholder_fields(self):
         field.widget = forms.PasswordInput(attrs=attrs)
       if type(field.widget) == forms.Textarea:
         field.widget = forms.Textarea(attrs=attrs)
+      if type(field.widget) == forms.widgets.Select:
+        field.empty_label = field.label
+        field.label = ''
 
 class PlaceholderModelForm(forms.ModelForm):
   def __init__(self,*args,**kwargs):
