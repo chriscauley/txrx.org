@@ -1,11 +1,9 @@
 {% extends "base.html" %}
-{% load cache %}
 
 {% block header_content %}Become a Member of TX/RX Labs{% endblock %}
 {% block full_title %}Become a Member of TX/RX Labs{% endblock %}
 
 {% block main %}
-{% cache settings.LONG_CACHE memberships %}
 <script type="text/javascript">
 
 membership_form_parameters = {}; //this is established at the bottom of every form
@@ -83,5 +81,4 @@ function setHiddenFields(that) {
 $(document).ready(function() {$("select").change()});
 </script>
 <div class="clear"></div>
-{% endcache %}
 {% endblock %}
