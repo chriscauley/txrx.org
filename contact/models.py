@@ -1,9 +1,9 @@
-from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.db import models
 
 class ContactPerson(models.Model):
-  user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
+  user = models.ForeignKey(get_user_model(),null=True,blank=True)
   _ht = "Use if desired email is not in a user account. THIS FIELD DOES NOTHING IF THERE IS A USER"
   email = models.EmailField(null=True,blank=True,help_text=_ht)
   __unicode__ = lambda self: str(self.user or self.email)
@@ -25,7 +25,7 @@ class ContactMessage(models.Model):
   from_email = models.EmailField("Email")
   contactsubject = models.ForeignKey(ContactSubject,verbose_name="Subject")
   message = models.TextField()
-  user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
+  user = models.ForeignKey(get_user_model(),null=True,blank=True)
   __unicode__ = lambda self: "%s: %s"%(self.user or self.from_email,self.subject)
   subject = property(lambda self: self.contactsubject.subject)
   def save(self,*args,**kwargs):
