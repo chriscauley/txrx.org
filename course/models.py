@@ -134,10 +134,8 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   @cached_property
   def active_sessions(self):
     # sessions haven't ended yet (and maybe haven't started)
-    first_date = datetime.datetime.now()+datetime.timedelta(1)
+    first_date = datetime.datetime.now()-datetime.timedelta(0.5)
     active_sessions = list(self.sessions.filter(last_date__gte=first_date))
-    if not active_sessions:
-      [s for s in Session.objects.filter(course=self)]
     return active_sessions or list(self.sessions.filter(last_date__gte=first_date))
 
   @cached_property
