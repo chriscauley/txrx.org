@@ -3,7 +3,6 @@ from django.core.mail import mail_admins
 from django.contrib.auth import get_user_model
 from django.template.loader import render_to_string
 
-from course.models import Course, Subject
 from membership.models import UserMembership
 from txrx.utils import reset_password
 import random, os, json
@@ -39,6 +38,7 @@ def get_or_create_student(email,u_id=None):
   return user,new
 
 def reset_classes_json(context="no context provided"):
+  from course.models import Course, Subject
   values = {
     'courses': json.dumps([c.as_json for c in Course.objects.filter(active=True)]),
     'subjects': json.dumps([s.as_json for s in Subject.objects.filter(parent=None)]),
