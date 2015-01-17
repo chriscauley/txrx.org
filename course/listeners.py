@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.mail import send_mail, mail_admins
 from django.template.loader import render_to_string
 
+from .utils import get_or_create_student, reset_classes_json
 from notify.models import NotifyCourse
 
 import traceback
@@ -12,7 +13,6 @@ import traceback
 _duid='course.signals.handle_successful_payment'
 @receiver(payment_was_successful, dispatch_uid=_duid)
 def handle_successful_payment(sender, **kwargs):
-  from .utils import get_or_create_student, reset_classes_json
   from course.models import Enrollment, Session
   #add them to the classes they're enrolled in
   params = QueryDict(sender.query)
