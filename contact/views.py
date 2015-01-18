@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 
+from .models import ContactSubject
 from .forms import ContactMessageForm
 
 def contact(request):
@@ -9,6 +10,10 @@ def contact(request):
   if request.user.is_authenticated():
     initial['from_email'] = request.user.email
     initial['from_name'] = request.user.get_full_name() or request.user.username
+  try:
+    initial['contactsubject'] = ContactSubject.objects.get(slug=request.GET.get('slug',''))
+  except ContactSubject.DoesNotExist:
+    pass
   form = ContactMessageForm(request.POST or None,initial=initial)
   if form.is_valid():
     message = form.save()

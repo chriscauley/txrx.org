@@ -15,10 +15,13 @@ class ContactPerson(models.Model):
 class ContactSubject(models.Model):
   subject = models.CharField(max_length=128)
   contactperson = models.ForeignKey(ContactPerson)
+  order = models.IntegerField(default=9999)
+  slug = models.CharField(max_length=32)
   __unicode__ = lambda self: self.subject
   get_email = lambda self: self.contactperson.get_email()
   class Meta:
     verbose_name = "Subject"
+    ordering = ("order",)
 
 class ContactMessage(models.Model):
   from_name = models.CharField("Name",max_length=128)
