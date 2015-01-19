@@ -59,12 +59,13 @@ myApp.controller("DemoController", function($scope) {
     if (!$("#all_classes_tab").hasClass("active")) { return; }
     console.log('scrolling');
     if ($scope.inactive_courses.length && $scope._vui >= $scope.inactive_courses.length) {return }
-    $scope._vsi = Math.min($scope.scheduled_courses.length+6,$scope.active_courses.length);
+    $scope._vsi = Math.max($scope.scheduled_courses.length+6,$scope.active_courses.length);
     $scope.scheduled_courses = $scope.active_courses.slice(0,$scope._vsi);
     if ($scope._vsi < $scope.active_courses.length) { return }
-    $scope._vui = Math.min($scope.unscheduled_courses.length+6,$scope.inactive_courses.length);
+    $scope._vui = Math.max($scope.unscheduled_courses.length+6,$scope.inactive_courses.length);
     $scope.unscheduled_courses = $scope.inactive_courses.slice(0,$scope._vui);
   };
 
   $scope.filterSubjects();
+  
 });
