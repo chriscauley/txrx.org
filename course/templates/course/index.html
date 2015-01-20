@@ -42,6 +42,22 @@ USER_COURSE_IDS = [];
   </form>
 </div>
 <div class="col-sm-9 col-md-10 col-lg-10">
+  {% if pending_evaluations %}
+  <div class="alert alert-success">
+    <p>Please take a moment to evaluate the following class{{ pending_evaluations|pluralize:"es" }}. We rely on your feedback to improve our classes and to decide which classes to teach in the future.</p>
+    <ul>
+      {% for enrollment in pending_evaluations %}
+      <li>
+        {{ enrollment.session }}
+        <a class="btn btn-success" href="{% url "course:evaluation_detail" enrollment.id %}">
+          Evaluate</a>
+        <a class="btn btn-danger" href="{% url "course:evaluation_refuse" enrollment.id %}">
+          Decline Evaluation</a>
+      </li>
+      {% endfor %}
+    </ul>
+</div>
+  {% endif %}
   <ul class="nav nav-tabs" role="tablist">
     <li class="active" id="all_classes_tab"><a href="#all_classes" role="tab" data-toggle="tab">
         All Classes</a></li>
