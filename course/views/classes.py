@@ -29,10 +29,11 @@ def get_course_values(user):
   user_courses = []
   user_sessions = []
   instructor_sessions = []
+  pending_evaluations = []
   if user.is_authenticated():
     instructor_sessions = Session.objects.filter(user=user).reverse()
     user_sessions = Session.objects.filter(enrollment__user=user.id)
-    us_ids = [s.id for s in user_sessions]
+    pending_evaluations = Enrollment.objects.pending_evaluation(user=user)
     for session in user_sessions:
       user_courses.append(session)
   user_sessions = sorted(list(user_sessions),key=lambda s: s.first_date,reverse=True)
@@ -41,6 +42,7 @@ def get_course_values(user):
     'user_sessions': user_sessions,
     'user_courses': user_courses,
     'instructor_sessions': instructor_sessions,
+    'pending_evaluations': pending_evaluations,
   }
 
 def index(request):

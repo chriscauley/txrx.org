@@ -87,11 +87,21 @@
         Free
         {% endif %}
       </h1>
-      {% endif %}
       <h3>Upcoming Sessions:</h3>
+      {% endif %}
+      {% if "archive" in request.GET %}
+      {% for session in course.session_set.all|slice:"::-1" %}
+      {% include "course/_session_row.html" %}
+      {% endfor %}
+      {% else %}
       {% for session in course.active_sessions %}
       {% include "course/_session_row.html" %}
       {% endfor %}
+      {% if request.user.is_superuser %}
+      <center><a href="?archive"><button class="btn-success btn">
+          View archived classes</button></a></center><br/>
+      {% endif %}
+      {% endif %}
     </div>
     <center>
       <span class="st_facebook_large" displayText="Facebook"></span>

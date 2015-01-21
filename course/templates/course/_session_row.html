@@ -15,10 +15,12 @@
   <div>
     {% if course.fee %}
     with {{ session.user }}
+    {% if not session.past %}
     <button class="btn btn-primary add-to-cart" onclick="addClass({{ session.id }});">
       Add this session to cart</button>
     <button class="btn btn-primary view-cart"  data-toggle="modal" data-target="#cartModal">
       <i class="fa fa-shopping-cart"></i> View Cart</button>
+    {% endif %}
     {% else %}
     <div class="RsvpLink{% if enrollment.session == session %} attending{% endif %}">
       {% if request.user.is_authenticated %}
