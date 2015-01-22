@@ -121,7 +121,13 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   short_description = models.TextField(null=True,blank=True)
   get_short_description = lambda self: self.short_description or truncatewords(striptags(self.description),40)
   safety = models.BooleanField(default=False)
-  room = models.ForeignKey(Room,default=1)
+  room = models.ForeignKey(Room)
+  start_in = models.ForeignKey(Room,null=True,blank=True,related_name="starting_courses")
+  def get_location_string(self):
+    if self.start_in:
+      s = "This class meets in the %s and then moves to the %s after a half hour lecture."
+      return s%(self.start_in.name.lower(),self.room.name.lower())
+    return "This class meets in the %s."%(self.room.name.lower())
   _ht = "If true, this class will not raise conflict warnings for events in the same room."
   no_conflict = models.BooleanField(default=False,help_text=_ht)
   max_students = models.IntegerField(default=16)
