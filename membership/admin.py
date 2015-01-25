@@ -30,7 +30,7 @@ class UserMembershipInline(admin.StackedInline):
 
 class ProposalInline(admin.StackedInline):
   model = Proposal
-  fields = (('order','title','user'),'original','ammended')
+  fields = ('order','title','user','original','ammended')
   extra = 0
 
 class MeetingMinutesForm(forms.ModelForm):
