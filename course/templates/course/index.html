@@ -36,8 +36,9 @@ USER_COURSE_IDS = [];
 <div class="col-sm-3 col-md-2 col-lg-2" id="side">
   <input type="checkbox" id="toggle_filters" />
   <label for="toggle_filters" class="btn btn-success">Filter by Subject</label>
-  <form onsubmit="applyFilters(this);return false;" class="filters course_filters">
-    {#! NotImplimented <input name="q" class="form-control" placeholder="Search Classes">#}
+  <form onsubmit="applyFilters(this);return false;" class="filters course_filters" autocomplete="off">
+    <input name="q" class="form-control" placeholder="Search Classes" ng-keyup="filterSearch();"
+           id="courseSearch" />
     {% include "course/_filters.html" %}
   </form>
 </div>
@@ -56,7 +57,7 @@ USER_COURSE_IDS = [];
       </li>
       {% endfor %}
     </ul>
-</div>
+  </div>
   {% endif %}
   <ul class="nav nav-tabs" role="tablist">
     <li class="active" id="all_classes_tab"><a href="#all_classes" role="tab" data-toggle="tab">
