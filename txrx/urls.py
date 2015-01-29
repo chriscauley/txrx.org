@@ -38,6 +38,7 @@ urlpatterns = patterns(
   url(r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
   url(r'^tx/rx/return/$','course.views.paypal_return',name='paypal_redirect'),
   url(r'^contact/$','contact.views.contact',name='contact'),
+  url(r'^dxfviewer/$','geo.views.dxfviewer',name='dxfviewer'),
 )
 
 #auth related

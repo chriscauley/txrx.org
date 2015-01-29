@@ -8,4 +8,4 @@ class RoomForm(forms.ModelForm):
     model = Room
     fields = ('name','geometry','in_calendar','color')
 
-RoomFormSet = modelformset_factory(Room,RoomForm,extra=3)
+RoomFormSet = modelformset_factory(Room,RoomForm)

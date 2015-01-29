@@ -1,11 +1,8 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 {% block main %}
-{% thumbnail location.src "1068" crop="noop" upscale=True as im %}
-<img src="{{ im.url }} " id="location_map" style="display:none"
-     width="{{ im.width }}" height="{{ im.height }}" />
-{% endthumbnail %}
-<div class="col-sm-12">
+<img src="{{ location.src.url }} " id="location_map" style="display:none" onload="initMap()" />
+<div class="col-sm-5 col-md-4">
   <form method="POST" id="location_form">
     {% csrf_token %}
     {{ formset.management_form }}
@@ -25,7 +22,7 @@
     <input type="submit" />
   </form>
 </div>
-<div class="col-sm-12">
+<div class="col-sm-7 col-md-8">
   <canvas id="location_canvas"></canvas>
 </div>
 <script>
@@ -47,7 +44,6 @@ function Room(form) {
     room.w = room.geometry.w;
     room.h = room.geometry.h;
   }
-  console.log(room);
   room.color = room.inputs.color.value;
   room.inputs.color.addEventListener("change",function (){
     room.color = room.inputs.color.value;
@@ -76,7 +72,7 @@ function LocationPicker(_o) {
   var mouse_down = false;
   var current_room;
   var room_forms = document.querySelectorAll(".room_form");
-  rooms = {};
+  var rooms = {};
   for (var i=0;i<room_forms.length;i++) {
     var room = new Room(room_forms[i]);
     rooms[room.id] = room;
@@ -125,12 +121,15 @@ function LocationPicker(_o) {
     current_room = null;
   }
   if (_o.editable) {
+    canvas.style.cursor = "crosshair";
     canvas.addEventListener("mousedown",mouseDown);
-    canvas.addEventListener("mouseup",mouseUp)
-    canvas.addEventListener("mousemove",mouseMove)
+    canvas.addEventListener("mouseup",mouseUp);
+    canvas.addEventListener("mousemove",mouseMove);
   }
 }
-map_options = {editable: true};
-var picker = new LocationPicker(map_options);
+map_options = { editable: true };
+function initMap() {
+  window.picker = new LocationPicker(map_options);
+}
 </script>
 {% endblock %}

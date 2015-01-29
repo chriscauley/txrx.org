@@ -96,6 +96,13 @@
       <footer>
         {% include "footer.html" %}
       </footer>
+      <div id="bot_right">
+        {% if request.theme == "dark" %}
+        <a href="?set_theme=default">Who turned out the Lights?</a>
+        {% else %}
+        <a href="?set_theme=dark">The Darkness Calls</a>
+        {% endif %}
+      </div>
       {% endblock %}
     </div>
     {% compress js %}
@@ -130,12 +137,5 @@
     </script>
     {% block extra_body %}
     {% endblock %}
-    <div id="bot_right">
-      {% if request.theme == "dark" %}
-      <a href="?set_theme=default">Who turned out the Lights?</a>
-      {% else %}
-      <a href="?set_theme=dark">The Darkness Calls</a>
-      {% endif %}
-    </div>
   </body>
 </html>

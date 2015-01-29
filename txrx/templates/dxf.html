@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block main %}
+<div class="col-xs-12">
+  <canvas id="floorplan"></canvas>
+</div>
+<script>
+var LOCATION_DATA = {
+  dxf: {{ location.dxf_as_json|safe }}
+}
+
+var x_max = -Infinity;
+var y_max = -Infinity;
+var x_min = Infinity;
+var y_min = Infinity;
+var scale = 3;
+
+// calculate bounds
+for (var di=0;di<LOCATION_DATA.dxf.length;di++) {
+  var dxf = LOCATION_DATA.dxf[di];
+  for (pi=0;pi<dxf.points.length;pi++) {
+    p = dxf.points[pi];
+    x_max = Math.max(x_max,p[0]);
+    x_min = Math.min(x_min,p[0]);
+    y_max = Math.max(y_max,p[1]);
+    y_min = Math.min(y_min,p[1]);
+  }
+}
+
+var WIDTH = (x_max - x_min)*scale;
+var HEIGHT = (y_max - y_min)*scale;
+
+// correct so that it's 0,0 for x_min,y_min
+for (var di=0;di<LOCATION_DATA.dxf.length;di++) {
+  var dxf = LOCATION_DATA.dxf[di];
+  for (pi=0;pi<dxf.points.length;pi++) {
+    p = dxf.points[pi];
+    dxf.points[pi] = [scale*(p[0]-x_min),HEIGHT-scale*(p[1]-y_min)];
+  }
+}
+
+// create rooms
+var rooms = [];
+for (var di=0;di<LOCATION_DATA.dxf.length;di++) {
+  var dxf = LOCATION_DATA.dxf[di];
+  var x_max = -Infinity;
+  var y_max = -Infinity;
+  var x_min = Infinity;
+  var y_min = Infinity;
+  for (pi=0;pi<dxf.points.length;pi++) {
+    p = dxf.points[pi];
+    x_max = Math.max(x_max,p[0]);
+    x_min = Math.min(x_min,p[0]);
+    y_max = Math.max(y_max,p[1]);
+    y_min = Math.min(y_min,p[1]);
+  }
+  rooms.push({
+    x: x_min,
+    y: y_min,
+    w: x_max-x_min,
+    h: y_max-y_min,
+    color: "blue",
+    stroke: "black"
+  });
+}
+
+var canvas = document.getElementById("floorplan");
+canvas.width = WIDTH;
+canvas.height = HEIGHT;
+var context = canvas.getContext("2d");
+
+function rect(r,ctx) {
+  ctx.beginPath();
+  ctx.rect(r.x,r.y,r.w,r.h);
+  ctx.fillStyle = r.color;
+  ctx.fill();
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = r.stroke;
+  ctx.stroke();
+}
+
+for (var ri=0;ri<rooms.length;ri++) {
+  rect(rooms[ri],context);
+}
+</script>
+{% endblock %}

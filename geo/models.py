@@ -4,6 +4,9 @@ from localflavor.us.models import USStateField
 
 from .widgets import LocationField
 from txrx.utils import cached_property
+
+import ezdxf, json
+
 try:
   from south.modelsinspector import add_introspection_rules
   add_introspection_rules([], ["^localflavor\.us\.models\.USStateField"])
@@ -48,6 +51,28 @@ class Location(GeoModel):
   dxf = models.FileField(upload_to="floorplans",null=True,blank=True)
   src = models.ImageField(upload_to="floorplans",null=True,blank=True)
   __unicode__ = lambda self: self.name
+  @property
+  def dxf_as_json(self):
+    return json.dumps([dxf.as_json for dxf in DXFEntity.objects.all()])
+  def generate_dxf_entities(self):
+    if not ezdxf:
+      return
+    dwg = ezdxf.readfile(self.dxf.path)
+    modelspace = dwg.modelspace()
+    for e in modelspace:
+      if e.dxftype() == "LWPOLYLINE":
+        geometry = [list(i)[:2] for i in e.get_points()]
+      elif e.dxftype() == "LINE":
+        geometry = [e.dxf.start,e.dxf.end]
+      else:
+        continue
+      dxf,new = DXFEntity.objects.get_or_create(
+        dxftype = e.dxftype(),
+        points = json.dumps([[round(i) for i in p] for p in geometry])
+      )
+      if new:
+        print("New DXFEntity: %s"%dxf)
+        
   class Meta:
     ordering = ('name',)
 
@@ -83,3 +108,16 @@ class Room(models.Model):
   class Meta:
     ordering = ('name',)
     unique_together = ('name','location')
+
+class DXFEntity(models.Model):
+  points = models.TextField()
+  dxftype = models.CharField(max_length=16)
+  room = models.ForeignKey(Room,null=True,blank=True)
+  __unicode__ = lambda self: "%s #%s (%s)"%(self.dxftype,self.id,self.room)
+  @property
+  def as_json(self):
+    return {
+      'points': json.loads(self.points),
+      'dxftype': self.dxftype,
+      'room': self.room.name if self.room else None,
+    }

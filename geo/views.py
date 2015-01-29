@@ -1,5 +1,6 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 
 from course.models import ClassTime
@@ -29,6 +30,7 @@ def room_picker(request,pk):
   if formset.is_valid():
     formset.save()
     messages.success(request,"Forms Saved")
+    return HttpResponseRedirect(request.path)
   elif request.method == "POST":
     messages.error(request,"Something seems to be wrong, check all fields and try again.")
   values = {
@@ -36,3 +38,13 @@ def room_picker(request,pk):
     'formset': formset,
   }
   return TemplateResponse(request,'geo/room_picker.html',values)
+
+@staff_member_required
+def dxfviewer(request,pk=None):
+  if not pk:
+    pk = 1
+  values = {
+    'location': Location.objects.get(pk=pk),
+  }
+  return TemplateResponse(request,'dxf.html',values)
+  
