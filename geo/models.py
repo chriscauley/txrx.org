@@ -101,6 +101,13 @@ class Room(models.Model):
   y = property(lambda self: self._xywh[0])
   w = property(lambda self: self._xywh[0])
   h = property(lambda self: self._xywh[0])
+  @property
+  def as_json(self):
+    return {
+      'name': self.name,
+      'color': self.color,
+      'short_name': self.short_name,
+    }
   def __unicode__(self):
     if self.name:
       return "%s @ %s"%(self.name,self.location)
@@ -117,7 +124,10 @@ class DXFEntity(models.Model):
   @property
   def as_json(self):
     return {
+      'id': self.pk,
       'points': json.loads(self.points),
       'dxftype': self.dxftype,
-      'room': self.room.name if self.room else None,
+      'room': self.room.as_json if self.room else None,
     }
+  class Meta:
+    ordering = ('pk',)

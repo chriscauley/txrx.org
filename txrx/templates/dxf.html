@@ -4,7 +4,17 @@
 {% block footer %}{% endblock %}
 
 {% block main %}
-<div class="col-xs-12">
+<div class="col-sm-4">
+  {% for time,events in event_tuples %}
+  <h1>{{ time|date:"P" }}</h1>
+  <ul>
+    {% for event in events %}
+    <li>{{ event.name }}</li>
+    {% endfor %}
+  </ul>
+  {% endfor %}
+</div>
+<div class="col-sm-8">
   <canvas id="floorplan"></canvas>
 </div>
 <script>
@@ -58,11 +68,12 @@ for (var di=0;di<LOCATION_DATA.dxf.length;di++) {
     y_min = Math.min(y_min,p[1]);
   }
   rooms.push({
+    id: dxf.id,
     x: x_min,
     y: y_min,
     w: x_max-x_min,
     h: y_max-y_min,
-    color: "blue",
+    color: dxf.room?dxf.room.color:"white",
     stroke: "black"
   });
 }
@@ -85,5 +96,20 @@ function rect(r,ctx) {
 for (var ri=0;ri<rooms.length;ri++) {
   rect(rooms[ri],context);
 }
+
+function findRoom(e) {
+  var x = e.offsetX;
+  var y = e.offsetY;
+  for (var ri=0;ri<rooms.length;ri++) {
+    var room = rooms[ri];
+    if ((room.x < x) && (x < room.x + room.w)) {
+      if ((room.y < y) && (y < room.y + room.h)) {
+        console.log(room.id);
+      }
+    }
+  }
+}
+canvas.addEventListener("click",findRoom);
+
 </script>
 {% endblock %}

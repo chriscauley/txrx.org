@@ -4,7 +4,15 @@ from .models import City,Location, Room, DXFEntity
 class LocationAdmin(admin.ModelAdmin):
   fields = ('name','short_name','parent','address','address2','city','zip_code','latlon','dxf','src')
 
-admin.site.register(Room)
+class RoomAdmin(admin.ModelAdmin):
+  list_display = ('__unicode__','color')
+  list_editable = ('color',)
+
+class DXFEntityAdmin(admin.ModelAdmin):
+  list_display = ('__unicode__','room')
+  list_editable = ('room',)
+
+admin.site.register(Room,RoomAdmin)
 admin.site.register(City)
-admin.site.register(DXFEntity)
+admin.site.register(DXFEntity,DXFEntityAdmin)
 admin.site.register(Location,LocationAdmin)
