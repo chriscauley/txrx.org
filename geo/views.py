@@ -41,10 +41,20 @@ def room_picker(request,pk):
 
 @staff_member_required
 def dxfviewer(request,pk=None):
+  today = datetime.datetime.now().replace(hour=0,minute=0)
+  tomorrow = today + datetime.timedelta(1)
+  events = EventOccurrence.objects.filter(start__gte=today,start__lte=tomorrow)
+  classtimes = ClassTime.objects.filter(start__gte=today,start__lte=tomorrow)
+  events = list(events)+list(classtimes)
+  event_dict = {}
+  for event in events:
+    if not event.start in event_dict:
+      event_dict[event.start] = []
+    event_dict[event.start].append(event)
   if not pk:
     pk = 1
   values = {
     'location': Location.objects.get(pk=pk),
+    'event_tuples': sorted(event_dict.items(),key=lambda t:t[0]),
   }
   return TemplateResponse(request,'dxf.html',values)
-  
