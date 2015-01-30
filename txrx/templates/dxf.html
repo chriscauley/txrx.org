@@ -9,7 +9,7 @@
   <h1>{{ time|date:"P" }}</h1>
   <ul>
     {% for event in events %}
-    <li>{{ event.name }}</li>
+    <li style="background:{{ event.room.color }}">{{ event.name }}</li>
     {% endfor %}
   </ul>
   {% endfor %}

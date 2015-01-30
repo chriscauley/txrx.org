@@ -49,8 +49,11 @@ class Location(GeoModel):
   city = models.ForeignKey(City,default=1)
   zip_code = models.IntegerField(default=77007)
   dxf = models.FileField(upload_to="floorplans",null=True,blank=True)
-  src = models.ImageField(upload_to="floorplans",null=True,blank=True)
   __unicode__ = lambda self: self.name
+  def save(self,*args,**kwargs):
+    super(Location,self).save(*args,**kwargs)
+    if self.dxf:
+      self.generate_dxf_entities()
   @property
   def dxf_as_json(self):
     return json.dumps([dxf.as_json for dxf in DXFEntity.objects.all()])
@@ -80,12 +83,10 @@ class Location(GeoModel):
     l = [self.name,self.address,self.address2,self.city.__unicode__(),self.zip_code]
     return '\n'.join([str(li) for li in l if li])
 
-COLOR_CHOICES = [
-  ('blue','blue'),
-  ('green','green'),
-  ('yellow','yellow'),
-  ('red','red'),
-]
+class RoomGroup(models.Model):
+  name = models.CharField(max_length=16)
+  color = models.CharField(max_length=32)
+  __unicode__ = lambda self: self.name
 
 class Room(models.Model):
   name = models.CharField(max_length=128,null=True,blank=True)
@@ -93,19 +94,13 @@ class Room(models.Model):
   _ht = "Optional. Alternative name for the calendar."
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   get_short_name = lambda self: self.short_name or self.name
-  geometry = models.CharField(max_length=64,null=True,blank=True)
-  _xywh = cached_property(lambda self: self.geometry.split(','),name='_xywh')
   in_calendar = models.BooleanField("can be scheduled for events",default=True)
-  color = models.CharField(max_length=32,choices=COLOR_CHOICES,null=True,blank=True)
-  x = property(lambda self: self._xywh[0])
-  y = property(lambda self: self._xywh[0])
-  w = property(lambda self: self._xywh[0])
-  h = property(lambda self: self._xywh[0])
+  roomgroup = models.ForeignKey(RoomGroup,null=True,blank=True)
   @property
   def as_json(self):
     return {
       'name': self.name,
-      'color': self.color,
+      'color': self.roomgroup.color if self.roomgroup else "white",
       'short_name': self.short_name,
     }
   def __unicode__(self):
