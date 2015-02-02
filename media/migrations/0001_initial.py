@@ -8,11 +8,91 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        #migrating over from codrspace. See codrspace/migrations/0033_create_media_app.py
-        pass
+        # Adding model 'MiscFile'
+        db.create_table(u'media_miscfile', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('filename', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=500, null=True, blank=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User'], null=True, blank=True)),
+            ('upload_dt', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
+        ))
+        db.send_create_signal(u'media', ['MiscFile'])
+
+        # Adding model 'PhotoTag'
+        db.create_table(u'media_phototag', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=32)),
+        ))
+        db.send_create_signal(u'media', ['PhotoTag'])
+
+        # Adding model 'Photo'
+        db.create_table(u'media_photo', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('filename', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=500, null=True, blank=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User'], null=True, blank=True)),
+            ('upload_dt', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('file', self.gf('crop_override.field.OriginalImage')(max_length=200, null=True)),
+            ('caption', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('instagramphoto', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['instagram.InstagramPhoto'], null=True, blank=True)),
+            ('approved', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('source', self.gf('django.db.models.fields.CharField')(default='web', max_length=16)),
+            ('square_crop', self.gf('crop_override.field.CropOverride')(max_length=100, null=True, blank=True)),
+            ('landscape_crop', self.gf('crop_override.field.CropOverride')(max_length=100, null=True, blank=True)),
+            ('portrait_crop', self.gf('crop_override.field.CropOverride')(max_length=100, null=True, blank=True)),
+            ('external_url', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
+        ))
+        db.send_create_signal(u'media', ['Photo'])
+
+        # Adding M2M table for field tags on 'Photo'
+        db.create_table(u'media_photo_tags', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('photo', models.ForeignKey(orm[u'media.photo'], null=False)),
+            ('phototag', models.ForeignKey(orm[u'media.phototag'], null=False))
+        ))
+        db.create_unique(u'media_photo_tags', ['photo_id', 'phototag_id'])
+
+        # Adding model 'TaggedPhoto'
+        db.create_table(u'media_taggedphoto', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('photo', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['media.Photo'])),
+            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
+            ('object_id', self.gf('django.db.models.fields.IntegerField')()),
+            ('order', self.gf('django.db.models.fields.IntegerField')(default=9999)),
+        ))
+        db.send_create_signal(u'media', ['TaggedPhoto'])
+
+        # Adding model 'TaggedFile'
+        db.create_table(u'media_taggedfile', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('file', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['media.MiscFile'])),
+            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
+            ('object_id', self.gf('django.db.models.fields.IntegerField')()),
+            ('order', self.gf('django.db.models.fields.IntegerField')(default=9999)),
+        ))
+        db.send_create_signal(u'media', ['TaggedFile'])
+
 
     def backwards(self, orm):
-        pass
+        # Deleting model 'MiscFile'
+        db.delete_table(u'media_miscfile')
+
+        # Deleting model 'PhotoTag'
+        db.delete_table(u'media_phototag')
+
+        # Deleting model 'Photo'
+        db.delete_table(u'media_photo')
+
+        # Removing M2M table for field tags on 'Photo'
+        db.delete_table('media_photo_tags')
+
+        # Deleting model 'TaggedPhoto'
+        db.delete_table(u'media_taggedphoto')
+
+        # Deleting model 'TaggedFile'
+        db.delete_table(u'media_taggedfile')
+
 
     models = {
         u'auth.group': {
@@ -27,22 +107,6 @@ class Migration(SchemaMigration):
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        },
-        u'auth.user': {
-            'Meta': {'ordering': "['username']", 'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
-            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
-            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
@@ -92,7 +156,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'iid': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
             'profile_picture': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']", 'null': 'True', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'website': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
@@ -103,7 +167,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
             'upload_dt': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']", 'null': 'True', 'blank': 'True'})
         },
         u'media.photo': {
             'Meta': {'ordering': "('name',)", 'object_name': 'Photo'},
@@ -121,7 +185,7 @@ class Migration(SchemaMigration):
             'square_crop': ('crop_override.field.CropOverride', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['media.PhotoTag']", 'symmetrical': 'False', 'blank': 'True'}),
             'upload_dt': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']", 'null': 'True', 'blank': 'True'})
         },
         u'media.phototag': {
             'Meta': {'ordering': "('-name',)", 'object_name': 'PhotoTag'},
@@ -143,6 +207,22 @@ class Migration(SchemaMigration):
             'object_id': ('django.db.models.fields.IntegerField', [], {}),
             'order': ('django.db.models.fields.IntegerField', [], {'default': '9999'}),
             'photo': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['media.Photo']"})
+        },
+        u'user.user': {
+            'Meta': {'ordering': "('username',)", 'object_name': 'User'},
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '254'}),
+            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
+            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         }
     }
 
