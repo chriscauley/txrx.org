@@ -19,7 +19,6 @@ def iter_times(start,end):
   blocks = int(math.ceil(td.total_seconds()/(block_size))) #half hours that this runs
   return [start+datetime.timedelta(0,block_size*i) for i in range(blocks)]
 
-@staff_member_required
 def dxfviewer(request,pk=None):
   today = datetime.datetime.now().replace(hour=0,minute=0)
   tomorrow = today + datetime.timedelta(1)

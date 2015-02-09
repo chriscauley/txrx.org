@@ -86,6 +86,7 @@ class Location(GeoModel):
 class RoomGroup(models.Model):
   name = models.CharField(max_length=16)
   color = models.CharField(max_length=32)
+  fill = models.ForeignKey('media.Photo',null=True,blank=True)
   __unicode__ = lambda self: self.name
 
 class Room(models.Model):
@@ -96,12 +97,16 @@ class Room(models.Model):
   get_short_name = lambda self: self.short_name or self.name
   in_calendar = models.BooleanField("can be scheduled for events",default=True)
   roomgroup = models.ForeignKey(RoomGroup,null=True,blank=True)
+  map_key = models.CharField(max_length=1,null=True,blank=True)
   @property
   def as_json(self):
     return {
       'name': self.name,
       'color': self.roomgroup.color if self.roomgroup else "white",
       'short_name': self.short_name,
+      'in_calendar': self.in_calendar,
+      'map_key': self.map_key,
+      'fill': self.roomgroup.fill.file.url if (self.roomgroup and self.roomgroup.fill) else None,
     }
   def __unicode__(self):
     if self.name:
