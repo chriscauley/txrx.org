@@ -1,7 +1,9 @@
+from django.conf import settings
 from django.conf.urls.defaults import url, patterns, include
 from django.contrib import admin
-from django.conf import settings
+from django.contrib.sitemaps.views import sitemap
 
+from txrx.sitemaps import sitemaps
 from txrx.feeds import AllFeed
 
 import os
@@ -13,6 +15,7 @@ _urls = lambda *ns: [url(r'^%s/'%n, include('%s.urls'%n, namespace=n, app_name=n
 urlpatterns = patterns(
   '',
   url(r'^$','txrx.views.index',name="home"),
+  url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
   url(r'^admin/', include(admin.site.urls)),
   url(r'^blog/$','txrx.views.blog_home',name="blog_home"),
   url(r'^blog/',include('blog.urls')),
