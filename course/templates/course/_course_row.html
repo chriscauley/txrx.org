@@ -19,23 +19,23 @@
             {{ subject }}</span></div>
         <div class="title">{{ course.name }}</div>
         <div class="description">{{ course.short_description }}</div>
+        <div class="enrolled-status" data-status="{{ course.enrolled_status }}"></div>
         <div class="sessions" ng-if="course.active_sessions.length > 0">
           <span class="next_session {{ course.active_sessions.0.closed_status }}">
             {{ course.active_sessions.0.short_dates }}</span>
           <div class="pull-right">
+            <span class="full_sessions" ng-if="course.full_sessions.length">
+              [{{ course.full_sessions.length }}
+              Full<span class=" hidden-xs"> Session<span ng-if="course.full_sessions.length >1">s</span></span>]
+            </span>
             <span class="open_sessions" ng-if="course.open_sessions.length == 1">
               [1 Open<span class=" hidden-xs"> Session</span>]
             </span>
             <span class="open_sessions" ng-if="course.open_sessions.length > 1">
               [{{ course.open_sessions.length }} Open<span class=" hidden-xs"> Sessions</span>]
             </span>
-            <span class="full_sessions" ng-if="course.full_sessions.length">
-              [{{ course.full_sessions.length }}
-              Full<span class=" hidden-xs"> Session<span ng-if="course.full_sessions.length >1">s</span></span>]
-            </span>
           </div>
         </div>
-        <div class="enrolled-status" data-status="{{ course.enrolled_status }}"></div>
       </div>
       <div class="price" ng-if="course.fee > 0 && course.next_time != 0">${{ course.fee }}</div>
       <div class="price" ng-if="course.fee == 0 && course.next_time != 0">FREE</div>

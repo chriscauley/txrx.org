@@ -63,6 +63,14 @@
     text-transform: uppercase;
     &:before { content: attr(data-status); }
   }
+  .full_sessions, .open_sessions { display: none; }
+  [data-status=Enroll] {
+    + div {
+      .full_sessions, .open_sessions {
+        display: inline-block;
+      }
+    }
+  }
   .details [data-status] {
     bottom: -3px;
     right: 0;
@@ -72,7 +80,9 @@
 
 // classes that are not scheduled
 .course_divider ~ div .course {
-  [data-status=Enroll]:before { content: "details"; }
+  [data-status=Enroll]:before {
+    content: "details";
+  }
 }
 
 .SessionList {
@@ -165,6 +175,9 @@
       .sessions {
         padding-right: 10px;
         .next_session:before { color: black; content: "Next: "; }
+        .full_sessions, .open_sessions {
+          display: inline-block;
+        }
       }
     }
     .price {
