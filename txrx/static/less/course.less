@@ -127,9 +127,11 @@
     bottom: 0;
     line-height: 1em;
     margin: 0;
-    padding: 10px 0 2px;
+    padding: 10px 80px 2px 0;
     position: absolute;
     width: 100%;
+    .next_session:before { color: black; content: "Next Session: "; }
+    .full { color: @brand-danger; }
     .open_sessions { color: @brand-success; }
     .full_sessions { color: @brand-danger; }
   }
@@ -159,6 +161,10 @@
       .title {
         padding-right: 0;
         white-space: normal;
+      }
+      .sessions {
+        padding-right: 10px;
+        .next_session:before { color: black; content: "Next: "; }
       }
     }
     .price {
