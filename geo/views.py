@@ -5,7 +5,7 @@ from django.template.response import TemplateResponse
 
 from course.models import ClassTime
 from event.models import EventOccurrence
-from geo.models import Location, Room
+from geo.models import Location, Room, RoomGroup
 
 import datetime, math
 from itertools import groupby
@@ -35,5 +35,6 @@ def dxfviewer(request,pk=None):
   values = {
     'location': Location.objects.get(pk=pk),
     'event_tuples': sorted(event_dict.items(),key=lambda t:t[0]),
+    'roomgroups': RoomGroup.objects.all(),
   }
   return TemplateResponse(request,'dxf.html',values)

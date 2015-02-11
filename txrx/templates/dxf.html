@@ -18,6 +18,14 @@
     {% endfor %}
   </ul>
   {% endfor %}
+  <h1>Legend</h1>
+  <ul class="event_list">
+    {% for roomgroup in roomgroups %}
+    <li class="room">
+      <span class="room_marker" style="background: url({{ roomgroup.fill.file.url }}) center"></span>
+      <span>{{ roomgroup.name }}</span>
+    </li>
+    {% endfor %}
 </div>
 <div class="col-sm-9">
   <div id="floorplan_wrapper">
@@ -26,10 +34,10 @@
 </div>
 </div>
 <script>
-setTimeout(function() {window.location = window.location;},60*1000);
+setTimeout(function() {window.location = window.location;},15*60*1000);
 
 var LOCATION_DATA = {
-  dxf: {{ location.dxf_as_json|safe }}
+  dxf: {{ location.dxf_as_json|safe }},
 }
 
 var x_max = -Infinity;
