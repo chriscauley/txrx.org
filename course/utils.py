@@ -44,9 +44,10 @@ def reset_classes_json(context="no context provided"):
     'subjects': json.dumps([s.as_json for s in Subject.objects.filter(parent=None)]),
   }
   text = render_to_string('course/classes.json',values)
-  f = open(os.path.join(settings.STATIC_ROOT,'classes.json'),'w')
+  f = open(os.path.join(settings.STATIC_ROOT,'_classes.json'),'w')
   f.write(text)
   f.close()
+  os.rename(os.path.join(settings.STATIC_ROOT,'_classes.json'),os.path.join(settings.STATIC_ROOT,'classes.json'))
 
   # for now email chris whenever this happens so that he can check
   # if it's firing too often or during a request
