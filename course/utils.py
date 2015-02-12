@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.core.mail import mail_admins
 from django.contrib.auth import get_user_model
-from django.template.loader import render_to_string
 
 from membership.models import UserMembership
 from txrx.utils import reset_password
@@ -36,19 +35,3 @@ def get_or_create_student(email,u_id=None):
       user.save()
       reset_password(user,**kwargs)
   return user,new
-
-def reset_classes_json(context="no context provided"):
-  from course.models import Course, Subject
-  values = {
-    'courses': json.dumps([c.as_json for c in Course.objects.filter(active=True)]),
-    'subjects': json.dumps([s.as_json for s in Subject.objects.filter(parent=None)]),
-  }
-  text = render_to_string('course/classes.json',values)
-  f = open(os.path.join(settings.STATIC_ROOT,'_classes.json'),'w')
-  f.write(text)
-  f.close()
-  os.rename(os.path.join(settings.STATIC_ROOT,'_classes.json'),os.path.join(settings.STATIC_ROOT,'classes.json'))
-
-  # for now email chris whenever this happens so that he can check
-  # if it's firing too often or during a request
-  mail_admins("classes.json reset",context)

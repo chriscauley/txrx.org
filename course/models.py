@@ -1,8 +1,10 @@
 from django.db import models
 from django.conf import settings
+from django.core.mail import mail_admins
 from django.core.urlresolvers import reverse
 from django.core.validators import MaxLengthValidator
 from django.template.defaultfilters import slugify, truncatewords, striptags
+from django.template.loader import render_to_string
 from db.models import UserModel, NamedTreeModel
 from sorl.thumbnail import ImageField, get_thumbnail
 from crop_override import get_override
@@ -15,7 +17,8 @@ from event.models import OccurrenceModel, reverse_ics
 from tool.models import ToolsMixin
 from txrx.utils import cached_method, cached_property, latin1_to_ascii
 
-from simplejson import dumps
+from json import dumps
+import os
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
@@ -163,7 +166,6 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
       if subject.parent and not (subject.parent in subjects):
         self.subjects.add(subject.parent)
 
-    from course.utils import reset_classes_json
     reset_classes_json("Classes reset during course save")
 
   #! inherited from section, may not be necessary
@@ -314,7 +316,6 @@ class Session(FeedItemModel,PhotosMixin):
     super(Session,self).save(*args,**kwargs)
 
     #now reset classe json just in case anything changed
-    from course.utils import reset_classes_json
     reset_classes_json("classes reset during session save")
   @cached_method
   def get_absolute_url(self):
@@ -448,4 +449,20 @@ class Evaluation(UserModel):
   class Meta:
     ordering = ('-datetime',)
 
+def reset_classes_json(context="no context provided"):
+  values = {
+    'courses': dumps([c.as_json for c in Course.objects.filter(active=True)]),
+    'subjects': dumps([s.as_json for s in Subject.objects.filter(parent=None)]),
+  }
+  text = render_to_string('course/classes.json',values)
+  f = open(os.path.join(settings.STATIC_ROOT,'_classes.json'),'w')
+  f.write(text)
+  f.close()
+  os.rename(os.path.join(settings.STATIC_ROOT,'_classes.json'),os.path.join(settings.STATIC_ROOT,'classes.json'))
+
+  # for now email chris whenever this happens so that he can check
+  # if it's firing too often or during a request
+  mail_admins("classes.json reset",context)
+
 from .listeners import *
+
