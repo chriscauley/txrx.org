@@ -467,7 +467,7 @@ def reset_classes_json(context="no context provided"):
   # for now email chris whenever this happens so that he can check
   # if it's firing too often or during a request
   dt = datetime.datetime.now()
-  if dt.hour + dt.minute == 0:
+  if dt.hour == 0:
     mail_admins("classes.json reset",context)
 
 from .listeners import *
