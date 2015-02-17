@@ -43,6 +43,14 @@ class EmailInstructorForm(RequestForm):
     send_mail(subject,body,from_address,to_addresses)
 
 class EvaluationForm(PlaceholderModelForm):
+  def __init__(self,*args,**kwargs):
+    self.enrollment = kwargs.pop('enrollment')
+    super(EvaluationForm,self).__init__(*args,**kwargs)
+    course = self.enrollment.session.course
+    for name in ['presentation','content','visuals']:
+      if not getattr(course,name):
+        del self.fields[name]
+        del self.fields[name+"_comments"]
   _kwargs = dict(choices=(('','-------'),)+FIVE_CHOICES)
   _kwargs = dict(choices=(('','-------'),)+FIVE_CHOICES)
   presentation = forms.ChoiceField(label="Instructor Presentation",help_text=Evaluation.p_ht,**_kwargs)

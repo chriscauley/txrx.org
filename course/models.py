@@ -87,6 +87,10 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   subjects = models.ManyToManyField(Subject)
   sessions = cached_property(lambda self: self.session_set.all(),name="sessions")
 
+  presentation = models.BooleanField("Evaluate Presentation",default=True)
+  visuals = models.BooleanField("Evaluate Visuals",default=True)
+  content = models.BooleanField("Evaluate Content",default=True)
+
   _ht = "The dashboard (/admin/) won't bug you to reschedule until after this date"
   reschedule_on = models.DateField(default=datetime.date.today,help_text=_ht)
   first_date = property(lambda self: self.active_sessions[0].first_date)
@@ -409,15 +413,15 @@ class Evaluation(UserModel):
   datetime = models.DateTimeField(auto_now_add=True)
 
   p_ht = "Rate the instructor on subject knowledge, pace of the course and communication skills"
-  presentation = models.IntegerField("Instructor Presentation",choices=FIVE_CHOICES,help_text=p_ht)
+  presentation = models.IntegerField("Instructor Presentation",choices=FIVE_CHOICES,help_text=p_ht,default=0)
   presentation_comments = models.TextField("Comments",**_kwargs)
 
   c_ht = "How well did the course content cover the subject area you were interested in?"
-  content = models.IntegerField("Course Content",choices=FIVE_CHOICES,help_text=c_ht)
+  content = models.IntegerField("Course Content",choices=FIVE_CHOICES,help_text=c_ht,default=0)
   content_comments = models.TextField("Comments",**_kwargs)
 
   v_ht = "How helpful did you find the handouts and audiovisuals presented in this course?"
-  visuals = models.IntegerField("Handouts/Audio/Visuals",choices=FIVE_CHOICES,help_text=v_ht)
+  visuals = models.IntegerField("Handouts/Audio/Visuals",choices=FIVE_CHOICES,help_text=v_ht,default=0)
   visuals_comments = models.TextField("Comments",**_kwargs)
 
   question1 = models.TextField("What did you like best about this class?",null=True,blank=True)

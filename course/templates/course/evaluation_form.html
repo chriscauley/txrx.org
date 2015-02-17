@@ -18,7 +18,8 @@
     {{ field }}
     {{ field.label_tag }}
     {% elif field|is_select %}
-    {{ field.label_tag }}
+    {% if not forloop.first %}<hr/>{% endif %}
+    {{ field.label_tag }}&nbsp; &nbsp;
     {{ field }}
     {% else %}
     {{ field }}

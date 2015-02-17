@@ -14,7 +14,8 @@ class CourseCompletionInline(admin.TabularInline):
   raw_id_fields = ('user',)
 
 class CourseAdmin(admin.ModelAdmin):
-  list_display = ("name","_notifies_count","active","tool_count","photo_count")
+  list_display = ("name","_notifies_count","active","tool_count","photo_count","content","visuals","presentation")
+  list_editable = ("content","visuals","presentation")
   readonly_fields = ("_notifies",)
   filter_horizontal = ("subjects",)
   inlines = [CourseCompletionInline, TaggedPhotoInline, TaggedToolInline, TaggedFileInline]
