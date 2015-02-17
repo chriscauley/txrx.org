@@ -12,7 +12,7 @@ def validate_email(s):
   try:
     f.clean(s)
     return True
-  except forms.ValidationEmail:
+  except forms.ValidationError:
     pass
 
 def get_or_create_student(paypal_email,u_id=None):
