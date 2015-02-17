@@ -54,27 +54,7 @@
   </head>
   <body>
     {# this can eventually be moved int _cart.html #}
-    <div class="modal fade" id="cartModal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" onclick="toggleCourses();">
-              <span aria-hidden="true">&times;</span>
-              <span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Shopping Cart</h4>
-          </div>
-          <div class="modal-body">
-            {% include "course/_cart.html" %}
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="pull-left btn btn-default" data-dismiss="modal" onclick="toggleCourses();">
-              &laquo; Keep Shopping</button>
-            <a href="javascript:;" onclick="startCheckout(); return false">
-              <img src="{{ STATIC_URL }}img/paypal.png"></a>
-          </div>
-        </div>
-      </div>
-    </div>
+    {% include "course/_cart.html" %}
     <div class="container">
       {% block nav %}{% include "_nav.html" with page="home" %}{% endblock %}
       {% block messages %}{% include "_messages.html" %}{% endblock %}

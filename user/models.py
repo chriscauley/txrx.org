@@ -23,6 +23,12 @@ class UserManager(BaseUserManager):
 
   def create_superuser(self, username, email, password, **extra_fields):
     return self._create_user(username, email, password, True, True,**extra_fields)
+  
+  def get_or_none(self,*args,**kwargs):
+    try:
+      return self.get(self,*args,**kwargs)
+    except (self.model.DoesNotExist, self.model.MultipleObjectsReturned):
+      pass
 
 class User(AbstractBaseUser, PermissionsMixin):
   kwargs = dict(
