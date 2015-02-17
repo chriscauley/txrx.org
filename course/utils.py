@@ -39,7 +39,7 @@ def get_or_create_student(paypal_email,u_id=None):
     username = username + str(random.randint(1000,10000))
   user, new = User.objects.get_or_create(email=email,defaults={'username':username})
   profile = user.usermembership
-  profile.paypal_email = user.profile.paypal_email or paypal_email
+  profile.paypal_email = profile.paypal_email or paypal_email
   profile.save()
   if new:
     kwargs = dict(
