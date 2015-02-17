@@ -26,7 +26,7 @@ class UserManager(BaseUserManager):
   
   def get_or_none(self,*args,**kwargs):
     try:
-      return self.get(self,*args,**kwargs)
+      return self.get(*args,**kwargs)
     except (self.model.DoesNotExist, self.model.MultipleObjectsReturned):
       pass
 
