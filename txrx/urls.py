@@ -1,7 +1,9 @@
+from django.conf import settings
 from django.conf.urls.defaults import url, patterns, include
 from django.contrib import admin
-from django.conf import settings
+from django.contrib.sitemaps.views import sitemap
 
+from txrx.sitemaps import sitemaps
 from txrx.feeds import AllFeed
 
 import os
@@ -13,6 +15,7 @@ _urls = lambda *ns: [url(r'^%s/'%n, include('%s.urls'%n, namespace=n, app_name=n
 urlpatterns = patterns(
   '',
   url(r'^$','txrx.views.index',name="home"),
+  url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
   url(r'^admin/', include(admin.site.urls)),
   url(r'^blog/$','txrx.views.blog_home',name="blog_home"),
   url(r'^blog/',include('blog.urls')),
@@ -32,12 +35,12 @@ urlpatterns = patterns(
   url(r'^thing/(\d+)/([\w\d\-\_]+)/$','thing.views.thing_detail',name='thing_detail'),
   url(r'^gfycat/$','main.views.gfycat',name='gfycat'),
   url(r'^tools/',include('tool.urls')),
-  url(r'room_picker/(\d+)/$','geo.views.room_picker',name='room_picker'),
   url('', include('social.apps.django_app.urls', namespace='social')),
   url(r'^classes/', include('course.urls',namespace='course',app_name='course')),
   url(r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
   url(r'^tx/rx/return/$','course.views.paypal_return',name='paypal_redirect'),
   url(r'^contact/$','contact.views.contact',name='contact'),
+  url(r'^dxfviewer/$','geo.views.dxfviewer',name='dxfviewer'),
 )
 
 #auth related

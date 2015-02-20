@@ -5,13 +5,13 @@
   margin-right: 0 !important;
 }
 #wmd-preview { display: none; }
-#wmd-input { height: 300px !important; }
+#wmd-input { height: 500px !important; }
 
 /* orriginal rules */
 .wmd-panel {
 	margin-left: 25%;
 	margin-right: 25%;
-	width: 50%;
+	width: 100%;
 	min-width: 500px;
 }
 

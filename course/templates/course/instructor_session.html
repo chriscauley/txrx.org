@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Instructor: {{ session.section.course }}{% endblock %}
+{% block title %}Instructor: {{ session.course }}{% endblock %}
 
 {% block main %}
 <div class="col-sm-12">
@@ -45,7 +45,7 @@
 {% endif %}
 <div class="col-sm-6">
   <div class="well">
-    <h2>Student List ({{ session.total_students }}/{{ session.max_students }} students)</h2>
+    <h2>Student List ({{ session.total_students }}/{{ session.course.max_students }} students)</h2>
     <ul style="padding-left: 15px;">
       {% for enrollment in session.enrollment_set.all %}
       <li{% if enrollment.quantity != 1 %} data-before="{{ enrollment.quantity }}x "{% endif %}>

@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand
-
-from course.utils import reset_classes_json
+from course.models import reset_classes_json
 
 class Command (BaseCommand):
   def handle(self, *args, **options):

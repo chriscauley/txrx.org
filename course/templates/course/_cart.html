@@ -1,25 +1,42 @@
-<script type="text/javascript" src="{{ STATIC_URL }}js/simpleCart.js"></script>
-<script type="text/javascript">
-simpleCart.email = "{{ settings.PAYPAL_RECEIVER_EMAIL }}";</script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/cart.js"></script>
-<div id="cart">
-  <div class="well">
-    <div id="cartEmpty">Your cart is empty</div>
-    <div class="simpleCart_items"></div>
-    <div class="checkout-box">
-      <div class="subtotals"></div>
-      Order Total: <span class="simpleCart_finalTotal"></span>
-    </div>
-  </div>
-  <center><button class="btn btn-danger return_policy" onclick="$('.return_policy').toggle();return false;">View our return policy</button></center>
-  <div class="alert alert-danger return_policy" style="display:none;">
-    {% include "course/_return_policy.html" with format="html" %}
-  </div>
-</div>
-<div class="visible-xs hidden-sm hidden-md hidden-lg">
-  <div id="mobileCart" class="alert alert-success"><a href="#cart">View Cart</a></div>
-</div>
-<script type="text/javascript">
+<div class="modal fade" id="cartModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" onclick="toggleCourses();">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Shopping Cart</h4>
+      </div>
+      <div class="modal-body">
+        <script type="text/javascript" src="{{ STATIC_URL }}js/simpleCart.js"></script>
+        <script type="text/javascript">
+          simpleCart.email = "{{ settings.PAYPAL_RECEIVER_EMAIL }}";</script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/cart.js"></script>
+        <div id="cart">
+          <div class="well">
+            <div id="cartEmpty">Your cart is empty</div>
+            <div class="simpleCart_items"></div>
+            <div class="checkout-box">
+              <div class="subtotals"></div>
+              Order Total: <span class="simpleCart_finalTotal"></span>
+            </div>
+          </div>
+          {% if not request.user.is_authenticated %}
+          <center>
+            <label>Alternate Contact Email:</label>
+            <input type="email" id="custom_email" />
+          </center>
+          <div class="help-block">
+            When you sign up for a class your PayPal email address will be used to send you a confirmation
+            and reminder the day before your class. If you want to use a different email, enter it above.
+          </div>
+          {% endif %}
+          <center><button class="btn btn-danger return_policy" onclick="$('.return_policy').toggle();return false;">View our return policy</button></center>
+          <div class="alert alert-danger return_policy" style="display:none;">
+            {% include "course/_return_policy.html" with format="html" %}
+          </div>
+        </div>
+        <script>
 function createCookie(name,value,days) {
   if (days) {
     var date = new Date();
@@ -53,4 +70,23 @@ simpleCart.cartHeaders = ["Name", "Quantity", "Increment", "Decrement", "Total",
 simpleCart.discount = {{ member_discount }};
 simpleCart.ready(simple_cart_ready)
 $(".itemRemove a").live("click",toggleCourses);
-</script>
+        </script>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="pull-left btn btn-default" data-dismiss="modal" onclick="toggleCourses();">
+          &laquo; Keep Shopping</button>
+        <a href="javascript:;" onclick="startCheckout(); return false">
+          <img src="{{ STATIC_URL }}img/paypal.png"></a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="visible-xs hidden-sm hidden-md hidden-lg">
+  <div id="mobileCart" class="alert alert-success">
+    <button class="btn btn-primary btn-cart" data-toggle="modal" data-target="#cartModal">
+      <i class="fa fa-shopping-cart"></i>
+      <span class="simpleCart_quantity">1</span> items
+      (<span class="simpleCart_total">$60.00</span>)
+    </button>
+  </div>
+</div>

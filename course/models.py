@@ -1,8 +1,10 @@
 from django.db import models
 from django.conf import settings
+from django.core.mail import mail_admins
 from django.core.urlresolvers import reverse
 from django.core.validators import MaxLengthValidator
 from django.template.defaultfilters import slugify, truncatewords, striptags
+from django.template.loader import render_to_string
 from db.models import UserModel, NamedTreeModel
 from sorl.thumbnail import ImageField, get_thumbnail
 from crop_override import get_override
@@ -15,7 +17,8 @@ from event.models import OccurrenceModel, reverse_ics
 from tool.models import ToolsMixin
 from txrx.utils import cached_method, cached_property, latin1_to_ascii
 
-from simplejson import dumps
+from json import dumps
+import os
 
 _desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
@@ -84,6 +87,10 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   subjects = models.ManyToManyField(Subject)
   sessions = cached_property(lambda self: self.session_set.all(),name="sessions")
 
+  presentation = models.BooleanField("Evaluate Presentation",default=True)
+  visuals = models.BooleanField("Evaluate Visuals",default=True)
+  content = models.BooleanField("Evaluate Content",default=True)
+
   _ht = "The dashboard (/admin/) won't bug you to reschedule until after this date"
   reschedule_on = models.DateField(default=datetime.date.today,help_text=_ht)
   first_date = property(lambda self: self.active_sessions[0].first_date)
@@ -121,7 +128,13 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   short_description = models.TextField(null=True,blank=True)
   get_short_description = lambda self: self.short_description or truncatewords(striptags(self.description),40)
   safety = models.BooleanField(default=False)
-  room = models.ForeignKey(Room,default=1)
+  room = models.ForeignKey(Room)
+  start_in = models.ForeignKey(Room,null=True,blank=True,related_name="starting_courses")
+  def get_location_string(self):
+    if self.start_in:
+      s = "This class meets in the %s and then moves to the %s after a half hour lecture."
+      return s%(self.start_in.name.lower(),self.room.name.lower())
+    return "This class meets in the %s."%(self.room.name.lower())
   _ht = "If true, this class will not raise conflict warnings for events in the same room."
   no_conflict = models.BooleanField(default=False,help_text=_ht)
   max_students = models.IntegerField(default=16)
@@ -157,7 +170,6 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
       if subject.parent and not (subject.parent in subjects):
         self.subjects.add(subject.parent)
 
-    from course.utils import reset_classes_json
     reset_classes_json("Classes reset during course save")
 
   #! inherited from section, may not be necessary
@@ -308,7 +320,6 @@ class Session(FeedItemModel,PhotosMixin):
     super(Session,self).save(*args,**kwargs)
 
     #now reset classe json just in case anything changed
-    from course.utils import reset_classes_json
     reset_classes_json("classes reset during session save")
   @cached_method
   def get_absolute_url(self):
@@ -402,15 +413,15 @@ class Evaluation(UserModel):
   datetime = models.DateTimeField(auto_now_add=True)
 
   p_ht = "Rate the instructor on subject knowledge, pace of the course and communication skills"
-  presentation = models.IntegerField("Instructor Presentation",choices=FIVE_CHOICES,help_text=p_ht)
+  presentation = models.IntegerField("Instructor Presentation",choices=FIVE_CHOICES,help_text=p_ht,default=0)
   presentation_comments = models.TextField("Comments",**_kwargs)
 
   c_ht = "How well did the course content cover the subject area you were interested in?"
-  content = models.IntegerField("Course Content",choices=FIVE_CHOICES,help_text=c_ht)
+  content = models.IntegerField("Course Content",choices=FIVE_CHOICES,help_text=c_ht,default=0)
   content_comments = models.TextField("Comments",**_kwargs)
 
   v_ht = "How helpful did you find the handouts and audiovisuals presented in this course?"
-  visuals = models.IntegerField("Handouts/Audio/Visuals",choices=FIVE_CHOICES,help_text=v_ht)
+  visuals = models.IntegerField("Handouts/Audio/Visuals",choices=FIVE_CHOICES,help_text=v_ht,default=0)
   visuals_comments = models.TextField("Comments",**_kwargs)
 
   question1 = models.TextField("What did you like best about this class?",null=True,blank=True)
@@ -442,4 +453,22 @@ class Evaluation(UserModel):
   class Meta:
     ordering = ('-datetime',)
 
+def reset_classes_json(context="no context provided"):
+  values = {
+    'courses': dumps([c.as_json for c in Course.objects.filter(active=True)]),
+    'subjects': dumps([s.as_json for s in Subject.objects.filter(parent=None)]),
+  }
+  text = render_to_string('course/classes.json',values)
+  f = open(os.path.join(settings.STATIC_ROOT,'_classes.json'),'w')
+  f.write(text)
+  f.close()
+  os.rename(os.path.join(settings.STATIC_ROOT,'_classes.json'),os.path.join(settings.STATIC_ROOT,'classes.json'))
+
+  # for now email chris whenever this happens so that he can check
+  # if it's firing too often or during a request
+  dt = datetime.datetime.now()
+  if dt.hour == 0:
+    mail_admins("classes.json reset",context)
+
 from .listeners import *
+

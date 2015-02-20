@@ -6,23 +6,18 @@ from django.db import models
 
 
 class Migration(SchemaMigration):
-    depends_on = (('user','0001_initial'),)
 
     def forwards(self, orm):
+        # Adding field 'RoomGroup.fill'
+        db.add_column(u'geo_roomgroup', 'fill',
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['media.Photo'], null=True, blank=True),
+                      keep_default=False)
 
-        # Changing field 'Photo.user'
-        db.alter_column(u'media_photo', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User'], null=True))
-
-        # Changing field 'MiscFile.user'
-        db.alter_column(u'media_miscfile', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User'], null=True))
 
     def backwards(self, orm):
+        # Deleting field 'RoomGroup.fill'
+        db.delete_column(u'geo_roomgroup', 'fill_id')
 
-        # Changing field 'Photo.user'
-        db.alter_column(u'media_photo', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True))
-
-        # Changing field 'MiscFile.user'
-        db.alter_column(u'media_miscfile', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True))
 
     models = {
         u'auth.group': {
@@ -44,6 +39,50 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        u'geo.city': {
+            'Meta': {'ordering': "('name',)", 'object_name': 'City'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'latlon': ('geo.widgets.LocationField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'state': ('localflavor.us.models.USStateField', [], {'max_length': '2'})
+        },
+        u'geo.dxfentity': {
+            'Meta': {'ordering': "('pk',)", 'object_name': 'DXFEntity'},
+            'dxftype': ('django.db.models.fields.CharField', [], {'max_length': '16'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'points': ('django.db.models.fields.TextField', [], {}),
+            'room': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['geo.Room']", 'null': 'True', 'blank': 'True'})
+        },
+        u'geo.location': {
+            'Meta': {'ordering': "('name',)", 'object_name': 'Location'},
+            'address': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
+            'address2': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
+            'city': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'to': u"orm['geo.City']"}),
+            'dxf': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'latlon': ('geo.widgets.LocationField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['geo.Location']", 'null': 'True', 'blank': 'True'}),
+            'short_name': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
+            'zip_code': ('django.db.models.fields.IntegerField', [], {'default': '77007'})
+        },
+        u'geo.room': {
+            'Meta': {'ordering': "('name',)", 'unique_together': "(('name', 'location'),)", 'object_name': 'Room'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'in_calendar': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['geo.Location']"}),
+            'map_key': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
+            'roomgroup': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['geo.RoomGroup']", 'null': 'True', 'blank': 'True'}),
+            'short_name': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'})
+        },
+        u'geo.roomgroup': {
+            'Meta': {'object_name': 'RoomGroup'},
+            'color': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
+            'fill': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['media.Photo']", 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '16'})
         },
         u'instagram.instagramlocation': {
             'Meta': {'object_name': 'InstagramLocation'},
@@ -90,15 +129,6 @@ class Migration(SchemaMigration):
             'username': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'website': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
-        u'media.miscfile': {
-            'Meta': {'object_name': 'MiscFile'},
-            'file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            'filename': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
-            'upload_dt': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']", 'null': 'True', 'blank': 'True'})
-        },
         u'media.photo': {
             'Meta': {'ordering': "('name',)", 'object_name': 'Photo'},
             'approved': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -122,25 +152,9 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '32'})
         },
-        u'media.taggedfile': {
-            'Meta': {'object_name': 'TaggedFile'},
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
-            'file': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['media.MiscFile']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'object_id': ('django.db.models.fields.IntegerField', [], {}),
-            'order': ('django.db.models.fields.IntegerField', [], {'default': '9999'})
-        },
-        u'media.taggedphoto': {
-            'Meta': {'object_name': 'TaggedPhoto'},
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'object_id': ('django.db.models.fields.IntegerField', [], {}),
-            'order': ('django.db.models.fields.IntegerField', [], {'default': '9999'}),
-            'photo': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['media.Photo']"})
-        },
         u'user.user': {
-            'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'Meta': {'ordering': "('username',)", 'object_name': 'User'},
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '254'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -156,4 +170,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['media']
+    complete_apps = ['geo']

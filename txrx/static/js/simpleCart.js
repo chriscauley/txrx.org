@@ -278,8 +278,14 @@ function Cart(){
     form.appendChild(me.createHiddenElement("business", me.email ));
     form.appendChild(me.createHiddenElement("currency_code", "me.currency"));
     form.appendChild(me.createHiddenElement("notify_url", window._NOTIFY_URL));
-    form.appendChild(me.createHiddenElement("custom",window._USER_NUMBER));
-    
+
+    var email_input = document.getElementById("custom_email");
+    if (email_input && email_input.value && email_input.value.match('@')) {
+      form.appendChild(me.createHiddenElement("custom",email_input.value));
+    } else {
+      form.appendChild(me.createHiddenElement("custom",window._USER_NUMBER));
+    }
+
     if( me.taxRate ){
       form.appendChild(me.createHiddenElement("tax_cart",me.taxCost ));
     }

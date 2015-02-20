@@ -24,7 +24,7 @@ def index(request):
 @login_required
 def detail(request,enrollment_id):
   enrollment = get_object_or_404(Enrollment,pk=enrollment_id,user=request.user)
-  form = EvaluationForm(request.POST or None)
+  form = EvaluationForm(request.POST or None,enrollment=enrollment)
   if request.POST and form.is_valid():
     evaluation = form.save(commit=False)
     evaluation.user = request.user
