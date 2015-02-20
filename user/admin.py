@@ -22,7 +22,10 @@ class UserAdmin(UserAdmin):
   )
   form = UserChangeForm
   add_form = CustomUserCreationForm
-  list_display = ('username', 'first_name', 'last_name', 'is_staff')
+  list_display = ('username', 'get_full_name', 'is_staff','_enrollments')
+  def _enrollments(self,obj):
+    return "<br/>".join(unicode(e.session) for e in obj.enrollment_set.all())
+  _enrollments.allow_tags = True
   search_fields = ('username', 'email', 'first_name', 'last_name')
   ordering = ('username',)
   readonly_fields = ('last_login','date_joined')
