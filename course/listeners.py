@@ -18,6 +18,8 @@ def handle_successful_payment(sender, **kwargs):
   params = QueryDict(sender.query)
   _uid = params.get('custom',None)
   user,new_user = get_or_create_student(sender.payer_email,u_id=_uid)
+  user.active = True
+  user.save()
   try:
     class_count = int(params['num_cart_items'])
   except:
