@@ -49,8 +49,10 @@
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     {% block analytics %}{{ ANALYTICS_CODE|safe }}{% endblock %}
+    {% comment %}
     <script type="text/javascript" src="//ws.sharethis.com/button/buttons.js"></script>
     <script type="text/javascript">stLight.options({publisher: "56794c5c-23aa-4e30-b62c-dcc177306755", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
+    {% endcomment %}
   </head>
   <body>
     {# this can eventually be moved int _cart.html #}
