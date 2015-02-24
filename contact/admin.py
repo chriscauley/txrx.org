@@ -6,7 +6,8 @@ class ContactPersonAdmin(admin.ModelAdmin):
   pass
 
 class ContactSubjectAdmin(admin.ModelAdmin):
-  pass
+  list_display = ('__unicode__','order')
+  list_editable = ('order',)
 
 class ContactMessageAdmin(admin.ModelAdmin):
   pass
