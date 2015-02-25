@@ -53,7 +53,7 @@ def blog_home(request):
     "posts": posts,
     "post_tags": tags,
     }
-  return TemplateResponse(request,"blog_home.html",values)
+  return TemplateResponse(request,"blog/home.html",values)
 
 def intentional_500(request):
   arst
