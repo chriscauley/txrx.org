@@ -1,6 +1,7 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
@@ -11,22 +12,23 @@ from .forms import PhotoForm, PhotoFilterForm, ZipForm, PhotoTagForm
 
 from NextPlease import pagination
 
-#! TODO pagination
 @staff_member_required
+@pagination('photos',per_page=12,orphans=5)
 def insert_photo(request):
   photos = Photo.objects.all()
-  if not request.GET or request.GET.get('mine',False):
+  if request.GET.get('mine',False):
     photos = photos.filter(user=request.user)
   form = PhotoFilterForm(request.GET or None,initial={'mine':True})
-  paginator = None
-  if photos:
-    paginator = Paginator(photos,8)
-    photos = paginator.page(request.GET.get('page',1))
+  query = request.GET.get('search','')
+  if query:
+    _q = Q(caption__icontains=query)
+    _q = _q | Q(filename__icontains=query)
+    _q = _q | Q(name__icontains=query)
+    photos = photos.filter(_q).distinct()
   values = {
-    "paginator": paginator,
     "photos": photos,
     "form": form,
-    }
+  }
   return TemplateResponse(request,"photo/insert_photo.html",values)
 
 @staff_member_required
