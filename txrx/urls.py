@@ -32,6 +32,7 @@ urlpatterns = patterns(
   url(r'^favicon.ico$','main.views.predirect',
       kwargs={'url':getattr(settings,'FAVICON','/static/favicon.ico')}),
   url(r'^thing/$','thing.views.thing_index',name='thing_index'),
+  url(r'^thing/add/$','thing.views.add_thing',name='add_thing'),
   url(r'^thing/(\d+)/([\w\d\-\_]+)/$','thing.views.thing_detail',name='thing_detail'),
   url(r'^gfycat/$','main.views.gfycat',name='gfycat'),
   url(r'^tools/',include('tool.urls')),

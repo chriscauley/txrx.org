@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load thumbnail crop_util short_codes%}
+
+{% block header %}{% endblock %}
+{% block title %}Add/Edit Project{% endblock %}
+{% block content %}
+<form method="POST">
+  {% csrf_token %}
+  {% include "_form.html" %}
+</form>
+{% endblock %}
