@@ -54,13 +54,7 @@
       <b>Course:</b> <a href="{{ thing.session.get_absolute_url }}">{{ thing.session.course }}</a>
       {% endif %}
       <h3>Like what you see? Please Share</h3>
-      <p style="text-align: center; margin: 10px 0">
-        <span class="st_facebook_large" displayText="Facebook"></span>
-        <span class="st_twitter_large" displayText="Tweet" st_via="TXRXLabs"></span>
-        <span class="st_pinterest_large" displayText="Pinterest"></span>
-        <span class="st_googleplus_large" displayText="Google +"></span>
-        <span class="st_reddit_large" displayText="Reddit"></span>
-      </p>
+      {% include "_social.html" %}
     </section>
   </div>
 </div>

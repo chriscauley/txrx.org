@@ -1,0 +1,9 @@
+<div class="social_links">
+  <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" class="popup facebook">
+    <i class="fa fa-facebook"></i></a>
+  <a href="https://pinterest.com/pin/create/button/?url=dev.txrxlabs.org:8009&media=http://placereddit.com/r/cats/750/500/4/&description=arstarst" class="popup pinterest"><i class="fa fa-pinterest-p"></i></a>
+  <a href="http://twitter.com/home?status={{ thing.title|add:" "|urlencode }}{{ request.build_absolute_uri|urlencode }}"
+     class="popup twitter"><i class="fa fa-twitter"></i></a>
+  <a href="https://plus.google.com/share?url={{ request.build_absolute_uri|urlencode }}"
+     class="popup google-plus"><i class="fa fa-google-plus"></i></a>
+</div>
