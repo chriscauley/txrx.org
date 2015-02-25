@@ -32,7 +32,7 @@ def delete(request, pk=0, template_name="delete.html"):
   return TemplateResponse(request, template_name, {'post': post,})
 
 @staff_member_required
-def edit(request, pk=0, template_name="edit.html"):
+def edit(request, pk=0, template_name="blog/edit.html"):
   """ Edit a post """
   user = request.user
   post = None

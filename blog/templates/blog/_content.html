@@ -1,0 +1,39 @@
+{% load thumbnail short_codes crop_util %}
+<div class="post-tags">
+  {% for tag in post.tags %}
+  <a href="{% url "posts_by_tag" tag %}">{{ tag.name|upper }}</a>
+  {% if not forloop.last %}/{% endif %}
+  {% endfor %}
+</div>
+<h2><a href="{{ post.get_absolute_url }}">{% filter striptags|truncatewords:30 %}{% firstof post.title "Untitled" %}{% endfilter %}</a></h2>
+
+<div>
+  {% if post.user == user %}
+  <span class="label label-{% if post.status == 'published' %}success{% else %}warning{% endif %}">{{ post.status }}</span>
+  {% endif %}
+  by <a href="{% url "post_list" post.user.username %}" rel="popover" data-original-title="{{ post.user.username }}">{{ post.user.username }}</a> {% if post.status == 'published' %}on {{ post.publish_dt }}{% endif %}
+  {% if request.user.is_superuser or request.user == post.user %}
+  <a href="{% url "edit" post.pk %}" class="edit"><span class="glyphicon glyphicon-edit"></span></a>
+  {% endif %}
+</div>
+
+{% if truncate_posts %}
+<div class="post-content short">
+  {% thumbnail post.photo|get_override:"square_crop" "200x200" as im %}
+  <img class="post-image" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+  {% endthumbnail %}
+  {{ post.content|explosivo|truncatewords_html:50 }}
+  <a href="{{ post.get_absolute_url }}">Read More</a>
+  <div style="clear: both;"></div>
+</div>
+{% else %}
+<div class="post-content Detail">
+  {% thumbnail post.photo|get_override:"square_crop" "300x300" as im %}
+  <a href="{{ post.photo.file.url }}" class="post-image">
+    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+  </a>
+  {% endthumbnail %}
+  <p>{{ post.content|explosivo }}</p>
+  <div style="clear:both"></div>
+</div>
+{% endif %}
