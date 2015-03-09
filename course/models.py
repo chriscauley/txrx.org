@@ -68,6 +68,7 @@ class Term(models.Model):
 
 class CourseManager(models.Manager):
   def courses_needed(self,*args,**kwargs):
+    # used in admin view
     # must only look at active courses
     kwargs['active'] = kwargs.get('active',True)
     kwargs['reschedule_on__lte'] = datetime.date.today()
@@ -85,7 +86,6 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   get_short_name = lambda self: self.short_name or self.name
   subjects = models.ManyToManyField(Subject)
-  sessions = cached_property(lambda self: self.session_set.all(),name="sessions")
 
   presentation = models.BooleanField("Evaluate Presentation",default=True)
   visuals = models.BooleanField("Evaluate Visuals",default=True)
@@ -148,8 +148,7 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   def active_sessions(self):
     # sessions haven't ended yet (and maybe haven't started)
     first_date = datetime.datetime.now()-datetime.timedelta(0.5)
-    active_sessions = list(self.sessions.filter(last_date__gte=first_date))
-    return active_sessions or list(self.sessions.filter(last_date__gte=first_date))
+    return list(self.sessions.filter(last_date__gte=first_date))
 
   @cached_property
   def open_sessions(self):
@@ -159,7 +158,7 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
   def full_sessions(self):
     return [s for s in self.active_sessions if s.full]
 
-  sessions = lambda self: Session.objects.filter(course=self)
+  sessions = lambda self: Session.objects.filter(course=self,active=True)
   sessions = cached_property(sessions,name="sessions")
   last_session = lambda self: (list(self.sessions) or [None])[-1]
   def save(self,*args,**kwargs):
@@ -224,7 +223,7 @@ class Session(FeedItemModel,PhotosMixin):
   slug = models.CharField(max_length=255)
   cancelled = models.BooleanField(default=False)
   active = models.BooleanField(default=True)
-  publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
+  publish_dt = models.DateTimeField(null=True,blank=True) # for rss feed
   _ht = "This will be automatically updated when you save the model. Do not change"
   first_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
   last_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
@@ -294,7 +293,7 @@ class Session(FeedItemModel,PhotosMixin):
   all_subjects = cached_property(lambda self: self.course.subjects.all(),name="all_subjects")
   @cached_property
   def related_sessions(self):
-    sessions = Session.objects.filter(first_date__gte=datetime.datetime.now())
+    sessions = Session.objects.filter(first_date__gte=datetime.datetime.now(),active=True)
     sessions = sessions.exclude(course=self.course)
     sub_subjects = self.course.subjects.filter(parent__isnull=False)
     sub_sessions = list(sessions.filter(course__subjects__in=sub_subjects).distinct())
@@ -313,6 +312,8 @@ class Session(FeedItemModel,PhotosMixin):
   def save(self,*args,**kwargs):
     #this may be depracated, basically the site fails hard if instructors don't have membership profiles
     from membership.models import UserMembership
+    if self.active and not self.publish_dt:
+      publish_dt = datetime.datetime.now()
     profile,_ = UserMembership.objects.get_or_create(user=self.user)
     self.slug = self.slug or 'arst' # can't save without one, we'll set this below
     super(Session,self).save(*args,**kwargs)

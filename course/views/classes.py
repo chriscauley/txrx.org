@@ -15,14 +15,7 @@ from db.utils import get_or_none
 from event.utils import make_ics,ics2response
 
 from paypal.standard.ipn.models import *
-import datetime, simplejson
-
-def json(request):
-  values = {
-    'courses': simplejson.dumps([c.as_json for c in Course.objects.filter(active=True)]),
-    'subjects': simplejson.dumps([s.as_json for s in Subject.objects.filter(parent=None)]),
-  }
-  return TemplateResponse(request,'course/classes.json',values)
+import datetime, json
 
 def get_course_values(user):
   term = Term.objects.all()[0]
@@ -128,7 +121,7 @@ def rsvp(request,session_pk):
     raise ValueError("Some one tried to rsvp for a class that costs money!")
   if not request.user.is_authenticated():
     m = "You must be logged in to rsvp. Click the icon at the top right of the page to login or register"
-    return HttpResponse(simplejson.dumps([0,m,session.full]))
+    return HttpResponse(json.dumps([0,m,session.full]))
   enrollment,new = Enrollment.objects.get_or_create(user=request.user,session=session)
   if "drop" in request.GET:
     enrollment.delete()
@@ -147,17 +140,17 @@ def rsvp(request,session_pk):
   else:
     q = 1
     m = "You have RSVP'd for this event. If you can't make it, please come back and unenroll."
-  return HttpResponse(simplejson.dumps([q,m,session.full]))
+  return HttpResponse(json.dumps([q,m,session.full]))
 
 def start_checkout(request):
-  cart_items = simplejson.loads(request.GET['cart'])
+  cart_items = json.loads(request.GET['cart'])
   out = []
   for cart_item in cart_items:
     session = Session.objects.get(pk=cart_item['pk'])
     new_total = session.total_students + cart_item['quantity']
     if new_total > session.course.max_students:
       out.append({'pk': session.pk,'remaining': session.course.max_students-session.total_students})
-  return HttpResponse(simplejson.dumps(out))
+  return HttpResponse(json.dumps(out))
 
 def delay_reschedule(request,course_pk,n_months):
   user = request.user
