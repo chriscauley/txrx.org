@@ -53,6 +53,7 @@ class SessionAdmin(admin.ModelAdmin):
   ordering = ('-first_date',)
   raw_id_fields = ('course','user')
   readonly_fields = ('_first_date','_last_date','get_room')
+  list_display = ("__unicode__","first_date","active")
   list_filter = ("publish_dt",)
   _first_date = lambda self,obj: getattr(obj,'first_date','Will be set on save')
   _first_date.short_description = 'first classtime'
