@@ -312,6 +312,10 @@ class Session(FeedItemModel,PhotosMixin):
   def save(self,*args,**kwargs):
     #this may be depracated, basically the site fails hard if instructors don't have membership profiles
     from membership.models import UserMembership
+    if not self.pk:
+      c = self.course
+      c.active = True
+      c.save()
     if self.active and not self.publish_dt:
       publish_dt = datetime.datetime.now()
     profile,_ = UserMembership.objects.get_or_create(user=self.user)
