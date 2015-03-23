@@ -57,7 +57,7 @@
                 {{ enrollment.session.course.name }}
               </a>
             </dt>
-            <dd>with {{ enrollment.session.user }}</dd>
+            <dd>with {{ enrollment.session.user.get_full_name }}</dd>
             <dd>
               {% if enrollment.session.class_time.count > 1 %}
               Starting {{ enrollment.session.first_date }}
