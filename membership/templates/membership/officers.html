@@ -6,9 +6,9 @@
 
 {% block content %}
 {% for officer in officers %}
-<div class="span3">
+<div class="col-sm-12 col-md-6">
   <div class="well">
-    <a href="{% url "course:instructor_detail" officer.user.id %}">
+    <a href="{% url "instructor_detail" officer.user.username %}">
       {% thumbnail officer.user.usermembership.photo.file "180x240" crop="top" as im %}
       <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
       {% endthumbnail %}
