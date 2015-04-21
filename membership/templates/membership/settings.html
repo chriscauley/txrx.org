@@ -6,7 +6,7 @@
 
 {% block main %}
 <p>If you want to change your password click <a href="{% url "auth_password_change" %}">here</a></p>
-<form method="POST" enctype="multipart/form-data" class="jvFloatForm">
+<form method="POST" enctype="multipart/form-data" class="cvfloat">
   {% csrf_token %}
   {% for form in forms %}{% for error in form.non_field_errors %}
   <div class="alert alert-danger">{{ error }}</div>
