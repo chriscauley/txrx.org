@@ -55,11 +55,12 @@ class PhotoAdmin(CropAdmin):
 
     if request.method == "POST" and request.FILES:
       image_list = []
-      
+      name = request.POST.get('name',None) or None
       for f in request.FILES.getlist('file'):
         photo = Photo.objects.create(
-          file = f,
-          user = request.user
+          name=name,
+          file=f,
+          user=request.user
         )
         image_list.append(photo.as_json)
       return HttpResponse(json.dumps(image_list))

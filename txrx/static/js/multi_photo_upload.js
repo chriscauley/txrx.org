@@ -23,7 +23,7 @@ jQuery(document).ready(function() {
       if (xhr.status === 200) {
         var photos = JSON.parse(xhr.responseText);
         for (i = 0; i<photos.length; i++) {
-          loadPhoto(photo);
+          loadPhoto(photos[i]);
         }
       } else {
         alert("An unknown error has occurred, go bug Chris");
@@ -37,7 +37,15 @@ jQuery(document).ready(function() {
     var photo = window.ADMIN_PHOTOS[i];
     loadPhoto(photo);
   }
-  $('.dropzone').bind("drop", dropHandler);
+  $('.dropzone').bind("dragenter", function(e) {
+    e.preventDefault();
+    $(e.target).addClass("hover");
+  }).bind("dragleave", function(e) {
+    e.preventDefault();
+    $(e.target).removeClass("hover");
+  }).bind("dragover", function(e) {
+    e.preventDefault();
+  }).bind("drop", dropHandler);
   function loadPhoto(photo) {
     if (window.PHOTO_TEMPLATE) {
       var fragment = Mustache.render(window.PHOTO_TEMPLATE,photo)
