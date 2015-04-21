@@ -37,6 +37,7 @@ urlpatterns = patterns(
   url(r'^gfycat/$','main.views.gfycat',name='gfycat'),
   url(r'^tools/',include('tool.urls')),
   url('', include('social.apps.django_app.urls', namespace='social')),
+  url(r'perfect-programming','txrx.views.intentional_500'),
   url(r'^classes/', include('course.urls',namespace='course',app_name='course')),
   url(r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
   url(r'^tx/rx/return/$','course.views.paypal_return',name='paypal_redirect'),
@@ -98,8 +99,8 @@ if settings.DEBUG:
   urlpatterns += patterns(
     '',
     url(r'^media/(?P<path>.*)$',
-      'django.views.static.serve',
-      {'document_root': settings.MEDIA_ROOT,
-       'show_indexes': True}),
-    )
+        'django.views.static.serve',
+        {'document_root': settings.MEDIA_ROOT,
+         'show_indexes': True}),
+  )
 

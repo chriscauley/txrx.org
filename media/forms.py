@@ -23,3 +23,7 @@ class PhotoTagForm(forms.ModelForm):
     return name
   class Meta:
     model = PhotoTag
+
+class MultiPhotoUploadForm(forms.ModelForm):
+  class Meta:
+    model = Photo

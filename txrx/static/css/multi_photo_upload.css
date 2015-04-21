@@ -1,0 +1,58 @@
+.dropzone {
+  background-color: #ccc;
+  border: 2px dashed #666;
+  border-radius: 10px;
+  box-shadow: inset 2px 2px 10px 2px rgba(0, 0, 0, 0.5);;
+  color: #666;
+  font-size: 200%;
+  height: 200px;
+  line-height: 200px;
+  margin-top: 20px;
+  text-align: center;
+  width: 100%;
+}
+.dropzone:before { content: "Drop images here."; }
+.field-_auto_photos label { display: none; }
+.dropzone:hover {
+  box-shadow: inset 2px 2px 10px 2px rgba(0, 0, 0, 0.5);;
+  background-color: #555;
+  color: #999;
+}
+
+.pending {
+  color: grey;
+}
+
+.loaded_images {
+  border: 0px solid yellow;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.images_list {
+  float: left;
+  border: 0px dotted red;
+  list-style-type: none;
+}
+
+.newitem{
+  border: 1px solid white;
+  margin: 5px;
+}
+.removebutton{
+  float: left;
+  border: 0px solid yellow;
+  margin-right: 10px;
+}
+
+.actions {
+  float: right;
+  margin-right: 50px;
+}
+
+.error{
+  font-weight: bold;
+  color: red;
+}
+
+#images_list img { max-width: 300px; display: block; }

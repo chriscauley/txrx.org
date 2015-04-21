@@ -1,11 +1,17 @@
+from django.conf import settings
+from django.conf.urls.defaults import url, patterns
 from django.contrib import admin
 from django.contrib.contenttypes.generic import GenericTabularInline
+from django.http import HttpResponse
+from django.template.response import TemplateResponse
 from crop_override.admin import CropAdmin
-from sorl.thumbnail import get_thumbnail
 
 from db.forms import StaffMemberForm
 
+from .forms import MultiPhotoUploadForm
 from .models import PhotoTag, Photo, MiscFile, TaggedPhoto, TaggedFile
+
+import json
 
 class PhotoAdmin(CropAdmin):
   form = StaffMemberForm
@@ -24,6 +30,42 @@ class PhotoAdmin(CropAdmin):
     out = '<img src="%s" width="%s" height="%s" />'%(im.url,im.width,im.height)
     return out
   _thumbnail.allow_tags=True
+  def get_urls(self):
+    urls = super(PhotoAdmin, self).get_urls()
+    upload_urls = patterns(
+      '',
+      url(r'^bulk/$', self.admin_site.admin_view(self.multi_photo_upload_view), name='photos_admin_upload'),
+    )
+    return upload_urls + urls
+  def multi_photo_upload_view(self, request):
+    context = {
+      'app_label': self.model._meta.app_label,
+      'opts': self.model._meta,
+      'add': True,
+      'change': False,
+      'is_popup': False,
+      'save_as': self.save_as,
+      'save_on_top': self.save_on_top,
+      'has_delete_permission': False,
+      'has_change_permission': True,
+      'has_add_permission': True,
+      "STATIC_URL": getattr(settings, "STATIC_URL"),
+      "photos": json.dumps([p.as_json for p in Photo.objects.filter(user=request.user)]),
+    }
+
+    if request.method == "POST" and request.FILES:
+      image_list = []
+      
+      for f in request.FILES.getlist('file'):
+        photo = Photo.objects.create(
+          file = f,
+          user = request.user
+        )
+        image_list.append(photo.as_json)
+      return HttpResponse(json.dumps(image_list))
+
+    template="admin/multi_photo_upload.html"
+    return TemplateResponse(request,template,context)
 
 class TaggedPhotoInline(GenericTabularInline):
   model = TaggedPhoto

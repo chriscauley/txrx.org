@@ -3,11 +3,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db import models
 
-from crop_override import CropOverride, OriginalImage
-
 from instagram.models import InstagramPhoto
 from txrx.utils import cached_method, cached_property
 
+from crop_override import CropOverride, OriginalImage
+from sorl.thumbnail import get_thumbnail
 import os
 
 class FileModel(models.Model):
@@ -90,6 +90,12 @@ class Photo(FileModel):
   _ph = "Usages: None"
   portrait_crop = CropOverride('Portrait Crop (2:3)', aspect='2x3',help_text=_ph,**kwargs)
   external_url = models.URLField(null=True,blank=True)
+  @property
+  def as_json(self):
+    return {
+      'name': self.name,
+      'thumbnail': get_thumbnail(self.file,"x200").url,
+    }
   @property
   def external_type(self):
     for t in ['gfycat','youtube','vortex']:

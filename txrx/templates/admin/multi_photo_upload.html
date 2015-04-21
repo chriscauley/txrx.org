@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div id="content-main">
+  {% csrf_token %}
+  <div>
+    <input type="text" name="name" placeholder="Files will be named NAME_1, NAME_2, etc."
+           id="photos_name"/>
+    <div id="dropzone" class="dropzone"></div>
+    <div class="loaded_images">
+      <ul class="images_list row" id="images_list"></ul>
+    </div>
+  </div>
+</div>
+
+<link href="{{ STATIC_URL }}css/multi_photo_upload.css" rel="stylesheet" type="text/css">
+<script>window.ADMIN_PHOTOS = {{ photos|safe }}; </script>
+<script src="{{ STATIC_URL }}js/mustache.js"></script>
+<script src="{{ STATIC_URL }}js/multi_photo_upload.js"></script>
+{% endblock %}
