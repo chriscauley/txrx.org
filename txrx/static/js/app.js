@@ -15,27 +15,40 @@ can.mustache.registerHelper('ifLoggedIn',function(block) {
 });
 
 function commentReply(pk) {
-  $("#c"+pk).append(can.view("/static/mustache/new_comment.html",{pk:pk}));
+  $("#c"+pk).append(can.view("/static/mustache/new_comment.html",{parent_pk:pk}));
 }
+
+function commentNew(content_type,object_pk) {
+  
+}
+
 function commentPost(form) {
-  console.log($(form).serializeArray());
+  $(form).addClass('loading');
+  $.post(
+    '/can_comments/post/',
+    $(form).serializeArray(),
+    function(data) {
+      $(form).replaceWith(can.view("/static/mustache/mptt_comment.html",data));
+    },
+    'json'
+  )
 }
 
 $(function() {
   $("[data-mptt]").each(function() {
     var params = {
       object_pk: this.dataset.object_pk,
-      name: this.dataset.name,
-      app: this.dataset.app
+      content_type: this.dataset.content_type
     };
     var that = this;
     $.get(
-      "/can_comments/",
+      "/can_comments/list/",
       params,
       function(data) {
         for (var i=0;i<data.length;i++) {
           $(that).append(can.view("/static/mustache/mptt_comment.html",data[i]));
         }
+        $(that).append(can.view("/static/mustache/new_comment.html",params));
       },
       "json"
     );

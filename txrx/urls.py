@@ -43,8 +43,7 @@ urlpatterns = patterns(
   url(r'^tx/rx/return/$','course.views.paypal_return',name='paypal_redirect'),
   url(r'^contact/$','contact.views.contact',name='contact'),
   url(r'^dxfviewer/$','geo.views.dxfviewer',name='dxfviewer'),
-  url(r'^ct/',include('ct.urls')),
-  url(r'^can_comments/$','ct.views.can_comments'),
+  url(r'^can_comments/',include('can_comment.urls')),
 )
 
 #auth related
