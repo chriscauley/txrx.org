@@ -15,7 +15,8 @@ can.mustache.registerHelper('ifLoggedIn',function(block) {
 });
 
 function commentReply(pk) {
-  $("#c"+pk).append(can.view("/static/mustache/new_comment.html",{parent_pk:pk}));
+  // add to immediate child so child comments don't get form
+  $("#c"+pk+" > .comment_actions").append(can.view("/static/mustache/new_comment.html",{parent_pk:pk}));
 }
 
 function commentNew(content_type,object_pk) {
@@ -45,10 +46,8 @@ $(function() {
       "/can_comments/list/",
       params,
       function(data) {
-        for (var i=0;i<data.length;i++) {
-          $(that).append(can.view("/static/mustache/mptt_comment.html",data[i]));
-        }
-        $(that).append(can.view("/static/mustache/new_comment.html",params));
+        params.comments = data;
+        $(that).replaceWith(can.view("/static/mustache/list_comments.html",params));
       },
       "json"
     );

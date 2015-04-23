@@ -49,7 +49,7 @@ def list_comments(request):
     object_pk=request.GET['object_pk'],
     content_type=ContentType.objects.get_by_natural_key(*natural_key),
     parent=None
-  )
+  ).order_by("-submit_date") # this should eventually be on MpttComment.Meta
   comments_json = [build_comment_json(c) for c in comments]
   return HttpResponse(json.dumps(comments_json))
 

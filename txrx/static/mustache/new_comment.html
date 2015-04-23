@@ -1,4 +1,5 @@
-<div class="comment_form_wrapper">
+<form action="/comments/post/" method="POST" onsubmit="commentPost(this);return false;"
+      class="comment_form_wrapper">
   <div class="comment_form">
     <p>Comments are displayed using Markdown.</p>
     <a href="javascript:;" onclick="$(this).next().toggleClass('show')">Show Formatting help</a>
@@ -38,21 +39,19 @@
       </tbody>
     </table>
 
-    <form action="/comments/post/" method="POST" onsubmit="commentPost(this);return false;">
-      <fieldset>
-        <ul class="list-unstyled">
-          <li class="required">
-            <textarea cols="40" id="id_comment" name="comment" rows="10" value="{{comment}}"></textarea>
-          </li>
-          <li>
-            <input id="id_content_type" name="content_type" type="hidden" value="{{content_type}}">
-            <input id="id_object_pk" name="object_pk" type="hidden" value="{{object_pk}}">
-            <input id="id_parent_pk" name="parent_pk" type="hidden" value="{{parent_pk}}">
-            <input type="submit" name="submit" class="submit-post" value="Post">
-          </li>
-        </ul>
-      </fieldset>
-    </form>
+    <fieldset>
+      <ul class="list-unstyled">
+        <li class="required">
+          <textarea cols="40" id="id_comment" name="comment" rows="10" value="{{comment}}"></textarea>
+        </li>
+        <li>
+          <input id="id_content_type" name="content_type" type="hidden" value="{{content_type}}">
+          <input id="id_object_pk" name="object_pk" type="hidden" value="{{object_pk}}">
+          <input id="id_parent_pk" name="parent_pk" type="hidden" value="{{parent_pk}}">
+          <input type="submit" name="submit" class="submit-post" value="Post">
+        </li>
+      </ul>
+    </fieldset>
 
   </div>
-</div>
+</form>
