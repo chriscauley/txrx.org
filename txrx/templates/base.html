@@ -15,11 +15,14 @@
       var _NOTIFY_URL = "https://txrxlabs.org/tx/rx/ipn/handler/"
       {% endif %}
       var _USER_NUMBER = "{{ request.user.pk }}";
+      {% if request.user.is_superuser %}
+      var _418 = true;
+      {% endif %}
     </script>
     
     <link rel="shortcut icon" href="/favicon.ico" />
     {% compress js %}
-    <script src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery-1.11.2.js"></script>
     <script src="{{ STATIC_URL }}js/init.js"></script>
     <script src="{{ STATIC_URL }}lightbox/js/lightbox.min.js"></script>
     <script src="{{ STATIC_URL }}js/jsi18n.js"></script>

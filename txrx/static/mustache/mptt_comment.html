@@ -1,0 +1,31 @@
+<!--<div class="mptt-comment">
+  {{#ifCurrentUser user_pk}}
+  yay
+  {{/ifCurrentUser}}
+  {{pk}}
+</div>-->
+<div class="comment comment_level_{{level}} comment_expanded" id="c{{pk}}">
+  <div class="comment_outer">
+    <div class="comment_content">
+      <p class="comment_meta">
+        <a href="javascript:;" onclick="$(this).closest('.comment').toggleClass('collapsed');" class="expand-link"></a>
+        <span class="commented_by">{{username}} - </span>
+        <span class="commented_date">{{date_s}}</span>
+      </p>
+      <p>{{ content }}</p>
+      {{#ifLoggedIn}}
+      <a onclick="commentReply({{pk}});return false;" title="reply" href="#"><i class="fa fa-reply"></i> Post Reply</a>
+      | <a onclick="commentFlag({{pk}});return false;" title="flag" href="#"><i class="fa fa-flag"></i> Flag</a>
+      {{#if418}}
+      | <a href="/admin/mptt_comments/mpttcomment/{{pk}}/delete/"><i class="fa fa-times"></i> Delete</a>
+      {{/if418}}
+      {{else}}
+      <a href="/accounts/login/?next=/classes/42/woodworking-tools-i/#c265">Login to reply to this comment</a>
+      {{/ifLoggedIn}}
+    </div>
+  </div>
+  {{#each children}}
+  {{>/static/mustache/mptt_comment.html}}
+  {{/each}}
+</div>
+</div>

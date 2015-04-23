@@ -1,0 +1,24 @@
+[cvfloat],form.cvfloat label {
+  color: #0c61fc;
+  display: block;
+  font-size: .8em;
+  font-weight: bold;
+  height: 20px;
+  line-height: 20px;
+  margin-bottom: 2px;
+  position: relative;
+}
+[cvfloat]:before {
+  bottom: 0;
+  content: attr(cvfloat);
+  cursor: pointer;
+  display: block;
+  height: 20px;
+  overflow: hidden;
+  position: absolute;
+  transition: height 0.5s;
+}
+[cvfloat].down:before {
+  height: 0;
+  transition: height 100ms;
+}

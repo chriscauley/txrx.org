@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script src="{{ STATIC_URL }}js/can.jquery.js"></script>
+<script src="{{ STATIC_URL }}js/app.js"></script>
+<script type="text/mustache" src="{{ STATIC_URL }}mustache/mptt_comment.html" id="mptt_comment"></script>
+<div data-mptt data-object_pk="42" data-name="course" data-app="course"></div>
+<style>
+.mptt-comment {border: 1px solid;padding:5px;}
+{% endblock %}

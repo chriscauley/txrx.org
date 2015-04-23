@@ -1,3 +1,10 @@
+* contract page
+** list
+   services
+   materials
+   time frame
+   file formats
+   policies
 * classes
 ** add an exit survey - what classes would you like to take?
 * side bar

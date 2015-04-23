@@ -69,7 +69,7 @@ function simple_cart_ready() {
 simpleCart.cartHeaders = ["Name", "Quantity", "Increment", "Decrement", "Total", "Remove"];
 simpleCart.discount = {{ member_discount }};
 simpleCart.ready(simple_cart_ready)
-$(".itemRemove a").live("click",toggleCourses);
+$(".itemRemove a").on("click",toggleCourses);
         </script>
       </div>
       <div class="modal-footer">
