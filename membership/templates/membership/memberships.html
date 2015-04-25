@@ -50,7 +50,7 @@ function setHiddenFields(that) {
         <input type="hidden" name="t3" value="M">
         <input type="hidden" name="src" value="1">
         <input type="hidden" name="sra" value="1">
-        <select name="os0" onchange="setHiddenFields(this);" {% if "Table Hacker" in m.name %}
+        <select name="os0" onchange="setHiddenFields(this);" {% if "Table Hacker" in m.name and not "open" in request.GET %}
                 disabled="disabled"{% endif %}>
           {% for rate in m.rates %}
           <option value="{{ m.name }} - {{ rate.description }}">{{ rate.description }}</option>
@@ -60,7 +60,7 @@ function setHiddenFields(that) {
         <input type="hidden" name="RETURNURL" value="{{ settings.SITE_URL }}/joined/{{ user.id }}/">
         <div class="button_box">
           <input type="image" name="submit" alt="PayPal - The safer, easier way to pay online!"
-                 {% if "Table Hacker" in m.name %} disabled="disabled"{% endif %} src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif">
+                 {% if "Table Hacker" in m.name and not "open" in request.GET %} disabled="disabled"{% endif %} src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif">
           <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="" width="1" height="1" border="0">
         </div>
       </form>
