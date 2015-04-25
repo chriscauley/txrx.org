@@ -1,4 +1,4 @@
-<form action="/comments/post/" method="POST" onsubmit="commentPost(this);return false;"
+<form action="{{form_url}}" method="POST" onsubmit="commentPost(this);return false;"
       class="comment_form_wrapper">
   <div class="comment_form">
     <p>Comments are displayed using Markdown.</p>
@@ -42,12 +42,13 @@
     <fieldset>
       <ul class="list-unstyled">
         <li class="required">
-          <textarea cols="40" id="id_comment" name="comment" rows="10" value="{{comment}}"></textarea>
+          <textarea cols="40" id="id_comment" name="comment" rows="10">{{comment}}</textarea>
         </li>
         <li>
           <input id="id_content_type" name="content_type" type="hidden" value="{{content_type}}">
           <input id="id_object_pk" name="object_pk" type="hidden" value="{{object_pk}}">
           <input id="id_parent_pk" name="parent_pk" type="hidden" value="{{parent_pk}}">
+          <inptu id="id_comment_pk" name="comment_pk" type="hidden" value="{{pk}}">
           <input type="submit" name="submit" class="submit-post" value="Post">
         </li>
       </ul>

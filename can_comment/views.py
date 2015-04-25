@@ -34,14 +34,26 @@ def make_branch(a,level):
   }
 
 def build_comment_json(comment):
+  children = comment.get_children().order_by("-submit_date") # this should eventually be on MpttComment.Meta
   return {
     'pk': comment.pk,
-    'children': [build_comment_json(c) for c in comment.get_children()],
+    'children': [build_comment_json(c) for c in children],
     'username': comment.user.username,
     'user_pk': comment.user_id,
     'date_s': date(comment.submit_date,"l F j, Y @ P").replace("@","at"),
-    'content': comment.comment,
+    'comment': comment.comment,
+    'level': comment.level,
+    'l_mod': comment.level%2,
   }
+
+def detail(request,pk):
+  comment = get_object_or_404(MpttComment,pk=pk)
+  ct = comment.content_type
+  x = dir(ct)
+  d = build_comment_json(comment)
+  d['content_type'] = "%s.%s"%(ct.app_label,ct.name)
+  d['object_pk'] = comment.object_pk
+  return HttpResponse(json.dumps(d))
 
 def list_comments(request):
   natural_key = request.GET.get('content_type').split('.')
@@ -77,16 +89,17 @@ def post(request):
   )
   return HttpResponse(json.dumps(build_comment_json(comment)))
 
-#! TODO not implimented
-
 @ajax_login_required
 def edit(request,pk):
-  comment = get_object_or_deny(MpttComment,user,pk=pk)
+  comment = get_object_or_deny(MpttComment,request.user,pk=pk)
+  if request.POST:
+    comment.comment = request.POST['comment']
+    comment.save()
   return HttpResponse(json.dumps(build_comment_json(comment)))
 
 def get_object_or_deny(model,user_object,*args,**kwargs):
   obj = get_object_or_404(model,*args,**kwargs)
-  if not (request.user.is_superuser or request.user == obj.user):
+  if not (user_object.is_superuser or user_object == obj.user):
     raise PermissionDenied()
   return obj
 
