@@ -32,6 +32,7 @@ urlpatterns = patterns(
   url(r'^favicon.ico$','main.views.predirect',
       kwargs={'url':getattr(settings,'FAVICON','/static/favicon.ico')}),
   url(r'^thing/$','thing.views.thing_index',name='thing_index'),
+  url(r'^thing/add/$','thing.views.add_thing',name='add_thing'),
   url(r'^thing/(\d+)/([\w\d\-\_]+)/$','thing.views.thing_detail',name='thing_detail'),
   url(r'^gfycat/$','main.views.gfycat',name='gfycat'),
   url(r'^tools/',include('tool.urls')),
@@ -68,6 +69,7 @@ urlpatterns += patterns(
   url(r'^instructors/([^/]+)/$','member_detail',name='instructor_detail'),
   url(r'^u/$','member_index',name='member_index'),
   url(r'^u/([^/]+)/$','member_detail',name='member_detail'),
+  url(r'^officers/$', 'officers', name='officers'),
 )
 
 #notify urls

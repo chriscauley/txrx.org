@@ -27,8 +27,8 @@ def get_or_create_student(paypal_email,u_id=None):
     profile.paypal_email = profile.paypal_email or paypal_email
     profile.save()
     return user, new
-  user = User.objects.get_or_none(usermembership__paypal_email=paypal_email)
-  user = user or User.objects.get_or_none(email=paypal_email)
+  user = User.objects.get_or_none(usermembership__paypal_email__iexact=paypal_email)
+  user = user or User.objects.get_or_none(email__iexact=paypal_email)
   if user:
     return user, new
   if validate_email(str(u_id)):

@@ -15,7 +15,7 @@
 <div id="post-detail-page">
   <i class="icon-arrow-left"></i> <a href="{% url "post_list" post.user.username %}">Latest posts by {{ post.user.username }}</a>
   {% if post.status != "deleted" %}
-  {% include "_post_content.html" with post=post %}
+  {% include "blog/_content.html" with post=post %}
   {% endif %}
   {% display_comment_toplevel_for post %}
 </div>

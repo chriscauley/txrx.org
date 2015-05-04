@@ -1,13 +1,15 @@
 {% load thumbnail %}
+{% include "_styles.html" %}
+<script src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
 <style type="text/css">
-ul { margin: 0 auto; padding: 0; list-style: none; width: 480px; height: 240px; }
-li { float: left; width: 110px; height: 110px; padding: 5px; text-align: center; }
-li:hover { background: #afa; }
+.photo-list { margin: 0 auto; width: 480px; height: 240px; }
+.photo-list a:hover { background: #afa; }
+.col-xs-3 { padding: 5px; }
 </style>
 <form method="GET" class="form-inline">
   <span class="input-append">
     {{ form.search }}
-    <button class="btn" type="button">Search</button>
+    <input type="submit" class="btn" value="Search" />
   </span>
   <label class="checkbox inline" style="float: right;">
     {{ form.mine }} Only show my images
@@ -15,32 +17,28 @@ li:hover { background: #afa; }
   {# any change to the form should reset to page 1 #}
   <input type="hidden" name="page" id="id_page" value="1" />
 </form>
-{% if photos %}
-<ul>
-  {% for photo in photos %}
-  {% thumbnail photo.file "110x110" crop="center" as im %}
-  <li>
-    <a href="javascript:;"  title="{{ photo }}"
-       onclick="window.parent.iframe_callback({'id':{{ photo.id }},'shortcode':'{{ photo.shortcode }}'});">
-      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
-    </a>
-  </li>
-  {% endthumbnail %}
-  {% endfor %}
-</ul>
+{% if paginator.current_list %}
+<div class="photo-list">
+  <div class="row">
+    {% for photo in paginator.current_list %}
+    {% thumbnail photo.file "120x120" crop="center" as im %}
+    <div class="col-xs-3">
+      <a href="javascript:;" title="{{ photo }}"
+         onclick="window.parent.iframe_callback({'id':{{ photo.id }},'shortcode':'{{ photo.shortcode }}'});">
+        <img src="{{ im.url }}" />
+      </a>
+    </div>
+    {% endthumbnail %}
+    {% endfor %}
+  </div>
+</div>
 {% else %}
 <p>
   No matching photos found. Change search options above or click button below to add a photo.
 </p>
 {% endif %}
 <div style="clear: both;"></div>
-{% if photos.has_previous %}
-<a href="javascript:;" onclick="goToPage({{ photos.previous_page_number }});" style="float: left;">Previous Page</a>
-{% endif %}
-{% if photos.has_next %}
-<a href="javascript:;" onclick="goToPage({{ photos.next_page_number }});" style="float: right">Next Page</a>
-{% endif %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
+{% include "_paginator.html" with showpages=3%}
 <script type="text/javascript">
 $("#id_mine").change(function(){$("form").submit()});
 $("#id_search").focus();

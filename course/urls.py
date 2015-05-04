@@ -11,7 +11,6 @@ urlpatterns = patterns(
   url(r'^debug/(?P<id>\d+)/$', 'debug_parsing',name='debug_parsing'),
 
   url(r'^$', 'classes.index'),
-  url(r'^classes.json$','classes.json',name='classes_json'),
   url(r'^(instructor|myclasses)/$','classes.user_ajax',name='user_ajax'),
 
   url(r'^rsvp/(\d+)/','classes.rsvp',name='rsvp'),

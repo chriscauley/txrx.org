@@ -7,7 +7,7 @@
     <meta name="google-site-verification" content="5BXTZkZEubZ_azCsu7q469YXtV6tYbDOVeTQ2enG88o" />
     {% block extra_head %}{% endblock %}
     {% include "_styles.html" %}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}font-awesome-4.2.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
     <script type="text/javascript">
       {% if settings.DEBUG %}
       var _NOTIFY_URL = "http://dev.txrxlabs.org:8009/tx/rx/ipn/handler/"
@@ -49,8 +49,10 @@
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     {% block analytics %}{{ ANALYTICS_CODE|safe }}{% endblock %}
+    {% comment %}
     <script type="text/javascript" src="//ws.sharethis.com/button/buttons.js"></script>
     <script type="text/javascript">stLight.options({publisher: "56794c5c-23aa-4e30-b62c-dcc177306755", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
+    {% endcomment %}
   </head>
   <body>
     {# this can eventually be moved int _cart.html #}

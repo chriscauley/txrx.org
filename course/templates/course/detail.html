@@ -123,6 +123,8 @@
       {% endif %}
       {% endif %}
     </div>
+    {% include "_social.html" with thing=course %}
+    {% comment %}
     <center>
       <span class="st_facebook_large" displayText="Facebook"></span>
       <span class="st_twitter_large" displayText="Tweet" st_via="TXRXLabs"></span>
@@ -130,6 +132,7 @@
       <span class="st_googleplus_large" displayText="Google +"></span>
       <span class="st_reddit_large" displayText="Reddit"></span>
     </center>
+    {% endcomment %}
     {% if request.user.is_staff %}
     {# {% include "course/_instructor_panel.html" %} #}
     {% endif %}

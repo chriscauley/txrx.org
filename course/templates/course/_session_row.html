@@ -14,7 +14,7 @@
   {% else %}
   <div>
     {% if course.fee %}
-    with {{ session.user }}
+    with {{ session.user.get_full_name }}
     {% if not session.past %}
     <button class="btn btn-primary add-to-cart" onclick="addClass({{ session.id }});">
       Add this session to cart</button>

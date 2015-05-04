@@ -22,6 +22,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('from_name', self.gf('django.db.models.fields.CharField')(max_length=128)),
             ('from_email', self.gf('django.db.models.fields.EmailField')(max_length=75)),
+            ('subject', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contact.Subject'])),
             ('message', self.gf('django.db.models.fields.TextField')()),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User'], null=True, blank=True)),
         ))
@@ -135,6 +136,7 @@ class Migration(SchemaMigration):
             'from_name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'message': ('django.db.models.fields.TextField', [], {}),
+            'subject': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contact.Subject']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']", 'null': 'True', 'blank': 'True'})
         },
         u'contact.person': {

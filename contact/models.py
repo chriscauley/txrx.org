@@ -38,11 +38,10 @@ class SubjectFAQ(models.Model):
 class Message(models.Model):
   from_name = models.CharField("Name",max_length=128)
   from_email = models.EmailField("Email")
-  subject = models.ForeignKey(Subject,verbose_name="Subject")
+  subject = models.ForeignKey(Subject)
   message = models.TextField()
   user = models.ForeignKey(get_user_model(),null=True,blank=True)
   __unicode__ = lambda self: "%s: %s"%(self.user or self.from_email,self.subject)
-  subject = property(lambda self: self.subject.subject)
   def save(self,*args,**kwargs):
     send_email = not self.pk
     super(Message,self).save(*args,**kwargs)
