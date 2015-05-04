@@ -10,12 +10,13 @@ class SubjectFAQInline(admin.TabularInline):
   extra = 0
 
 class SubjectAdmin(admin.ModelAdmin):
-  list_display = ('__unicode__','order')
+  list_display = ('__unicode__','order','_message_count')
   list_editable = ('order',)
   inlines = [SubjectFAQInline]
+  _message_count = lambda self,obj: obj.message_set.count()
 
 class MessageAdmin(admin.ModelAdmin):
-  pass
+  list_filter = ('subject',)
 
 class FAQAdmin(admin.ModelAdmin):
   pass

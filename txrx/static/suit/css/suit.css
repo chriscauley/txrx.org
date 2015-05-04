@@ -1,10 +1,10 @@
 /* txrx overrides */
-.tabular.inline-related textarea {
-  width: 100%;
+.tabular.inline-related textarea, .form-horizontal textarea {
+  width: 95% !important;
 }
-/* end txrx overrides */
 .form-horizontal .control-group .field-box .controls li { list-style: none; }
 .form-horizontal .control-group .field-box .controls label { float: none !important; }
+/* end txrx overrides */
 .white-shadow{text-shadow:0 1px rgba(255,255,255,0.5)}
 .white-shadow-max{text-shadow:0 1px #fff}
 .grey-box-shadow{box-shadow:0 0 0 1px rgba(0,0,0,0.07)}

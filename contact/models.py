@@ -18,6 +18,7 @@ class Subject(models.Model):
   order = models.IntegerField(default=9999)
   slug = models.CharField(max_length=32)
   __unicode__ = lambda self: self.subject
+  faqs = property(lambda self: [s.faq for s in self.subjectfaq_set.all()])
   get_email = lambda self: self.person.get_email()
   class Meta:
     verbose_name = "Subject"

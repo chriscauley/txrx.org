@@ -24,7 +24,7 @@ def contact(request):
     return HttpResponseRedirect('.')
   values = {
     'form': form,
-    'ubjects': Subject.objects.all(),
+    'subjects': Subject.objects.all(),
   }
   return TemplateResponse(request,"contact.html",values)
   
