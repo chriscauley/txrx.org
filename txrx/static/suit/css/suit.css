@@ -1,3 +1,8 @@
+/* txrx overrides */
+.tabular.inline-related textarea {
+  width: 100%;
+}
+/* end txrx overrides */
 .form-horizontal .control-group .field-box .controls li { list-style: none; }
 .form-horizontal .control-group .field-box .controls label { float: none !important; }
 .white-shadow{text-shadow:0 1px rgba(255,255,255,0.5)}

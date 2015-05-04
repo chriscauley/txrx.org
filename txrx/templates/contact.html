@@ -7,3 +7,16 @@
   <input type="submit" class="btn btn-primary" />
 </form>
 {% endblock %}
+
+{% block side %}
+{% for subject in subjects %}
+<div>
+  {% for faq in subject.subjectfaq_set.all %}
+  <div>
+    <h2>{{ faq.question }}</h2>
+    {{ faq.answer }}
+  </div>
+  {% endfor %}
+</div>
+{% endfor %}
+{% endblock %}
