@@ -8,10 +8,11 @@ from hashlib import md5
 from django import template
 from django.template.defaultfilters import striptags
 from django.utils.safestring import mark_safe
-from django.utils import simplejson
 from settings import MEDIA_ROOT
 
 from .syntax_color import _colorize_table
+
+import json
 
 register = template.Library()
 
@@ -137,7 +138,7 @@ def filter_gist(value):
     if resp.status_code != 200:
       return (replacements, value, None,)
 
-    content = simplejson.loads(resp.content)
+    content = json.loads(resp.content)
 
     # Go through all files in gist and smash 'em together
     for name in content['files']:

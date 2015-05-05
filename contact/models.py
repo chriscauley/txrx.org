@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.core.mail import send_mail
 from django.db import models
 
@@ -28,7 +28,7 @@ class ContactMessage(models.Model):
   from_email = models.EmailField("Email")
   contactsubject = models.ForeignKey(ContactSubject,verbose_name="Subject")
   message = models.TextField()
-  user = models.ForeignKey(get_user_model(),null=True,blank=True)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
   __unicode__ = lambda self: "%s: %s"%(self.user or self.from_email,self.subject)
   subject = property(lambda self: self.contactsubject.subject)
   def save(self,*args,**kwargs):

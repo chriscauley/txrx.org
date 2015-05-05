@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-import datetime, requests, simplejson, os, re
+import datetime, requests, json, os, re
 
 photofile_path = getattr(settings,"INSTAGRAM_DIR",'uploads/instagram')
 
@@ -13,8 +13,8 @@ class FollowableModel(models.Model):
     return self.feed_url%(self.feed_param,self.token)
   def follow_me(self):
     request = requests.get(self.latest_url)
-    json = simplejson.loads(request.text)
-    save_photos(json,approved=self.approved)
+    d = json.loads(request.text)
+    save_photos(d,approved=self.approved)
   class Meta:
     abstract = True
 
@@ -43,8 +43,8 @@ class InstagramUser(FollowableModel):
 
   def update_and_save(self):
     url = "https://api.instagram.com/v1/users/search?q=%s&access_token=%s"%(self.username,self.token)
-    json = simplejson.loads(requests.get(url).text)
-    for user in json['data']:
+    d = json.loads(requests.get(url).text)
+    for user in d['data']:
       if user['username'] == self.username:
         self.iid = user['id']
         self.save()
@@ -58,18 +58,18 @@ class InstagramTag(FollowableModel):
   __unicode__ = lambda self: self.name
 
 class InstagramLocationManager(models.Manager):
-  def get_from_json(self,json):
-    if not json: #some just don't have locations!
+  def get_from_json(self,d):
+    if not d: #some just don't have locations!
       return 
-    if 'id' in json:
-      location,new = InstagramLocation.objects.get_or_create(iid=json.pop('id'),defaults=json)
+    if 'id' in d:
+      location,new = InstagramLocation.objects.get_or_create(iid=d.pop('id'),defaults=d)
       if new:
         print "New Location: %s"%location
       return location
 
     # search instagram for any APPROVED locations nearby that are already in the database
-    r = requests.get(self.model.search_url%(json['latitude'],json['longitude'],self.model.token))
-    response = simplejson.loads(r.text)
+    r = requests.get(self.model.search_url%(d['latitude'],d['longitude'],self.model.token))
+    response = json.loads(r.text)
     for l in response['data']:
       try:
         return InstagramLocation.objects.get(iid=l['id'],approved=True)

@@ -58,8 +58,8 @@ class FuturePastListFilter(admin.SimpleListFilter):
 class EventOccurrenceInline(OccurrenceModelInline):
   model = EventOccurrence
   fields = ('name_override','start','end_time')
-  def queryset(self,request):
-    qs = super(EventOccurrenceInline,self).queryset(request)
+  def get_queryset(self,request):
+    qs = super(EventOccurrenceInline,self).get_queryset(request)
     return qs.filter(start__gte=datetime.datetime.now())
 
 class EventAdmin(admin.ModelAdmin):

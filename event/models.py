@@ -10,8 +10,7 @@ from txrx.utils import cached_property
 
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
-import simplejson as json
-import datetime,sys
+import datetime, sys, json
 
 def print_time(t):
   if t: return t.strftime('%I:%M %P')
