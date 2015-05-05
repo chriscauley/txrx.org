@@ -1,10 +1,10 @@
 from django import forms
 
-from .models import ContactMessage,ContactSubject
+from .models import Message,Subject
 from db.forms import PlaceholderModelForm
 
-class ContactMessageForm(PlaceholderModelForm):
-  contactsubject = forms.ModelChoiceField(ContactSubject.objects,label="Please select a reason for contacting us")
+class MessageForm(PlaceholderModelForm):
+  subject = forms.ModelChoiceField(Subject.objects,label="Please select a reason for contacting us")
   class Meta:
-    model = ContactMessage
+    model = Message
     exclude = ('user',)

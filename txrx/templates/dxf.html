@@ -5,33 +5,39 @@
 
 {% block main %}
 <div id="map">
-<div class="col-sm-3">
-  {% for time,events in event_tuples %}
-  <h1>{{ time|date:"P" }}</h1>
-  <ul class="event_list">
-    {% for event in events %}
-    <li class="room">
-      <span class="room_marker" style="background:{{ event.room.roomgroup.color }}">
-        {{ event.room.map_key }}</span>
-      <span>{{ event.name }}</span>
-    </li>
+  <div class="col-sm-3">
+    <h1>Today at TXRX Labs</h1>
+    {% for time,events in event_tuples %}
+    <div class="well">
+      <h2>{{ time|date:"P" }}</h2>
+      <ul class="event_list">
+        {% for event in events %}
+        <li class="room">
+          <span class="room_marker" style="background:{{ event.room.roomgroup.color }}">
+            {{ event.room.map_key|default_if_none:"" }}</span>
+          <span>{{ event.name }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
     {% endfor %}
-  </ul>
-  {% endfor %}
-  <h1>Legend</h1>
-  <ul class="event_list">
-    {% for roomgroup in roomgroups %}
-    <li class="room">
-      <span class="room_marker" style="background: url({{ roomgroup.fill.file.url }}) center"></span>
-      <span>{{ roomgroup.name }}</span>
-    </li>
-    {% endfor %}
-</div>
-<div class="col-sm-9">
-  <div id="floorplan_wrapper">
-    <canvas id="floorplan"></canvas>
   </div>
-</div>
+  <div class="col-sm-9">
+    <div id="floorplan_wrapper">
+      <canvas id="floorplan"></canvas>
+      <div class="legend">
+        <h1>Legend</h1>
+        <ul class="event_list">
+          {% for roomgroup in roomgroups %}
+          <li class="room">
+            <span class="room_marker" style="background: url({{ roomgroup.fill.file.url }}) center"></span>
+            <span>{{ roomgroup.name }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
 <script>
 setTimeout(function() {window.location = window.location;},15*60*1000);
@@ -44,7 +50,7 @@ var x_max = -Infinity;
 var y_max = -Infinity;
 var x_min = Infinity;
 var y_min = Infinity;
-var scale = 2.8;
+var scale = 5.3;
 var rotate = true;
 var mirror_x = false, mirror_y = true;
 var fill_images = {};

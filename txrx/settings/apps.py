@@ -16,6 +16,9 @@ INSTALLED_APPS = (
   #'template_utils',
 
   # 3rd party
+  'markdown_deux',
+  'helpdesk',
+  'bootstrapform',
   'south',
   'sorl.thumbnail',
   'registration',

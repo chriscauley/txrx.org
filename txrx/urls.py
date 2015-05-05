@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls import url, patterns, include
 from django.contrib import admin
+from django.contrib.auth.views import password_reset
 from django.contrib.sitemaps.views import sitemap
 
 from txrx.sitemaps import sitemaps
@@ -46,12 +47,29 @@ urlpatterns = patterns(
   url(r'^can_comments/',include('can_comment.urls')),
 )
 
+def activate_user(target):
+  def wrapper(request,*args,**kwargs):
+    from django.contrib.auth import get_user_model
+    model = get_user_model()
+    if request.REQUEST.get('email',None):
+      print 'email in get'
+      try:
+        user = model.objects.get(email=request.REQUEST.get('email'))
+        print user
+        user.is_active = True
+        user.save()
+      except model.DoesNotExist:
+        pass
+    return target(request,*args,**kwargs)
+  return wrapper
+
 #auth related
 urlpatterns += patterns(
   '',
   url(r'^accounts/settings/$','membership.views.user_settings',name='account_settings'),
   url(r'^accounts/register/$','membership.views.register'),
   url(r'^accounts/', include('registration.urls')),
+  url(r'^auth/password_reset/$',activate_user(password_reset)),
   url(r'^auth/',include('django.contrib.auth.urls')),
   url(r'^force_login/(\d+)/$', 'txrx.views.force_login'),
 )
