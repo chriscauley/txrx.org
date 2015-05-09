@@ -3,7 +3,7 @@ from django.core.mail import send_mail
 from django.db import models
 
 class Person(models.Model):
-  user = models.ForeignKey(get_user_model(),null=True,blank=True)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
   _ht = "Use if desired email is not in a user account. THIS FIELD DOES NOTHING IF THERE IS A USER"
   email = models.EmailField(null=True,blank=True,help_text=_ht)
   __unicode__ = lambda self: str(self.user or self.email)

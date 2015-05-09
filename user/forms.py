@@ -29,3 +29,4 @@ class CustomUserCreationForm(UserCreationForm):
 class UserChangeForm(UserChangeForm):
   class Meta:
     model = User
+    exclude = ('',)
