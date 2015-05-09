@@ -34,7 +34,7 @@ def thing_index(request):
   #for tool in tool_filter['options']:
   #  tool.count = TaggedTool.objects.filter(tool_id=tool.id,content_type=contenttype).count()
   #tool_filter['options'] = [t for t in tool_filter['options'] if t.count > 1]
-  if "material" in request.GET:
+  if request.GET.get("material",None):
     things = things.filter(materials__pk=request.GET['material'])
   if "tool" in request.GET:
     things = things.filter(tools__pk=request.GET['tool'])
