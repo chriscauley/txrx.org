@@ -14,7 +14,7 @@ psycopg2
 pillow==2.1.0
 
 django-mptt==0.5.4
--e git+https://github.com/chriscauley/django-mptt-comments.git#egg=django-mptt-comments
+pip install -e git+https://github.com/chriscauley/django-mptt-comments.git#egg=django-mptt-comments.git
 
 django-redis-cache
 Markdown==2.0.3
@@ -24,7 +24,7 @@ Pygments
 requests
 -e git://github.com/durden/frappy.git#egg=frappy
 
-django-tagging
+-e git+https://github.com/Fantomas42/django-tagging.git#egg=django-tagging
 -e git+https://github.com/alekam/django-tagging-autocomplete.git#egg=django-tagging-autocomplete
 -e git://github.com/marcuswhybrow/django-wmd-editor.git#egg=django_wmd_editor
 

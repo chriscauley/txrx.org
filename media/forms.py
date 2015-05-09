@@ -23,7 +23,9 @@ class PhotoTagForm(forms.ModelForm):
     return name
   class Meta:
     model = PhotoTag
+    exclude = ()
 
 class MultiPhotoUploadForm(forms.ModelForm):
   class Meta:
     model = Photo
+    exclude = ()

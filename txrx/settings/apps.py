@@ -17,7 +17,7 @@ INSTALLED_APPS = (
   'markdown_deux',
   'helpdesk',
   'bootstrapform',
-  'south',
+  #'south',
   'sorl.thumbnail',
   'registration',
   'paypal.standard.ipn',

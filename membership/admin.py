@@ -43,6 +43,7 @@ class MeetingMinutesForm(forms.ModelForm):
   inactive_present = forms.ModelMultipleChoiceField(queryset=_q,**kwargs)
   class Meta:
     model = MeetingMinutes
+    exclude = ()
 
 class MeetingMinutesAdmin(admin.ModelAdmin):
   form = MeetingMinutesForm

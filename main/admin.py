@@ -26,6 +26,7 @@ class FlatPageForm(forms.ModelForm):
     self.fields['template_name'].widget = forms.Select(choices=TEMPLATE_CHOICES)
   class Meta:
     model = FlatPage
+    exclude = ()
 
 class FlatPageAdmin(FlatPageAdmin):
   form = FlatPageForm
