@@ -59,7 +59,7 @@ def make_ics(occurrences=None,title=None):
 def ics2response(calendar_object,fname):
   icalstream = calendar_object.to_ical().replace('TZID=UTC;', '')
 
-  response = HttpResponse(icalstream, mimetype='text/calendar')
+  response = HttpResponse(icalstream, content_type='text/calendar')
 
   response['Filename'] = '%s.ics'%fname
   response['Content-Disposition'] = 'attachment; filename=%s.ics'%fname

@@ -22,5 +22,5 @@ urlpatterns += patterns(
 
 urlpatterns += patterns(
   '',
-  (r'^robots\.txt$', lambda r: HttpResponse("User-agent: *\nCrawl-delay: 5", mimetype="text/plain")),
+  (r'^robots\.txt$', lambda r: HttpResponse("User-agent: *\nCrawl-delay: 5", content_type="text/plain")),
 )
