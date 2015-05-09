@@ -73,7 +73,7 @@ class TaggedTool(models.Model):
   content_object = generic.GenericForeignKey('content_type', 'object_id')
   order = models.IntegerField(default=9999)
 
-class ToolsMixin():
+class ToolsMixin(models.Model):
   @cached_property
   def first_tool(self):
     return self.get_tools()[0]

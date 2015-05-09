@@ -78,7 +78,7 @@ class CourseManager(models.Manager):
     courses = [course for course in query_set if not course.open_sessions]
     return courses
 
-class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
+class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
   name = models.CharField(max_length=64)
   slug = property(lambda self: slugify(self.name))
   active = models.BooleanField(default=True) # only used with the reshedule view

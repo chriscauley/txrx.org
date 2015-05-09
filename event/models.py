@@ -34,7 +34,7 @@ REPEAT_CHOICES = (
   ('month-number','Monthly (by day number)'),
   )
 
-class Event(models.Model,PhotosMixin):
+class Event(PhotosMixin,models.Model):
   name = models.CharField(max_length=128,null=True,blank=True)
   _ht = "Optional. Alternative name for the calendar."
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
