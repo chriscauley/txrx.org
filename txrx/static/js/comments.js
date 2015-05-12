@@ -1,6 +1,7 @@
 function commentReply(pk) {
   // add to immediate child so child comments don't get form
-  riot.mount("#c"+pk+" > comment-form",{parent_pk:pk});
+  $("#c"+pk+" > .comment-form").html("<comment-form></comment-form>");
+  riot.mount("#c"+pk+" > .comment-form comment-form",{parent_pk:pk});
 }
 
 function commentEdit(pk) {
@@ -17,20 +18,19 @@ function commentEdit(pk) {
 
 function commentNew(content_type,object_pk) {
   data.form_url = "/can_comments/post/";
-  riot.mount("#c"+pk+" > comment-form",{parent_pk:pk});
+  $("#c"+pk+" > comment-form",{parent_pk:pk});
 }
 
-function commentPost(form) {
+function commentPost(e,that) {
+  form = e.target;
   $(form).addClass('loading');
   $.post(
     form.action,
     $(form).serializeArray(),
     function(data) {
-      if ($("#c"+data.pk).length) {
-        riot.mount("#c"+data.pk,data);
-      } else {
-      $(form).replaceWith(riot.mount(form,data));
-      }
+      // #! TODO: don't push data, splice, update url, and change focus
+      that.parent.comments.push(data);
+      that.parent.update();
     },
     'json'
   )

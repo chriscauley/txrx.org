@@ -4,12 +4,10 @@
 {% block title %}Classes + Workshops{% endblock %}
 {% block header %}{% endblock %}
 
-{% block head %}
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
-<script src="{{ STATIC_URL }}js/ng-infinite-scroll.js"></script>
-<script src="{{ STATIC_URL }}classes.json?v={% now "ymd_his" %}"></script>
-{% endblock %}
 {% block extrajs %}
+<script src="{{ STATIC_URL }}classes.json?v={% now "ymd_his" %}"></script>
+<script src="{{ STATIC_URL }}tags/course/filters.tag" type="riot/tag"></script>
+<script src="{{ STATIC_URL }}tags/course/list.tag" type="riot/tag"></script>
 <script src="{{ STATIC_URL }}js/course.js"></script>
 <script>
 var USER_SESSIONS = [
@@ -32,15 +30,8 @@ USER_COURSE_IDS = [];
   </h1>
 </div>
 <div style="clear:both;"></div>
-<div ng-app="myApp" ng-controller="DemoController">
 <div class="col-sm-3 col-md-2 col-lg-2" id="side">
-  <input type="checkbox" id="toggle_filters" />
-  <label for="toggle_filters" class="btn btn-success">Filter by Subject</label>
-  <form onsubmit="applyFilters(this);return false;" class="filters course_filters" autocomplete="off">
-    <input name="q" class="form-control" placeholder="Search Classes" ng-keyup="filterSearch();"
-           id="courseSearch" />
-    {% include "course/_filters.html" %}
-  </form>
+  <course-filters></course-filters>
 </div>
 <div class="col-sm-9 col-md-10 col-lg-10">
   {% if pending_evaluations %}
@@ -73,15 +64,19 @@ USER_COURSE_IDS = [];
   </ul>
   <div class="tab-content">
     <div class="tab-pane active course_list" id="all_classes">
-      <div infinite-scroll="loadMore()" infinite-scroll-distance="1">
-        {% include "course/_course_row.html" %}
+      <course-list id="scheduled-courses"></course-list>
+      <div class="course_divider" style="display:none">
+        <h2>Classes not Scheduled</h2>
+        <p class="alert alert-warning">
+          The classes below are not currently scheduled but are classes taught at TXRX. Click the "Email me the next time this class is scheduled" button on the class page to be notified when a new session is posted.
+        </p>
       </div>
+      <course-list id="unscheduled-courses"></course-list>
     </div>
     <div class="tab-pane needs_ajax" id="myclasses"></div>
     {% if instructor_sessions %}
     <div class="tab-pane needs_ajax" id="instructor_sessions"></div>
     {% endif %}
   </div>
-</div>
 </div>
 {% endblock %}

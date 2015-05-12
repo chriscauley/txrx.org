@@ -86,6 +86,8 @@ class ToolsMixin(models.Model):
   def _get_tools(self):
     return list(Tool.objects.filter(taggedtool__content_type_id=self._ct_id,
                                      taggedtool__object_id=self.id).order_by("taggedtool__order"))
+  class Meta:
+    abstract = True
 
 class ToolCertification(models.Model):
   name = models.CharField(max_length=32)
