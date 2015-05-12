@@ -30,3 +30,46 @@ comment-list .comment_actions a {
   padding: 0 9px;
   &:first-child { border: 0; padding-left: 0; }
 }
+
+/* stuff from old styling that isn't converted yet */
+.comment:target > .comment_outer { background-color: @successBackground; }
+/* comments */
+h2.section_title {
+  background: @well-bg;
+  font-size: 18px;
+  padding: 0 10px;
+}
+
+#comments {
+  h2 { margin: 20px 0 5px; }
+  textarea { height: 150px; max-width: 100%; width: 350px; }
+}
+
+#mptt-comments-tree {
+  min-height: 20px;
+}
+
+#mptt-comments-tree .comment {
+  .comment:last-child { margin-bottom: 0; }
+  &.collapsed {
+    height: 20px;
+    overflow: hidden;
+    .comment {
+      display: none;
+    }
+    .expand-link:before { content: "[+]"; }
+  }
+  .expand-link:before { content: "[-]"; font-weight: normal; font-family: monospace; }
+  a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
+.comment_form .md {
+  display: none;
+  margin-bottom: 20px;
+  &.show { display: block; }
+  tr { border: 1px gray solid; border-left: 0; }
+  td { border-left: 1px gray solid; }
+}

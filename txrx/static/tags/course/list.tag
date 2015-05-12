@@ -11,7 +11,7 @@
         <div class="description">{ short_description }</div>
         <div class="enrolled-status" data-status={ enrolled_status }></div>
         <div class="sessions" if={ active_sessions.length }>
-          <!--<span class="next_session { active_sessions.0.closed_status }">{ active_sessions.0.short_dates }</span>-->
+          <span class="next_session { active_sessions[0].closed_status }">{ active_sessions[0].short_dates }</span>
           <div class="pull-right">
             <span class="full_sessions" if={ full_sessions.length }>
               [{ full_sessions.length } Full<span class=" hidden-xs"> Session{ (full_sessions.length > 1)?"s":"" }</span>]
