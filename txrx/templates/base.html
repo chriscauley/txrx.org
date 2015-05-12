@@ -4,9 +4,10 @@
   <head>
     <title>{% block full_title %}{% block title %}{% endblock %} - {{ SITE_NAME }}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="google-site-verification" content="5BXTZkZEubZ_azCsu7q469YXtV6tYbDOVeTQ2enG88o" />
     {% block extra_head %}{% endblock %}
     {% include "_styles.html" %}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}font-awesome-4.2.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
     <script type="text/javascript">
       {% if settings.DEBUG %}
       var _NOTIFY_URL = "http://dev.txrxlabs.org:8009/tx/rx/ipn/handler/"
@@ -22,7 +23,7 @@
     <script src="{{ STATIC_URL }}js/init.js"></script>
     <script src="{{ STATIC_URL }}lightbox/js/lightbox.min.js"></script>
     <script src="{{ STATIC_URL }}js/jsi18n.js"></script>
-    <script src="{{ STATIC_URL }}mptt_comments/js/mptt_comments.js"></script>
+    {#<script src="{{ STATIC_URL }}mptt_comments/js/mptt_comments.js"></script>#}
     <script src="{{ STATIC_URL }}js/favico.js"></script>
     <script src="{{ STATIC_URL }}js/jvfloat.js"></script>
     {% endcompress %}
@@ -48,14 +49,18 @@
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     {% block analytics %}{{ ANALYTICS_CODE|safe }}{% endblock %}
+    {% comment %}
     <script type="text/javascript" src="//ws.sharethis.com/button/buttons.js"></script>
     <script type="text/javascript">stLight.options({publisher: "56794c5c-23aa-4e30-b62c-dcc177306755", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
+    {% endcomment %}
   </head>
   <body>
+    {# this can eventually be moved int _cart.html #}
+    {% include "course/_cart.html" %}
     <div class="container">
       {% block nav %}{% include "_nav.html" with page="home" %}{% endblock %}
       {% block messages %}{% include "_messages.html" %}{% endblock %}
-      
+
       <div class="row" id="main">
         {% block main %}
         <div class="col-sm-6 col-md-8">
@@ -74,6 +79,13 @@
       <footer>
         {% include "footer.html" %}
       </footer>
+      <div id="bot_right">
+        {% if request.theme == "dark" %}
+        <a href="?set_theme=default">Who turned out the Lights?</a>
+        {% else %}
+        <a href="?set_theme=dark">The Darkness Calls</a>
+        {% endif %}
+      </div>
       {% endblock %}
     </div>
     {% compress js %}
@@ -90,6 +102,7 @@
     <script src="{{ STATIC_URL }}less/bootstrap/js/popover.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/tab.js"></script>
     {% endcompress %}    
+    {% block extrajs %}{% endblock %}
     <script src="{{ STATIC_URL }}blog.js"></script>
     <script>
 
@@ -107,12 +120,5 @@
     </script>
     {% block extra_body %}
     {% endblock %}
-    <div id="bot_right">
-      {% if request.theme == "dark" %}
-      <a href="?set_theme=default">Who turned out the Lights?</a>
-      {% else %}
-      <a href="?set_theme=dark">The Darkness Calls</a>
-      {% endif %}
-    </div>
   </body>
 </html>

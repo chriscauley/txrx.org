@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block main %}
+<div id="map">
+  <div class="col-sm-3">
+    <h1>Today at TXRX Labs</h1>
+    {% for time,events in event_tuples %}
+    <div class="well">
+      <h2>{{ time|date:"P" }}</h2>
+      <ul class="event_list">
+        {% for event in events %}
+        <li class="room">
+          <span class="room_marker" style="background:{{ event.room.roomgroup.color }}">
+            {{ event.room.map_key|default_if_none:"" }}</span>
+          <span>{{ event.name }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="col-sm-9">
+    <div id="floorplan_wrapper">
+      <canvas id="floorplan"></canvas>
+      <div class="legend">
+        <h1>Legend</h1>
+        <ul class="event_list">
+          {% for roomgroup in roomgroups %}
+          <li class="room">
+            <span class="room_marker" style="background: url({{ roomgroup.fill.file.url }}) center"></span>
+            <span>{{ roomgroup.name }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+setTimeout(function() {window.location = window.location;},15*60*1000);
+
+var LOCATION_DATA = {
+  dxf: {{ location.dxf_as_json|safe }},
+}
+
+var x_max = -Infinity;
+var y_max = -Infinity;
+var x_min = Infinity;
+var y_min = Infinity;
+var scale = 5.3;
+var rotate = true;
+var mirror_x = false, mirror_y = true;
+var fill_images = {};
+
+// calculate bounds
+for (var di=0;di<LOCATION_DATA.dxf.length;di++) {
+  var dxf = LOCATION_DATA.dxf[di];
+  for (pi=0;pi<dxf.points.length;pi++) {
+    p = dxf.points[pi];
+    x_max = Math.max(x_max,p[0]);
+    x_min = Math.min(x_min,p[0]);
+    y_max = Math.max(y_max,p[1]);
+    y_min = Math.min(y_min,p[1]);
+  }
+}
+
+var WIDTH = (x_max - x_min)*scale+4;
+var HEIGHT = (y_max - y_min)*scale+2;
+
+if (rotate) {
+  var HEIGHT = (x_max - x_min)*scale;
+  var WIDTH = (y_max - y_min)*scale;
+}
+
+// correct so that it's 0,0 for x_min,y_min
+for (var di=0;di<LOCATION_DATA.dxf.length;di++) {
+  var dxf = LOCATION_DATA.dxf[di];
+  for (pi=0;pi<dxf.points.length;pi++) {
+    p = dxf.points[pi];
+    if (rotate) {
+      dxf.points[pi] = [WIDTH-scale*(p[1]-y_min),scale*(p[0]-x_min)];
+    } else {
+      dxf.points[pi] = [scale*(p[0]-x_min),HEIGHT-scale*(p[1]-y_min)];
+    }
+    if (mirror_x) { dxf.points[pi][0] = WIDTH - dxf.points[pi][0]; }
+    if (mirror_y) { dxf.points[pi][1] = HEIGHT - dxf.points[pi][1]; }
+  }
+}
+
+function draw () {
+  for (var ri=0;ri<rooms.length;ri++) {
+    rect(rooms[ri],context);
+  }
+}
+
+// create rooms
+var rooms = [];
+var floorplan_wrapper = document.getElementById('floorplan_wrapper');
+var room_map = {};
+for (var di=0;di<LOCATION_DATA.dxf.length;di++) {
+  var dxf = LOCATION_DATA.dxf[di];
+  var x_max = -Infinity;
+  var y_max = -Infinity;
+  var x_min = Infinity;
+  var y_min = Infinity;
+  for (pi=0;pi<dxf.points.length;pi++) {
+    p = dxf.points[pi];
+    x_max = Math.max(x_max,p[0]);
+    x_min = Math.min(x_min,p[0]);
+    y_max = Math.max(y_max,p[1]);
+    y_min = Math.min(y_min,p[1]);
+  }
+  if (dxf.room && dxf.room.fill && !fill_images[dxf.room.fill]) {
+    var img = document.createElement('img');
+    img.src = dxf.room.fill;
+    fill_images[dxf.room.fill] = img;
+    $(img).load(draw);
+  }
+  rooms.push({
+    id: dxf.id,
+    x: x_min,
+    y: y_min,
+    w: x_max-x_min,
+    h: y_max-y_min,
+    color: dxf.room?dxf.room.color:"white",
+    fill: dxf.room?dxf.room.fill:null,
+    stroke: "black"
+  });
+  if (dxf.room && dxf.room.in_calendar) {
+    var color = dxf.room.color || 'white';
+    var room_marker = document.createElement('div');
+    room_marker.style.backgroundColor = color;
+    room_marker.className = 'room_marker';
+    room_map[color] = room_map[color] || [];
+    room_map[color].push(dxf);
+    room_marker.innerHTML = dxf.room.map_key;
+    room_marker.style.left = (x_max+x_min)/2+"px";
+    room_marker.style.top = (y_max+y_min)/2+"px";
+    room_marker.title = dxf.room.name;
+    floorplan_wrapper.appendChild(room_marker);
+  }
+}
+
+var canvas = document.getElementById("floorplan");
+canvas.width = WIDTH+2;
+canvas.height = HEIGHT+2;
+var context = canvas.getContext("2d");
+
+draw();
+
+function rect(r,ctx) {
+  ctx.beginPath();
+  ctx.rect(r.x,r.y,r.w,r.h);
+  ctx.fillStyle = r.color;
+  if (r.fill) {
+    pattern = ctx.createPattern(fill_images[r.fill],'repeat');
+    ctx.fillStyle = pattern;
+  }
+  ctx.fill();
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = r.stroke;
+  ctx.stroke();
+}
+
+function findRoom(e) {
+  var x = e.offsetX;
+  var y = e.offsetY;
+  for (var ri=0;ri<rooms.length;ri++) {
+    var room = rooms[ri];
+    if ((room.x < x) && (x < room.x + room.w)) {
+      if ((room.y < y) && (y < room.y + room.h)) {
+        console.log(room.id);
+      }
+    }
+  }
+}
+canvas.addEventListener("click",findRoom);
+
+</script>
+{% endblock %}

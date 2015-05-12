@@ -278,8 +278,14 @@ function Cart(){
     form.appendChild(me.createHiddenElement("business", me.email ));
     form.appendChild(me.createHiddenElement("currency_code", "me.currency"));
     form.appendChild(me.createHiddenElement("notify_url", window._NOTIFY_URL));
-    form.appendChild(me.createHiddenElement("custom",window._USER_NUMBER));
-    
+
+    var email_input = document.getElementById("custom_email");
+    if (email_input && email_input.value && email_input.value.match('@')) {
+      form.appendChild(me.createHiddenElement("custom",email_input.value));
+    } else {
+      form.appendChild(me.createHiddenElement("custom",window._USER_NUMBER));
+    }
+
     if( me.taxRate ){
       form.appendChild(me.createHiddenElement("tax_cart",me.taxCost ));
     }
@@ -602,12 +608,28 @@ function Cart(){
 	  div.removeChild( div.childNodes[0] );
 	}
 	
-
+        
 	for(var j=0, jLen = newRows.length; j<jLen; j++){
 	  div.appendChild( newRows[j] );
 	}
       }
 
+    }
+
+    var subtotals = document.querySelector(".checkout-box .subtotals");
+    subtotals.innerHTML = "";
+    if (me.discount != 1 && me.total) {
+      var e = document.createElement("div");
+      _total = Math.round(me.total/me.discount,2);
+      var subtotal = document.createElement("div");
+      subtotal.className = "cartSubtotal";
+      subtotal.innerHTML = "$" + _total;
+      var discount = document.createElement("div");
+      discount.className = "cartDiscount";
+      discount.innerHTML = "$" + Math.round(_total*(1-me.discount),2) + " ("+Math.round(100*(1-me.discount))+"%)";
+      e.appendChild(subtotal);
+      e.appendChild(discount);
+      subtotals.appendChild(e);
     }
   };
   
@@ -618,10 +640,10 @@ function Cart(){
       outputValue = me.valueToCurrencyString(parseFloat(item.price)*parseInt(item.quantity,10) );
       break;
     case "increment":
-      outputValue = me.valueToLink( "+" , "javascript:;" , "onclick=\"simpleCart.items[\'" + item.id + "\'].increment();\"" );
+      outputValue = me.valueToLink( "<i class='fa fa-plus-circle'></i>" , "javascript:;" , "onclick=\"simpleCart.items[\'" + item.id + "\'].increment();\"" );
       break;
     case "decrement":
-      outputValue = me.valueToLink( "-" , "javascript:;" , "onclick=\"simpleCart.items[\'" + item.id + "\'].decrement();\"" );
+      outputValue = me.valueToLink( "<i class='fa fa-minus-circle'></i>" , "javascript:;" , "onclick=\"simpleCart.items[\'" + item.id + "\'].decrement();\"" );
       break;
     case "remove":
       outputValue = me.valueToLink( "Remove" , "javascript:;" , "onclick=\"simpleCart.items[\'" + item.id + "\'].remove();\"" );
@@ -918,6 +940,9 @@ function Cart(){
       }
       
     });
+    if (me.discount) {
+      me.total = me.total * me.discount;
+    }
     me.shippingCost = me.shipping();
     me.taxCost = parseFloat(me.total)*me.taxRate;
     me.finalTotal = me.shippingCost + me.taxCost + me.total;

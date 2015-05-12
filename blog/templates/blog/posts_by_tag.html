@@ -8,6 +8,6 @@
 
 {% block content %}
 {% for post in posts %}
-{% include "_post_content.html" with truncate_posts="True" %}
+{% include "blog/_content.html" with truncate_posts="True" %}
 {% endfor %}
 {% endblock %}

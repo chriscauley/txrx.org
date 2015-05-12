@@ -6,7 +6,7 @@ from django.http import QueryDict, Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from ..models import Course, Section, Term, Subject, Session, Enrollment, ClassTime, Evaluation
+from ..models import Course, Term, Subject, Session, Enrollment, ClassTime, Evaluation
 from ..forms import EmailInstructorForm, EvaluationForm
 from membership.models import UserMembership
 from event.utils import make_ics,ics2response
@@ -15,12 +15,16 @@ from paypal.standard.ipn.models import *
 
 @login_required
 def index(request):
-  return TemplateResponse(request,"course/evaluations.html",{})
+  pending_evaluations = Enrollment.objects.pending_evaluation(user=request.user)
+  values = {
+    'pending_evaluations': pending_evaluations
+  }
+  return TemplateResponse(request,"course/evaluations.html",values)
 
 @login_required
 def detail(request,enrollment_id):
   enrollment = get_object_or_404(Enrollment,pk=enrollment_id,user=request.user)
-  form = EvaluationForm(request.POST or None)
+  form = EvaluationForm(request.POST or None,enrollment=enrollment)
   if request.POST and form.is_valid():
     evaluation = form.save(commit=False)
     evaluation.user = request.user
@@ -45,7 +49,7 @@ def instructor_detail(request,instructor_id=None):
     return HttpResponseNotAllowed()
   if not instructor_id:
     instructor_id = request.user.id
-  sessions = Session.objects.filter(user_id=instructor_id)
+  sessions = Session.objects.filter(user_id=instructor_id).order_by("-first_date")
   session_evaluations = []
   for session in sessions:
     evaluations = Evaluation.objects.filter(enrollment__session=session)

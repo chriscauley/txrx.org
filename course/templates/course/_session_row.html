@@ -1,45 +1,47 @@
-{% load txrx_tags thumbnail crop_util %}
-<div class="course filterable well{% if session.full %} full{% endif %}{% if session.last_date < yesterday %} past{% endif %}{% if session in user_sessions %} success{% endif %}"
-     id="c{{session.id}}" data-subject="{% for subject in session.all_subjects %}{{ subject }},{% endfor %}"
-     data-date="{{ session.first_date|date:"Ymd" }}">
-  <a href="{% url "course:detail" session.slug %}" class="picture">
-    {% thumbnail session.first_photo|get_override:"landscape_crop" "298x199" crop="center" as im %}
-    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
-    {% endthumbnail %}
-  </a>
-  <div class="details">
-    <a href="{% url "course:detail" session.slug %}" class="title">
-      {% if session.branding %}
-      {% thumbnail session.branding.get_small_image "150x40" crop="center" as im %}
-      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"
-           style="float:left;margin: 5px 10px 0 0;" />
-      {% endthumbnail %}
-      {% endif %}
-      {{ session.section.course }}</a>
-    <div class="dates"><small>
-        {{ session.get_short_dates }}
-        with <a href="{% url "member_detail" session.user.username %}">
-          <i class="icon-user"></i>{{ session.get_instructor_name|noemail }}</a>
-    </small></div>
-    <div class="bottom">
-      <div class="subjects">
-        {% for subject in session.subjects %}
-        {{ subject|upper }}
-        {% endfor %}
-      </div>
-      {% if session.section.get_notes %}
-      <div class="notes">
-        {% for note,title in session.section.get_notes %}
-        <small class="has_notes" data-tooltip="{{ title }}"><span>{{ note }}</span></small>
-        {% endfor %}
-      </div>
+{% load txrx_tags %}
+<div class="session well" id="s{{ session.id }}">
+  {% if request.user.is_superuser or request.user == session.user %}
+  <a href="{% url "course:instructor_session" session.pk %}" class="instructor-link">
+    <i class="fa fa-edit"></i></a>
+  {% endif %}
+  <div class="dates">
+    {% for classtime in session.classtime_set.all %}
+    <div>{{ classtime|format_classtime }}</div>
+    {% endfor %}
+  </div>
+  {% if session.full %}
+  <b class="full">This session is full</b>
+  {% else %}
+  <div>
+    {% if course.fee %}
+    with {{ session.user.get_full_name }}
+    {% if not session.past %}
+    <button class="btn btn-primary add-to-cart" onclick="addClass({{ session.id }});">
+      Add this session to cart</button>
+    <button class="btn btn-primary view-cart"  data-toggle="modal" data-target="#cartModal">
+      <i class="fa fa-shopping-cart"></i> View Cart</button>
+    {% endif %}
+    {% else %}
+    <div class="RsvpLink{% if enrollment.session == session %} attending{% endif %}">
+      {% if request.user.is_authenticated %}
+      <button class="btn btn-success rsvp" onclick="rsvp({{ session.id }},'{{ session.get_rsvp_url }}');">
+        RSVP for this event</button>
+      <button class="btn btn-danger unrsvp" onclick="rsvp({{ session.id }},'{{ session.get_rsvp_url }}?drop=1');">
+        Cancel RSVP</button>
+      {% else %}
+      You must
+      <a href="/accounts/login/?next={{ session.get_absolute_url|urlencode }}">Login</a>
+      to RSVP
       {% endif %}
     </div>
+    {% endif %}
   </div>
-  <div class="CartBox">
-    {% include "course/_enroll_link.html" %}
-  </div>
-  {% if not session.active %}
-  <div class="alert alert-danger">This class is not active, you only see it because you are logged in as a superuser</div>
   {% endif %}
 </div>
+<script>
+  window.SESSIONS_ON_PAGE = window.SESSIONS_ON_PAGE || {};
+  window.SESSIONS_ON_PAGE[{{ session.id }}] = {
+  'name': "<b>{{ session.course }}</b> {{ session.first_date|date:"m/d/Y" }}",
+  'fee': {{ session.course.fee }},
+  };
+</script>

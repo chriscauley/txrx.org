@@ -2,9 +2,7 @@
 {% load txrx_tags %}
 
 {% block full_title %}Course Evaluation{% endblock %}
-{% block header_content %}
-Evaluate {{ enrollment.session.section.course }}
-{% endblock %}
+{% block header_content %}Evaluate {{ enrollment.session.course }}{% endblock %}
 
 {% block content %}
 <h3>{{ enrollment.session.first_date }}</h3>
@@ -20,7 +18,8 @@ Evaluate {{ enrollment.session.section.course }}
     {{ field }}
     {{ field.label_tag }}
     {% elif field|is_select %}
-    {{ field.label_tag }}
+    {% if not forloop.first %}<hr/>{% endif %}
+    {{ field.label_tag }}&nbsp; &nbsp;
     {{ field }}
     {% else %}
     {{ field }}
@@ -38,6 +37,6 @@ Evaluate {{ enrollment.session.section.course }}
   <hr />
   {% endif %}
   {% endfor %}
-  <input type="submit" />
+  <input type="submit" class="btn btn-primary" />
 </form>
 {% endblock %}

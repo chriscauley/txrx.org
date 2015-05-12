@@ -4,6 +4,7 @@ INSTALLED_APPS = (
   'django.contrib.contenttypes',
   'django.contrib.sessions',
   'django.contrib.sites',
+  'django.contrib.sitemaps',
   'django.contrib.markup',
   'django.contrib.messages',
   'django.contrib.comments',
@@ -14,6 +15,9 @@ INSTALLED_APPS = (
   #'template_utils',
 
   # 3rd party
+  'markdown_deux',
+  'helpdesk',
+  'bootstrapform',
   'south',
   'sorl.thumbnail',
   'registration',
@@ -40,6 +44,7 @@ INSTALLED_APPS = (
   #'project',
   'instagram',
   'tool',
+  'contact',
   'course',
   'membership',
   'main',
@@ -120,6 +125,7 @@ SUIT_CONFIG = {
   # 'MENU_EXCLUDE': ('auth.group',),
   'MENU': (
     'blog',
+    'contact',
     {'app': 'course',
      'icon':'icon-calendar',
      'models': (
@@ -129,7 +135,6 @@ SUIT_CONFIG = {
        'course.evaluation',
        'geo.location',
        'geo.room',
-       'course.section',
        'course.session',
        'course.subject',
        #'course.term', #accessible through course.session

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load short_codes txrx_tags %}
+{% load short_codes %}
 
 {% block title %}{{ minutes.date|date:"Y/m/d" }} Meeting Minutes{% endblock %}
 {% block header_content %}Meeting Minutes for {{ minutes.date }}{% endblock %}
@@ -9,7 +9,7 @@
 {% for proposal in minutes.proposal_set.all %}
 <div class="well">
   <h3>{{ proposal }}</h3>
-  <i>Proposed by {{ proposal.user.username|noemail }}</i>
+  <i>Proposed by {{ proposal.user.username }}</i>
   {{ proposal.final_text|explosivo }}
 </div>
 {% endfor %}
@@ -21,7 +21,7 @@
   <p><b>Total:</b>{{ minutes.get_member_count }}</p>
   <ul>
     {% for member in minutes.members_present.all %}
-    <li>{{ member.username|noemail }}</li>
+    <li>{{ member.username }}</li>
     {% endfor %}
   </ul>
 </div>

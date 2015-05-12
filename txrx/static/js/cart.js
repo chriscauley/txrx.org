@@ -4,16 +4,20 @@ function showLogin() {
 }
 
 simpleCart.successURL = window.location.origin+"/classes/?success"
-simpleCart.cartHeaders = ["Name", "Price", "Quantity", "Remove"]
+simpleCart.cartHeaders = ["Name", "Price", "Decrement", "Increment","Quantity", "Remove"]
 
 function showCart() {
   $("#cart-modal").modal({width: 400, modal: true, minHight: 300});
 }
 
 function addClass(session_id) {
+  $(".SessionList .error").hide();
+  if (!session_id) { session_id = $("#session_selector").val(); }
+  if (!session_id) { $(".SessionList .error").show(); return; }
   var session = window.SESSIONS_ON_PAGE[session_id];
   addItem(session.name,session.fee,session_id);
   toggleCourses(session.name);
+  $("#cartModal").modal({show:true})
 }
 
 function addItem(name,price,id) {
@@ -22,11 +26,18 @@ function addItem(name,price,id) {
 
 function toggleCourses(name) {
   $(".in-cart").removeClass("in-cart");
-  for (id in simpleCart.items) { $("#c"+id).addClass("in-cart") }
+  var has_items = false;
+  $("#cartEmpty").show();
+  for (id in simpleCart.items) {
+    if ($("#s"+id).length) {
+      $("#s"+id).addClass("in-cart");
+    }
+    $("#cartEmpty").hide();
+    has_items = true;
+  }
   simpleCart.update();
-  $("#cartEmpty").hide();
-  if ($("#cart .itemContainer").length == 0) { $("#cartEmpty").show(); $("#mobileCart").hide() }
-  else { $("#mobileCart").show(); }
+  if (has_items) { $("#mobileCart,nav .btn-cart").show(); }
+  else { $("#mobileCart,nav .btn-cart").hide(); }
   $(".recentAdd").removeClass("recentAdd");
   $(".itemContainer").each(function() {
     if ($(this).find(".itemName").text() == name) {
@@ -36,32 +47,35 @@ function toggleCourses(name) {
 }
 
 function applyFilters(that) {
-  var filters = $(that).closest("form").find("select");
+  // Controls filters found in widgets/filters.html and course/_filters.html
+  var form = $(that);
+  var data = form.serializeArray();
   var items = $(".filterable").show();
-  var subject = $("[name=subject]").val();
   if ($("#show_closed").attr("checked")) { $(".course_list .past").show(); }
   else { $(".course_list .past").hide(); }
-  items.filter(function() {
-      return $(this).data("subject").search(subject)<0;
-  }).hide();
+  for (var i=0; i<data.length;i++) {
+    var name = data[i].name;
+    var value = data[i].value;
+    if (!value) { continue }
+    items.filter(function() {
+      return $(this).data(name).search(value)<0;
+    }).hide();
+  }
 }
 
 function rsvp(session_id,url) {
-  var row = $("#c"+session_id);
+  var row = $("#s"+session_id);
   row.addClass("loading");
   row.find(".message").hide();
   $.get(
     url,
     function(data) {
       row.removeClass("loading");
+      row.find(".RsvpLink").removeClass("attending");
       if (data[0]>0) {
 	row.find(".RsvpLink").addClass("attending");
-	row.find(".number_attending").text("RSVP'd x "+data[0])
       }
-      else { row.find(".RsvpLink").removeClass("attending"); }
-      row.removeClass("full");
-      if (data[2]) { row.addClass("full"); }
-      if (data[1]) { row.find(".RsvpLink .message").html(data[1]).show(); };
+      $(".class-enrollment").hide();
     },
     "json"
   )
@@ -116,7 +130,22 @@ $(function() {
       simpleCart.items[id].price = session_price;
     }
     simpleCart.update();
-    if (discounted) { $("#main").prepend("<div class='alert alert-success'>The price of " + discounted + " classes in your cart have decreased. This is most likely because your membership level has changed (eg: you logged out). Please notify <a href='mailto:classes@txrxlabs.org'>classes@txrxlabs.org</a> if you believe this is in error.</div>"); }
-    if (undiscounted) { $("#main").prepend("<div class='alert alert-success'>The price of " + undiscounted + " classes in your cart have increased. This is most likely becaus your membership level has changed (eg: you logged in). Please notify <a href='mailto:classes@txrxlabs.org'>classes@txrxlabs.org</a> if you believe this is in error.</div>"); }
+    if (discounted) { $("#main").prepend("<div class='alert alert-success'>The price of " + discounted + " classes in your cart have decreased. This is most likely because your membership level has changed (eg: you logged in). Please notify <a href='mailto:classes@txrxlabs.org'>classes@txrxlabs.org</a> if you believe this is in error.</div>"); }
+    if (undiscounted) { $("#main").prepend("<div class='alert alert-success'>The price of " + undiscounted + " classes in your cart have increased. This is most likely becaus your membership level has changed (eg: you logged out). Please notify <a href='mailto:classes@txrxlabs.org'>classes@txrxlabs.org</a> if you believe this is in error.</div>"); }
   }
+});
+
+$(function() {
+  $('[data-toggle="tab"]').click(function(e) {
+    var $this = $(this), loadurl = $this.data('href'), targ = $($this.attr('href'));
+    if (!loadurl) { return true; }
+
+    $this.removeData('href');
+
+    if (targ.hasClass("needs_ajax")) {
+      $.get(loadurl, function(data) {
+        targ.html(data).removeClass("needs_ajax");
+      });
+    }
+  });
 });

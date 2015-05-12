@@ -86,14 +86,9 @@ def nav(request):
     calendar_protocols = ['http://www.google.com/calendar/render?cid=http://','webcal://'], #! move to event.context
     all_classes_ics = '%s/classes/ics/all_classes.ics'%settings.SITE_DOMAIN, #! move to course.context
     pressitems = PressItem.objects.all(),
-    login_redirect = login_redirect
+    login_redirect = login_redirect,
+    SITE_DOMAIN = "https://txrxlabs.org",
   )
-
-def evaluations(request):
-  _e = []
-  if request.user.is_authenticated():
-    _e = Enrollment.objects.pending_evaluation(user=request.user)
-  return {'pending_evaluations': _e}
 
 def motd(request):
   if True:

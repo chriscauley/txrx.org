@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django import forms
-from course.models import Subject, Course, Section, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseCompletion
 from db.forms import StaffMemberForm
 from db.admin import NamedTreeModelAdmin
 
+from .models import Subject, Course, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseCompletion
+from event.admin import OccurrenceModelInline
 from media.admin import TaggedPhotoInline, TaggedFileInline
 from tool.admin import TaggedToolInline
 
@@ -13,7 +14,8 @@ class CourseCompletionInline(admin.TabularInline):
   raw_id_fields = ('user',)
 
 class CourseAdmin(admin.ModelAdmin):
-  list_display = ("name","tool_count","photo_count")
+  list_display = ("name","_notifies_count","active","tool_count","photo_count","content","visuals","presentation")
+  list_editable = ("content","visuals","presentation")
   readonly_fields = ("_notifies",)
   filter_horizontal = ("subjects",)
   inlines = [CourseCompletionInline, TaggedPhotoInline, TaggedToolInline, TaggedFileInline]
@@ -21,8 +23,10 @@ class CourseAdmin(admin.ModelAdmin):
     return len(obj.get_tools())
   def photo_count(self,obj):
     return len(obj.get_photos())
+  def _notifies_count(self,obj):
+    return obj.notifycourse_set.count()
   def _notifies(self,obj):
-    out = ''
+    out = "<b>%s notifies</b><br />"%self._notifies_count(obj)
     for notify in obj.notifycourse_set.all():
       out += "%s<br/>"%notify.user.email
     return out
@@ -35,22 +39,9 @@ class CourseAdmin(admin.ModelAdmin):
       if subject.parent and not (subject.parent in subjects):
         form.instance.subjects.add(subject.parent)
 
-class ClassTimeInline(admin.TabularInline):
+class ClassTimeInline(OccurrenceModelInline):
   extra = 0
   model = ClassTime
-
-class SectionAdmin(admin.ModelAdmin):
-  save_as = True
-  list_display = ("__unicode__","prerequisites","requirements","max_students")
-  list_editable = ("prerequisites","requirements","max_students")
-  list_filter = ("course__active",'no_conflict',"room")
-  inlines = [TaggedFileInline]
-  def has_change_permission(self,request,obj=None):
-    if not obj:
-      return request.user.is_superuser
-    return request.user.is_superuser or (request.user in obj.list_users)
-  def has_delete_permission(self,request,obj=None):
-    return request.user.is_superuser
 
 class EnrollmentInline(admin.TabularInline):
   model = Enrollment
@@ -60,15 +51,17 @@ class EnrollmentInline(admin.TabularInline):
 class SessionAdmin(admin.ModelAdmin):
   form = StaffMemberForm
   ordering = ('-first_date',)
-  raw_id_fields = ('section','user')
-  readonly_fields = ('_first_date','get_room')
-  list_search = ('section__course__name','user__username')
+  raw_id_fields = ('course','user')
+  readonly_fields = ('_first_date','_last_date','get_room')
+  list_display = ("__unicode__","first_date","active")
   list_filter = ("publish_dt",)
   _first_date = lambda self,obj: getattr(obj,'first_date','Will be set on save')
   _first_date.short_description = 'first classtime'
+  _last_date = lambda self,obj: getattr(obj,'last_date','Will be set on save')
+  _last_date.short_description = 'last classtime'
   exclude = ('time_string','slug','publish_dt')
   inlines = (ClassTimeInline, EnrollmentInline, TaggedPhotoInline)
-  search_fields = ("user__username","user__email","section__course__name")
+  search_fields = ("user__username","user__email","course__name")
   class Media:
     js = ("js/course_admin.js",)
 
@@ -78,11 +71,14 @@ class EnrollmentAdmin(admin.ModelAdmin):
   search_fields = ("user__username","user__email","user__usermembership__paypal_email")
   raw_id_fields = ("user","session")
 
+class EvaluationAdmin(admin.ModelAdmin):
+  exclude = ('user','enrollment','anonymous')
+  readonly_fields = ('get_user',)
+
 admin.site.register(Subject,NamedTreeModelAdmin)
 admin.site.register(Course,CourseAdmin)
-admin.site.register(Section,SectionAdmin)
 admin.site.register(Enrollment,EnrollmentAdmin)
 admin.site.register(Session,SessionAdmin)
 admin.site.register(Term)
 admin.site.register(Branding)
-admin.site.register(Evaluation)
+admin.site.register(Evaluation,EvaluationAdmin)

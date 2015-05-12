@@ -1,11 +1,9 @@
 {% extends "base.html" %}
-{% load cache %}
 
 {% block header_content %}Become a Member of TX/RX Labs{% endblock %}
 {% block full_title %}Become a Member of TX/RX Labs{% endblock %}
 
 {% block main %}
-{% cache settings.LONG_CACHE memberships %}
 <script type="text/javascript">
 
 membership_form_parameters = {}; //this is established at the bottom of every form
@@ -24,7 +22,7 @@ function setHiddenFields(that) {
 <br />
 <div id="memberships" class="row">
   {% for group in groups %}
-  <div class="col-lg-4 {% if not forloop.last %}col-sm-6{% endif %}">
+  <div class="{% if forloop.first %}col-lg-offset-2 {% endif %}col-lg-4 col-sm-6">
     {% if groups|length != 1 %}<h2>{{ group }} Memberships:</h2>{% endif %}
     {% for m in group.active_memberships %}
     <span class="well membership">
@@ -52,7 +50,8 @@ function setHiddenFields(that) {
         <input type="hidden" name="t3" value="M">
         <input type="hidden" name="src" value="1">
         <input type="hidden" name="sra" value="1">
-        <select name="os0" onchange="setHiddenFields(this);">
+        <select name="os0" onchange="setHiddenFields(this);" {% if "Table Hacker" in m.name and not "open" in request.GET %}
+                disabled="disabled"{% endif %}>
           {% for rate in m.rates %}
           <option value="{{ m.name }} - {{ rate.description }}">{{ rate.description }}</option>
           {% endfor %}
@@ -61,7 +60,7 @@ function setHiddenFields(that) {
         <input type="hidden" name="RETURNURL" value="{{ settings.SITE_URL }}/joined/{{ user.id }}/">
         <div class="button_box">
           <input type="image" name="submit" alt="PayPal - The safer, easier way to pay online!"
-	         src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif">
+                 {% if "Table Hacker" in m.name and not "open" in request.GET %} disabled="disabled"{% endif %} src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif">
           <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="" width="1" height="1" border="0">
         </div>
       </form>
@@ -83,5 +82,4 @@ function setHiddenFields(that) {
 $(document).ready(function() {$("select").change()});
 </script>
 <div class="clear"></div>
-{% endcache %}
 {% endblock %}

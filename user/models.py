@@ -23,6 +23,12 @@ class UserManager(BaseUserManager):
 
   def create_superuser(self, username, email, password, **extra_fields):
     return self._create_user(username, email, password, True, True,**extra_fields)
+  
+  def get_or_none(self,*args,**kwargs):
+    try:
+      return self.get(*args,**kwargs)
+    except (self.model.DoesNotExist, self.model.MultipleObjectsReturned):
+      pass
 
 class User(AbstractBaseUser, PermissionsMixin):
   kwargs = dict(
@@ -58,8 +64,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     return "/users/%s/" % urlquote(self.email)
 
   def get_full_name(self):
-    full_name = '%s %s' % (self.first_name, self.last_name)
-    return full_name.strip()
+    full_name = '%s %s' % (self.first_name, self.last_name[:1])
+    return full_name.strip() or self.username
 
   def get_short_name(self):
     return self.first_name

@@ -1,8 +1,16 @@
-{% extends "base.html" %}
-
-{% block content %}
+<html>
+<head>
+<title>Server Error</title>
+</head>
+<body>
+{% if 'perfect-programming' in request.path %}
+<h1>Sever Error</h1>
+<p>Looks like we had a little boo-boo</p>
+{% else %}
 <h1>Server Error</h1>
 <p>
 An internal server error has occurred. The administrators have been notified and we will fix this as soon as possible. Please go back or try again.
 </p>
-{% endblock %}
+{% endif %}
+</body>
+</html>

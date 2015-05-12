@@ -1,0 +1,12 @@
+<div class="social_links">
+  <a target="popup" href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" class="popup facebook">
+    <i class="fa fa-facebook"></i></a>
+  <a target="popup" href="https://pinterest.com/pin/create/button/?url={{ request.build_absolute_uri|urlencode }}&media={{ SITE_DOMAIN }}{{ thing.first_photo.file.url|urlencode }}&description={{ thing|urlencode }}" class="popup pinterest"><i class="fa fa-pinterest-p"></i></a>
+  <a target="popup" href="http://twitter.com/home?status={{ thing|urlencode }}%20{{ request.build_absolute_uri|urlencode }}" class="popup twitter"><i class="fa fa-twitter"></i></a>
+  <a target="popup" href="https://plus.google.com/share?url={{ request.build_absolute_uri|urlencode }}"
+     class="popup google-plus"><i class="fa fa-google-plus"></i></a>
+</div>
+
+<script>
+$(".social_links .popup").click(function() { window.open(this.href,'name','width=600,height=400'); })
+</script>

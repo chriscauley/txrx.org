@@ -8,10 +8,63 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        pass
+        # Adding model 'Post'
+        db.create_table(u'blog_post', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User'])),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=200, blank=True)),
+            ('content', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('short_content', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=75)),
+            ('status', self.gf('django.db.models.fields.CharField')(default=0, max_length=30)),
+            ('publish_dt', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('create_dt', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('update_dt', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('featured', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('photo', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['media.Photo'], null=True, blank=True)),
+        ))
+        db.send_create_signal(u'blog', ['Post'])
+
+        # Adding unique constraint on 'Post', fields ['slug', 'user']
+        db.create_unique(u'blog_post', ['slug', 'user_id'])
+
+        # Adding model 'PressItem'
+        db.create_table(u'blog_pressitem', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=64)),
+            ('url', self.gf('django.db.models.fields.URLField')(max_length=256)),
+            ('publish_dt', self.gf('django.db.models.fields.DateField')()),
+        ))
+        db.send_create_signal(u'blog', ['PressItem'])
+
+        # Adding model 'Banner'
+        db.create_table(u'blog_banner', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('start_date', self.gf('django.db.models.fields.DateField')(default=datetime.date.today)),
+            ('end_date', self.gf('django.db.models.fields.DateField')(blank=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=64)),
+            ('header', self.gf('django.db.models.fields.CharField')(default='Featured Event', max_length=32)),
+            ('active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('src', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
+            ('url', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('weight', self.gf('django.db.models.fields.IntegerField')()),
+        ))
+        db.send_create_signal(u'blog', ['Banner'])
+
 
     def backwards(self, orm):
-        pass
+        # Removing unique constraint on 'Post', fields ['slug', 'user']
+        db.delete_unique(u'blog_post', ['slug', 'user_id'])
+
+        # Deleting model 'Post'
+        db.delete_table(u'blog_post')
+
+        # Deleting model 'PressItem'
+        db.delete_table(u'blog_pressitem')
+
+        # Deleting model 'Banner'
+        db.delete_table(u'blog_banner')
+
 
     models = {
         u'auth.group': {
@@ -26,22 +79,6 @@ class Migration(SchemaMigration):
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        },
-        u'auth.user': {
-            'Meta': {'ordering': "['username']", 'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
-            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
-            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
         u'blog.banner': {
             'Meta': {'ordering': "('name',)", 'object_name': 'Banner'},
@@ -68,7 +105,7 @@ class Migration(SchemaMigration):
             'status': ('django.db.models.fields.CharField', [], {'default': '0', 'max_length': '30'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200', 'blank': 'True'}),
             'update_dt': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']"})
         },
         u'blog.pressitem': {
             'Meta': {'ordering': "('-publish_dt',)", 'object_name': 'PressItem'},
@@ -76,23 +113,6 @@ class Migration(SchemaMigration):
             'publish_dt': ('django.db.models.fields.DateField', [], {}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '256'})
-        },
-        u'blog.profile': {
-            'Meta': {'object_name': 'Profile'},
-            'git_access_token': ('django.db.models.fields.CharField', [], {'max_length': '75', 'null': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'meta': ('django.db.models.fields.TextField', [], {'null': 'True'}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True'})
-        },
-        u'blog.setting': {
-            'Meta': {'object_name': 'Setting'},
-            'bio': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'blog_tagline': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
-            'blog_title': ('django.db.models.fields.CharField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
-            'timezone': ('timezones.fields.TimeZoneField', [], {'default': "'US/Central'", 'max_length': '100'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
@@ -142,7 +162,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'iid': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
             'profile_picture': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']", 'null': 'True', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'website': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
@@ -162,12 +182,28 @@ class Migration(SchemaMigration):
             'square_crop': ('crop_override.field.CropOverride', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['media.PhotoTag']", 'symmetrical': 'False', 'blank': 'True'}),
             'upload_dt': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']", 'null': 'True', 'blank': 'True'})
         },
         u'media.phototag': {
             'Meta': {'ordering': "('-name',)", 'object_name': 'PhotoTag'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '32'})
+        },
+        u'user.user': {
+            'Meta': {'ordering': "('username',)", 'object_name': 'User'},
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '254'}),
+            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
+            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         }
     }
 

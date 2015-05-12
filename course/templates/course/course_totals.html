@@ -16,7 +16,7 @@
   {% for session,totals in term_dict.sessions.items %}
   <tr>
     <td>{{ session.first_date|date:"Y/m/d" }}</td>
-    <td>{{ session.section.course }}</td>
+    <td>{{ session.course }}</td>
     <td>{{ totals.money }}</td>
     <td>{{ totals.attendance }}</td>
   </tr>

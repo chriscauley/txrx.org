@@ -8,24 +8,49 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        db.rename_table(u'auth_user','user_user',)
-        db.rename_table('auth_user_groups','user_user_groups')
-        db.rename_table('auth_user_user_permissions','user_user_user_permissions')
-        db.alter_column(u'user_user_groups', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User'], null=True))
-        db.alter_column(u'user_user_user_permissions', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User'], null=True))
-        if not db.dry_run:
-            # For permissions to work properly after migrating
-            orm['contenttypes.contenttype'].objects.filter(app_label='auth', model='user').update(app_label='user')
+        # Adding model 'User'
+        db.create_table(u'user_user', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('password', self.gf('django.db.models.fields.CharField')(max_length=128)),
+            ('last_login', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('is_superuser', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('username', self.gf('django.db.models.fields.CharField')(unique=True, max_length=30)),
+            ('email', self.gf('django.db.models.fields.EmailField')(unique=True, max_length=254)),
+            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('is_staff', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('date_joined', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+        ))
+        db.send_create_signal(u'user', ['User'])
+
+        # Adding M2M table for field groups on 'User'
+        db.create_table(u'user_user_groups', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('user', models.ForeignKey(orm[u'user.user'], null=False)),
+            ('group', models.ForeignKey(orm[u'auth.group'], null=False))
+        ))
+        db.create_unique(u'user_user_groups', ['user_id', 'group_id'])
+
+        # Adding M2M table for field user_permissions on 'User'
+        db.create_table(u'user_user_user_permissions', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('user', models.ForeignKey(orm[u'user.user'], null=False)),
+            ('permission', models.ForeignKey(orm[u'auth.permission'], null=False))
+        ))
+        db.create_unique(u'user_user_user_permissions', ['user_id', 'permission_id'])
+
 
     def backwards(self, orm):
-        db.rename_table(u'auth_user','user_user',)
-        db.rename_table('auth_user_groups','user_user_groups')
-        db.rename_table('auth_user_user_permissions','user_user_user_permissions')
-        db.alter_column(u'user_user_groups', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User'], null=True))
-        db.alter_column(u'user_user_user_permissions', 'user_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User'], null=True))
-        if not db.dry_run:
-            # For permissions to work properly after migrating
-            orm['contenttypes.contenttype'].objects.filter(app_label='auth', model='user').update(app_label='user')
+        # Deleting model 'User'
+        db.delete_table(u'user_user')
+
+        # Removing M2M table for field groups on 'User'
+        db.delete_table('user_user_groups')
+
+        # Removing M2M table for field user_permissions on 'User'
+        db.delete_table('user_user_user_permissions')
+
 
     models = {
         u'auth.group': {
@@ -49,8 +74,8 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'user.user': {
-            'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'Meta': {'ordering': "('username',)", 'object_name': 'User'},
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '254'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),

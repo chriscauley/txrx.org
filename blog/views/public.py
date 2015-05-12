@@ -14,7 +14,7 @@ from tagging.models import Tag
 from blog.models import Post
 import datetime, difflib
 
-def post_detail(request, username, slug, template_name="post_detail.html"):
+def post_detail(request, username, slug, template_name="blog/detail.html"):
   user = get_object_or_404(get_user_model(), username=username)
 
   post = get_object_or_404(Post,user=user,slug=slug)
@@ -27,8 +27,7 @@ def post_detail(request, username, slug, template_name="post_detail.html"):
     'post': post,
   })
 
-def post_list(request, username, post_type='published',
-        template_name="post_list.html"):
+def post_list(request, username, post_type='published',template_name="blog/index.html"):
   user = get_object_or_404(get_user_model(), username=username)
 
   if post_type == 'published':

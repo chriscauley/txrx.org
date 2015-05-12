@@ -4,35 +4,34 @@ from django.conf import settings
 from django.template.loader import render_to_string
 
 from course.models import Enrollment
-from txrx.utils import mail_on_fail
+from txrx.utils import print_to_mail
 from membership.models import LimitedAccessKey
 
 import datetime
 
 class Command (BaseCommand):
-  @mail_on_fail
+  @print_to_mail(subject="[LOG] Evaluation Reminder")
   def handle(self, *args, **options):
-    send_mail(
-      'Sending evaluations reminders!',
-      'this is to inform you that they have been sent. Hopefully they did not go twice',
-      settings.DEFAULT_FROM_EMAIL,
-      ['chris@lablackey.com'],
-      )
     yesterday = datetime.datetime.now()-datetime.timedelta(1)
     pe = Enrollment.objects.pending_evaluation()
     pe = pe.filter(evaluation_date__gte=yesterday)
-    print "sending %s evaluation emails"%pe.count()
-    for evaluation in pe:
-      if not evaluation.user.email:
+    if pe.count:
+      print "sending %s evaluation emails"%pe.count()
+    for enrollment in pe:
+      if not enrollment.user.email:
         continue
       _dict = {
-        'evaluation': evaluation,
-        'la_key': LimitedAccessKey.new(evaluation.user),
+        'evaluation': enrollment,
+        'la_key': LimitedAccessKey.new(enrollment.user),
         'domain': settings.SITE_URL
-        }
+      }
       send_mail(
         "Please evaluate the class you took from TX/RX",
         render_to_string("email/pending_evaluation.html",_dict),
         settings.DEFAULT_FROM_EMAIL,
-        [evaluation.user.email]
-        )
+        [enrollment.user.email]
+      )
+      enrollment.emailed=True
+      enrollment.save()
+      
+      print "Emailed %s about %s"%(enrollment.user.email,enrollment.session)

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block title %}Classes + Workshops{% endblock %}
+{% block header %}{% endblock %}
+
+{% block head %}
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+<script src="{{ STATIC_URL }}js/ng-infinite-scroll.js"></script>
+<script src="{{ STATIC_URL }}classes.json?v={% now "ymd_his" %}"></script>
+{% endblock %}
+{% block extrajs %}
+<script src="{{ STATIC_URL }}js/course.js"></script>
+<script>
+var USER_SESSIONS = [
+  {% for session in user_sessions %}
+  {{ session.json|safe }}{% if not forloop.last %},{% endif %}{% endfor %}
+]
+USER_COURSE_IDS = [];
+</script>
+{% endblock %}
+
+{% block main %}
+<div class="col-xs-12">
+  <h1 class="page_title">
+    Classes and Workshops
+    <div class="calendar_widget">
+      <a href="javascript:;" onclick="$('.add_to_calendar').toggle()">
+        <span class="glyphicon glyphicon-calendar"></span></a>
+      {% include "course/_add_to_calendar.html" with calendar_event=occurrence calendar_context="classes" %}
+    </div>
+  </h1>
+</div>
+<div style="clear:both;"></div>
+<div ng-app="myApp" ng-controller="DemoController">
+<div class="col-sm-3 col-md-2 col-lg-2" id="side">
+  <input type="checkbox" id="toggle_filters" />
+  <label for="toggle_filters" class="btn btn-success">Filter by Subject</label>
+  <form onsubmit="applyFilters(this);return false;" class="filters course_filters" autocomplete="off">
+    <input name="q" class="form-control" placeholder="Search Classes" ng-keyup="filterSearch();"
+           id="courseSearch" />
+    {% include "course/_filters.html" %}
+  </form>
+</div>
+<div class="col-sm-9 col-md-10 col-lg-10">
+  {% if pending_evaluations %}
+  <div class="alert alert-success">
+    <p>Please take a moment to evaluate the following class{{ pending_evaluations|pluralize:"es" }}. We rely on your feedback to improve our classes and to decide which classes to teach in the future.</p>
+    <ul>
+      {% for enrollment in pending_evaluations %}
+      <li>
+        {{ enrollment.session }}
+        <a class="btn btn-success" href="{% url "course:evaluation_detail" enrollment.id %}">
+          Evaluate</a>
+        <a class="btn btn-danger" href="{% url "course:evaluation_refuse" enrollment.id %}">
+          Decline Evaluation</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="active" id="all_classes_tab"><a href="#all_classes" role="tab" data-toggle="tab">
+        All Classes</a></li>
+    <li><a href="#myclasses" role="tab" data-toggle="tab"
+           data-href="{% url "course:user_ajax" "myclasses" %}">
+        My Classes ({{ user_sessions|length }})</a></li>
+    {% if instructor_sessions %}
+    <li><a href="#instructor_sessions" role="tab" data-toggle="tab"
+           data-href="{% url "course:user_ajax" "instructor" %}">
+        Instructor ({{ instructor_sessions|length }})</a></li>
+    {% endif %}
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active course_list" id="all_classes">
+      <div infinite-scroll="loadMore()" infinite-scroll-distance="1">
+        {% include "course/_course_row.html" %}
+      </div>
+    </div>
+    <div class="tab-pane needs_ajax" id="myclasses"></div>
+    {% if instructor_sessions %}
+    <div class="tab-pane needs_ajax" id="instructor_sessions"></div>
+    {% endif %}
+  </div>
+</div>
+</div>
+{% endblock %}

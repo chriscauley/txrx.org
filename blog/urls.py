@@ -1,5 +1,4 @@
 from django.conf.urls.defaults import patterns, url, include
-from django.views.decorators.cache import cache_page
 from django.contrib.sitemaps import views as sitemaps_views
 from django.http import HttpResponse
 

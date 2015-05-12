@@ -2,6 +2,7 @@
 section { padding-bottom: 25px; }
 section.banner { padding-bottom: 35px; }
 .comment:target > .comment_outer { background-color: @successBackground; }
+[ng-cloak] { display: none; }
 
 .transition(@value) {
   transition: @value;
@@ -50,6 +51,7 @@ h3.block_title {
   font-weight: normal;
   margin: 0 0 15px;
   text-transform: uppercase;
+  &.margin-top { margin: 15px 0 5px; }
 }
 
 #side {
@@ -126,6 +128,28 @@ form label.required {
 }
 
 form.filters { margin-bottom: 10px; }
+
+#toggle_filters,[for=toggle_filters] { display:none; }
+
+@media (max-width: @screen-xs-max) {
+  .course_filters { max-height: 0; overflow: hidden; transition: 0.5s; }
+  [for=toggle_filters] { display: block; margin-bottom: 10px; }
+  #toggle_filters:checked ~ .course_filters { max-height: 1000px; }
+}
+
+.list_filter {
+  display: block;
+  [type=radio] { display: none; }
+  label {
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+  }
+  input:checked ~ label { font-weight: bold; }
+  .child { display:none; }
+  // child categories are temporarily disabled
+  //input:checked ~ .child { display: block; }
+}
 
 #bot_right,#mobileCart {
   border: double 4px;

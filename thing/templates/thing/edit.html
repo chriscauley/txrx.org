@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load thumbnail crop_util short_codes%}
+
+{% block header %}{% endblock %}
+{% block title %}Add/Edit Project{% endblock %}
+{% block content %}
+<script>django={jQuery:$}</script>
+<script src="/static/admin/js/core.js"></script>
+<form method="POST">
+  {% csrf_token %}
+  {% include "_form.html" %}
+  <input type="submit" class="btn btn-success">
+</form>
+{% endblock %}

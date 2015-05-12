@@ -1,0 +1,52 @@
+#map {
+  height: 100%;
+  left: 0;
+  outline: 1px black solid;
+  padding: 0 30px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+.room_marker {
+  box-shadow: 1px 1px 2px black, inset 1px 1px 1px rgba(255,255,255,0.75);
+  border-radius: 100%;
+  color: white;
+  height: 26px;
+  font-weight: bold;
+  line-height: 26px;
+  margin: -13px 0 0 -13px;
+  text-align: center;
+  position: absolute;
+  text-shadow: 1px 1px 1px black;
+  width: 26px;
+}
+
+.event_list {
+  list-style: none;
+  padding: 0;
+  .room {
+    line-height: 26px;
+    list-style: none;
+    padding: 0 0 5px;
+    position: relative;
+    .room_marker {
+      margin: 0 5px 0 0;
+      position: static;
+    }
+    span {
+      display: inline-block;
+      max-width: 300px;
+      vertical-align: middle;
+    }
+  }
+}
+
+#floorplan_wrapper {
+  position: absolute;
+  margin-top: 80px;
+  .legend {
+    bottom: 50px;
+    position: absolute;
+    right: 50px;
+  }
+}

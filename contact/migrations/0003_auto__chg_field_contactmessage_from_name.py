@@ -9,13 +9,13 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
 
-        # Changing field 'User.date_joined'
-        db.alter_column(u'user_user', 'date_joined', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True))
+        # Changing field 'ContactMessage.from_name'
+        db.alter_column(u'contact_contactmessage', 'from_name', self.gf('django.db.models.fields.CharField')(max_length=128))
 
     def backwards(self, orm):
 
-        # Changing field 'User.date_joined'
-        db.alter_column(u'user_user', 'date_joined', self.gf('django.db.models.fields.DateTimeField')())
+        # Changing field 'ContactMessage.from_name'
+        db.alter_column(u'contact_contactmessage', 'from_name', self.gf('django.db.models.fields.TextField')(max_length=128))
 
     models = {
         u'auth.group': {
@@ -31,6 +31,27 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
+        u'contact.contactmessage': {
+            'Meta': {'object_name': 'ContactMessage'},
+            'contactsubject': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contact.ContactSubject']"}),
+            'from_email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
+            'from_name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'message': ('django.db.models.fields.TextField', [], {}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']", 'null': 'True', 'blank': 'True'})
+        },
+        u'contact.contactperson': {
+            'Meta': {'object_name': 'ContactPerson'},
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.User']", 'null': 'True', 'blank': 'True'})
+        },
+        u'contact.contactsubject': {
+            'Meta': {'object_name': 'ContactSubject'},
+            'contactperson': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contact.ContactPerson']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'subject': ('django.db.models.fields.CharField', [], {'max_length': '128'})
+        },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -39,7 +60,7 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'user.user': {
-            'Meta': {'object_name': 'User'},
+            'Meta': {'ordering': "('username',)", 'object_name': 'User'},
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '254'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
@@ -56,4 +77,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['user']
+    complete_apps = ['contact']

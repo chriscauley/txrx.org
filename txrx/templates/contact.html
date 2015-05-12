@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <form method="POST" class="jvFloatForm">
+    {% csrf_token %}
+    {% include "_form.html" %}
+    <input type="submit" class="btn btn-primary" />
+  </form>
+{% endblock %}
+
+{% comment %}
+{% block main %}
+<div class="col-sm-6 col-md-7">
+  <h1 class="page_title">Contact Us</h1>
+  <form method="POST" class="jvFloatForm">
+    {% csrf_token %}
+    {% include "_form.html" %}
+    <input type="submit" class="btn btn-primary" />
+  </form>
+</div>
+<div class="col-sm-6 col-md-5" id="side">
+  {% for subject in subjects %}
+  <div>
+    {% for faq in subject.faqs %}
+    <div>
+      <h4>{{ faq.question }}</h4>
+      {{ faq.answer }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+{% endcomment %}

@@ -5,17 +5,21 @@ from django.conf import settings
 from django.core.mail import send_mail, mail_admins
 from django.template.loader import render_to_string
 
-from .utils import get_or_create_student
 from notify.models import NotifyCourse
+from .utils import get_or_create_student
 
 import traceback
 
-@receiver(payment_was_successful, dispatch_uid='course.signals.handle_successful_payment')
+_duid='course.signals.handle_successful_payment'
+@receiver(payment_was_successful, dispatch_uid=_duid)
 def handle_successful_payment(sender, **kwargs):
-  from course.models import Enrollment, Session
+  from course.models import Enrollment, Session, reset_classes_json
   #add them to the classes they're enrolled in
   params = QueryDict(sender.query)
-  user,new_user = get_or_create_student(sender.payer_email,u_id=params.get('custom',None))
+  _uid = params.get('custom',None)
+  user,new_user = get_or_create_student(sender.payer_email,u_id=_uid)
+  user.active = True
+  user.save()
   try:
     class_count = int(params['num_cart_items'])
   except:
@@ -25,7 +29,7 @@ def handle_successful_payment(sender, **kwargs):
   error_sessions = []
   admin_subject = "New course enrollment"
   for i in range(1, class_count+1):
-    section_cost = int(float(params['mc_gross_%d'%i]))
+    course_cost = int(float(params['mc_gross_%d'%i]))
     quantity = int(params['quantity%s'%i])
 
     try:
@@ -38,25 +42,30 @@ def handle_successful_payment(sender, **kwargs):
       continue
 
     enrollment,new = Enrollment.objects.get_or_create(user=user, session=session)
-    notifys = NotifyCourse.objects.filter(user=user,course=session.section.course)
+    notifys = NotifyCourse.objects.filter(user=user,course=session.course)
     if notifys:
       notifys.delete()
     if new:
       enrollment.quantity = quantity
     else:
+      s = "%s seems to have a duplicate enrollment. Please see https://txrxlabs.org/admin/course/session/%s/"
+      mail_admins("Course so nice they took it twice",s%(enrollment.user,enrollment.session.pk))
       enrollment.quantity += quantity
     enrollment.save()
     enrollments.append(enrollment)
-    if section_cost != session.section.fee * int(quantity):
+    if course_cost != session.course.fee * int(quantity):
       l = [
-        "PP cost: %s"%section_cost,
-        "Session Fee: %s"%session.section.fee,
+        "PP cost: %s"%course_cost,
+        "Session Fee: %s"%session.course.fee,
         "Session Id:%s"%session.id,
         "Quantity:%s"%enrollment.quantity,
         "PP Email:%s"%sender.payer_email,
         "U Email:%s"%user.email,
       ]
       error_sessions.append("\n".join(l))
+    if enrollment.session.total_students > enrollment.session.course.max_students:
+      s = "Session #%s overfilled. Please see https://txrxlabs.org/admin/course/session/%s/"
+      mail_admins("My Course over floweth",s%(enrollment.session.pk,enrollment.session.pk))
 
   values = {
     'enrollments': enrollments,
@@ -64,9 +73,11 @@ def handle_successful_payment(sender, **kwargs):
     'new_user': new_user,
   }
   body = render_to_string("email/course_enrollment.html",values)
-  send_mail("Course enrollment confirmation",body,settings.DEFAULT_FROM_EMAIL,[user.email,'chris@lablackey.com'])
+  send_mail("Course enrollment confirmation",body,settings.DEFAULT_FROM_EMAIL,[user.email])
+  send_mail("Course enrollment confirmation",body,settings.DEFAULT_FROM_EMAIL,['chris@lablackey.com'])
   if error_sessions:
     mail_admins("Enrollment Error","\n\n".join(error_sessions))
+  reset_classes_json("classes reset during course enrollment")
 
 @receiver(payment_was_flagged, dispatch_uid='course.signals.handle_flagged_payment')
 def handle_flagged_payment(sender, **kwargs):

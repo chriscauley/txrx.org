@@ -1,0 +1,7 @@
+function compare_classes(a,b) {
+  if (a.next_time>b.next_time) { return 1 }
+  if (a.next_time<b.next_time) { return -1 }
+  return 0;
+}
+ALL_CLASSES = {{ courses|safe }}.sort(compare_classes);
+CLASS_SUBJECTS = {{ subjects|safe }};

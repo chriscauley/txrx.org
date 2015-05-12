@@ -1,16 +1,34 @@
 {% if request.user.is_authenticated %}
 <section class="events_box">
-  <h3 class="block_title">My Classes</h3>
+  <div class="alert alert-danger">
+    After you pay for a class it should appear here. If it does not, please email
+    <a href="{% url "contact" %}?slug=enrollment">write us</a> and we'll look into it.
+  </div>
+  {% if not user_sessions.0.past %}
+  <h3 class="block_title">Upcoming Classes</h3>
+  {% endif %}
   <ul class="list-unstyled">
     {% for session in user_sessions %}
+    {% ifchanged session.past %} {% if session.past %}
+  </ul>
+  {% if not forloop.first %}
+  <p class="alert alert-danger">{% include "course/_return_policy.html" with format="html" %}</p>
+  {% endif %}
+  <ul class="list-unstyled">
+    <li><h3 class="block_title margin-top">Past Courses</h3></li>
+    {% endif %}{% endifchanged %}
     <li>
-      <a href="{{ session.get_absolute_url }}"> {{ session.section.course }}</a> ({{ session.first_date|date:"F j" }})
+      <a href="{{ session.get_absolute_url }}"> {{ session.course }}</a> ({{ session.get_short_dates }} - {{ session.first_date.year }})
     </li>
     {% endfor %}
   </ul>
-  <div class="alert alert-danger">
-    After you pay for a class it should appear here. If it does not, please email
-    <a href="mailto:txrxlabs@gmail.com">txrxlabs@gmail.com</a>.
-  </div>
 </section>
+{% else %}
+<p class="alert alert-danger">
+  Already signed up?
+  <a href="/accounts/login/?next={{ request.path|urlencode }}{{ "#my_classes"|urlencode }}">Log in</a>
+  to see your classes.<br />
+  If not, an account will be automatically created when you first pay for a class.
+</p>
 {% endif %}
+
