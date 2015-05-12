@@ -1,9 +1,3 @@
-function commentReply(pk) {
-  // add to immediate child so child comments don't get form
-  $("#c"+pk+" > .comment-form").html("<comment-form></comment-form>");
-  riot.mount("#c"+pk+" > .comment-form comment-form",{parent_pk:pk});
-}
-
 function commentEdit(pk) {
   $("#c"+pk+" > comment-form").addClass("loading");
   $.get(

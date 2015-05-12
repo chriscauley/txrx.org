@@ -7,13 +7,11 @@
   <div class="comment_content">{ comment }</div>
   <div class="comment_actions">
     <div if={ window._USER_NUMBER}>
-      <a onclick={ reply } title="reply" href="#">
-        <i class="fa fa-reply"></i> Post Reply</a>
+      <a onclick={ reply } title="reply" href="#"><i class="fa fa-reply"></i> Post Reply</a>
       <!--| <a onclick="commentFlag({ pk });return false;" title="flag" href="#"><i class="fa fa-flag"></i> Flag</a>-->
-      <a if={ user_pk == window._USER_NUMBER } onclick={ edit } title="reply" href="#">
-        <i class="fa fa-pencil"></i> Edit</a>
-      <a if={ window._418 } href="/admin/mptt_comments/mpttcomment/{ pk }/delete/">
-        <i class="fa fa-close"></i> Delete</a>
+      <a if={ user_pk == window._USER_NUMBER } onclick={ edit } title="reply"
+         href="#"><i class="fa fa-pencil"></i> Edit</a>
+      <a if={ window._418 } href="/admin/mptt_comments/mpttcomment/{ pk }/delete/"><i class="fa fa-close"></i> Delete</a>
     </div>
     <div if={ !window._USER_NUMBER }>
       <a href="/accounts/login/?next=/classes/42/woodworking-tools-i/#c265">Login to reply to this comment</a>
@@ -27,10 +25,24 @@
     $(e.target).closest('comment').toggleClass('collapsed');
   }
   reply(e) {
-    commentReply(this.pk);
+    console.log(this.pk)
+    $("#c"+this.pk+" > .comment-form").html("<comment-form></comment-form>");
+    riot.mount("#c"+this.pk+" > .comment-form comment-form",{parent_pk:this.pk,data:{}});
   }
   edit(e) {
-    commentEdit(this.pk);
+    var pk = this.pk;
+    $("#c"+pk+" > comment-form").addClass("loading");
+    $.get(
+      "/can_comments/"+pk+"/",
+      function(data) {
+        data.form_url = "/can_comments/edit/"+pk+"/";
+        data.data = {};
+        console.log($("#c"+pk+" > .comment-form"));
+        $("#c"+pk+" > .comment-form").html("<comment-form></comment-form>");
+        riot.mount("#c"+pk+" > .comment-form comment-form",data);
+      },
+      "json"
+    )
   }
   this.root.className = "comment_level_{ level } l{ l_mod } comment_expanded";
   this.root.id = "c{ pk }";

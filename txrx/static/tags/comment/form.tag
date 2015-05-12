@@ -48,7 +48,7 @@
             <input id="id_content_type" name="content_type" type="hidden" value={ content_type } />
             <input id="id_object_pk" name="object_pk" type="hidden" value={ object_pk } />
             <input id="id_parent_pk" name="parent_pk" type="hidden" value={ parent_pk } />
-            <input id="id_comment_pk" name="comment_pk" type="hidden" value={ pk } />
+            <input id="id_comment_pk" name="comment_pk" type="hidden" value={ opts.pk } />
             <input type="submit" name="submit" class="submit-post" value="Post" />
           </li>
         </ul>
