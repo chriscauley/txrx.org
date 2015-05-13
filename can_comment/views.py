@@ -37,7 +37,7 @@ def build_comment_json(comment):
   children = comment.get_children().order_by("-submit_date") # this should eventually be on MpttComment.Meta
   return {
     'pk': comment.pk,
-    'children': [build_comment_json(c) for c in children],
+    'comments': [build_comment_json(c) for c in children],
     'username': comment.user.username,
     'user_pk': comment.user_id,
     'date_s': date(comment.submit_date,"l F j, Y @ P").replace("@","at"),

@@ -1,5 +1,5 @@
 <comment-form>
-  <form action={ form_url } method="POST" onsubmit={ submit } class="comment_form_wrapper">
+  <form action={ data.form_url } method="POST" class="comment_form_wrapper { loading && 'loading' }">
     <div class="comment_form">
       <p>Comments are displayed using Markdown.</p>
       <a href="javascript:;" onclick="$(this).next().toggleClass('show')">Show Formatting help</a>
@@ -42,29 +42,54 @@
       <fieldset>
         <ul class="list-unstyled">
           <li class="required">
-            <textarea cols="40" id="id_comment" name="comment" rows="10">{ opts.comment }</textarea>
-          </li>
-          <li>
-            <input id="id_content_type" name="content_type" type="hidden" value={ content_type } />
-            <input id="id_object_pk" name="object_pk" type="hidden" value={ object_pk } />
-            <input id="id_parent_pk" name="parent_pk" type="hidden" value={ parent_pk } />
-            <input id="id_comment_pk" name="comment_pk" type="hidden" value={ opts.pk } />
-            <input type="submit" name="submit" class="submit-post" value="Post" />
+            <textarea cols="40" id="id_comment" name="comment" rows="10">{ data.comment }</textarea>
+            <input id="id_content_type" name="content_type" type="hidden" value={ data.content_type } />
+            <input id="id_object_pk" name="object_pk" type="hidden" value={ data.object_pk } />
+            <input id="id_parent_pk" name="parent_pk" type="hidden" value={ data.parent_pk } />
+            <input id="id_comment_pk" name="comment_pk" type="hidden" value={ data.pk } />
           </li>
         </ul>
+        <input type="submit" class="submit-post btn btn-primary" value="Post" onclick={ submit } />
+        <input type="submit" class="submit-post btn btn-danger" value="Cancel" onclick={ cancel } />
       </fieldset>
 
     </div>
   </form>
-  that = this
+  var that = this
+  this.loading = false
+  cancel(e) {
+    that.parent.form_data = that.data = undefined;
+    this.parent.update()
+    this.update()
+    return
+  }
   submit(e) {
-    commentPost(e,that);
+    this.loading = true
+    $.post(
+      this.data.form_url,
+      $(this.root).find('form').serializeArray(),
+      function (data) {
+        if (that.parent.pk == data.pk) { // editing a comment
+          var comments = that.parent.parent.parent.comments;
+          console.log(comments)
+          for (var i=0;i<comments.length;i++) {
+            console.log(comments[i]);
+            if (comments[i].pk == data.pk) {
+              console.log('found it!')
+              comments.splice(i,1,data);
+              riot.update()
+            }
+          }
+        } else { // new comment
+          that.parent.comments.splice(0,0,data);
+          that.parent.form_data = undefined;
+          that.parent.update()
+          that.loading = false
+          that.update()
+        }
+      },
+      "json"
+    )
     return false;
   }
-
-  this.content_type = opts.data['data-content_type'];
-  this.object_pk = opts.data['data-object_pk']
-  this.pk = opts.data['pk']
-  this.parent_pk = opts.data['parent_pk']
-  this.form_url = opts.form_url
 </comment-form>

@@ -17,29 +17,31 @@
       <a href="/accounts/login/?next=/classes/42/woodworking-tools-i/#c265">Login to reply to this comment</a>
     </div>
   </div>
-  <div class="comment-form" riot-tag="comment-form"></div>
+  <comment-form if={ form_data }></comment-form>
   <div class="comment_children">
-    <comment each={ children }></comment>
+    <comment each={ comments }></comment>
   </div>
   collapse(e) {
     $(e.target).closest('comment').toggleClass('collapsed');
   }
   reply(e) {
-    console.log(this.pk)
-    $("#c"+this.pk+" > .comment-form").html("<comment-form></comment-form>");
-    riot.mount("#c"+this.pk+" > .comment-form comment-form",{parent_pk:this.pk,data:{}});
+    form = this.tags['comment-form']
+    this.form_data = form.data = {
+      parent_pk: this.pk,
+      form_url: "/can_comments/post/",
+    };
+    form.update()
   }
   edit(e) {
-    var pk = this.pk;
-    $("#c"+pk+" > comment-form").addClass("loading");
+    var pk = this.pk, that = this;
     $.get(
       "/can_comments/"+pk+"/",
       function(data) {
         data.form_url = "/can_comments/edit/"+pk+"/";
-        data.data = {};
-        console.log($("#c"+pk+" > .comment-form"));
-        $("#c"+pk+" > .comment-form").html("<comment-form></comment-form>");
-        riot.mount("#c"+pk+" > .comment-form comment-form",data);
+        form = that.tags['comment-form']
+        that.form_data = form.data = data
+        form.update()
+        that.update()
       },
       "json"
     )

@@ -10,11 +10,6 @@ function commentEdit(pk) {
   )
 }
 
-function commentNew(content_type,object_pk) {
-  data.form_url = "/can_comments/post/";
-  $("#c"+pk+" > comment-form",{parent_pk:pk});
-}
-
 function commentPost(e,that) {
   form = e.target;
   $(form).addClass('loading');
