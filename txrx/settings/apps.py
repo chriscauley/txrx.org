@@ -16,7 +16,7 @@ INSTALLED_APPS = (
 
   # 3rd party
   'markdown_deux',
-  'helpdesk',
+  #'helpdesk',
   'bootstrapform',
   'south',
   'sorl.thumbnail',
