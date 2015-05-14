@@ -56,38 +56,40 @@
     </div>
   </form>
   var that = this
+  that.data = opts
   this.loading = false
+  this.parent = opts.parent
   cancel(e) {
-    that.parent.form_data = that.data = undefined;
-    this.parent.update()
-    this.update()
-    return
+    this.unmount()
   }
   submit(e) {
     this.loading = true
+    function callback(data) {
+      if (that.parent.pk == data.pk) { // editing a comment
+        var comments = that.parent.parent.parent.comments
+        for (var i=0;i<comments.length;i++) {
+          if (comments[i].pk == data.pk) {
+            comments.splice(i,1,data)
+            break
+          }
+        }
+      } else { // new comment
+        that.parent.comments.splice(0,0,data)
+        that.loading = false
+      }
+      if (that.parent.pk) { that.unmount() }
+      else {
+        that.loading = false
+        setTimeout(function(){window.location = '#c'+data.pk},200)
+        console.log(that)
+        that.comment.value = ''
+      }
+      riot.update()
+    }
     $.post(
       this.data.form_url,
       $(this.root).find('form').serializeArray(),
-      function (data) {
-        if (that.parent.pk == data.pk) { // editing a comment
-          var comments = that.parent.parent.parent.comments;
-          console.log(comments)
-          for (var i=0;i<comments.length;i++) {
-            console.log(comments[i]);
-            if (comments[i].pk == data.pk) {
-              console.log('found it!')
-              comments.splice(i,1,data);
-              riot.update()
-            }
-          }
-        } else { // new comment
-          that.parent.comments.splice(0,0,data);
-          that.parent.form_data = undefined;
-          that.parent.update()
-          that.loading = false
-          that.update()
-        }
-      },
+      callback,
       "json"
     )
     return false;

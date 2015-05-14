@@ -17,35 +17,42 @@
       <a href="/accounts/login/?next=/classes/42/woodworking-tools-i/#c265">Login to reply to this comment</a>
     </div>
   </div>
-  <comment-form if={ form_data }></comment-form>
+  <div class="comment_form"></div>
   <div class="comment_children">
     <comment each={ comments }></comment>
   </div>
+  var that = this
   collapse(e) {
     $(e.target).closest('comment').toggleClass('collapsed');
   }
-  reply(e) {
+  /*reply(e) {
     form = this.tags['comment-form']
-    this.form_data = form.data = {
-      parent_pk: this.pk,
-      form_url: "/can_comments/post/",
-    };
+    this.form_data = form.data = 
     form.update()
+  }*/
+  function openForm(form_opts) {
+    form_opts.parent = that
+    $(that.root).find(">.comment_form").html("<comment-form id='f"+that.pk+"'></comment-form>");
+    riot.mount("#f"+that.pk,form_opts)
+  }
+  reply(e) {
+    var form_opts = {
+      parent_pk: that.pk,
+      form_url: "/can_comments/post/",
+      comment: 'monkey',
+    }
+    openForm(form_opts);
   }
   edit(e) {
-    var pk = this.pk, that = this;
     $.get(
-      "/can_comments/"+pk+"/",
-      function(data) {
-        data.form_url = "/can_comments/edit/"+pk+"/";
-        form = that.tags['comment-form']
-        that.form_data = form.data = data
-        form.update()
-        that.update()
+      "/can_comments/"+that.pk+"/",
+      function(form_opts) {
+        form_opts.form_url = "/can_comments/edit/"+that.pk+"/",
+        openForm(form_opts);
       },
       "json"
     )
   }
-  this.root.className = "comment_level_{ level } l{ l_mod } comment_expanded";
-  this.root.id = "c{ pk }";
+  that.root.className = "comment_level_{ level } l{ l_mod } comment_expanded";
+  that.root.id = "c{ pk }";
 </comment>
