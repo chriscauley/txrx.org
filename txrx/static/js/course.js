@@ -37,6 +37,7 @@ myApp.controller("DemoController", function($scope) {
     }
   }
   $scope.filterSubjects = function(value) {
+    console.log(value)
     if (value != $scope.active_subject) {
       $scope.scheduled_courses = []; // visible "active" courses
       $scope._vsi = 0; // number of visible scheduled courses
