@@ -5,7 +5,7 @@ myApp.controller("DemoController", function($scope) {
   $scope.courses = ALL_CLASSES;
   $scope.subjects = CLASS_SUBJECTS;
   $scope.active_subject = "";
-  if (window.location.search.indexOf("young_adults") != "-1") {
+  if (window.location.search.indexOf("young_adults") != -1) {
     $scope.active_subject = 22;
   }
 
@@ -78,6 +78,6 @@ myApp.controller("DemoController", function($scope) {
     $scope.unscheduled_courses = $scope.inactive_courses;
   };
 
-  $scope.filterSubjects();
+  $scope.filterSubjects( $scope.active_subject);
   
 });
