@@ -5,6 +5,9 @@ myApp.controller("DemoController", function($scope) {
   $scope.courses = ALL_CLASSES;
   $scope.subjects = CLASS_SUBJECTS;
   $scope.active_subject = "";
+  if (window.location.search.indexOf("young_adults") != "-1") {
+    $scope.active_subject = 22;
+  }
 
   for (var si=0; si<USER_SESSIONS.length;si++) {
     session = USER_SESSIONS[si];
