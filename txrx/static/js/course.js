@@ -7,6 +7,9 @@ myApp.controller("DemoController", function($scope) {
   $scope.active_subject = "";
   if (window.location.search.indexOf("young_adults") != -1) {
     $scope.active_subject = 22;
+    setTimeout(function() { $("#filter_subject_22").click() },500)
+    setTimeout(function() { $("#filter_subject_22").click() },1000)
+    setTimeout(function() { $("#filter_subject_22").click() },2000)
   }
 
   for (var si=0; si<USER_SESSIONS.length;si++) {
