@@ -14,7 +14,7 @@
       {% else %}
       var _NOTIFY_URL = "https://txrxlabs.org/tx/rx/ipn/handler/"
       {% endif %}
-      var _USER_NUMBER = "{{ request.user.pk }}";
+      var _USER_NUMBER = {{ request.user.pk|default_if_none:"undefined" }};
       {% if request.user.is_superuser %}
       var _418 = true;
       {% endif %}

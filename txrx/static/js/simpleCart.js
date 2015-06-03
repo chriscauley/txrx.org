@@ -283,7 +283,7 @@ function Cart(){
     if (email_input && email_input.value && email_input.value.match('@')) {
       form.appendChild(me.createHiddenElement("custom",email_input.value));
     } else {
-      form.appendChild(me.createHiddenElement("custom",window._USER_NUMBER));
+      form.appendChild(me.createHiddenElement("custom",window._USER_NUMBER || "None"));
     }
 
     if( me.taxRate ){

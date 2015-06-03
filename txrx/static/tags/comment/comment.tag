@@ -39,7 +39,7 @@
     var form_opts = {
       parent_pk: that.pk,
       form_url: "/can_comments/post/",
-      comment: 'monkey',
+      comment: '',
     }
     openForm(form_opts);
   }

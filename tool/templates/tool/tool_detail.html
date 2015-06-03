@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load thumbnail crop_util %}
-{% load mptt_comments_tags %}
 {% load short_codes %}
 
 {% block title %}{{ tool }}{% endblock %}
@@ -51,7 +50,9 @@
     {% endif %}
   </div>
   <div class="col-xs-12">
-    {% display_comment_toplevel_for tool %}
+    <comment-list data-object_pk="{{ tool.pk }}" data-content_type="tool.tool"></comment-list>
   </div>
 </div>
 {% endblock %}
+
+{% block extrajs %}{% include "_comment_media.html" %}{% endblock %}

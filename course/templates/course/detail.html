@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load mptt_comments_tags thumbnail %}
+{% load thumbnail %}
 {% load short_codes txrx_tags %}
 
 {% block title %}{{ course }}{% endblock %}
@@ -137,6 +137,10 @@
     {# {% include "course/_instructor_panel.html" %} #}
     {% endif %}
   </div>
-  <div class="col-xs-12 col-sm-8 col-md-9">{% display_comment_toplevel_for course %}</div>
+  <div class="col-xs-12">
+    <comment-list data-object_pk="{{ course.pk }}" data-content_type="course.course"></comment-list>
+  </div>
 </div>
 {% endblock %}
+
+{% block extrajs %}{% include "_comment_media.html" %}{% endblock %}
