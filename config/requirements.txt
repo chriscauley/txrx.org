@@ -13,7 +13,7 @@ psycopg2
 pillow==2.1.0
 
 django-mptt==0.5.4
-pip install -e git+https://github.com/chriscauley/django-mptt-comments.git#egg=django-mptt-comments.git
+-e git+https://github.com/chriscauley/django-mptt-comments.git#egg=django-mptt-comments.git
 
 django-redis-cache
 Markdown==2.0.3
