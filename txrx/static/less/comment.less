@@ -34,16 +34,15 @@ comment-list .comment_actions a {
   &:first-child { border: 0; padding-left: 0; }
 }
 
-/* stuff from old styling that isn't converted yet */
-.comment:target > .comment_outer { background-color: @successBackground; }
-/* comments */
+comment:target > .comment_outer { background-color: @successBackground; }
+
 h2.section_title {
   background: @well-bg;
   font-size: 18px;
   padding: 0 10px;
 }
 
-#comments {
+comment-list {
   h2 { margin: 20px 0 5px; }
   textarea { height: 150px; max-width: 100%; width: 350px; }
 }
@@ -52,12 +51,17 @@ h2.section_title {
   min-height: 20px;
 }
 
-#mptt-comments-tree .comment {
-  .comment:last-child { margin-bottom: 0; }
+comment-list comment {
+  border-left: solid 4px #dddddd;
+  margin-left: 0.5em;
+  margin-top: 0.5em;
+  padding-left: 0.5em;
+  comment:last-child { margin-bottom: 0; }
+  .comment_meta { font-weight: bold; }
   &.collapsed {
-    height: 20px;
+    height: 34px;
     overflow: hidden;
-    .comment {
+    comment {
       display: none;
     }
     .expand-link:before { content: "[+]"; }
@@ -69,7 +73,7 @@ h2.section_title {
   }
 }
 
-.comment_form .md {
+comment-form .md {
   display: none;
   margin-bottom: 20px;
   &.show { display: block; }

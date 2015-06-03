@@ -1,5 +1,5 @@
 <comment-list>
-  <h2 class="section_title">Comments</h2>
+  <h2>Comments</h2>
   <div class="alert alert-danger reply-warning" if={ comments }>
     If you want to respond to a comment, please click "Post Reply" underneath that comment.
     This way the comment author will receive a notification of your response.
