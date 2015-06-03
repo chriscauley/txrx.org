@@ -110,7 +110,9 @@ STATICFILES_FINDERS = (
   'django.contrib.staticfiles.finders.AppDirectoriesFinder',
   # other finders..
   'compressor.finders.CompressorFinder',
-  )
+)
+
+COMPRESS_PRECOMPILERS = (('text/less', 'lessc {infile} {outfile}'),)
 
 ACCOUNT_ACTIVATION_DAYS = 7
 

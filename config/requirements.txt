@@ -2,13 +2,14 @@ django==1.7.8
 django-devserver
 -e git+https://github.com/chriscauley/django-registration.git#egg=django-registration
 -e git+https://github.com/dcramer/django-paypal.git#egg=django-paypal
-django_compressor==1.3
+django_compressor
 django-localflavor
 BeautifulSoup==3.2.1
 psycopg2
 django-suit
 django-contrib-comments
 ezdxf
+simplejson
 
 #image stuff
 -e git+https://github.com/chriscauley/sorl-thumbnail.git#egg=sorl-thumbnail
