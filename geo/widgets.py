@@ -1,6 +1,3 @@
-from south.modelsinspector import add_introspection_rules
-add_introspection_rules([], ["^geo.widgets.LocationField"])
-
 from django import forms
 from django.db import models
 from django.conf import settings

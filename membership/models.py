@@ -10,8 +10,6 @@ from txrx.utils import cached_method, cached_property
 from project.models import Project
 
 from wmd.models import MarkDownField
-from south.modelsinspector import add_introspection_rules
-add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
 
 import datetime, random, string
 

@@ -7,12 +7,9 @@ from django.template.defaultfilters import slugify
 
 from db.models import SlugModel, OrderedModel
 from media.models import Photo, PhotosMixin
-from south.modelsinspector import add_introspection_rules
 from txrx.utils import cached_property, cached_method
 from wmd.models import MarkDownField
 from geo.models import Room
-
-add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
 
 class Lab(OrderedModel,PhotosMixin):
   name = models.CharField(max_length=128)

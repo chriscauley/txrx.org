@@ -6,6 +6,9 @@ django_compressor==1.3
 django-localflavor
 BeautifulSoup==3.2.1
 psycopg2
+django-suit
+django-contrib-comments
+ezdxf
 
 #image stuff
 -e git+https://github.com/chriscauley/sorl-thumbnail.git#egg=sorl-thumbnail

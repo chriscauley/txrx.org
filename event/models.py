@@ -8,8 +8,6 @@ from wmd import models as wmd_models
 from geo.models import Room
 from txrx.utils import cached_property
 
-from south.modelsinspector import add_introspection_rules
-add_introspection_rules([], ["^wmd\.models\.MarkDownField"])
 import datetime, sys, json
 
 def print_time(t):
