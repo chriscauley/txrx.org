@@ -10,7 +10,6 @@ from blog.models import Post, Banner
 from membership.models import Membership
 from thing.models import Thing
 
-from NextPlease import pagination
 from tagging.models import Tag
 import random, datetime
 
@@ -49,17 +48,6 @@ def index(request):
     'banner': Banner.objects.get_random(),
     }
   return TemplateResponse(request,"index.html",values)
-
-@pagination("posts")
-def blog_home(request):
-  posts = Post.objects.filter(status="published",publish_dt__lte=datetime.datetime.now())
-  _t = Tag.objects.cloud_for_model(Post)
-  tags = sorted([(t,t.count) for t in _t if t.count > 1],key=lambda t:-t[1])
-  values = {
-    "posts": posts,
-    "post_tags": tags,
-    }
-  return TemplateResponse(request,"blog/home.html",values)
 
 def intentional_500(request):
   arst

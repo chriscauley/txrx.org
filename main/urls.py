@@ -16,7 +16,6 @@ urlpatterns = patterns(
   url(r'^$','main.views.index',name="home"),
   url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
   url(r'^admin/', include(admin.site.urls)),
-  url(r'^blog/$','main.views.blog_home',name="blog_home"),
   url(r'^blog/',include('blog.urls')),
   url(r'^(\d{4})/(\d{1,2})/(\d{1,2})/([^/]+)/','blog.views.post_redirect'),
   url(r'^500/$','main.views.intentional_500'),
