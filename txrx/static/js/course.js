@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 $(function() {
   // set enrollment status for ALL_CLASSES
   for (var si=0; si<USER_SESSIONS.length;si++) {
