@@ -5,7 +5,7 @@ from django.conf import settings
 import requests, os
 
 from instagram.models import InstagramTag, InstagramLocation, InstagramUser, InstagramPhoto
-from txrx.utils import mail_on_fail
+from main.utils import mail_on_fail
 
 class Command (BaseCommand):
   @mail_on_fail

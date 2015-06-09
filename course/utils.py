@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django import forms
 
 from membership.models import UserMembership
-from txrx.utils import reset_password
+from main.utils import reset_password
 import random, os, json
 
 def validate_email(s):

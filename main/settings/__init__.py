@@ -63,7 +63,7 @@ AUTHENTICATION_BACKENDS = (
   #'social.backends.google.GoogleOAuth',
   #'social.backends.twitter.TwitterOAuth',
   #'social.backends.yahoo.YahooOpenId',
-  'txrx.backends.EmailOrUsernameModelBackend',
+  'main.backends.EmailOrUsernameModelBackend',
   'django.contrib.auth.backends.ModelBackend'
 )
 
@@ -91,12 +91,12 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   "django.contrib.messages.context_processors.messages",
   'social.apps.django_app.context_processors.backends',
   'social.apps.django_app.context_processors.login_redirect',
-  'txrx.context.nav',
-  'txrx.context.motd',
+  'main.context.nav',
+  'main.context.motd',
   'blog.context.process',
 )
 
-ROOT_URLCONF = 'txrx.urls'
+ROOT_URLCONF = 'main.urls'
 
 TEMPLATE_DIRS = (
   os.path.join(SPATH,"templates"),
@@ -132,14 +132,14 @@ CONTACT_LINK = "<a href='%s'>%s</a>"%(CONTACT_EMAIL,CONTACT_EMAIL)
 EMAIL_SUBJECT_PREFIX = "[TXRX] "
 DEFAULT_FROM_EMAIL = "noreply@txrxlabs.org"
 SERVER_EMAIL = "noreply@txrxlabs.org"
-EMAIL_BACKEND = "txrx.mail.DebugBackend"
+EMAIL_BACKEND = "main.mail.DebugBackend"
 
 PER_PAGE = 10
 NEW_STUDENT_PASSWORD = "I am a new student, reset my passwrod asap"
 
 for s_file in ['apps','local']:
   try:
-    f = 'txrx/settings/%s.py'%s_file
+    f = 'main/settings/%s.py'%s_file
     exec(compile(open(os.path.abspath(f)).read(), f, 'exec'), globals(), locals())
   except IOError:
     print "Setting file missing. We looked here: %s"%f

@@ -4,24 +4,22 @@ from django.contrib import admin
 from django.contrib.auth.views import password_reset
 from django.contrib.sitemaps.views import sitemap
 
-from txrx.sitemaps import sitemaps
-from txrx.feeds import AllFeed
+from main.sitemaps import sitemaps
+from main.feeds import AllFeed
 
 import os
-
-admin.autodiscover()
 
 _urls = lambda *ns: [url(r'^%s/'%n, include('%s.urls'%n, namespace=n, app_name=n)) for n in ns]
 
 urlpatterns = patterns(
   '',
-  url(r'^$','txrx.views.index',name="home"),
+  url(r'^$','main.views.index',name="home"),
   url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
   url(r'^admin/', include(admin.site.urls)),
-  url(r'^blog/$','txrx.views.blog_home',name="blog_home"),
+  url(r'^blog/$','main.views.blog_home',name="blog_home"),
   url(r'^blog/',include('blog.urls')),
   url(r'^(\d{4})/(\d{1,2})/(\d{1,2})/([^/]+)/','blog.views.post_redirect'),
-  url(r'^500/$','txrx.views.intentional_500'),
+  url(r'^500/$','main.views.intentional_500'),
   url(r'^event/',include('event.urls',namespace="event",app_name="event")),
   url(r'^instagram/',include('instagram.urls',namespace="instagram",app_name="instagram")),
   url(r'^media_files/',include('media.urls')),
@@ -38,7 +36,7 @@ urlpatterns = patterns(
   url(r'^gfycat/$','main.views.gfycat',name='gfycat'),
   url(r'^tools/',include('tool.urls')),
   url('', include('social.apps.django_app.urls', namespace='social')),
-  url(r'perfect-programming','txrx.views.intentional_500'),
+  url(r'perfect-programming','main.views.intentional_500'),
   url(r'^classes/', include('course.urls',namespace='course',app_name='course')),
   url(r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
   url(r'^tx/rx/return/$','course.views.paypal_return',name='paypal_redirect'),
@@ -70,7 +68,7 @@ urlpatterns += patterns(
   url(r'^accounts/', include('registration.urls')),
   url(r'^auth/password_reset/$',activate_user(password_reset)),
   url(r'^auth/',include('django.contrib.auth.urls')),
-  url(r'^force_login/(\d+)/$', 'txrx.views.force_login'),
+  url(r'^force_login/(\d+)/$', 'main.views.force_login'),
 )
 
 #membership urls
@@ -103,13 +101,13 @@ urlpatterns += patterns(
 # todo
 urlpatterns += patterns(
   '',
-  (r'^survey/$','txrx.views.survey'),
+  (r'^survey/$','main.views.survey'),
 )
 
 # flat pages
 urlpatterns += patterns(
   '',
-  url(r'^(about-us)/$','txrx.views.to_template'),
+  url(r'^(about-us)/$','main.views.to_template'),
   url(r'^(schoolbot/|map/|bylaws/)$','django.contrib.flatpages.views.flatpage',name='map'),
 )
 

@@ -15,7 +15,7 @@ from .utils import limited_login_required, verify_unique_email
 from blog.models import Post
 from course.models import Course,CourseCompletion, Session
 from thing.models import Thing
-from txrx.utils import FORBIDDEN
+from main.utils import FORBIDDEN
 
 import datetime
 

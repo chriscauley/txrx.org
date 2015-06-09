@@ -5,7 +5,7 @@ from django.conf import settings
 import datetime,calendar, traceback
 
 from event.models import Event,EventOccurrence
-from txrx.utils import print_to_mail
+from main.utils import print_to_mail
 
 def add_month(date):
   if not date:

@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from course.models import ClassTime
 from membership.models import LimitedAccessKey
 
-from txrx.utils import print_to_mail
+from main.utils import print_to_mail
 
 import datetime
 

@@ -15,7 +15,7 @@ from media.models import FilesMixin, PhotosMixin
 from geo.models import Room
 from event.models import OccurrenceModel, reverse_ics
 from tool.models import ToolsMixin
-from txrx.utils import cached_method, cached_property, latin1_to_ascii
+from main.utils import cached_method, cached_property, latin1_to_ascii
 
 from json import dumps
 import os

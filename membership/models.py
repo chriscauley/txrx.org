@@ -6,7 +6,7 @@ from sorl.thumbnail import ImageField
 from db.models import UserModel
 from media.models import Photo
 from course.models import Session, Term, Course
-from txrx.utils import cached_method, cached_property
+from main.utils import cached_method, cached_property
 from project.models import Project
 
 from wmd.models import MarkDownField

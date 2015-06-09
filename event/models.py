@@ -6,7 +6,7 @@ from django.template.defaultfilters import slugify, date, urlencode
 from media.models import PhotosMixin
 from wmd import models as wmd_models
 from geo.models import Room
-from txrx.utils import cached_property
+from main.utils import cached_property
 
 import datetime, sys, json
 
