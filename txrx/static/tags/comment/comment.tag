@@ -38,16 +38,16 @@
   reply(e) {
     var form_opts = {
       parent_pk: that.pk,
-      form_url: "/can_comments/post/",
+      form_url: "/comments/post/",
       comment: '',
     }
     openForm(form_opts);
   }
   edit(e) {
     $.get(
-      "/can_comments/"+that.pk+"/",
+      "/comments/"+that.pk+"/",
       function(form_opts) {
-        form_opts.form_url = "/can_comments/edit/"+that.pk+"/",
+        form_opts.form_url = "/comments/edit/"+that.pk+"/",
         openForm(form_opts);
       },
       "json"

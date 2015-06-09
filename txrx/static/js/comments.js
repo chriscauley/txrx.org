@@ -1,9 +1,9 @@
 function commentEdit(pk) {
   $("#c"+pk+" > comment-form").addClass("loading");
   $.get(
-    "/can_comments/"+pk+"/",
+    "/comments/"+pk+"/",
     function(data) {
-      data.form_url = "/can_comments/edit/"+pk+"/";
+      data.form_url = "/comments/edit/"+pk+"/";
       riot.mount("#c"+pk+" > comment-form",data);
     },
     "json"
@@ -33,11 +33,11 @@ $(function() {
     };
     var that = this;
     $.get(
-      "/can_comments/list/",
+      "/comments/list/",
       params,
       function(data) {
         params.comments = data;
-        params.form_url = "/can_comments/post/";
+        params.form_url = "/comments/post/";
         riot.mount("comment-list",params);
       },
       "json"

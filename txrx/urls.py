@@ -27,7 +27,7 @@ urlpatterns = patterns(
   url(r'^media_files/',include('media.urls')),
 
   # comments and javascript translation
-  url(r'^comments/', include('mptt_comments.urls')),
+  url(r'^comments/',include('comment.urls')),
   url(r'^jsi18n/(?P<packages>\S+?)/$', 'django.views.i18n.javascript_catalog'),
   url(r'^rss/$', AllFeed()),
   url(r'^favicon.ico$','main.views.predirect',
@@ -44,7 +44,6 @@ urlpatterns = patterns(
   url(r'^tx/rx/return/$','course.views.paypal_return',name='paypal_redirect'),
   url(r'^contact/$','contact.views.contact',name='contact'),
   url(r'^dxfviewer/$','geo.views.dxfviewer',name='dxfviewer'),
-  url(r'^can_comments/',include('can_comment.urls')),
 )
 
 def activate_user(target):
