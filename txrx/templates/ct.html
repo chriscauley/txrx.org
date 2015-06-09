@@ -1,8 +1,0 @@
-{% extends "base.html" %}
-
-{% block content %}
-<script src="{{ STATIC_URL }}js/comments.js"></script>
-<comment-list data-object_pk="42" data-content_type="course.course"></comment-list>
-{% endblock %}
-
-{% block extrajs %}{% include "_comment_media.html" %}{% endblock %}

@@ -21,12 +21,6 @@ def ajax_login_required(function):
   wrap.csrf_exempt = True
   return wrap
 
-def test(request):
-  values = {
-    'comments': MpttComment.objects.all().count()
-  }
-  return TemplateResponse(request,'ct.html',values)
-
 def make_branch(a,level):
   return {
     'letter': a,
