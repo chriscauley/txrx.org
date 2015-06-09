@@ -48,7 +48,6 @@ MIDDLEWARE_CLASSES = (
   'django.middleware.csrf.CsrfViewMiddleware',
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
-  'theme.middleware.Theme',
 )
 
 AUTH_USER_MODEL = 'user.User'
