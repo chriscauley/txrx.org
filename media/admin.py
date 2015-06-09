@@ -5,6 +5,7 @@ from django.contrib.contenttypes.generic import GenericTabularInline
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from crop_override.admin import CropAdmin
+from sorl.thumbnail import get_thumbnail
 
 from db.forms import StaffMemberForm
 
