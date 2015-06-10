@@ -199,7 +199,7 @@ class Branding(models.Model):
   get_small_image = lambda self: self.small_image_override or self.image
   __unicode__ = lambda self: self.name
 
-class Session(FeedItemModel,PhotosMixin):
+class Session(FeedItemModel,PhotosMixin,models.Model):
   def __init__(self,*args,**kwargs):
     super(Session,self).__init__(*args,**kwargs)
     if self.pk:

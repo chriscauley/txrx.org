@@ -30,7 +30,7 @@ def invalidate_cache_key(fragment_name, *variables):
   cache.delete(cache_key)
 """
 
-class Post(FeedItemModel,PhotosMixin):
+class Post(PhotosMixin,FeedItemModel):
   feed_item_type = 'blog'
   STATUS_CHOICES = (
     ('draft', 'Draft'),

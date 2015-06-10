@@ -11,7 +11,7 @@ from main.utils import cached_property, cached_method
 from wmd.models import MarkDownField
 from geo.models import Room
 
-class Lab(OrderedModel,PhotosMixin):
+class Lab(PhotosMixin,OrderedModel):
   name = models.CharField(max_length=128)
   __unicode__ = lambda self: self.name
   slug = property(lambda self: slugify(self.name))
@@ -23,7 +23,7 @@ class Lab(OrderedModel,PhotosMixin):
 
 _help = "Will default to %s photo if blank"
 
-class Tool(OrderedModel,PhotosMixin):
+class Tool(PhotosMixin,OrderedModel):
   name = models.CharField(max_length=128)
   __unicode__ = lambda self: self.name
   value = property(lambda self: self.pk)
@@ -70,7 +70,7 @@ class TaggedTool(models.Model):
   content_object = generic.GenericForeignKey('content_type', 'object_id')
   order = models.IntegerField(default=9999)
 
-class ToolsMixin(models.Model):
+class ToolsMixin(object):
   @cached_property
   def first_tool(self):
     return self.get_tools()[0]

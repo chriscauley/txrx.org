@@ -97,7 +97,7 @@ class OccurrenceModel(models.Model):
   class Meta:
     abstract = True
 
-class EventOccurrence(OccurrenceModel,PhotosMixin):
+class EventOccurrence(PhotosMixin,OccurrenceModel):
   event = models.ForeignKey(Event)
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
   get_absolute_url = lambda self: reverse('event:occurrence_detail',args=(self.id,slugify(self.name)))

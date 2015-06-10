@@ -119,7 +119,7 @@ class TaggedPhoto(models.Model):
   content_object = generic.GenericForeignKey('content_type', 'object_id')
   order = models.IntegerField(default=9999)
 
-class PhotosMixin(models.Model):
+class PhotosMixin(object):
   @cached_property
   def first_photo(self):
     try:
@@ -135,10 +135,8 @@ class PhotosMixin(models.Model):
   def _get_photos(self):
     return list(Photo.objects.filter(taggedphoto__content_type_id=self._ct_id,
                                      taggedphoto__object_id=self.id).order_by("taggedphoto__order"))
-  class Meta:
-    abstract = True
 
-class FilesMixin(models.Model):
+class FilesMixin(object):
   @cached_property
   def first_file(self):
     try:
