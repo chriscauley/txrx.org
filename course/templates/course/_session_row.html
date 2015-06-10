@@ -4,6 +4,9 @@
   <a href="{% url "course:instructor_session" session.pk %}" class="instructor-link">
     <i class="fa fa-edit"></i></a>
   {% endif %}
+  {% if request.user.is_superuser %}
+  <a href="/admin/course/course/{{ course.pk }}" class="admin-link"><i class="fa fa-pencil"></i></a>
+  {% endif %}
   <div class="dates">
     {% for classtime in session.classtime_set.all %}
     <div>{{ classtime|format_classtime }}</div>
