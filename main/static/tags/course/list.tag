@@ -22,7 +22,7 @@
           </div>
         </div>
       </div>
-      <div class="price">{ (fee > 0 && next_time != 0)?("$"+fee):"FREE" }</div>
+      <div class="price" if={ fee === 0 || fee }>{ (fee > 0 && next_time != 0)?("$"+fee):"FREE" }</div>
     </a>
   </div>
 </course-list>
