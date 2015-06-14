@@ -2,8 +2,9 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import wmd.models
 import datetime
+import wmd.models
+import media.models
 
 
 class Migration(migrations.Migration):
@@ -24,7 +25,7 @@ class Migration(migrations.Migration):
             ],
             options={
             },
-            bases=(models.Model,),
+            bases=(media.models.PhotosMixin, models.Model),
         ),
         migrations.CreateModel(
             name='EventOccurrence',
@@ -41,6 +42,6 @@ class Migration(migrations.Migration):
             options={
                 'ordering': ('start',),
             },
-            bases=(models.Model,),
+            bases=(media.models.PhotosMixin, models.Model),
         ),
     ]

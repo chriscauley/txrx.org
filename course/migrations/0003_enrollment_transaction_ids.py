@@ -7,15 +7,14 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0001_initial'),
-        ('media', '0001_initial'),
+        ('course', '0002_auto_20150614_1510'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='post',
-            name='photo',
-            field=models.ForeignKey(blank=True, to='media.Photo', null=True),
+            model_name='enrollment',
+            name='transaction_ids',
+            field=models.TextField(null=True, blank=True),
             preserve_default=True,
         ),
     ]

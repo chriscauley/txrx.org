@@ -2,11 +2,13 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -39,6 +41,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('email', models.EmailField(help_text=b'Use if desired email is not in a user account. THIS FIELD DOES NOTHING IF THERE IS A USER', max_length=75, null=True, blank=True)),
+                ('user', models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
                 'verbose_name': 'Person',
@@ -72,5 +75,17 @@ class Migration(migrations.Migration):
                 'ordering': ('order',),
             },
             bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='message',
+            name='subject',
+            field=models.ForeignKey(to='contact.Subject'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='message',
+            name='user',
+            field=models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            preserve_default=True,
         ),
     ]

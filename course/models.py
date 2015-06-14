@@ -386,6 +386,7 @@ class Enrollment(UserModel):
   evaluated = models.BooleanField(default=False)
   emailed = models.BooleanField(default=False)
   evaluation_date = models.DateTimeField(null=True,blank=True)
+  transaction_ids = models.TextField(null=True,blank=True)
 
   objects = EnrollmentManager()
 

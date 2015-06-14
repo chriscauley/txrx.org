@@ -3,11 +3,15 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 import datetime
+import media.models
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('media', '__first__'),
     ]
 
     operations = [
@@ -42,11 +46,13 @@ class Migration(migrations.Migration):
                 ('create_dt', models.DateTimeField(auto_now_add=True)),
                 ('update_dt', models.DateTimeField(auto_now=True)),
                 ('featured', models.BooleanField(default=False, help_text=b"Featured blogs must have a photo or they won't appear at all.")),
+                ('photo', models.ForeignKey(blank=True, to='media.Photo', null=True)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'ordering': ('-featured', '-publish_dt'),
             },
-            bases=(models.Model,),
+            bases=(media.models.PhotosMixin, models.Model),
         ),
         migrations.CreateModel(
             name='PressItem',
@@ -60,5 +66,9 @@ class Migration(migrations.Migration):
                 'ordering': ('-publish_dt',),
             },
             bases=(models.Model,),
+        ),
+        migrations.AlterUniqueTogether(
+            name='post',
+            unique_together=set([('slug', 'user')]),
         ),
     ]

@@ -8,7 +8,7 @@ import crop_override.field
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('instagram', '0002_auto_20150509_1659'),
+        ('instagram', '0001_initial'),
         ('contenttypes', '0001_initial'),
     ]
 
