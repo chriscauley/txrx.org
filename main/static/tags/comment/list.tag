@@ -7,7 +7,7 @@
   <comment each={ comments }></comment>
   <h2 class="section_title" if={ window._USER_NUMBER }>Post a new comment</h2>
   <div class="alert alert-warning" if={ !window._USER_NUMBER }>
-    <a href="/accounts/login/?next={ window.location.pathname }">Login to reply to this comment</a>
+    <a href="/accounts/login/?next={ window.location.pathname }">Login to leave a comment</a>
   </div>
   this.comments = opts.comments;
   this.on('mount', function() {

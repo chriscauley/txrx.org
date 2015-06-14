@@ -14,7 +14,7 @@
       <a if={ window._418 } href="/admin/mptt_comments/mpttcomment/{ pk }/delete/"><i class="fa fa-close"></i> Delete</a>
     </div>
     <div if={ !window._USER_NUMBER }>
-      <a href="/accounts/login/?next={ window.location.pathname }">Login to leave a comment</a>
+      <a href="/accounts/login/?next={ window.location.pathname }">Login to reply to this comment</a>
     </div>
   </div>
   <div class="comment_form"></div>
