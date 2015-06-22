@@ -8,7 +8,7 @@
 <script src="{{ STATIC_URL }}classes.json?v={% now "ymd_his" %}"></script>
 <script src="{{ STATIC_URL }}tags/course/filters.tag" type="riot/tag"></script>
 <script src="{{ STATIC_URL }}tags/course/list.tag" type="riot/tag"></script>
-<script src="{{ STATIC_URL }}js/course.js"></script>
+<script src="{{ STATIC_URL }}js/course.js?v2"></script>
 <script>
 var USER_SESSIONS = [
   {% for session in user_sessions %}
