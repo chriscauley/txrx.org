@@ -1,4 +1,5 @@
 $(function() {
+  var active_subject;
   // set enrollment status for ALL_CLASSES
   for (var si=0; si<USER_SESSIONS.length;si++) {
     session = USER_SESSIONS[si];
@@ -50,8 +51,12 @@ $(function() {
     filterSubjects(active_subject);
   }
 
-  // run filters and mount elements
-  filterSubjects();
+  if (window.location.search.indexOf('young_adults') != -1) {
+    filterSubjects(22);
+    active_subject = 22;
+  } else {
+    filterSubjects();
+  }
   riot.mount("course-filters",{
     active_subject: active_subject,
     current_search: current_search,
