@@ -128,10 +128,16 @@ SUIT_CONFIG = {
      )
     },
     #'feed', # not implimented
-    'flatpages',
     #'geo', #occurs in several other places
     #'ipn', #paypal ipns
-    'media',
+    {'app': 'media',
+     'models': (
+       'flatpages.flatpage'
+       'media.miscfile',
+       'media.photo',
+       'media.phototag',
+     )
+    },
     {'app': 'membership',
      'icon':'icon-user',
      'models': (
@@ -139,7 +145,7 @@ SUIT_CONFIG = {
        'membership.levels',
        'membership.membershipgroup',
        'membership.officer',
-       'user.user'
+       'user.user',
      )
     },
     'mptt_comments'
