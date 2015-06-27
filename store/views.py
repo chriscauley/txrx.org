@@ -1,3 +1,6 @@
 from django.shortcuts import render
 
-# Create your views here.
+from .models import Category, Consumable
+
+def shop_home(request):
+  pass
