@@ -4,7 +4,17 @@
 
 {% block main %}
 <div class="col-sm-12">
-  <h1 class="page-title">{{ session.course.name }} - {{ session.get_short_dates }}</h1>
+  <h1 class="page-title">{{ session.course.name }}</h1>
+</div>
+<div class="col-sm-12">
+  <div class="well">
+    <h3>Class times</h3>
+    <ul>
+      {% for classtime in session.classtime_set.all %}
+      <li>{{ classtime.start|date:"l M d, P" }} - {{ classtime.end|date:"P" }}</li>
+      {% endfor %}
+    </ul>
+  </div>
 </div>
 {% if session.get_evaluations %}
 <div class="col-sm-12">
