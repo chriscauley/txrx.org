@@ -22,6 +22,7 @@ urlpatterns = patterns(
   url(r'^event/',include('event.urls',namespace="event",app_name="event")),
   url(r'^instagram/',include('instagram.urls',namespace="instagram",app_name="instagram")),
   url(r'^media_files/',include('media.urls')),
+  url(r'^shop/', include('shop.urls')),
 
   # comments and javascript translation
   url(r'^comments/',include('comment.urls')),

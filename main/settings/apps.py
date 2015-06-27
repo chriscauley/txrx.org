@@ -25,6 +25,10 @@ INSTALLED_APPS = (
   'crop_override',
   'social.apps.django_app.default',
 
+  #store
+  'shop',
+  'store',
+
   # comments
   'mptt',
   'mptt_comments',
