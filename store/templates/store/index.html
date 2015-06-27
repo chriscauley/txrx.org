@@ -1,0 +1,10 @@
+{% extends "shop/base.html" %}
+{% load url from future %}
+
+{% block body %}
+  <h1>Product list:</h1>
+  {% for product in product_list %}
+  <a href="{{ product.get_absolute_url }}">{{ product.get_name }}</a><br />
+  {% endfor %}
+
+{% endblock %}

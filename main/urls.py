@@ -22,6 +22,8 @@ urlpatterns = patterns(
   url(r'^event/',include('event.urls',namespace="event",app_name="event")),
   url(r'^instagram/',include('instagram.urls',namespace="instagram",app_name="instagram")),
   url(r'^media_files/',include('media.urls')),
+  url(r'^shop/$','store.views.index',name='product_list'),
+  url(r'^shop/(\d+)/([^/]+)/$','store.views.detail',name='product_detail'),
   url(r'^shop/', include('shop.urls')),
 
   # comments and javascript translation

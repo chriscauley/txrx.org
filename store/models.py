@@ -1,3 +1,4 @@
+from django.template.defaultfilters import slugify
 from django.db import models
 
 from db.models import NamedTreeModel
@@ -19,5 +20,10 @@ class Consumable(PhotosMixin,Product):
     in_stock = models.IntegerField(null=True,blank=True,help_text=_ht)
     _ht2 = "Amount purchased at a time. Used to make the quick refill process."
     purchase_quantity = models.IntegerField(default=1,help_text=_ht2)
+    def save(self,*args,**kwargs):
+      self.slug = slugify(self.name)
+      super(Consumable,self).save(*args,**kwargs)
+    get_absolute_url = lambda self: reverse('product_detail',args=[self.pk,self.slug])
     class Meta:
         ordering = ('name',)
+
