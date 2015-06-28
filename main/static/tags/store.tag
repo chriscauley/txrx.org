@@ -12,9 +12,11 @@
     <img src={ opts.data.img.url } />
     <div class="name">{{ opts.data.name }}</div>
     <div class="row">
-      <div class="col-sm-6 price">${opts.data.price}</div>
-      <div class="col-sm-6">
+      <div class="col-sm-6 price">
+        ${opts.data.price}
         <span if={ opts.data.quantity }>x { opts.data.quantity }</span>
+      </div>
+      <div class="col-sm-6">
         <button class="btn btn-success btn-block" onclick={ plusOne } if={ !opts.data.quantity }>Add to Cart</button>
       </div>
     </div>
