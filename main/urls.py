@@ -23,8 +23,10 @@ urlpatterns = patterns(
   url(r'^instagram/',include('instagram.urls',namespace="instagram",app_name="instagram")),
   url(r'^media_files/',include('media.urls')),
   url(r'^shop/$','store.views.index',name='product_list'),
+  url(r'^shop/edit/$','store.views.cart_edit',name='cart_edit'),
   url(r'^shop/(\d+)/([^/]+)/$','store.views.detail',name='product_detail'),
   url(r'^shop/', include('shop.urls')),
+  url(r'^products.js$','store.views.products_json'),
 
   # comments and javascript translation
   url(r'^comments/',include('comment.urls')),
@@ -116,9 +118,7 @@ urlpatterns += patterns(
 if settings.DEBUG:
   urlpatterns += patterns(
     '',
-    url(r'^media/(?P<path>.*)$',
-        'django.views.static.serve',
-        {'document_root': settings.MEDIA_ROOT,
-         'show_indexes': True}),
+    url(r'^media/(?P<path>.*)$','django.views.static.serve',
+        {'document_root': settings.MEDIA_ROOT,'show_indexes': True}),
   )
 

@@ -21,7 +21,7 @@ class Category(PhotosMixin,NamedTreeModel):
       self.pk,
       self.name,
       [image.width,image.height,image.url],
-      [p.as_json for p in self.consumable_set.all()],
+      [c.as_json for c in self.category_set.all()],
     ]
   class Meta:
     ordering = ('order',)
@@ -44,6 +44,7 @@ class Consumable(PhotosMixin,Product):
       self.name,
       [image.width,image.height,image.url],
       int(100*self.unit_price),
+      [c.pk for c in self.categories.all()]
     ]
   def save(self,*args,**kwargs):
     self.slug = slugify(self.name)
@@ -64,9 +65,11 @@ class DecimalEncoder(json.JSONEncoder):
 def reset_products_json():
   values = {
     'categories': json.dumps([c.as_json for c in Category.objects.all()], cls=DecimalEncoder),
+    'products': json.dumps([p.as_json for p in Consumable.objects.all()], cls=DecimalEncoder),
   }
   text = render_to_string('store/products.json',values)
   f = open(os.path.join(settings.STATIC_ROOT,'_products.json'),'w')
   f.write(text)
   f.close()
   os.rename(os.path.join(settings.STATIC_ROOT,'_products.json'),os.path.join(settings.STATIC_ROOT,'products.json'))
+  return text

@@ -27,17 +27,9 @@
     <script src="{{ STATIC_URL }}lightbox/js/lightbox.min.js"></script>
     <script src="{{ STATIC_URL }}js/jsi18n.js"></script>
     {#<script src="{{ STATIC_URL }}mptt_comments/js/mptt_comments.js"></script>#}
-    <script src="{{ STATIC_URL }}js/favico.js"></script>
-    <script src="{{ STATIC_URL }}cv/float.js"></script>
     {% endcompress %}
     <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" />
     <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}cv/float.css" />
-    <script>
-      var f = new Favico({
-        animation : 'popFade'
-      });
-      f.badge({{ pending_evaluations.count }});
-    </script>
     {% block head %}{% endblock %}
     <meta property="og:title" content="{% block fb_title %}TXRX Labs: Houston's Hackerspace{% endblock %}" />
     <meta property="og:site_name" content="{{ SITE_NAME }}" />
@@ -105,6 +97,12 @@
     <script src="https://cdn.jsdelivr.net/g/riot@2.0.14(riot.min.js+compiler.min.js)"></script>
     {% block extrajs %}{% endblock %}
     <script src="{{ STATIC_URL }}blog.js"></script>
+    <script src="{{ STATIC_URL }}js/favico.js"></script>
+    <script>
+      var f = new Favico({animation : 'popFade'});
+      f.badge({{ pending_evaluations.count }});
+    </script>
+    <script src="{{ STATIC_URL }}cv/float.js"></script>
     <script>
 
       var _gaq = _gaq || [];

@@ -12,7 +12,10 @@
 {% endblock %}
 
 {% block extrajs %}
-<script src="{{ STATIC_URL }}products.json"></script>
+<script>var CART = {{ cart|safe }};</script>
+<script src="/products.js"></script>
 <script type="riot/tag" src="{{ STATIC_URL }}tags/store.tag"></script>
-<script>riot.mount("product-list",{categories:PRODUCT_CATEGORIES})</script>
+<script>
+riot.mount("product-list",{});
+</script>
 {% endblock %}

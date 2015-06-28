@@ -1,10 +1,9 @@
 <product-list>
-  <div class="category" each={ opts.categories }>
-    <h1>{ name }</h1>
-    <div class="row">
-      <product each={ product,i in products } data={ product } class="col-sm-4"></product>
-    </div>
+  <div class="row">
+    <product each={ product,i in opts.visible_products } data={ product } class="col-sm-4"></product>
   </div>
+  console.log(opts.visible_products);
+  opts.visible_products = window.PRODUCTS.list;
 </product-list>
 
 <product>
@@ -28,16 +27,28 @@
         <button class="btn btn-danger btn-block" onclick={ minusOne }>-1</button>
       </div>
       <div class="col-sm-12">
-<br />
+        <br />
         <button class="btn btn-primary btn-block" onclick={ minusOne }>Checkout</button>
       </div>
     </div>
   </div>
-  opts.data.quantity = 0;
+  var update_timeout;
+  function updateCart() {
+    clearTimeout(update_timeout);
+    update_timeout = setTimeout(_updateCart,250);
+  }
+  function _updateCart() {
+    $.post(
+      '/shop/edit/',
+      {pk: opts.data.pk,quantity: opts.data.quantity}
+    );
+  }
   plusOne(e) {
     opts.data.quantity++;
+    updateCart();
   }
   minusOne(e) {
     opts.data.quantity--;
+    updateCart();
   }
 </product>
