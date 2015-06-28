@@ -1,10 +1,18 @@
 {% extends "shop/base.html" %}
-{% load url from future %}
+{% load thumbnail crop_util %}
 
 {% block body %}
-  <h1>Product list:</h1>
-  {% for product in product_list %}
-  <a href="{{ product.get_absolute_url }}">{{ product.get_name }}</a><br />
+<h1>Jump To...</h1>
+<div class="row">
+  {% for category in categories %}
+  <div class="col-sm-4"><button class="btn btn-primary btn-block">{{ category }}</button><br/></div>
   {% endfor %}
+</div>
+<product-list></product-list>
+{% endblock %}
 
+{% block extrajs %}
+<script src="{{ STATIC_URL }}products.json"></script>
+<script type="riot/tag" src="{{ STATIC_URL }}tags/store.tag"></script>
+<script>riot.mount("product-list",{categories:PRODUCT_CATEGORIES})</script>
 {% endblock %}

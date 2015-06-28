@@ -15,11 +15,15 @@ for line in lines:
     continue
   name= line[1]
   slug = name.lower().replace(' ','_')
+  if not slug:
+    continue
   defaults = {
     'part_number': line[3],
     'part_style': line[4],
     'unit_price': line[5] or 0,
   }
   product,new = Consumable.objects.get_or_create(name=name,defaults=defaults)
+  product.slug = slug
   product.categories.add(category)
+  product.active = True
   product.save()

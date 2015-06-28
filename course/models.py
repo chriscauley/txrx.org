@@ -17,6 +17,7 @@ from event.models import OccurrenceModel, reverse_ics
 from tool.models import ToolsMixin
 from main.utils import cached_method, cached_property, latin1_to_ascii
 
+from shop.models import Product
 from json import dumps
 import os
 
@@ -324,8 +325,11 @@ class Session(FeedItemModel,PhotosMixin,models.Model):
     self.slug = slugify("%s_%s"%(self.course,self.id))
     super(Session,self).save(*args,**kwargs)
 
-    #now reset classe json just in case anything changed
-    reset_classes_json("classes reset during session save")
+    # now a class product needs to be made (or not)
+    defaults = {'slug': "%s_%s"%(self.slug[:40],self.pk),'name': unicode(self)}
+    s,new = SessionProduct.objects.get_or_create(session=self,defaults=defaults)
+    if new:
+      print s,'\t',self
   @cached_method
   def get_absolute_url(self):
     return self.course.get_absolute_url()
@@ -476,5 +480,9 @@ def reset_classes_json(context="no context provided"):
   if dt.hour == 0:
     mail_admins("classes.json reset",context)
 
-from .listeners import *
+class SessionProduct(Product):
+  session = models.OneToOneField(Session)
+  class Meta:
+    ordering = ('pk',)
 
+from .listeners import *

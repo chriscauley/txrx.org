@@ -1,0 +1,31 @@
+(function() {
+  var start = new Date().valueOf();
+  var cs = {{ categories|safe }};
+  var cl = cs.length;
+  window.PRODUCT_CATEGORIES = [];
+  for (var ci=0;ci<cl;ci++) {
+    var cjson = cs[ci];
+    var img = cjson[2];
+    var category = {
+      pk: cjson[0],
+      name: cjson[1],
+      img: {width:img[0],height:img[1],url:img[2]},
+      products: [],
+    }
+    var ps = cjson[3];
+    var pl = ps.length;
+    for (var pi=0;pi<pl;pi++) {
+      var pj = ps[pi];
+      var img = pj[2];
+      var price = pj[3]/100;
+      category.products.push({
+        pk: pj[0],
+        name: pj[1],
+        img: {width:img[0],height:img[1],url:img[2]},
+        price: (price%1==0)?price:price.toFixed(2)
+      })
+    }
+    window.PRODUCT_CATEGORIES.push(category)
+  }
+  //console.log(new Date().valueOf() - start);
+})();
