@@ -32,7 +32,8 @@ def cart_edit(request):
   cart = get_or_create_cart(request,save=True)
   quantity =  int(request.POST['quantity'])
   product = Product.objects.get(pk=request.POST['pk'])
-  cart_item,new = CartItem.objects.get_or_create(product=product,cart=cart)
+  defaults = {'quantity': 0}
+  cart_item,new = CartItem.objects.get_or_create(product=product,cart=cart,defaults=defaults)
   if new:
     print "created!"
   print cart_item.quantity

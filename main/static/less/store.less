@@ -1,9 +1,18 @@
+product .price {
+  font-size: 20px;
+  height: 34px;
+  line-height: 34px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+@rowHeight: 34px;
 product {
-  .price { text-align: center; }
-  .price {
-    font-size: 20px;
-    height: 34px;
-    line-height: 34px;
-    vertical-align: middle;
+  .img {
+    height: 140px;
+    overflow: hidden;
+  }
+  .incart .img {
+    height: 140px - @rowHeight*2;
   }
 }

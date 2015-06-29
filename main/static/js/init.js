@@ -13,16 +13,16 @@ $(function() {
     if ($(this).find("li").length > 2) {
       $(this).find("ul").addClass("ts-list");
       $(this).thumbScroller({
-	responsive:true,
-	numDisplay:numDisplay,
-	slideWidth:200,
-	slideHeight:200,
-	slideMargin:5,
-	slideBorder:2,
-	padding:10,
-	navButtons:'hover',
-	playButton:false,
-	continuous:true,
+	      responsive:true,
+	      numDisplay:numDisplay,
+	      slideWidth:200,
+	      slideHeight:200,
+	      slideMargin:5,
+	      slideBorder:2,
+	      padding:10,
+	      navButtons:'hover',
+	      playButton:false,
+	      continuous:true,
       });
     }
   });
@@ -30,3 +30,28 @@ $(function() {
   //  $(this).click();
   //});
 });
+
+function createCookie(name,value,days) {
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime()+(days*24*60*60*1000));
+    var expires = "; expires="+date.toGMTString();
+  }
+  else var expires = "";
+  document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0;i < ca.length;i++) {
+    var c = ca[i];
+    while (c.charAt(0)==' ') c = c.substring(1,c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+  }
+  return null;
+}
+
+function eraseCookie(name) {
+  createCookie(name,"",-1);
+}
