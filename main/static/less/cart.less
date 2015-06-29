@@ -37,6 +37,7 @@ cart .items {
   overflow: hidden;
   text-align: center;
   .item {
+    position: relative;
     &:nth-child(2n+1) { background-color: rgba(0,0,0,0.05); }
   }
   .name {
@@ -51,6 +52,7 @@ cart .items {
     line-height: 1em;
     vertical-align: middle;
   }
+  .remove, .decrement, .increment { cursor: pointer; }
   .quantity, .decrement { padding-right: 10px; }
   .increment { padding-right: 5px; }
   .decrement, .increment {
@@ -69,19 +71,11 @@ cart .items {
   }
 
   .remove {
-    font-size: 0;
-    right: 0;
+    color: @brand-danger;
+    font-size: 1.1em;
     position: absolute;
+    right: 6px;
     top: 6px;
-    a {
-      display: inline-block;
-      width: 11px;
-      height: 11px;
-      margin-top: 1px;
-      line-height: 14px;
-      background-image: url("/static/img/icon_x_red.png");
-      background-repeat: no-repeat;
-    }
   }
 }
 

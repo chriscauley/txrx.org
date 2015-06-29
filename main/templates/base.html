@@ -9,11 +9,15 @@
     {% include "_styles.html" %}
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
     <script type="text/javascript">
-      {% if settings.DEBUG %}
-      var _NOTIFY_URL = "http://dev.txrxlabs.org:8009/tx/rx/ipn/handler/"
-      {% else %}
-      var _NOTIFY_URL = "https://txrxlabs.org/tx/rx/ipn/handler/"
-      {% endif %}
+      var SHOP = {
+        {% if settings.DEBUG %}
+        base_url: "http://dev.txrxlabs.org:8009",
+        email: 'chris@lablackey.com'
+        {% else %}
+        base_url: "https://txrxlabs.org",
+        email: 'txrxlabs@gmail.com'
+        {% endif %}
+      }
       var _USER_NUMBER = {{ request.user.pk|default_if_none:"undefined" }};
       {% if request.user.is_superuser %}
       var _418 = true;

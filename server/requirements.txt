@@ -1,7 +1,6 @@
 django==1.7.8
 django-devserver
 -e git+https://github.com/chriscauley/django-registration.git#egg=django-registration
--e git+https://github.com/dcramer/django-paypal.git#egg=django-paypal
 django_compressor
 django-localflavor
 BeautifulSoup==3.2.1
@@ -34,3 +33,6 @@ requests
 django-next-please
 icalendar
 python-social-auth
+
+-e git+https://github.com/dcramer/django-paypal.git#egg=django-paypal
+django_shop

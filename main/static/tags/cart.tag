@@ -15,7 +15,8 @@
             <i class="fa fa-plus-circle increment" onclick={ parent.plusOne }></i>
             <i class="fa fa-minus-circle decrement" onclick={ parent.minusOne }></i>
             <div class="total">${ (quantity*price).toFixed(2) }</div>
-            <button class="btn remove" onclick={ parent.remove }>Remove</div>
+            <i class="fa fa-times remove" onclick={ parent.remove }></i>
+          </div>
         </div>
       </div>
       <div class="checkout-box">
@@ -43,17 +44,35 @@
     <div class="modal-footer">
       <button type="button" class="pull-left btn btn-default" data-dismiss="modal" onclick="toggleCourses();">
         &laquo; Keep Shopping</button>
-      <a>
-        <img src="{{ STATIC_URL }}img/paypal.png"></a>
+      <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+        <input name="business" type="hidden" value="{ SHOP.email }">
+        <span each={ n,i in cart_items }>
+          <input name="item_name_{ i+1 }" type="hidden" value="{ encodeURIComponent(n.name) }">
+          <input name="item_number_{ i+1 }" type="hidden" value="{ n.pk }">
+          <input name="quantity_{ i+1 }" type="hidden" value="{ n.quantity }">
+          <input name="amount_{ i+1 }" type="hidden" value="{ n.price }">
+        </span>
+        <input name="notify_url" type="hidden" value="{ SHOP.base_url}/tx/rx/ipn/handler/">
+        <input name="cancel_return" type="hidden" value="{ SHOP.base_url }/shop/checkout/pay/">
+        <input name="return" type="hidden" value="{ SHOP.base_url }/shop/pay/paypal/success/">
+        <input name="invoice" type="hidden" value="3">
+        <input name="cmd" type="hidden" value="_cart">
+        <input type="hidden" name="upload" value="1">
+        <input type="hidden" name="tax_cart" value="0">
+        <input name="charset" type="hidden" value="utf-8">
+        <input name="currency_code" type="hidden" value="USD">
+        <input name="no_shipping" type="hidden" value="1">
+        <input type="image" src="/static/img/paypal.png" border="0" name="submit" alt="Buy it Now">
+      </form>
     </div>
   </div>
 
+  this.SHOP = window.SHOP;
   this.cart_items = PRODUCTS.list.filter(function(l){return l.quantity});
   this.on("update",function() {
     this.total = 0;
     for (var i=0;i<this.cart_items.length;i++) {
       var c = this.cart_items[i];
-      console.log(c);
       this.total += c.quantity*c.price;
     }
   });
