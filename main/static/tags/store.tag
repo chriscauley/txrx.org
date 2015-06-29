@@ -20,19 +20,25 @@
         <button class="btn btn-success btn-block" onclick={ plusOne } if={ !opts.data.quantity }>Add to Cart</button>
       </div>
     </div>
-    <div if={ opts.data.quantity } class="row">
-      <div class="col-sm-6">
-        <button class="btn btn-success btn-block" onclick={ plusOne }>+1</button>
-      </div>
-      <div class="col-sm-6">
-        <button class="btn btn-danger btn-block" onclick={ minusOne }>-1</button>
-      </div>
-      <div class="col-sm-12">
-        <button class="btn btn-primary btn-block" onclick={ openCart }>Checkout</button>
+    <div class="row cart-buttons">
+      <div if={ has_buttons }>
+        <div class="col-sm-6">
+          <button class="btn btn-success btn-block" onclick={ plusOne }>+1</button>
+        </div>
+        <div class="col-sm-6">
+          <button class="btn btn-danger btn-block" onclick={ minusOne }>-1</button>
+        </div>
+        <div class="col-sm-12">
+          <button class="btn btn-primary btn-block" onclick={ openCart }>Checkout</button>
+        </div>
       </div>
     </div>
   </div>
   var update_timeout;
+  this.has_buttons = false;
+  this.on("update",function() {
+    if (this.opts.data.quantity) { this.has_buttons = true }
+  });
   function updateCart() {
     clearTimeout(update_timeout);
     update_timeout = setTimeout(_updateCart,250);
