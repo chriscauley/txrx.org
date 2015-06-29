@@ -5,7 +5,7 @@
     <i class="fa fa-edit"></i></a>
   {% endif %}
   {% if request.user.is_superuser %}
-  <a href="/admin/course/course/{{ course.pk }}" class="admin-link"><i class="fa fa-pencil"></i></a>
+  <a href="/admin/course/session/{{ session.pk }}" class="admin-link"><i class="fa fa-pencil-square"></i></a>
   {% endif %}
   <div class="dates">
     {% for classtime in session.classtime_set.all %}
