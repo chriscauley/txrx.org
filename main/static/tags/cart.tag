@@ -68,8 +68,8 @@
   </div>
 
   this.SHOP = window.SHOP;
-  this.cart_items = PRODUCTS.list.filter(function(l){return l.quantity});
   this.on("update",function() {
+    this.cart_items = PRODUCTS.list.filter(function(l){return l.quantity});
     this.total = 0;
     for (var i=0;i<this.cart_items.length;i++) {
       var c = this.cart_items[i];
@@ -80,5 +80,22 @@
   close(e) {
     this.unmount();
   }
-
+  function updateCart(e) {
+    $.post(
+      '/shop/edit/',
+      {pk: e.item.pk,quantity:e.item.quantity}
+    );
+  }
+  plusOne(e) {
+    e.item.quantity++;
+    updateCart(e);
+  }
+  minusOne(e) {
+    e.item.quantity--;
+    updateCart(e);
+  }
+  remove(e) {
+    e.item.quantity = 0;
+    updateCart(e);
+  }
 </cart>
