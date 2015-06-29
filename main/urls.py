@@ -25,6 +25,7 @@ urlpatterns = patterns(
   url(r'^shop/$','store.views.index',name='product_list'),
   url(r'^shop/start_checkout/$','store.views.start_checkout',name='start_checkout'),
   url(r'^shop/edit/$','store.views.cart_edit',name='cart_edit'),
+  url(r'^shop/receipts/$','store.views.receipts',name='receipts'),
   url(r'^shop/(\d+)/([^/]+)/$','store.views.detail',name='product_detail'),
   url(r'^shop/', include('shop.urls')),
   url(r'^products.js$','store.views.products_json'),

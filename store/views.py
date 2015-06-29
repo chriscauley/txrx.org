@@ -1,4 +1,5 @@
-from django.http import HttpResponse
+from django.contrib.admin.views.decorators import staff_member_required
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -51,5 +52,20 @@ def start_checkout(request):
   cart = get_or_create_cart(request,save=True)
   cart.update(request)
   order = Order.objects.create_from_cart(cart,request)
+  order.status = Order.COMPLETED
   order.save()
   return HttpResponse(str(order.pk))
+
+@staff_member_required
+@csrf_exempt
+def receipts(request):
+  if request.POST:
+    o = Order.objects.get(pk=request.POST['pk'])
+    o.status = request.POST['status']
+    o.save()
+    return HttpResponseRedirect('.')
+  values = {
+    'outstanding_orders': Order.objects.filter(status=Order.COMPLETED),
+    'delivered_orders': Order.objects.filter(status=Order.SHIPPED)[:20]
+  }
+  return TemplateResponse(request,'store/receipts.html',values)

@@ -34,7 +34,7 @@ def handle_successful_store_payment(sender, **kwargs):
     product = Product.objects.get(int(params['item_number%d'%i]))
     products.append(product)
     product.decrease_stock(quantity)
-  order.status = Order.SHIPPED
+  order.status = Order.COMPLETED
   order.save()
   payment = OrderPayment.objects.create(
     amount=total,
