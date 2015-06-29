@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import Category, reset_products_json
 
-from shop.models import Product, CartItem
+from shop.models import Product, CartItem, Order
 from shop.util.cart import get_or_create_cart
 
 import json;
@@ -43,6 +43,13 @@ def cart_edit(request):
   else:
     cart_item.delete()
     print "deleted"
-  
+
+  cart.update(request)
   return HttpResponse('')
 
+def start_checkout(request):
+  cart = get_or_create_cart(request,save=True)
+  cart.update(request)
+  order = Order.objects.create_from_cart(cart,request)
+  order.save()
+  return HttpResponse(str(order.pk))

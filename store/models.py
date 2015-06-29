@@ -36,6 +36,10 @@ class Consumable(PhotosMixin,Product):
   in_stock = models.IntegerField(null=True,blank=True,help_text=_ht)
   _ht2 = "Amount purchased at a time. Used to make the quick refill process."
   purchase_quantity = models.IntegerField(default=1,help_text=_ht2)
+  def decrease_stock(self,quantity):
+    if self.in_stock is None:
+      return
+    self.in_stock -= quantity
   @property
   def as_json(self):
     image = get_thumbnail(get_override(self.first_photo,'landscape_crop'),"298x199",crop="center")

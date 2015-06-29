@@ -23,6 +23,7 @@ urlpatterns = patterns(
   url(r'^instagram/',include('instagram.urls',namespace="instagram",app_name="instagram")),
   url(r'^media_files/',include('media.urls')),
   url(r'^shop/$','store.views.index',name='product_list'),
+  url(r'^shop/start_checkout/$','store.views.start_checkout',name='start_checkout'),
   url(r'^shop/edit/$','store.views.cart_edit',name='cart_edit'),
   url(r'^shop/(\d+)/([^/]+)/$','store.views.detail',name='product_detail'),
   url(r'^shop/', include('shop.urls')),

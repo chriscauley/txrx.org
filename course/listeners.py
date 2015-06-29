@@ -12,7 +12,45 @@ import traceback
 
 _duid='course.signals.handle_successful_payment'
 @receiver(payment_was_successful, dispatch_uid=_duid)
+def handle_successful_store_payment(sender, **kwargs):
+  from shop.models import Product, Order, OrderPayment
+  if not params['invoice']:
+    return # invoice number means it came from the new django_shop system
+  params = QueryDict(sender.query)
+  _uid = params.get('custom',None)
+  order = Order.objects.get(pk=params['invoice'])
+  user,new_user = get_or_create_student(sender.payer_email,u_id=_uid)
+  user.active = True
+  user.save()
+  total = 0
+  try:
+    item_count = int(params['num_cart_items'])
+  except:
+    item_count = 1
+  products = []
+  for i in range(1,item_count+1):
+    total += int(float(params['mc_gross_%d'%i]))
+    quantity = int(params['quantity%s'%i])
+    product = Product.objects.get(int(params['item_number%d'%i]))
+    products.append(product)
+    product.decrease_stock(quantity)
+  order.status = Order.SHIPPED
+  order.save()
+  payment = OrderPayment.objects.create(
+    amount=total,
+    payment_method='PayPal',
+    transaction_id=sender.txn_id
+  )
+  [p.save() for p in products] #save decreased stock last, incase of error
+  try:
+    Cart.objects.get(pk=order.cart_pk).delete()
+  except Cart.DoesNotExist:
+    pass
+
+@receiver(payment_was_successful, dispatch_uid=_duid)
 def handle_successful_payment(sender, **kwargs):
+  if params['invoice']:
+    return # invoice number means it came from the new django_shop system
   from course.models import Enrollment, Session, reset_classes_json
   #add them to the classes they're enrolled in
   params = QueryDict(sender.query)
@@ -21,14 +59,14 @@ def handle_successful_payment(sender, **kwargs):
   user.active = True
   user.save()
   try:
-    class_count = int(params['num_cart_items'])
+    item_count = int(params['num_cart_items'])
   except:
-    class_count = 1
+    item_count = 1
 
   enrollments = []
   error_sessions = []
   admin_subject = "New course enrollment"
-  for i in range(1, class_count+1):
+  for i in range(1, item_count+1):
     course_cost = int(float(params['mc_gross_%d'%i]))
     quantity = int(params['quantity%s'%i])
 

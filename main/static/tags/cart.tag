@@ -21,7 +21,7 @@
       </div>
       <div class="checkout-box">
         <div class="subtotals"></div>
-        Order Total: <b>{ total }</b>
+        Order Total: <b>${ total.toFixed(2) }</b>
       </div>
       <div if={ !window._USER_NUMBER }>
         <center>
@@ -44,7 +44,7 @@
     <div class="modal-footer">
       <button type="button" class="pull-left btn btn-default" data-dismiss="modal" onclick="toggleCourses();">
         &laquo; Keep Shopping</button>
-      <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
         <input name="business" type="hidden" value="{ SHOP.email }">
         <span each={ n,i in cart_items }>
           <input name="item_name_{ i+1 }" type="hidden" value="{ encodeURIComponent(n.name) }">
@@ -62,7 +62,7 @@
         <input name="charset" type="hidden" value="utf-8">
         <input name="currency_code" type="hidden" value="USD">
         <input name="no_shipping" type="hidden" value="1">
-        <input type="image" src="/static/img/paypal.png" border="0" name="submit" alt="Buy it Now">
+        <input type="image" src="/static/img/paypal.png" border="0" onclick={ startCheckout } alt="Buy it Now">
       </form>
     </div>
   </div>
@@ -97,5 +97,16 @@
   remove(e) {
     e.item.quantity = 0;
     updateCart(e);
+  }
+  startCheckout(e) {
+    var form = $(e.target).closest('form');
+    $.get(
+      '/shop/start_checkout/',
+      function(data) {
+        form.find("[name=invoice]").val(data);
+        form.submit();
+      },
+      "json"
+    )
   }
 </cart>
