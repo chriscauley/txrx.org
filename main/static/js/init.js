@@ -67,6 +67,6 @@ function updateCartButton() {
   });
   var button = $(".store-button").hide();
   button.find(".quantity").html(quantity);
-  button.find(".total").html(total);
+  button.find(".total").html("$"+total.toFixed(2));
   if (total) { button.show(); }
 }

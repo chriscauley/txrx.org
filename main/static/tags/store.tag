@@ -1,6 +1,6 @@
 <product-list>
   <div class="row">
-    <product each={ product,i in opts.visible_products } data={ product } class="col-sm-4"></product>
+    <product each={ product,i in opts.visible_products } data={ product } class="col-sm-6 col-md-4"></product>
   </div>
   opts.visible_products = window.PRODUCTS.list;
 </product-list>
@@ -12,23 +12,23 @@
     </div>
     <div class="name">{{ opts.data.name }}</div>
     <div class="row">
-      <div class="col-sm-6 price">
+      <div class="col-xs-6 price">
         ${opts.data.price}
         <span if={ opts.data.quantity }>x { opts.data.quantity }</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <button class="btn btn-success btn-block" onclick={ plusOne } if={ !opts.data.quantity }>Add to Cart</button>
       </div>
     </div>
     <div class="row cart-buttons">
       <div if={ has_buttons }>
-        <div class="col-sm-6">
+        <div class="col-xs-6">
           <button class="btn btn-success btn-block" onclick={ plusOne }>+1</button>
         </div>
-        <div class="col-sm-6">
+        <div class="col-xs-6">
           <button class="btn btn-danger btn-block" onclick={ minusOne }>-1</button>
         </div>
-        <div class="col-sm-12">
+        <div class="col-xs-12">
           <button class="btn btn-primary btn-block" onclick={ openCart }>Checkout</button>
         </div>
       </div>

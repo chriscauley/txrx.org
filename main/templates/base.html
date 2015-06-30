@@ -59,13 +59,13 @@
 
       <div class="row" id="main">
         {% block main %}
-        <div class="col-sm-6 col-md-8">
+        <div class="col-sm-8">
           {% block header %}
           <h1 class="page_title">{% block header_content %}{{ SITE_TAGLINE }}{% endblock %}</h1>
           {% endblock %}
           {% block content %}{% endblock %}
         </div>
-        <div class="col-sm-6 col-md-4" id="side">
+        <div class="col-sm-4" id="side">
           {% block side %}{% include "_side.html" %}{% endblock %}
         </div>
         {% endblock %}

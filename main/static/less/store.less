@@ -1,13 +1,17 @@
 product {
-  .name {
-    height: 40px;
-  }
+  .name { height: 40px; }
   .price {
     font-size: 20px;
     height: 34px;
     line-height: 34px;
     text-align: center;
     vertical-align: middle;
+  }
+  @media (max-width: @screen-xs-max) {
+    .well {
+      max-width: 300px;
+      margin: 0 auto;
+    }
   }
 }
 
@@ -18,9 +22,7 @@ product {
     overflow: hidden;
   }
   .cart-buttons { height: 0; }
-  .img {
-    height: 140px;
-  }
+  .img { height: 140px; }
   .incart {
     .img { height: 140px - @rowHeight*2; }
     .cart-buttons { height: @rowHeight*2; }

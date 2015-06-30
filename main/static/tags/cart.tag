@@ -68,6 +68,9 @@
   </div>
 
   this.SHOP = window.SHOP;
+  document.body.style.overflowY = document.documentElement.style.overflowY = "hidden";
+  document.body.style.paddingRight = "17px";
+  document.body.scrolling = "no";
   this.on("update",function() {
     this.cart_items = PRODUCTS.list.filter(function(l){return l.quantity});
     this.total = 0;
@@ -81,6 +84,9 @@
   close(e) {
     this.unmount();
     riot.update("*");
+    document.body.style.overflowY = document.documentElement.style.overflowY = "";
+    document.body.scrolling = "yes";
+    document.body.style.paddingRight = "";
   }
   function updateCart(e) {
     $.post(
