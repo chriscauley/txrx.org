@@ -52,6 +52,21 @@ function readCookie(name) {
   return null;
 }
 
-function eraseCookie(name) {
-  createCookie(name,"",-1);
+function eraseCookie(name) { createCookie(name,"",-1); }
+
+function openCart() {
+  $("body").append("<cart></cart>");
+  riot.mount("cart");
+}
+
+function updateCartButton() {
+  var total = 0,quantity=0;
+  PRODUCTS.list.forEach(function(l) {
+    total += l.price*l.quantity;
+    quantity += l.quantity;
+  });
+  var button = $(".store-button").hide();
+  button.find(".quantity").html(quantity);
+  button.find(".total").html(total);
+  if (total) { button.show(); }
 }

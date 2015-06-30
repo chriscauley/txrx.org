@@ -308,6 +308,12 @@
   .fee { padding-right: 0; }
 }
 
+.has_notes span {
+  border-bottom: dashed 1px;
+  color: #0088cc;
+  cursor: help;
+}
+
 .SessionList {
   .add { display: inline-block; }
   .view-cart, .add-to-cart, .rsvp, .unrsvp {
@@ -380,3 +386,83 @@
   right: 0;
   width: 213px;
 }
+
+// classes cart
+@cartWidth: 100px;
+
+#cart {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+#cart {
+  .cartHeaders { display: none; }
+  .itemContainer {
+    padding: 3px;
+    position: relative;
+    margin-bottom: 5px;
+    min-height: 20px;
+    overflow: hidden;
+    text-align: center;
+    &:nth-child(2n+1) { background-color: rgba(0,0,0,0.05); }
+  }
+
+  .itemName {
+    font-size: 12px;
+    padding-right: 15px;
+    text-align: left;
+    b { font-size: 1.1em; }
+  }
+
+  .itemQuantity, .itemDecrement, .itemIncrement {
+    display: inline-block;
+    line-height: 1em;
+    vertical-align: middle;
+  }
+  .itemQuantity, .itemDecrement { padding-right: 10px; }
+  .itemIncrement { padding-right: 5px; }
+  .itemDecrement, .itemIncrement { font-size: 1.2em; }
+  .itemQuantity {
+    font-weight: bold;
+    &:before { content: "Quantity: "; font-weight: normal; }
+  }
+  .itemTotal {
+    font-weight: bold;
+    &:before { content: "Item Total: "; font-weight: normal; }
+  }
+  .simpleCart_finalTotal { font-size: 1.1em; font-weight: bold; }
+  .itemRemove {
+    font-size: 0;
+    right: 0;
+    position: absolute;
+    top: 6px;
+    a {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      margin-top: 1px;
+      line-height: 14px;
+      background-image: url("/static/img/icon_x_red.png");
+      background-repeat: no-repeat;
+    }
+  }
+}
+
+#cart {
+  .subtotals {
+    border-top: 1px solid @borderGray;
+    margin: 10px auto 0;
+    padding-top: 5px;
+    width: 75%;
+  }
+  .cartSubtotal, .cartDiscount {
+    font-weight: bold;
+    text-align: center;
+    &:before { font-weight: normal; }
+  }
+  .cartSubtotal:before { content: "Cart Subtotal: "; }
+  .cartDiscount:before { content: "Discount: "; }
+  .checkout-box { text-align: center; }
+}
+
+.btn-cart { display: none; }

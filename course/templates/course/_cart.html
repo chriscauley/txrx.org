@@ -5,7 +5,7 @@
         <button type="button" class="close" data-dismiss="modal" onclick="toggleCourses();">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span></button>
-        <h4 class="modal-title">Shopping Cart monkey</h4>
+        <h4 class="modal-title">Shopping Cart</h4>
       </div>
       <div class="modal-body">
         <script type="text/javascript" src="{{ STATIC_URL }}js/simpleCart.js"></script>
@@ -31,7 +31,8 @@
             and reminder the day before your class. If you want to use a different email, enter it above.
           </div>
           {% endif %}
-          <center><button class="btn btn-danger return_policy" onclick="$('.return_policy').toggle();return false;">View our return policy</button></center>
+          <center><button class="btn btn-danger return_policy" onclick="$('.return_policy').toggle();return false;">
+              View our return policy</button></center>
           <div class="alert alert-danger return_policy" style="display:none;">
             {% include "course/_return_policy.html" with format="html" %}
           </div>

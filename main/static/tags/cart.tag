@@ -75,10 +75,12 @@
       var c = this.cart_items[i];
       this.total += c.quantity*c.price;
     }
+    updateCartButton();
   });
 
   close(e) {
     this.unmount();
+    riot.update("*");
   }
   function updateCart(e) {
     $.post(

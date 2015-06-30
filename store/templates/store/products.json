@@ -30,6 +30,7 @@
     }
     window.PRODUCTS.list.push(product);
     window.PRODUCTS.map[product.pk] = product;
+    updateCartButton();
   }
   //console.log(new Date().valueOf() - start);
 })();

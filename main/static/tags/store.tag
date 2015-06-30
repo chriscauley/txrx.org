@@ -38,6 +38,7 @@
   this.has_buttons = false;
   this.on("update",function() {
     if (this.opts.data.quantity) { this.has_buttons = true }
+    updateCartButton();
   });
   function updateCart() {
     clearTimeout(update_timeout);
