@@ -54,7 +54,16 @@ def start_checkout(request):
   order = Order.objects.create_from_cart(cart,request)
   order.status = Order.COMPLETED
   order.save()
-  return HttpResponse(str(order.pk))
+  out = {
+    'order_pk': order.pk,
+    'errors': []
+  }
+  for item in cart.items.all():
+    if item.product.in_stock is None:
+      continue
+    if item.product.in_stock < item.quantity:
+      out['errors'].append("We only have %s in stock of the following item: %s"%(item.product.in_stock,item.product))
+  return HttpResponse(json.dumps(out))
 
 @staff_member_required
 @csrf_exempt

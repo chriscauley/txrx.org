@@ -12,12 +12,12 @@
     </div>
     <div class="name">{{opts.data.in_stock}}{{ opts.data.name }}</div>
     <div class="row">
-      <div class="col-xs-6 price">
+      <div class="col-xs-{ (opts.data.quantity!=0)?12:6 } price">
         ${opts.data.price}
         <span if={ opts.data.quantity }>x { opts.data.quantity }</span>
       </div>
-      <div class="col-xs-6">
-        <button class="btn btn-success btn-block" onclick={ plusOne } if={ !opts.data.quantity }>Add to Cart</button>
+      <div class="col-xs-6" if={ !opts.data.quantity }>
+        <button class="btn btn-success btn-block" onclick={ plusOne }>Add to Cart</button>
       </div>
     </div>
     <div class="row cart-buttons">

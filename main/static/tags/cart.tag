@@ -40,6 +40,7 @@
         Cancellations and rescheduling requests must be made at least one week prior to the class for a full refund.
         Cancellations submitted less than one week before the class will only be refunded if we can fill your slot.
       </div>
+      <div class="alert alert-danger" style="margin:10px 0 0" each={ n,i in errors }>{ n }</div>
     </div>
     <div class="modal-footer">
       <button type="button" class="pull-left btn btn-default" data-dismiss="modal" onclick="toggleCourses();">
@@ -68,6 +69,7 @@
   </div>
 
   this.SHOP = window.SHOP;
+  var that = this;
   document.body.style.overflowY = document.documentElement.style.overflowY = "hidden";
   document.body.style.paddingRight = "17px";
   document.body.scrolling = "no";
@@ -111,8 +113,13 @@
     $.get(
       '/shop/start_checkout/',
       function(data) {
-        form.find("[name=invoice]").val(data);
-        form.submit();
+        if (data.errors.length) {
+          that.errors = data.errors;
+          that.update();
+        } else {
+          form.find("[name=invoice]").val(data.order_pk);
+          form.submit();
+        }
       },
       "json"
     )
