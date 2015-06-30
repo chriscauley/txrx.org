@@ -48,7 +48,8 @@ class Consumable(PhotosMixin,Product):
       self.name,
       [image.width,image.height,image.url],
       int(100*self.unit_price),
-      [c.pk for c in self.categories.all()]
+      [c.pk for c in self.categories.all()],
+      self.in_stock
     ]
   def save(self,*args,**kwargs):
     self.slug = slugify(self.name)

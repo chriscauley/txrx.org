@@ -26,7 +26,8 @@
       name: pj[1],
       img: {width:img[0],height:img[1],url:img[2]},
       price: (price%1==0)?price:price.toFixed(2),
-      quantity: window.CART[pj[0]] || 0
+      quantity: window.CART[pj[0]] || 0,
+      in_stock: pj[5]
     }
     window.PRODUCTS.list.push(product);
     window.PRODUCTS.map[product.pk] = product;

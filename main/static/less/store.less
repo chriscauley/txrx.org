@@ -27,4 +27,19 @@ product {
     .img { height: 140px - @rowHeight*2; }
     .cart-buttons { height: @rowHeight*2; }
   }
+  .out-of-stock {
+    position: relative;
+    &:before {
+      background: url(/static/img/sold_out.png) rgba(255,255,255,0.75) center 25% no-repeat;
+      background-size: 80% auto;
+      bottom: 0;
+      content: "";
+      display: block;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top:0;
+      z-index:1;
+    }
+  }
 }

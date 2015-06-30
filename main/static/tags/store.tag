@@ -6,11 +6,11 @@
 </product-list>
 
 <product>
-  <div class="well {incart:opts.data.quantity}">
+  <div class="well {incart:opts.data.quantity,out-of-stock:opts.data.in_stock==0}">
     <div class="img">
       <img src={ opts.data.img.url } />
     </div>
-    <div class="name">{{ opts.data.name }}</div>
+    <div class="name">{{opts.data.in_stock}}{{ opts.data.name }}</div>
     <div class="row">
       <div class="col-xs-6 price">
         ${opts.data.price}
