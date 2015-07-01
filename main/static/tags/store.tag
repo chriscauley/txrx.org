@@ -1,8 +1,29 @@
+<category-list>
+  <button class="btn btn-default btn-block {active:!active_category}" onclick={ reset }>
+    Any Category</button>
+  <button class="btn btn-default btn-block {active:parent.active_category==category.pk}"
+          onclick={ parent.click } each={ category,i in categories }>
+    { category.name }</button>
+
+  this.categories = window.PRODUCTS.categories;
+  this.active_category = undefined;
+  click(e) {
+    var pk = e.item.category.pk;
+    this.active_category = pk;
+    window.visible_products = window.PRODUCTS.list.filter(function(l) { return l.categories.indexOf(pk) > -1; });
+    riot.update("product-list");
+  }
+  reset(e) {
+    this.active_category = undefined;
+    window.visible_products = window.PRODUCTS.list;
+    riot.update("product-list");
+  }
+</category-list>
+
 <product-list>
   <div class="row">
-    <product each={ product,i in opts.visible_products } data={ product } class="col-sm-6 col-md-4"></product>
+    <product each={ product,i in window.visible_products } data={ product } class="col-sm-6 col-md-4"></product>
   </div>
-  opts.visible_products = window.PRODUCTS.list;
 </product-list>
 
 <product>
