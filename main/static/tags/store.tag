@@ -83,7 +83,7 @@
           </div>
           <div class="col-xs-6">
             <a href="{ product.purchase_url }" class="btn btn-info btn-block {hidden:!product.purchase_url}">
-              { product.purchase_domain }</a>
+              <i class="fa fa-shopping-cart"></i> { product.purchase_domain }</a>
           </div>
         </div>
         <div class="row bottom">

@@ -24,6 +24,10 @@ product, product_admin .product {
       margin: 0 auto;
     }
   }
+  .col-xs-6 {
+    &:nth-child(2n+1) { padding-right: @rowSpacing/2; }
+    &:nth-child(2n) { padding-left: @rowSpacing/2; }
+  }
 }
 
 product, product_admin .product {
