@@ -88,11 +88,11 @@
         </div>
         <div class="row bottom">
           <div class="col-xs-6">
-            <button click={ add } class="btn btn-success btn-block">
+            <button onclick={ parent.add } class="btn btn-success btn-block">
               +{ product.purchase_quantity }</button>
           </div>
           <div class="col-xs-6">
-            <button click={ subtract } class="btn btn-danger btn-block">
+            <button onclick={ parent.subtract } class="btn btn-danger btn-block">
               -{ product.purchase_quantity }</button>
           </div>
         </div>
@@ -101,4 +101,21 @@
   </div>
 
   this.visible_products = window.PRODUCTS.list;
+  that = this;
+  function modify(sign,product) {
+    $.post(
+      '/shop/admin/add/',
+      {quantity:product.purchase_quantity*sign,pk:product.pk},
+      function() {
+        product.in_stock += product.purchase_quantity*sign;
+        that.update();
+      }
+    )
+  }
+  add(e) {
+    modify(1,e.item.product);
+  }
+  subtract(e) {
+    modify(-1,e.item.product);
+  }
 </product_admin>

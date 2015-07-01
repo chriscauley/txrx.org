@@ -7,7 +7,7 @@ class CategoryAdmin(NamedTreeModelAdmin):
   pass
 
 class ConsumableAdmin(admin.ModelAdmin):
-  pass
+  list_display = ('__unicode__','in_stock','unit_price')
 
 admin.site.register(Consumable,ConsumableAdmin)
 admin.site.register(Category,NamedTreeModelAdmin)

@@ -37,13 +37,11 @@ def cart_edit(request):
   cart_item,new = CartItem.objects.get_or_create(product=product,cart=cart,defaults=defaults)
   if new:
     print "created!"
-  print cart_item.quantity
   if quantity:
     cart_item.quantity = quantity
     cart_item.save()
   else:
     cart_item.delete()
-    print "deleted"
 
   cart.update(request)
   return HttpResponse('')
@@ -93,3 +91,12 @@ def admin_products_json(request):
   out = {product.pk:{k:getattr(product,k) for k in extra_fields}
          for product in Product.objects.filter(active=True)}
   return HttpResponse("window.PRODUCTS_EXTRA = %s;"%json.dumps(out))
+
+@staff_member_required
+@csrf_exempt
+def admin_add(request):
+  quantity = int(request.POST['quantity'])
+  product = get_object_or_404(Product,pk=request.POST['pk'])
+  product.in_stock = max(product.in_stock or 0 + quantity,0)
+  product.save()
+  return HttpResponse('')

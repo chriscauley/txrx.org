@@ -9,7 +9,12 @@ product, product_admin .product {
     text-align: center;
     vertical-align: middle;
   }
-  .btn-block { margin-bottom: @rowSpacing; }
+  .btn-block {
+    height: @rowHeight;
+    line-height: @rowHeight - 2px;
+    padding: 0;
+    margin-bottom: @rowSpacing;
+  }
   .bottom .btn-block { margin-bottom: 0; }
   .well { position: relative; }
   .gone { opacity: 0 }
