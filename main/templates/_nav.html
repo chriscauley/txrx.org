@@ -63,7 +63,6 @@
           {% if user.is_authenticated %}
           {% if user.is_staff %}
           <li><a href="/admin/"><i class="fa fa-pencil-square"></i> Admin</a></li>
-          <li><a href="{% url "receipts" %}"><i class="fa fa-paypal"></i> Recepts</a>
           {% endif %}
           <li><a href="{% url "logout" %}"><i class="fa fa-power-off"></i> Log out</a></li>
           <li><a href="{% url "account_settings" %}"><i class="fa fa-gear"></i> Settings</a></li>
