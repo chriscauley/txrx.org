@@ -1,22 +1,9 @@
-{% extends "shop/base.html" %}
-{% load thumbnail crop_util %}
+{% extends "store/base.html" %}
 
-{% block body %}
-<h1>Jump To...</h1>
-<div class="row">
-  {% for category in categories %}
-  <div class="col-sm-4"><button class="btn btn-primary btn-block">{{ category }}</button><br/></div>
-  {% endfor %}
-</div>
+{% block products %}
 <product-list></product-list>
 {% endblock %}
 
-{% block extrajs %}
+{% block pjs %}
 <script>var CART = {{ cart|safe }};</script>
-<script src="/products.js"></script>
-<script type="riot/tag" src="{{ STATIC_URL }}tags/store.tag"></script>
-<script type="riot/tag" src="{{ STATIC_URL }}tags/cart.tag"></script>
-<script>
-riot.mount("product-list",{});
-</script>
 {% endblock %}

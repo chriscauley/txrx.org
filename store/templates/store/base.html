@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="col-sm-3 col-md-2 col-lg-2" id="side">
+  <category-list></category-list>
+</div>
+<div class="col-sm-9 col-md-10 col-lg-10">
+  {% block products %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block extrajs %}
+{% block pjs %}{% endblock %}
+<script>var CART = {{ cart|safe }};</script>
+<script src="/products.js"></script>
+<script type="riot/tag" src="{{ STATIC_URL }}tags/store.tag"></script>
+<script type="riot/tag" src="{{ STATIC_URL }}tags/cart.tag"></script>
+<script>riot.mount("*");</script>
+{% endblock %}
