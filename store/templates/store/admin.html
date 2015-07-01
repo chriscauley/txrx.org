@@ -1,9 +1,9 @@
-{% extends "shop/base.html" %}
+{% extends "store/base.html" %}
 
 {% block products %}
-<product_admin></product_admin>
+<product-list></product-list>
 {% endblock %}
 
-{% pjs %}
+{% block pjs %}
 <script src="{% url "admin_products_json" %}"></script>
 {% endblock %}

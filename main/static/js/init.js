@@ -70,3 +70,21 @@ function updateCartButton() {
   button.find(".total").html("$"+total.toFixed(2));
   if (total) { button.show(); }
 }
+
+function timeit(f) {
+  return function() {
+    var start = new Date().valueOf();
+    var out = f.apply(this,arguments);
+    var t = new Date().valueOf()-start;
+    console.log(t)
+    return out
+  }
+}
+
+//ho to disable/enable timeit
+function timeit(f) { return f }
+
+//this is just so that I can easily timeit
+var resetProductList = timeit(function() {
+  riot.update('product-list');
+});

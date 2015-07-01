@@ -7,6 +7,7 @@
   window.PRODUCTS.list = [];
   window.PRODUCTS.map = {};
   window.CART = window.CART || {};
+  window.PRODUCTS_EXTRA = window.PRODUCTS_EXTRA || {};
   for (var ci=0;ci<cl;ci++) {
     var cjson = cs[ci];
     var img = cjson[2];
@@ -31,16 +32,11 @@
       categories: pj[4],
       in_stock: pj[5]
     }
+    var e = window.PRODUCTS_EXTRA[product.pk] || {};
+    for (var attr in e) { product[attr] = e[attr]; }
     window.PRODUCTS.list.push(product);
     window.PRODUCTS.map[product.pk] = product;
     updateCartButton();
-  }
-  if (window.PRODUCTS_EXTRA) {
-    console.log(1);
-    window.PRODUCTS.list.forEach(function(product) {
-      var e = window.PRODUCTS_EXTRA[product.pk] || {};
-      for (var attr in e) { product[attr] = e[attr]; }
-    });
   }
   window.visible_products = PRODUCTS.list;
 
