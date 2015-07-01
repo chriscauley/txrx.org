@@ -1,12 +1,18 @@
-product {
+@rowHeight: 34px;
+@rowSpacing: 10px;
+product, product_admin .product {
   .name { height: 40px; }
   .price {
     font-size: 20px;
-    height: 34px;
+    height: @rowHeight + @rowSpacing;
     line-height: 34px;
     text-align: center;
     vertical-align: middle;
   }
+  .btn-block { margin-bottom: @rowSpacing; }
+  .bottom .btn-block { margin-bottom: 0; }
+  .well { position: relative; }
+  .gone { opacity: 0 }
   @media (max-width: @screen-xs-max) {
     .well {
       max-width: 300px;
@@ -15,8 +21,7 @@ product {
   }
 }
 
-@rowHeight: 34px;
-product {
+product, product_admin .product {
   .img,.cart-buttons {
     transition: height 0.25s;
     overflow: hidden;
@@ -24,8 +29,8 @@ product {
   .cart-buttons { height: 0; }
   .img { height: 140px; }
   .incart {
-    .img { height: 140px - @rowHeight*2; }
-    .cart-buttons { height: @rowHeight*2; }
+    .img { height: 140px - @rowHeight*2 - @rowSpacing; }
+    .cart-buttons { height: @rowHeight*2 + @rowSpacing; }
   }
   .out-of-stock {
     position: relative;
