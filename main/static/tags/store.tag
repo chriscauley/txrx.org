@@ -10,7 +10,7 @@
     <div class="img">
       <img src={ opts.data.img.url } />
     </div>
-    <div class="name">{{opts.data.in_stock}}{{ opts.data.name }}</div>
+    <div class="name">{ opts.data.name }</div>
     <div class="row">
       <div class="col-xs-{ (opts.data.quantity!=0)?12:6 } price">
         ${opts.data.price}
@@ -28,7 +28,7 @@
         <div class="col-xs-6">
           <button class="btn btn-danger btn-block" onclick={ minusOne }>-1</button>
         </div>
-        <div class="col-xs-12">
+        <div class="col-xs-12 bottom">
           <button class="btn btn-primary btn-block" onclick={ openCart }>Checkout</button>
         </div>
       </div>
@@ -63,3 +63,42 @@
     riot.mount("cart")
   }
 </product>
+
+<product_admin>
+  <div class="row">
+    <div each={ product,i in visible_products } class="col-sm-6 col-md-4 product">
+      <div class="well">
+        <div class="img {out-of-stock:product.in_stock==0}">
+          <img src={ product.img.url } />
+        </div>
+        <div class="name">{ product.name }</div>
+        <div class="price">
+          ${ product.price }
+          <span class="pull-right">In Stock: { product.in_stock||"null" }</span>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <a href="/admin/store/consumable/{ product.pk }/" class="fa fa-pencil-square btn btn-primary btn-block">
+              Edit</a>
+          </div>
+          <div class="col-xs-6">
+            <a href="{ product.purchase_url }" class="btn btn-info btn-block {hidden:!product.purchase_url}">
+              { product.purchase_domain }</a>
+          </div>
+        </div>
+        <div class="row bottom">
+          <div class="col-xs-6">
+            <button click={ add } class="btn btn-success btn-block">
+              +{ product.purchase_quantity }</button>
+          </div>
+          <div class="col-xs-6">
+            <button click={ subtract } class="btn btn-danger btn-block">
+              -{ product.purchase_quantity }</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  this.visible_products = window.PRODUCTS.list;
+</product_admin>

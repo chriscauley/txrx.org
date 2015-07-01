@@ -51,6 +51,12 @@ class Consumable(PhotosMixin,Product):
       [c.pk for c in self.categories.all()],
       self.in_stock
     ]
+  def get_domain(self,attr):
+    if not getattr(self,attr):
+      return
+    return getattr(self,attr).split('//')[-1].split('/')[0].split('.')[-2]
+  purchase_domain = property(lambda self: self.get_domain('purchase_url'))
+  purchase_domain2 = property(lambda self: self.get_domain('purchase_url2'))
   def save(self,*args,**kwargs):
     self.slug = slugify(self.name)
     super(Consumable,self).save(*args,**kwargs)

@@ -62,7 +62,8 @@ def start_checkout(request):
     if item.product.in_stock is None:
       continue
     if item.product.in_stock < item.quantity:
-      out['errors'].append("We only have %s in stock of the following item: %s"%(item.product.in_stock,item.product))
+      s = "Sorry, we only have %s in stock of the following item: %s"
+      out['errors'].append(s%(item.product.in_stock,item.product))
   return HttpResponse(json.dumps(out))
 
 @staff_member_required
@@ -78,3 +79,17 @@ def receipts(request):
     'delivered_orders': Order.objects.filter(status=Order.SHIPPED)[:20]
   }
   return TemplateResponse(request,'store/receipts.html',values)
+
+@staff_member_required
+@csrf_exempt
+def admin_page(request):
+  values = {}
+  return TemplateResponse(request,'store/admin.html',values)
+
+@staff_member_required
+def admin_products_json(request):
+  extra_fields = ['purchase_url','purchase_domain','purchase_url2','purchase_domain2',
+                  'purchase_quantity','in_stock']
+  out = {product.pk:{k:getattr(product,k) for k in extra_fields}
+         for product in Product.objects.filter(active=True)}
+  return HttpResponse("window.PRODUCTS_EXTRA = %s;"%json.dumps(out))

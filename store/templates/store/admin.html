@@ -1,0 +1,16 @@
+{% extends "shop/base.html" %}
+{% load thumbnail crop_util %}
+
+{% block body %}
+<product_admin></product_admin>
+{% endblock %}
+
+{% block extrajs %}
+<script src="{% url "admin_products_json" %}"></script>
+<script src="/products.js"></script>
+<script type="riot/tag" src="{{ STATIC_URL }}tags/store.tag"></script>
+<script type="riot/tag" src="{{ STATIC_URL }}tags/cart.tag"></script>
+<script>
+riot.mount("product_admin",{});
+</script>
+{% endblock %}

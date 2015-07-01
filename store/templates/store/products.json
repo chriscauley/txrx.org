@@ -6,6 +6,7 @@
   window.PRODUCTS.categories = [];
   window.PRODUCTS.list = [];
   window.PRODUCTS.map = {};
+  window.CART = window.CART || {};
   for (var ci=0;ci<cl;ci++) {
     var cjson = cs[ci];
     var img = cjson[2];
@@ -33,5 +34,13 @@
     window.PRODUCTS.map[product.pk] = product;
     updateCartButton();
   }
+  if (window.PRODUCTS_EXTRA) {
+    console.log(1);
+    window.PRODUCTS.list.forEach(function(product) {
+      var e = window.PRODUCTS_EXTRA[product.pk] || {};
+      for (var attr in e) { product[attr] = e[attr]; }
+    });
+  }
+
   //console.log(new Date().valueOf() - start);
 })();
