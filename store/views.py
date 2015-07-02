@@ -97,6 +97,7 @@ def admin_products_json(request):
 def admin_add(request):
   quantity = int(request.POST['quantity'])
   product = get_object_or_404(Product,pk=request.POST['pk'])
-  product.in_stock = max(product.in_stock or 0 + quantity,0)
+  old = product.in_stock or 0 
+  product.in_stock = max(old + quantity,0)
   product.save()
-  return HttpResponse('')
+  return HttpResponse(str(product.in_stock))

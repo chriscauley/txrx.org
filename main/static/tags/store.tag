@@ -148,8 +148,8 @@
     $.post(
       '/shop/admin/add/',
       {quantity:that.product.purchase_quantity*sign,pk:that.product.pk},
-      function() {
-        that.product.in_stock += that.product.purchase_quantity*sign;
+      function(data) {
+        that.product.in_stock = data;
         that.update();
       }
     )

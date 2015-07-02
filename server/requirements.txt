@@ -34,5 +34,4 @@ django-next-please
 icalendar
 python-social-auth
 
--e git+https://github.com/dcramer/django-paypal.git#egg=django-paypal
 django_shop

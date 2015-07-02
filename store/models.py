@@ -39,7 +39,7 @@ class Consumable(PhotosMixin,Product):
   def decrease_stock(self,quantity):
     if self.in_stock is None:
       return
-    self.in_stock -= quantity
+    self.in_stock = max(self.in_stock- quantity,0)
   @property
   def as_json(self):
     image = get_thumbnail(get_override(self.first_photo,'landscape_crop'),"298x199",crop="center")
@@ -64,19 +64,10 @@ class Consumable(PhotosMixin,Product):
   class Meta:
     ordering = ('name',)
 
-class DecimalEncoder(json.JSONEncoder):
-  def _iterencode(self, o, markers=None):
-    if isinstance(o, decimal.Decimal):
-      # wanted a simple yield str(o) in the next line, but that would mean a yield on the line with super(...),
-      # which wouldn't work (see http://stackoverflow.com/questions/1960516/python-json-serialize-a-decimal-object)
-      print "face down booty up"
-      return (str(o) for o in [o])
-    return super(DecimalEncoder, self)._iterencode(o, markers)
-
 def reset_products_json():
   values = {
-    'categories': json.dumps([c.as_json for c in Category.objects.all()], cls=DecimalEncoder),
-    'products': json.dumps([p.as_json for p in Consumable.objects.all()], cls=DecimalEncoder),
+    'categories': json.dumps([c.as_json for c in Category.objects.all()]),
+    'products': json.dumps([p.as_json for p in Consumable.objects.all()])
   }
   text = render_to_string('store/products.json',values)
   f = open(os.path.join(settings.STATIC_ROOT,'_products.json'),'w')

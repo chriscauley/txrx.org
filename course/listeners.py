@@ -10,15 +10,15 @@ from .utils import get_or_create_student
 
 import traceback
 
-_duid='course.signals.handle_successful_payment'
-@receiver(payment_was_successful, dispatch_uid=_duid)
 def handle_successful_store_payment(sender, **kwargs):
-  from shop.models import Product, Order, OrderPayment
-  if not params['invoice']:
-    return # invoice number means it came from the new django_shop system
+  from shop.models import Product, Order, OrderPayment, Cart
   params = QueryDict(sender.query)
   _uid = params.get('custom',None)
-  order = Order.objects.get(pk=params['invoice'])
+  try:
+    order = Order.objects.get(pk=params['invoice'])
+  except Order.DoesNotExist:
+    mail_admins("repeat transaction for %s"%sender.txn_id,"")
+    return
   user,new_user = get_or_create_student(sender.payer_email,u_id=_uid)
   user.active = True
   user.save()
@@ -31,12 +31,17 @@ def handle_successful_store_payment(sender, **kwargs):
   for i in range(1,item_count+1):
     total += int(float(params['mc_gross_%d'%i]))
     quantity = int(params['quantity%s'%i])
-    product = Product.objects.get(int(params['item_number%d'%i]))
+    try:
+      product = Product.objects.get(pk=int(params['item_number%d'%i]))
+    except Product.DoesNotExist:
+      main_admins("Product fail for %s"%sender.txn_id,"")
+      continue
     products.append(product)
     product.decrease_stock(quantity)
   order.status = Order.COMPLETED
   order.save()
   payment = OrderPayment.objects.create(
+    order=order,
     amount=total,
     payment_method='PayPal',
     transaction_id=sender.txn_id
@@ -47,13 +52,14 @@ def handle_successful_store_payment(sender, **kwargs):
   except Cart.DoesNotExist:
     pass
 
-@receiver(payment_was_successful, dispatch_uid=_duid)
+_duid2='course.signals.handle_successful_store_payment'
+@receiver(payment_was_successful, dispatch_uid=_duid2)
 def handle_successful_payment(sender, **kwargs):
-  if params['invoice']:
-    return # invoice number means it came from the new django_shop system
   from course.models import Enrollment, Session, reset_classes_json
-  #add them to the classes they're enrolled in
+  #add them to the classes they are enrolled in
   params = QueryDict(sender.query)
+  if params['invoice']:
+    return handle_successful_store_payment(sender,**kwargs)
   _uid = params.get('custom',None)
   user,new_user = get_or_create_student(sender.payer_email,u_id=_uid)
   user.active = True
