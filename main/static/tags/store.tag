@@ -37,7 +37,7 @@
     }
     this.max_products = this.products.length
     this.products = this.products.slice(0,window.PRODUCTS.visible);
-    if (window.PRODUCTS_EXTRA) {
+    if (window.PRODUCTS.extra) {
       this.admin_products = this.products;
       this.products = [];
     }
