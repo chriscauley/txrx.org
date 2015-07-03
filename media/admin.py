@@ -1,14 +1,16 @@
 from django.conf import settings
 from django.conf.urls import url, patterns
 from django.contrib import admin
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.generic import GenericTabularInline
 from django.http import HttpResponse
+from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
+
 from crop_override.admin import CropAdmin
 from sorl.thumbnail import get_thumbnail
 
 from db.forms import StaffMemberForm
-
 from .forms import MultiPhotoUploadForm
 from .models import PhotoTag, Photo, MiscFile, TaggedPhoto, TaggedFile
 
@@ -39,22 +41,9 @@ class PhotoAdmin(CropAdmin):
     )
     return upload_urls + urls
   def multi_photo_upload_view(self, request):
-    context = {
-      'app_label': self.model._meta.app_label,
-      'opts': self.model._meta,
-      'add': True,
-      'change': False,
-      'is_popup': False,
-      'save_as': self.save_as,
-      'save_on_top': self.save_on_top,
-      'has_delete_permission': False,
-      'has_change_permission': True,
-      'has_add_permission': True,
-      "STATIC_URL": getattr(settings, "STATIC_URL"),
-      "photos": json.dumps([p.as_json for p in Photo.objects.filter(user=request.user)]),
-    }
-
     if request.method == "POST" and request.FILES:
+      natural_key = request.POST.get('content_type').split('.')
+      content_type = ContentType.objects.get_by_natural_key(*natural_key)
       image_list = []
       name = request.POST.get('name',None) or None
       for f in request.FILES.getlist('file'):
@@ -64,10 +53,38 @@ class PhotoAdmin(CropAdmin):
           user=request.user
         )
         image_list.append(photo.as_json)
+        TaggedPhoto.objects.create(
+          photo=photo,
+          object_id=request.POST['object_pk'],
+          content_type=content_type,
+        )
       return HttpResponse(json.dumps(image_list))
 
     template="admin/multi_photo_upload.html"
     return TemplateResponse(request,template,context)
+
+class TaggedPhotoAdmin(admin.ModelAdmin):
+  def get_fields(self,request,obj=None):
+    fields = super(TaggedPhotoAdmin,self).get_fields(request,obj)
+    if obj and not 'dropphoto' in fields:
+      return list(fields) + ['dropphoto']
+    return fields
+  def get_readonly_fields(self,request,obj=None):
+    fields = super(TaggedPhotoAdmin,self).get_readonly_fields(request,obj)
+    if obj and not 'dropphoto' in fields:
+      return list(fields) + ['dropphoto']
+    return fields
+  def dropphoto(self,obj=None): # only occurs with obj (See get_fields)
+    values = {
+      'content_type': self.model._meta.app_label+"."+self.model.__name__.lower(),
+      'opts': self.model._meta,
+      'photos': json.dumps([p.as_json for p in obj.get_photos()]),
+      'obj': obj,
+      'STATIC_URL':settings.STATIC_URL
+    }
+    print values
+    return render_to_string('admin/dropphoto.html',values).replace('\n','')
+  dropphoto.allow_tags = True
 
 class TaggedPhotoInline(GenericTabularInline):
   model = TaggedPhoto
