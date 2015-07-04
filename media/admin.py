@@ -1,7 +1,5 @@
 from django.conf import settings
-from django.conf.urls import url, patterns
 from django.contrib import admin
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.generic import GenericTabularInline
 from django.http import HttpResponse
 from django.template.loader import render_to_string
@@ -11,7 +9,6 @@ from crop_override.admin import CropAdmin
 from sorl.thumbnail import get_thumbnail
 
 from db.forms import StaffMemberForm
-from .forms import MultiPhotoUploadForm
 from .models import PhotoTag, Photo, MiscFile, TaggedPhoto, TaggedFile
 
 import json
@@ -33,35 +30,6 @@ class PhotoAdmin(CropAdmin):
     out = '<img src="%s" width="%s" height="%s" />'%(im.url,im.width,im.height)
     return out
   _thumbnail.allow_tags=True
-  def get_urls(self):
-    urls = super(PhotoAdmin, self).get_urls()
-    upload_urls = patterns(
-      '',
-      url(r'^bulk/$', self.admin_site.admin_view(self.multi_photo_upload_view), name='photos_admin_upload'),
-    )
-    return upload_urls + urls
-  def multi_photo_upload_view(self, request):
-    if request.method == "POST" and request.FILES:
-      natural_key = request.POST.get('content_type').split('.')
-      content_type = ContentType.objects.get_by_natural_key(*natural_key)
-      image_list = []
-      name = request.POST.get('name',None) or None
-      for f in request.FILES.getlist('file'):
-        photo = Photo.objects.create(
-          name=name,
-          file=f,
-          user=request.user
-        )
-        image_list.append(photo.as_json)
-        TaggedPhoto.objects.create(
-          photo=photo,
-          object_id=request.POST['object_pk'],
-          content_type=content_type,
-        )
-      return HttpResponse(json.dumps(image_list))
-
-    template="admin/multi_photo_upload.html"
-    return TemplateResponse(request,template,context)
 
 class TaggedPhotoAdmin(admin.ModelAdmin):
   def get_fields(self,request,obj=None):

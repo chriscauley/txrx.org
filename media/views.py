@@ -110,3 +110,24 @@ def tag_photo(request):
     content_type=content_type,
   )
   return HttpResponse(json.dumps(new))
+
+
+def bulk_photo_upload(request):
+  image_list = []
+  if request.method == "POST" and request.FILES:
+    natural_key = request.POST.get('content_type').split('.')
+    content_type = ContentType.objects.get_by_natural_key(*natural_key)
+    name = request.POST.get('name',None) or None
+    for f in request.FILES.getlist('file'):
+      photo = Photo.objects.create(
+        name=name,
+        file=f,
+        user=request.user
+      )
+      image_list.append(photo.as_json)
+      TaggedPhoto.objects.create(
+        photo=photo,
+        object_id=request.POST['object_pk'],
+        content_type=content_type,
+      )
+  return HttpResponse(json.dumps(image_list))

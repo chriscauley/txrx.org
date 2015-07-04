@@ -1,3 +1,4 @@
+{% load compress %}
 <div id="content-main">
   {% csrf_token %}
   <div>
@@ -11,9 +12,11 @@
   </div>
 </div>
 
-<link href="{{ STATIC_URL }}css/multi_photo_upload.css" rel="stylesheet" type="text/css">
-<script src="{{ STATIC_URL }}tags/photo-list.tag" type="riot/tag"></script>
+{% compress css %}
+<link href="{{ STATIC_URL }}css/multi_photo_upload.less" rel="stylesheet" type="text/less">
+{% endcompress %}
 <script src="https://cdn.jsdelivr.net/g/riot@2.0.14(riot.min.js+compiler.min.js)"></script>
+<script src="{{ STATIC_URL }}tags/photo-list.tag" type="riot/tag"></script>
 <script>
   window._PHOTOS = {
     photos: {{ photos|safe }},
@@ -21,4 +24,6 @@
     object_id: {{ obj.pk }}
   }
 </script>
+{% compress js %}
 <script src="{{ STATIC_URL }}js/multi_photo_upload.js"></script>
+{% endcompress %}

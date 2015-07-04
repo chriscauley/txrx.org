@@ -8,4 +8,5 @@ urlpatterns = patterns(
   url(r'^photo/add/$','add_photo',name='add_photo'),
   url(r'^photo/bulk_tag/$','bulk_tag_index',name='bulk_tag_index'),
   url(r'^photo/bulk_tag/(\d+)/$','bulk_tag_detail',name='bulk_tag_detail'),
+  url(r'^photo/bulk_upload/$','bulk_photo_upload',name='bulk_photo_upload'),
 )

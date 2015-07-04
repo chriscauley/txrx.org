@@ -17,7 +17,7 @@ jQuery(document).ready(function() {
     formData.append('csrfmiddlewaretoken', csrf_token)
 
     var xhr = new XMLHttpRequest();
-    var post_url = "/admin/media/photo/bulk/";
+    var post_url = "/media_files/photo/bulk_upload/";
     xhr.open('POST', post_url);
     xhr.onload = function () {
       var i;
