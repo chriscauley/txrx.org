@@ -83,7 +83,7 @@ class TaggedPhotoAdmin(admin.ModelAdmin):
       'STATIC_URL':settings.STATIC_URL
     }
     print values
-    return render_to_string('admin/dropphoto.html',values).replace('\n','')
+    return render_to_string('admin/dropphoto.html',values)
   dropphoto.allow_tags = True
 
 class TaggedPhotoInline(GenericTabularInline):

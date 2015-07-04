@@ -1,4 +1,5 @@
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -7,10 +8,12 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Photo, PhotoTag
+from .models import Photo, PhotoTag, TaggedPhoto
 from .forms import PhotoForm, PhotoFilterForm, ZipForm, PhotoTagForm
 
 from NextPlease import pagination
+
+import json
 
 @staff_member_required
 @pagination('photos',per_page=12,orphans=5)
@@ -89,3 +92,21 @@ def bulk_tag_detail(request,tag_id):
     'photos': Photo.objects.all()
   }
   return TemplateResponse(request,"photo/bulk_tag_detail.html",values)
+
+@staff_member_required
+def photo_search(request):
+  q = request.GET['q']
+  photos = Photo.objects.filter(Q(name__icontains=q)|Q(caption__icontains=q))
+  return HttpResponse(json.dumps([p.as_json for p in photos]))
+
+@staff_member_required
+def tag_photo(request):
+  natural_key = request.GET.get('content_type').split('.')
+  content_type = ContentType.objects.get_by_natural_key(*natural_key)
+  photo = Photo.objects.get(pk=request.GET['photo_pk'])
+  tag,new = TaggedPhoto.objects.get_or_create(
+    photo=photo,
+    object_id=request.GET['object_pk'],
+    content_type=content_type,
+  )
+  return HttpResponse(json.dumps(new))

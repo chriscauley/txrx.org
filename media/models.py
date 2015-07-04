@@ -93,8 +93,9 @@ class Photo(FileModel):
   @property
   def as_json(self):
     return {
+      'pk': self.pk,
       'name': self.name,
-      'thumbnail': get_thumbnail(self.file,"x200").url,
+      'thumbnail': get_thumbnail(self.file,"200x200",crop="center").url,
     }
   @property
   def external_type(self):
