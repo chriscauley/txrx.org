@@ -1,3 +1,44 @@
+.form-horizontal .control-group.field-dropphoto {
+  display: block;
+}
+
+.form-horizontal .control-group.dropphoto>div {
+  display: block;
+}
+.form-horizontal .control-group.field-dropphoto .control-label {
+  display: block;
+  text-align: left;
+}
+.form-horizontal .control-group.field-dropphoto .controls {
+  box-sizing: border-box;
+  display: block;
+  margin: 0;
+  width: 100%;
+}
+
+.rows {
+  min-height: 1px;
+  overflow: hidden;
+  margin: 10px -5px;
+}
+
+.form-horizontal .control-group .controls .readonly {
+  width: 100%;
+}
+
+.fourth {
+  box-sizing: border-box;
+  margin: 5px 5px;
+  float: left;
+  width: 33%;
+  max-width: 200px;
+}
+
+.search_results .name {
+  height: 3em;
+  overflow-y: hidden;
+}
+
 .dropzone {
   background-color: #ccc;
   border: 2px dashed #666;
@@ -5,11 +46,9 @@
   box-shadow: inset 2px 2px 10px 2px rgba(0, 0, 0, 0.5);;
   color: #666;
   font-size: 200%;
-  height: 200px;
-  line-height: 200px;
-  margin-top: 20px;
+  padding-top: 10px;
+  height: 100px;
   text-align: center;
-  width: 100%;
 }
 .dropzone:before { content: "Drop images here."; }
 .field-_auto_photos label { display: none; }
