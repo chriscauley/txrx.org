@@ -16,7 +16,7 @@ import os, json
 class Category(PhotosMixin,NamedTreeModel):
   @property
   def as_json(self):
-    image = get_thumbnail(get_override(self.first_photo,'landscape_crop'),"298x199",crop="center")
+    image = get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center")
     return [
       self.pk,
       self.name,
@@ -42,7 +42,7 @@ class Consumable(PhotosMixin,Product):
     self.in_stock = max(self.in_stock- quantity,0)
   @property
   def as_json(self):
-    image = get_thumbnail(get_override(self.first_photo,'landscape_crop'),"298x199",crop="center")
+    image = get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center")
     return [
       self.pk,
       self.name,
