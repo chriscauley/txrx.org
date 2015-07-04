@@ -90,12 +90,13 @@ class Photo(FileModel):
   _ph = "Usages: None"
   portrait_crop = CropOverride('Portrait Crop (2:3)', aspect='2x3',help_text=_ph,**kwargs)
   external_url = models.URLField(null=True,blank=True)
+  thumbnail_url = property(lambda self: get_thumbnail(self.file,"200x200",crop="center").url)
   @property
   def as_json(self):
     return {
       'pk': self.pk,
       'name': self.name,
-      'thumbnail': get_thumbnail(self.file,"200x200",crop="center").url,
+      'thumbnail': self.thumbnail_url,
     }
   @property
   def external_type(self):
