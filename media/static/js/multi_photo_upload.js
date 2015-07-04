@@ -12,7 +12,6 @@ jQuery(document).ready(function() {
     }
     formData.append('content_type',window._PHOTOS.content_type);
     formData.append('object_pk',window._PHOTOS.object_id);
-    formData.append('name',$("#photos_name").val());
     var csrf_token = $('[name=csrfmiddlewaretoken]').val()
     formData.append('csrfmiddlewaretoken', csrf_token)
 

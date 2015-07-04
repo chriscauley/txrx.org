@@ -12,6 +12,7 @@ from .models import Photo, PhotoTag, TaggedPhoto
 from .forms import PhotoForm, PhotoFilterForm, ZipForm, PhotoTagForm
 
 from NextPlease import pagination
+from PIL import Image
 
 import json
 
@@ -117,10 +118,16 @@ def bulk_photo_upload(request):
   if request.method == "POST" and request.FILES:
     natural_key = request.POST.get('content_type').split('.')
     content_type = ContentType.objects.get_by_natural_key(*natural_key)
-    name = request.POST.get('name',None) or None
     for f in request.FILES.getlist('file'):
+      try:
+        Image.open(f)
+      except IOError:
+        image_list.append({
+          'error':"This does not appear to be a valid image",
+          'name': f.name
+        })
+        continue
       photo = Photo.objects.create(
-        name=name,
         file=f,
         user=request.user
       )

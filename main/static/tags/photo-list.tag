@@ -2,7 +2,8 @@
   <div class="rows">
     <div id="dropzone" class="fourth dropzone"></div>
     <photo class="fourth" each={ photos }>
-      <img src="{ thumbnail }" />
+      <img src="{ thumbnail }" if={ thumbnail }/>
+      <div data-error={ error } if={ error }></div>
       <div class="name">{ name }</div>
     </photo>
   </div>
