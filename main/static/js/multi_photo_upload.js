@@ -23,7 +23,12 @@ jQuery(document).ready(function() {
       var i;
       var text = this.responseText;
       if (xhr.status === 200) {
-          loadPhotos(JSON.parse(xhr.responseText));
+        var new_photos = JSON.parse(xhr.responseText);
+        var i = new_photos.length;
+        while (i--) {
+          window._PHOTOS.photos.unshift(new_photos[i]);
+        }
+        riot.update("photo-list");
       } else {
         alert("An unknown error has occurred, go bug Chris");
       }
@@ -32,17 +37,6 @@ jQuery(document).ready(function() {
     xhr.send(formData);
   }
 
-  $('.dropzone').bind("dragenter", function(e) {
-    e.preventDefault();
-    $(e.target).addClass("hover");
-  }).bind("dragleave", function(e) {
-    e.preventDefault();
-    $(e.target).removeClass("hover");
-  }).bind("dragover", function(e) {
-    e.preventDefault();
-  }).bind("drop", dropHandler);
-  function loadPhotos(photo) {
-    
-  }
-  riot.mount("photo-list",{'photos': window._PHOTOS.photos});
+  riot.mount("photo-list",{dropHandler:dropHandler});
+  riot.mount('photo-search',{});
 });
