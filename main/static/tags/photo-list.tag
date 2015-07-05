@@ -2,6 +2,14 @@
   <div class="rows">
     <div id="dropzone" class="fourth dropzone"></div>
     <photo class="fourth" each={ photos }>
+      <div class="buttons">
+        <button class="btn btn-danger" onclick={ parent.untag } title="Will not delete photo from database">
+          <i class="fa fa-times"></i> Unlink</button>
+        <button class="btn btn-danger" onclick={ parent.delete } title="Will delete from database">
+          <i class="fa fa-warning"></i> Delete</button>
+        <a class="btn btn-primary" href="/admin/media/photo/{ id }">
+          <i class="fa fa-pencil-square"></i> Edit</a>
+      </div>
       <img src="{ thumbnail }" if={ thumbnail }/>
       <div data-error={ error } if={ error }></div>
       <div class="name">{ name }</div>
@@ -21,6 +29,37 @@
       e.preventDefault();
     }).bind("drop", opts.dropHandler);
   });
+  untag(e) {
+    $.post(
+      '/media_files/photo/untag/',
+      {
+        content_type:window._PHOTOS.content_type,
+        object_id:window._PHOTOS.object_id,
+        photo_id: e.item.id
+      },
+      function(data) {
+        for (var i=0;i<window._PHOTOS.photos.length;i++) {
+          if (window._PHOTOS.photos[i].id == e.item.id) { window._PHOTOS.photos.splice(i,1); }
+        }
+        riot.update("photo-list");
+      }
+    )
+  }
+  delete(e) {
+    var warn = "This will delete this photo entirely from the site. Don't do this unless you are certain";
+    if (confirm(warn)) {
+      $.post(
+        '/media_files/photo/delete/',
+        { photo_id: e.item.id },
+        function(data) {
+          for (var i=0;i<window._PHOTOS.photos.length;i++) {
+            if (window._PHOTOS.photos[i].id == e.item.id) { window._PHOTOS.photos.splice(i,1); }
+          }
+          riot.update("photo-list");
+        }
+      )
+    }
+  }
 </photo-list>
 
 <photo-search>
@@ -58,8 +97,8 @@
       "/media_files/photo/tag/",
       {
         content_type:window._PHOTOS.content_type,
-        object_pk:window._PHOTOS.object_id,
-        photo_pk: e.item.pk
+        object_id:window._PHOTOS.object_id,
+        photo_id: e.item.id
       },
       function(data) {
         that.search_results = [];

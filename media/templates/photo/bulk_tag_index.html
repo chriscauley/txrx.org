@@ -8,7 +8,7 @@
   </tr>
   {% for phototag in phototags %}
   <tr>
-    <td><a href="{% url "bulk_tag_detail" phototag.pk %}">{{ phototag }}</a></td>
+    <td><a href="{% url "bulk_tag_detail" phototag.id %}">{{ phototag }}</a></td>
     <td>{{ phototag.photo_set.count }}</td>
   </tr>
   {% endfor %}

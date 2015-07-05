@@ -11,7 +11,7 @@ jQuery(document).ready(function() {
       formData.append('file', files[i]);
     }
     formData.append('content_type',window._PHOTOS.content_type);
-    formData.append('object_pk',window._PHOTOS.object_id);
+    formData.append('object_id',window._PHOTOS.object_id);
     var csrf_token = $('[name=csrfmiddlewaretoken]').val()
     formData.append('csrfmiddlewaretoken', csrf_token)
 

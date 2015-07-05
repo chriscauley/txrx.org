@@ -74,7 +74,7 @@ class TaggedFileInline(GenericTabularInline):
 
 class PhotoTagAdmin(admin.ModelAdmin):
   list_display = ("__unicode__","bulk_link")
-  bulk_link = lambda self, obj: "<a href='/media_files/photo/bulk_tag/%s'>Bulk Tag %s Photos</a>"%(obj.pk,obj)
+  bulk_link = lambda self, obj: "<a href='/media_files/photo/bulk_tag/%s'>Bulk Tag %s Photos</a>"%(obj.id,obj)
   bulk_link.allow_tags = True
 
 class MiscFileAdmin(admin.ModelAdmin):

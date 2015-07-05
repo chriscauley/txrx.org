@@ -20,9 +20,10 @@
   window._PHOTOS = {
     photos: {{ photos|safe }},
     content_type: "{{ content_type }}",
-    object_id: {{ obj.pk }}
+    object_id: {{ obj.id }}
   }
 </script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
 {% compress js %}
 <script src="{{ STATIC_URL }}js/multi_photo_upload.js"></script>
 {% endcompress %}

@@ -94,7 +94,7 @@ class Photo(FileModel):
   @property
   def as_json(self):
     return {
-      'pk': self.pk,
+      'id': self.id,
       'name': self.name,
       'thumbnail': self.thumbnail_url,
     }
@@ -127,7 +127,7 @@ class PhotosMixin(object):
     try:
       return self.get_photos()[0]
     except IndexError:
-      return Photo.objects.get(pk=144)
+      return Photo.objects.get(id=144)
   @cached_property
   def _ct_id(self):
     return ContentType.objects.get_for_model(self.__class__).id
@@ -144,7 +144,7 @@ class FilesMixin(object):
     try:
       return self.get_files()[0]
     except IndexError:
-      return MiscFile.objects.get(pk=144)
+      return MiscFile.objects.get(id=144)
   @cached_property
   def _ct_id(self):
     return ContentType.objects.get_for_model(self.__class__).id

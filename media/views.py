@@ -79,9 +79,9 @@ def bulk_tag_index(request):
 @staff_member_required
 @pagination('photos',per_page=96,orphans=5)
 def bulk_tag_detail(request,tag_id):
-  phototag = PhotoTag.objects.get(pk=tag_id)
+  phototag = PhotoTag.objects.get(id=tag_id)
   if request.POST:
-    photo = Photo.objects.get(pk=request.POST['photo_pk'])
+    photo = Photo.objects.get(id=request.POST['photo_id'])
     if request.POST['checked'] == 'true':
       photo.tags.add(phototag)
     else:
@@ -104,15 +104,15 @@ def photo_search(request):
 def tag_photo(request):
   natural_key = request.GET.get('content_type').split('.')
   content_type = ContentType.objects.get_by_natural_key(*natural_key)
-  photo = Photo.objects.get(pk=request.GET['photo_pk'])
+  photo = Photo.objects.get(id=request.GET['photo_id'])
   tag,new = TaggedPhoto.objects.get_or_create(
     photo=photo,
-    object_id=request.GET['object_pk'],
+    object_id=request.GET['object_id'],
     content_type=content_type,
   )
   return HttpResponse(json.dumps(new))
 
-
+@staff_member_required
 def bulk_photo_upload(request):
   image_list = []
   if request.method == "POST" and request.FILES:
@@ -134,7 +134,22 @@ def bulk_photo_upload(request):
       image_list.append(photo.as_json)
       TaggedPhoto.objects.create(
         photo=photo,
-        object_id=request.POST['object_pk'],
+        object_id=request.POST['object_id'],
         content_type=content_type,
       )
   return HttpResponse(json.dumps(image_list))
+
+@csrf_exempt
+@staff_member_required
+def untag_photo(request):
+  natural_key = request.POST.get('content_type').split('.')
+  content_type = ContentType.objects.get_by_natural_key(*natural_key)
+  TaggedPhoto.objects.filter(content_type=content_type,
+                          object_id=request.POST['object_id'],
+                          photo__id=request.POST['photo_id']).delete()
+  return HttpResponse('')
+
+@csrf_exempt
+@staff_member_required
+def delete_photo(request):
+  return HttpResponse('')

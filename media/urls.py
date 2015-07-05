@@ -9,4 +9,6 @@ urlpatterns = patterns(
   url(r'^photo/bulk_tag/$','bulk_tag_index',name='bulk_tag_index'),
   url(r'^photo/bulk_tag/(\d+)/$','bulk_tag_detail',name='bulk_tag_detail'),
   url(r'^photo/bulk_upload/$','bulk_photo_upload',name='bulk_photo_upload'),
+  url(r'^photo/untag/$','untag_photo',name='untag_photo'),
+  url(r'^photo/delete/$','delete_photo',name='delete_photo'),
 )
