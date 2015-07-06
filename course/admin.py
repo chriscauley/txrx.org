@@ -5,7 +5,7 @@ from db.admin import NamedTreeModelAdmin
 
 from .models import Subject, Course, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseCompletion
 from event.admin import OccurrenceModelInline
-from media.admin import TaggedPhotoInline, TaggedFileInline
+from media.admin import TaggedFileInline, TaggedPhotoAdmin
 from tool.admin import TaggedToolInline
 
 class CourseCompletionInline(admin.TabularInline):
@@ -13,12 +13,12 @@ class CourseCompletionInline(admin.TabularInline):
   extra = 0
   raw_id_fields = ('user',)
 
-class CourseAdmin(admin.ModelAdmin):
+class CourseAdmin(TaggedPhotoAdmin):
   list_display = ("name","_notifies_count","active","tool_count","photo_count","content","visuals","presentation")
   list_editable = ("content","visuals","presentation")
   readonly_fields = ("_notifies",)
   filter_horizontal = ("subjects",)
-  inlines = [CourseCompletionInline, TaggedPhotoInline, TaggedToolInline, TaggedFileInline]
+  inlines = [CourseCompletionInline, TaggedToolInline, TaggedFileInline]
   def tool_count(self,obj):
     return len(obj.get_tools())
   def photo_count(self,obj):
@@ -48,7 +48,7 @@ class EnrollmentInline(admin.TabularInline):
   readonly_fields = ('user',)
   extra = 0
 
-class SessionAdmin(admin.ModelAdmin):
+class SessionAdmin(TaggedPhotoAdmin):
   form = StaffMemberForm
   ordering = ('-first_date',)
   raw_id_fields = ('course','user')
@@ -60,7 +60,7 @@ class SessionAdmin(admin.ModelAdmin):
   _last_date = lambda self,obj: getattr(obj,'last_date','Will be set on save')
   _last_date.short_description = 'last classtime'
   exclude = ('time_string','slug','publish_dt')
-  inlines = (ClassTimeInline, EnrollmentInline, TaggedPhotoInline)
+  inlines = (ClassTimeInline, EnrollmentInline)
   search_fields = ("user__username","user__email","course__name")
   class Media:
     js = ("js/course_admin.js",)

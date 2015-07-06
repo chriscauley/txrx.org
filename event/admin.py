@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from .models import Event, EventOccurrence
 from event.utils import get_room_conflicts
-from media.admin import TaggedPhotoInline
+from media.admin import TaggedPhotoAdmin
 
 import datetime,functools
 
@@ -62,13 +62,12 @@ class EventOccurrenceInline(OccurrenceModelInline):
     qs = super(EventOccurrenceInline,self).get_queryset(request)
     return qs.filter(start__gte=datetime.datetime.now())
 
-class EventAdmin(admin.ModelAdmin):
+class EventAdmin(TaggedPhotoAdmin):
   list_display = ("__unicode__","repeat")
-  inlines = [EventOccurrenceInline,TaggedPhotoInline]
+  inlines = [EventOccurrenceInline]
   search_fields = ['name']
 
-class EventOccurrenceAdmin(admin.ModelAdmin):
-  inlines = [TaggedPhotoInline]
+class EventOccurrenceAdmin(TaggedPhotoAdmin):
   search_fields = ['event__name']
   list_filter = (FuturePastListFilter,)
 
