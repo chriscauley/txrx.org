@@ -12,12 +12,13 @@
       </div>
       <img src="{ thumbnail }" if={ thumbnail }/>
       <div data-error={ error } if={ error }></div>
-      <div class="name">{ name }</div>
+      <div class="name" contenteditable="true" onkeyup={ parent.editName }>{ name }</div>
     </photo>
   </div>
 
   this.photos = window._PHOTOS.photos;
   var that = this;
+  var edit_timeout;
   this.on("mount",function() {
     $("#dropzone").bind("dragenter", function(e) {
       e.preventDefault();
@@ -29,6 +30,16 @@
       e.preventDefault();
     }).bind("drop", opts.dropHandler);
   });
+  editName(e) {
+    clearTimeout(edit_timeout);
+    edit_timeout = setTimeout(function() {
+      $.post(
+        '/media_files/photo/edit/'+e.item.id+'/',
+        {name:e.target.innerText},
+        function(data) {}
+      )
+    },500);
+  }
   untag(e) {
     $.post(
       '/media_files/photo/untag/',
