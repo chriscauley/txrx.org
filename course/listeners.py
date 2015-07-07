@@ -58,7 +58,7 @@ def handle_successful_payment(sender, **kwargs):
   from course.models import Enrollment, Session, reset_classes_json
   #add them to the classes they are enrolled in
   params = QueryDict(sender.query)
-  if params['invoice']:
+  if params.get('invoice',None):
     return handle_successful_store_payment(sender,**kwargs)
   _uid = params.get('custom',None)
   user,new_user = get_or_create_student(sender.payer_email,u_id=_uid)
