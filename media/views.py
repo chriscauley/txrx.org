@@ -151,13 +151,14 @@ def untag_photo(request):
 
 @csrf_exempt
 @staff_member_required
-def delete_photo(request):
+def delete_photo(request,pk):
+  Photo.objects.filter(pk=pk).delete()
   return HttpResponse('')
 
 @csrf_exempt
 @staff_member_required
 def edit_photo(request,pk):
   photo = Photo.objects.get(pk=pk)
-  photo.name = request.POST['name'].replace('\n').('').strip()
+  photo.name = request.POST['name'].replace('\n','').strip()
   photo.save()
   return HttpResponse('')

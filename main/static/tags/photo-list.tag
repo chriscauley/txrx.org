@@ -40,6 +40,12 @@
       )
     },500);
   }
+  function removePhoto(id) {
+    for (var i=0;i<window._PHOTOS.photos.length;i++) {
+      if (window._PHOTOS.photos[i].id == id) { window._PHOTOS.photos.splice(i,1); }
+    }
+    riot.update("photo-list");
+  }
   untag(e) {
     $.post(
       '/media_files/photo/untag/',
@@ -49,10 +55,7 @@
         photo_id: e.item.id
       },
       function(data) {
-        for (var i=0;i<window._PHOTOS.photos.length;i++) {
-          if (window._PHOTOS.photos[i].id == e.item.id) { window._PHOTOS.photos.splice(i,1); }
-        }
-        riot.update("photo-list");
+        removePhoto(e.item.id);
       }
     )
   }
@@ -60,13 +63,9 @@
     var warn = "This will delete this photo entirely from the site. Don't do this unless you are certain";
     if (confirm(warn)) {
       $.post(
-        '/media_files/photo/delete/',
-        { photo_id: e.item.id },
+        '/media_files/photo/delete/'+e.item.id+'/',
         function(data) {
-          for (var i=0;i<window._PHOTOS.photos.length;i++) {
-            if (window._PHOTOS.photos[i].id == e.item.id) { window._PHOTOS.photos.splice(i,1); }
-          }
-          riot.update("photo-list");
+          removePhoto(e.item.id);
         }
       )
     }
