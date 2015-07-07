@@ -3,9 +3,9 @@ function showLogin() {
   $("#login-dialog").toggleClass("login-visible");
 }
 
-simpleCart.successURL = window.location.origin+"/classes/?success"
-simpleCart.cartHeaders = ["Name", "Price", "Decrement", "Increment","Quantity", "Remove"]
-
+simpleCart.successURL = window.location.origin+"/classes/?success";
+simpleCart.cartHeaders = ["Name", "Price", "Decrement", "Increment","Quantity", "Remove"];
+simpleCart.email = window.SHOP.email;
 function showCart() {
   $("#cart-modal").modal({width: 400, modal: true, minHight: 300});
 }

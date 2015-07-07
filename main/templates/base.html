@@ -18,6 +18,7 @@
         email: 'txrxlabs@gmail.com'
         {% endif %}
       }
+      SHOP.notify_url = SHOP.base_url + "/tx/rx/ipn/handler/";
       var _USER_NUMBER = {{ request.user.pk|default_if_none:"undefined" }};
       {% if request.user.is_superuser %}
       var _418 = true;

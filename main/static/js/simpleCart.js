@@ -276,8 +276,8 @@ function Cart(){
     form.appendChild(me.createHiddenElement("rm", me.paypalHTTPMethod == "POST" ? "2" : "0" ));
     form.appendChild(me.createHiddenElement("upload", "1"));
     form.appendChild(me.createHiddenElement("business", me.email ));
-    form.appendChild(me.createHiddenElement("currency_code", "me.currency"));
-    form.appendChild(me.createHiddenElement("notify_url", window._NOTIFY_URL));
+    form.appendChild(me.createHiddenElement("currency_code", me.currency));
+    form.appendChild(me.createHiddenElement("notify_url", window.SHOP.notify_url));
 
     var email_input = document.getElementById("custom_email");
     if (email_input && email_input.value && email_input.value.match('@')) {
