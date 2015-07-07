@@ -3,6 +3,7 @@ jQuery(document).ready(function() {
 
   function dropHandler(e) {
     e.preventDefault();
+    $("photo-list .rows").addClass("loading");
 
     var files = e.originalEvent.dataTransfer.files;
 
@@ -28,6 +29,7 @@ jQuery(document).ready(function() {
           window._PHOTOS.photos.unshift(new_photos[i]);
         }
         riot.update("photo-list");
+        $("photo-list .rows").removeClass("loading");
       } else {
         alert("An unknown error has occurred, go bug Chris");
       }

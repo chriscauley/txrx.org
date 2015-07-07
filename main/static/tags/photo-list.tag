@@ -1,7 +1,7 @@
 <photo-list>
-  <div class="rows">
+  <div class="rows foreground_loading">
     <div id="dropzone" class="fourth dropzone"></div>
-    <photo class="fourth" each={ photos }>
+    <photo class="fourth background_loading" each={ photos }>
       <div class="buttons">
         <button class="btn btn-danger" onclick={ parent.untag } title="Will not delete photo from database">
           <i class="fa fa-times"></i> Unlink</button>
@@ -32,11 +32,14 @@
   });
   editName(e) {
     clearTimeout(edit_timeout);
+    $(e.target).closest('photo').addClass("loading").removeClass("success");
     edit_timeout = setTimeout(function() {
       $.post(
         '/media_files/photo/edit/'+e.item.id+'/',
         {name:e.target.innerText},
-        function(data) {}
+        function(data) {
+          $(e.target).closest('photo').removeClass("loading").addClass("success");
+        }
       )
     },500);
   }

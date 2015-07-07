@@ -137,6 +137,7 @@ photo {
     background: url(/static/lightbox/img/loading.gif) center no-repeat rgba(255,255,255,0.75);
     box-sizing: border-box;
     content: "";
+    display: none;
     height: 100%;
     left: 0;
     position: absolute;
@@ -144,6 +145,10 @@ photo {
     width: 100%;
     z-index: 1000;
   }
+}
+
+.success {
+  position: relative;
 }
 
 .background_loading {
@@ -154,6 +159,7 @@ photo {
     border-radius: 100%;
     box-shadow: 1px 1px 1px white;
     content: "\f1ce";
+    display: none;
     font: normal normal normal 14px/1 FontAwesome;
     font-size: 30px;
     height: 30px;
@@ -166,4 +172,8 @@ photo {
     width: 30px;
     z-index: 1;
   }
+}
+
+.background_loading, .foreground_loading {
+  &.loading:before { display: block; }
 }
