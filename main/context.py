@@ -45,9 +45,9 @@ def nav(request):
     #{'name': "Facility", "url": "/facility/"},
     {'name': "Membership", "url": "/join-us/"},
     {'name': "Contact", "url": "/map/"},
+    {'name': "Shop", "url": "/shop/"},
   ]
-  if request.user.is_superuser:
-    _nav.append({'name': "Shop", "url": "/shop/"})
+
   for _n in _nav:
     if request.path.startswith(_n['url']):
       _n['class'] = 'current'

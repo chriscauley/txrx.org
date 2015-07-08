@@ -136,7 +136,8 @@ SUIT_CONFIG = {
     #'ipn', #paypal ipns
     {'app': 'media',
      'models': (
-       'flatpages.flatpage'
+       {'model': 'mptt_comments.mpttcomment', 'label':'Comments'},
+       'flatpages.flatpage',
        'media.miscfile',
        'media.photo',
        'media.phototag',
