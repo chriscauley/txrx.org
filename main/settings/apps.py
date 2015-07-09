@@ -54,7 +54,6 @@ INSTALLED_APPS = (
   'feed', #TODO!
   'thing',
   'notify',
-  'comment',
 )
 
 SOUTH_TESTS_MIGRATE = False

@@ -11,12 +11,8 @@ from membership.models import UserMembership
 from paypal.standard.ipn.models import PayPalIPN
 from paypal.standard.ipn.admin import PayPalIPNAdmin
 
-from mptt_comments.models import MpttComment
-from mptt_comments.admin import MpttCommentsAdmin
-
 admin.site.unregister(FlatPage)
 admin.site.unregister(PayPalIPN)
-admin.site.unregister(MpttComment)
 
 TEMPLATE_CHOICES = (
   ('','HTML'),
@@ -64,13 +60,7 @@ class CustomIPNAdmin(PayPalIPNAdmin):
     return link
   view_IPN.allow_tags = True
 
-class MpttCommentAdmin(MpttCommentsAdmin):
-  list_display = ['_preview']+list(MpttCommentsAdmin.list_display)[1:]
-  def _preview(self,obj=None):
-    return obj.comment[:25]
-
 admin.site.register(FlatPage,FlatPageAdmin)
 admin.site.register(PayPalIPN,CustomIPNAdmin)
-admin.site.register(MpttComment,MpttCommentAdmin)
 
 from .signals import *

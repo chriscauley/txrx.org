@@ -26,7 +26,7 @@ urlpatterns = patterns(
   url(r'^products.js$','store.views.products_json'),
 
   # comments and javascript translation
-  url(r'^comments/',include('comment.urls')),
+  url(r'^comments/',include('mptt_comments.urls')),
   url(r'^jsi18n/(?P<packages>\S+?)/$', 'django.views.i18n.javascript_catalog'),
   url(r'^rss/$', AllFeed()),
   url(r'^favicon.ico$','main.views.predirect',
