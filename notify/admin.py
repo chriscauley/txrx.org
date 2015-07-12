@@ -1,8 +1,9 @@
 from django.contrib import admin
 
+from db.admin import RawMixin
 from .models import NotifyCourse
 
-class NotifyCourseAdmin(admin.ModelAdmin):
+class NotifyCourseAdmin(RawMixin,admin.ModelAdmin):
   list_display = ("__unicode__","_enrolled")
   raw_id_fields = ("user","course")
   def _enrolled(self,obj):

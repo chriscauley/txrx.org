@@ -4,9 +4,10 @@ from django import forms
 
 from models import MembershipGroup, Membership, Feature, MembershipFeature, UserMembership, MembershipRate, MeetingMinutes, Proposal, Officer
 
+from db.admin import RawMixin
 from db.forms import StaffMemberForm
 
-class MembershipFeatureInline(admin.TabularInline):
+class MembershipFeatureInline(RawMixin,admin.TabularInline):
   extra = 0
   raw_id_fields = ('membership','feature')
   model = MembershipFeature

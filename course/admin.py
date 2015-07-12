@@ -1,14 +1,14 @@
 from django.contrib import admin
 from django import forms
 from db.forms import StaffMemberForm
-from db.admin import NamedTreeModelAdmin
+from db.admin import NamedTreeModelAdmin, RawMixin
 
 from .models import Subject, Course, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseCompletion
 from event.admin import OccurrenceModelInline
 from media.admin import TaggedFileInline, TaggedPhotoAdmin
 from tool.admin import TaggedToolInline
 
-class CourseCompletionInline(admin.TabularInline):
+class CourseCompletionInline(RawMixin,admin.TabularInline):
   model = CourseCompletion
   extra = 0
   raw_id_fields = ('user',)
@@ -65,13 +65,13 @@ class SessionAdmin(TaggedPhotoAdmin):
   class Media:
     js = ("js/course_admin.js",)
 
-class EnrollmentAdmin(admin.ModelAdmin):
+class EnrollmentAdmin(RawMixin,admin.ModelAdmin):
   list_display = ("id",'user', 'session','datetime')
   list_filter = ("session", "user",)
   search_fields = ("user__username","user__email","user__usermembership__paypal_email")
   raw_id_fields = ("user","session")
 
-class EvaluationAdmin(admin.ModelAdmin):
+class EvaluationAdmin(RawMixin,admin.ModelAdmin):
   exclude = ('user','enrollment','anonymous')
   readonly_fields = ('get_user',)
 

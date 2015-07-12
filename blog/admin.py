@@ -3,7 +3,7 @@ from django.contrib.contenttypes.generic import GenericTabularInline
 from crop_override.admin import CropAdmin
 from sorl.thumbnail import get_thumbnail
 
-from db.admin import SlugModelAdmin, OrderedModelAdmin, OrderedModelInline
+from db.admin import SlugModelAdmin, OrderedModelAdmin, OrderedModelInline, RawMixin
 from db.forms import StaffMemberForm
 
 from .models import Post, Banner, PressItem
@@ -15,7 +15,7 @@ class PostAdminForm(PostForm):
     model = Post
     fields = ('user','title','slug','content','short_content','publish_dt','tags','status','photo')
 
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(RawMixin,admin.ModelAdmin):
   form = PostAdminForm
   list_display = ('__unicode__','user','featured','publish_dt','status')
   list_editable = ('featured','status')

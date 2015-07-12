@@ -8,12 +8,13 @@ from django.template.response import TemplateResponse
 from crop_override.admin import CropAdmin
 from sorl.thumbnail import get_thumbnail
 
+from db.admin import RawMixin
 from db.forms import StaffMemberForm
 from .models import PhotoTag, Photo, MiscFile, TaggedPhoto, TaggedFile
 
 import json
 
-class PhotoAdmin(CropAdmin):
+class PhotoAdmin(RawMixin,CropAdmin):
   form = StaffMemberForm
   list_display = ('__unicode__','_thumbnail','approved','upload_dt')
   list_sortable = ('__unicode__','upload_dt')
@@ -54,7 +55,7 @@ class TaggedPhotoAdmin(admin.ModelAdmin):
     return render_to_string('photo/dropphoto.html',values)
   dropphoto.allow_tags = True
 
-class TaggedPhotoInline(GenericTabularInline):
+class TaggedPhotoInline(RawMixin,GenericTabularInline):
   model = TaggedPhoto
   raw_id_fields = ('photo',)
   fields = ('order','_thumbnail','photo')
@@ -67,7 +68,7 @@ class TaggedPhotoInline(GenericTabularInline):
   _thumbnail.allow_tags=True
 
 
-class TaggedFileInline(GenericTabularInline):
+class TaggedFileInline(RawMixin,GenericTabularInline):
   model = TaggedFile
   raw_id_fields = ('file',)
   extra = 0

@@ -92,7 +92,7 @@ def course_full(request):
 
 def course_totals(request):
   if not request.user.is_superuser:
-    raise Http404
+    raise Http404('Page not found')
   term_list = []
   args = ('session','session__course')
   enrollments = Enrollment.objects.select_related(*args)
@@ -143,6 +143,8 @@ def rsvp(request,session_pk):
   return HttpResponse(json.dumps([q,m,session.full]))
 
 def start_checkout(request):
+  if not 'cart' in request.GET:
+    raise Http404('cart information missing from request')
   cart_items = json.loads(request.GET['cart'])
   out = []
   for cart_item in cart_items:
@@ -155,7 +157,7 @@ def start_checkout(request):
 def delay_reschedule(request,course_pk,n_months):
   user = request.user
   if not (user.is_superuser or user.groups.filter(name="Class Coordinator")):
-    raise Http404()
+    raise Http404('Page not found.')
   course = get_object_or_404(Course,pk=course_pk)
   if n_months == "close":
     course.active = False
