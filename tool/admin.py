@@ -3,10 +3,10 @@ from django.contrib import admin
 from django.contrib.contenttypes.generic import GenericTabularInline
 
 from media.admin import TaggedPhotoInline
-from db.admin import OrderedModelAdmin, RawMixin
+from db.admin import OrderedModelAdmin
 from .models import Lab, Tool, ToolLink, TaggedTool
 
-class LabAdmin(RawMixin,OrderedModelAdmin):
+class LabAdmin(OrderedModelAdmin):
   inlines = (TaggedPhotoInline,)
   raw_id_fields = ('photo',)
 
@@ -36,7 +36,7 @@ class ToolAdmin(OrderedModelAdmin):
   _materials.allow_tags = True
 
 #See note above corresponding model
-class TaggedToolInline(RawMixin,GenericTabularInline):
+class TaggedToolInline(GenericTabularInline):
   model = TaggedTool
   raw_id_fields = ('tool',)
   extra = 0
