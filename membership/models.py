@@ -62,6 +62,7 @@ class MembershipProduct(Product):
 class MembershipRate(models.Model):
   membership = models.ForeignKey(Membership)
   months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
+  cost = models.IntegerField(default=0)
   description = models.CharField(max_length=128)
   order = models.IntegerField(default=0)
   class Meta:
