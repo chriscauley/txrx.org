@@ -8,6 +8,7 @@ from media.models import Photo
 from course.models import Session, Term, Course
 from main.utils import cached_method, cached_property
 from project.models import Project
+from shop.models import Product
 
 from wmd.models import MarkDownField
 
@@ -42,10 +43,25 @@ class Membership(models.Model):
     ordering = ("order",)
   __unicode__ = lambda self: self.name
 
+MONTHS_CHOICES = (
+  (1,"Monthly"),
+  (12,"Yearly"),
+)
+
+class MembershipProduct(Product):
+  membership = models.ForeignKey(Membership)
+  months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
+  order = models.IntegerField(default=0)
+  def save(self,*args,**kwargs):
+    self.active = True
+    self.slug = "__membershipproduct__%s"%(self.pk or random.random())
+    super(MembershipProduct,self).save(*args,**kwargs)
+  class Meta:
+    ordering = ("order",)
+
 class MembershipRate(models.Model):
   membership = models.ForeignKey(Membership)
-  cost = models.IntegerField()
-  months = models.IntegerField(default=1)
+  months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
   description = models.CharField(max_length=128)
   order = models.IntegerField(default=0)
   class Meta:

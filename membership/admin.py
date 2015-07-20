@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django import forms
 
-from models import MembershipGroup, Membership, Feature, MembershipFeature, UserMembership, MembershipRate, MeetingMinutes, Proposal, Officer
+from models import (MembershipGroup, Membership, Feature, MembershipFeature, UserMembership,
+                    MembershipProduct, MembershipRate, MeetingMinutes, Proposal, Officer)
 
 from db.admin import RawMixin
 from db.forms import StaffMemberForm
@@ -16,10 +17,15 @@ class MembershipRateInline(admin.TabularInline):
   extra = 0
   model = MembershipRate
 
+class MembershipProductInline(admin.TabularInline):
+  extra = 0
+  model = MembershipProduct
+  exclude = ('slug','active')
+
 class MembershipAdmin(admin.ModelAdmin):
   list_display = ("name","order")
   list_editable = ("order",)
-  inlines = (MembershipFeatureInline,MembershipRateInline)
+  inlines = (MembershipFeatureInline, MembershipProductInline, MembershipRateInline)
 
 class UserMembershipInline(admin.StackedInline):
   list_display = ("__unicode__",'photo')
