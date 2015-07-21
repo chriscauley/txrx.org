@@ -10,18 +10,14 @@ from .utils import get_or_create_student
 
 import traceback
 
-def handle_successful_store_payment(sender, **kwargs):
+def handle_successful_store_payment(sender, user):
   from shop.models import Product, Order, OrderPayment, Cart
   params = QueryDict(sender.query)
-  _uid = params.get('custom',None)
   try:
     order = Order.objects.get(pk=params['invoice'])
   except Order.DoesNotExist:
     mail_admins("repeat transaction for %s"%sender.txn_id,"")
     return
-  user,new_user = get_or_create_student(sender.payer_email,u_id=_uid)
-  user.active = True
-  user.save()
   total = 0
   try:
     item_count = int(params['num_cart_items'])
@@ -52,18 +48,54 @@ def handle_successful_store_payment(sender, **kwargs):
   except Cart.DoesNotExist:
     pass
 
+def handle_successful_membership_payment(sender,user):
+  from membership.models import MembershipPurchase, Membership, MembershipProduct
+  params = QueryDict(sender.query)
+  if MembershipPurchase.objects.filter(transaction_id=sender.txn_id):
+    # This has already been processed
+    return
+  try:
+    membership = Membership.objects.get(name=params.get('option_name1',''))
+  except Membership.DoesNotExist:
+    b = "Could not find membership %s for txn %s"%(params.get('option_name1',''),sender.txn_id)
+    mail_admins("Bad IPN",b)
+    return
+  if not 'mc_gross' in params:
+    mail_admins("Bad IPN","no mc_gross in txn %s"%sender.txn_id)
+    
+  try:
+    product = MembershipProduct.objects.get(unit_price=params['mc_gross'],membership=membership)
+  except MembershipProduct.DoesNotExist:
+    b = "Could not find membership product %s $%s for txn %s"
+    b = b%(membership,params['mc_gross'],sender.txn_id)
+    mail_admins("Bad IPN",b)
+    return
+  print 1
+  print 1.5
+  print 2
+  print 3
+  MembershipPurchase.objects.create(
+    user = user,
+    membershipproduct = product,
+    transaction_id = sender.txn_id
+  )
+
 _duid2='course.signals.handle_successful_store_payment'
 @receiver(payment_was_successful, dispatch_uid=_duid2)
 def handle_successful_payment(sender, **kwargs):
   from course.models import Enrollment, Session, reset_classes_json
   #add them to the classes they are enrolled in
   params = QueryDict(sender.query)
-  if params.get('invoice',None):
-    return handle_successful_store_payment(sender,**kwargs)
   _uid = params.get('custom',None)
   user,new_user = get_or_create_student(sender.payer_email,u_id=_uid)
   user.active = True
   user.save()
+  if params.get('invoice',None):
+    return handle_successful_store_payment(sender,user)
+  if sender.txn_type == "subscr_payment":
+    print "subscribing!"
+    return handle_successful_membership_payment(sender,user)
+  
   try:
     item_count = int(params['num_cart_items'])
   except:

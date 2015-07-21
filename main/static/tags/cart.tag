@@ -54,8 +54,8 @@
           <input name="amount_{ i+1 }" type="hidden" value="{ n.price }">
         </span>
         <input name="notify_url" type="hidden" value="{ SHOP.base_url}/tx/rx/ipn/handler/">
-        <input name="cancel_return" type="hidden" value="{ SHOP.base_url }/shop/checkout/pay/">
-        <input name="return" type="hidden" value="{ SHOP.base_url }/shop/pay/paypal/success/">
+        <input name="cancel_return" type="hidden" value="{ SHOP.base_url }/shop/">
+        <input name="return" type="hidden" value="{ SHOP.base_url }/shop/">
         <input name="invoice" type="hidden" value="3">
         <input name="cmd" type="hidden" value="_cart">
         <input type="hidden" name="upload" value="1">
