@@ -11,4 +11,4 @@ with {{ enrollment.session.user }}
 on {{ enrollment.session.get_short_dates }}
 {% endfor %}
 
-{% include "coruse/_return_policy.html" with format="text" %}{% endautoescape %}
+{% include "course/_return_policy.html" with format="text" %}{% endautoescape %}
