@@ -28,21 +28,18 @@ function setHiddenFields(that) {
     <span class="well membership">
       <h2>
         {{ m.name }}
-        <small>${{ m.monthly_rate.cost }}{% if forloop.last %}+{% endif %}/month</small>
+        <small>${{ m.monthly_product.unit_price|floatformat:0 }}{% if "Table Hacker" in m.name %}+{% endif %}/month</small>
       </h2>
       {% if m.notes %}<br />
       {{ m.notes|safe }}{% endif %}
       <ul class="membership_features">
         {% for f in m.features %}
-        <li>
-          <i class="icon-ok"></i>
-          {{ f.text }}
-        </li>
+        <li><i class="fa fa-check"></i> {{ f.text }}</li>
         {% endfor %}
       </ul>
       <form name="_xclick" action="https://www.paypal.com/cgi-bin/webscr" method="post">
         <input type="hidden" name="cmd" value="_xclick-subscriptions">
-        <input type="hidden" name="business" value="txrxlabs@gmail.com">
+        <input type="hidden" name="business" value="{{ settings.PAYPAL_RECEIVER_EMAIL }}">
         <input type="hidden" name="no_shipping" value="1">
         <input type="hidden" name="on0" value="{{ m.name }}">
         <input type="hidden" name="a3" value="">
@@ -50,27 +47,32 @@ function setHiddenFields(that) {
         <input type="hidden" name="t3" value="M">
         <input type="hidden" name="src" value="1">
         <input type="hidden" name="sra" value="1">
+        <input name="notify_url" type="hidden" value="{{ SITE_URL }}/tx/rx/ipn/handler/">
+        <input name="cancel_return" type="hidden" value="{{ SITE_URL }}/shop/">
+        <input name="return" type="hidden" value="{{ SITE_URL }}/shop/">
         <select name="os0" onchange="setHiddenFields(this);" {% if "Table Hacker" in m.name and not "open" in request.GET %}
                 disabled="disabled"{% endif %}>
-          {% for rate in m.rates %}
-          <option value="{{ m.name }} - {{ rate.description }}">{{ rate.description }}</option>
+          {% for product in m.products %}
+          <option value="{{ m.name }} - {{ product.name }}">
+            ${{ product.unit_price|floatformat:0 }} {{ product.name }}</option>
           {% endfor %}
         </select>
         <input type="hidden" name="currency_code" value="USD">
         <input type="hidden" name="RETURNURL" value="{{ settings.SITE_URL }}/joined/{{ user.id }}/">
         <div class="button_box">
           <input type="image" name="submit" alt="PayPal - The safer, easier way to pay online!"
-                 {% if "Table Hacker" in m.name and not "open" in request.GET %} disabled="disabled"{% endif %} src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif">
+                 {% if "Table Hacker" in m.name and not "open" in request.GET %} disabled="disabled"
+                 {% endif %} src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif">
           <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="" width="1" height="1" border="0">
         </div>
       </form>
     </span>
 
     <script type="text/javascript">
-      {% for rate in m.rates %}
-      membership_form_parameters['{{ m.name }} - {{ rate.description }}'] = {
-      'cost': {{ rate.cost }},
-      'months': {{ rate.months }}, // "wait this many months between billings"
+      {% for product in m.products %}
+      membership_form_parameters['{{ m.name }} - {{ product.name }}'] = {
+      'cost': {{ product.unit_price }},
+      'months': {{ product.months }}, // "wait this many months between billings"
       }
       {% endfor %}
     </script>

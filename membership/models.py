@@ -12,7 +12,7 @@ from shop.models import Product
 
 from wmd.models import MarkDownField
 
-import datetime, random, string
+import datetime, random, string, calendar
 
 def rand32():
   seed = string.letters+string.digits
@@ -22,16 +22,16 @@ class MembershipGroup(models.Model):
   name = models.CharField(max_length=64)
   order = models.IntegerField(default=0)
   __unicode__ = lambda self: self.name
-  active_memberships = lambda self: self.membership_set.filter(membershiprate__isnull=False).distinct()
+  active_memberships = lambda self: self.membership_set.filter(membershipproduct__isnull=False).distinct()
   class Meta:
     ordering = ("order",)
 
 class Membership(models.Model):
   name = models.CharField(max_length=64)
   order = models.IntegerField("Level")
-  rates = cached_property(lambda self: self.membershiprate_set.all(),name="rates")
-  monthly_rate = lambda self: self.rates.filter(months=1)[0]
-  yearly_rate = lambda self: self.rates.filter(months=12)[0]
+  products = cached_property(lambda self: self.membershipproduct_set.filter(active=True),name="products")
+  monthly_product = lambda self: self.products.filter(months=1)[0]
+  yearly_product = lambda self: self.products.filter(months=12)[0]
   discount_percentage = models.IntegerField(default=0)
   membershipgroup = models.ForeignKey(MembershipGroup,null=True,blank=True)
   features = cached_property(lambda self:[a.feature for a in self.membershipfeature_set.all()],
@@ -52,21 +52,36 @@ class MembershipProduct(Product):
   membership = models.ForeignKey(Membership)
   months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
   order = models.IntegerField(default=0)
+  __unicode__ = lambda self: "%s months of %s"%(self.months,self.membership)
   def save(self,*args,**kwargs):
-    self.active = True
     self.slug = "__membershipproduct__%s"%(self.pk or random.random())
     super(MembershipProduct,self).save(*args,**kwargs)
   class Meta:
     ordering = ("order",)
 
-class MembershipRate(models.Model):
-  membership = models.ForeignKey(Membership)
-  months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
-  cost = models.IntegerField(default=0)
-  description = models.CharField(max_length=128)
-  order = models.IntegerField(default=0)
-  class Meta:
-    ordering = ("order",)
+def add_months(sourcedate,months):
+  month = sourcedate.month - 1 + months
+  year = sourcedate.year + month / 12
+  month = month % 12 + 1
+  day = min(sourcedate.day,calendar.monthrange(year,month)[1])
+  return datetime.date(year,month,day)
+
+class MembershipPurchase(models.Model):
+  user = models.ForeignKey(settings.AUTH_USER_MODEL)
+  transaction_id = models.CharField(max_length=20,null=True,blank=True)
+  old_expiration_date = models.DateField(null=True,blank=True)
+  membershipproduct = models.ForeignKey(MembershipProduct,null=True,blank=True)
+  notes = models.CharField(max_length=128,null=True,blank=True)
+  def save(self,*args,**kwargs):
+    new = not self.id
+    super(MembershipPurchase,self).save(*args,**kwargs)
+    if not new:
+      return
+    usermembership = self.user.usermembership
+    self.old_expiration_date = usermembership.membership_expiration
+    usermembership.membership_expiration = add_months(usermembership.membership_expiration,self.membershipproduct.months)
+    usermembership.membership = self.membershipproduct.membership
+    usermembership.save()
 
 class Role(models.Model):
   name = models.CharField(max_length=64)
@@ -92,6 +107,7 @@ class UserMembershipManager(models.Manager):
 class UserMembership(models.Model):
   user = models.OneToOneField(settings.AUTH_USER_MODEL)
   membership = models.ForeignKey(Membership,default=1)
+  membership_expiration = models.DateField(default=datetime.date.today)
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
   waiver = models.FileField("Waivers",upload_to="waivers/",null=True,blank=True)
@@ -105,7 +121,8 @@ class UserMembership(models.Model):
   name = lambda self: "%s %s"%(self.user.first_name,self.user.last_name)
   _h ="Leave blank if this is the same as your email address above."
   paypal_email = models.EmailField(null=True,blank=True,help_text=_h)
-  _h = "Uncheck this to stop all email correspondance from this website (same as unchecking all the below items and any future notifications we add)."
+  _h = "Uncheck this to stop all email correspondance from this website "
+  _h += "(same as unchecking all the below items and any future notifications we add)."
   notify_global = models.BooleanField("Global Email Preference",default=True,help_text=_h)
   _h = "If checked, you will be emailed whenever someone replies to a comment you make on this site."
   notify_comments = models.BooleanField("Comment Response Email",default=True,help_text=_h)

@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django import forms
 
-from models import (MembershipGroup, Membership, Feature, MembershipFeature, UserMembership,
-                    MembershipProduct, MembershipRate, MeetingMinutes, Proposal, Officer)
+from models import (MembershipGroup, Membership, Feature, MembershipFeature, UserMembership, MembershipPurchase,
+                    MembershipProduct, MeetingMinutes, Proposal, Officer)
 
 from db.admin import RawMixin
 from db.forms import StaffMemberForm
@@ -13,26 +13,29 @@ class MembershipFeatureInline(RawMixin,admin.TabularInline):
   raw_id_fields = ('membership','feature')
   model = MembershipFeature
 
-class MembershipRateInline(admin.TabularInline):
-  extra = 0
-  model = MembershipRate
-
 class MembershipProductInline(admin.TabularInline):
   extra = 0
   model = MembershipProduct
-  exclude = ('slug','active')
+  exclude = ('slug',)
 
 class MembershipAdmin(admin.ModelAdmin):
   list_display = ("name","order")
   list_editable = ("order",)
-  inlines = (MembershipFeatureInline, MembershipProductInline, MembershipRateInline)
+  inlines = (MembershipFeatureInline, MembershipProductInline)
+
+class MembershipPurchaseInline(admin.TabularInline):
+  model = MembershipPurchase
+  extra = 1
+  readonly_fields = ('transaction_id','old_expiration_date')
+  has_delete_permission = lambda self, request, obj=None: False
 
 class UserMembershipInline(admin.StackedInline):
   list_display = ("__unicode__",'photo')
   list_editable = ('photo',)
   list_filter = ('user__is_staff',)
   search_fields = ('user__email','user__username','paypal_email')
-  readonly_fields = ('api_key',)
+  readonly_fields = ('api_key','membership_expiration')
+  raw_id_fields = ('photo',)
   model = UserMembership
 
 class ProposalInline(admin.StackedInline):
