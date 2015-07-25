@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Category, reset_products_json
+from .models import Category, reset_products_json, Consumable
 
 from shop.models import Product, CartItem, Order
 from shop.util.cart import get_or_create_cart
@@ -22,7 +22,7 @@ def products_json(request):
   return HttpResponse(reset_products_json())
 
 def detail(request,pk,slug):
-  product = get_object_or_404(Product,pk=pk)
+  product = get_object_or_404(Consumable,pk=pk)
   values = {
     'product': product,
   }
@@ -32,7 +32,7 @@ def detail(request,pk,slug):
 def cart_edit(request):
   cart = get_or_create_cart(request,save=True)
   quantity =  int(request.POST['quantity'])
-  product = Product.objects.get(pk=request.POST['pk'])
+  product = Consumable.objects.get(pk=request.POST['pk'])
   defaults = {'quantity': 0}
   cart_item,new = CartItem.objects.get_or_create(product=product,cart=cart,defaults=defaults)
   if new:
@@ -89,14 +89,14 @@ def admin_products_json(request):
   extra_fields = ['purchase_url','purchase_domain','purchase_url2','purchase_domain2',
                   'purchase_quantity','in_stock']
   out = {product.pk:{k:getattr(product,k) for k in extra_fields}
-         for product in Product.objects.filter(active=True)}
+         for product in Consumable.objects.filter(active=True)}
   return HttpResponse("window.PRODUCTS_EXTRA = %s;"%json.dumps(out))
 
 @staff_member_required
 @csrf_exempt
 def admin_add(request):
   quantity = int(request.POST['quantity'])
-  product = get_object_or_404(Product,pk=request.POST['pk'])
+  product = get_object_or_404(Consumable,pk=request.POST['pk'])
   old = product.in_stock or 0 
   product.in_stock = max(old + quantity,0)
   product.save()
