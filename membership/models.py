@@ -66,15 +66,22 @@ def add_months(sourcedate,months):
   day = min(sourcedate.day,calendar.monthrange(year,month)[1])
   return datetime.date(year,month,day)
 
-class MembershipPurchase(models.Model):
+PAYMENT_METHOD_CHOICES = (
+  ('paypal','PayPalIPN'),
+  ('admin','Admin (manually entered)')
+)
+
+class MembershipChange(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
   transaction_id = models.CharField(max_length=20,null=True,blank=True)
+  paypalipn = models.ForeignKey("ipn.PayPalIPN",null=True,blank=True)
   old_expiration_date = models.DateField(null=True,blank=True)
   membershipproduct = models.ForeignKey(MembershipProduct,null=True,blank=True)
   notes = models.CharField(max_length=128,null=True,blank=True)
+  payment_method = models.CharField(max_length=16,choices=PAYMENT_METHOD_CHOICES,default="admin")
   def save(self,*args,**kwargs):
     new = not self.id
-    super(MembershipPurchase,self).save(*args,**kwargs)
+    super(MembershipChange,self).save(*args,**kwargs)
     if not new:
       return
     usermembership = self.user.usermembership

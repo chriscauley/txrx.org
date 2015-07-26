@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django import forms
 
-from models import (MembershipGroup, Membership, Feature, MembershipFeature, UserMembership, MembershipPurchase,
+from models import (MembershipGroup, Membership, Feature, MembershipFeature, UserMembership, MembershipChange,
                     MembershipProduct, MeetingMinutes, Proposal, Officer)
 
 from db.admin import RawMixin
@@ -23,8 +23,8 @@ class MembershipAdmin(admin.ModelAdmin):
   list_editable = ("order",)
   inlines = (MembershipFeatureInline, MembershipProductInline)
 
-class MembershipPurchaseInline(admin.TabularInline):
-  model = MembershipPurchase
+class MembershipChangeInline(admin.TabularInline):
+  model = MembershipChange
   extra = 1
   readonly_fields = ('transaction_id','old_expiration_date')
   has_delete_permission = lambda self, request, obj=None: False

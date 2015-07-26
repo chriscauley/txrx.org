@@ -49,9 +49,9 @@ def handle_successful_store_payment(sender, user):
     pass
 
 def handle_successful_membership_payment(sender,user):
-  from membership.models import MembershipPurchase, Membership, MembershipProduct
+  from membership.models import MembershipChange, Membership, MembershipProduct
   params = QueryDict(sender.query)
-  if MembershipPurchase.objects.filter(transaction_id=sender.txn_id):
+  if MembershipChange.objects.filter(transaction_id=sender.txn_id):
     # This has already been processed
     return
   try:
@@ -70,14 +70,12 @@ def handle_successful_membership_payment(sender,user):
     b = b%(membership,params['mc_gross'],sender.txn_id)
     mail_admins("Bad IPN",b)
     return
-  print 1
-  print 1.5
-  print 2
-  print 3
-  MembershipPurchase.objects.create(
+  MembershipChange.objects.create(
     user = user,
     membershipproduct = product,
-    transaction_id = sender.txn_id
+    transaction_id = sender.txn_id,
+    payment_method='paypal',
+    paypalipn=sender
   )
 
 _duid2='course.signals.handle_successful_store_payment'
