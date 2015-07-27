@@ -15,14 +15,15 @@ def nav(request):
     {'name': 'Blog Home', 'url': '/blog/'},
     {'name': 'Add Post', 'url': '/blog/admin/add/'},
     {'name': 'My Posts', 'url': '/blog/%s/'%request.user.username},
-    ]
+  ]
   about_links = [
     {'name': 'About TX/RX', 'url': '/about-us/'},
     {'name': 'Bylaws', 'url': '/bylaws/'},
     {'name': 'Meeting Minutes', 'url': '/minutes/'},     
     {'name': 'Google Groups (Public)', 'url': 'https://groups.google.com/forum/#!forum/txrxlabs'},
     {'name': 'Google Groups (Members)', 'url': 'https://groups.google.com/forum/#!forum/txrxmembership'},
-    ]
+    {'name': 'Membership Handbook (PDF)', 'url': '/static/handbook.pdf'}
+  ]
   social_nav = [
     {'name': 'facebook','url': 'https://www.facebook.com/TxRxLabs' },
     #{'name': 'instagram','url': '' },
