@@ -74,6 +74,9 @@
         <input type="checkbox" name="completed"{% if enrollment.completed %}
                checked="checked"{% endif %} value="{{ enrollment.id }}"/>
         {{ enrollment.user }}
+        {% if enrollment.user.first_name or enrollment.user.last_name %}
+        ({{ enrollment.user.first_name }} {{ enrollment.user.last_name }})
+        {% endif %}
       </p>
       {% endfor %}
       <input type="submit" value="Update" />
