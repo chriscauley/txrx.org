@@ -88,6 +88,7 @@ def handle_successful_payment(sender, **kwargs):
     enrollment,new = Enrollment.objects.get_or_create(user=user, session=session)
     if enrollment.transaction_ids and (sender.txn_id in enrollment.transaction_ids):
       mail_admins("Multiple transaction ids blocked for enrollment #%s"%enrollment.id,"")
+      continue
     enrollment.transaction_ids = (enrollment.transaction_ids or "") + sender.txn_id + "|"
     notifys = NotifyCourse.objects.filter(user=user,course=session.course)
     if notifys:
