@@ -3,7 +3,6 @@ from django.core.mail import mail_admins
 from django.contrib.auth import get_user_model
 from django import forms
 
-from membership.models import UserMembership
 from main.utils import reset_password
 import random, os, json
 
@@ -15,17 +14,26 @@ def validate_email(s):
   except forms.ValidationError:
     pass
 
-def get_or_create_student(paypal_email,u_id=None):
+def get_or_create_student(paypal_email,u_id=None,subscr_id=None):
+  user, new = _get_or_create_student(paypal_email,u_id=u_id,subscri_id=subscr_id)
+  user.active = True
+  user.save()
+  profile = user.usermembership
+  profile.paypal_email = profile.paypal_email or paypal_email
+  profile.subscr_id = subscr_id or profile.subscr_id #always overwrite this one
+  profile.save()
+  return user, new
+
+def _get_or_create_student(paypal_email,u_id=None,subscr_id=None):
   email = paypal_email
   User = get_user_model()
   user = None
   new = False
+  if subscr_id:
+    user = User.objects.get(usermembership__subscr_id=subscr_id)
+    return user, False
   if str(u_id).isdigit():
     user = User.objects.get(id=u_id)
-    profile = user.usermembership
-    # only update paypal email to new email if they don't already have one
-    profile.paypal_email = profile.paypal_email or paypal_email
-    profile.save()
     return user, new
   user = User.objects.get_or_none(usermembership__paypal_email__iexact=paypal_email)
   user = user or User.objects.get_or_none(email__iexact=paypal_email)
@@ -38,9 +46,6 @@ def get_or_create_student(paypal_email,u_id=None):
     # iff the username is taken, use this instead:
     username = username + str(random.randint(1000,10000))
   user, new = User.objects.get_or_create(email=email,defaults={'username':username})
-  profile = user.usermembership
-  profile.paypal_email = profile.paypal_email or paypal_email
-  profile.save()
   if new:
     kwargs = dict(
       subject_template_name="email/welcome_classes_subject.txt",

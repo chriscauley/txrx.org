@@ -1,3 +1,11 @@
+* membership changes
+** ipn txn_types
+   subscr_signup - reset old_expiration_date
+   subscr_payment - push old_expiration_date out
+   subscr_cancel - 
+   subscr_modify - 
+   subscr_failed - 
+   subscr_eot - not used
 * contract page
 ** list
    services

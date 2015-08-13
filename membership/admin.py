@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django import forms
@@ -26,15 +27,23 @@ class MembershipAdmin(admin.ModelAdmin):
 class MembershipChangeInline(admin.TabularInline):
   model = MembershipChange
   extra = 1
-  readonly_fields = ('transaction_id','old_expiration_date')
-  has_delete_permission = lambda self, request, obj=None: False
+  exclude = ('paypalipn','transaction_id')
+  readonly_fields = ('payment_method','ipn_link')
+  def ipn_link(self,obj=None):
+    if not (obj and obj.pk):
+      return ""
+    if obj.paypalipn:
+      return "<a href='/admin/ipn/paypalipn/%s/'>%s</a>"%(obj.paypalipn.pk,obj.transaction_id)
+    return obj.transaction_id
+  ipn_link.allow_tags = True
+  has_delete_permission = lambda self, request, obj=None: settings.DEBUG
 
 class UserMembershipInline(admin.StackedInline):
   list_display = ("__unicode__",'photo')
   list_editable = ('photo',)
   list_filter = ('user__is_staff',)
   search_fields = ('user__email','user__username','paypal_email')
-  readonly_fields = ('api_key','membership_expiration')
+  readonly_fields = ('api_key','start','end')
   raw_id_fields = ('photo',)
   model = UserMembership
 

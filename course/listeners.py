@@ -48,37 +48,7 @@ def handle_successful_store_payment(sender, user):
   except Cart.DoesNotExist:
     pass
 
-def handle_successful_membership_payment(sender,user):
-  from membership.models import MembershipChange, Membership, MembershipProduct
-  params = QueryDict(sender.query)
-  if MembershipChange.objects.filter(transaction_id=sender.txn_id):
-    # This has already been processed
-    return
-  try:
-    membership = Membership.objects.get(name=params.get('option_name1',''))
-  except Membership.DoesNotExist:
-    b = "Could not find membership %s for txn %s"%(params.get('option_name1',''),sender.txn_id)
-    mail_admins("Bad IPN",b)
-    return
-  if not 'mc_gross' in params:
-    mail_admins("Bad IPN","no mc_gross in txn %s"%sender.txn_id)
-    
-  try:
-    product = MembershipProduct.objects.get(unit_price=params['mc_gross'],membership=membership)
-  except MembershipProduct.DoesNotExist:
-    b = "Could not find membership product %s $%s for txn %s"
-    b = b%(membership,params['mc_gross'],sender.txn_id)
-    mail_admins("Bad IPN",b)
-    return
-  MembershipChange.objects.create(
-    user = user,
-    membershipproduct = product,
-    transaction_id = sender.txn_id,
-    payment_method='paypal',
-    paypalipn=sender
-  )
-
-_duid2='course.signals.handle_successful_store_payment'
+_duid2='course.listners.handle_successful_store_payment'
 @receiver(payment_was_successful, dispatch_uid=_duid2)
 def handle_successful_payment(sender, **kwargs):
   from course.models import Enrollment, Session, reset_classes_json
@@ -91,9 +61,8 @@ def handle_successful_payment(sender, **kwargs):
   if params.get('invoice',None):
     return handle_successful_store_payment(sender,user)
   if sender.txn_type == "subscr_payment":
-    print "subscribing!"
-    return handle_successful_membership_payment(sender,user)
-  
+    # handled by membership.listeners
+    return
   try:
     item_count = int(params['num_cart_items'])
   except:
@@ -120,9 +89,7 @@ def handle_successful_payment(sender, **kwargs):
       mail_admins("Multiple transaction ids blocked for enrollment #%s"%enrollment.id,"")
       continue
     enrollment.transaction_ids = (enrollment.transaction_ids or "") + sender.txn_id + "|"
-    notifys = NotifyCourse.objects.filter(user=user,course=session.course)
-    if notifys:
-      notifys.delete()
+    NotifyCourse.objects.filter(user=user,course=session.course).delete()
     if new:
       enrollment.quantity = quantity
     else:
@@ -156,5 +123,4 @@ def handle_successful_payment(sender, **kwargs):
 
 @receiver(payment_was_flagged, dispatch_uid='course.signals.handle_flagged_payment')
 def handle_flagged_payment(sender, **kwargs):
-  #email people to let them intervene manually
   handle_successful_payment(sender, **kwargs)

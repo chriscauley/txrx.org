@@ -59,36 +59,34 @@ class MembershipProduct(Product):
   class Meta:
     ordering = ("order",)
 
-def add_months(sourcedate,months):
-  month = sourcedate.month - 1 + months
-  year = sourcedate.year + month / 12
-  month = month % 12 + 1
-  day = min(sourcedate.day,calendar.monthrange(year,month)[1])
-  return datetime.date(year,month,day)
-
 PAYMENT_METHOD_CHOICES = (
   ('paypal','PayPalIPN'),
-  ('admin','Admin (manually entered)')
+  ('admin','Admin (manual)')
 )
+
+MEMBERSHIP_ACTION_CHOICES = [
+  ('stop','Cancel Membership'),
+  ('start','Change Start Date'),
+  ('extend','Add Membership Time'),
+]
 
 class MembershipChange(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
   transaction_id = models.CharField(max_length=20,null=True,blank=True)
+  subscr_id = models.CharField(max_length=20,null=True,blank=True)
   paypalipn = models.ForeignKey("ipn.PayPalIPN",null=True,blank=True)
-  old_expiration_date = models.DateField(null=True,blank=True)
+  datetime = models.DateTimeField(auto_now_add=True)
+  date_override = models.DateTimeField(null=True,blank=True)
+  action = models.CharField(max_length=16,choices=MEMBERSHIP_ACTION_CHOICES)
   membershipproduct = models.ForeignKey(MembershipProduct,null=True,blank=True)
   notes = models.CharField(max_length=128,null=True,blank=True)
   payment_method = models.CharField(max_length=16,choices=PAYMENT_METHOD_CHOICES,default="admin")
   def save(self,*args,**kwargs):
-    new = not self.id
     super(MembershipChange,self).save(*args,**kwargs)
-    if not new:
-      return
-    usermembership = self.user.usermembership
-    self.old_expiration_date = usermembership.membership_expiration
-    usermembership.membership_expiration = add_months(usermembership.membership_expiration,self.membershipproduct.months)
-    usermembership.membership = self.membershipproduct.membership
-    usermembership.save()
+    self.user.usermembership.recalculate()
+
+  class Meta:
+    ordering = ('datetime',)
 
 class Role(models.Model):
   name = models.CharField(max_length=64)
@@ -111,10 +109,19 @@ class UserMembershipManager(models.Manager):
     from course.models import Session
     return set([s.user.usermembership for s in Session.objects.filter(**kwargs)])
 
+def add_months(d,months):
+  month = d.month - 1 + months
+  year = d.year + month / 12
+  month = month % 12 + 1
+  day = min(d.day,calendar.monthrange(year,month)[1])
+  return d.replace(year=year,month=month,day=day)
+
 class UserMembership(models.Model):
   user = models.OneToOneField(settings.AUTH_USER_MODEL)
   membership = models.ForeignKey(Membership,default=1)
-  membership_expiration = models.DateField(default=datetime.date.today)
+  start = models.DateTimeField(null=True,blank=True)
+  end = models.DateTimeField(null=True,blank=True)
+  subscr_id = models.CharField(max_length=32,null=True,blank=True)
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
   waiver = models.FileField("Waivers",upload_to="waivers/",null=True,blank=True)
@@ -152,6 +159,18 @@ class UserMembership(models.Model):
   @cached_method
   def get_projects(self):
     return Project.objects.filter(author=self.user)
+
+  def recalculate(self):
+    self.start = self.end = self.user.date_joined
+    for change in self.user.membershipchange_set.all():
+      if change.action == 'stop':
+        self.end = change.date_override or change.datetime
+      elif change.action == 'start':
+        self.membership = change.membershipproduct.membership
+        self.start = self.end = change.date_override or change.datetime
+      elif change.action == 'extend':
+        self.end = add_months(self.end,change.membershipproduct.months)
+    self.save()
 
 class OfficerManager(models.Manager):
   def current(self,*args,**kwargs):
