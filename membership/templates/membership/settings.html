@@ -37,5 +37,16 @@
 {% block side %}
 <h1>Other settings</h1>
 <p>If you want to change your password click <a href="{% url "auth_password_change" %}">here</a></p>
-<p>Membership Status: <a href="{% url "membership_status" %}">{{ request.user.usermembership.membership }}</a></p>
+<p>
+  Membership Status:
+  <button class="btn btn-{{ request.user.usermembership.status_class }}" onclick="$('#membership_status').toggle();">
+    {{ request.user.usermembership.membership }}</button>
+</p>
+<table id="membership_status">
+  {% for change in request.user.membershipchange_set.all %}
+  <tr>
+    <td>{{ change }}</td>
+  </tr>
+  {% endfor %}
+</table>
 {% endblock %}

@@ -14,17 +14,17 @@ def validate_email(s):
   except forms.ValidationError:
     pass
 
-def get_or_create_student(paypal_email,u_id=None,subscr_id=None):
-  user, new = _get_or_create_student(paypal_email,u_id=u_id,subscri_id=subscr_id)
+def get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=False):
+  user, new = _get_or_create_student(paypal_email,u_id=u_id,subscri_id=subscr_id,send_mail=send_mail)
   user.active = True
   user.save()
   profile = user.usermembership
-  profile.paypal_email = profile.paypal_email or paypal_email
+  profile.paypal_email = profile.paypal_email or paypal_email # they can set this if they want
   profile.subscr_id = subscr_id or profile.subscr_id #always overwrite this one
   profile.save()
   return user, new
 
-def _get_or_create_student(paypal_email,u_id=None,subscr_id=None):
+def _get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True):
   email = paypal_email
   User = get_user_model()
   user = None
@@ -53,5 +53,6 @@ def _get_or_create_student(paypal_email,u_id=None,subscr_id=None):
     )
     user.set_password(settings.NEW_STUDENT_PASSWORD)
     user.save()
-    reset_password(user,**kwargs)
+    if send_mail:
+      reset_password(user,**kwargs)
   return user, new

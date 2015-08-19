@@ -147,11 +147,3 @@ def member_detail(request,username=None):
     'posts': posts
     }
   return TemplateResponse(request,"membership/member_detail.html",values)
-
-@login_required
-def membership_status(request):
-  values = {
-    'usermembership': request.user.usermembership,
-    'membershipchanges': request.user.membershipchange_set.all(),
-  }
-  return TemplateResponse(request,"membership/status.html",values)
