@@ -14,8 +14,8 @@ def validate_email(s):
   except forms.ValidationError:
     pass
 
-def get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=False):
-  user, new = _get_or_create_student(paypal_email,u_id=u_id,subscri_id=subscr_id,send_mail=send_mail)
+def get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True):
+  user, new = _get_or_create_student(paypal_email,u_id=u_id,subscr_id=subscr_id,send_mail=send_mail)
   user.active = True
   user.save()
   profile = user.usermembership
@@ -30,8 +30,9 @@ def _get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True)
   user = None
   new = False
   if subscr_id:
-    user = User.objects.get(usermembership__subscr_id=subscr_id)
-    return user, False
+    user = User.objects.get_or_none(usermembership__subscr_id=subscr_id)
+    if user:
+      return user, False
   if str(u_id).isdigit():
     user = User.objects.get(id=u_id)
     return user, new
