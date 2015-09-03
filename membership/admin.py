@@ -3,8 +3,8 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django import forms
 
-from models import (MembershipGroup, Membership, Feature, MembershipFeature, UserMembership, MembershipChange,
-                    MembershipProduct, MeetingMinutes, Proposal, Officer)
+from models import (MembershipGroup, Membership, Feature, MembershipFeature, UserMembership, MembershipProduct,
+                    Subscription, ScheduledPayment, Status, MeetingMinutes, Proposal, Officer)
 
 from db.admin import RawMixin
 from db.forms import StaffMemberForm
@@ -24,20 +24,8 @@ class MembershipAdmin(admin.ModelAdmin):
   list_editable = ("order",)
   inlines = (MembershipFeatureInline, MembershipProductInline)
 
-class MembershipChangeInline(admin.StackedInline):
-  model = MembershipChange
-  extra = 1
-  exclude = ('paypalipn','transaction_id')
-  readonly_fields = ('payment_method','ipn_link','subscr_id','datetime')
-  fields = (('subscr_id','action','membershipproduct'),('payment_method','ipn_link'),('date_override','notes'),'datetime')
-  def ipn_link(self,obj=None):
-    if not (obj and obj.pk):
-      return ""
-    if obj.paypalipn:
-      return "<a href='/admin/ipn/paypalipn/%s/'>%s</a>"%(obj.paypalipn.pk,obj.transaction_id)
-    return obj.transaction_id
-  ipn_link.allow_tags = True
-  has_delete_permission = lambda self, request, obj=None: settings.DEBUG
+class SubscriptionInline(admin.TabularInline):
+  model = Subscription
 
 class UserMembershipInline(admin.StackedInline):
   list_display = ("__unicode__",'photo')
@@ -47,10 +35,9 @@ class UserMembershipInline(admin.StackedInline):
   readonly_fields = ('start','end','membership')
   raw_id_fields = ('photo',)
   fields = (
-    'membership','bio',
+    'membership','bio','paypal_email',
     ('voting_rights','suspended'),
     ('photo','waiver'),
-    ('paypal_email','subscr_id'),
     ('start','end')
   )
   model = UserMembership

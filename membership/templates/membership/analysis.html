@@ -22,8 +22,11 @@
           <td>{{ user.usermembership.start }}</td>
           <td>{{ user.usermembership.end }}</td>
           <td>
-            {% for subscription in user.usermembership.subscriptions %}
-            {{ subscription.subscr_id }} - {{ subscription.datetime|date:'m/Y' }}<br/>
+            {% for subscription in user.usermembership.all_subscriptions %}
+            <div>
+              ${{ subscription.owed }}
+              {{ subscription.subscr_id }}
+              [{{ subscription.created|date:'m/Y' }} {{ subscription.last_status.datetime|date:'m/Y' }}]</div>
             {% endfor %}
           </td>
         </tr>

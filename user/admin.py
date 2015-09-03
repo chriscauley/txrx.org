@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
 from .models import User
-from membership.admin import UserMembershipInline, MembershipChangeInline
+from membership.admin import UserMembershipInline, SubscriptionInline
 from .forms import UserChangeForm, CustomUserCreationForm
 
 class UserAdmin(UserAdmin):
@@ -28,6 +28,6 @@ class UserAdmin(UserAdmin):
   search_fields = ('username', 'email', 'first_name', 'last_name','usermembership__paypal_email')
   ordering = ('username',)
   readonly_fields = ('last_login','date_joined')
-  inlines = [UserMembershipInline, MembershipChangeInline]
+  inlines = [UserMembershipInline, SubscriptionInline]
 
 admin.site.register(User, UserAdmin)

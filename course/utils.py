@@ -20,7 +20,6 @@ def get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True):
   user.save()
   profile = user.usermembership
   profile.paypal_email = profile.paypal_email or paypal_email # they can set this if they want
-  profile.subscr_id = subscr_id or profile.subscr_id #always overwrite this one
   profile.save()
   return user, new
 
@@ -30,9 +29,10 @@ def _get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True)
   user = None
   new = False
   if subscr_id:
-    user = User.objects.get_or_none(usermembership__subscr_id=subscr_id)
-    if user:
-      return user, False
+    try:
+      return User.objects.get(subscription__subscr_id=subscr_id), False
+    except User.DoesNotExist:
+      pass
   if str(u_id).isdigit():
     user = User.objects.get(id=u_id)
     return user, new

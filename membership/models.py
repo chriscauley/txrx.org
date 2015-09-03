@@ -59,32 +59,49 @@ class MembershipProduct(Product):
   class Meta:
     ordering = ("order",)
 
+class Subscription(models.Model):
+  user = models.ForeignKey(settings.AUTH_USER_MODEL)
+  subscr_id = models.CharField(max_length=20,null=True,blank=True)
+  created = models.DateTimeField(default=datetime.datetime.now)
+  cancelled = models.DateTimeField(null=True,blank=True)
+  product = models.ForeignKey(MembershipProduct,null=True,blank=True)
+  # self.amount should match self.product, but can be used as an override
+  amount = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+  owed = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+  last_status = lambda self: (self.status_set.all() or [None])[0]
+  def recalculate(self):
+    for i in range(360): # 60 years
+      date = add_months(self.created,i)
+      ScheduledPayment.objects.get_or_create(subscription=self,amount=self.amount,due_date=date)
+    now = datetime.datetime.now()
+    amount_due = sum([sp.amount for sp in self.scheduledpayment_set.filter(due_date__lte=now)])
+    amount_paid = sum([s.amount for s in self.status_set.all()])
+    self.owed = max([0,amount_due-amount_paid])
+    self.save()
+
+class ScheduledPayment(models.Model):
+  subscription = models.ForeignKey(Subscription)
+  amount = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+  due_date = models.DateTimeField()
+
 PAYMENT_METHOD_CHOICES = (
   ('paypal','PayPalIPN'),
-  ('admin','Admin (manual)'),
+  ('cash', 'Cash'),
+  ('adjustment', 'Adjustment'),
+  ('refund', 'Refund'),
   ('legacy','Legacy (PayPal)'),
 )
 
-MEMBERSHIP_ACTION_CHOICES = [
-  ('stop','Cancel Membership'),
-  ('start','Change Start Date'),
-  ('extend','Add Membership Time'),
-]
-
-class MembershipChange(models.Model):
-  user = models.ForeignKey(settings.AUTH_USER_MODEL)
-  transaction_id = models.CharField(max_length=20,null=True,blank=True)
-  subscr_id = models.CharField(max_length=20,null=True,blank=True)
+class Status(models.Model):
+  amount = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+  subscription = models.ForeignKey(Subscription)
   paypalipn = models.ForeignKey("ipn.PayPalIPN",null=True,blank=True)
-  datetime = models.DateTimeField()
-  date_override = models.DateTimeField(null=True,blank=True)
-  action = models.CharField(max_length=16,choices=MEMBERSHIP_ACTION_CHOICES)
-  membershipproduct = models.ForeignKey(MembershipProduct,null=True,blank=True)
+  datetime = models.DateTimeField(default=datetime.datetime.now)
   notes = models.CharField(max_length=128,null=True,blank=True)
-  payment_method = models.CharField(max_length=16,choices=PAYMENT_METHOD_CHOICES,default="admin")
+  payment_method = models.CharField(max_length=16,choices=PAYMENT_METHOD_CHOICES,default="cash")
   def save(self,*args,**kwargs):
-    super(MembershipChange,self).save(*args,**kwargs)
-    self.user.usermembership.recalculate()
+    super(Status,self).save(*args,**kwargs)
+    self.subscription.recalculate()
 
   class Meta:
     ordering = ('datetime',)
@@ -117,12 +134,16 @@ def add_months(d,months):
   day = min(d.day,calendar.monthrange(year,month)[1])
   return d.replace(year=year,month=month,day=day)
 
+FLAG_CHOICES = [
+
+]
+
 class UserMembership(models.Model):
   user = models.OneToOneField(settings.AUTH_USER_MODEL)
   membership = models.ForeignKey(Membership,default=1)
   start = models.DateTimeField(null=True,blank=True)
   end = models.DateTimeField(null=True,blank=True)
-  subscr_id = models.CharField(max_length=32,null=True,blank=True)
+  flagged = models.CharField(max_length=16,choices=FLAG_CHOICES,null=True,blank=True)
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
   waiver = models.FileField("Waivers",upload_to="waivers/",null=True,blank=True)
@@ -149,8 +170,8 @@ class UserMembership(models.Model):
   __unicode__ = lambda self: "%s's Membership"%self.user
   objects = UserMembershipManager()
   @property
-  def subscriptions(self):
-    return MembershipChange.objects.filter(user=self.user,action="start")
+  def all_subscriptions(self):
+    return Subscription.objects.filter(user=self.user).order_by("created")
   @cached_method
   def get_photo(self):
     return self.photo or Photo.objects.get(pk=144)
@@ -163,18 +184,6 @@ class UserMembership(models.Model):
   @cached_method
   def get_projects(self):
     return Project.objects.filter(author=self.user)
-
-  def recalculate(self):
-    self.start = self.end = self.user.date_joined
-    for change in self.user.membershipchange_set.all():
-      if change.action == 'stop':
-        self.end = change.date_override or change.datetime
-      elif change.action == 'start':
-        self.membership = change.membershipproduct.membership
-        self.start = self.end = change.date_override or change.datetime
-      elif change.action == 'extend':
-        self.end = add_months(self.end,change.membershipproduct.months)
-    self.save()
 
 class OfficerManager(models.Manager):
   def current(self,*args,**kwargs):

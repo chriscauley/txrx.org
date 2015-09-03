@@ -8,9 +8,9 @@ from paypal.standard.ipn.models import PayPalIPN
 from course.models import Enrollment, Session
 from course.utils import get_or_create_student
 from user.models import User
-from membership.models import MembershipChange, Membership, MembershipProduct
+from membership.models import Subscription, Status, Membership, MembershipProduct
 
-MembershipChange.objects.all().delete()
+Status.objects.all().delete()
 
 def cache_output(file_name):
   """Save the output of the function as file_name"""
@@ -41,12 +41,19 @@ def get_txn_ids_for_day(day):
   raw_d = urlparse.parse_qs(r.text)
   return [v[0] for k,v in raw_d.items() if k.startswith("L_TRANSACTIONID")]
 
-num_years = 5
+def get_subscription_info(subscr_id):
+  Q = "&METHOD=GetRecurringPaymentsProfileDetails&PROFILEID=%s"%subscr_id
+  r = requests.get(BASE_URL+Q)
+  raw_d = r.text
+  print r.text
+
+num_years = 2
 
 @cache_output('_%sppt.txt'%num_years)
 def get_txn_ids():
   ids = []
   for i in range(365*num_years)[::-1]:
+    print i," day"
     ids += cache_output("txn_ids/%s.day"%i)(lambda: get_txn_ids_for_day(datetime.date.today()-datetime.timedelta(i)))()
   return ids
 
@@ -97,10 +104,12 @@ membership_map = {
   "Full Member Subscribe": 'Hacker',
   "Full Membership": 'Hacker',
   "Full Membership Dual": 'Hacker',
+  "Auto Membership": "Hacker",
   #"Hacker": '',
   "Mike Reynolds Membership": 'Hacker',
   "Special Full Bay Memberhip Tiny House Build": 'Table Hacker',
   #"Table Hacker": '',
+  "Table": "Table Hacker",
   "Table Membership": 'Table Hacker',
   "Table Membership (1/2 Bay)": 'Table Hacker',
   "Table Membership (1/4 Bay Legacy)": 'Table Hacker',
@@ -114,14 +123,14 @@ membership_lookup = {
   'TX/RX Supporter': [110],
   'Tinkerer': [225,250,440,275,550],
   'Hacker': [500,800,880,990,275],
-  'Table Hacker': [1815,1595],
+  'Table Hacker': [1815,1595, 1200],
 }
 
 membership_skips = ['Auto Membership', 'Table']
 
 def process_subscrpayment(d,user,txn_id=None,subscr_id=None,**kwargs):
   for i in [0]:
-    if random.random() > 0.999:
+    if random.random() > 0.99:
       reset_queries()
     name = get_cart_item(d,'OPTIONSNAME',i) or d.get('SUBJECT',[''])[0].replace(' Membership Subscribe','')
     name = name.replace(" (One-Year Legacy)","")
@@ -160,25 +169,15 @@ def process_subscrpayment(d,user,txn_id=None,subscr_id=None,**kwargs):
     except IndexError:
       print "Cannot find %s @ %s"%(membership_name,months)
       return
-    if not MembershipChange.objects.filter(subscr_id=subscr_id):
-      MembershipChange.objects.create(
-        user=user,
-        transaction_id=txn_id,
-        subscr_id=subscr_id,
-        payment_method="legacy",
-        action="start",
-        membershipproduct=product,
-        datetime=ordertime
-      )
-      print "%s created"%subscr_id
-    change, new = MembershipChange.objects.get_or_create(
-      user=user,
-      transaction_id=txn_id,
-      subscr_id=subscr_id,
-      payment_method="legacy",
-      action='extend',
-      membershipproduct=product,
-      datetime=ordertime
+    defaults = {'product': product, 'created': ordertime,'user': user, 'amount': amt}
+    subscription, new = Subscription.objects.get_or_create(subscr_id=subscr_id,defaults=defaults)
+    if new:
+      print "%s created subscription"%subscr_id
+    Status.objects.get_or_create(
+      subscription=subscription,
+      amount=amt,
+      datetime=ordertime,
+      payment_method='legacy',
     )
     return name
 
@@ -201,6 +200,8 @@ if __name__ == "__main__":
   types = {}
   users = User.objects.all().count()
   for i in ids:
+    if i.startswith("I-"):
+      continue
     d = cache_output("txn_ids/%s"%i)(lambda: get_txn(i))()
     if not 'TRANSACTIONTYPE' in d:
       continue

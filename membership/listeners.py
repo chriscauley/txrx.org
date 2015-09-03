@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from django.http import QueryDict
 
 from course.utils import get_or_create_student
-from .models import UserMembership, MembershipChange, Membership, MembershipProduct
+from .models import UserMembership, Status, Subscription, Membership, MembershipProduct
 from user.models import User
 
 from paypal.standard.ipn.signals import payment_was_successful, subscription_signup

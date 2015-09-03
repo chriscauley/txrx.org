@@ -7,7 +7,6 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 class UserManager(BaseUserManager):
-
   def _create_user(self, username,  email, password, is_staff, is_superuser, **extra_fields):
     if not email:
       raise ValueError('The given email must be set')
