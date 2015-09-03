@@ -1,12 +1,16 @@
-import requests, urlparse, datetime, django, os
+import requests, urlparse, datetime, django, os, random
 from functools import wraps
 os.environ['DJANGO_SETTINGS_MODULE'] = 'main.settings'
 django.setup()
 from django.conf import settings
+from django.db import reset_queries
 from paypal.standard.ipn.models import PayPalIPN
 from course.models import Enrollment, Session
 from course.utils import get_or_create_student
 from user.models import User
+from membership.models import MembershipChange, Membership, MembershipProduct
+
+MembershipChange.objects.all().delete()
 
 def cache_output(file_name):
   """Save the output of the function as file_name"""
@@ -19,6 +23,7 @@ def cache_output(file_name):
       output = method(*args,**kwargs)
       with open(file_name,'w') as f:
         f.write(repr(output))
+        print "wrote ",file_name
       return output
     return wrapper
   return decorator
@@ -36,11 +41,13 @@ def get_txn_ids_for_day(day):
   raw_d = urlparse.parse_qs(r.text)
   return [v[0] for k,v in raw_d.items() if k.startswith("L_TRANSACTIONID")]
 
-@cache_output('__ppt.txt')
+num_years = 5
+
+@cache_output('_%sppt.txt'%num_years)
 def get_txn_ids():
   ids = []
-  for i in range(600):
-    ids += get_txn_ids_for_day(datetime.date.today()-datetime.timedelta(i))
+  for i in range(365*num_years)[::-1]:
+    ids += cache_output("txn_ids/%s.day"%i)(lambda: get_txn_ids_for_day(datetime.date.today()-datetime.timedelta(i)))()
   return ids
 
 def get_txn(txn_id):
@@ -54,6 +61,7 @@ def get_cart_item(d,key,i):
   return d.get('L_%s%s'%(key,i),[None])[0]
 
 def process_cart(d,user,txn_id=None,**kwargs):
+  return
   for i in range(10):
     if not get_cart_item(d,'AMT',i):
       break
@@ -61,28 +69,118 @@ def process_cart(d,user,txn_id=None,**kwargs):
     name = get_cart_item(d,'NAME',i)
     number = get_cart_item(d,'NUMBER',i)
     qty = get_cart_item(d,'QTY',i)
-    if not Session.objects.filter(pk=number):
+    if not number.isdigit() or not Session.objects.filter(pk=number):
       continue
     session = Session.objects.get(pk=number)
     if not session.course.name in name:
-      pass #print "name mismatch:\n%s\n%s\n"%(session.course.name,name)
+      print "name mismatch:\n%s\n%s\n"%(session.course.name,name)
 
 opt_names = {}
+amts = {}
+monthly = {}
+yearly = {}
 
 strptime = lambda s: datetime.datetime.strptime(s,"%Y-%m-%dT%H:%M:%SZ")
 
+"""
+Non-paying Member
+TX/RX Supporter
+Amigotron
+Tinkerer
+Hacker
+Table Hacker
+"""
+membership_map = {
+  "Artist": 'Tinkerer',
+  "Crafter": 'Hacker',
+  "Table Artist": 'Table Hacker',
+  "Full Member Subscribe": 'Hacker',
+  "Full Membership": 'Hacker',
+  "Full Membership Dual": 'Hacker',
+  #"Hacker": '',
+  "Mike Reynolds Membership": 'Hacker',
+  "Special Full Bay Memberhip Tiny House Build": 'Table Hacker',
+  #"Table Hacker": '',
+  "Table Membership": 'Table Hacker',
+  "Table Membership (1/2 Bay)": 'Table Hacker',
+  "Table Membership (1/4 Bay Legacy)": 'Table Hacker',
+  #"Tinkerer": '',
+  "Tinkerer (Monthly Legacy)": 'Tinkerer',
+  #"TX/RX Supporter": ''
+}
+
+membership_lookup = {
+  'Amigotron': [110,220],#['20.00', '10.00'], ['110.00', '220.00']],
+  'TX/RX Supporter': [110],
+  'Tinkerer': [225,250,440,275,550],
+  'Hacker': [500,800,880,990,275],
+  'Table Hacker': [1815,1595],
+}
+
+membership_skips = ['Auto Membership', 'Table']
+
 def process_subscrpayment(d,user,txn_id=None,subscr_id=None,**kwargs):
   for i in [0]:
+    if random.random() > 0.999:
+      reset_queries()
     name = get_cart_item(d,'OPTIONSNAME',i) or d.get('SUBJECT',[''])[0].replace(' Membership Subscribe','')
+    name = name.replace(" (One-Year Legacy)","")
     value = get_cart_item(d,'OPTIONSVALUE',i)
     if not name:
-      print d
       break
     ordertime = strptime(d.get("ORDERTIME")[0])
+    amt = d.get("AMT")[0]
     if not name in opt_names:
       opt_names[name] = datetime.datetime(2000,1,1)
+      amts[name] = []
     if opt_names[name] < ordertime:
       opt_names[name] = ordertime
+    if not amt in amts[name]:
+      amts[name].append(amt)
+    membership_name = membership_map.get(name,name)
+    try:
+      membership = Membership.objects.get(name=membership_name)
+    except Membership.DoesNotExist:
+      print '"%s" membership not found: $%s %s - %s'%(membership_name,amt,d['EMAIL'][0],ordertime)
+      break
+    _d = monthly
+    amt = int(float(amt))
+    #if amt == 270:
+    #  print sorted(d.items())
+    months = 1
+    if amt in membership_lookup[membership_name]:
+      _d = yearly
+      months = 12
+    if not membership_name in _d:
+      _d[membership_name] = []
+    if not amt in _d[membership_name]:
+      _d[membership_name].append(amt)
+    try:
+      product = MembershipProduct.objects.filter(membership__name=membership_name,months=months)[0]
+    except IndexError:
+      print "Cannot find %s @ %s"%(membership_name,months)
+      return
+    if not MembershipChange.objects.filter(subscr_id=subscr_id):
+      MembershipChange.objects.create(
+        user=user,
+        transaction_id=txn_id,
+        subscr_id=subscr_id,
+        payment_method="legacy",
+        action="start",
+        membershipproduct=product,
+        datetime=ordertime
+      )
+      print "%s created"%subscr_id
+    change, new = MembershipChange.objects.get_or_create(
+      user=user,
+      transaction_id=txn_id,
+      subscr_id=subscr_id,
+      payment_method="legacy",
+      action='extend',
+      membershipproduct=product,
+      datetime=ordertime
+    )
+    return name
 
 processors = {
   'cart': process_cart,
@@ -94,6 +192,8 @@ processors = {
   #'webaccept': ,#60
   #'expresscheckout': ,#47
 }
+
+status_processors = ['Completed','Refunded','PartiallyRefunded','Failed']
 if __name__ == "__main__":
   ids = get_txn_ids()
   found = 0
@@ -111,14 +211,25 @@ if __name__ == "__main__":
     subscr_id = d.get("SUBSCRIPTIONID",[None])[0]
     txn_id = d.get("TRANSACTIONID",[None])[0]
     email = d.get("EMAIL",[None])[0]
+    if txn_type == 'subscrpayment' and not d['PAYMENTSTATUS'][0] in status_processors:
+      print "bad status: ",d['PAYMENTSTATUS'][0]
+      continue
     if PayPalIPN.objects.filter(txn_id=txn_id):
       continue
     user,new = get_or_create_student(email,subscr_id=subscr_id,send_mail=False)
     if new:
       print '\t'.join([str(s) for s in [txn_type[:6],subscr_id,email,user]])
-    if txn_type in processors:
-      processors[txn_type](d,user,txn_id=txn_id,subscr_id=subscr_id)
-  for k,v in types.items():
+    if not txn_type in processors:
+      continue
+    processors[txn_type](d,user,txn_id=txn_id,subscr_id=subscr_id)
+  #for k,v in types.items():
+  #  print k,':  ',v
+  for k in sorted(opt_names.keys()):
+    print k,':  ',opt_names[k],' ',sorted(amts[k])
+  print "Monthly"
+  for k,v in sorted(monthly.items()):
     print k,':  ',v
-  for k,v in opt_names.items():
+  print "Yearly"
+  for k,v in sorted(yearly.items()):
     print k,':  ',v
+  

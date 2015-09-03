@@ -24,11 +24,12 @@ class MembershipAdmin(admin.ModelAdmin):
   list_editable = ("order",)
   inlines = (MembershipFeatureInline, MembershipProductInline)
 
-class MembershipChangeInline(admin.TabularInline):
+class MembershipChangeInline(admin.StackedInline):
   model = MembershipChange
   extra = 1
   exclude = ('paypalipn','transaction_id')
-  readonly_fields = ('payment_method','ipn_link')
+  readonly_fields = ('payment_method','ipn_link','subscr_id','datetime')
+  fields = (('subscr_id','action','membershipproduct'),('payment_method','ipn_link'),('date_override','notes'),'datetime')
   def ipn_link(self,obj=None):
     if not (obj and obj.pk):
       return ""
@@ -43,8 +44,15 @@ class UserMembershipInline(admin.StackedInline):
   list_editable = ('photo',)
   list_filter = ('user__is_staff',)
   search_fields = ('user__email','user__username','paypal_email')
-  readonly_fields = ('api_key','start','end')
+  readonly_fields = ('start','end','membership')
   raw_id_fields = ('photo',)
+  fields = (
+    'membership','bio',
+    ('voting_rights','suspended'),
+    ('photo','waiver'),
+    ('paypal_email','subscr_id'),
+    ('start','end')
+  )
   model = UserMembership
 
 class ProposalInline(admin.StackedInline):

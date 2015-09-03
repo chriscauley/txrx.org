@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.models import FlatPage
@@ -147,3 +148,14 @@ def member_detail(request,username=None):
     'posts': posts
     }
   return TemplateResponse(request,"membership/member_detail.html",values)
+
+@staff_member_required
+def analysis(request):
+  memberships = []
+  for level in Membership.objects.filter(order__gt=0):
+    users = get_user_model().objects.filter(usermembership__membership=level).order_by('-usermembership__end')
+    memberships.append((level,users))
+  values = {
+    'memberships': memberships
+  }
+  return TemplateResponse(request,"membership/analysis.html",values)

@@ -61,7 +61,8 @@ class MembershipProduct(Product):
 
 PAYMENT_METHOD_CHOICES = (
   ('paypal','PayPalIPN'),
-  ('admin','Admin (manual)')
+  ('admin','Admin (manual)'),
+  ('legacy','Legacy (PayPal)'),
 )
 
 MEMBERSHIP_ACTION_CHOICES = [
@@ -75,7 +76,7 @@ class MembershipChange(models.Model):
   transaction_id = models.CharField(max_length=20,null=True,blank=True)
   subscr_id = models.CharField(max_length=20,null=True,blank=True)
   paypalipn = models.ForeignKey("ipn.PayPalIPN",null=True,blank=True)
-  datetime = models.DateTimeField(auto_now_add=True)
+  datetime = models.DateTimeField()
   date_override = models.DateTimeField(null=True,blank=True)
   action = models.CharField(max_length=16,choices=MEMBERSHIP_ACTION_CHOICES)
   membershipproduct = models.ForeignKey(MembershipProduct,null=True,blank=True)
@@ -147,6 +148,9 @@ class UserMembership(models.Model):
 
   __unicode__ = lambda self: "%s's Membership"%self.user
   objects = UserMembershipManager()
+  @property
+  def subscriptions(self):
+    return MembershipChange.objects.filter(user=self.user,action="start")
   @cached_method
   def get_photo(self):
     return self.photo or Photo.objects.get(pk=144)

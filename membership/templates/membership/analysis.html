@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block main %}
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    {% for membership,users in memberships %}
+    <li role="presentation"{% if forloop.first %} class="active"{% endif %}>
+      <a href="#{{ membership.name|slugify }}" aria-controls="home" role="tab" data-toggle="tab">
+        {{ membership }} ({{ users|length }})
+    </a></li>
+    {% endfor %}
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    {% for membership,users in memberships %}
+    <div role="tabpanel" class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ membership.name|slugify }}">
+      <table class="table table-striped">
+        {% for user in users %}
+        <tr>
+          <td><a href="/admin/user/user/{{ user.pk }}/">{{ user }}</a></td>
+          <td>{{ user.usermembership.start }}</td>
+          <td>{{ user.usermembership.end }}</td>
+          <td>
+            {% for subscription in user.usermembership.subscriptions %}
+            {{ subscription.subscr_id }} - {{ subscription.datetime|date:'m/Y' }}<br/>
+            {% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    {% endfor %}
+  </div>
+{% endblock %}
