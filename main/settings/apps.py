@@ -16,7 +16,6 @@ INSTALLED_APPS = (
   # 3rd party
   #'markdown_deux',
   #'bootstrapform',
-  #'south',
   'sorl.thumbnail',
   'registration',
   'paypal.standard.ipn',
@@ -55,8 +54,6 @@ INSTALLED_APPS = (
   'thing',
   'notify',
 )
-
-SOUTH_TESTS_MIGRATE = False
 
 #mptt_comments
 COMMENTS_APP = 'mptt_comments'
