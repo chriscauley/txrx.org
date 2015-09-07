@@ -36,6 +36,7 @@
           {% for subscription in user.usermembership.all_subscriptions %}
           <div style="background: {{ subscription.bg }}">
             <a href="/admin/membership/subscription/{{ subscription.pk }}/" class="fa fa-edit"></a>
+            <a href="https://mail.google.com/mail/u/0/#search/{{ subscription.subscr_id }}" class="fa fa-search"></a>
             {{ subscription.subscr_id }}
             ${{ subscription.owed|floatformat:0 }}/{{ subscription.amount|floatformat:0 }}
             [{{ subscription.created|date:'m/Y' }} {{ subscription.last_status.datetime|date:'m/Y' }}]

@@ -134,7 +134,7 @@ membership_skips = ['Auto Membership', 'Table']
 
 def process_subscrpayment(d,user,txn_id=None,subscr_id=None,**kwargs):
   if subscr_id in ['I-CY935RUG8XY2','I-NSJ6LKWJ7TB6']:
-    continue
+    return
   for i in [0]:
     if random.random() > 0.99:
       reset_queries()

@@ -9,15 +9,23 @@ Subscription.objects.all().update(canceled=None)
 
 now = datetime.datetime.now()
 low = high = other = 0
-initial = Subscription.objects.filter(owed__gt=0).count()
 
 for subscription in Subscription.objects.all():
   subscription.recalculate()
 
+f = open("_cancels.txt",'r')
+subscr_ids = f.read().split("\n")
+for subscr_id in subscr_ids:
+  try:
+    Subscription.objects.get(subscr_id=subscr_id).force_canceled()
+  except:
+    print subscr_id,' not found'
+f.close()
+
+initial = Subscription.objects.filter(owed__gt=0).count()
+
 for membership in Membership.objects.filter(order__gte=1):
-  for subscription in Subscription.objects.filter(product__membership=membership):
-    if not subscription.owed > 0:
-      continue
+  for subscription in Subscription.objects.filter(product__membership=membership,owed__gt=0):
     if membership.order in [1,2]: #amigotron/supporter
       low += 1
       subscription.force_canceled()
@@ -29,6 +37,7 @@ for membership in Membership.objects.filter(order__gte=1):
       other += 1
   print membership,'\t',Subscription.objects.filter(product__membership=membership,owed__gt=0).count()
 
+print 'pp:\t',len(subscr_ids)
 print 'init:\t',initial
 print 'low:\t',low
 print 'high:\t',high
