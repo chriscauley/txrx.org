@@ -126,7 +126,14 @@
       {% endif %}
       {% endif %}
     </div>
-    {% include "_social.html" with thing=course %}
+    <center>{% include "_social.html" with thing=course %}</center>
+    <br/>
+    <center><button class="btn btn-danger return_policy" onclick="$('.session_return_policy').toggle();return false;">
+        View our return policy</button></center>
+    <br/>
+    <div class="alert alert-danger session_return_policy" style="display:none;">
+      {% include "course/_return_policy.html" with format="html" %}
+    </div>
     {% comment %}
     <center>
       <span class="st_facebook_large" displayText="Facebook"></span>
