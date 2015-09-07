@@ -16,7 +16,7 @@
   {% for membership,users in memberships %}
   <li role="presentation"{% if forloop.first %} class="active"{% endif %}>
     <a href="#{{ membership.name|slugify }}" aria-controls="home" role="tab" data-toggle="tab">
-      {{ membership }} ({{ membership.active_subscriptions|length }}/{{ users|length }})
+      {{ membership }} ({{ membership.count_active_users }}/{{ membership.count_all_users }})
   </a></li>
   {% endfor %}
 </ul>
@@ -31,6 +31,7 @@
         <td><a href="/admin/user/user/{{ user.pk }}/">{{ user }}</a></td>
         <td>{{ user.usermembership.start }}</td>
         <td>{{ user.usermembership.end }}</td>
+        <td>{{ user.enrollment_set.count }}</td>
         <td>
           {% for subscription in user.usermembership.all_subscriptions %}
           <div style="background: {{ subscription.bg }}">

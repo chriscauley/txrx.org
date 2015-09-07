@@ -37,9 +37,13 @@ class Membership(models.Model):
   membershipgroup = models.ForeignKey(MembershipGroup,null=True,blank=True)
   features = cached_property(lambda self:[a.feature for a in self.membershipfeature_set.all()],
                              name="features")
-  def active_subscriptions(self):
-    return get_user_model().objects.filter(subscription__product__membership=self,
-                                            subscription__canceled__isnull=True).distinct()
+  @cached_property
+  def all_users(self):
+    return get_user_model().objects.filter(subscription__product__membership=self)
+  def count_all_users(self):
+    return self.all_users.count()
+  def count_active_users(self):
+    return self.all_users.filter(subscription__canceled__isnull=True).distinct().count()
   def profiles(self):
     return self.profile_set.all()
   class Meta:
