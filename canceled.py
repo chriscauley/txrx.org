@@ -17,9 +17,9 @@ f = open("_cancels.txt",'r')
 subscr_ids = f.read().split("\n")
 for subscr_id in subscr_ids:
   try:
-    Subscription.objects.get(subscr_id=subscr_id).force_canceled()
+    Subscription.objects.get(subscr_id=subscr_id.strip()).force_canceled()
   except:
-    print subscr_id,' not found'
+    print subscr_id.strip(),' not found'
 f.close()
 
 initial = Subscription.objects.filter(owed__gt=0).count()

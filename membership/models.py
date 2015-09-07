@@ -8,7 +8,6 @@ from db.models import UserModel
 from media.models import Photo
 from course.models import Session, Term, Course
 from main.utils import cached_method, cached_property
-from project.models import Project
 from shop.models import Product
 
 from wmd.models import MarkDownField
@@ -215,9 +214,6 @@ class UserMembership(models.Model):
     #! Needs to be separated by something now that term is depracated!
     term = Term.objects.all()[0]
     return [(term,Session.objects.filter(user=self.user))]
-  @cached_method
-  def get_projects(self):
-    return Project.objects.filter(author=self.user)
 
 class OfficerManager(models.Manager):
   def current(self,*args,**kwargs):
