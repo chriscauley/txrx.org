@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('ipn', '__first__'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('membership', '0011_membershipchange_subscr_id'),
+        ('membership', '0006_membershiprate_cost'),
     ]
 
     operations = [
@@ -58,19 +58,11 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.RemoveField(
-            model_name='membershipchange',
-            name='membershipproduct',
-        ),
-        migrations.RemoveField(
-            model_name='membershipchange',
-            name='paypalipn',
-        ),
-        migrations.RemoveField(
-            model_name='membershipchange',
-            name='user',
+            model_name='membershiprate',
+            name='membership',
         ),
         migrations.DeleteModel(
-            name='MembershipChange',
+            name='MembershipRate',
         ),
         migrations.AddField(
             model_name='status',
@@ -84,14 +76,22 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(to='membership.Subscription'),
             preserve_default=True,
         ),
-        migrations.RemoveField(
+        migrations.AddField(
             model_name='usermembership',
-            name='subscr_id',
+            name='end',
+            field=models.DateTimeField(null=True, blank=True),
+            preserve_default=True,
         ),
         migrations.AddField(
             model_name='usermembership',
             name='flagged',
             field=models.CharField(max_length=16, null=True, blank=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='usermembership',
+            name='start',
+            field=models.DateTimeField(null=True, blank=True),
             preserve_default=True,
         ),
     ]

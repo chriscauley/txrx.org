@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django import forms
 
 from models import (MembershipGroup, Membership, Feature, MembershipFeature, UserMembership, MembershipProduct,
-                    Subscription, ScheduledPayment, Status, MeetingMinutes, Proposal, Officer)
+                    Subscription, Status, MeetingMinutes, Proposal, Officer)
 
 from db.admin import RawMixin
 from db.forms import StaffMemberForm
@@ -23,6 +23,13 @@ class MembershipAdmin(admin.ModelAdmin):
   list_display = ("name","order")
   list_editable = ("order",)
   inlines = (MembershipFeatureInline, MembershipProductInline)
+
+class StatusInline(admin.TabularInline):
+  model = Status
+  extra = 0
+
+class SubscriptionAdmin(admin.ModelAdmin):
+  inlines = [StatusInline]
 
 class SubscriptionInline(admin.TabularInline):
   model = Subscription
@@ -73,3 +80,4 @@ admin.site.register(MeetingMinutes,MeetingMinutesAdmin)
 admin.site.register(Officer,OfficerAdmin)
 admin.site.register(Feature)
 admin.site.register(MembershipGroup)
+admin.site.register(Subscription,SubscriptionAdmin)

@@ -89,6 +89,7 @@ urlpatterns += patterns(
   url(r'^u/([^/]+)/$','member_detail',name='member_detail'),
   url(r'^officers/$', 'officers', name='officers'),
   url(r'^analysis/$', 'analysis', name='analysis'),
+  url(r'^force_cancel/(\d+)/$','force_cancel'),
 )
 
 #notify urls

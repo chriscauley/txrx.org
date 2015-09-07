@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .models import Membership, MembershipGroup, MeetingMinutes, Officer, UserMembership
+from .models import Membership, MembershipGroup, MeetingMinutes, Officer, UserMembership, Subscription
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required, verify_unique_email
 
@@ -151,11 +151,23 @@ def member_detail(request,username=None):
 
 @staff_member_required
 def analysis(request):
+  order = request.GET.get('order','-usermembership__end')
+  orders = [
+    ('-usermembership__end','Last Payment'),
+    ('-subscription__owed','Money owed'),
+  ]
   memberships = []
   for level in Membership.objects.filter(order__gt=0):
-    users = get_user_model().objects.filter(usermembership__membership=level).order_by('-usermembership__end')
+    users = get_user_model().objects.filter(usermembership__membership=level).order_by(order).distinct()
     memberships.append((level,users))
   values = {
-    'memberships': memberships
+    'memberships': memberships,
+    'order': order,
+    'orders': orders
   }
   return TemplateResponse(request,"membership/analysis.html",values)
+
+@staff_member_required
+def force_cancel(self,pk):
+  Subscription.objects.get(pk=pk).force_canceled()
+  return HttpResponse('')

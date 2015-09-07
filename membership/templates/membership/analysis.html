@@ -1,38 +1,53 @@
 {% extends "base.html" %}
 
 {% block main %}
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    {% for membership,users in memberships %}
-    <li role="presentation"{% if forloop.first %} class="active"{% endif %}>
-      <a href="#{{ membership.name|slugify }}" aria-controls="home" role="tab" data-toggle="tab">
-        {{ membership }} ({{ users|length }})
-    </a></li>
-    {% endfor %}
-  </ul>
+<form>
+  <label>Order By:
+    <select name="order">
+      {% for value,verbose in orders %}
+      <option value="{{ value }}"{% if value = order %} selected="selected"{% endif %}>{{ verbose }}</option>
+      {% endfor %}
+    </select>
+    <button>Reorder</button>
+  </label>
+</form>
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+  {% for membership,users in memberships %}
+  <li role="presentation"{% if forloop.first %} class="active"{% endif %}>
+    <a href="#{{ membership.name|slugify }}" aria-controls="home" role="tab" data-toggle="tab">
+      {{ membership }} ({{ membership.active_subscriptions|length }}/{{ users|length }})
+  </a></li>
+  {% endfor %}
+</ul>
 
-  <!-- Tab panes -->
-  <div class="tab-content">
-    {% for membership,users in memberships %}
-    <div role="tabpanel" class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ membership.name|slugify }}">
-      <table class="table table-striped">
-        {% for user in users %}
-        <tr>
-          <td><a href="/admin/user/user/{{ user.pk }}/">{{ user }}</a></td>
-          <td>{{ user.usermembership.start }}</td>
-          <td>{{ user.usermembership.end }}</td>
-          <td>
-            {% for subscription in user.usermembership.all_subscriptions %}
-            <div>
-              ${{ subscription.owed }}
-              {{ subscription.subscr_id }}
-              [{{ subscription.created|date:'m/Y' }} {{ subscription.last_status.datetime|date:'m/Y' }}]</div>
-            {% endfor %}
-          </td>
-        </tr>
-        {% endfor %}
-      </table>
-    </div>
-    {% endfor %}
+<!-- Tab panes -->
+<div class="tab-content">
+  {% for membership,users in memberships %}
+  <div role="tabpanel" class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ membership.name|slugify }}">
+    <table class="table table-striped">
+      {% for user in users %}
+      <tr>
+        <td><a href="/admin/user/user/{{ user.pk }}/">{{ user }}</a></td>
+        <td>{{ user.usermembership.start }}</td>
+        <td>{{ user.usermembership.end }}</td>
+        <td>
+          {% for subscription in user.usermembership.all_subscriptions %}
+          <div style="background: {{ subscription.bg }}">
+            <a href="/admin/membership/subscription/{{ subscription.pk }}/" class="fa fa-edit"></a>
+            {{ subscription.subscr_id }}
+            ${{ subscription.owed|floatformat:0 }}/{{ subscription.amount|floatformat:0 }}
+            [{{ subscription.created|date:'m/Y' }} {{ subscription.last_status.datetime|date:'m/Y' }}]
+            {% if not subscription.canceled %}
+            <a href="/force_cancel/{{ subscription.pk }}/">cancel</a>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
   </div>
+  {% endfor %}
+</div>
 {% endblock %}

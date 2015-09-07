@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from sorl.thumbnail import ImageField
 
 from db.models import UserModel
@@ -36,6 +37,9 @@ class Membership(models.Model):
   membershipgroup = models.ForeignKey(MembershipGroup,null=True,blank=True)
   features = cached_property(lambda self:[a.feature for a in self.membershipfeature_set.all()],
                              name="features")
+  def active_subscriptions(self):
+    return get_user_model().objects.filter(subscription__product__membership=self,
+                                            subscription__canceled__isnull=True).distinct()
   def profiles(self):
     return self.profile_set.all()
   class Meta:
@@ -63,21 +67,47 @@ class Subscription(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
   subscr_id = models.CharField(max_length=20,null=True,blank=True)
   created = models.DateTimeField(default=datetime.datetime.now)
-  cancelled = models.DateTimeField(null=True,blank=True)
+  canceled = models.DateTimeField(null=True,blank=True)
   product = models.ForeignKey(MembershipProduct,null=True,blank=True)
   # self.amount should match self.product, but can be used as an override
   amount = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   owed = models.DecimalField(max_digits=30, decimal_places=2, default=0)
-  last_status = lambda self: (self.status_set.all() or [None])[0]
-  def recalculate(self):
-    for i in range(360): # 60 years
-      date = add_months(self.created,i)
-      ScheduledPayment.objects.get_or_create(subscription=self,amount=self.amount,due_date=date)
-    now = datetime.datetime.now()
-    amount_due = sum([sp.amount for sp in self.scheduledpayment_set.filter(due_date__lte=now)])
-    amount_paid = sum([s.amount for s in self.status_set.all()])
-    self.owed = max([0,amount_due-amount_paid])
+  last_status = property(lambda self: (self.status_set.all().order_by('-datetime') or [None])[0])
+  def force_canceled(self):
+    self.canceled = add_months(self.last_status.datetime,self.product.months)
     self.save()
+    self.recalculate()
+  @property
+  def bg(self):
+    if self.owed > 0:
+      return "#ff8888"
+    if self.canceled:
+      return "#88ffff"
+    if self.owed < 0:
+      return "#88ff88"
+    return "transparent"
+  def recalculate(self,modify_membership=True):
+    now = self.canceled or datetime.datetime.now()
+    for months in range(1200): # 100 years
+      if add_months(self.created,months) >= now:
+        break
+    amount_due = months * self.amount / self.product.months
+    amount_paid = sum([s.amount for s in self.status_set.all()])
+    self.owed = amount_due-amount_paid
+    if self.canceled:
+      self.owed = 0
+    self.save()
+    last = self.last_status
+    if last:
+      um = self.user.usermembership
+      if modify_membership:
+        um.membership = self.product.membership
+      um.end = max(last.datetime,um.end or last.datetime)
+      um.start = min(um.start or self.created,self.created)
+      um.save()
+    
+  class Meta:
+    ordering = ('created',)
 
 class ScheduledPayment(models.Model):
   subscription = models.ForeignKey(Subscription)

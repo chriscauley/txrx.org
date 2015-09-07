@@ -8,9 +8,12 @@ from paypal.standard.ipn.models import PayPalIPN
 from course.models import Enrollment, Session
 from course.utils import get_or_create_student
 from user.models import User
-from membership.models import Subscription, Status, Membership, MembershipProduct
+from membership.models import Subscription, Status, Membership, MembershipProduct, UserMembership
 
+#[s.recalculate() for s in Subscription.objects.all()];exit()
 Status.objects.all().delete()
+Subscription.objects.all().delete()
+UserMembership.objects.all().update(end=None)
 
 def cache_output(file_name):
   """Save the output of the function as file_name"""
@@ -47,14 +50,15 @@ def get_subscription_info(subscr_id):
   raw_d = r.text
   print r.text
 
-num_years = 2
+num_years = 5
 
 @cache_output('_%sppt.txt'%num_years)
 def get_txn_ids():
   ids = []
-  for i in range(365*num_years)[::-1]:
-    print i," day"
-    ids += cache_output("txn_ids/%s.day"%i)(lambda: get_txn_ids_for_day(datetime.date.today()-datetime.timedelta(i)))()
+  for i in range(365*num_years+90)[::-1]:
+    d = datetime.date.today()-datetime.timedelta(i)
+    # this next line is better since it isn't a relative date
+    ids += cache_output("txn_ids/%s.%s.%s.day"%(d.year,d.month,d.day))(lambda: get_txn_ids_for_day(d))()
   return ids
 
 def get_txn(txn_id):
@@ -171,8 +175,11 @@ def process_subscrpayment(d,user,txn_id=None,subscr_id=None,**kwargs):
       return
     defaults = {'product': product, 'created': ordertime,'user': user, 'amount': amt}
     subscription, new = Subscription.objects.get_or_create(subscr_id=subscr_id,defaults=defaults)
+    if subscription.created > ordertime:
+      subscription.created = ordertime
+      subscription.save()
     if new:
-      print "%s created subscription"%subscr_id
+      print "%s created subscription %s"%(subscr_id,ordertime)
     Status.objects.get_or_create(
       subscription=subscription,
       amount=amt,
@@ -200,7 +207,7 @@ if __name__ == "__main__":
   types = {}
   users = User.objects.all().count()
   for i in ids:
-    if i.startswith("I-"):
+    if i.startswith('I-'):
       continue
     d = cache_output("txn_ids/%s"%i)(lambda: get_txn(i))()
     if not 'TRANSACTIONTYPE' in d:
