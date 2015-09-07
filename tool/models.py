@@ -34,7 +34,7 @@ class Tool(PhotosMixin,OrderedModel):
   description = MarkDownField(blank=True,null=True)
   est_price = models.FloatField(null=True,blank=True)
   links = lambda self: self.toollink_set.all()
-  materials = models.ManyToManyField("thing.Material",null=True,blank=True)
+  materials = models.ManyToManyField("thing.Material",blank=True)
   room = models.ForeignKey(Room,null=True,blank=True)
   get_absolute_url = lambda self: reverse("tool_detail",args=[self.slug,self.id])
   functional = models.BooleanField(default=True)

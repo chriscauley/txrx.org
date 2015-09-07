@@ -181,7 +181,6 @@ class UserMembership(models.Model):
   suspended = models.BooleanField(default=False)
   waiver = models.FileField("Waivers",upload_to="waivers/",null=True,blank=True)
 
-  #roles = models.ManyToManyField(Role,null=True,blank=True)
   photo = models.ForeignKey(Photo,null=True,blank=True)
   bio = MarkDownField(null=True,blank=True)
   api_key = models.CharField(max_length=32,default=rand32)
@@ -266,9 +265,9 @@ class LimitedAccessKey(UserModel):
 
 class MeetingMinutes(models.Model):
   date = models.DateField(default=datetime.date.today,unique=True)
-  voters_present = models.ManyToManyField(settings.AUTH_USER_MODEL,null=True,blank=True)
-  inactive_present = models.ManyToManyField(settings.AUTH_USER_MODEL,null=True,blank=True,related_name="meetings_inactive")
-  nonvoters_present = models.ManyToManyField(settings.AUTH_USER_MODEL,null=True,blank=True,related_name="+")
+  voters_present = models.ManyToManyField(settings.AUTH_USER_MODEL,blank=True)
+  inactive_present = models.ManyToManyField(settings.AUTH_USER_MODEL,blank=True,related_name="meetings_inactive")
+  nonvoters_present = models.ManyToManyField(settings.AUTH_USER_MODEL,blank=True,related_name="+")
   content = MarkDownField()
   _ht = "Used only when an exact list of members is unavailable (eg legacy minutes)"
   member_count = models.IntegerField(default=0,help_text=_ht)
@@ -292,7 +291,7 @@ class Proposal(UserModel):
     ordering = ('order',)
 
 class Survey(models.Model):
-  user = models.ForeignKey(settings.AUTH_USER_MODEL,unique=True)
+  user = models.OneToOneField(settings.AUTH_USER_MODEL)
   reasons = models.TextField(blank=True)
   projects = models.TextField(blank=True)
   skills = models.TextField(blank=True)

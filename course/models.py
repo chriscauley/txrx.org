@@ -419,7 +419,7 @@ FIVE_CHOICES = (
 class Evaluation(UserModel):
   _kwargs = dict(validators=[MaxLengthValidator(512)],max_length=512,null=True,blank=True)
 
-  enrollment = models.ForeignKey(Enrollment,unique=True)
+  enrollment = models.OneToOneField(Enrollment)
   datetime = models.DateTimeField(auto_now_add=True)
 
   p_ht = "Rate the instructor on subject knowledge, pace of the course and communication skills"

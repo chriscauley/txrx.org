@@ -25,7 +25,7 @@ class Thing(PhotosMixin,ToolsMixin,FilesMixin,UserModel):
   active = models.BooleanField(default=False)
   parent_link = models.URLField(null=True,blank=True)
   parent = models.ForeignKey("self",null=True,blank=True)
-  materials = models.ManyToManyField(Material,null=True,blank=True)
+  materials = models.ManyToManyField(Material,blank=True)
   session = models.ForeignKey(Session,null=True,blank=True)
 
   __unicode__ = lambda self: self.title

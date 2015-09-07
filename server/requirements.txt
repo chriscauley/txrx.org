@@ -1,4 +1,4 @@
-django==1.7.8
+django
 django-devserver
 -e git+https://github.com/chriscauley/django-registration.git#egg=django-registration
 django_compressor

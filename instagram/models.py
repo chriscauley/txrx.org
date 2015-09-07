@@ -95,7 +95,7 @@ class InstagramPhoto(models.Model):
 
   instagram_user = models.ForeignKey(InstagramUser,null=True,blank=True)
   instagram_location = models.ForeignKey(InstagramLocation,null=True,blank=True)
-  instagram_tags = models.ManyToManyField(InstagramTag,null=True,blank=True)
+  instagram_tags = models.ManyToManyField(InstagramTag,blank=True)
 
   caption = models.CharField(max_length=255,null=True,blank=True)
   created_time = models.IntegerField()
