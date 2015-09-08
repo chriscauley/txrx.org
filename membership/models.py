@@ -18,7 +18,7 @@ def rand32():
   seed = string.letters+string.digits
   return ''.join([random.choice(seed) for i in range(32)])
 
-class MembershipGroup(models.Model):
+class Group(models.Model):
   name = models.CharField(max_length=64)
   order = models.IntegerField(default=0)
   __unicode__ = lambda self: self.name
@@ -33,7 +33,7 @@ class Membership(models.Model):
   monthly_product = lambda self: self.products.filter(months=1)[0]
   yearly_product = lambda self: self.products.filter(months=12)[0]
   discount_percentage = models.IntegerField(default=0)
-  membershipgroup = models.ForeignKey(MembershipGroup,null=True,blank=True)
+  group = models.ForeignKey(Group,null=True,blank=True)
   features = cached_property(lambda self:[a.feature for a in self.membershipfeature_set.all()],
                              name="features")
   @cached_property

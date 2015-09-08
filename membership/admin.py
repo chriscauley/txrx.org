@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django import forms
 
-from models import (MembershipGroup, Membership, Feature, MembershipFeature, UserMembership, Product,
+from models import (Group, Membership, Feature, MembershipFeature, UserMembership, Product,
                     Subscription, Status, MeetingMinutes, Proposal, Officer)
 
 from db.admin import RawMixin
@@ -83,5 +83,5 @@ admin.site.register(Membership,MembershipAdmin)
 admin.site.register(MeetingMinutes,MeetingMinutesAdmin)
 admin.site.register(Officer,OfficerAdmin)
 admin.site.register(Feature)
-admin.site.register(MembershipGroup)
+admin.site.register(Group)
 admin.site.register(Subscription,SubscriptionAdmin)

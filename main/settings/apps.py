@@ -144,7 +144,7 @@ SUIT_CONFIG = {
      'models': (
        'membership.meetingminutes',
        'membership.levels',
-       'membership.membershipgroup',
+       'membership.group',
        'membership.officer',
        'user.user',
      )
