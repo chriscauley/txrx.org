@@ -1,5 +1,5 @@
-from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
@@ -36,7 +36,7 @@ class FeedItem(UserModel):
 
   content_type = models.ForeignKey(ContentType)
   object_id = models.PositiveIntegerField()
-  content_object = generic.GenericForeignKey('content_type', 'object_id')
+  content_object = GenericForeignKey('content_type', 'object_id')
 
   __unicode__ = lambda self: self.title
   def save(self,*args,**kwargs):

@@ -1,4 +1,4 @@
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from wmd.models import MarkDownField
@@ -6,7 +6,7 @@ from wmd.models import MarkDownField
 class Topic(models.Model):
   content_type = models.ForeignKey("contenttypes.ContentType")
   object_id = models.IntegerField()
-  content_object = generic.GenericForeignKey('content_type', 'object_id')
+  content_object = GenericForeignKey('content_type', 'object_id')
   __unicode__ = lambda self: "%s (%s)"%(content_object,content_type)
 
 class Question(models.Model):

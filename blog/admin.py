@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.contrib.contenttypes.generic import GenericTabularInline
+from django.contrib.contenttypes.admin import GenericTabularInline
 from crop_override.admin import CropAdmin
 from sorl.thumbnail import get_thumbnail
 

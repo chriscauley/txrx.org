@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.contrib.contenttypes.generic import GenericTabularInline
+from django.contrib.contenttypes.admin import GenericTabularInline
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.forms.models import BaseInlineFormSet

@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 
 from instagram.models import InstagramPhoto
@@ -118,7 +118,7 @@ class TaggedPhoto(models.Model):
   photo = models.ForeignKey(Photo)
   content_type = models.ForeignKey("contenttypes.ContentType")
   object_id = models.IntegerField()
-  content_object = generic.GenericForeignKey('content_type', 'object_id')
+  content_object = GenericForeignKey('content_type', 'object_id')
   order = models.IntegerField(default=9999)
 
 class PhotosMixin(object):
@@ -162,5 +162,5 @@ class TaggedFile(models.Model):
   file = models.ForeignKey(MiscFile)
   content_type = models.ForeignKey("contenttypes.ContentType")
   object_id = models.IntegerField()
-  content_object = generic.GenericForeignKey('content_type', 'object_id')
+  content_object = GenericForeignKey('content_type', 'object_id')
   order = models.IntegerField(default=9999)
