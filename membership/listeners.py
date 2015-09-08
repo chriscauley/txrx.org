@@ -1,6 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.http import QueryDict
+from db.utils import get_or_none
 
 from course.utils import get_or_create_student
 from .models import UserMembership, Status, Subscription, Membership, Product
@@ -18,32 +19,34 @@ _duid2='membership.listners.handle_successful_membership_payment'
 def handle_successful_membership_payment(sender,**kwargs):
   if sender.txn_type != "subscr_payment":
     return # not a membership payment
-  if MembershipChange.objects.filter(transaction_id=sender.txn_id):
+  if Status.objects.filter(transaction_id=sender.txn_id):
     return # This has already been processed
   params = QueryDict(sender.query)
-  user,new_user = get_or_create_student(sender.payer_email,subscr_id=params.get('subscr_id',None))
-  try:
-    membership = Membership.objects.get(name=params.get('option_name1',''))
-  except Membership.DoesNotExist:
-    b = "Could not find membership %s for txn %s"%(params.get('option_name1',''),sender.txn_id)
-    mail_admins("Bad IPN",b)
-    return
+  subscr_id=params.get('subscr_id',None)
+  user,new_user = get_or_create_student(sender.payer_email,subscr_id=subscr_id)
+  subscription = get_or_none(Subscription,subscr_id=subscr_id)
   if not 'mc_gross' in params:
     mail_admins("Bad IPN","no mc_gross in txn %s"%sender.txn_id)
-
-  try:
-    product = Product.objects.get(unit_price=params['mc_gross'],membership=membership)
-  except Product.DoesNotExist:
-    b = "Could not find membership product %s $%s for txn %s"
-    mail_admins("Bad IPN",b%(membership,params['mc_gross'],sender.txn_id))
     return
-  MembershipChange.objects.create(
-    user=user,
-    product=product,
-    transaction_id=sender.txn_id,
-    subscr_id=params.get(subscr_id),
+  amt = params['mc_gross']
+  if not subscription:
+    try:
+      membership = Membership.objects.get(name=params.get('option_name1',''))
+    except Membership.DoesNotExist:
+      b = "Could not find membership %s for txn %s"%(params.get('option_name1',''),sender.txn_id)
+      mail_admins("Bad IPN",b)
+      return
+    try:
+      product = Product.objects.get(unit_price=amt,membership=membership)
+    except Product.DoesNotExist:
+      b = "Could not find membership product %s $%s for txn %s"
+      mail_admins("Bad IPN",b%(membership,amt,sender.txn_id))
+      return
+  Status.objects.create(
+    subscription=subscription,
+    paypalipn=sender,
     payment_method='paypal',
-    paypalipn=sender
+    amount=amt,
   )
 
 _duid2='membership.listners.handle_subscription_signup'
