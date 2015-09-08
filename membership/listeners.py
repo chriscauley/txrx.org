@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from django.http import QueryDict
 
 from course.utils import get_or_create_student
-from .models import UserMembership, Status, Subscription, Membership, MembershipProduct
+from .models import UserMembership, Status, Subscription, Membership, Product
 from user.models import User
 
 from paypal.standard.ipn.signals import payment_was_successful, subscription_signup
@@ -32,16 +32,16 @@ def handle_successful_membership_payment(sender,**kwargs):
     mail_admins("Bad IPN","no mc_gross in txn %s"%sender.txn_id)
 
   try:
-    product = MembershipProduct.objects.get(unit_price=params['mc_gross'],membership=membership)
-  except MembershipProduct.DoesNotExist:
+    product = Product.objects.get(unit_price=params['mc_gross'],membership=membership)
+  except Product.DoesNotExist:
     b = "Could not find membership product %s $%s for txn %s"
     mail_admins("Bad IPN",b%(membership,params['mc_gross'],sender.txn_id))
     return
   MembershipChange.objects.create(
-    user = user,
-    membershipproduct = product,
-    transaction_id = sender.txn_id,
-    subscr_id = params.get(subscr_id),
+    user=user,
+    product=product,
+    transaction_id=sender.txn_id,
+    subscr_id=params.get(subscr_id),
     payment_method='paypal',
     paypalipn=sender
   )

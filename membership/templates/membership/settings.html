@@ -43,9 +43,9 @@
     {{ request.user.usermembership.membership }}</button>
 </p>
 <table id="membership_status">
-  {% for change in request.user.membershipchange_set.all %}
+  {% for subscription in request.user.subscription_set.all %}
   <tr>
-    <td>{{ change }}</td>
+    <td>{{ subscription.product }}</td>
   </tr>
   {% endfor %}
 </table>

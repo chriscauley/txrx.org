@@ -22,14 +22,14 @@ class MembershipGroup(models.Model):
   name = models.CharField(max_length=64)
   order = models.IntegerField(default=0)
   __unicode__ = lambda self: self.name
-  active_memberships = lambda self: self.membership_set.filter(membershipproduct__isnull=False).distinct()
+  active_memberships = lambda self: self.membership_set.filter(product__isnull=False).distinct()
   class Meta:
     ordering = ("order",)
 
 class Membership(models.Model):
   name = models.CharField(max_length=64)
   order = models.IntegerField("Level")
-  products = cached_property(lambda self: self.membershipproduct_set.filter(active=True),name="products")
+  products = cached_property(lambda self: self.product_set.filter(active=True),name="products")
   monthly_product = lambda self: self.products.filter(months=1)[0]
   yearly_product = lambda self: self.products.filter(months=12)[0]
   discount_percentage = models.IntegerField(default=0)
@@ -55,14 +55,14 @@ MONTHS_CHOICES = (
   (12,"Yearly"),
 )
 
-class MembershipProduct(Product):
+class Product(Product):
   membership = models.ForeignKey(Membership)
   months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
   order = models.IntegerField(default=0)
   __unicode__ = lambda self: "%s months of %s"%(self.months,self.membership)
   def save(self,*args,**kwargs):
     self.slug = "__membershipproduct__%s"%(self.pk or random.random())
-    super(MembershipProduct,self).save(*args,**kwargs)
+    super(Product,self).save(*args,**kwargs)
   class Meta:
     ordering = ("order",)
 
@@ -71,7 +71,7 @@ class Subscription(models.Model):
   subscr_id = models.CharField(max_length=20,null=True,blank=True)
   created = models.DateTimeField(default=datetime.datetime.now)
   canceled = models.DateTimeField(null=True,blank=True)
-  product = models.ForeignKey(MembershipProduct,null=True,blank=True)
+  product = models.ForeignKey(Product,null=True,blank=True)
   # self.amount should match self.product, but can be used as an override
   amount = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   owed = models.DecimalField(max_digits=30, decimal_places=2, default=0)

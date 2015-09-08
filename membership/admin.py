@@ -3,26 +3,30 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django import forms
 
-from models import (MembershipGroup, Membership, Feature, MembershipFeature, UserMembership, MembershipProduct,
+from models import (MembershipGroup, Membership, Feature, MembershipFeature, UserMembership, Product,
                     Subscription, Status, MeetingMinutes, Proposal, Officer)
 
 from db.admin import RawMixin
 from db.forms import StaffMemberForm
+
+from django.contrib.contenttypes.models import ContentType
+
+admin.site.register(ContentType)
 
 class MembershipFeatureInline(RawMixin,admin.TabularInline):
   extra = 0
   raw_id_fields = ('membership','feature')
   model = MembershipFeature
 
-class MembershipProductInline(admin.TabularInline):
+class ProductInline(admin.TabularInline):
   extra = 0
-  model = MembershipProduct
+  model = Product
   exclude = ('slug',)
 
 class MembershipAdmin(admin.ModelAdmin):
   list_display = ("name","order")
   list_editable = ("order",)
-  inlines = (MembershipFeatureInline, MembershipProductInline)
+  inlines = (MembershipFeatureInline, ProductInline)
 
 class StatusInline(admin.TabularInline):
   model = Status
