@@ -71,6 +71,7 @@ class Subscription(models.Model):
   subscr_id = models.CharField(max_length=20,null=True,blank=True)
   created = models.DateTimeField(default=datetime.datetime.now)
   canceled = models.DateTimeField(null=True,blank=True)
+  paid_until = models.DateTimeField(null=True,blank=True)
   product = models.ForeignKey(Product,null=True,blank=True)
   # self.amount should match self.product, but can be used as an override
   amount = models.DecimalField(max_digits=30, decimal_places=2, default=0)
@@ -80,6 +81,19 @@ class Subscription(models.Model):
     self.canceled = add_months(self.last_status.datetime,self.product.months)
     self.save()
     self.recalculate()
+  def bs_class(self):
+    if self.owed > 0:
+      return "danger"
+    if self.canceled:
+      return "warning"
+    return "success"
+  def verbose_status(self):
+    if self.owed > 0:
+      return "Overdue by %s"%self.owed
+    if self.canceled:
+      return "Canceled"
+    return self.paid_until.strftime("Paid until %b %-d, %Y")
+    
   @property
   def bg(self):
     if self.owed > 0:
@@ -99,6 +113,7 @@ class Subscription(models.Model):
     self.owed = amount_due-amount_paid
     if self.canceled:
       self.owed = 0
+    self.paid_until = add_months(self.created,int(amount_paid/amount_due))
     self.save()
     last = self.last_status
     if last:
@@ -111,11 +126,6 @@ class Subscription(models.Model):
     
   class Meta:
     ordering = ('created',)
-
-class ScheduledPayment(models.Model):
-  subscription = models.ForeignKey(Subscription)
-  amount = models.DecimalField(max_digits=30, decimal_places=2, default=0)
-  due_date = models.DateTimeField()
 
 PAYMENT_METHOD_CHOICES = (
   ('paypal','PayPalIPN'),

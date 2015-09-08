@@ -39,14 +39,12 @@
 <p>If you want to change your password click <a href="{% url "auth_password_change" %}">here</a></p>
 <p>
   Membership Status:
-  <button class="btn btn-{{ request.user.usermembership.status_class }}" onclick="$('#membership_status').toggle();">
-    {{ request.user.usermembership.membership }}</button>
 </p>
-<table id="membership_status">
-  {% for subscription in request.user.subscription_set.all %}
-  <tr>
-    <td>{{ subscription.product }}</td>
-  </tr>
-  {% endfor %}
-</table>
+{% for subscription in request.user.subscription_set.all %}
+<div class="alert alert-{{ subscription.bs_class }}">
+  <h4>{% if subscription.product.months == 1 %}Monthly{% else %}Yearly{% endif %} {{ subscription.product.membership }}</h4>
+  <div>Start Date: {{ subscription.created|date:"n-j-Y" }}</div>
+  <div>{{ subscription.verbose_status }}</div>
+</div>
+{% endfor %}
 {% endblock %}

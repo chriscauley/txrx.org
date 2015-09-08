@@ -8,7 +8,7 @@ from membership.models import Subscription, Membership, add_months
 Subscription.objects.all().update(canceled=None)
 
 now = datetime.datetime.now()
-low = high = other = 0
+low = high = changed = 0
 
 for subscription in Subscription.objects.all():
   subscription.recalculate()
@@ -34,14 +34,14 @@ for membership in Membership.objects.filter(order__gte=1):
       subscription.force_canceled()
     elif subscription.user.subscription_set.filter(owed__lte=0).exclude(pk=subscription.pk):
       subscription.force_canceled()
-      other += 1
+      changed += 1
   print membership,'\t',Subscription.objects.filter(product__membership=membership,owed__gt=0).count()
 
 print 'pp:\t',len(subscr_ids)
 print 'init:\t',initial
 print 'low:\t',low
 print 'high:\t',high
-print 'other:\t',other
+print 'changed:\t',changed
 print 'remain:\t',Subscription.objects.filter(owed__gt=0).count()
 
 cancel_all = False
