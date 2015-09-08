@@ -16,7 +16,7 @@ simplejson
 pillow==2.1.0
 
 django-mptt==0.5.4
--e git+https://github.com/chriscauley/django-mptt-comments.git#egg=django-mptt-comments.git
+-e git+https://github.com/chriscauley/django-riot-comments.git#egg=django-riot-comments.git
 
 django-redis-cache
 Markdown==2.0.3
@@ -26,12 +26,11 @@ Pygments
 requests
 -e git://github.com/durden/frappy.git#egg=frappy
 
--e git+https://github.com/Fantomas42/django-tagging.git#egg=django-tagging
--e git+https://github.com/alekam/django-tagging-autocomplete.git#egg=django-tagging-autocomplete
--e git://github.com/marcuswhybrow/django-wmd-editor.git#egg=django_wmd_editor
-
+django-tagging==0.3.6
 django-next-please
 icalendar
 python-social-auth
 
-django_shop
+-e git+https://github.com/chriscauley/django-shop.git#egg=django-shop
+-e git+https://github.com/chriscauley/django-wmd-editor.git#egg=django_wmd_editor
+django_paypal==0.2.5

@@ -1,11 +1,13 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.conf import settings
-from django.db.models.loading import get_model
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.template.defaultfilters import slugify
+
+from django.apps import apps
+get_model = apps.get_model
 
 from .utils import make_ics,ics2response
 from .models import Event, EventOccurrence
