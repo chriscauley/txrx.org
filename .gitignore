@@ -17,6 +17,7 @@ scripts/backups
 env/*
 environ/*
 .environ/*
+.e/*
 src/*
 .pydev
 .pydevproject

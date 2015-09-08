@@ -8,7 +8,7 @@ from paypal.standard.ipn.models import PayPalIPN
 from course.models import Enrollment, Session
 from course.utils import get_or_create_student
 from user.models import User
-from membership.models import Subscription, Status, Membership, MembershipProduct, UserMembership
+from membership.models import Subscription, Status, Membership, Product, UserMembership
 
 #[s.recalculate() for s in Subscription.objects.all()];exit()
 Status.objects.all().delete()
@@ -171,7 +171,7 @@ def process_subscrpayment(d,user,txn_id=None,subscr_id=None,**kwargs):
     if not amt in _d[membership_name]:
       _d[membership_name].append(amt)
     try:
-      product = MembershipProduct.objects.filter(membership__name=membership_name,months=months)[0]
+      product = Product.objects.filter(membership__name=membership_name,months=months)[0]
     except IndexError:
       print "Cannot find %s @ %s"%(membership_name,months)
       return
