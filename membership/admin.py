@@ -4,14 +4,24 @@ from django.contrib.auth import get_user_model
 from django import forms
 
 from models import (Group, Membership, Feature, MembershipFeature, UserMembership, Product,
-                    Subscription, Status, MeetingMinutes, Proposal, Officer)
+                    Subscription, Status, MeetingMinutes, Proposal, Officer, Area, Container)
 
 from db.admin import RawMixin
 from db.forms import StaffMemberForm
 
-from django.contrib.contenttypes.models import ContentType
+admin.site.register(Feature)
+admin.site.register(Group)
 
-admin.site.register(ContentType)
+class ContainerInline(admin.TabularInline):
+  model = Container
+
+@admin.register(Container)
+class ContainerAdmin(admin.ModelAdmin):
+  pass
+
+@admin.register(Area)
+class AreaAdmin(admin.ModelAdmin):
+  inlines = [ContainerInline]
 
 class MembershipFeatureInline(RawMixin,admin.TabularInline):
   extra = 0
@@ -23,6 +33,7 @@ class ProductInline(admin.TabularInline):
   model = Product
   exclude = ('slug',)
 
+@admin.register(Membership)
 class MembershipAdmin(admin.ModelAdmin):
   list_display = ("name","order")
   list_editable = ("order",)
@@ -32,11 +43,20 @@ class StatusInline(admin.TabularInline):
   model = Status
   extra = 0
 
+@admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
   inlines = [StatusInline]
 
 class SubscriptionInline(admin.TabularInline):
   model = Subscription
+  readonly_fields = ('edit','subscr_id','created','canceled','paid_until','product','amount','owed')
+  ordering = ('-canceled',)
+  raw_id_fields = ('container',)
+  extra = 0
+  has_add_permission = lambda self,obj: False
+  def edit(self,obj):
+    return "<a href='/admin/membership/subscription/%s/'>Edit</a>"%obj.pk
+  edit.allow_tags = True
 
 class UserMembershipInline(admin.StackedInline):
   list_display = ("__unicode__",'photo')
@@ -70,18 +90,13 @@ class MeetingMinutesForm(forms.ModelForm):
     model = MeetingMinutes
     exclude = ()
 
+@admin.register(MeetingMinutes)
 class MeetingMinutesAdmin(admin.ModelAdmin):
   form = MeetingMinutesForm
   inlines = [ProposalInline]
   fields = ('date','content',('voters_present','inactive_present'),'nonvoters_present')
   filter_horizontal = ('nonvoters_present',)
 
+@admin.register(Officer)
 class OfficerAdmin(admin.ModelAdmin):
   form = StaffMemberForm
-
-admin.site.register(Membership,MembershipAdmin)
-admin.site.register(MeetingMinutes,MeetingMinutesAdmin)
-admin.site.register(Officer,OfficerAdmin)
-admin.site.register(Feature)
-admin.site.register(Group)
-admin.site.register(Subscription,SubscriptionAdmin)
