@@ -1,4 +1,5 @@
 INSTALLED_APPS = (
+  'lablackey',
   'suit',
   'django.contrib.auth',
   'django.contrib.contenttypes',

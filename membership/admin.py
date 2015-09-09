@@ -41,6 +41,7 @@ class MembershipAdmin(admin.ModelAdmin):
 
 class StatusInline(admin.TabularInline):
   model = Status
+  raw_id_fields = ('paypalipn',)
   extra = 0
 
 @admin.register(Subscription)
@@ -55,7 +56,7 @@ class SubscriptionInline(admin.TabularInline):
   extra = 0
   has_add_permission = lambda self,obj: False
   def edit(self,obj):
-    return "<a href='/admin/membership/subscription/%s/'>Edit</a>"%obj.pk
+    return "<a class='related-widget-wrapper-link change-related' href='/admin/membership/subscription/%s/'></a>"%obj.pk
   edit.allow_tags = True
 
 class UserMembershipInline(admin.StackedInline):
