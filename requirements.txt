@@ -19,7 +19,7 @@ django-mptt==0.5.4
 -e git+https://github.com/chriscauley/django-riot-comments.git#egg=django-riot-comments.git
 
 django-redis-cache
-Markdown==2.0.3
+Markdown
 django-timezones==0.2
 pytz>=2011n
 Pygments

@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% load thumbnail %}
+{% load thumbnail short_codes%}
 
 {% block full_title %}{{ flatpage.title }}{% endblock %}
 {% block header %}{% endblock %}
 
 {% block content %}
 <div id="flatpage">
-{{ flatpage.content }}
+{{ flatpage.content|explosivo }}
 </div>
 {% endblock %}
 
