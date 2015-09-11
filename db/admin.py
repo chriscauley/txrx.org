@@ -70,9 +70,6 @@ class SlugModelAdmin(RawMixin,admin.ModelAdmin):
 class SlugModelInline(RawMixin,admin.TabularInline):
   exclude = ("slug",)
 
-class ColumnModelAdmin(RawMixin,admin.ModelAdmin):
-  list_filter = ('column',)
-
 class NamedTreeModelAdmin(RawMixin,admin.ModelAdmin):
   exclude = ('order',)
 

@@ -50,29 +50,6 @@ class SlugModel(models.Model):
   class Meta:
     abstract = True
 
-#! depracated?
-class ColumnModel(models.Model):
-  choices = (('right','right'),('left','left'))
-  column = models.CharField(max_length=8,choices=choices)
-  class Meta:
-    abstract = True
-
-#! depracated?
-class ProfileManager(models.Manager):
-  def from_user(user):
-    user = getattr(user,"user",False) or user
-    profile,new = self.get_or_create(user=user)
-    return profile
-
-#! depracated?
-class ProfileModel(models.Model):
-  user = models.OneToOneField(settings.AUTH_USER_MODEL)
-  ghandle = models.CharField(max_length=256,null=True,blank=True)
-  objects = ProfileManager()
-  __unicode__ = lambda self: "%s's Profile"%self.user
-  class Meta:
-    abstract = True
-
 class UserModel(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
   class Meta:
