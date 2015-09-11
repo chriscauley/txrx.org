@@ -111,7 +111,7 @@ urlpatterns += patterns(
 urlpatterns += patterns(
   '',
   url(r'^(about-us)/$','main.views.to_template'),
-  url(r'^(privacy/|schoolbot/|map/|bylaws/)$','django.contrib.flatpages.views.flatpage',name='map'),
+  url(r'^(fake-button/|privacy/|schoolbot/|map/|bylaws/)$','django.contrib.flatpages.views.flatpage',name='map'),
 )
 
 if settings.DEBUG:

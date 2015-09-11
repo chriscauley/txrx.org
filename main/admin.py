@@ -29,6 +29,7 @@ class FlatPageForm(forms.ModelForm):
     exclude = ()
 
 class FlatPageAdmin(FlatPageAdmin):
+  list_display = ('url','title','template_name')
   form = FlatPageForm
   inlines = [TaggedPhotoInline]
 
