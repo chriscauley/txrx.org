@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.http import QueryDict
-from db.utils import get_or_none
+from lablackey.utils import get_or_none
 
 from course.utils import get_or_create_student
 from .models import UserMembership, Status, Subscription, Membership, Product

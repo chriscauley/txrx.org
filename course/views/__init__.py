@@ -3,7 +3,7 @@ from django.http import QueryDict, Http404, HttpResponseRedirect
 from django.template.response import TemplateResponse
 
 from ..models import Session
-from db.utils import get_or_none
+from lablackey.utils import get_or_none
 
 from paypal.standard.ipn.models import *
 

@@ -11,7 +11,7 @@ from ..models import Course, Term, Subject, Session, Enrollment, ClassTime
 from ..forms import EmailInstructorForm, EvaluationForm
 from membership.models import UserMembership
 from notify.models import NotifyCourse
-from db.utils import get_or_none
+from lablackey.utils import get_or_none
 from event.utils import make_ics,ics2response
 
 from paypal.standard.ipn.models import *

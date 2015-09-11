@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
-from db.utils import get_or_none
+from lablackey.utils import get_or_none
 
 class EmailOrUsernameModelBackend(object):
   def authenticate(self, username=None, password=None):

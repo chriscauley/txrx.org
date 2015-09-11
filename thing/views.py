@@ -6,7 +6,7 @@ from django.template.response import TemplateResponse
 
 from .forms import ThingForm
 from .models import Thing, Material
-from db.utils import get_or_none
+from lablackey.utils import get_or_none
 from tool.models import Tool, TaggedTool
 
 from NextPlease import pagination
