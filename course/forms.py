@@ -2,7 +2,7 @@ from django import forms
 from django.core.mail import send_mail
 
 from .models import Evaluation, FIVE_CHOICES
-from db.forms import PlaceholderModelForm
+from lablackey.db.forms import PlaceholderModelForm
 
 class RequestForm(forms.Form):
   """

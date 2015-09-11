@@ -4,10 +4,10 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from sorl.thumbnail import ImageField
 
-from db.models import UserModel
-from media.models import Photo
 from course.models import Session, Term, Course
+from lablackey.db.models import UserModel
 from lablackey.utils import cached_method, cached_property
+from media.models import Photo
 from shop.models import Product
 
 from wmd.models import MarkDownField

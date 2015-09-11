@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
-from db.forms import StaffMemberForm
-from db.admin import NamedTreeModelAdmin, RawMixin
+from lablackey.db.forms import StaffMemberForm
+from lablackey.db.admin import NamedTreeModelAdmin, RawMixin
 
 from .models import Subject, Course, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseCompletion
 from event.admin import OccurrenceModelInline

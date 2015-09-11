@@ -6,8 +6,8 @@ from django import forms
 from models import (Group, Membership, Feature, MembershipFeature, UserMembership, Product,
                     Subscription, Status, MeetingMinutes, Proposal, Officer, Area, Container)
 
-from db.admin import RawMixin
-from db.forms import StaffMemberForm
+from lablackey.db.admin import RawMixin
+from lablackey.db.forms import StaffMemberForm
 
 admin.site.register(Feature)
 admin.site.register(Group)

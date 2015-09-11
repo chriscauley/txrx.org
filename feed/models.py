@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 
-from db.models import UserModel
+from lablackey.db.models import UserModel
 
 from sorl.thumbnail import get_thumbnail
 from wmd import models as wmd_models

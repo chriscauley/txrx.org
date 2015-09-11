@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 
 from media.admin import TaggedPhotoInline
-from db.admin import OrderedModelAdmin
+from lablackey.db.admin import OrderedModelAdmin
 from .models import Lab, Tool, ToolLink, TaggedTool
 
 class LabAdmin(OrderedModelAdmin):

@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.core.validators import MaxLengthValidator
 from django.template.defaultfilters import slugify, truncatewords, striptags
 from django.template.loader import render_to_string
-from db.models import UserModel, NamedTreeModel
+from lablackey.db.models import UserModel, NamedTreeModel
 from sorl.thumbnail import ImageField, get_thumbnail
 from crop_override import get_override
 import datetime, time

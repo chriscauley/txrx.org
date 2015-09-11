@@ -3,8 +3,8 @@ from django.contrib.contenttypes.admin import GenericTabularInline
 from crop_override.admin import CropAdmin
 from sorl.thumbnail import get_thumbnail
 
-from db.admin import SlugModelAdmin, OrderedModelAdmin, OrderedModelInline, RawMixin
-from db.forms import StaffMemberForm
+from lablackey.db.admin import SlugModelAdmin, OrderedModelAdmin, OrderedModelInline, RawMixin
+from lablackey.db.forms import StaffMemberForm
 
 from .models import Post, Banner, PressItem
 from .forms import PostForm

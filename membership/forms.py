@@ -8,7 +8,7 @@ from registration.models import RegistrationProfile
 
 from .models import UserMembership
 from .utils import verify_unique_email
-from db.forms import PlaceholderModelForm, PlaceholderForm, placeholder_fields
+from lablackey.db.forms import PlaceholderModelForm, PlaceholderForm, placeholder_fields
 
 from registration import signals
 from registration.forms import RegistrationForm

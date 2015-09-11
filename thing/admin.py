@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Thing, Material
 
-from db.admin import NamedTreeModelAdmin, RawMixin
+from lablackey.db.admin import NamedTreeModelAdmin, RawMixin
 from media.admin import TaggedPhotoAdmin, TaggedFileInline
 from tool.admin import TaggedToolInline
 

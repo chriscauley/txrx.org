@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 
-from db.models import UserModel,NamedTreeModel
+from lablackey.db.models import UserModel,NamedTreeModel
 from media.models import PhotosMixin, FilesMixin
 from course.models import Session
 from tool.models import ToolsMixin

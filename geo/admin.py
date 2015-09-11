@@ -1,5 +1,5 @@
 from django.contrib import admin
-from db.admin import RawMixin
+from lablackey.db.admin import RawMixin
 from .models import City, Location, Room, DXFEntity, RoomGroup
 
 class LocationAdmin(admin.ModelAdmin):

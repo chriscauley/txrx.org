@@ -4,7 +4,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 
-from db.models import NamedTreeModel
+from lablackey.db.models import NamedTreeModel
 from media.models import PhotosMixin
 
 from sorl.thumbnail import get_thumbnail

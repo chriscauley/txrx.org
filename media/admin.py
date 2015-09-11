@@ -8,8 +8,8 @@ from django.template.response import TemplateResponse
 from crop_override.admin import CropAdmin
 from sorl.thumbnail import get_thumbnail
 
-from db.admin import RawMixin
-from db.forms import StaffMemberForm
+from lablackey.db.admin import RawMixin
+from lablackey.db.forms import StaffMemberForm
 from .models import PhotoTag, Photo, MiscFile, TaggedPhoto, TaggedFile
 
 import json

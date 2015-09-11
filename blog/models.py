@@ -11,7 +11,7 @@ from .templatetags.short_codes import explosivo
 from lablackey.utils import cached_property
 from feed.models import FeedItemModel
 from media.models import Photo, PhotosMixin
-from db.models import SlugModel, OrderedModel
+from lablackey.db.models import SlugModel, OrderedModel
 
 class Post(PhotosMixin,FeedItemModel):
   feed_item_type = 'blog'

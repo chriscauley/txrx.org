@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from db.admin import RawMixin
+from lablackey.db.admin import RawMixin
 from .models import NotifyCourse
 
 class NotifyCourseAdmin(RawMixin,admin.ModelAdmin):

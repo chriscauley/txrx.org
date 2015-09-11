@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Consumable, Category
-from db.admin import NamedTreeModelAdmin
+from lablackey.db.admin import NamedTreeModelAdmin
 from media.admin import TaggedPhotoAdmin
 
 class CategoryAdmin(NamedTreeModelAdmin):

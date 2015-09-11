@@ -5,11 +5,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 
-from db.models import SlugModel, OrderedModel
-from media.models import Photo, PhotosMixin
-from lablackey.utils import cached_property, cached_method
-from wmd.models import MarkDownField
 from geo.models import Room
+from lablackey.db.models import SlugModel, OrderedModel
+from lablackey.utils import cached_property, cached_method
+from media.models import Photo, PhotosMixin
+from wmd.models import MarkDownField
 
 class Lab(PhotosMixin,OrderedModel):
   name = models.CharField(max_length=128)
