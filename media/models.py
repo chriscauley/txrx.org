@@ -4,7 +4,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 
 from instagram.models import InstagramPhoto
-from main.utils import cached_method, cached_property
+from lablackey.utils import cached_method, cached_property
 
 from crop_override import CropOverride, OriginalImage
 from sorl.thumbnail import get_thumbnail

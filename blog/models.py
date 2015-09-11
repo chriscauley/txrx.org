@@ -8,7 +8,7 @@ from timezones.fields import TimeZoneField
 import tagging
 
 from .templatetags.short_codes import explosivo
-from main.utils import cached_property
+from lablackey.utils import cached_property
 from feed.models import FeedItemModel
 from media.models import Photo, PhotosMixin
 from db.models import SlugModel, OrderedModel

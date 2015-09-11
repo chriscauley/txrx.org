@@ -3,7 +3,7 @@ from django.conf import settings
 from localflavor.us.models import USStateField
 
 from .widgets import LocationField
-from main.utils import cached_property
+from lablackey.utils import cached_property
 
 import ezdxf, json
 

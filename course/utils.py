@@ -3,7 +3,7 @@ from django.core.mail import mail_admins
 from django.contrib.auth import get_user_model
 from django import forms
 
-from main.utils import reset_password
+from lablackey.utils import reset_password
 import random, os, json
 
 def validate_email(s):

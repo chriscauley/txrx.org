@@ -6,7 +6,7 @@ from django.template.response import TemplateResponse
 
 from ..models import Session
 from ..forms import EmailInstructorForm
-from main.utils import FORBIDDEN
+from lablackey.utils import FORBIDDEN
 
 @login_required
 def email(request,session_pk):

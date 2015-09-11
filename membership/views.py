@@ -16,7 +16,7 @@ from .utils import limited_login_required, verify_unique_email
 from blog.models import Post
 from course.models import Course,CourseCompletion, Session
 from thing.models import Thing
-from main.utils import FORBIDDEN
+from lablackey.utils import FORBIDDEN
 
 import datetime
 

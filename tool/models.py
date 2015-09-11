@@ -7,7 +7,7 @@ from django.template.defaultfilters import slugify
 
 from db.models import SlugModel, OrderedModel
 from media.models import Photo, PhotosMixin
-from main.utils import cached_property, cached_method
+from lablackey.utils import cached_property, cached_method
 from wmd.models import MarkDownField
 from geo.models import Room
 

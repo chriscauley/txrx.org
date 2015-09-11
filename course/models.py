@@ -15,7 +15,7 @@ from media.models import FilesMixin, PhotosMixin
 from geo.models import Room
 from event.models import OccurrenceModel, reverse_ics
 from tool.models import ToolsMixin
-from main.utils import cached_method, cached_property, latin1_to_ascii
+from lablackey.utils import cached_method, cached_property, latin1_to_ascii
 
 from shop.models import Product
 from json import dumps

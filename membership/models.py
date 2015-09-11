@@ -7,7 +7,7 @@ from sorl.thumbnail import ImageField
 from db.models import UserModel
 from media.models import Photo
 from course.models import Session, Term, Course
-from main.utils import cached_method, cached_property
+from lablackey.utils import cached_method, cached_property
 from shop.models import Product
 
 from wmd.models import MarkDownField
