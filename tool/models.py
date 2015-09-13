@@ -45,12 +45,12 @@ class Tool(PhotosMixin,OrderedModel):
   # Abstract the next two!
   @cached_property
   def courses(self):
-    ct_id = ContentType.objects.get(name="course").id
+    ct_id = ContentType.objects.get(model="course").id
     tagged = list(TaggedTool.objects.filter(content_type__id=ct_id,tool=self))
     return [t.content_object for t in tagged]
   @cached_property
   def things(self):
-    ct_id = ContentType.objects.get(name="thing").id
+    ct_id = ContentType.objects.get(model="thing").id
     tagged = list(TaggedTool.objects.filter(content_type__id=ct_id,tool=self))
     return [t.content_object for t in tagged]
 
