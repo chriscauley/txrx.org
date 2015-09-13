@@ -1,17 +1,28 @@
 {% extends "base.html" %}
 
 {% block main %}
-<form>
-  <label>Order By:
-    <select name="order">
-      {% for value,verbose in orders %}
-      <option value="{{ value }}"{% if value = order %} selected="selected"{% endif %}>{{ verbose }}</option>
-      {% endfor %}
-    </select>
-    <button>Reorder</button>
-  </label>
-</form>
-<!-- Nav tabs -->
+<div class="row">
+  <form class="col-sm-6">
+    <label>Order By:
+      <select name="order">
+        {% for value,verbose in orders %}
+        <option value="{{ value }}"{% if value = order %} selected="selected"{% endif %}>{{ verbose }}</option>
+        {% endfor %}
+      </select>
+      <button>Reorder</button>
+    </label>
+  </form>
+
+  <div class="col-sm-6">
+    <table class="table" style="text-align: center">
+      <tr>
+        <td style="background-color:#ff8888">PAST DUE</td>
+        <td style="background-color:#88ffff">CANCELED</td>
+        <td style="background-color:#88ff88">SURPLUS DUES</td>
+      </tr>
+    </table>
+  </div>
+
 <ul class="nav nav-tabs" role="tablist">
   {% for membership,users in memberships %}
   <li role="presentation"{% if forloop.first %} class="active"{% endif %}>
@@ -21,7 +32,6 @@
   {% endfor %}
 </ul>
 
-<!-- Tab panes -->
 <div class="tab-content">
   {% for membership,users in memberships %}
   <div role="tabpanel" class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ membership.name|slugify }}">
