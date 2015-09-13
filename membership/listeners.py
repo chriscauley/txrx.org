@@ -42,27 +42,15 @@ def handle_successful_membership_payment(sender,**kwargs):
       b = "Could not find membership product %s $%s for txn %s"
       mail_admins("Bad IPN",b%(membership,amt,sender.txn_id))
       return
+    subscription = Subscription.objects.create(
+      user=user,
+      subscr_id=subscr_id,
+      product=product,
+      amount=amt
+    )
   Status.objects.create(
     subscription=subscription,
     paypalipn=sender,
     payment_method='paypal',
     amount=amt,
   )
-
-_duid2='membership.listners.handle_subscription_signup'
-@receiver(subscription_signup, dispatch_uid=_duid2)
-def handle_subscription_signup(sender,**kwargs):
-  params = QueryDict(sender.query)
-  if sender.txn_type != "subscr_payment":
-    return # not a membership payment
-  if Subscription.objects.filter(subscr_id=params.get('subscr_id')):
-    return # This has already been processed
-  user,new_user = get_or_create_student(sender.payer_email,subscr_id=params.get('subscr_id',None))
-  try:
-    membership = Membership.objects.get(name=params.get('option_name1',''))
-  except Membership.DoesNotExist:
-    b = "Could not find membership %s for txn %s"%(params.get('option_name1',''),sender.txn_id)
-    mail_admins("Bad IPN",b)
-    return
-  """Subscription(
-    membership=membership"""
