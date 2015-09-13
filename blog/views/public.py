@@ -64,7 +64,7 @@ def post_list(request, username, post_type='published',template_name="blog/index
 
 def posts_by_tag(request,name):
   tag = get_object_or_404(Tag,name=name)
-  items = tag.items.filter(content_type__app_label="blog",content_type__name="post",object_id__isnull=False)
+  items = tag.items.filter(content_type__app_label="blog",content_type__model="post",object_id__isnull=False)
   posts = [item.object for item in items]
   values = {
     "posts": posts,
