@@ -141,7 +141,7 @@ class Subscription(models.Model):
         um.membership = self.product.membership
       um.end = max(last.datetime,um.end or last.datetime)
       um.start = min(um.start or self.created,self.created)
-      um.container = None if self.cancelled else self.container
+      um.container = None if self.canceled else self.container
       um.save()
     
   class Meta:

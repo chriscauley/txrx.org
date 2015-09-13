@@ -40,7 +40,6 @@ INSTALLED_APPS = (
 
   # this project
   'user',
-  'db',
   'geo',
   'misc',
   #'project',

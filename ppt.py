@@ -10,10 +10,9 @@ from course.utils import get_or_create_student
 from user.models import User
 from membership.models import Subscription, Status, Membership, Product, UserMembership
 
-#[s.recalculate() for s in Subscription.objects.all()];exit()
-Status.objects.all().delete()
-Subscription.objects.all().delete()
-UserMembership.objects.all().update(end=None)
+#Status.objects.all().delete()
+#Subscription.objects.all().delete()
+#UserMembership.objects.all().update(end=None)
 
 def cache_output(file_name):
   """Save the output of the function as file_name"""
