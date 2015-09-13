@@ -132,7 +132,7 @@ class Subscription(models.Model):
     self.owed = amount_due-amount_paid
     if self.canceled:
       self.owed = 0
-    self.paid_until = add_months(self.created,int(amount_paid/amount_due))
+    self.paid_until = add_months(self.created,int(self.product.months*amount_paid/self.amount))
     self.save()
     last = self.last_status
     if last:
