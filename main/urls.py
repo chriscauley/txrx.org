@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls import url, patterns, include
 from django.contrib import admin
 from django.contrib.auth.views import password_reset
+from django.contrib.flatpages.models import FlatPage
 from django.contrib.sitemaps.views import sitemap
 
 from main.sitemaps import sitemaps
@@ -107,11 +108,14 @@ urlpatterns += patterns(
   (r'^survey/$','main.views.survey'),
 )
 
+flatpages = [page.url[1:] for page in FlatPage.objects.all()]
+fps = '|'.join(flatpages)
+
 # flat pages
 urlpatterns += patterns(
   '',
   url(r'^(about-us)/$','main.views.to_template'),
-  url(r'^(fake-button/|privacy/|schoolbot/|map/|bylaws/)$','django.contrib.flatpages.views.flatpage',name='map'),
+  url(r'(%s)'%fps,'django.contrib.flatpages.views.flatpage',name='map'),
 )
 
 if settings.DEBUG:

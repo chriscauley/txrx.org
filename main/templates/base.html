@@ -76,6 +76,7 @@
       <footer>
         {% include "footer.html" %}
       </footer>
+      {% comment %}
       <div id="bot_right">
         {% if request.theme == "dark" %}
         <a href="?set_theme=default">Who turned out the Lights?</a>
@@ -83,6 +84,7 @@
         <a href="?set_theme=dark">The Darkness Calls</a>
         {% endif %}
       </div>
+      {% endcomment %}
       {% endblock %}
     </div>
     {% compress js %}
