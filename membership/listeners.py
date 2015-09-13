@@ -7,16 +7,18 @@ from course.utils import get_or_create_student
 from .models import UserMembership, Status, Subscription, Membership, Product
 from user.models import User
 
-from paypal.standard.ipn.signals import payment_was_successful, payment_was_flagged
+from paypal.standard.ipn.signals import payment_was_successful, payment_was_flagged, subscription_signup
 
 @receiver(post_save,sender=User)
 def post_save_user_handler(sender, **kwargs):
   user = kwargs['instance']
   UserMembership.objects.get_or_create(user=user)
 
-_duid2='membership.listners.handle_successful_membership_payment'
+_duid2='membership.listners.membership_payment'
+@receiver(payment_was_flagged, dispatch_uid=_duid2)
+@receiver(subscription_signup, dispatch_uid=_duid2)
 @receiver(payment_was_successful, dispatch_uid=_duid2)
-def handle_successful_membership_payment(sender,**kwargs):
+def membership_payment(sender,**kwargs):
   if sender.txn_type != "subscr_payment":
     return # not a membership payment
   if Status.objects.filter(paypalipn=sender):
@@ -54,7 +56,3 @@ def handle_successful_membership_payment(sender,**kwargs):
     payment_method='paypal',
     amount=amt,
   )
-
-@receiver(payment_was_flagged, dispatch_uid='membership.listeners.handle_flagged_membership_payment')
-def handle_flagged_membership_payment(sender, **kwargs):
-  handle_successful_membership_payment(sender, **kwargs)
