@@ -2,6 +2,8 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 from sorl.thumbnail import ImageField
 
 from course.models import Session, Term, Course
@@ -197,15 +199,11 @@ def add_months(d,months):
   day = min(d.day,calendar.monthrange(year,month)[1])
   return d.replace(year=year,month=month,day=day)
 
-FLAG_CHOICES = [
-]
-
 class UserMembership(models.Model):
   user = models.OneToOneField(settings.AUTH_USER_MODEL)
   membership = models.ForeignKey(Membership,default=1)
   start = models.DateTimeField(null=True,blank=True)
   end = models.DateTimeField(null=True,blank=True)
-  flagged = models.CharField(max_length=16,choices=FLAG_CHOICES,null=True,blank=True)
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
   waiver = models.FileField("Waivers",upload_to="waivers/",null=True,blank=True)
@@ -326,5 +324,17 @@ class Survey(models.Model):
   skills = models.TextField(blank=True)
   expertise = models.TextField(blank=True)
   questions = models.TextField(blank=True)
+
+REASON_CHOICES = [
+  ('paypal_skipped', 'PayPal Skipped'),
+]
+
+class UserFlag(models.Model):
+  user = models.OneToOneField(settings.AUTH_USER_MODEL)
+  datetime = models.DateTimeField(auto_now_add=True)
+  content_type = models.ForeignKey("contenttypes.ContentType")
+  object_id = models.IntegerField()
+  content_object = GenericForeignKey('content_type', 'object_id')
+  reason = models.CharField(max_length=32,choices=REASON_CHOICES)
 
 from listeners import *

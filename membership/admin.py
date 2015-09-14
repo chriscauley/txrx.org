@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django import forms
 
-from models import (Group, Membership, Feature, MembershipFeature, UserMembership, Product,
+from models import (Group, Membership, Feature, MembershipFeature, UserMembership, Product, UserFlag,
                     Subscription, Status, MeetingMinutes, Proposal, Officer, Area, Container)
 
 from lablackey.db.admin import RawMixin
@@ -14,6 +14,11 @@ admin.site.register(Group)
 
 class ContainerInline(admin.TabularInline):
   model = Container
+  extra = 0
+
+class UserFlagInline(admin.TabularInline):
+  model = UserFlag
+  extra = 0
 
 @admin.register(Container)
 class ContainerAdmin(admin.ModelAdmin):
