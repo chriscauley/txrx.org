@@ -1,3 +1,4 @@
+from django.core.mail import mail_admins
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.http import QueryDict
@@ -7,8 +8,7 @@ from course.utils import get_or_create_student
 from .models import UserMembership, Status, Subscription, Membership, Product, UserFlag
 from user.models import User
 
-from paypal.standard.ipn.signals import (payment_was_successful, payment_was_flagged, subscription_signup,
-                                         recurring_skipped, recurring_cancel, recurring_failed)
+from paypal.standard.ipn.signals import valid_ipn_received, invalid_ipn_received
 
 @receiver(post_save,sender=User)
 def post_save_user_handler(sender, **kwargs):
@@ -25,6 +25,7 @@ def get_subscription(params):
     mail_admins("Bad IPN","no subscr_id in IPN #%s"%sender.pk)
     return
   return subscription
+
 def paypal_flag(sender,reason,**kwargs):
   params = QueryDict(sender.query)
   subscription = get_subscription(params)
@@ -36,28 +37,22 @@ def paypal_flag(sender,reason,**kwargs):
     user=get_or_create_student(sender.payer_email,subscr_id=subscr_id,send_mail=False)
   )
 
-@receiver(recurring_skipped,dispatch_uid='paypal_skipped')
-def payment_skipped(sender,**kwargs):
-  paypal_flag(sender,reason,**kwargs)
+@receiver(valid_ipn_received,dispatch_uid='paypal_signal')
+@receiver(invalid_ipn_received,dispatch_uid='paypal_signal')
+def paypal_signal(sender,**kwargs):
+  if sender.txn_type in ['recurring_payment_skipped',"recurring_payment_failed","recurring_payment_suspended"]:
+    paypal_flag(sender,sender.txn_type,**kwargs)
+    return
+  elif sender.txn_type == 'subscr_cancel':
+    params = QueryDict(sender.query)
+    subscription = get_subscription(params)
+    subscription.force_canceled()
+    mail_admins("New Cancelation","https://txrxlabs.org/admin/membership/subscription/%s"%subscription.pk)
+    return
 
-@receiver(recurring_failed,dispatch_uid='paypal_failed')
-def payment_failed(sender,**kwargs):
-  paypal_flag(sender,reason,**kwargs)
-
-@receiver(recurring_skipped,dispatch_uid='paypal_cancel')
-def payment_cancel(sender,**kwargs):
-  params = QueryDict(sender.query)
-  subscription = get_subscription(params)
-  subscription.force_canceled()
-  mail_admins("New Cancelation","https://txrxlabs.org/admin/membership/subscription/%s"%subscription.pk)
-
-_duid2='membership.listners.membership_payment'
-@receiver(payment_was_flagged, dispatch_uid=_duid2)
-@receiver(subscription_signup, dispatch_uid=_duid2)
-@receiver(payment_was_successful, dispatch_uid=_duid2)
-def membership_payment(sender,**kwargs):
   if sender.txn_type != "subscr_payment":
-    return # not a membership payment
+    mail_admins("Unknown Transaction","https://txrxlabs.org/admin/ipn/paypalipn/%s/"%sender.pk)
+    return # rest of function handles successful membership payment
   if Status.objects.filter(paypalipn=sender):
     return # This has already been processed
   params = QueryDict(sender.query)
