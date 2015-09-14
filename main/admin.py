@@ -44,8 +44,11 @@ class CustomIPNAdmin(PayPalIPNAdmin):
   fieldsets[0][1]['fields'].append('view_redirect')
   fieldsets[0][1]['fields'].append('view_IPN')
   readonly_fields = PayPalIPNAdmin.readonly_fields + ('view_redirect','view_IPN')
-  list_display = PayPalIPNAdmin.list_display + ['txn_type']
+  list_display = PayPalIPNAdmin.list_display + ['txn_type','subscr_id']
   list_filter = list(PayPalIPNAdmin.list_filter) + ['txn_type']
+  def subscr_id(self,obj):
+    data = QueryDict(obj.query)
+    return data.get('subscr_id',None) or data.get('recurring_payment_id',None)
   def view_redirect(self,obj):
     link = '<a href="%s">View Redirect</a>'
     return link%(reverse('paypal_redirect')+"?"+obj.query)

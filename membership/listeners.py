@@ -16,7 +16,7 @@ def post_save_user_handler(sender, **kwargs):
   UserMembership.objects.get_or_create(user=user)
 
 def get_subscription(params):
-  subscr_id=params.get('subscr_id',None)
+  subscr_id = params.get('subscr_id',None) or params.get('recurring_payment_id',None)
   if not subscr_id:
     mail_admins("Bad IPN","no subscr_id in IPN #%s"%sender.pk)
     return
@@ -40,14 +40,15 @@ def paypal_flag(sender,reason,**kwargs):
 @receiver(valid_ipn_received,dispatch_uid='paypal_signal')
 @receiver(invalid_ipn_received,dispatch_uid='paypal_signal')
 def paypal_signal(sender,**kwargs):
-  if sender.txn_type in ['recurring_payment_skipped',"recurring_payment_failed","recurring_payment_suspended"]:
+  if sender.txn_type in ['recurring_payment_skipped',"recurring_payment_failed","recurring_payment_suspended",
+                         "subscr_failed"]:
     paypal_flag(sender,sender.txn_type,**kwargs)
     return
   elif sender.txn_type == 'subscr_cancel':
     params = QueryDict(sender.query)
     subscription = get_subscription(params)
     subscription.force_canceled()
-    mail_admins("New Cancelation","https://txrxlabs.org/admin/membership/subscription/%s"%subscription.pk)
+    mail_admins("New Cancelation","https://txrxlabs.org/admin/membership/subscription/%s/"%subscription.pk)
     return
 
   if sender.txn_type != "subscr_payment":
@@ -56,9 +57,9 @@ def paypal_signal(sender,**kwargs):
   if Status.objects.filter(paypalipn=sender):
     return # This has already been processed
   params = QueryDict(sender.query)
-  subscr_id=params.get('subscr_id',None)
+  subscr_id = params.get('subscr_id',None) or params.get('recurring_payment_id',None)
   user,new_user = get_or_create_student(sender.payer_email,subscr_id=subscr_id)
-  subscription = get_or_none(Subscription,subscr_id=subscr_id)
+  subscription = get_subscription(params)
   if not 'mc_gross' in params:
     mail_admins("Bad IPN","no mc_gross in txn %s"%sender.txn_id)
     return
