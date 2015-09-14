@@ -4,15 +4,52 @@ from django.http import QueryDict
 from lablackey.utils import get_or_none
 
 from course.utils import get_or_create_student
-from .models import UserMembership, Status, Subscription, Membership, Product
+from .models import UserMembership, Status, Subscription, Membership, Product, UserFlag
 from user.models import User
 
-from paypal.standard.ipn.signals import payment_was_successful, payment_was_flagged, subscription_signup
+from paypal.standard.ipn.signals import (payment_was_successful, payment_was_flagged, subscription_signup,
+                                         recurring_skipped, recurring_cancel, recurring_failed)
 
 @receiver(post_save,sender=User)
 def post_save_user_handler(sender, **kwargs):
   user = kwargs['instance']
   UserMembership.objects.get_or_create(user=user)
+
+def get_subscription(params):
+  subscr_id=params.get('subscr_id',None)
+  if not subscr_id:
+    mail_admins("Bad IPN","no subscr_id in IPN #%s"%sender.pk)
+    return
+  subscription = get_or_none(Subscription,subscr_id=subscr_id)
+  if not subscription:
+    mail_admins("Bad IPN","no subscr_id in IPN #%s"%sender.pk)
+    return
+  return subscription
+def paypal_flag(sender,reason,**kwargs):
+  params = QueryDict(sender.query)
+  subscription = get_subscription(params)
+  if not subscription:
+    return
+  UserFlag.objects.create(
+    content_object=subscription,
+    reason=reason,
+    user=get_or_create_student(sender.payer_email,subscr_id=subscr_id,send_mail=False)
+  )
+
+@receiver(recurring_skipped,dispatch_uid='paypal_skipped')
+def payment_skipped(sender,**kwargs):
+  paypal_flag(sender,reason,**kwargs)
+
+@receiver(recurring_failed,dispatch_uid='paypal_failed')
+def payment_failed(sender,**kwargs):
+  paypal_flag(sender,reason,**kwargs)
+
+@receiver(recurring_skipped,dispatch_uid='paypal_cancel')
+def payment_cancel(sender,**kwargs):
+  params = QueryDict(sender.query)
+  subscription = get_subscription(params)
+  subscription.force_canceled()
+  mail_admins("New Cancelation","https://txrxlabs.org/admin/membership/subscription/%s"%subscription.pk)
 
 _duid2='membership.listners.membership_payment'
 @receiver(payment_was_flagged, dispatch_uid=_duid2)
