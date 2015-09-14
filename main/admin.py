@@ -44,6 +44,8 @@ class CustomIPNAdmin(PayPalIPNAdmin):
   fieldsets[0][1]['fields'].append('view_redirect')
   fieldsets[0][1]['fields'].append('view_IPN')
   readonly_fields = PayPalIPNAdmin.readonly_fields + ('view_redirect','view_IPN')
+  list_display = PayPalIPNAdmin.list_display + ['txn_type']
+  list_filter = list(PayPalIPNAdmin.list_filter) + ['txn_type']
   def view_redirect(self,obj):
     link = '<a href="%s">View Redirect</a>'
     return link%(reverse('paypal_redirect')+"?"+obj.query)
