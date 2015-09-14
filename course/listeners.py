@@ -48,7 +48,7 @@ def handle_successful_store_payment(sender, user):
   except Cart.DoesNotExist:
     pass
 
-_duid2='course.listners.handle_successful_store_payment'
+_duid2='course.listners.handle_successful_payment'
 @receiver(payment_was_successful, dispatch_uid=_duid2)
 def handle_successful_payment(sender, **kwargs):
   from course.models import Enrollment, Session, reset_classes_json
@@ -60,7 +60,7 @@ def handle_successful_payment(sender, **kwargs):
   user.save()
   if params.get('invoice',None):
     return handle_successful_store_payment(sender,user)
-  if sender.txn_type == "subscr_payment":
+  if sender.txn_type in ["subscr_payment",'recurring_payment']:
     # handled by membership.listeners
     return
   try:
