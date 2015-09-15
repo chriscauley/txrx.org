@@ -43,6 +43,7 @@ def paypal_signal(sender,**kwargs):
   if sender.txn_type in ['recurring_payment_skipped',"recurring_payment_failed","recurring_payment_suspended",
                          "subscr_failed"]:
     paypal_flag(sender,sender.txn_type,**kwargs)
+    mail_admins("Flagged %s"%sender.txn_type,"https://txrxlabs.org/admin/membership/subscription/%s/"%subscription.pk)
     return
   elif sender.txn_type == 'subscr_cancel':
     params = QueryDict(sender.query)
@@ -52,8 +53,11 @@ def paypal_signal(sender,**kwargs):
     return
 
   if sender.txn_type != "subscr_payment":
-    mail_admins("Unknown Transaction","https://txrxlabs.org/admin/ipn/paypalipn/%s/"%sender.pk)
+    mail_admins('Unknown Transaction "%s"'%sender.txn_type,
+                "https://txrxlabs.org/admin/ipn/paypalipn/%s/"%sender.pk)
     return # rest of function handles successful membership payment
+  if sender.txn_type in ['','cart']:
+    return # refunds and classes
   if Status.objects.filter(paypalipn=sender):
     return # This has already been processed
   params = QueryDict(sender.query)
