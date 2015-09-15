@@ -26,51 +26,49 @@ def get_subscription(params,sender):
     return
   return subscription
 
-def paypal_flag(sender,reason,**kwargs):
-  params = QueryDict(sender.query)
-  subscription = get_subscription(params,sender)
-  if not subscription:
+def paypal_flag(sender,reason=None,**kwargs):
+  if not kwargs['subscription']:
     return
   UserFlag.objects.create(
-    content_object=subscription,
-    reason=reason,
-    user=get_or_create_student(sender.payer_email,subscr_id=subscr_id,send_mail=False)
+    content_object=kwargs['subscription'],
+    reason=reason or sender.txn_type,
+    user=get_or_create_student(sender.payer_email,subscr_id=kwargs['subscription'].subscr_id,send_mail=False)[0]
   )
 
 @receiver(valid_ipn_received,dispatch_uid='paypal_signal')
 @receiver(invalid_ipn_received,dispatch_uid='paypal_signal')
 def paypal_signal(sender,**kwargs):
+  params = QueryDict(sender.query)
+  subscr_id = params.get('subscr_id',None) or params.get('recurring_payment_id',None)
+  subscription = get_subscription(params,sender)
+  kwargs['subscription'] = subscription
+  user,new_user = get_or_create_student(sender.payer_email,subscr_id=subscr_id)
+
   if sender.txn_type in ['recurring_payment_skipped',"recurring_payment_failed","recurring_payment_suspended",
                          "subscr_failed"]:
-    paypal_flag(sender,sender.txn_type,**kwargs)
+    paypal_flag(sender,**kwargs)
     mail_admins("Flagged %s"%sender.txn_type,"https://txrxlabs.org/admin/membership/subscription/%s/"%subscription.pk)
     return
   elif sender.txn_type == 'subscr_eot':
-    paypal_flag(sender,sender.txt_type,**kwargs)
+    paypal_flag(sender,**kwargs)
     mail_admins("Flagged %s and canceled"%sender.txn_type,
                 "https://txrxlabs.org/admin/membership/subscription/%s/"%subscription.pk)
-    subscription = get_subscription(params,sender)
     subscription.force_canceled()
     return
   elif sender.txn_type == 'subscr_cancel':
-    params = QueryDict(sender.query)
-    subscription = get_subscription(params,sender)
-    subscription.force_canceled()
-    mail_admins("New Cancelation","https://txrxlabs.org/admin/membership/subscription/%s/"%subscription.pk)
+    if subscription:
+      subscription.force_canceled()
+      mail_admins("New Cancelation","https://txrxlabs.org/admin/membership/subscription/%s/"%subscription.pk)
     return
 
   if sender.txn_type in ['','cart','subscr_signup']:
     return # refunds and classes and signups
   if sender.txn_type != "subscr_payment":
-    mail_admins('Unknown Transaction "%s"'%sender.txn_type,
+    mail_admins('Unknown Transaction type "%s"'%sender.txn_type,
                 "https://txrxlabs.org/admin/ipn/paypalipn/%s/"%sender.pk)
     return # rest of function handles successful membership payment
   if Status.objects.filter(paypalipn=sender):
     return # This has already been processed
-  params = QueryDict(sender.query)
-  subscr_id = params.get('subscr_id',None) or params.get('recurring_payment_id',None)
-  user,new_user = get_or_create_student(sender.payer_email,subscr_id=subscr_id)
-  subscription = get_subscription(params,sender)
   if not 'mc_gross' in params:
     mail_admins("Bad IPN","no mc_gross in txn %s"%sender.txn_id)
     return

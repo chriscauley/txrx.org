@@ -16,6 +16,10 @@ class ContainerInline(admin.TabularInline):
   model = Container
   extra = 0
 
+@admin.register(UserFlag)
+class UserFlagAdmin(admin.ModelAdmin):
+  raw_id_fields = ('user',)
+
 class UserFlagInline(admin.TabularInline):
   model = UserFlag
   extra = 0

@@ -326,15 +326,20 @@ class Survey(models.Model):
   questions = models.TextField(blank=True)
 
 REASON_CHOICES = [
-  ('paypal_skipped', 'PayPal Skipped'),
+  ("recurring_payment_skipped", "PayPal Skipped"),
+  ("recurring_payment_failed", "PayPal Failed Recurring"),
+  ("recurring_payment_suspended", "PayPal Suspended"),
+  ("subscr_failed", "PayPal Failed Subscription"),
+  ("subscr_eot", "PayPal End of Term"),
 ]
 
 class UserFlag(models.Model):
-  user = models.OneToOneField(settings.AUTH_USER_MODEL)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL)
   datetime = models.DateTimeField(auto_now_add=True)
   content_type = models.ForeignKey("contenttypes.ContentType")
   object_id = models.IntegerField()
-  content_object = GenericForeignKey('content_type', 'object_id')
+  content_object = GenericForeignKey("content_type", "object_id")
   reason = models.CharField(max_length=32,choices=REASON_CHOICES)
+  __unicode__ lambda self: "%s flagged for %s"%(user,reason)
 
 from listeners import *
