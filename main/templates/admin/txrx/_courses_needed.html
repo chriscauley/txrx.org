@@ -1,0 +1,55 @@
+{% load admin_dashboard i18n %}
+
+{% get_courses_needed %}
+{% if courses_needed %}
+<h1>Courses Needed (x{{ courses_needed|length }})</h1>
+{% for course in courses_needed %}
+<div class="module" style="width: 375px;">
+  <table class="table-overview applist" summary="{% blocktrans %}Conflicting classes and events.{% endblocktrans %}"
+         style="width: 100%">
+    <tr><td>
+        <dl>
+          <dt><h2>{{ course }}</h2></dt>
+          <dd>
+            <div>
+              {% if course.last_session %}
+              {% if course.last_session.past %}
+              Last taught
+              {% else %}
+              <b style="color:red">[{{ course.last_session.closed_string|upper }}]</b> with
+              {% endif %}
+              {{ course.last_session.user }} on {{ course.last_session.first_date|date:"m/d/Y" }}
+              {% else %}
+              <b>Never Taught</b>
+              {% endif %}
+            </div>
+            <div><big>{{ course.notifycourse_set.count }}</big> People on waiting list</div>
+          </dd>
+          <dd>
+            <br />
+            {% if course.last_session %}
+            <a class="btn btn-success" href="{{ course.last_session.get_absolute_url }}">
+              <i class="icon-share" title="View Session on Site"></i> View</a>
+            <a class="btn btn-success" href="{{ course.last_session.get_admin_url }}">
+              <i class="icon-search" title="Edit Session in Admin"></i> Edit</a>
+            {% endif %}
+            <a class="btn btn-success" href="{% url "admin:course_session_add" %}">
+              <i class="icon-plus" title="Add New Session"></i> New</a>
+          </dd>
+          <dd>
+            <br />
+            {% for n in "136" %}
+            <a href="{% url "course:delay_reschedule" course.pk n %}">
+              <button class="btn btn-warning" title="Delay for {{ n }} Months">
+                <i class="icon-plus"></i>{{ n }} Mo</button></a>
+            {% endfor %}
+            <a href="{% url "course:delay_reschedule" course.pk "close" %}">
+              <button class="btn btn-warning" title="Delay for {{ n }} Months">
+                Deactivate</button></a>
+          </dd>
+        </dl>
+    </td></tr>
+  </table>
+</div>
+{% endfor %}
+{% endif %}
