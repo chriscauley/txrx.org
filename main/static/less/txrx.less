@@ -8,8 +8,8 @@ section.banner { padding-bottom: 35px; }
 }
 
 .floatingBox {
-  background: white;
-  box-shadow: 1px 1px 4px black;
+  background: @gray-lighter;
+  box-shadow: 1px 1px 4px @gray-darker;
   padding: 3px;
   position: absolute;
   z-index: 10;
@@ -85,7 +85,7 @@ h3.block_title {
 }
 .well.success {
   background-color: lighten(@brand-primary,15%);
-  a,.has_notes span { color: white; }
+  a,.has_notes span { color: @gray-lighter; }
 }
 
 #memberships {
@@ -158,7 +158,7 @@ form.filters { margin-bottom: 10px; }
   z-index: 100;
 }
 #mobileCart { right: 0; margin: 0;}
-#bot_right { background: white; left: 0px; }
+#bot_right { background: @gray-lighter; left: 0px; }
 
 .vertical-gradient(@color1,@color2) {
   background: @color1;
@@ -179,14 +179,14 @@ form.filters { margin-bottom: 10px; }
     }
     .bottom {
       bottom: 0;
-      color: white;
+      color: @gray-lighter;
       font-size: 18px;
       padding: 30px 15px 5px;
       position: absolute;
       text-align: center;
-      text-shadow: 1px 1px black;
+      text-shadow: 1px 1px @gray-darker;
       width: 100%;
-      .vertical-gradient(transparent,rgba(150,150,150,0.75));
+      .vertical-gradient(transparent,fade(@gray,75%));
     }
   }
 }
@@ -198,7 +198,7 @@ div.highlight { clear: both; }
 div.post-content {
   margin: 15px 0 40px;
   width: 100%;
-  code { background-color: #eee; }
+  code { background-color: @gray-lighter; }
   iframe { max-width: 100%; }
   .post-image {
     float: left;
@@ -234,7 +234,7 @@ label .help-text {
   &:checked + label {
     background-color: @brand-success;
     img { opacity: 0.5; }
-    h3 { color: white; }
+    h3 { color: @gray-lighter; }
   }
   + label {
     cursor: pointer;
@@ -261,7 +261,7 @@ h4,h5,h6{line-height:18px;}
 h4{font-size:14px;}
 h4 small{font-size:12px;}
 h5{font-size:12px;}
-h6{font-size:11px;color:#999999;text-transform:uppercase;}
+h6{font-size:11px;color:@gray-light;text-transform:uppercase;}
 p,h1,h2,h3,h4,h5,h6{a{color: @link-color; }}
 
 
@@ -348,7 +348,7 @@ h3.date {
   &:before {
     background: red;
     border-radius: 100%;
-    color: white;
+    color: @gray-lighter;
     content: attr(data-reddot);
     display: inline-block;
     font-family: sans-serif;
@@ -433,13 +433,13 @@ h3.date {
 */
 textarea,input { max-width: 100%; }
 
-p.error { color: red; } /* currently only used on login form */
-ul.errorlist { color: red; }
+p.error { color: @brand-danger; } /* currently only used on login form */
+ul.errorlist { color: @brand-danger; }
 
 .btn.disabled {
   color: @gray-light;
   &.btn-success {
-    color: white;
+    color: @gray-lighter;
   }
 }
 
@@ -452,7 +452,7 @@ ul.errorlist { color: red; }
     label { vertical-align: middle; width: 135px; }
   }
   :checked + label {
-    outline: 1px solid grey;
+    outline: 1px solid @gray;
     + .room_form { display: block; }
   }
   [name=room_selector] { display:none; }

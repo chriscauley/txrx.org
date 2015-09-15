@@ -44,7 +44,7 @@ product, product-admin {
   .out-of-stock {
     position: relative;
     &:before {
-      background: url(/static/img/sold_out.png) rgba(255,255,255,0.75) center 25% no-repeat;
+      background: url(/static/img/sold_out.png) fade(@gray-lighter,75%) center 25% no-repeat;
       background-size: 80% auto;
       bottom: 0;
       content: "";
