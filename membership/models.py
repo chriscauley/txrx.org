@@ -340,6 +340,6 @@ class UserFlag(models.Model):
   object_id = models.IntegerField()
   content_object = GenericForeignKey("content_type", "object_id")
   reason = models.CharField(max_length=32,choices=REASON_CHOICES)
-  __unicode__ lambda self: "%s flagged for %s"%(user,reason)
+  __unicode__ = lambda self: "%s flagged for %s"%(self.user,self.reason)
 
 from listeners import *

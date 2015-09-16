@@ -2,10 +2,15 @@
 
 <div class="module" id="recent-actions-module">
   <h4 class="italic-title">Flagged Accounts</h4>
-  <ul class="actionlist">
+  <ul class="actionlist" style="width: 400px;">
     {% get_user_flags %}
     {% for flag in user_flags %}
-    <li>{{ flag }}</li>
+    <li>
+      <i class="icon-flag"></i>
+      <a href="/admin/membership/userflag/{{ flag.pk }}/">
+        {{ flag.user }} - {{ flag.get_reason_display }} [{{ flag.datetime|date:"m/d/Y" }}]</a>
+      <a href="/admin/membership/userflag/{{ flag.pk }}/delete" class="pull-right"><i class="icon-trash"></i></a>
+    </li>
     {% endfor %}
   </ul>
 </div>
