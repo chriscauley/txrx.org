@@ -155,6 +155,7 @@ SUIT_CONFIG = {
     'registration',
     #'sites',
     #'tagging',
+    'store',
     'thing',
     'tool',
     #{'label': 'Settings', 'icon':'icon-cog', 'models': ('auth.user', 'auth.group')},
