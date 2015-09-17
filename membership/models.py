@@ -331,11 +331,22 @@ REASON_CHOICES = [
   ("subscr_eot", "PayPal End of Term"),
 ]
 
+EMAIL_REASONS = {
+  "payment_overdue": [
+    "recurring_payment_skipped",
+    "recurring_payment_failed",
+    "recurring_payment_suspended",
+    "subscr_failed",
+    "subscr_eot"
+  ],
+}
+
 class UserFlag(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
   datetime = models.DateTimeField(auto_now_add=True)
   content_type = models.ForeignKey("contenttypes.ContentType")
   object_id = models.IntegerField()
+  emailed = models.DateTimeField(null=True,blank=True)
   content_object = GenericForeignKey("content_type", "object_id")
   reason = models.CharField(max_length=32,choices=REASON_CHOICES)
   __unicode__ = lambda self: "%s flagged for %s"%(self.user,self.reason)
