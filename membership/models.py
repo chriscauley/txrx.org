@@ -43,7 +43,8 @@ class Area(models.Model):
 class Container(models.Model):
   number = models.IntegerField()
   area = models.ForeignKey(Area)
-  __unicode__ = lambda self: self.name
+  user = models.ForeignKey(settings.AUTH_USER_MODEL)
+  __unicode__ = lambda self: "%s #%s"%(self.area,self.number)
   class Meta:
     ordering = ('number',)
 
@@ -94,7 +95,6 @@ class Subscription(models.Model):
   canceled = models.DateTimeField(null=True,blank=True)
   paid_until = models.DateTimeField(null=True,blank=True)
   product = models.ForeignKey(Product,null=True,blank=True)
-  container = models.ForeignKey(Container,null=True,blank=True)
   # self.amount should match self.product, but can be used as an override
   amount = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   owed = models.DecimalField(max_digits=30, decimal_places=2, default=0)
@@ -143,7 +143,6 @@ class Subscription(models.Model):
         um.membership = self.product.membership
       um.end = max(last.datetime,um.end or last.datetime)
       um.start = min(um.start or self.created,self.created)
-      um.container = None if self.canceled else self.container
       um.save()
     
   class Meta:
@@ -207,7 +206,6 @@ class UserMembership(models.Model):
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
   waiver = models.FileField("Waivers",upload_to="waivers/",null=True,blank=True)
-  container = models.ForeignKey(Container,null=True,blank=True)
 
   photo = models.ForeignKey(Photo,null=True,blank=True)
   bio = MarkDownField(null=True,blank=True)

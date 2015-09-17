@@ -61,7 +61,6 @@ class SubscriptionInline(admin.TabularInline):
   model = Subscription
   readonly_fields = ('edit','subscr_id','created','canceled','paid_until','product','amount','owed')
   ordering = ('-canceled',)
-  raw_id_fields = ('container',)
   extra = 0
   has_add_permission = lambda self,obj: False
   def edit(self,obj):
