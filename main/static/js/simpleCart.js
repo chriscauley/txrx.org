@@ -310,7 +310,8 @@ function Cart(){
       
       form.appendChild( me.createHiddenElement( "item_name_"		+ counter, item.name		) );
       form.appendChild( me.createHiddenElement( "quantity_"		+ counter, item.quantity	) );
-      form.appendChild( me.createHiddenElement( "amount_"			+ counter, item.price		) );
+      discount = me.discount || 1;
+      form.appendChild( me.createHiddenElement( "amount_"			+ counter, item.price*discount		) );
       form.appendChild( me.createHiddenElement( "item_number_"	+ counter, item.id			) );
       
       var option_count = 0;
@@ -620,13 +621,13 @@ function Cart(){
     subtotals.innerHTML = "";
     if (me.discount != 1 && me.total) {
       var e = document.createElement("div");
-      _total = Math.round(me.total/me.discount,2);
+      var _total = (me.total/me.discount).toFixed(2);
       var subtotal = document.createElement("div");
       subtotal.className = "cartSubtotal";
       subtotal.innerHTML = "$" + _total;
       var discount = document.createElement("div");
       discount.className = "cartDiscount";
-      discount.innerHTML = "$" + Math.round(_total*(1-me.discount),2) + " ("+Math.round(100*(1-me.discount))+"%)";
+      discount.innerHTML = "$" + (_total*(1-me.discount)).toFixed(2) + " ("+Math.round(100*(1-me.discount))+"%)";
       e.appendChild(subtotal);
       e.appendChild(discount);
       subtotals.appendChild(e);
