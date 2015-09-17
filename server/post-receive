@@ -5,6 +5,10 @@ export PROJECT_ROOT=$DIR/../../
 
 GIT_WORK_TREE=../ git checkout -f
 
+#for now just update lablackey every time.
+cd ~/lablackey
+git pull
+
 cd $PROJECT_ROOT
 
 echo -e "\n---Silently migrating, compressing, collecting static, and restarting---\n"

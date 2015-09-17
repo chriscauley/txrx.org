@@ -4,7 +4,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 
 from course.models import Enrollment
-from lablackey.utils import print_to_mail
+from lablackey.mail import print_to_mail
 from membership.models import LimitedAccessKey
 
 import datetime

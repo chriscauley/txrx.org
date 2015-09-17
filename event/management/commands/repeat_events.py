@@ -5,7 +5,7 @@ from django.conf import settings
 import datetime,calendar, traceback
 
 from event.models import Event,EventOccurrence
-from lablackey.utils import print_to_mail
+from lablackey.mail import print_to_mail
 
 def add_month(date):
   if not date:
