@@ -4,11 +4,13 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.template.loader import TemplateDoesNotExist
 from sorl.thumbnail import ImageField
 
 from course.models import Session, Term, Course
 from lablackey.db.models import UserModel
 from lablackey.utils import cached_method, cached_property
+from lablackey.mail import send_template_email
 from media.models import Photo
 from shop.models import Product
 
@@ -372,5 +374,17 @@ class UserFlag(models.Model):
     'first_warning': ['second_warning','Send Second Warning',7],
     'second_warning': ['final_warning','Cancel and send cancellation notice', 10],
   }
+  def apply_status(self,new_status):
+    context = {
+      'userflag': self,
+      'last_warning_date': datetime.timedelta(14)+self.datetime,
+    }
+    try:
+      send_template_email('email/overdue/%s'%new_status,self.user.email,context=context)
+    except TemplateDoesNotExist:
+      print "template not found %s"%new_status
+    self.status = new_status
+    self.emailed = datetime.datetime.now()
+    self.save()
     
 from listeners import *

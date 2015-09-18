@@ -26,13 +26,9 @@ class UserFlagAdmin(admin.ModelAdmin):
   def action(self,obj):
     if not obj or not obj.pk or not obj.status in obj.ACTION_CHOICES:
       return "No action to be taken"
-    print 1
     next_status, verbose, target_days = obj.ACTION_CHOICES[obj.status]
-    print 1
     days_since_flag = (datetime.datetime.now()-obj.datetime).days
-    print 1
     _diff = abs(days_since_flag - target_days)
-    print 1
     if days_since_flag > target_days:
       msg = "This person should have been notified of the cancellation %s days ago"%_diff
       cls = 'warning'

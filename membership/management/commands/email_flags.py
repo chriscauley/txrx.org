@@ -18,7 +18,6 @@ class Command(BaseCommand):
     #email anyone whos flag is ten or more days old
     flags = UserFlag.objects.filter(emailed__isnull=True)
     overdue_flags = flags.filter(reason__in=EMAIL_REASONS['payment_overdue'],datetime__lte=now-1*day)
-    print list(overdue_flags)
     email_tuples = [
       ('first_warning', first_warning),
       ('second_warning', second_warning),
