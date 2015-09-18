@@ -198,6 +198,13 @@ def add_months(d,months):
   day = min(d.day,calendar.monthrange(year,month)[1])
   return d.replace(year=year,month=month,day=day)
 
+ORIENTATION_STATUS_CHOICES = [
+  ('new','New'),
+  ('emailed','Emailed'),
+  ('scheduled','scheduled'),
+  ('oriented','Oriented'),
+]
+
 class UserMembership(models.Model):
   user = models.OneToOneField(settings.AUTH_USER_MODEL)
   membership = models.ForeignKey(Membership,default=1)
@@ -206,6 +213,7 @@ class UserMembership(models.Model):
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
   waiver = models.FileField("Waivers",upload_to="waivers/",null=True,blank=True)
+  orientation_status = models.CharField(max_length=32,choices=ORIENTATION_STATUS_CHOICES)
 
   photo = models.ForeignKey(Photo,null=True,blank=True)
   bio = MarkDownField(null=True,blank=True)
