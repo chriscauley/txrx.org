@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .models import Membership, Group, MeetingMinutes, Officer, UserMembership, Subscription
+from .models import Membership, Group, MeetingMinutes, Officer, UserMembership, Subscription, UserFlag
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required, verify_unique_email
 
@@ -168,6 +168,16 @@ def analysis(request):
   return TemplateResponse(request,"membership/analysis.html",values)
 
 @staff_member_required
-def force_cancel(self,pk):
+def force_cancel(request,pk):
   Subscription.objects.get(pk=pk).force_canceled()
   return HttpResponse('')
+
+@staff_member_required
+def containers(request):
+  return TemplateResponse(request,'membership/containers.html',{})
+
+@staff_member_required
+def update_flag_status(request,flag_pk,new_status):
+  userflag = get_object_or_404(UserFlag,pk=flag_pk)
+  userflag.apply_status(new_status)
+  return HttpResponseRedirect('/admin/membership/userflag/%s/'%flag_pk)

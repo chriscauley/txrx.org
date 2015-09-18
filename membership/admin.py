@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from django.core.urlresolvers import reverse
 from django import forms
 
 from models import (Group, Membership, Feature, MembershipFeature, UserMembership, Product, UserFlag,
@@ -8,6 +9,8 @@ from models import (Group, Membership, Feature, MembershipFeature, UserMembershi
 
 from lablackey.db.admin import RawMixin
 from lablackey.db.forms import StaffMemberForm
+
+import datetime
 
 admin.site.register(Feature)
 admin.site.register(Group)
@@ -19,6 +22,31 @@ class ContainerInline(admin.TabularInline):
 @admin.register(UserFlag)
 class UserFlagAdmin(admin.ModelAdmin):
   raw_id_fields = ('user',)
+  readonly_fields = ('action',)
+  def action(self,obj):
+    if not obj or not obj.pk or not obj.status in obj.ACTION_CHOICES:
+      return "No action to be taken"
+    print 1
+    next_status, verbose, target_days = obj.ACTION_CHOICES[obj.status]
+    print 1
+    days_since_flag = (datetime.datetime.now()-obj.datetime).days
+    print 1
+    _diff = abs(days_since_flag - target_days)
+    print 1
+    if days_since_flag > target_days:
+      msg = "This person should have been notified of the cancellation %s days ago"%_diff
+      cls = 'warning'
+    elif days_since_flag < target_days:
+      msg = "This person should not be notified for %s more days"%_diff
+      cls = 'danger'
+    else:
+      msg = "This person should be notified now. Send this out now"
+      cls = 'success'
+
+    url = reverse('update_flag_status',args=[obj.pk,next_status])
+    html = "<div class='alert alert-%s'>%s<br/><a href='%s' class='btn btn-%s'>%s</a></div"
+    return html%(cls,msg,url,cls,verbose)
+  action.allow_tags = True
 
 class UserFlagInline(admin.TabularInline):
   model = UserFlag
