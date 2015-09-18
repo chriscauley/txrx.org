@@ -341,14 +341,28 @@ EMAIL_REASONS = {
   ],
 }
 
+FLAG_STATUS_CHOICES = [
+  ('new','New'),
+  ('first_warning', 'Warned Once'),
+  ('second_warning', 'Warned Twice'),
+  ('final_warning', 'Canceled'),
+]
+
 class UserFlag(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
   datetime = models.DateTimeField(auto_now_add=True)
   content_type = models.ForeignKey("contenttypes.ContentType")
   object_id = models.IntegerField()
+  status = models.CharField(max_length=32,default='new',choices=FLAG_STATUS_CHOICES)
   emailed = models.DateTimeField(null=True,blank=True)
   content_object = GenericForeignKey("content_type", "object_id")
   reason = models.CharField(max_length=32,choices=REASON_CHOICES)
   __unicode__ = lambda self: "%s flagged for %s"%(self.user,self.reason)
-
+  ACTION_CHOICES = {
+    # current_status: [future_status, verbose_description, days_since_flag]
+    'new': ['first_warning','Send First Warning',1],
+    'first_warning': ['second_warning','Send Second Warning',7],
+    'second_warning': ['final_warning','Cancel and send cancellation notice', 10],
+  }
+    
 from listeners import *
