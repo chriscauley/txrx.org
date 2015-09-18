@@ -356,31 +356,35 @@ FLAG_STATUS_CHOICES = [
   ('first_warning', 'Warned Once'),
   ('second_warning', 'Warned Twice'),
   ('final_warning', 'Canceled'),
+  ('resolved', 'Resolved'),
+  ('paid','Paid'),
 ]
 
-class UserFlag(models.Model):
-  user = models.ForeignKey(settings.AUTH_USER_MODEL)
-  datetime = models.DateTimeField(auto_now_add=True)
-  content_type = models.ForeignKey("contenttypes.ContentType")
-  object_id = models.IntegerField()
-  status = models.CharField(max_length=32,default='new',choices=FLAG_STATUS_CHOICES)
-  emailed = models.DateTimeField(null=True,blank=True)
-  content_object = GenericForeignKey("content_type", "object_id")
+class SubscriptionFlag(models.Model):
+  subscription = models.ForeignKey(Subscription)
   reason = models.CharField(max_length=32,choices=REASON_CHOICES)
+  status = models.CharField(max_length=32,default='new',choices=FLAG_STATUS_CHOICES)
+  datetime = models.DateTimeField(auto_now_add=True)
+  emailed = models.DateTimeField(null=True,blank=True)
   __unicode__ = lambda self: "%s flagged for %s"%(self.user,self.reason)
-  ACTION_CHOICES = {
+  ACTION_CHOICES = { # this should be renamed
     # current_status: [future_status, verbose_description, days_since_flag]
     'new': ['first_warning','Send First Warning',1],
     'first_warning': ['second_warning','Send Second Warning',7],
     'second_warning': ['final_warning','Cancel and send cancellation notice', 10],
   }
+  @property
+  def date_of_next_action(self):
+    if not self.status in self.ACTION_CHOICES:
+      return
+    return self.datetime + datetime.timedelta(self.ACTION_CHOICES[self.status][2])
   def apply_status(self,new_status):
     context = {
-      'userflag': self,
+      'subscriptionflag': self,
       'last_warning_date': datetime.timedelta(14)+self.datetime,
     }
     try:
-      send_template_email('email/overdue/%s'%new_status,self.user.email,context=context)
+      send_template_email('email/overdue/%s'%new_status,self.subscription.user.email,context=context)
     except TemplateDoesNotExist:
       print "template not found %s"%new_status
     self.status = new_status

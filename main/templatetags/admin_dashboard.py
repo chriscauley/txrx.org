@@ -2,7 +2,9 @@ from django.template import Library
 
 from course.models import Course
 from event.utils import get_room_conflicts as _get_room_conflicts
-from membership.models import UserFlag
+from membership.models import SubscriptionFlag
+
+import datetime
 
 register = Library()
 
@@ -26,5 +28,18 @@ def get_courses_needed(context):
   
 @register.simple_tag(takes_context=True)
 def get_user_flags(context):
-  context['user_flags'] = UserFlag.objects.all()
+  today, upcoming, pastdue = [], [], []
+  now = datetime.datetime.now()
+  for flag in SubscriptionFlag.objects.filter(status__in=SubscriptionFlag.ACTION_CHOICES):
+    if flag.date_of_next_action > now:
+      upcoming.append(flag)
+    elif flag.date_of_next_action < now:
+      pastdue.append(flag)
+    else:
+      today.append(flag)
+  context['user_flags'] = [
+    ['Action Past Due',pastdue,'danger'],
+    ['Todays Flags',today,'success'],
+    ['Upcoming Flags',upcoming,'']
+  ]
   return ''

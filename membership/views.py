@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .models import Membership, Group, MeetingMinutes, Officer, UserMembership, Subscription, UserFlag
+from .models import Membership, Group, MeetingMinutes, Officer, UserMembership, Subscription, SubscriptionFlag
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required, verify_unique_email
 
@@ -178,6 +178,6 @@ def containers(request):
 
 @staff_member_required
 def update_flag_status(request,flag_pk,new_status):
-  userflag = get_object_or_404(UserFlag,pk=flag_pk)
-  userflag.apply_status(new_status)
-  return HttpResponseRedirect('/admin/membership/userflag/%s/'%flag_pk)
+  subscriptionflag = get_object_or_404(SubscriptionFlag,pk=flag_pk)
+  subscriptionflag.apply_status(new_status)
+  return HttpResponseRedirect('/admin/membership/subscriptionflag/%s/'%flag_pk)
