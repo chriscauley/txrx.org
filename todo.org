@@ -5,8 +5,7 @@
    email new user from admin, set to emailed
    get email, set orientation
    go to orientation, mark oriented
-** Paid 
-   
+** Paid
 * membership changes
 ** ipn txn_types
    subscr_signup - reset old_expiration_date
