@@ -41,10 +41,6 @@ def paypal_signal(sender,**kwargs):
   subscr_id = params.get('subscr_id',None) or params.get('recurring_payment_id',None)
   if sender.txn_type in ['','cart','subscr_signup']:
     return # refunds and classes and signups
-  if sender.txn_type != "subscr_payment":
-    mail_admins('Unknown Transaction type "%s"'%sender.txn_type,
-                "https://txrxlabs.org/admin/ipn/paypalipn/%s/"%sender.pk)
-    return # rest of function handles successful membership payment
   if Status.objects.filter(paypalipn=sender):
     return # This has already been processed
   subscription = get_subscription(params,sender)
@@ -67,6 +63,11 @@ def paypal_signal(sender,**kwargs):
       subscription.force_canceled()
       mail_admins("New Cancelation","https://txrxlabs.org/admin/membership/subscription/%s/"%subscription.pk)
     return
+
+  if sender.txn_type != "subscr_payment":
+    mail_admins('Unknown Transaction type "%s"'%sender.txn_type,
+                "https://txrxlabs.org/admin/ipn/paypalipn/%s/"%sender.pk)
+    return # rest of function handles successful membership payment
 
   if not 'mc_gross' in params:
     mail_admins("Bad IPN","no mc_gross in txn %s"%sender.txn_id)

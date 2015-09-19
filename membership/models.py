@@ -101,7 +101,7 @@ class Subscription(models.Model):
   owed = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   last_status = property(lambda self: (self.status_set.all().order_by('-datetime') or [None])[0])
   def force_canceled(self):
-    self.canceled = add_months(self.last_status.datetime,self.product.months)
+    self.canceled = self.paid_until
     self.save()
     self.recalculate()
   def bs_class(self):

@@ -1,6 +1,11 @@
 {% extends "suit:admin/index.html" %}
 {% load i18n admin_dashboard %}
 
+{% block extrastyle %}
+{{ block.super }}
+<link href="{{ STATIC_URL }}suit/extra_suit.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
 {% block content %}
 {% if request.path == "/admin/" %}
 <div id="content-main">
