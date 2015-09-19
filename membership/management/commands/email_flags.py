@@ -1,8 +1,9 @@
 from django.core.management.base import BaseCommand
 
 from membership.models import SubscriptionFlag, EMAIL_REASONS
+from membership.utils import send_membership_email
 
-from lablackey.mail import send_template_email, print_to_mail
+from lablackey.mail import print_to_mail
 import datetime
 
 class Command(BaseCommand):
@@ -30,7 +31,7 @@ class Command(BaseCommand):
           'flag': flag,
         }
         context.update(email_dict)
-        send_template_email('email/overdue/%'%template,flag.subscription.user.email,context=context)
+        send_membership_email('email/overdue/%'%template,flag.subscription.user.email,context=context)
         flag.emailed = now
         flag.save()
     if overdue_flags:

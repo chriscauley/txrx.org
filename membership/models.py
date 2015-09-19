@@ -10,7 +10,6 @@ from sorl.thumbnail import ImageField
 from course.models import Session, Term, Course
 from lablackey.db.models import UserModel
 from lablackey.utils import cached_method, cached_property
-from lablackey.mail import send_template_email
 from media.models import Photo
 from shop.models import Product
 
@@ -248,6 +247,11 @@ class UserMembership(models.Model):
     #! Needs to be separated by something now that term is depracated!
     term = Term.objects.all()[0]
     return [(term,Session.objects.filter(user=self.user))]
+  def send_welcome_email(self):
+    from membership.utils import send_membership_email
+    send_membership_email('email/new_member',self.user.email)
+    self.orientation_status = 'emailed'
+    self.save()
 
 class OfficerManager(models.Manager):
   def current(self,*args,**kwargs):
@@ -379,12 +383,13 @@ class SubscriptionFlag(models.Model):
       return
     return self.datetime + datetime.timedelta(self.ACTION_CHOICES[self.status][2])
   def apply_status(self,new_status):
+    from membership.utils import send_membership_email
     context = {
       'subscriptionflag': self,
       'last_warning_date': datetime.timedelta(14)+self.datetime,
     }
     try:
-      send_template_email('email/overdue/%s'%new_status,self.subscription.user.email,context=context)
+      send_membership_email('email/overdue/%s'%new_status,self.subscription.user.email,context=context)
     except TemplateDoesNotExist:
       print "template not found %s"%new_status
     self.status = new_status

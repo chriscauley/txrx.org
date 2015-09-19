@@ -21,7 +21,7 @@ class ContainerInline(admin.TabularInline):
 
 @admin.register(SubscriptionFlag)
 class SubscriptionFlagAdmin(admin.ModelAdmin):
-  raw_id_fields = ('user',)
+  raw_id_fields = ('subscription',)
   readonly_fields = ('action',)
   def action(self,obj):
     if not obj or not obj.pk or not obj.status in obj.ACTION_CHOICES:

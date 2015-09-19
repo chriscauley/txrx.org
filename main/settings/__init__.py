@@ -131,6 +131,7 @@ CONTACT_LINK = "<a href='%s'>%s</a>"%(CONTACT_EMAIL,CONTACT_EMAIL)
 EMAIL_SUBJECT_PREFIX = "[TXRX] "
 DEFAULT_FROM_EMAIL = "noreply@txrxlabs.org"
 SERVER_EMAIL = "noreply@txrxlabs.org"
+MEMBERSHIP_EMAIL = "chris.lazaroo@txrxlabs.org"
 EMAIL_BACKEND = "main.mail.DebugBackend"
 
 PER_PAGE = 10
