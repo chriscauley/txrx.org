@@ -91,6 +91,10 @@ def paypal_signal(sender,**kwargs):
       product=product,
       amount=amt
     )
+    um = subscription.user.usermembership
+    if um.orientation_status == 'new':
+      um.send_welcome_email()
+
   Status.objects.create(
     subscription=subscription,
     paypalipn=sender,
