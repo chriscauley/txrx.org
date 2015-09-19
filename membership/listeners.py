@@ -95,9 +95,17 @@ def paypal_signal(sender,**kwargs):
     if um.orientation_status == 'new':
       um.send_welcome_email()
 
-  Status.objects.create(
+  status = Status.objects.create(
     subscription=subscription,
     paypalipn=sender,
     payment_method='paypal',
     amount=amt,
   )
+  # need to get subscription again because status forced it to recalculate
+  subscription = status.subscription
+  # clear out any subscription flags
+  if subscription.owed <= 0:
+    SubscriptionFlag.objects.filter(
+      subscription=subscription,
+      status__in=SubscriptionFlag.ACTION_CHOICES
+    ).update(status="paid")
