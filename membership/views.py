@@ -170,6 +170,9 @@ def analysis(request):
 @staff_member_required
 def force_cancel(request,pk):
   Subscription.objects.get(pk=pk).force_canceled()
+  if request.GET.get("next",None):
+    messages.success(request,"Subscription #%s set to canceled"%pk)
+    return HttpResponseRedirect(request.GET['next'])
   return HttpResponse('')
 
 @staff_member_required

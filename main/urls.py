@@ -90,7 +90,7 @@ urlpatterns += patterns(
   url(r'^u/([^/]+)/$','member_detail',name='member_detail'),
   url(r'^officers/$', 'officers', name='officers'),
   url(r'^analysis/$', 'analysis', name='analysis'),
-  url(r'^force_cancel/(\d+)/$','force_cancel'),
+  url(r'^force_cancel/(\d+)/$','force_cancel',name="force_cancel"),
   url(r'^containers/$','containers'),
   url(r'^change_flag_status/(\d+)/([\w\_\-]+)/$','update_flag_status',name='update_flag_status'),
 )

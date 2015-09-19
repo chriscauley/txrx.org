@@ -80,6 +80,14 @@ class StatusInline(admin.TabularInline):
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
   inlines = [StatusInline,SubscriptionFlagInline]
+  fields = (('user','subscr_id'),('created','paid_until'),('canceled','_action'),'product',('amount','owed'))
+  raw_id_fields = ('user',)
+  readonly_fields = ('_action',)
+  def _action(self,obj):
+    if obj and not obj.canceled:
+      url = reverse("force_cancel",args=[obj.pk])+"?next=/admin/membership/subscription/%s/"%obj.pk
+      return "<a href='%s'>%s</a>"%(url,"Force Cancel")
+  _action.allow_tags = True
 
 class SubscriptionInline(admin.TabularInline):
   model = Subscription
@@ -88,7 +96,8 @@ class SubscriptionInline(admin.TabularInline):
   extra = 0
   has_add_permission = lambda self,obj: False
   def edit(self,obj):
-    return "<a class='related-widget-wrapper-link change-related' href='/admin/membership/subscription/%s/'></a>"%obj.pk
+    # add this class to open in popup related-widget-wrapper-link
+    return "<a class='change-related' href='/admin/membership/subscription/%s/'></a>"%obj.pk
   edit.allow_tags = True
 
 class UserMembershipInline(admin.StackedInline):
