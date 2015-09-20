@@ -108,7 +108,8 @@ class UserMembershipInline(admin.StackedInline):
   readonly_fields = ('start','end','membership')
   raw_id_fields = ('photo',)
   fields = (
-    'membership','bio','paypal_email',
+    ('membership','orientation_status'),
+    'bio','paypal_email',
     ('voting_rights','suspended'),
     ('photo','waiver'),
     ('start','end')
