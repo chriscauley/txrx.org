@@ -183,4 +183,5 @@ def containers(request):
 def update_flag_status(request,flag_pk,new_status):
   subscriptionflag = get_object_or_404(SubscriptionFlag,pk=flag_pk)
   subscriptionflag.apply_status(new_status)
+  messages.success(request,"Membership status changed to %s"%subscriptionflag.get_status_display())
   return HttpResponseRedirect('/admin/membership/subscriptionflag/%s/'%flag_pk)

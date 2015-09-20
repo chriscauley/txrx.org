@@ -371,7 +371,7 @@ class SubscriptionFlag(models.Model):
   status = models.CharField(max_length=32,default='new',choices=FLAG_STATUS_CHOICES)
   datetime = models.DateTimeField(auto_now_add=True)
   emailed = models.DateTimeField(null=True,blank=True)
-  __unicode__ = lambda self: "%s flagged for %s"%(self.user,self.reason)
+  __unicode__ = lambda self: "%s flagged for %s"%(self.subscription.user,self.reason)
   ACTION_CHOICES = { # this should be renamed
     # current_status: [future_status, verbose_description, days_since_flag]
     'new': ['first_warning','Send First Warning',1],
