@@ -215,7 +215,7 @@ class UserMembership(models.Model):
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
   waiver = models.FileField("Waivers",upload_to="waivers/",null=True,blank=True)
-  orientation_status = models.CharField(max_length=32,choices=ORIENTATION_STATUS_CHOICES)
+  orientation_status = models.CharField(max_length=32,choices=ORIENTATION_STATUS_CHOICES,default="new")
 
   photo = models.ForeignKey(Photo,null=True,blank=True)
   bio = MarkDownField(null=True,blank=True)

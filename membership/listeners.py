@@ -22,7 +22,7 @@ def get_subscription(params,sender):
     return
   subscription = get_or_none(Subscription,subscr_id=subscr_id)
   if not subscription:
-    mail_admins("Bad IPN","no subscr_id in IPN #%s"%sender.pk)
+    mail_admins("Bad IPN","no subscription for IPN #%s and subscr_id "%(sender.pk,subscr_id))
     return
   return subscription
 
@@ -46,28 +46,30 @@ def paypal_signal(sender,**kwargs):
   subscription = get_subscription(params,sender)
   kwargs['subscription'] = subscription
   user,new_user = get_or_create_student(sender.payer_email,subscr_id=subscr_id)
+  urls = "https://txrxlabs.org/admin/ipn/paypalipn/%s/"%sender.pk
+  urls += "\n\n%s http://txrxlabs.org/admin/user/user/%s/"%(new_user,user.pk)
+  if subscription:
+    urls += "\n\nhttps://txrxlabs.org/admin/membership/subscription/%s/"%subscription.pk
 
   if sender.txn_type in ['recurring_payment_skipped',"recurring_payment_failed","recurring_payment_suspended",
                          'recurring_payment_suspended_due_to_max_failed_payment',
                          "subscr_failed"]:
     paypal_flag(sender,**kwargs)
-    mail_admins("Flagged %s"%sender.txn_type,"https://txrxlabs.org/admin/membership/subscription/%s/"%subscription.pk)
+    mail_admins("Flagged %s"%sender.txn_type,urls)
     return
   elif sender.txn_type == 'subscr_eot':
     paypal_flag(sender,**kwargs)
-    mail_admins("Flagged %s and canceled"%sender.txn_type,
-                "https://txrxlabs.org/admin/membership/subscription/%s/"%subscription.pk)
+    mail_admins("Flagged %s and canceled"%sender.txn_type,urls)
     subscription.force_canceled()
     return
   elif sender.txn_type == 'subscr_cancel':
     if subscription:
       subscription.force_canceled()
-      mail_admins("New Cancelation","https://txrxlabs.org/admin/membership/subscription/%s/"%subscription.pk)
+      mail_admins("New Cancelation",urls)
     return
 
   if sender.txn_type != "subscr_payment":
-    mail_admins('Unknown Transaction type "%s"'%sender.txn_type,
-                "https://txrxlabs.org/admin/ipn/paypalipn/%s/"%sender.pk)
+    mail_admins('Unknown Transaction type "%s"'%sender.txn_type,urls)
     return # rest of function handles successful membership payment
 
   if not 'mc_gross' in params:
