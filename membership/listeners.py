@@ -48,6 +48,7 @@ def paypal_signal(sender,**kwargs):
   user,new_user = get_or_create_student(sender.payer_email,subscr_id=subscr_id)
 
   if sender.txn_type in ['recurring_payment_skipped',"recurring_payment_failed","recurring_payment_suspended",
+                         'recurring_payment_suspended_due_to_max_failed_payment',
                          "subscr_failed"]:
     paypal_flag(sender,**kwargs)
     mail_admins("Flagged %s"%sender.txn_type,"https://txrxlabs.org/admin/membership/subscription/%s/"%subscription.pk)
@@ -72,7 +73,7 @@ def paypal_signal(sender,**kwargs):
   if not 'mc_gross' in params:
     mail_admins("Bad IPN","no mc_gross in txn %s"%sender.txn_id)
     return
-  amt = params['mc_gross']
+  amt = float(params['mc_gross'])
   if not subscription:
     try:
       membership = Membership.objects.get(name=params.get('option_name1',''))
