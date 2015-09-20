@@ -58,7 +58,8 @@
             ${{ subscription.owed|floatformat:0 }}/{{ subscription.amount|floatformat:0 }}
             [{{ subscription.created|date:'m/Y' }} {{ subscription.last_status.datetime|date:'m/Y' }}]
             {% if not subscription.canceled %}
-            <a href="/force_cancel/{{ subscription.pk }}/">cancel</a>
+            <a href="/force_cancel/{{ subscription.pk }}/" class="fa fa-trash"></a>
+            <a href="/flag_subscription/{{ subscription.pk }}/" class="fa fa-flag"></a>
             {% endif %}
           </div>
           {% endfor %}

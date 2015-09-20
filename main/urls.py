@@ -91,6 +91,7 @@ urlpatterns += patterns(
   url(r'^officers/$', 'officers', name='officers'),
   url(r'^analysis/$', 'analysis', name='analysis'),
   url(r'^force_cancel/(\d+)/$','force_cancel',name="force_cancel"),
+  url(r'^flag_subscription/(\d+)/$','flag_subscription',name="flag_subscription"),
   url(r'^containers/$','containers'),
   url(r'^change_flag_status/(\d+)/([\w\_\-]+)/$','update_flag_status',name='update_flag_status'),
 )

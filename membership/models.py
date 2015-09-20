@@ -250,7 +250,7 @@ class UserMembership(models.Model):
     return [(term,Session.objects.filter(user=self.user))]
   def send_welcome_email(self):
     from membership.utils import send_membership_email
-    send_membership_email('email/new_member',self.user.email)
+    send_membership_email('email/new_member',self.user.email,experimental=False)
     self.orientation_status = 'emailed'
     self.save()
 
@@ -344,6 +344,7 @@ REASON_CHOICES = [
   ("recurring_payment_suspended", "PayPal Suspended"),
   ("subscr_failed", "PayPal Failed Subscription"),
   ("subscr_eot", "PayPal End of Term"),
+  ("manually_flagged","Manually Flagged"),
 ]
 
 EMAIL_REASONS = {

@@ -176,6 +176,16 @@ def force_cancel(request,pk):
   return HttpResponse('')
 
 @staff_member_required
+def flag_subscription(request,pk):
+  subscription = Subscription.objects.get(pk=pk)
+  flag,new = SubscriptionFlag.objects.get_or_create(
+    subscription=subscription,
+    reason="manually_flagged",
+  )
+  messages.success(request,"Subscription #%s flagged, you can edit it below"%pk)
+  return HttpResponseRedirect("/admin/membership/subscriptionflag/%s/"%flag.pk)
+
+@staff_member_required
 def containers(request):
   return TemplateResponse(request,'membership/containers.html',{})
 
