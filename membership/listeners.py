@@ -41,7 +41,7 @@ def paypal_signal(sender,**kwargs):
   subscr_id = params.get('subscr_id',None) or params.get('recurring_payment_id',None)
   if sender.txn_type in ['','cart','subscr_signup']:
     return # refunds and classes and signups
-  if Status.objects.filter(paypalipn=sender):
+  if Status.objects.filter(transaction_id=sender.txn_id):
     return # This has already been processed
   subscription = get_subscription(params,sender)
   kwargs['subscription'] = subscription
