@@ -31,7 +31,7 @@ def paypal_flag(sender,reason=None,**kwargs):
     return
   SubscriptionFlag.objects.create(
     subscription=kwargs['subscription'],
-    reason=reason or sender.txn_type,
+    reason=(reason or sender.txn_type)[:32],
   )
 
 @receiver(valid_ipn_received,dispatch_uid='paypal_signal')
