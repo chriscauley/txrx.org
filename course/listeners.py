@@ -7,22 +7,26 @@ from django.template.loader import render_to_string
 
 from notify.models import NotifyCourse
 from .utils import get_or_create_student
+from lablackey.utils import latin1_to_ascii
 
 import traceback
 
 def handle_successful_store_payment(sender, user):
   from shop.models import Product, Order, OrderPayment, Cart
-  params = QueryDict(sender.query)
+  try:
+    params = QueryDict(sender.query)
+  except UnicodeEncodeError:
+    params = QueryDict(latin1_to_ascii(sender.query))
   try:
     order = Order.objects.get(pk=params['invoice'])
   except Order.DoesNotExist:
     mail_admins("repeat transaction for %s"%sender.txn_id,"")
     return
   total = 0
-  try:
-    item_count = int(params['num_cart_items'])
-  except:
-    item_count = 1
+  if not "num_cart_items" in params:
+    mail_admins("No cart items found for %s"%sender.txn_id,"")
+    return
+  item_count = int(params['num_cart_items'])
   products = []
   for i in range(1,item_count+1):
     total += int(float(params['mc_gross_%d'%i]))
@@ -30,7 +34,7 @@ def handle_successful_store_payment(sender, user):
     try:
       product = Product.objects.get(pk=int(params['item_number%d'%i]))
     except Product.DoesNotExist:
-      main_admins("Product fail for %s"%sender.txn_id,"")
+      mail_admins("Product fail for %s"%sender.txn_id,"")
       continue
     products.append(product)
     product.decrease_stock(quantity)
@@ -53,8 +57,14 @@ _duid2='course.listners.handle_successful_payment'
 def handle_successful_payment(sender, **kwargs):
   from course.models import Enrollment, Session, reset_classes_json
   #add them to the classes they are enrolled in
-  params = QueryDict(sender.query)
-  _uid = params.get('custom',None)
+  try:
+    params = QueryDict(sender.query)
+  except UnicodeEncodeError:
+    params = QueryDict(latin1_to_ascii(sender.query))
+  try:
+    _uid = str(params.get('custom',None))
+  except UnicodeEncodeError:
+    _uid = latin1_to_ascii(params.get('custom',None))
   user,new_user = get_or_create_student(sender.payer_email,u_id=_uid)
   user.active = True
   user.save()
@@ -63,10 +73,10 @@ def handle_successful_payment(sender, **kwargs):
   if sender.txn_type in ["subscr_payment",'recurring_payment']:
     # handled by membership.listeners
     return
-  try:
-    item_count = int(params['num_cart_items'])
-  except:
-    item_count = 1
+  if not "num_cart_items" in params:
+    mail_admins("No cart items found for %s"%sender.txn_id,"")
+    return
+  item_count = int(params['num_cart_items'])
 
   enrollments = []
   error_sessions = []

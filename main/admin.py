@@ -63,8 +63,7 @@ class CustomIPNAdmin(PayPalIPNAdmin):
     ]
     onclick = ''.join(lines)
     link = '<a href="javascript:;" id="emulate_ipn" onclick="%s">Emulate Post</a>'%onclick
-    form = "<form method='POST' action='/tx/rx/ipn/handler/'><input type='submit' /></form>"
-    return link+form
+    return link
   view_IPN.allow_tags = True
 
 admin.site.register(FlatPage,FlatPageAdmin)

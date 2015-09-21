@@ -2,7 +2,7 @@ from django.core.mail import mail_admins
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.http import QueryDict
-from lablackey.utils import get_or_none
+from lablackey.utils import get_or_none, latin1_to_ascii
 
 from course.utils import get_or_create_student
 from .models import UserMembership, Status, Subscription, Membership, Product, SubscriptionFlag
@@ -37,7 +37,10 @@ def paypal_flag(sender,reason=None,**kwargs):
 @receiver(valid_ipn_received,dispatch_uid='paypal_signal')
 @receiver(invalid_ipn_received,dispatch_uid='paypal_signal')
 def paypal_signal(sender,**kwargs):
-  params = QueryDict(sender.query)
+  try:
+    params = QueryDict(sender.query)
+  except UnicodeEncodeError:
+    params = QueryDict(latin1_to_ascii(sender.query))
   subscr_id = params.get('subscr_id',None) or params.get('recurring_payment_id',None)
   if sender.txn_type in ['','cart','subscr_signup']:
     return # refunds and classes and signups
