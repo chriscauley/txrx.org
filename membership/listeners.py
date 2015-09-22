@@ -102,6 +102,7 @@ def paypal_signal(sender,**kwargs):
       um.send_welcome_email()
 
   status = Status.objects.create(
+    transaction_id=sender.txn_id,
     subscription=subscription,
     paypalipn=sender,
     payment_method='paypal',
