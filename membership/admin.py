@@ -74,7 +74,7 @@ class MembershipAdmin(admin.ModelAdmin):
 
 class StatusInline(admin.TabularInline):
   model = Status
-  exclude = ("transaction_id",)
+  exclude = ("transaction_id",'datetime','paypalipn')
   raw_id_fields = ('paypalipn',)
   extra = 0
 
@@ -83,11 +83,11 @@ class SubscriptionAdmin(admin.ModelAdmin):
   inlines = [StatusInline,SubscriptionFlagInline]
   fields = (
     ('user','edit_user'),
-    'product',
+    ('product','subscr_id'),
     'created',
-    ('amount','owed'),
-    'subscr_id','_action',
-    ('canceled','paid_until'),
+    ('amount','owed','paid_until'),
+    ('canceled','_action')
+    
   )
   raw_id_fields = ('user',)
   readonly_fields = ('_action','paid_until','canceled','owed','edit_user')
@@ -95,7 +95,9 @@ class SubscriptionAdmin(admin.ModelAdmin):
     if obj and obj.pk and not obj.canceled:
       url = reverse("force_cancel",args=[obj.pk])+"?next=/admin/membership/subscription/%s/"%obj.pk
       return "<a href='%s'>%s</a>"%(url,"Force Cancel")
+    return ""
   _action.allow_tags = True
+  _action.short_description = ""
   def edit_user(self,obj):
     if obj and obj.user:
       return '<a class="change-related" href="/admin/user/user/%s/"></a>'%obj.user.pk

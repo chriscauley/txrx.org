@@ -91,11 +91,12 @@ class Product(Product):
 
 class Subscription(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
-  subscr_id = models.CharField(max_length=20,null=True,blank=True)
+  _ht = "Only used with PayPal subscriptions. Do not touch."
+  subscr_id = models.CharField(max_length=20,null=True,blank=True,help_text=_ht)
   created = models.DateTimeField(default=datetime.datetime.now)
   canceled = models.DateTimeField(null=True,blank=True)
   paid_until = models.DateTimeField(null=True,blank=True)
-  product = models.ForeignKey(Product,null=True,blank=True)
+  product = models.ForeignKey(Product)
   # self.amount should match self.product, but can be used as an override
   amount = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   owed = models.DecimalField(max_digits=30, decimal_places=2, default=0)
