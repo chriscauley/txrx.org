@@ -152,21 +152,23 @@ class Subscription(models.Model):
 
 PAYMENT_METHOD_CHOICES = (
   ('paypal','PayPalIPN'),
-  ('cash', 'Cash'),
-  ('adjustment', 'Adjustment'),
+  ('cash', 'Cash/Check'),
+  ('adjustment', 'Adjustment (gift from lab)'),
   ('refund', 'Refund'),
   ('legacy','Legacy (PayPal)'),
 )
 
 class Status(models.Model):
   amount = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+  payment_method = models.CharField(max_length=16,choices=PAYMENT_METHOD_CHOICES,default="cash")
+  notes = models.CharField(max_length=128,null=True,blank=True)
+  datetime = models.DateTimeField(default=datetime.datetime.now)
   subscription = models.ForeignKey(Subscription)
   paypalipn = models.ForeignKey("ipn.PayPalIPN",null=True,blank=True)
   transaction_id = models.CharField(max_length=32,null=True,blank=True)
-  datetime = models.DateTimeField(default=datetime.datetime.now)
-  notes = models.CharField(max_length=128,null=True,blank=True)
-  payment_method = models.CharField(max_length=16,choices=PAYMENT_METHOD_CHOICES,default="cash")
   def save(self,*args,**kwargs):
+    if self.paypalipn:
+      self.transaction_id = self.paypalipn.txn_id
     super(Status,self).save(*args,**kwargs)
     self.subscription.recalculate()
 
