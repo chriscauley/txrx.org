@@ -15,7 +15,7 @@ from shop.models import Product
 
 from wmd.models import MarkDownField
 
-import datetime, random, string, calendar
+import datetime, random, string, calendar, decimal
 
 def rand32():
   seed = string.letters+string.digits
@@ -131,7 +131,7 @@ class Subscription(models.Model):
     for months in range(1200): # 100 years
       if add_months(self.created,months) >= now:
         break
-    amount_due = months * self.amount / self.product.months
+    amount_due = decimal.Decimal(months * self.amount / self.product.months)
     amount_paid = sum([s.amount for s in self.status_set.all()])
     self.owed = amount_due-amount_paid
     if self.canceled:
