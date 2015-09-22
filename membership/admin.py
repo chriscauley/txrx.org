@@ -94,7 +94,7 @@ class SubscriptionInline(admin.TabularInline):
   readonly_fields = ('edit','subscr_id','created','canceled','paid_until','product','amount','owed')
   ordering = ('-canceled',)
   extra = 0
-  has_add_permission = lambda self,obj: False
+  #has_add_permission = lambda self,obj: False
   def edit(self,obj):
     # add this class to open in popup related-widget-wrapper-link
     return "<a class='change-related' href='/admin/membership/subscription/%s/'></a>"%obj.pk
