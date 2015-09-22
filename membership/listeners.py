@@ -22,7 +22,6 @@ def get_subscription(params,sender):
     return
   subscription = get_or_none(Subscription,subscr_id=subscr_id)
   if not subscription:
-    mail_admins("Bad IPN","no subscription for IPN #%s and subscr_id "%(sender.pk,subscr_id))
     return
   return subscription
 
