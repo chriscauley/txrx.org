@@ -10,11 +10,11 @@ from sorl.thumbnail import ImageField, get_thumbnail
 from crop_override import get_override
 import datetime, time
 
-from feed.models import FeedItemModel
 from media.models import FilesMixin, PhotosMixin
 from geo.models import Room
 from event.models import OccurrenceModel, reverse_ics
 from tool.models import ToolsMixin
+from lablackey.db.models import UserModel
 from lablackey.utils import cached_method, cached_property, latin1_to_ascii
 
 from shop.models import Product
@@ -200,7 +200,7 @@ class Branding(models.Model):
   get_small_image = lambda self: self.small_image_override or self.image
   __unicode__ = lambda self: self.name
 
-class Session(FeedItemModel,PhotosMixin,models.Model):
+class Session(UserModel,PhotosMixin,models.Model):
   def __init__(self,*args,**kwargs):
     super(Session,self).__init__(*args,**kwargs)
     if self.pk:
@@ -219,12 +219,11 @@ class Session(FeedItemModel,PhotosMixin,models.Model):
         self.last_date = _a[-1].end
         self.save()
   get_ics_url = lambda self: reverse_ics(self)
-  feed_item_type = 'session'
   course = models.ForeignKey(Course,null=True,blank=True)
   slug = models.CharField(max_length=255)
   cancelled = models.BooleanField(default=False)
   active = models.BooleanField(default=True)
-  publish_dt = models.DateTimeField(null=True,blank=True) # for rss feed
+  publish_dt = models.DateTimeField(null=True,blank=True)
   _ht = "This will be automatically updated when you save the model. Do not change"
   first_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
   last_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering

@@ -50,7 +50,6 @@ INSTALLED_APPS = (
   'membership',
   'main',
   'event',
-  'feed', #TODO!
   'thing',
   'notify',
 )

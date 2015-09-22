@@ -11,6 +11,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('media', '0001_initial'),
+        ('user', '0001_initial'),
     ]
 
     operations = [
