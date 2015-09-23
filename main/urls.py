@@ -51,10 +51,8 @@ def activate_user(target):
     from django.contrib.auth import get_user_model
     model = get_user_model()
     if request.REQUEST.get('email',None):
-      print 'email in get'
       try:
         user = model.objects.get(email=request.REQUEST.get('email'))
-        print user
         user.is_active = True
         user.save()
       except model.DoesNotExist:

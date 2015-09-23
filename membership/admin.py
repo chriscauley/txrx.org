@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django import forms
 
-from models import (Group, Membership, Feature, MembershipFeature, UserMembership, Product, SubscriptionFlag,
+from models import (Group, Level, Feature, MembershipFeature, UserMembership, Product, SubscriptionFlag,
                     Subscription, Status, MeetingMinutes, Proposal, Officer, Area, Container)
 
 from lablackey.db.admin import RawMixin
@@ -58,7 +58,7 @@ class AreaAdmin(admin.ModelAdmin):
 
 class MembershipFeatureInline(RawMixin,admin.TabularInline):
   extra = 0
-  raw_id_fields = ('membership','feature')
+  raw_id_fields = ('level','feature')
   model = MembershipFeature
 
 class ProductInline(admin.TabularInline):
@@ -66,7 +66,7 @@ class ProductInline(admin.TabularInline):
   model = Product
   exclude = ('slug',)
 
-@admin.register(Membership)
+@admin.register(Level)
 class MembershipAdmin(admin.ModelAdmin):
   list_display = ("name","order")
   list_editable = ("order",)
@@ -120,10 +120,10 @@ class UserMembershipInline(admin.StackedInline):
   list_editable = ('photo',)
   list_filter = ('user__is_staff',)
   search_fields = ('user__email','user__username','paypal_email')
-  readonly_fields = ('start','end','membership')
+  readonly_fields = ('start','end','level')
   raw_id_fields = ('photo',)
   fields = (
-    ('membership','orientation_status'),
+    ('level','orientation_status'),
     'bio','paypal_email',
     ('voting_rights','suspended'),
     ('photo','waiver'),

@@ -7,7 +7,6 @@ from django.template.response import TemplateResponse
 from django.http import HttpResponsePermanentRedirect, HttpResponseRedirect, HttpResponse, Http404
 
 from blog.models import Post, Banner
-from membership.models import Membership
 from thing.models import Thing
 
 from tagging.models import Tag

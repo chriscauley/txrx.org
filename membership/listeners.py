@@ -5,10 +5,14 @@ from django.http import QueryDict
 from lablackey.utils import get_or_none, latin1_to_ascii
 
 from course.utils import get_or_create_student
-from .models import UserMembership, Status, Subscription, Membership, Product, SubscriptionFlag
+from .models import UserMembership, Status, Subscription, Level, Product, SubscriptionFlag
 from user.models import User
 
 from paypal.standard.ipn.signals import valid_ipn_received, invalid_ipn_received
+
+def mail_admins(a,b):
+  print "MAIL: "+a
+  print b
 
 @receiver(post_save,sender=User)
 def post_save_user_handler(sender, **kwargs):
@@ -80,16 +84,16 @@ def paypal_signal(sender,**kwargs):
   amt = float(params['mc_gross'])
   if not subscription:
     try:
-      membership = Membership.objects.get(name=params.get('option_name1',''))
-    except Membership.DoesNotExist:
-      b = "Could not find membership %s for txn %s"%(params.get('option_name1',''),sender.txn_id)
+      level = Level.objects.get(name=params.get('option_name1',''))
+    except Level.DoesNotExist:
+      b = "Could not find level \"%s\" for txn %s"%(params.get('option_name1',''),sender.txn_id)
       mail_admins("Bad IPN",b)
       return
     try:
-      product = Product.objects.get(unit_price=amt,membership=membership)
+      product = Product.objects.get(unit_price=amt,level=level)
     except Product.DoesNotExist:
-      b = "Could not find membership product %s $%s for txn %s"
-      mail_admins("Bad IPN",b%(membership,amt,sender.txn_id))
+      b = "Could not find level product %s $%s for txn %s"
+      mail_admins("Bad IPN",b%(level,amt,sender.txn_id))
       return
     subscription = Subscription.objects.create(
       user=user,

@@ -8,7 +8,6 @@ from django.template.response import TemplateResponse
 
 from ..models import Course, Term, Subject, Session, Enrollment, ClassTime, Evaluation
 from ..forms import EmailInstructorForm, EvaluationForm
-from membership.models import UserMembership
 from event.utils import make_ics,ics2response
 
 from paypal.standard.ipn.models import *

@@ -24,17 +24,17 @@
   </div>
 
 <ul class="nav nav-tabs" role="tablist">
-  {% for membership,users in memberships %}
+  {% for level,users in level_users %}
   <li role="presentation"{% if forloop.first %} class="active"{% endif %}>
-    <a href="#{{ membership.name|slugify }}" aria-controls="home" role="tab" data-toggle="tab">
-      {{ membership }} ({{ membership.count_active_users }}/{{ membership.count_all_users }})
+    <a href="#{{ level.name|slugify }}" aria-controls="home" role="tab" data-toggle="tab">
+      {{ level }} ({{ level.count_active_users }}/{{ level.count_all_users }})
   </a></li>
   {% endfor %}
 </ul>
 
 <div class="tab-content">
-  {% for membership,users in memberships %}
-  <div role="tabpanel" class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ membership.name|slugify }}">
+  {% for level,users in levels %}
+  <div role="tabpanel" class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ level.name|slugify }}">
     <table class="table table-striped">
       <tr>
         <th>Username</th>

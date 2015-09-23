@@ -2,13 +2,17 @@ from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.test import TestCase, RequestFactory
 
-from .models import Product, Membership, Group
+from .models import Product, Level, Group, add_months
 from .paypal_utils import get_membership_query
+from paypal.standard.ipn.models import PayPalIPN
 from paypal.standard.ipn.views import ipn as ipn_view
 from six import text_type
 from six.moves.urllib.parse import urlencode
 
-import datetime,urllib
+import datetime, urllib, os
+
+import warnings
+warnings.showwarning = lambda *x: None
 
 BASE_URL = 'http://dev.txrxlabs.org:8025'
 
@@ -18,7 +22,7 @@ def setUp():
       {"name": "Non-Tool", "order": 3, 'pk': 1},
       {"name": "All Access", "order": 0, 'pk':3},
     ]),
-    (Membership,[
+    (Level,[
       {"discount_percentage": 0, "group": 1, "name": "Non-paying Member", "order": 0},
       {"discount_percentage": 10, "group": 3, "name": "Tinkerer", "order": 20},
       {"discount_percentage": 10, "group": 3, "name": "Hacker", "order": 21},
@@ -42,10 +46,25 @@ class SimpleTest(TestCase):
     self.factory = RequestFactory()
   #  setUp()
   def test_hacker_membership(self):
-    product = Membership.objects.get(name="Hacker").monthly_product
-    new_hacker_email = "new_email@txrxtesting.com"
-    data = get_membership_query(product=product,payer_email=new_hacker_email)
-    self.paypal_post(data)
-    users = get_user_model().objects.filter(email=new_hacker_email)
-    self.assertEqual(users.count(),1)
-    users.delete()
+    now = datetime.datetime.now()
+    def validate(email):
+      user = get_user_model().objects.get(email=email)
+      self.assertEqual(user.usermembership.level,product.level)
+      subscription = user.subscription_set.get()
+      self.assertEqual(subscription.paid_until.date(),add_months(now.date(),subscription.product.months))
+      self.assertTrue(subscription.owed <= 0)
+
+    level = Level.objects.get(name="Hacker")
+    for product in level.product_set.all():
+      new_email = "new_email%s@txrxtesting.com"%product.pk
+      get_user_model().objects.filter(email=new_email).delete()
+      data = get_membership_query(product=product,payer_email=new_email)
+      self.paypal_post(data)
+      validate(new_email)
+
+      # reposting the same data should not change anything
+      self.paypal_post(data)
+      validate(new_email)
+
+    get_user_model().objects.get(email=new_email).delete()
+    PayPalIPN.objects.filter(txn_id=data['txn_id']).delete()

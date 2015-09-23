@@ -25,7 +25,7 @@ class Group(models.Model):
   name = models.CharField(max_length=64)
   order = models.IntegerField(default=0)
   __unicode__ = lambda self: self.name
-  active_memberships = lambda self: self.membership_set.filter(product__isnull=False).distinct()
+  active_levels = lambda self: self.level_set.filter(product__isnull=False).distinct()
   class Meta:
     ordering = ("order",)
 
@@ -49,7 +49,7 @@ class Container(models.Model):
   class Meta:
     ordering = ('number',)
 
-class Membership(models.Model):
+class Level(models.Model):
   name = models.CharField(max_length=64)
   order = models.IntegerField("Level")
   products = cached_property(lambda self: self.product_set.filter(active=True),name="products")
@@ -61,7 +61,7 @@ class Membership(models.Model):
                              name="features")
   @cached_property
   def all_users(self):
-    return get_user_model().objects.filter(subscription__product__membership=self)
+    return get_user_model().objects.filter(subscription__product__level=self)
   def count_all_users(self):
     return self.all_users.count()
   def count_active_users(self):
@@ -79,10 +79,10 @@ MONTHS_CHOICES = (
 )
 
 class Product(Product):
-  membership = models.ForeignKey(Membership)
+  level = models.ForeignKey(Level)
   months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
   order = models.IntegerField(default=0)
-  __unicode__ = lambda self: "%s months of %s"%(self.months,self.membership)
+  __unicode__ = lambda self: "%s months of %s"%(self.months,self.level)
   def save(self,*args,**kwargs):
     self.slug = "__membershipproduct__%s"%(self.pk or random.random())
     super(Product,self).save(*args,**kwargs)
@@ -138,13 +138,13 @@ class Subscription(models.Model):
     self.owed = amount_due-amount_paid
     if self.canceled:
       self.owed = 0
-    self.paid_until = add_months(self.created,int(self.product.months*amount_paid/self.amount))
+    self.paid_until = add_months(self.created,int(self.product.months*amount_paid/decimal.Decimal(self.amount)))
     self.save()
     last = self.last_status
     if last:
       um = self.user.usermembership
       if modify_membership:
-        um.membership = self.product.membership
+        um.level = self.product.level
       um.end = max(last.datetime,um.end or last.datetime)
       um.start = min(um.start or self.created,self.created)
       um.save()
@@ -188,7 +188,7 @@ class Feature(models.Model):
 
 class MembershipFeature(models.Model):
   feature = models.ForeignKey(Feature)
-  membership = models.ForeignKey(Membership)
+  level = models.ForeignKey(Level)
   order = models.IntegerField(default=0)
   class Meta:
     ordering = ("order",)
@@ -214,7 +214,7 @@ ORIENTATION_STATUS_CHOICES = [
 
 class UserMembership(models.Model):
   user = models.OneToOneField(settings.AUTH_USER_MODEL)
-  membership = models.ForeignKey(Membership,default=1)
+  level = models.ForeignKey(Level,default=1)
   start = models.DateTimeField(null=True,blank=True)
   end = models.DateTimeField(null=True,blank=True)
   voting_rights = models.BooleanField(default=False)

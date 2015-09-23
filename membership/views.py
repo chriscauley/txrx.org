@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .models import Membership, Group, MeetingMinutes, Officer, UserMembership, Subscription, SubscriptionFlag
+from .models import Level, Group, MeetingMinutes, Officer, UserMembership, Subscription, SubscriptionFlag
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required, verify_unique_email
 
@@ -31,8 +31,7 @@ def join_us(request):
 def user_settings(request):
   user = request.user
   user_form = UserForm(request.POST or None, instance=user)
-  user_membership = user.usermembership
-  usermembership_form = UserMembershipForm(request.POST or None, request.FILES or None, instance=user_membership)
+  usermembership_form = UserMembershipForm(request.POST or None, request.FILES or None, instance=user.usermembership)
   if request.POST and all([user_form.is_valid(),usermembership_form.is_valid()]):
     user_form.save()
     usermembership_form.save()
@@ -156,12 +155,12 @@ def analysis(request):
     ('-usermembership__end','Last Payment'),
     ('-subscription__owed','Money owed'),
   ]
-  memberships = []
-  for level in Membership.objects.filter(order__gt=0):
-    users = get_user_model().objects.filter(usermembership__membership=level).order_by(order).distinct()
-    memberships.append((level,users))
+  level_users = []
+  for level in Level.objects.filter(order__gt=0):
+    users = get_user_model().objects.filter(usermembership__level=level).order_by(order).distinct()
+    level_users.append((level,users))
   values = {
-    'memberships': memberships,
+    'level_users': level_users,
     'order': order,
     'orders': orders
   }

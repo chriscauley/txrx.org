@@ -9,7 +9,6 @@ from django.template.response import TemplateResponse
 
 from ..models import Course, Term, Subject, Session, Enrollment, ClassTime
 from ..forms import EmailInstructorForm, EvaluationForm
-from membership.models import UserMembership
 from notify.models import NotifyCourse
 from lablackey.utils import get_or_none
 from event.utils import make_ics,ics2response

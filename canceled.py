@@ -3,7 +3,7 @@ from functools import wraps
 os.environ['DJANGO_SETTINGS_MODULE'] = 'main.settings'
 django.setup()
 
-from membership.models import Subscription, Membership, add_months
+from membership.models import Subscription, Level, add_months
 
 Subscription.objects.all().update(canceled=None)
 
@@ -24,7 +24,7 @@ f.close()
 
 initial = Subscription.objects.filter(owed__gt=0).count()
 
-for membership in Membership.objects.filter(order__gte=1):
+for membership in Level.objects.filter(order__gte=1):
   for subscription in Subscription.objects.filter(product__membership=membership,owed__gt=0):
     if membership.order in [1,2]: #amigotron/supporter
       low += 1

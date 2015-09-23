@@ -211,11 +211,9 @@ class Session(UserModel,PhotosMixin,models.Model):
       if not _a:
         return
       if not _a[0].start == self.first_date:
-        print "setting first_date"
         self.first_date = _a[0].start
         self.save()
       if not _a[-1].end == self.last_date:
-        print "setting last_date"
         self.last_date = _a[-1].end
         self.save()
   get_ics_url = lambda self: reverse_ics(self)

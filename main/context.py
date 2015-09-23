@@ -65,7 +65,7 @@ def nav(request):
   if request.user.is_authenticated():
     my_classes_ics = "%s/classes/ics/%s/%s/my-classes.ics"
     my_classes_ics = my_classes_ics%(settings.SITE_DOMAIN,request.user.id,request.user.usermembership.api_key)
-    member_discount = (100.-request.user.usermembership.membership.discount_percentage)/100
+    member_discount = (100.-request.user.usermembership.level.discount_percentage)/100
 
   login_redirect = request.path
   if 'auth' in request.path or 'accounts' in request.path:

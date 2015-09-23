@@ -24,7 +24,7 @@ function setHiddenFields(that) {
   {% for group in groups %}
   <div class="{% if forloop.first %}col-lg-offset-2 {% endif %}col-lg-4 col-sm-6">
     {% if groups|length != 1 %}<h2>{{ group }} Memberships:</h2>{% endif %}
-    {% for m in group.active_memberships %}
+    {% for m in group.active_levels %}
     <span class="well membership">
       <h2>
         {{ m.name }}
