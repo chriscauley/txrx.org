@@ -1,5 +1,16 @@
-from django.test import TestCase
-from .models import Membership, Group
+from django.contrib.auth import get_user_model
+from django.core.urlresolvers import reverse
+from django.test import TestCase, RequestFactory
+
+from .models import Product, Membership, Group
+from .paypal_utils import get_membership_query
+from paypal.standard.ipn.views import ipn as ipn_view
+from six import text_type
+from six.moves.urllib.parse import urlencode
+
+import datetime,urllib
+
+BASE_URL = 'http://dev.txrxlabs.org:8025'
 
 def setUp():
   objects = [
@@ -20,7 +31,21 @@ def setUp():
     model.objects.create(**kwargs)
 
 class SimpleTest(TestCase):
+  def paypal_post(self, params):
+    CHARSET = "windows-1252"
+    cond_encode = lambda v: v.encode(CHARSET) if isinstance(v, text_type) else v
+    byte_params = {cond_encode(k): cond_encode(v) for k, v in params.items()}
+    post_data = urlencode(byte_params)
+    ipn_url = reverse("paypal-ipn")
+    return self.client.post(ipn_url, post_data, content_type='application/x-www-form-urlencoded')
   def setUp(self):
-    setUp()
-  def test_dummy(self):
-    self.assertEqual(1 + 1, 2)
+    self.factory = RequestFactory()
+  #  setUp()
+  def test_hacker_membership(self):
+    product = Membership.objects.get(name="Hacker").monthly_product
+    new_hacker_email = "new_email@txrxtesting.com"
+    data = get_membership_query(product=product,payer_email=new_hacker_email)
+    self.paypal_post(data)
+    users = get_user_model().objects.filter(email=new_hacker_email)
+    self.assertEqual(users.count(),1)
+    users.delete()

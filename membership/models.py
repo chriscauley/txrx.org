@@ -53,8 +53,8 @@ class Membership(models.Model):
   name = models.CharField(max_length=64)
   order = models.IntegerField("Level")
   products = cached_property(lambda self: self.product_set.filter(active=True),name="products")
-  monthly_product = lambda self: self.products.filter(months=1)[0]
-  yearly_product = lambda self: self.products.filter(months=12)[0]
+  monthly_product = property(lambda self: self.products.filter(months=1)[0])
+  yearly_product = property(lambda self: self.products.filter(months=12)[0])
   discount_percentage = models.IntegerField(default=0)
   group = models.ForeignKey(Group,null=True,blank=True)
   features = cached_property(lambda self:[a.feature for a in self.membershipfeature_set.all()],
@@ -117,7 +117,8 @@ class Subscription(models.Model):
       return "Overdue by %s"%self.owed
     if self.canceled:
       return "Canceled"
-    return self.paid_until.strftime("Paid until %b %-d, %Y")
+    if self.paid_until:
+      return self.paid_until.strftime("Paid until %b %-d, %Y")
   @property
   def bg(self):
     if self.owed > 0:

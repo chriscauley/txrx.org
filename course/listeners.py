@@ -65,14 +65,14 @@ def handle_successful_payment(sender, **kwargs):
     _uid = str(params.get('custom',None))
   except UnicodeEncodeError:
     _uid = latin1_to_ascii(params.get('custom',None))
+  if sender.txn_type in ["subscr_payment",'recurring_payment']:
+    # handled by membership.listeners
+    return
   user,new_user = get_or_create_student(sender.payer_email,u_id=_uid)
   user.active = True
   user.save()
   if params.get('invoice',None):
     return handle_successful_store_payment(sender,user)
-  if sender.txn_type in ["subscr_payment",'recurring_payment']:
-    # handled by membership.listeners
-    return
   if not "num_cart_items" in params:
     mail_admins("No cart items found for %s"%sender.txn_id,"")
     return
