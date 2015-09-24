@@ -189,8 +189,10 @@ def containers(request):
   return TemplateResponse(request,'membership/containers.html',{})
 
 @staff_member_required
-def update_flag_status(request,flag_pk,new_status):
+def update_flag_status(request,flag_pk,new_status=None):
   subscriptionflag = get_object_or_404(SubscriptionFlag,pk=flag_pk)
+  if not new_status:
+    new_status = subscriptionflag.ACTION_CHOICES[subscriptionflag.status]
   subscriptionflag.apply_status(new_status)
   messages.success(request,"Membership status changed to %s"%subscriptionflag.get_status_display())
   return HttpResponseRedirect('/admin/membership/subscriptionflag/%s/'%flag_pk)
