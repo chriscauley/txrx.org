@@ -3,18 +3,22 @@
 <div class="module" id="recent-actions-module">
   {% get_user_flags %}
   {% for verbose, flags, cls in user_flags %}
-  <h4 class="italic-title">Flagged Accounts</h4>
-  <ul class="actionlist" style="width: 400px;">
+  <h4 class="italic-title">{{ verbose }}</h4>
+  <div class="actionlist" style="width: 400px;">
+    <table style="width: 100%;">
     {% for flag in flags %}
-    <li>
-      <i class="icon-flag"></i>
-      <a href="/admin/membership/userflag/{{ flag.pk }}/">
-        {{ flag.user }} - {{ flag.get_reason_display }} [{{ flag.datetime|date:"m/d/Y" }}]</a>
-      <a href="/admin/membership/userflag/{{ flag.pk }}/delete" class="pull-right"><i class="icon-trash"></i></a>
-    </li>
+    <tr>
+      <td><i class="icon-flag"></i></td>
+      <td><a href="/admin/membership/userflag/{{ flag.pk }}/">
+          {{ flag.subscription.user }} - {{ flag.subscription.product }}
+          <br/>{{ flag.get_reason_display }} [{{ flag.datetime|date:"m/d/Y" }}]
+      </a></td>
+      <td><a href="/admin/membership/suscriptionflag/{{ flag.pk }}/delete"><i class="icon-trash"></i></a></td>
+    </tr>
     {% empty %}
-    <li>No Flags, hurray!</li>
+    <tr><td>No Flags, hurray!</td></tr>
     {% endfor %}
-  </ul>
+    </table>
+  </div>
   {% endfor %}
 </div>

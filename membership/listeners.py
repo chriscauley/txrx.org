@@ -40,6 +40,8 @@ def paypal_flag(sender,reason=None,**kwargs):
 @receiver(valid_ipn_received,dispatch_uid='paypal_signal')
 @receiver(invalid_ipn_received,dispatch_uid='paypal_signal')
 def paypal_signal(sender,**kwargs):
+  if senter.txn_type == "web_accept":
+    return # payment from front page
   try:
     params = QueryDict(sender.query)
   except UnicodeEncodeError:
@@ -59,7 +61,7 @@ def paypal_signal(sender,**kwargs):
 
   if sender.txn_type in ['recurring_payment_skipped',"recurring_payment_failed","recurring_payment_suspended",
                          'recurring_payment_suspended_due_to_max_failed_payment',
-                         "subscr_failed"]:
+                         "subscr_failed","web_accept"]:
     paypal_flag(sender,**kwargs)
     mail_admins("Flagged %s"%sender.txn_type,urls)
     return
