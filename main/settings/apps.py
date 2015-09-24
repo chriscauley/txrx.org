@@ -148,7 +148,7 @@ SUIT_CONFIG = {
        'membership.group',
        'membership.officer',
        'membership.subscription',
-       'membership.subscriptionflag',
+       'membership.flag',
        'user.user',
      )
     },

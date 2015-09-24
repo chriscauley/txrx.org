@@ -371,7 +371,7 @@ FLAG_STATUS_CHOICES = [
   ('paid','Paid'),
 ]
 
-class SubscriptionFlag(models.Model):
+class Flag(models.Model):
   subscription = models.ForeignKey(Subscription)
   reason = models.CharField(max_length=32,choices=REASON_CHOICES)
   status = models.CharField(max_length=32,default='new',choices=FLAG_STATUS_CHOICES)
@@ -395,7 +395,7 @@ class SubscriptionFlag(models.Model):
   def apply_status(self,new_status):
     from membership.utils import send_membership_email
     context = {
-      'subscriptionflag': self,
+      'flag': self,
       'last_warning_date': datetime.timedelta(14)+self.datetime,
     }
     try:

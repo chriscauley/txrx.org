@@ -1,21 +1,21 @@
 from rest_framework import serializers
-from membership.models import SubscriptionFlag
+from membership.models import Flag
 
-class SubscriptionFlagSerializer(serializers.ModelSerializer):
+class FlagSerializer(serializers.ModelSerializer):
   subscription = serializers.StringRelatedField()
   permissions = classmethod(lambda class_,request: request.user.is_staff)
   class Meta:
-    model = SubscriptionFlag
+    model = Flag
     fields = ['subscription','reason','status','datetime','emailed','days_until_next_action']
 
-subscriptionflag = SubscriptionFlagSerializer
+flag = FlagSerializer
 
-class ActiveFlagSerializer(SubscriptionFlagSerializer):
+class ActiveFlagSerializer(FlagSerializer):
   @classmethod
   def get_queryset(class_):
-    return class_.Meta.model.objects.filter(pk=1) #status__in=SubscriptionFlag.ACTION_CHOICES)
+    return class_.Meta.model.objects.filter(pk=1) #status__in=Flag.ACTION_CHOICES)
   class Meta:
-    model = SubscriptionFlag
+    model = Flag
     fields = ['subscription','reason','status','datetime','emailed','days_until_next_action']
 
 activeflag = ActiveFlagSerializer

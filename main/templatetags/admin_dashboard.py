@@ -2,7 +2,7 @@ from django.template import Library
 
 from course.models import Course
 from event.utils import get_room_conflicts as _get_room_conflicts
-from membership.models import SubscriptionFlag
+from membership.models import Flag
 
 import datetime
 
@@ -30,7 +30,7 @@ def get_courses_needed(context):
 def get_user_flags(context):
   today, upcoming, pastdue = [], [], []
   now = datetime.datetime.now()
-  for flag in SubscriptionFlag.objects.filter(status__in=SubscriptionFlag.ACTION_CHOICES):
+  for flag in Flag.objects.filter(status__in=Flag.ACTION_CHOICES):
     if flag.date_of_next_action > now:
       upcoming.append(flag)
     elif flag.date_of_next_action < now:

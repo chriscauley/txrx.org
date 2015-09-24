@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from membership.models import SubscriptionFlag, EMAIL_REASONS
+from membership.models import Flag, EMAIL_REASONS
 from membership.utils import send_membership_email
 
 from lablackey.mail import print_to_mail
@@ -17,7 +17,7 @@ class Command(BaseCommand):
     second_warning = 7
     final_warning = 2
     #email anyone whos flag is ten or more days old
-    flags = SubscriptionFlag.objects.filter(emailed__isnull=True)
+    flags = Flag.objects.filter(emailed__isnull=True)
     overdue_flags = flags.filter(reason__in=EMAIL_REASONS['payment_overdue'],datetime__lte=now-1*day)
     email_tuples = [
       ('first_warning', first_warning),

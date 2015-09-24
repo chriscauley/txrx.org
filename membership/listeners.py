@@ -5,7 +5,7 @@ from django.http import QueryDict
 from lablackey.utils import get_or_none, latin1_to_ascii
 
 from course.utils import get_or_create_student
-from .models import UserMembership, Status, Subscription, Level, Product, SubscriptionFlag
+from .models import UserMembership, Status, Subscription, Level, Product, Flag
 from user.models import User
 
 from paypal.standard.ipn.signals import valid_ipn_received, invalid_ipn_received
@@ -32,7 +32,7 @@ def get_subscription(params,sender):
 def paypal_flag(sender,reason=None,**kwargs):
   if not kwargs['subscription']:
     return
-  SubscriptionFlag.objects.create(
+  Flag.objects.create(
     subscription=kwargs['subscription'],
     reason=(reason or sender.txn_type)[:32],
   )
@@ -118,7 +118,7 @@ def paypal_signal(sender,**kwargs):
   subscription = status.subscription
   # clear out any subscription flags
   if subscription.owed <= 0:
-    SubscriptionFlag.objects.filter(
+    Flag.objects.filter(
       subscription=subscription,
-      status__in=SubscriptionFlag.ACTION_CHOICES
+      status__in=Flag.ACTION_CHOICES
     ).update(status="paid")

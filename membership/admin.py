@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django import forms
 
-from models import (Group, Level, Feature, MembershipFeature, UserMembership, Product, SubscriptionFlag,
+from models import (Group, Level, Feature, MembershipFeature, UserMembership, Product, Flag,
                     Subscription, Status, MeetingMinutes, Proposal, Officer, Area, Container)
 
 from lablackey.db.admin import RawMixin
@@ -19,8 +19,8 @@ class ContainerInline(admin.TabularInline):
   model = Container
   extra = 0
 
-@admin.register(SubscriptionFlag)
-class SubscriptionFlagAdmin(admin.ModelAdmin):
+@admin.register(Flag)
+class FlagAdmin(admin.ModelAdmin):
   raw_id_fields = ('subscription',)
   readonly_fields = ('action',)
   def action(self,obj):
@@ -44,8 +44,8 @@ class SubscriptionFlagAdmin(admin.ModelAdmin):
     return html%(cls,msg,url,cls,verbose)
   action.allow_tags = True
 
-class SubscriptionFlagInline(admin.TabularInline):
-  model = SubscriptionFlag
+class FlagInline(admin.TabularInline):
+  model = Flag
   extra = 0
 
 @admin.register(Container)
@@ -80,7 +80,7 @@ class StatusInline(admin.TabularInline):
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
-  inlines = [StatusInline,SubscriptionFlagInline]
+  inlines = [StatusInline,FlagInline]
   fields = (
     ('user','edit_user'),
     ('product','subscr_id'),

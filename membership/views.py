@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .models import Level, Group, MeetingMinutes, Officer, UserMembership, Subscription, SubscriptionFlag
+from .models import Level, Group, MeetingMinutes, Officer, UserMembership, Subscription, Flag
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required, verify_unique_email
 
@@ -177,12 +177,12 @@ def force_cancel(request,pk):
 @staff_member_required
 def flag_subscription(request,pk):
   subscription = Subscription.objects.get(pk=pk)
-  flag,new = SubscriptionFlag.objects.get_or_create(
+  flag,new = Flag.objects.get_or_create(
     subscription=subscription,
     reason="manually_flagged",
   )
   messages.success(request,"Subscription #%s flagged, you can edit it below"%pk)
-  return HttpResponseRedirect("/admin/membership/subscriptionflag/%s/"%flag.pk)
+  return HttpResponseRedirect("/admin/membership/flag/%s/"%flag.pk)
 
 @staff_member_required
 def containers(request):
@@ -190,9 +190,9 @@ def containers(request):
 
 @staff_member_required
 def update_flag_status(request,flag_pk,new_status=None):
-  subscriptionflag = get_object_or_404(SubscriptionFlag,pk=flag_pk)
+  flag = get_object_or_404(Flag,pk=flag_pk)
   if not new_status:
-    new_status = subscriptionflag.ACTION_CHOICES[subscriptionflag.status]
-  subscriptionflag.apply_status(new_status)
-  messages.success(request,"Membership status changed to %s"%subscriptionflag.get_status_display())
-  return HttpResponseRedirect('/admin/membership/subscriptionflag/%s/'%flag_pk)
+    new_status = flag.ACTION_CHOICES[flag.status]
+  flag.apply_status(new_status)
+  messages.success(request,"Membership status changed to %s"%flag.get_status_display())
+  return HttpResponseRedirect('/admin/membership/flag/%s/'%flag_pk)
