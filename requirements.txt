@@ -3,6 +3,7 @@ pip install git+git://github.com/dcramer/django-devserver#egg=django-devserver
 -e git+https://github.com/chriscauley/django-registration.git#egg=django-registration
 django_compressor
 django-localflavor
+djangorestframework
 BeautifulSoup==3.2.1
 psycopg2
 django-suit

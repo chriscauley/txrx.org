@@ -101,7 +101,7 @@ class Subscription(models.Model):
   amount = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   owed = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   last_status = property(lambda self: (self.status_set.all().order_by('-datetime') or [None])[0])
-  __unicode__ = lambda self: "%s for %s"%(self.subscr_id,self.user)
+  __unicode__ = lambda self: "%s for %s"%(self.user,self.product)
   def force_canceled(self):
     self.canceled = self.paid_until
     self.save()

@@ -52,6 +52,7 @@ INSTALLED_APPS = (
   'event',
   'thing',
   'notify',
+  'api',
 )
 
 #mptt_comments
