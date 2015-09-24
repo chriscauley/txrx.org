@@ -24,6 +24,7 @@ INSTALLED_APPS = (
   'tagging',
   'crop_override',
   'social.apps.django_app.default',
+  'rest_framework',
 
   #store
   'shop',

@@ -69,6 +69,7 @@ urlpatterns += patterns(
   url(r'^auth/password_reset/$',activate_user(password_reset)),
   url(r'^auth/',include('django.contrib.auth.urls')),
   url(r'^force_login/(\d+)/$', 'main.views.force_login'),
+  url(r'^api/',include("api.urls")),
 )
 
 #membership urls
