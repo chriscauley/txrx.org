@@ -13,7 +13,7 @@ flag = FlagSerializer
 class ActiveFlagSerializer(FlagSerializer):
   @classmethod
   def get_queryset(class_):
-    return class_.Meta.model.objects.filter(pk=1) #status__in=Flag.ACTION_CHOICES)
+    return class_.Meta.model.objects.filter(status__in=Flag.ACTION_CHOICES)
   class Meta:
     model = Flag
     fields = ['subscription','reason','status','datetime','emailed','days_until_next_action']

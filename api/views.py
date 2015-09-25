@@ -7,8 +7,8 @@ def get_serializer(app_name,class_):
   return getattr(serializers,class_)
 
 @api_view(['GET', 'POST'])
-def list_view(request,app_name,class_):
-  serializer = get_serializer(app_name,class_)
+def list_view(request,app_name,class_,serializer=None):
+  serializer = serializer or get_serializer(app_name,class_)
   model = serializer.Meta.model
   if hasattr(serializer,'permissions') and not serializer.permissions(request):
     Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -17,6 +17,7 @@ def list_view(request,app_name,class_):
       items = serializer.get_queryset()
     else:
       items = model.objects.all()
+    serializer._many = True
     serializer = serializer(items, many=True)
     return Response(serializer.data)
 
@@ -28,8 +29,8 @@ def list_view(request,app_name,class_):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def detail_view(request,app_name,class_,pk):
-  serializer = get_serializer(app_name,class_)
+def detail_view(request,app_name,class_,pk,serializer=None):
+  serializer = serializer or get_serializer(app_name,class_)
   model = serializer.Meta.model
   if hasattr(serializer,'permissions') and not serializer.permissions(request):
     Response(status=status.HTTP_401_UNAUTHORIZED)
