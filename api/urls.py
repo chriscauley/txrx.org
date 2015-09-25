@@ -62,7 +62,7 @@ def build_urls():
       kwargs = {'serializer': serializer}
       _url = u'^(%s)/(%s)/'%(app_label,s_name)
       out.append(url(_url+"$",'list_view',name="api_list_view",kwargs=kwargs))
-      out.append(url(_url+"(\d+)/$",'detail_view',name="api_list_view",kwargs=kwargs))
+      out.append(url(_url+"(\d+)/$",'detail_view',name="api_detail_view",kwargs=kwargs))
   return out
 
 urlpatterns = patterns(

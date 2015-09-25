@@ -192,7 +192,7 @@ def containers(request):
 def update_flag_status(request,flag_pk,new_status=None):
   flag = get_object_or_404(Flag,pk=flag_pk)
   if not new_status:
-    new_status = flag.ACTION_CHOICES[flag.status]
+    new_status = flag.ACTION_CHOICES[flag.status][0]
   flag.apply_status(new_status)
   messages.success(request,"Membership status changed to %s"%flag.get_status_display())
   if request.is_ajax():

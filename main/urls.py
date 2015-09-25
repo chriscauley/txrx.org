@@ -93,6 +93,7 @@ urlpatterns += patterns(
   url(r'^flag_subscription/(\d+)/$','flag_subscription',name="flag_subscription"),
   url(r'^containers/$','containers'),
   url(r'^update_flag_status/(\d+)/$','update_flag_status',name='update_flag_status'),
+  url(r'^update_flag_status/(\d+)/([\w\d\-\_]+)/$','update_flag_status',name='update_flag_status'),
 )
 
 #notify urls

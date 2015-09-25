@@ -9,23 +9,26 @@
   <div class="well">
     <div class="pull-left">
       <button class="btn-success btn fa fa-envelope" onclick={ ajaxPost } data-action="send"></button>
-      <button class="btn-danger btn fa fa-trash" onclick={ ajaxPost } data-action="delete"></button>
+      <button class="btn-danger btn fa fa-trash" onclick={ ajaxPost } data-method="delete"></button>
     </div>
-    <a href="/admin/membership/userflag/{ pk }/">
+    <a href="/admin/membership/flag/{ pk }/">
       { subscription }<br />
       [{ date }]
     </a>
   </div>
 
   ajaxPost(e) {
-    console.log(e)
     var action = e.target.dataset.action || "default";
-    var url = router[action](this);
-    console.log(url);
+    var method = e.target.dataset.method || "get";
+    console.log(this);
+    console.log(method);
+    $.ajax({
+      url: router[action](this),
+      type: method.toUpperCase(),
+    });
   }
   var router = {
     send: function(item) { return "/update_flag_status/"+item.pk+"/"; },
-    default: function(item) { return "/api/membership/activeflags/"+item.pk+"/"; },
+    default: function(item) { return "/api/membership/activeflag/"+item.pk+"/"; },
   }
-
 </flag-row>
