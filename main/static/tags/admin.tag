@@ -6,17 +6,26 @@
 </flag-list>
 
 <flag-row>
-  <div class="pull-left">
-    <button class="btn-success btn" onclick={ ajaxPost } data-action="send">
-      <i class="icon-envelope"></i></button>
-    <button class="btn-warning btn" onclick={ parent.parent.ajaxPost } data-action="delete">
-      <i class="icon-trash"></i></button>
+  <div class="well">
+    <div class="pull-left">
+      <button class="btn-success btn fa fa-envelope" onclick={ ajaxPost } data-action="send"></button>
+      <button class="btn-danger btn fa fa-trash" onclick={ ajaxPost } data-action="delete"></button>
+    </div>
+    <a href="/admin/membership/userflag/{ pk }/">
+      { subscription }<br />
+      [{ date }]
+    </a>
   </div>
-  <a href="/admin/membership/userflag/{ pk }/">
-    { subscription }
-    <br/>{ reason_display } [{ datetime }]
-  </a>
 
   ajaxPost(e) {
+    console.log(e)
+    var action = e.target.dataset.action || "default";
+    var url = router[action](this);
+    console.log(url);
   }
+  var router = {
+    send: function(item) { return "/update_flag_status/"+item.pk+"/"; },
+    default: function(item) { return "/api/membership/activeflags/"+item.pk+"/"; },
+  }
+
 </flag-row>
