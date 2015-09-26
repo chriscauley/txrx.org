@@ -5,3 +5,34 @@ flag-list,flag-row {
 flag-row .pull-left {
   margin-right: 20px;
 }
+
+flag-row {
+  .deleted:before {
+    content: "This item has been deleted";
+    background-color: fade(#f2dede,95%);
+  }
+  .sent:before {
+    content: "User has been emailed and flag status changed";
+    background-color: fade(#dff0d8,95%);
+  }
+  .loading:before {
+    content: "Loading";
+    background-color: fade(#888,90%);
+  }
+  .loading, .sent, .deleted {
+    overflow: hidden;
+    position: relative;
+    &:before {
+      display: block;
+      height: 100%;
+      line-height: 56px;
+      left: 0;
+      font-size: 1.5em;
+      position: absolute;
+      text-align: center;
+      top: 0;
+      width: 100%;
+      z-index: 1;
+    }
+  }
+}
