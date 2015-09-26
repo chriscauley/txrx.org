@@ -22,4 +22,5 @@ $(function() {
       "json"
     )
   }
+  riot.mount("login");
 });

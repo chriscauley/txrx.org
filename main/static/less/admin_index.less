@@ -16,8 +16,8 @@ flag-row {
     background-color: fade(#dff0d8,95%);
   }
   .loading:before {
-    content: "Loading";
     background-color: fade(#888,90%);
+    content: "Loading";
   }
   .loading, .sent, .deleted {
     overflow: hidden;
@@ -34,5 +34,32 @@ flag-row {
       width: 100%;
       z-index: 1;
     }
+  }
+}
+
+[data-loading] {
+  &:before {
+    background-color: fade(#888,90%);
+    content: "Loading";
+    display: block;
+    height: 100%;
+    line-height: 56px;
+    left: 0;
+    font-size: 1.5em;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+  }
+}
+
+input-field {
+  display: block;
+  input { box-sizing: border-box; height: 28px !important;}
+  .error {
+    box-sizing: border-box;
+    margin-top: -10px;
+    width: 90%;
   }
 }
