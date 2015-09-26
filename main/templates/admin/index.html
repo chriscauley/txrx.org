@@ -31,6 +31,8 @@
 
 {% block extrajs %}
 {{ block.super }}
+<script src="{{ STATIC_URL }}js/init.js"></script>{#! TODO this is only here for cookies and I don't like it #}
+<script src="{{ STATIC_URL }}js/jwt.js"></script>
 <script src="{{ STATIC_URL }}js/admin_index.js"></script>
 <script src="{{ STATIC_URL }}tags/admin.tag" type="riot/tag"></script>
 <script src="https://cdn.jsdelivr.net/g/riot@2.0.14(riot.min.js+compiler.min.js)"></script>

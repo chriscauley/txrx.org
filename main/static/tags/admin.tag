@@ -20,8 +20,6 @@
   ajaxPost(e) {
     var action = e.target.dataset.action || "default";
     var method = e.target.dataset.method || "get";
-    console.log(this);
-    console.log(method);
     $.ajax({
       url: router[action](this),
       type: method.toUpperCase(),
