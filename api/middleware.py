@@ -16,11 +16,10 @@ authentication_paths = [
   
 class JWTMiddleware(object):
   def process_request(self, request):
-    self.user_in = request.user.is_authenticated() and False
+    self.user_in = request.user.is_authenticated()
   def process_response(self, request, response):
-    payload = jwt_payload_handler(request.user)
-    response.set_cookie('JWT-Token', jwt_encode_handler(payload))
     if not getattr(self,'user_in',False) and request.user.is_authenticated():
       # user just logged in but doesn't have a web token
-      pass
+      payload = jwt_payload_handler(request.user)
+      response.set_cookie('JWT-Token', jwt_encode_handler(payload))
     return response

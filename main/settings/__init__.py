@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, datetime
 SPATH = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0,os.path.normpath(SPATH))
 
@@ -91,6 +91,10 @@ REST_FRAMEWORK = {
     'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
   ),
 }
+
+from rest_framework_jwt.settings import DEFAULTS as JWT_AUTH
+JWT_AUTH['JWT_EXPIRATION_DELTA'] = datetime.timedelta(7)
+JWT_AUTH['JWT_REFRESH_EXPIRATION_DELTA'] = datetime.timedelta(7)
 
 TEMPLATE_CONTEXT_PROCESSORS = (
   "django.contrib.auth.context_processors.auth",

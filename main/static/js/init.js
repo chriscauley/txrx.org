@@ -81,17 +81,10 @@ function timeit(f) {
   }
 }
 
-//ho to disable/enable timeit
+// how to disable/enable timeit
 function timeit(f) { return f }
 
-//this is just so that I can easily timeit
+// this is just so that I can easily timeit
 var resetProductList = timeit(function() {
   riot.update('product-list');
 });
-
-function checkToken(data) {
-  if (data) { var new_token = data['token']; }
-  else { var new_token = readCookie('JWT-Token'); }
-  if (new_token) { localStorage.setItem('jwt-token',new_token); console.log('yay!')}
-}
-checkToken();
