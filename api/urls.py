@@ -44,7 +44,6 @@ def build_urls():
 
   for app_label,app_dict in app_map.items():
     for name,serializer in import_serializers(app_label):
-      print name
       url_name = name.lower()
       if url_name.endswith("sizzler"):
         url_name = url_name[:-7] # len("sizzler")

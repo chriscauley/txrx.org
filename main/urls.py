@@ -70,6 +70,7 @@ urlpatterns += patterns(
   url(r'^auth/',include('django.contrib.auth.urls')),
   url(r'^force_login/(\d+)/$', 'main.views.force_login'),
   url(r'^api/',include("api.urls")),
+  url(r'^api-token-auth/', 'rest_framework_jwt.views.obtain_jwt_token'),
 )
 
 #membership urls

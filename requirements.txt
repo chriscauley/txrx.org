@@ -4,6 +4,7 @@ pip install git+git://github.com/dcramer/django-devserver#egg=django-devserver
 django_compressor
 django-localflavor
 djangorestframework
+pip install djangorestframework-jwt
 BeautifulSoup==3.2.1
 psycopg2
 django-suit

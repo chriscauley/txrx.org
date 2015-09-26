@@ -47,6 +47,7 @@ MIDDLEWARE_CLASSES = (
   'django.contrib.sessions.middleware.SessionMiddleware',
   'django.middleware.csrf.CsrfViewMiddleware',
   'django.contrib.auth.middleware.AuthenticationMiddleware',
+  'api.middleware.JWTMiddleware', #must be somewhere after auth
   'django.contrib.messages.middleware.MessageMiddleware',
 )
 
@@ -79,6 +80,17 @@ PIPELINE = (
   'social.pipeline.social_auth.load_extra_data',
   'social.pipeline.user.user_details'
 )
+
+REST_FRAMEWORK = {
+  'DEFAULT_PERMISSION_CLASSES': (
+    'rest_framework.permissions.IsAuthenticated',
+  ),
+  'DEFAULT_AUTHENTICATION_CLASSES': (
+    'rest_framework.authentication.SessionAuthentication',
+    'rest_framework.authentication.BasicAuthentication',
+    'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+  ),
+}
 
 TEMPLATE_CONTEXT_PROCESSORS = (
   "django.contrib.auth.context_processors.auth",
