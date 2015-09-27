@@ -5,10 +5,18 @@
     <div class="submit-row">
       <input type="submit" value="Log in" class="btn btn-info" />
       <a href="/auth/password_reset/" class="pull-right">Forgotten username/password?</a>
+      <div class="alert alert-danger error" if={ non_field_errors }>{ non_field_errors }</div>
     </div>
   </form>
 
   var that = this;
+
+  function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  }
 
   function serialize(form) {
     var field, s = [];
@@ -32,16 +40,22 @@
 
   submit(e) {
     form.setAttribute("loading","loading");
-    console.log(serialize(form));
     $.ajax({
       url: "/api-token-auth/",
       type: "POST",
       data: serialize(form),
-      success: function(data) { console.log(data); },
+      success: function(data) {
+        that.fields.forEach(function(item,i) { item.error = ''; });
+        that.non_field_errors = '';
+        var next = getParameterByName("next");
+        JWT.updateToken(data);
+        if (!next) { next = (window.location.pathname.indexOf("/admin/") == -1)?'/':'/admin/' }
+      },
       error: function(jqxhr) {
         var errors = JSON.parse(jqxhr.responseText);
+        console.log(errors)
         that.fields.forEach(function(el,i) { el.error = errors[el.name]; });
-        console.log(that.fields);
+        that.non_field_errors = errors.non_field_errors;
         that.update()
       },
     });
