@@ -54,10 +54,27 @@ var JWT = (function() {
     if (new_token) { localStorage.setItem('jwt-token',new_token); }
   }
   updateToken()
+  function startLogin(callback,args,params) {
+    params = params || '';
+    var modal = document.createElement("modal");
+    modal.appendChild(document.createElement("login"));
+    document.body.appendChild(modal);
+    function success(pk) { callback.apply(this,args); }
+    riot.mount("modal",{success:success,title: "Please login to continue"});
+  }
+
+  function loginRequired(func,params) {
+    return function() {
+      if (isTokenExpired()) { startLogin(func,arguments,params); }
+      else { func.apply(this,arguments); }
+    }
+  }
+
   return {
     'getTokenExpirationDate': getTokenExpirationDate,
     'isTokenExpired': isTokenExpired,
-    'updateToken': updateToken
+    'updateToken': updateToken,
+    'startLogin': startLogin
   }
 })()
 

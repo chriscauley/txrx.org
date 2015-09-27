@@ -49,7 +49,7 @@
         that.non_field_errors = '';
         var next = getParameterByName("next");
         JWT.updateToken(data);
-        if (!next) { next = (window.location.pathname.indexOf("/admin/") == -1)?'/':'/admin/' }
+        this.parent.opts.success;
       },
       error: function(jqxhr) {
         var errors = JSON.parse(jqxhr.responseText);

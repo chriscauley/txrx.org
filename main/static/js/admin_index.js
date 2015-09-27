@@ -23,4 +23,5 @@ $(function() {
     )
   }
   riot.mount("login");
+  riot.mount("modal");
 });
