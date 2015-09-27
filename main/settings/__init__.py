@@ -49,6 +49,7 @@ MIDDLEWARE_CLASSES = (
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'api.middleware.JWTMiddleware', #must be somewhere after auth
   'django.contrib.messages.middleware.MessageMiddleware',
+  'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 AUTH_USER_MODEL = 'user.User'
