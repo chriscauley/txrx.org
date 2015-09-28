@@ -18,7 +18,7 @@ class JWTMiddleware(object):
   def process_request(self, request):
     self.user_in = request.user.is_authenticated()
   def process_response(self, request, response):
-    if not getattr(self,'user_in',False) and request.user.is_authenticated():
+    if not getattr(self,'user_in',False) and hasattr(request,"user") and request.user.is_authenticated():
       # user just logged in but doesn't have a web token
       payload = jwt_payload_handler(request.user)
       response.set_cookie('JWT-Token', jwt_encode_handler(payload))
