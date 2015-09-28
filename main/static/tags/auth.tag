@@ -45,15 +45,16 @@
       type: "POST",
       data: serialize(form),
       success: function(data) {
+        form.removeAttribute("loading");
         that.fields.forEach(function(item,i) { item.error = ''; });
         that.non_field_errors = '';
         var next = getParameterByName("next");
         JWT.updateToken(data);
-        this.parent.opts.success;
+        that.parent.success();
       },
       error: function(jqxhr) {
+        form.removeAttribute("loading");
         var errors = JSON.parse(jqxhr.responseText);
-        console.log(errors)
         that.fields.forEach(function(el,i) { el.error = errors[el.name]; });
         that.non_field_errors = errors.non_field_errors;
         that.update()

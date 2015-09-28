@@ -45,5 +45,8 @@
   cancel() {
     this.unmount();
   }
-  console.log(this);
+  success(e) {
+    (this.opts.success || function(){})();
+    this.unmount();
+  }
 </modal>

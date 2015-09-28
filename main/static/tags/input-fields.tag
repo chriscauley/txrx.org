@@ -1,8 +1,8 @@
 <input-field>
   <div if={ !tagname }>
     <label if={ label } for={ id } class={ required: required, labelclass }>
-      { label }</label>
-    <input name={ name } id={ id } type={ type } value={ value }>
+      { name && label }</label>
+    <input name={ name } id={ id } type={ type } value={ value } placeholder={ placeholder }>
     <div if={ error } class="alert alert-danger error">{ error }</div>
   </div>
 
