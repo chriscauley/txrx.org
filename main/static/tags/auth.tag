@@ -69,3 +69,19 @@
   //this.fields[0].focus = true;
 </login>
 
+<reset-password>
+  <input-field each={ fields }></input-field>
+
+  <div class="submit-row">
+    <input type="submit" value="Log in" class="btn btn-info" />
+    <a href="/auth/password_reset/" class="pull-right">Forgotten username/password?</a>
+    <div class="alert alert-danger error" if={ non_field_errors }>{ non_field_errors }</div>
+  </div>
+
+  this.fields = [
+    {name: "old_password", type="text", labelclass: "control-label", label: "Old Password: ", require: true},
+    {name: "password", type="text", labelclass: "control-label", label: "New Password: ", require: true},
+    {name: "password2", type="text", labelclass: "control-label", label: "Confirm Password: ", require: true},
+  ]
+
+</reset-password>
