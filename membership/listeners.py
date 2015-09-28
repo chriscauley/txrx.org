@@ -40,7 +40,7 @@ def paypal_flag(sender,reason=None,**kwargs):
 @receiver(valid_ipn_received,dispatch_uid='paypal_signal')
 @receiver(invalid_ipn_received,dispatch_uid='paypal_signal')
 def paypal_signal(sender,**kwargs):
-  if senter.txn_type == "web_accept":
+  if sender.txn_type == "web_accept":
     return # payment from front page
   try:
     params = QueryDict(sender.query)
