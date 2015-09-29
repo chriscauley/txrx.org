@@ -79,9 +79,9 @@
   </div>
 
   this.fields = [
-    {name: "old_password", type="text", labelclass: "control-label", label: "Old Password: ", require: true},
-    {name: "password", type="text", labelclass: "control-label", label: "New Password: ", require: true},
-    {name: "password2", type="text", labelclass: "control-label", label: "Confirm Password: ", require: true},
+    {name: "old_password", type: "text", labelclass: "control-label", label: "Old Password: ", require: true},
+    {name: "password", type: "text", labelclass: "control-label", label: "New Password: ", require: true},
+    {name: "password2", type: "text", labelclass: "control-label", label: "Confirm Password: ", require: true},
   ]
 
 </reset-password>

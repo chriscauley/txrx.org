@@ -65,7 +65,7 @@ class SurveyForm(PlaceholderForm):
   questions = forms.CharField(label=lq,help_text=q,**kwargs)
 
 class UserMembershipForm(PlaceholderModelForm):
-  #! TODO: this technically is a vulnerability (someone could try to steal in very weird circumstances) 
+  #! TODO: this technically is a vulnerability (someone could try to steal in very weird circumstances)
   # I need to add a verified paypal email and set it to false when they do this.
   def clean_paypal_email(self,*args,**kwargs):
     user = self.instance.user

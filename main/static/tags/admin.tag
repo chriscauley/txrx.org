@@ -3,6 +3,7 @@
     <h4 class="italic-title">{ verbose }</h4>
     <flag-row each={ flags }></flag-row>
   </div>
+
 </flag-list>
 
 <flag-row>

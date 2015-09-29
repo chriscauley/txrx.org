@@ -45,6 +45,14 @@ class SimpleTest(TestCase):
   def setUp(self):
     self.factory = RequestFactory()
   #  setUp()
+  def test_flag_workflow(self,params):
+    """
+    Create a user with a subscription and move it back to the past due date.
+    Run the requisite management command and make sure that they get flagged.
+    Promote the flag three times and make sure the emails go out and the days_until logic works
+    Make sure appropriate flags are resolved on payment.
+    """
+    pass
   def test_hacker_membership(self):
     now = datetime.datetime.now()
     def validate(email):
