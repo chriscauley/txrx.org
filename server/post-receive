@@ -9,6 +9,10 @@ GIT_WORK_TREE=../ git checkout -f
 cd ~/lablackey
 git pull
 
+#same for riot-comments
+cd ~/django-riot-comments
+git pull
+
 cd $PROJECT_ROOT
 
 echo -e "\n---Silently migrating, compressing, collecting static, and restarting---\n"
