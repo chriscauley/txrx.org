@@ -1,0 +1,31 @@
+{% extends "suit:admin/base.html" %}
+{% load admin_static suit_tags i18n %}
+
+{% block userlinks %}
+{% url 'django-admindocs-docroot' as docsroot %}
+{% if docsroot %}
+<a href="{{ docsroot }}">{% trans 'Documentation' %}</a>
+<span class="separator">|</span>
+{% endif %}
+<a href="javascript: void(0);" onclick="openPasswordChange()">{% trans 'Change yo password' %}</a>
+<span class="separator">|</span>
+<a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+<script>
+  function openPasswordChange() {
+    openModal({
+      content: '<password-change>',
+      title: 'Change Password',
+    });
+  }
+  function openModal(arg1,opts) {
+    if (arg1.content) {
+      opts = arg1;
+      content = arg1.content;
+    }
+    var e = document.createElement("modal");
+    e.innerHTML = content;
+    document.body.appendChild(e);
+    riot.mount("modal",opts);
+  };
+</script>
+{% endblock %}

@@ -10,55 +10,13 @@
   </form>
 
   var that = this;
-
-  function getParameterByName(name) {
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-  }
-
-  function serialize(form) {
-    var field, s = [];
-    if (typeof form != 'object' && form.nodeName != "FORM") { return }
-    var len = form.elements.length;
-    for (i=0; i<len; i++) {
-      field = form.elements[i];
-      if (!field.name || field.disabled || field.type == 'file' || field.type == 'reset' ||
-          field.type == 'submit' || field.type == 'button') { continue }
-      if (field.type == 'select-multiple') {
-        for (j=form.elements[i].options.length-1; j>=0; j--) {
-          if(field.options[j].selected)
-            s[s.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.options[j].value);
-        }
-      } else if ((field.type != 'checkbox' && field.type != 'radio') || field.checked) {
-        s[s.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value);
-      }
-    }
-    return s.join('&').replace(/%20/g, '+');
-  }
-
+  
   submit(e) {
-    form.setAttribute("loading","loading");
-    $.ajax({
+    uR.ajax({
       url: "/api-token-auth/",
       type: "POST",
-      data: serialize(form),
-      success: function(data) {
-        form.removeAttribute("loading");
-        that.fields.forEach(function(item,i) { item.error = ''; });
-        that.non_field_errors = '';
-        var next = getParameterByName("next");
-        JWT.updateToken(data);
-        that.parent.success();
-      },
-      error: function(jqxhr) {
-        form.removeAttribute("loading");
-        var errors = JSON.parse(jqxhr.responseText);
-        that.fields.forEach(function(el,i) { el.error = errors[el.name]; });
-        that.non_field_errors = errors.non_field_errors;
-        that.update()
-      },
+      data: uR.serialize(form),
+      success: function(data) { JWT.updateToken(data); that.parent.success() },
     });
   }
   
@@ -69,14 +27,34 @@
   //this.fields[0].focus = true;
 </login>
 
-<reset-password>
-  <input-field each={ fields }></input-field>
+<password-change>
+  <form onsubmit={ submit }>
+    <div if={ !password_changed }>
+      <input-field each={ fields } if></input-field>
+      <div class="submit-row">
+        <input type="submit" value="Change Password" class="btn btn-info" />
+        <div class="alert alert-danger error" if={ non_field_errors }>{ non_field_errors }</div>
+        <div style="margin-top: 5px;"><a href="/auth/password_reset/">Forgotten username/password?</a></div>
+      </div>
+    </div>
+    <div if={ password_changed } class="alert alert-success">
+      Your password has been changed successfully.
+      <button class="btn btn-danger btn-block">Close</div>
+    </div>
+  </form>
 
-  <div class="submit-row">
-    <input type="submit" value="Log in" class="btn btn-info" />
-    <a href="/auth/password_reset/" class="pull-right">Forgotten username/password?</a>
-    <div class="alert alert-danger error" if={ non_field_errors }>{ non_field_errors }</div>
-  </div>
+  submit(e) {
+    uR.ajax({
+      url: "/api-token-auth/",
+      type: "POST",
+      data: uR.serialize(form),
+      success: function(data) {
+        that.parent.success();
+        that.password_changed = true;
+      },
+    });
+  }
+  
 
   this.fields = [
     {name: "old_password", type: "text", labelclass: "control-label", label: "Old Password: ", require: true},
@@ -84,4 +62,4 @@
     {name: "password2", type: "text", labelclass: "control-label", label: "Confirm Password: ", require: true},
   ]
 
-</reset-password>
+</password-change>

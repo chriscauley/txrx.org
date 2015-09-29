@@ -31,7 +31,7 @@
 
 {% block extrajs %}
 {{ block.super }}
-<script src="{{ STATIC_URL }}js/init.js"></script>{#! TODO this is only here for cookies and I don't like it #}
+<script src="{{ STATIC_URL }}js/unrest.js"></script>
 <script src="{{ STATIC_URL }}js/jwt.js"></script>
 <script src="{{ STATIC_URL }}js/admin_index.js"></script>
 <script src="https://cdn.jsdelivr.net/g/riot@2.2(riot.min.js+compiler.min.js)"></script>
@@ -42,5 +42,5 @@
 {% compress css %}
 <link type="text/less" rel="stylesheet" href="{{ STATIC_URL }}less/admin_index.less" />
 {% endcompress %}
-{% if settings.DEBUG %}<script>JWT.startLogin(function() { alert('yay') });</script>{% endif %}
+{% if settings.DEBUG %}<script>openPasswordChange();</script>{% endif %}
 {% endblock %}
