@@ -26,8 +26,7 @@ def get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True):
 def _get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True):
   email = paypal_email
   User = get_user_model()
-  user = None
-  new = False
+  user, new = None, False
   if subscr_id:
     try:
       return User.objects.get(subscription__subscr_id=subscr_id), False

@@ -11,6 +11,7 @@ from lablackey.utils import latin1_to_ascii
 
 import traceback
 
+#! TODO this needs to be moved to store.listeners
 def handle_successful_store_payment(sender, user):
   from shop.models import Product, Order, OrderPayment, Cart
   try:
@@ -56,7 +57,9 @@ _duid2='course.listners.handle_successful_payment'
 @receiver(payment_was_successful, dispatch_uid=_duid2)
 def handle_successful_payment(sender, **kwargs):
   from course.models import Enrollment, Session, reset_classes_json
-  #add them to the classes they are enrolled in
+
+  # these two errors occurred because of the donate button on the front page.
+  # they can be removed by checking for that
   try:
     params = QueryDict(sender.query)
   except UnicodeEncodeError:
@@ -106,7 +109,8 @@ def handle_successful_payment(sender, **kwargs):
       enrollment.quantity += quantity
     enrollment.save()
     enrollments.append(enrollment)
-    if course_cost != session.course.fee * int(quantity):
+    discount = user.usermembership.level.discount_percentage / 100.
+    if course_cost != discount*session.course.fee * int(quantity):
       l = [
         "PP cost: %s"%course_cost,
         "Session Fee: %s"%session.course.fee,
