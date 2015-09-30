@@ -14,6 +14,7 @@
     display: -webkit-flex;
     display: flex;
     justify-content: center;
+    overflow: auto;
     z-index: 1000;
   }
   :scope, .mask {
@@ -46,7 +47,7 @@
     align-self: center;
     display: inline-block;
     background: white;
-    min-width: 300px;
+    max-width: 100%;
     padding: 15px;
     position: relative;
     z-index: 2;

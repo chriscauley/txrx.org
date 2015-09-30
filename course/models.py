@@ -116,9 +116,9 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
       'open_sessions': [s.as_json for s in self.open_sessions],
       'full_sessions': [s.as_json for s in self.full_sessions],
       'short_description': self.get_short_description(),
-      'enrolled_status': "Enroll",
     }
     out['visible_session'] = (out['open_sessions']+out['full_sessions']+[None])[0]
+    out['enrolled_status'] = "Enroll" if out['visible_session'] else "Details"
     return out
 
   fee = models.IntegerField(null=True,blank=True)
