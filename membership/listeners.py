@@ -32,6 +32,9 @@ def get_subscription(params,sender):
 def paypal_flag(sender,reason=None,**kwargs):
   if not kwargs['subscription']:
     return
+  if Flag.objects.filter(subscription=kwargs['subscription'],status__in=Flag.ACTION_CHOICES):
+    mail_admins("Flag already exists"," #%s"%sender.pk)
+    return
   Flag.objects.create(
     subscription=kwargs['subscription'],
     reason=(reason or sender.txn_type)[:32],
