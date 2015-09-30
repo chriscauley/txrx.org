@@ -86,6 +86,7 @@ RECAPTCHA_PRIVATE_KEY = '6Lc53egSAAAAACCvXuucwYu_M3mn-ZQsOlc4Ly_0'
 SUIT_CONFIG = {
   # header
   'ADMIN_NAME': 'TXRX Labs',
+  'SEARCH_URL': '/admin/user/user/',
   # 'HEADER_DATE_FORMAT': 'l, j. F Y',
   # 'HEADER_TIME_FORMAT': 'H:i',
 
@@ -94,7 +95,6 @@ SUIT_CONFIG = {
   # 'CONFIRM_UNSAVED_CHANGES': True, # Default True
 
   # menu
-  # 'SEARCH_URL': '/admin/auth/user/',
   # 'MENU_ICONS': {
   #  'sites': 'icon-leaf',
   #  'auth': 'icon-lock',
