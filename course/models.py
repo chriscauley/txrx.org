@@ -256,7 +256,7 @@ class Session(UserModel,PhotosMixin,models.Model):
   get_room = lambda self: self.course.room
 
   total_students = property(lambda self: sum([e.quantity for e in self.enrollment_set.all()]))
-  evaluated_students = property(lambda self: self.enrollment_set.filter(evaluated=True).count())
+  evaluated_students = property(lambda self: self.get_evaluations().count())
   completed_students = property(lambda self: self.enrollment_set.filter(completed=True).count())
   _full = lambda self: self.total_students >= self.course.max_students
   full = property(_full)
