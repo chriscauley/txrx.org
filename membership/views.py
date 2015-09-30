@@ -157,8 +157,10 @@ def analysis(request):
   ]
   level_users = []
   for level in Level.objects.filter(order__gt=0):
-    users = get_user_model().objects.filter(usermembership__level=level).order_by(order).distinct()
-    level_users.append((level,users))
+    users = get_user_model().objects.filter(usermembership__level=level)
+    if not "canceled" in request.GET:
+      users = users.filter(subscription__canceled__isnull=True)
+    level_users.append((level,users.order_by(order).distinct()))
   values = {
     'level_users': level_users,
     'order': order,

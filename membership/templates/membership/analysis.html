@@ -47,8 +47,8 @@
       {% for user in users %}
       <tr>
         <td><a href="/admin/user/user/{{ user.pk }}/">{{ user }}</a></td>
-        <td>{{ user.usermembership.start }}</td>
-        <td>{{ user.usermembership.end }}</td>
+        <td>{{ user.usermembership.start.date }}</td>
+        <td>{{ user.usermembership.end.date }}</td>
         <td>{{ user.enrollment_set.count }}</td>
         <td>
           {% for subscription in user.usermembership.all_subscriptions %}
