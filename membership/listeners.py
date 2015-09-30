@@ -103,6 +103,10 @@ def paypal_signal(sender,**kwargs):
       product=product,
       amount=amt
     )
+    Flag.objects.filter(
+      subscription__user=subscription.user,
+      status__in=Flag.ACTION_CHOICES
+    ).update(status="paid")
     um = subscription.user.usermembership
     if um.orientation_status == 'new':
       um.send_welcome_email()

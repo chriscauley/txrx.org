@@ -31,9 +31,11 @@
 
 {% block extrajs %}
 {{ block.super }}
+{% compress js %}
 <script src="{{ STATIC_URL }}js/unrest.js"></script>
 <script src="{{ STATIC_URL }}js/jwt.js"></script>
 <script src="{{ STATIC_URL }}js/admin_index.js"></script>
+{% endcompress %}
 <script src="https://cdn.jsdelivr.net/g/riot@2.2(riot.min.js+compiler.min.js)"></script>
 <script src="{{ STATIC_URL }}tags/admin.tag" type="riot/tag"></script>
 <script src="{{ STATIC_URL }}tags/auth.tag" type="riot/tag"></script>
