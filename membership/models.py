@@ -106,6 +106,7 @@ class Subscription(models.Model):
     self.canceled = self.paid_until
     self.save()
     self.recalculate()
+    self.flag_set.exclude(status__in=['final_warning','resolved','paid']).update(status='canceled')
   def bs_class(self):
     if self.owed > 0:
       return "danger"
@@ -366,7 +367,8 @@ FLAG_STATUS_CHOICES = [
   ('new','New'),
   ('first_warning', 'Warned Once'),
   ('second_warning', 'Warned Twice'),
-  ('final_warning', 'Canceled'),
+  ('final_warning', 'Canceled (Automatically)'), #! TODO Let's rename this to 'expired'
+  ('canceled', 'Canceled (Manually)'),
   ('resolved', 'Resolved'),
   ('paid','Paid'),
 ]
