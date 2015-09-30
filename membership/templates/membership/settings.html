@@ -43,7 +43,7 @@
 {% for subscription in request.user.subscription_set.all %}
 <div class="alert alert-{{ subscription.bs_class }}">
   <h4>{% if subscription.product.months == 1 %}Monthly{% else %}Yearly{% endif %} {{ subscription.product.level }}</h4>
-  <div>Start Date: {{ subscription.created|date:"n-j-Y" }}</div>
+  <div>Start Date: {{ subscription.created|date:"M n, Y" }}</div>
   <div>{{ subscription.verbose_status }}</div>
 </div>
 {% endfor %}

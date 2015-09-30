@@ -103,32 +103,25 @@ class Subscription(models.Model):
   last_status = property(lambda self: (self.status_set.all().order_by('-datetime') or [None])[0])
   __unicode__ = lambda self: "%s for %s"%(self.user,self.product)
   def force_canceled(self):
-    self.canceled = self.paid_until
+    self.canceled = datetime.datetime.now()
     self.save()
     self.recalculate()
     self.flag_set.exclude(status__in=['final_warning','resolved','paid']).update(status='canceled')
   def bs_class(self):
-    if self.owed > 0:
+    if Flag.objects.filter_pastdue(subscription=self):
+      return "warning"
+    if self.owed < 0:
       return "danger"
     if self.canceled:
-      return "warning"
+      return "info"
     return "success"
   def verbose_status(self):
     if self.owed > 0:
       return "Overdue by %s"%self.owed
     if self.canceled:
-      return "Canceled"
+      return self.canceled.strftime("Canceled %b %-d, %Y")
     if self.paid_until:
       return self.paid_until.strftime("Paid until %b %-d, %Y")
-  @property
-  def bg(self):
-    if self.owed > 0:
-      return "#ff8888"
-    if self.canceled:
-      return "#88ffff"
-    if self.owed < 0:
-      return "#88ff88"
-    return "transparent"
   def recalculate(self,modify_membership=True):
     now = self.canceled or datetime.datetime.now()
     for months in range(1200): # 100 years
@@ -151,7 +144,7 @@ class Subscription(models.Model):
       um.save()
     
   class Meta:
-    ordering = ('created',)
+    ordering = ('-created',)
 
 PAYMENT_METHOD_CHOICES = (
   ('paypal','PayPalIPN'),
@@ -373,12 +366,19 @@ FLAG_STATUS_CHOICES = [
   ('paid','Paid'),
 ]
 
+class FlagManager(models.Manager):
+  def filter_pastdue(self,*args,**kwargs):
+    # return flags that have actions needed
+    kwargs['status__in'] = Flag.ACTION_CHOICES
+    return self.filter(*args,**kwargs)
+
 class Flag(models.Model):
   subscription = models.ForeignKey(Subscription)
   reason = models.CharField(max_length=32,choices=REASON_CHOICES)
   status = models.CharField(max_length=32,default='new',choices=FLAG_STATUS_CHOICES)
   datetime = models.DateTimeField(auto_now_add=True)
   emailed = models.DateTimeField(null=True,blank=True)
+  objects = FlagManager()
   __unicode__ = lambda self: "%s flagged for %s"%(self.subscription.user,self.reason)
   ACTION_CHOICES = { # this should be renamed
     # current_status: [future_status, verbose_description, days_since_flag]
