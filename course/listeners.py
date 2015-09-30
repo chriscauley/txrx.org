@@ -109,8 +109,8 @@ def handle_successful_payment(sender, **kwargs):
       enrollment.quantity += quantity
     enrollment.save()
     enrollments.append(enrollment)
-    discount = user.usermembership.level.discount_percentage / 100.
-    if course_cost != discount*session.course.fee * int(quantity):
+    price_multiplier = (100-user.usermembership.level.discount_percentage) / 100.
+    if course_cost != price_multiplier*session.course.fee * int(quantity):
       l = [
         "PP cost: %s"%course_cost,
         "Session Fee: %s"%session.course.fee,
