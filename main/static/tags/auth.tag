@@ -16,7 +16,8 @@
       url: "/api-token-auth/",
       type: "POST",
       data: uR.serialize(form),
-      success: function(data) { JWT.updateToken(data); that.parent.success() },
+      success: function(data) { JWT.updateToken(data); that.parent.success(); },
+      that: that
     });
   }
   
@@ -52,6 +53,7 @@
         that.parent.success();
         that.password_changed = true;
       },
+      that: that
     });
   }
   

@@ -23,16 +23,18 @@
     var method = e.target.dataset.method || "get";
     var that = this;
     that.className = "loading";
-    $.ajax({
-      url: router[action](this),
-      type: method.toUpperCase(),
-      success: function(data) {
-        that.className = "";
-        if (method == "delete") { that.className = "deleted"; }
-        if (action == "send") { that.className = "sent"; }
-        that.update();
-      }
-    });
+    JWT.loginRequired(function(){
+      $.ajax({
+        url: router[action](that),
+        type: method.toUpperCase(),
+        success: function(data) {
+          that.className = "";
+          if (method == "delete") { that.className = "deleted"; }
+          if (action == "send") { that.className = "sent"; }
+          that.update();
+        }
+      });
+    })();
   }
   var router = {
     send: function(item) { return "/update_flag_status/"+item.pk+"/"; },

@@ -194,7 +194,7 @@ def update_flag_status(request,flag_pk,new_status=None):
   if not new_status:
     new_status = flag.ACTION_CHOICES[flag.status][0]
   flag.apply_status(new_status)
-  messages.success(request,"Membership status changed to %s"%flag.get_status_display())
   if request.is_ajax():
-    return HttpResponse('True')
+    return HttpResponse("Membership status changed to %s"%flag.get_status_display())
+  messages.success(request,"Membership status changed to %s"%flag.get_status_display())
   return HttpResponseRedirect('/admin/membership/flag/%s/'%flag_pk)

@@ -31,17 +31,20 @@ var uR = (function() {
       type: "POST",
       data: uR.serialize(form),
       success: function(data) {
-        if (opts.form) { form.removeAttribute("loading"); }
-        that.fields.forEach(function(item,i) { item.error = ''; });
-        that.non_field_errors = '';
+        if (opts.form) {
+          form.removeAttribute("loading");
+          that.fields.forEach(function(item,i) { item.error = ''; });
+          that.non_field_errors = '';
+        }
         opts.success(data);
-        that.parent.success();
       },
       error: function(jqxhr) {
-        if (opts.form) { form.removeAttribute("loading"); }
-        var errors = JSON.parse(jqxhr.responseText);
-        that.fields.forEach(function(el,i) { el.error = errors[el.name]; });
-        that.non_field_errors = errors.non_field_errors;
+        if (opts.form) {
+          form.removeAttribute("loading");
+          var errors = JSON.parse(jqxhr.responseText);
+          that.fields.forEach(function(el,i) { el.error = errors[el.name]; });
+          that.non_field_errors = errors.non_field_errors;
+        }
         opts.error(jqxhr);
         that.update()
       },

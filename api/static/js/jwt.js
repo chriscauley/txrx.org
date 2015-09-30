@@ -1,6 +1,9 @@
 // JWT decode functions
 
 var JWT = (function() {
+  function hasToken() {
+    return !!localStorage.getItem("jwt-token");
+  }
   function urlBase64Decode(str) {
     var output = str.replace(/-/g, '+').replace(/_/g, '/');
     if (output.length%4 == 1) { throw 'Illegal base64url string!'; }
@@ -28,6 +31,7 @@ var JWT = (function() {
   };
 
   function isTokenExpired(offsetSeconds) {
+    if (!hasToken()) { return false; }
     var d = getTokenExpirationDate();
     offsetSeconds = offsetSeconds || 0;
     if (d === null) { return false; }
@@ -85,7 +89,8 @@ var JWT = (function() {
     'getTokenExpirationDate': getTokenExpirationDate,
     'isTokenExpired': isTokenExpired,
     'updateToken': updateToken,
-    'startLogin': startLogin
+    'startLogin': startLogin,
+    'loginRequired': loginRequired,
   }
 })()
 
