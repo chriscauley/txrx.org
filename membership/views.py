@@ -168,9 +168,16 @@ def analysis(request):
 
 @staff_member_required
 def force_cancel(request,pk):
-  Subscription.objects.get(pk=pk).force_canceled()
-  if request.GET.get("next",None):
+  subscription = Subscription.objects.get(pk=pk)
+  if "undo" in request.GET:
+    subscription.canceled = None
+    subscription.save()
+    subscription.recalculate()
+    messages.success(request,"Subscription #%s un-canceled"%pk)
+  else:
+    subscription.force_canceled()
     messages.success(request,"Subscription #%s set to canceled"%pk)
+  if request.GET.get("next",None):
     return HttpResponseRedirect(request.GET['next'])
   return HttpResponse('')
 

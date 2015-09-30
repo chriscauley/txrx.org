@@ -93,10 +93,10 @@ class SubscriptionAdmin(admin.ModelAdmin):
   raw_id_fields = ('user',)
   readonly_fields = ('_action','paid_until','canceled','owed','edit_user')
   def _action(self,obj):
+    url = reverse("force_cancel",args=[obj.pk])+"?next=/admin/membership/subscription/%s/"%obj.pk
     if obj and obj.pk and not obj.canceled:
-      url = reverse("force_cancel",args=[obj.pk])+"?next=/admin/membership/subscription/%s/"%obj.pk
       return "<a href='%s'>%s</a>"%(url,"Force Cancel")
-    return ""
+    return "<a href='%s&undo'>%s</a>"%(url,"Undo Cancel")
   _action.allow_tags = True
   _action.short_description = ""
   def edit_user(self,obj):
