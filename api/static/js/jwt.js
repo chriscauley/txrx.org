@@ -31,7 +31,7 @@ var JWT = (function() {
   };
 
   function isTokenExpired(offsetSeconds) {
-    if (!hasToken()) { return false; }
+    if (!hasToken()) { return true; }
     var d = getTokenExpirationDate();
     offsetSeconds = offsetSeconds || 0;
     if (d === null) { return false; }
