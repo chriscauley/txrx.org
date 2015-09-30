@@ -16,4 +16,4 @@ class ActiveFlagSizzler(FlagSizzler):
     return class_.Meta.model.objects.filter(status__in=Flag.ACTION_CHOICES)
   class Meta:
     model = Flag
-    fields = ['subscription','reason','status','datetime','emailed','days_until_next_action']
+    fields = ['subscription','reason','status','datetime','emailed','days_until_next_action','last_datetime']

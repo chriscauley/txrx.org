@@ -386,11 +386,12 @@ class Flag(models.Model):
     'first_warning': ['second_warning','Send Second Warning',7],
     'second_warning': ['final_warning','Cancel and send cancellation notice', 10],
   }
+  last_datetime = property(lambda self: self.emailed or self.datetime)
   @property
   def date_of_next_action(self):
     if not self.status in self.ACTION_CHOICES:
       return
-    return self.datetime + datetime.timedelta(self.ACTION_CHOICES[self.status][2])
+    return self.last_datetime + datetime.timedelta(self.ACTION_CHOICES[self.status][2])
   @property
   def days_until_next_action(self):
     return (self.date_of_next_action - datetime.datetime.now()).days

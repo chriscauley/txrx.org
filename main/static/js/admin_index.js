@@ -6,7 +6,7 @@ $(function() {
         var now = [], then = [], later = [], flag, days;
         for (var i=0;i<data.length;i++) {
           flag = data[i];
-          flag.date = new Date(flag.datetime).toDateString();
+          flag.date = new Date(flag.last_datetime).toDateString();
           days = flag.days_until_next_action;
           if (days == 0) { now.push(flag); }
           else if (days > 0) { later.push(flag); }
