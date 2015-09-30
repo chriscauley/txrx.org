@@ -74,7 +74,8 @@ class MembershipAdmin(admin.ModelAdmin):
 
 class StatusInline(admin.TabularInline):
   model = Status
-  exclude = ("transaction_id",'datetime','paypalipn')
+  exclude = ('paypalipn',)
+  readonly_fields = ('datetime',"transaction_id")
   raw_id_fields = ('paypalipn',)
   extra = 0
 
