@@ -87,8 +87,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
     ('product','subscr_id'),
     'created',
     ('amount','owed','paid_until'),
-    ('canceled','_action')
-    
+    ('canceled','_action'),
   )
   raw_id_fields = ('user',)
   readonly_fields = ('_action','paid_until','canceled','owed','edit_user')
@@ -104,6 +103,9 @@ class SubscriptionAdmin(admin.ModelAdmin):
       return '<a class="change-related" href="/admin/user/user/%s/"></a>'%obj.user.pk
   edit_user.allow_tags = True
   edit_user.short_description = ""
+  def save_model(self,request,obj,form,change):
+    super(SubscriptionAdmin,self).save_model(request,obj,form,change)
+    obj.recalculate()
 
 class SubscriptionInline(admin.TabularInline):
   model = Subscription
@@ -127,7 +129,7 @@ class UserMembershipInline(admin.StackedInline):
     ('level','orientation_status'),
     'bio','paypal_email',
     ('voting_rights','suspended'),
-    ('photo','waiver'),
+    ('photo','rfid'),
     ('start','end')
   )
   model = UserMembership

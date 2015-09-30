@@ -213,7 +213,7 @@ class UserMembership(models.Model):
   end = models.DateTimeField(null=True,blank=True)
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
-  waiver = models.FileField("Waivers",upload_to="waivers/",null=True,blank=True)
+  rfid = models.CharField(max_length=64,null=True,blank=True)
   orientation_status = models.CharField(max_length=32,choices=ORIENTATION_STATUS_CHOICES,default="new")
 
   photo = models.ForeignKey(Photo,null=True,blank=True)
