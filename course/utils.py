@@ -18,7 +18,7 @@ def get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True):
   user, new = _get_or_create_student(paypal_email,u_id=u_id,subscr_id=subscr_id,send_mail=send_mail)
   if new:
     kwargs = dict(
-      subject_template_name="email/welcome_classes_subject.txt",
+      subject_template_name="email/welcome_classes.subject",
       email_template_name="email/welcome_classes.html"
     )
     user.set_password(settings.NEW_STUDENT_PASSWORD)
