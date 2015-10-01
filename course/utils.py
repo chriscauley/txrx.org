@@ -16,6 +16,15 @@ def validate_email(s):
 
 def get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True):
   user, new = _get_or_create_student(paypal_email,u_id=u_id,subscr_id=subscr_id,send_mail=send_mail)
+  if new:
+    kwargs = dict(
+      subject_template_name="email/welcome_classes_subject.txt",
+      email_template_name="email/welcome_classes.html"
+    )
+    user.set_password(settings.NEW_STUDENT_PASSWORD)
+    user.save()
+    if send_mail:
+      reset_password(user,**kwargs)
   user.active = True
   user.save()
   profile = user.usermembership
@@ -45,14 +54,4 @@ def _get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True)
   if User.objects.filter(username=username):
     # iff the username is taken, use this instead:
     username = username + str(random.randint(1000,10000))
-  user, new = User.objects.get_or_create(email=email,defaults={'username':username})
-  if new:
-    kwargs = dict(
-      subject_template_name="email/welcome_classes_subject.txt",
-      email_template_name="email/welcome_classes.html"
-    )
-    user.set_password(settings.NEW_STUDENT_PASSWORD)
-    user.save()
-    if send_mail:
-      reset_password(user,**kwargs)
-  return user, new
+  return User.objects.get_or_create(email=email,defaults={'username':username})
