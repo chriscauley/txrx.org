@@ -45,7 +45,18 @@ class CustomIPNAdmin(PayPalIPNAdmin):
   fieldsets[0][1]['fields'].append(('view_redirect','view_IPN'))
   fieldsets[0][1]['fields'].append('query_list')
   readonly_fields = PayPalIPNAdmin.readonly_fields + ('view_redirect','view_IPN','query_list')
-  list_display = PayPalIPNAdmin.list_display + ['txn_type','subscr_id']
+  list_display = ['__unicode__','_info','created_at']
+  def _info(self,obj):
+    print dir(obj)
+    attrs = [
+      ('','txn_type'),
+      ('Flag','flag_info'),
+      ('Invoice #','invoice'),
+      ('Custom','custom'),
+      ('Subscr_id','subscr_id')
+    ]
+    return "<br/>".join(["%s %s"%(a,getattr(obj,b)) for a,b in attrs if getattr(obj,b)])
+  _info.allow_tags = True
   list_filter = list(PayPalIPNAdmin.list_filter) + ['txn_type']
   def subscr_id(self,obj):
     data = QueryDict(obj.query)
