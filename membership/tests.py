@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.core.urlresolvers import reverse
 from django.test import TestCase, RequestFactory
 
 from .models import Product, Level, Group, add_months
@@ -35,17 +34,10 @@ def setUp():
     model.objects.create(**kwargs)
 
 class SimpleTest(TestCase):
-  def paypal_post(self, params):
-    CHARSET = "windows-1252"
-    cond_encode = lambda v: v.encode(CHARSET) if isinstance(v, text_type) else v
-    byte_params = {cond_encode(k): cond_encode(v) for k, v in params.items()}
-    post_data = urlencode(byte_params)
-    ipn_url = reverse("paypal-ipn")
-    return self.client.post(ipn_url, post_data, content_type='application/x-www-form-urlencoded')
   def setUp(self):
     self.factory = RequestFactory()
   #  setUp()
-  def test_flag_workflow(self,params):
+  def test_flag_workflow(self):
     """
     Create a user with a subscription and move it back to the past due date.
     Run the requisite management command and make sure that they get flagged.

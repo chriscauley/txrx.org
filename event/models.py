@@ -30,7 +30,7 @@ REPEAT_CHOICES = (
   ('triweekly','Tri Weekly'),
   ('month-dow','Monthly (Nth weekday of every month)'),
   ('month-number','Monthly (by day number)'),
-  )
+)
 
 class Event(PhotosMixin,models.Model):
   name = models.CharField(max_length=128,null=True,blank=True)
