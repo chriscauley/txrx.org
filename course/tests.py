@@ -37,12 +37,6 @@ class ListenersTest(TestCase):
   """This tests all possible purchases from paypal and to make sure prices line up.
   This uses artificial IPN data, not the actual IPN."""
   setUp = setUp
-  def test_annonymous_purchase(self):
-    """
-    Pay for a class with a non-existent user. Verify price, enrollment, email, and new account.
-    Then test the same user and make sure a second account was not created.
-    """
-    pass
   def test_discounts(self):
     """
     Pay for a class with a membership that has a discount.
@@ -52,7 +46,7 @@ class ListenersTest(TestCase):
   def test_quantity(self):
     """
     Pay for a class with more than one quantity. Make sure enrollment and session.total students is correct
-    Pay for a class that the user is alread enrolled in. ibid.
+    Pay for a class that the user is already enrolled in. ibid.
     """
     email = "preexistinguser@txrxlabstest.com"
     paypal_email = "adifferentemail@txrxlabstest.com"
@@ -63,8 +57,19 @@ class ListenersTest(TestCase):
       username="preexisinguser",
       email=email
     )
+    params = get_course_query(session=self.session1,quantities=[2],payer_email=email)
+    paypal_post(self,params)
 
-del ListenersTest
+    enrollment = self.session1.enrollment_set.get()
+    self.assertEqual(enrollment.quantity,2)
+    self.assertEqual(enrollment.user,user)
+
+    params = get_course_query(session=self.session1,quantities=[1],payer_email=email)
+    paypal_post(self,params)
+
+    enrollment = self.session1.enrollment_set.get()
+    self.assertEqual(enrollment.quantity,3)
+    self.assertEqual(enrollment.user,user)
 
 class UtilsTest(TestCase):
   """ Test the following parameters of the get_or_create_student functions.

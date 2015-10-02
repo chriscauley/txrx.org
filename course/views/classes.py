@@ -43,8 +43,9 @@ def index(request):
 def user_ajax(request,template):
   return TemplateResponse(request,"course/_%s.html"%template,get_course_values(request.user))
 
+#the old way we did classes had session detail pages
 def detail_redirect(request,slug):
-  five_hunned
+  HttpResonpesRedirect("/classes/")
 
 def detail(request,pk,slug):
   course = get_object_or_404(Course,pk=pk)
