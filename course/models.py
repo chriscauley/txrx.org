@@ -218,7 +218,6 @@ class Session(UserModel,PhotosMixin,models.Model):
         self.save()
   get_ics_url = lambda self: reverse_ics(self)
   course = models.ForeignKey(Course,null=True,blank=True)
-  slug = models.CharField(max_length=255)
   cancelled = models.BooleanField(default=False)
   active = models.BooleanField(default=True)
   publish_dt = models.DateTimeField(null=True,blank=True)
@@ -317,16 +316,11 @@ class Session(UserModel,PhotosMixin,models.Model):
     if self.active and not self.publish_dt:
       publish_dt = datetime.datetime.now()
     profile,_ = UserMembership.objects.get_or_create(user=self.user)
-    self.slug = self.slug or 'arst' # can't save without one, we'll set this below
-    super(Session,self).save(*args,**kwargs)
-    self.slug = slugify("%s_%s"%(self.course,self.id))
     super(Session,self).save(*args,**kwargs)
 
     # now a class product needs to be made (or not)
-    defaults = {'slug': "%s_%s"%(self.slug[:40],self.pk),'name': unicode(self)}
+    defaults = {'slug': "%s_%s"%(unicode(self)[:40],self.pk),'name': unicode(self)}
     s,new = SessionProduct.objects.get_or_create(session=self,defaults=defaults)
-    if new:
-      print s,'\t',self
   @cached_method
   def get_absolute_url(self):
     return self.course.get_absolute_url()
