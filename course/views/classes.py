@@ -44,8 +44,7 @@ def user_ajax(request,template):
   return TemplateResponse(request,"course/_%s.html"%template,get_course_values(request.user))
 
 def detail_redirect(request,slug):
-  session = get_object_or_404(Session,slug=slug)
-  return HttpResponseRedirect(session.course.get_absolute_url())
+  five_hunned
 
 def detail(request,pk,slug):
   course = get_object_or_404(Course,pk=pk)
