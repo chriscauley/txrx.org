@@ -60,17 +60,11 @@ def handle_successful_payment(sender, **kwargs):
 
   # these two errors occurred because of the donate button on the front page.
   # they can be removed by checking for that
-  try:
-    params = QueryDict(sender.query)
-  except UnicodeEncodeError:
-    params = QueryDict(latin1_to_ascii(sender.query))
-  try:
-    _uid = str(params.get('custom',None))
-  except UnicodeEncodeError:
-    _uid = latin1_to_ascii(params.get('custom',None))
-  if sender.txn_type in ["subscr_payment",'recurring_payment']:
+  if not sender.txn_type == "cart":
     # handled by membership.listeners
     return
+  params = QueryDict(sender.query)
+  _uid = str(params.get('custom',None))
   user,new_user = get_or_create_student(sender.payer_email,u_id=_uid)
   user.active = True
   user.save()

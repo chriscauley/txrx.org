@@ -45,10 +45,7 @@ def paypal_flag(sender,reason=None,**kwargs):
 def paypal_signal(sender,**kwargs):
   if sender.txn_type == "web_accept":
     return # payment from front page
-  try:
-    params = QueryDict(sender.query)
-  except UnicodeEncodeError:
-    params = QueryDict(latin1_to_ascii(sender.query))
+  params = QueryDict(sender.query)
   subscr_id = params.get('subscr_id',None) or params.get('recurring_payment_id',None)
   if sender.txn_type in ['','cart','subscr_signup']:
     return # refunds and classes and signups
