@@ -190,6 +190,11 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
   class Meta:
     ordering = ("name",)
 
+class CoursePermission(models.Model):
+  course = models.ForeignKey(Course)
+  permission = models.ForeignKey(Permission)
+  __unicode__ = lambda self: "%s requires %s"%(self.permission,self.course)
+
 class CourseSubscription(UserModel):
   course = models.ForeignKey(Course)
 

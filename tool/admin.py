@@ -5,6 +5,7 @@ from django.contrib.contenttypes.admin import GenericTabularInline
 from media.admin import TaggedPhotoInline
 from lablackey.db.admin import OrderedModelAdmin
 from .models import Lab, Tool, ToolLink, TaggedTool, Permission
+from course.models import CoursePermission
 
 class LabAdmin(OrderedModelAdmin):
   inlines = (TaggedPhotoInline,)
@@ -40,9 +41,15 @@ class TaggedToolInline(GenericTabularInline):
   raw_id_fields = ('tool',)
   extra = 0
 
+class CoursePermissionInline(admin.TabularInline):
+  model = CoursePermission
+  raw_id_fields = ('course',)
+  extra = 0
+
 @admin.register(Permission)
 class PermissionAdmin(admin.ModelAdmin):
   filter_horizontal = ('tools',)
+  inlines = [CoursePermissionInline]
 
 admin.site.register(Lab,LabAdmin)
 admin.site.register(Tool,ToolAdmin)
