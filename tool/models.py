@@ -87,9 +87,14 @@ class ToolsMixin(object):
   class Meta:
     abstract = True
 
+class Criterion(models.Model):
+  name = models.CharField(max_length=32)
+  __unicode__ = lambda self: self.name
+
 class Permission(models.Model):
   name = models.CharField(max_length=32)
   tools = models.ManyToManyField(Tool)
+  criteria = models.ManyToManyField(Criterion)
   room = models.ForeignKey(Room)
   safety = models.BooleanField(default=True)
   __unicode__ = lambda self: self.name

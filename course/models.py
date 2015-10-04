@@ -13,7 +13,7 @@ import datetime, time
 from media.models import FilesMixin, PhotosMixin
 from geo.models import Room
 from event.models import OccurrenceModel, reverse_ics
-from tool.models import ToolsMixin, Permission
+from tool.models import ToolsMixin, Permission, Criterion
 from lablackey.db.models import UserModel
 from lablackey.utils import cached_method, cached_property, latin1_to_ascii
 
@@ -193,10 +193,15 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
 class CoursePermission(models.Model):
   course = models.ForeignKey(Course)
   permission = models.ForeignKey(Permission)
-  __unicode__ = lambda self: "%s requires %s"%(self.permission,self.course)
+  __unicode__ = lambda self: "%s requires %s"%(self.permission, self.course)
+
+class CourseCriterion(models.Model):
+  course = models.ForeignKey(Course)
+  criterion = models.ForeignKey(Criterion)
+  __unicode__ = lambda self: "%s requires %s"%(self.permission, self.course)
 
 class CourseSubscription(UserModel):
-  course = models.ForeignKey(Course)
+   course = models.ForeignKey(Course)
 
 class Branding(models.Model):
   name = models.CharField(max_length=32)
@@ -266,7 +271,7 @@ class Session(UserModel,PhotosMixin,models.Model):
   full = property(_full)
   list_users = property(lambda self: [self.user])
 
-  #! much of this if deprecated after course remodel
+  #! mucch of this if deprecated after course remodel
   description = property(lambda self: self.course.description)
   @cached_property
   def first_photo(self):
