@@ -26,8 +26,8 @@ def nav(request):
   ]
   social_nav = [
     {'name': 'facebook','url': 'https://www.facebook.com/TxRxLabs' },
-    #{'name': 'instagram','url': '' },
     {'name': 'twitter','url': 'https://twitter.com/txrxlabs' },
+    {'name': 'instagram','url': 'https://instagram.com/txrxlabs/' },
   ]
   _nav = [
     {"name": "About",
