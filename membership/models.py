@@ -197,18 +197,10 @@ def add_months(d,months):
   day = min(d.day,calendar.monthrange(year,month)[1])
   return d.replace(year=year,month=month,day=day)
 
-ORIENTATION_STATUS_CHOICES = [
-  ('new','New'),
-  ('emailed','Emailed'),
-  ('scheduled','scheduled'),
-  ('oriented','Oriented'),
-]
-
 class UserMembership(models.Model):
   user = models.OneToOneField(settings.AUTH_USER_MODEL)
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
-  orientation_status = models.CharField(max_length=32,choices=ORIENTATION_STATUS_CHOICES,default="new")
 
   photo = models.ForeignKey(Photo,null=True,blank=True)
   bio = MarkDownField(null=True,blank=True)
@@ -241,11 +233,6 @@ class UserMembership(models.Model):
     #! Needs to be separated by something now that term is depracated!
     term = Term.objects.all()[0]
     return [(term,Session.objects.filter(user=self.user))]
-  def send_welcome_email(self):
-    from membership.utils import send_membership_email
-    send_membership_email('email/new_member',self.user.email,experimental=False)
-    self.orientation_status = 'emailed'
-    self.save()
 
 class OfficerManager(models.Manager):
   def current(self,*args,**kwargs):

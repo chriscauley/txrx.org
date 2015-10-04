@@ -31,6 +31,13 @@ class UserManager(BaseUserManager):
     except (self.model.DoesNotExist, self.model.MultipleObjectsReturned):
       pass
 
+ORIENTATION_STATUS_CHOICES = [
+  ('new','New'),
+  ('emailed','Emailed'),
+  ('scheduled','scheduled'),
+  ('oriented','Oriented'),
+]
+
 class User(AbstractBaseUser, PermissionsMixin):
   kwargs = dict(
     help_text=_('Required. 30 characters or fewer. Letters, digits, and ./+/-/_ only.'),
@@ -54,6 +61,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
   #txrx fields
   level = models.ForeignKey(Level,default=1)
+  orientation_status = models.CharField(max_length=32,choices=ORIENTATION_STATUS_CHOICES,default="new")
 
   USERNAME_FIELD = 'username'
   REQUIRED_FIELDS = ['email']
@@ -75,3 +83,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
   def email_user(self, subject, message, from_email=None):
     send_mail(subject, message, from_email, [self.email])
+
+  def send_welcome_email(self):
+    from membership.utils import send_membership_email
+    send_membership_email('email/new_member',self.user.email,experimental=False)
+    self.orientation_status = 'emailed'
+    self.save()
+
+from .listeners import *

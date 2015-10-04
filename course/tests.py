@@ -16,7 +16,7 @@ warnings.showwarning = lambda *x: None
 
 def setUp(self):
   self.session1 = Session.objects.create(
-    course=Course.objects.filter(active=True).order_by("?")[0],
+    course=Course.objects.filter(active=True,fee__gt=0).order_by("?")[0],
     user_id=1
   )
   ClassTime.objects.create(
@@ -25,7 +25,7 @@ def setUp(self):
     end_time="12:00"
   )
   self.session2 = Session.objects.create(
-    course=Course.objects.filter(active=True).order_by("?")[0],
+    course=Course.objects.filter(active=True,fee__gt=0).order_by("?")[0],
     user_id=1
   )
   ClassTime.objects.create(

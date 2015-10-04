@@ -125,7 +125,6 @@ class UserMembershipInline(admin.StackedInline):
   search_fields = ('user__email','user__username','paypal_email')
   raw_id_fields = ('photo',)
   fields = (
-    'orientation_status',
     'bio','paypal_email',
     ('voting_rights','suspended'),
     ('photo','rfid'),

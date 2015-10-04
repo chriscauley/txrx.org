@@ -1,5 +1,4 @@
 from django.core.mail import mail_admins
-from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.http import QueryDict
 from lablackey.utils import get_or_none, latin1_to_ascii
