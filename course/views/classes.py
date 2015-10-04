@@ -45,7 +45,13 @@ def user_ajax(request,template):
 
 #the old way we did classes had session detail pages
 def detail_redirect(request,slug):
-  HttpResonpesRedirect("/classes/")
+  pk = slug.split("_")[-1]
+  if pk.isdigit():
+    try:
+      return HttpResponseRedirect(Session.objects.get(pk=pk).get_absolute_url())
+    except Session.DoesNotExist:
+      pass
+  return HttpResponseRedirect("/classes/")
 
 def detail(request,pk,slug):
   course = get_object_or_404(Course,pk=pk)

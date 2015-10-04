@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.test import TestCase
 
 from membership.paypal_utils import get_course_query, paypal_post
+from membership.models import Level
 
 from course.models import Session, Course, ClassTime, Enrollment
 
@@ -37,12 +38,6 @@ class ListenersTest(TestCase):
   """This tests all possible purchases from paypal and to make sure prices line up.
   This uses artificial IPN data, not the actual IPN."""
   setUp = setUp
-  def test_discounts(self):
-    """
-    Pay for a class with a membership that has a discount.
-    Make sure that the price was correct, the user is enrolled, and no new accounts were created.
-    """
-    pass
   def test_quantity(self):
     """
     Pay for a class with more than one quantity. Make sure enrollment and session.total students is correct
