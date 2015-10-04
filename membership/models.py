@@ -136,10 +136,10 @@ class Subscription(models.Model):
     self.save()
     last = self.last_status
     if last:
-      um = self.user.usermembership
+      user = self.user
       if modify_membership:
-        um.level = self.product.level
-      um.save()
+        user.level = self.product.level
+      user.save()
     
   class Meta:
     ordering = ('-created',)

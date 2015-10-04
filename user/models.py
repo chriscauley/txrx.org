@@ -86,7 +86,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
   def send_welcome_email(self):
     from membership.utils import send_membership_email
-    send_membership_email('email/new_member',self.user.email,experimental=False)
+    send_membership_email('email/new_member',self.email,experimental=False)
     self.orientation_status = 'emailed'
     self.save()
 

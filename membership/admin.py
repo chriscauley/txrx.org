@@ -127,7 +127,7 @@ class UserMembershipInline(admin.StackedInline):
   fields = (
     'bio','paypal_email',
     ('voting_rights','suspended'),
-    ('photo','rfid'),
+    'photo',
   )
   model = UserMembership
 

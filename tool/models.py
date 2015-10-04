@@ -92,3 +92,4 @@ class Permission(models.Model):
   tools = models.ManyToManyField(Tool)
   room = models.ForeignKey(Room)
   safety = models.BooleanField(default=True)
+  __unicode__ = lambda self: self.name
