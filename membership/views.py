@@ -152,7 +152,7 @@ def member_detail(request,username=None):
 def analysis(request):
   order = request.GET.get('order','-usermembership__end')
   orders = [
-    ('-usermembership__end','Last Payment'),
+    ('-subscription__status','Last Payment'),
     ('-subscription__owed','Money owed'),
   ]
   level_users = []

@@ -2,9 +2,8 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, RequestFactory
 
 from .models import Product, Level, Group, add_months
-from .paypal_utils import get_membership_query
+from .paypal_utils import get_membership_query, paypal_post
 from paypal.standard.ipn.models import PayPalIPN
-from paypal.standard.ipn.views import ipn as ipn_view
 from six import text_type
 from six.moves.urllib.parse import urlencode
 
@@ -59,11 +58,11 @@ class SimpleTest(TestCase):
       new_email = "new_email%s@txrxtesting.com"%product.pk
       get_user_model().objects.filter(email=new_email).delete()
       data = get_membership_query(product=product,payer_email=new_email)
-      self.paypal_post(data)
+      paypal_post(self,data)
       validate(new_email)
 
       # reposting the same data should not change anything
-      self.paypal_post(data)
+      paypal_post(self,data)
       validate(new_email)
 
     get_user_model().objects.get(email=new_email).delete()

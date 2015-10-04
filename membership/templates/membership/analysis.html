@@ -39,16 +39,12 @@
     <table class="table table-striped">
       <tr>
         <th>Username</th>
-        <th>Start</th>
-        <th>End</th>
         <th>Enrollments</th>
         <th>Subscriptions</th>
       </tr>
       {% for user in users %}
       <tr>
         <td><a href="/admin/user/user/{{ user.pk }}/">{{ user }}</a></td>
-        <td>{{ user.usermembership.start.date }}</td>
-        <td>{{ user.usermembership.end.date }}</td>
         <td>{{ user.enrollment_set.count }}</td>
         <td>
           {% for subscription in user.usermembership.all_subscriptions %}

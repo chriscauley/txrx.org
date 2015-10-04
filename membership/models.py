@@ -139,8 +139,6 @@ class Subscription(models.Model):
       um = self.user.usermembership
       if modify_membership:
         um.level = self.product.level
-      um.end = max(last.datetime,um.end or last.datetime)
-      um.start = min(um.start or self.created,self.created)
       um.save()
     
   class Meta:
@@ -209,11 +207,8 @@ ORIENTATION_STATUS_CHOICES = [
 class UserMembership(models.Model):
   user = models.OneToOneField(settings.AUTH_USER_MODEL)
   level = models.ForeignKey(Level,default=1)
-  start = models.DateTimeField(null=True,blank=True)
-  end = models.DateTimeField(null=True,blank=True)
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
-  rfid = models.CharField(max_length=64,null=True,blank=True)
   orientation_status = models.CharField(max_length=32,choices=ORIENTATION_STATUS_CHOICES,default="new")
 
   photo = models.ForeignKey(Photo,null=True,blank=True)
