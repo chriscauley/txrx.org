@@ -81,14 +81,14 @@ class ToolsMixin(object):
   def get_tools(self):
     return self._get_tools()
   def _get_tools(self):
-    return list(Tool.objects.filter(taggedtool__content_type_id=self._ct_id,
-                                     taggedtool__object_id=self.id).order_by("taggedtool__order"))
+    return list(Tool.objects.filter(
+      taggedtool__content_type_id=self._ct_id,
+      taggedtool__object_id=self.id).order_by("taggedtool__order"))
   class Meta:
     abstract = True
 
-class ToolCertification(models.Model):
+class Permission(models.Model):
   name = models.CharField(max_length=32)
-  tool = models.ForeignKey(Tool)
-  safety = models.BooleanField(default=False)
-  waiver = models.BooleanField(default=False)
+  tools = models.ManyToManyField(Tool)
   room = models.ForeignKey(Room)
+  safety = models.BooleanField(default=True)

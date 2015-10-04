@@ -4,7 +4,7 @@ from django.contrib.contenttypes.admin import GenericTabularInline
 
 from media.admin import TaggedPhotoInline
 from lablackey.db.admin import OrderedModelAdmin
-from .models import Lab, Tool, ToolLink, TaggedTool
+from .models import Lab, Tool, ToolLink, TaggedTool, Permission
 
 class LabAdmin(OrderedModelAdmin):
   inlines = (TaggedPhotoInline,)
@@ -17,8 +17,7 @@ class ToolLinkInline(admin.TabularInline):
 
 class ToolAdmin(OrderedModelAdmin):
   inlines = (ToolLinkInline,TaggedPhotoInline)
-  list_display = ('__unicode__','has_links','has_description','_materials',
-                  'make','model',"lab",'order')
+  list_display = ('__unicode__','has_links','has_description','_materials','make','model',"lab",'order')
   list_filter = ('lab','functional')
   filter_horizontal = ('materials',)
   readonly_fields = ('has_links','has_description')
@@ -40,6 +39,10 @@ class TaggedToolInline(GenericTabularInline):
   model = TaggedTool
   raw_id_fields = ('tool',)
   extra = 0
+
+@admin.register(Permission)
+class PermissionAdmin(admin.ModelAdmin):
+  filter_horizontal = ('tools',)
 
 admin.site.register(Lab,LabAdmin)
 admin.site.register(Tool,ToolAdmin)
