@@ -121,7 +121,7 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
     out['enrolled_status'] = "Enroll" if out['visible_session'] else "Details"
     return out
 
-  fee = models.IntegerField(default=0)
+  fee = models.IntegerField(null=True,blank=True,default=0)
   fee_notes = models.CharField(max_length=256,null=True,blank=True)
   requirements = models.CharField(max_length=256,null=True,blank=True)
   prerequisites = models.CharField(max_length=256,null=True,blank=True)

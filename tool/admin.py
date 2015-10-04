@@ -48,7 +48,7 @@ class CoursePermissionInline(admin.TabularInline):
 
 @admin.register(Permission)
 class PermissionAdmin(admin.ModelAdmin):
-  filter_horizontal = ('tools',)
+  filter_horizontal = ('tools','criteria')
   inlines = [CoursePermissionInline]
 
 admin.site.register(Lab,LabAdmin)
