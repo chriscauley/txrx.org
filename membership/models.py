@@ -206,7 +206,6 @@ ORIENTATION_STATUS_CHOICES = [
 
 class UserMembership(models.Model):
   user = models.OneToOneField(settings.AUTH_USER_MODEL)
-  level = models.ForeignKey(Level,default=1)
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
   orientation_status = models.CharField(max_length=32,choices=ORIENTATION_STATUS_CHOICES,default="new")

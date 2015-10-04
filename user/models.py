@@ -6,6 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
+from membership.models import Level
+
 class UserManager(BaseUserManager):
   def _create_user(self, username,  email, password, is_staff, is_superuser, **extra_fields):
     if not email:
@@ -48,8 +50,10 @@ class User(AbstractBaseUser, PermissionsMixin):
   is_staff = models.BooleanField(_('staff status'), default=False, help_text=_ht)
   is_active = models.BooleanField(_('active'), default=True)
   date_joined = models.DateTimeField(_('date joined'),auto_now_add=True)
-
   objects = UserManager()
+
+  #txrx fields
+  level = models.ForeignKey(Level,default=1)
 
   USERNAME_FIELD = 'username'
   REQUIRED_FIELDS = ['email']

@@ -48,7 +48,7 @@ class SimpleTest(TestCase):
     now = datetime.datetime.now()
     def validate(email):
       user = get_user_model().objects.get(email=email)
-      self.assertEqual(user.usermembership.level,product.level)
+      self.assertEqual(user.level,product.level)
       subscription = user.subscription_set.get()
       self.assertEqual(subscription.paid_until.date(),add_months(now.date(),subscription.product.months))
       self.assertTrue(subscription.owed <= 0)

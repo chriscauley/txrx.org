@@ -5,19 +5,13 @@ from django.http import QueryDict
 from lablackey.utils import get_or_none, latin1_to_ascii
 
 from course.utils import get_or_create_student
-from .models import UserMembership, Status, Subscription, Level, Product, Flag
-from user.models import User
+from .models import Status, Subscription, Level, Product, Flag
 
 from paypal.standard.ipn.signals import valid_ipn_received, invalid_ipn_received
 
 def mail_admins(a,b):
   print "MAIL: "+a
   print b
-
-@receiver(post_save,sender=User)
-def post_save_user_handler(sender, **kwargs):
-  user = kwargs['instance']
-  UserMembership.objects.get_or_create(user=user)
 
 def get_subscription(params,sender):
   subscr_id = params.get('subscr_id',None) or params.get('recurring_payment_id',None)
@@ -107,9 +101,8 @@ def paypal_signal(sender,**kwargs):
       subscription__user=subscription.user,
       status__in=Flag.ACTION_CHOICES
     ).update(status="paid")
-    um = subscription.user.usermembership
-    if um.orientation_status == 'new':
-      um.send_welcome_email()
+    if user.orientation_status == 'new':
+      user.send_welcome_email()
 
   status = Status.objects.create(
     transaction_id=sender.txn_id,
