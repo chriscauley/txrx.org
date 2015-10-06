@@ -46,5 +46,6 @@
   window.SESSIONS_ON_PAGE[{{ session.id }}] = {
   'name': "<b>{{ session.course }}</b> {{ session.first_date|date:"m/d/Y" }}",
   'fee': {{ session.course.fee }},
+  'requirements': {{ session.course.requirments }},
   };
 </script>

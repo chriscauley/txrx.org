@@ -76,7 +76,7 @@ class CourseManager(models.Manager):
     query_set = self.filter(*args,**kwargs)
 
     # select only courses with only full and closed sessions
-    courses = [course for course in query_set if not course.open_sessions]
+    courses = [course for course in query_set if not [s for s in course.active_sessions if not s.full]]
     return courses
 
 class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
@@ -113,12 +113,10 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
       'next_time': time.mktime(self.first_date.timetuple()) if self.active_sessions else 0,
       'fee': self.fee,
       'active_sessions': [s.as_json for s in self.active_sessions],
-      'open_sessions': [s.as_json for s in self.open_sessions],
-      'full_sessions': [s.as_json for s in self.full_sessions],
       'short_description': self.get_short_description(),
+      'requirements': self.requirements
     }
-    out['visible_session'] = (out['open_sessions']+out['full_sessions']+[None])[0]
-    out['enrolled_status'] = "Enroll" if out['visible_session'] else "Details"
+    out['enrolled_status'] = "Enroll" if out['active_sessions'] else "Details"
     return out
 
   fee = models.IntegerField(null=True,blank=True,default=0)
@@ -150,14 +148,6 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
     # sessions haven't ended yet (and maybe haven't started)
     first_date = datetime.datetime.now()-datetime.timedelta(0.5)
     return list(self.sessions.filter(last_date__gte=first_date))
-
-  @cached_property
-  def open_sessions(self):
-    return [s for s in self.active_sessions if not s.full]
-
-  @cached_property
-  def full_sessions(self):
-    return [s for s in self.active_sessions if s.full]
 
   sessions = lambda self: Session.objects.filter(course=self,active=True)
   sessions = cached_property(sessions,name="sessions")
@@ -254,6 +244,7 @@ class Session(UserModel,PhotosMixin,models.Model):
       d = self.last_date
       enrolled_status = "Completed: %s/%s/%s"%(d.month,d.day,d.year)
     return {
+      'id': self.pk,
       'closed_status': self.closed_string if (self.closed or self.full) else None,
       'short_dates': short_dates,
       'instructor_name': self.get_instructor_name(),
@@ -267,8 +258,7 @@ class Session(UserModel,PhotosMixin,models.Model):
   total_students = property(lambda self: sum([e.quantity for e in self.enrollment_set.all()]))
   evaluated_students = property(lambda self: self.get_evaluations().count())
   completed_students = property(lambda self: self.enrollment_set.filter(completed=True).count())
-  _full = lambda self: self.total_students >= self.course.max_students
-  full = property(_full)
+  full = property(lambda self: self.total_students >= self.course.max_students)
   list_users = property(lambda self: [self.user])
 
   #! mucch of this if deprecated after course remodel
@@ -474,6 +464,12 @@ def reset_classes_json(context="no context provided"):
   f.write(text)
   f.close()
   os.rename(os.path.join(settings.STATIC_ROOT,'_classes.json'),os.path.join(settings.STATIC_ROOT,'classes.json'))
+
+  text = dumps([s.pk for s in Session.objects.filter(first_date__gte=datetime.datetime.now()) if s.full])
+  f = open(os.path.join(settings.STATIC_ROOT,'_sessions.json'),'w')
+  f.write("var FULL_SESSIONS = "+text)
+  f.close()
+  os.rename(os.path.join(settings.STATIC_ROOT,'_sessions.json'),os.path.join(settings.STATIC_ROOT,'sessions.json'))
 
   # for now email chris whenever this happens so that he can check
   # if it's firing too often or during a request

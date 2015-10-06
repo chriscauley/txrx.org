@@ -17,13 +17,22 @@ $(function() {
     var course = ALL_CLASSES[ci];
     course.search_string = [course.name,course.short_description,course.subject_names.join(' ')];
     course.search_string = course.search_string.join(' ').toLowerCase();
-    for (var csi=0; csi<course.subject_ids.length; csi++) {
+
+    //Tally number of active classes in each subject. This isn't used right now
+    /*for (var csi=0; csi<course.subject_ids.length; csi++) {
       for (var si=0; si< CLASS_SUBJECTS.length; si++) {
         var subject = CLASS_SUBJECTS[si];
         if (subject.id != course.subject_ids[csi]) { continue; }
         if (course.next_time == 0) { subject.active_courses += 1; }
         else { subject.inactive_courses += 1; }
       }
+    }*/
+    course.full_sessions = [];
+    course.open_sessions = [];
+    for (var si=0;si<course.active_sessions.length;si++) {
+      var session = course.active_sessions[si];
+      if (FULL_SESSIONS.indexOf(session.id) == -1) { course.open_sessions.push(session); }
+      else { course.full_sessions.push(session); }
     }
   }
 
