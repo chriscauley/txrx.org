@@ -322,11 +322,11 @@ REASON_CHOICES = [
   ("recurring_payment_skipped", "PayPal Skipped"),
   ("recurring_payment_failed", "PayPal Failed Recurring"),
   ("recurring_payment_suspended", "PayPal Suspended"),
+  ('recurring_payment_suspended_due_',"PayPal End of Subscription"),
   ("subscr_failed", "PayPal Failed Subscription"),
   ("subscr_eot", "PayPal End of Term"),
   ("manually_flagged","Manually Flagged"),
 ]
-
 EMAIL_REASONS = {
   "payment_overdue": [
     "recurring_payment_skipped",
@@ -360,6 +360,7 @@ class Flag(models.Model):
   datetime = models.DateTimeField(auto_now_add=True)
   emailed = models.DateTimeField(null=True,blank=True)
   objects = FlagManager()
+  user_id = lambda self: self.subscription.user_id
   __unicode__ = lambda self: "%s flagged for %s"%(self.subscription.user,self.reason)
   ACTION_CHOICES = { # this should be renamed
     # current_status: [future_status, verbose_description, days_since_flag]

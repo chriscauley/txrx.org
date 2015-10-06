@@ -11,6 +11,7 @@
     <div class="pull-left">
       <button class="btn-success btn fa fa-envelope" onclick={ ajaxPost } data-action="send"></button>
       <button class="btn-danger btn fa fa-trash" onclick={ ajaxPost } data-method="delete"></button>
+      <a class="btn-primary btn fa fa-user" href="/admin/user/user/{user_id}/" target="_blank"></a>
     </div>
     <a href="/admin/membership/flag/{ pk }/">
       { subscription }<br />
