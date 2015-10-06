@@ -150,7 +150,7 @@ def member_detail(request,username=None):
 
 @staff_member_required
 def analysis(request):
-  order = request.GET.get('order','-usermembership__end')
+  order = request.GET.get('order','-subscription__status')
   orders = [
     ('-subscription__status','Last Payment'),
     ('-subscription__owed','Money owed'),

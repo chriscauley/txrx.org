@@ -2,7 +2,7 @@
   <input type="checkbox" id="toggle_filters" name="toggle"/>
   <label for="toggle_filters" class="btn btn-success">Filter by Subject</label>
   <form onsubmit={ apply } class="filters course_filters" autocomplete="off">
-    <input name="q" class="form-control" placeholder="Search Classes" onkeyup={ search } 
+    <input name="q" id="classes_q" class="form-control" placeholder="Search Classes" onkeyup={ search } 
            onblur={ apply } id="courseSearch" />
     <div class="list_filter btn-group-vertical">
       <label class="btn btn-default { opts.active_subject?' ':'selected' }" onclick={ click }>All Subjects</label>
@@ -26,12 +26,12 @@
     riot.update();
   }
   apply(e) {
-    opts.filterSearch(this.q.value);
+    opts.filterSearch(this.classes_q.value);
     this.toggle.checked = false;
     riot.update();
   }
   search(e) {
-    opts.filterSearch(this.q.value);
+    opts.filterSearch(this.classes_q.value);
     riot.update();
   }
 </course-filters>
