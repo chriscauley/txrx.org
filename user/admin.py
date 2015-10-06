@@ -8,7 +8,7 @@ from .forms import UserChangeForm, CustomUserCreationForm
 
 class UserAdmin(UserAdmin):
   fieldsets = (
-    (None, {'fields': ('username', 'email', 'password', 'first_name', 'last_name')}),
+    (None, {'fields': ('username', 'email', 'password', ('first_name', 'last_name'),'level')}),
     (_('Permissions'),
      {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups')}),
     (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
@@ -27,7 +27,7 @@ class UserAdmin(UserAdmin):
   _enrollments.allow_tags = True
   search_fields = ('username', 'email', 'first_name', 'last_name','usermembership__paypal_email')
   ordering = ('username',)
-  readonly_fields = ('last_login','date_joined')
+  readonly_fields = ('last_login','date_joined','level')
   inlines = [UserMembershipInline, SubscriptionInline]
 
 admin.site.register(User, UserAdmin)
