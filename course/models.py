@@ -226,8 +226,6 @@ class Session(UserModel,PhotosMixin,models.Model):
   last_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
   created = models.DateTimeField(auto_now_add=True) # for emailing new classes
   # depracated?
-  ts_help = "Only used to set dates on creation."
-  time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
   branding = models.ForeignKey(Branding,null=True,blank=True)
 
   __unicode__ = lambda self: latin1_to_ascii("%s (%s - %s)"%(self.course, self.user,self.first_date.date()))

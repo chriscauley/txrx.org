@@ -1,6 +1,7 @@
 $(function() {
   var active_subject;
-  // set enrollment status for ALL_CLASSES
+
+  // set enrollment status for ALL_CLASSES, this can be moved to course.tag 
   for (var si=0; si<USER_SESSIONS.length;si++) {
     session = USER_SESSIONS[si];
     for (var ci=0; ci<ALL_CLASSES.length;ci++) {
@@ -13,6 +14,7 @@ $(function() {
   }
 
   // assign ALL_CLASSES to subjects and generate search string
+  // this should be part of the mount or update section of course list
   for (var ci=0; ci<ALL_CLASSES.length; ci++) {
     var course = ALL_CLASSES[ci];
     course.search_string = [course.name,course.short_description,course.subject_names.join(' ')];
