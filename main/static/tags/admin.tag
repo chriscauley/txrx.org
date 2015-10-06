@@ -15,7 +15,7 @@
     </div>
     <a href="/admin/membership/flag/{ pk }/">
       { subscription }<br />
-      [{ date }]
+      [{ date }] - <b>{status}</b>
     </a>
   </div>
 

@@ -22,12 +22,12 @@ class ContainerInline(admin.TabularInline):
 @admin.register(Flag)
 class FlagAdmin(admin.ModelAdmin):
   raw_id_fields = ('subscription',)
-  readonly_fields = ('action',)
+  readonly_fields = ('action','datetime')
   def action(self,obj):
     if not obj or not obj.pk or not obj.status in obj.ACTION_CHOICES:
       return "No action to be taken"
     next_status, verbose, target_days = obj.ACTION_CHOICES[obj.status]
-    days_since_flag = (datetime.datetime.now()-obj.datetime).days
+    days_since_flag = (datetime.datetime.now()-obj.last_datetime).days
     _diff = abs(days_since_flag - target_days)
     if days_since_flag > target_days:
       msg = "This person should have been notified of the cancellation %s days ago"%_diff
@@ -40,7 +40,7 @@ class FlagAdmin(admin.ModelAdmin):
       cls = 'success'
 
     url = reverse('update_flag_status',args=[obj.pk,next_status])
-    html = "<div class='alert alert-%s'>%s<br/><a href='%s' class='btn btn-%s'>%s</a></div"
+    html = "<div class='alert alert-%s'>%s<br/><a href='%s' class='btn btn-%s'>%s</a></div>"
     return html%(cls,msg,url,cls,verbose)
   action.allow_tags = True
 

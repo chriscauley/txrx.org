@@ -140,7 +140,12 @@ class Subscription(models.Model):
       if modify_membership:
         user.level = self.product.level
       user.save()
-    
+    if self.owed <= 0:
+      Flag.objects.filter(
+        subscription=self,
+        status__in=Flag.ACTION_CHOICES
+      ).update(status="paid")
+
   class Meta:
     ordering = ('-created',)
 
@@ -366,7 +371,7 @@ class Flag(models.Model):
     # current_status: [future_status, verbose_description, days_since_flag]
     'new': ['first_warning','Send First Warning',1],
     'first_warning': ['second_warning','Send Second Warning',7],
-    'second_warning': ['final_warning','Cancel and send cancellation notice', 10],
+    'second_warning': ['final_warning','Cancel and send cancellation notice', 4],
   }
   last_datetime = property(lambda self: self.emailed or self.datetime)
   @property
@@ -381,7 +386,7 @@ class Flag(models.Model):
     from membership.utils import send_membership_email
     context = {
       'flag': self,
-      'last_warning_date': datetime.timedelta(14)+self.datetime,
+      'last_warning_date': datetime.timedelta(21)+self.datetime,
     }
     try:
       send_membership_email('email/overdue/%s'%new_status,self.subscription.user.email,context=context)
