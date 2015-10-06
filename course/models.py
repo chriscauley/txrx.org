@@ -463,7 +463,8 @@ def reset_classes_json(context="no context provided"):
   f.close()
   os.rename(os.path.join(settings.STATIC_ROOT,'_classes.json'),os.path.join(settings.STATIC_ROOT,'classes.json'))
 
-  text = dumps([s.pk for s in Session.objects.filter(first_date__gte=datetime.datetime.now()) if s.full])
+  cutoff = datetime.datetime.now() - datetime.timedelta(1)
+  text = dumps([s.pk for s in Session.objects.filter(last_date__gte=cutoff) if s.full])
   f = open(os.path.join(settings.STATIC_ROOT,'_sessions.json'),'w')
   f.write("var FULL_SESSIONS = "+text)
   f.close()
