@@ -180,18 +180,6 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
   class Meta:
     ordering = ("name",)
 
-class CoursePermission(models.Model):
-  _ht = "Completing this course (and all associated criteria) grants this permission."
-  course = models.ForeignKey(Course,help_text=_ht)
-  permission = models.ForeignKey(Permission)
-  __unicode__ = lambda self: "%s requires %s"%(self.permission, self.course)
-
-class CourseCriterion(models.Model):
-  _ht = "Completing this course (or any other in this list) meets this criterion"
-  course = models.ForeignKey(Course,help_text=_ht)
-  criterion = models.ForeignKey(Criterion)
-  __unicode__ = lambda self: "%s requires %s"%(self.permission, self.course)
-
 class CourseSubscription(UserModel):
    course = models.ForeignKey(Course)
 

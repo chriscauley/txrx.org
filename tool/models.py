@@ -89,14 +89,13 @@ class ToolsMixin(object):
 
 class Criterion(models.Model):
   name = models.CharField(max_length=32)
-  _ht = "Possessing this permission meets this criterion"
-  permission = models.ForeignKey("Permission",null=True,blank=True,help_text=_ht)
+  courses = models.ManyToManyField('course.Course')
   __unicode__ = lambda self: self.name
 
 class Permission(models.Model):
   name = models.CharField(max_length=32)
   tools = models.ManyToManyField(Tool,blank=True)
-  _ht = "All these criteria (and a course) grants access to these tools."
+  _ht = "All these criteria grants access to these tools."
   criteria = models.ManyToManyField(Criterion,blank=True,help_text=_ht,related_name="+")
   room = models.ForeignKey(Room)
   safety = models.BooleanField(default=True)

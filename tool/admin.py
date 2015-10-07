@@ -5,7 +5,6 @@ from django.contrib.contenttypes.admin import GenericTabularInline
 from media.admin import TaggedPhotoInline
 from lablackey.db.admin import OrderedModelAdmin
 from .models import Lab, Tool, ToolLink, TaggedTool, Permission, Criterion
-from course.models import CoursePermission, CourseCriterion
 
 @admin.register(Lab)
 class LabAdmin(OrderedModelAdmin):
@@ -43,11 +42,6 @@ class TaggedToolInline(GenericTabularInline):
   raw_id_fields = ('tool',)
   extra = 0
 
-class CoursePermissionInline(admin.TabularInline):
-  model = CoursePermission
-  raw_id_fields = ('course',)
-  extra = 0
-
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 class GroupedToolForm(forms.ModelForm):
@@ -64,15 +58,9 @@ class GroupedToolForm(forms.ModelForm):
 @admin.register(Permission)
 class PermissionAdmin(admin.ModelAdmin):
   filter_horizontal = ('criteria',)
-  inlines = [CoursePermissionInline]
   form = GroupedToolForm
-
-class CourseCriterionInline(admin.TabularInline):
-  extra = 0
-  raw_id_fields = ('course',)
-  model = CourseCriterion
 
 @admin.register(Criterion)
 class CriterionAdmin(admin.ModelAdmin):
-  inlines = [CourseCriterionInline]
+  filter_horizontal = ("courses",)
 
