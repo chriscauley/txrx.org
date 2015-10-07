@@ -23,6 +23,7 @@ class ContainerInline(admin.TabularInline):
 class FlagAdmin(admin.ModelAdmin):
   raw_id_fields = ('subscription',)
   readonly_fields = ('action','datetime')
+  list_display = ('__unicode__','status')
   def action(self,obj):
     if not obj or not obj.pk or not obj.status in obj.ACTION_CHOICES:
       return "No action to be taken"

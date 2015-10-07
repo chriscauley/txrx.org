@@ -381,7 +381,8 @@ class Flag(models.Model):
     return self.last_datetime + datetime.timedelta(self.ACTION_CHOICES[self.status][2])
   @property
   def days_until_next_action(self):
-    return (self.date_of_next_action - datetime.datetime.now()).days
+    # add one because timedelta.days rounds down
+    return (self.date_of_next_action - datetime.datetime.now()).days + 1
   def apply_status(self,new_status):
     from membership.utils import send_membership_email
     context = {
