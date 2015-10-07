@@ -93,8 +93,8 @@ class Criterion(models.Model):
 
 class Permission(models.Model):
   name = models.CharField(max_length=32)
-  tools = models.ManyToManyField(Tool)
-  criteria = models.ManyToManyField(Criterion)
+  tools = models.ManyToManyField(Tool,blank=True)
+  criteria = models.ManyToManyField(Criterion,blank=True)
   room = models.ForeignKey(Room)
   safety = models.BooleanField(default=True)
   __unicode__ = lambda self: self.name

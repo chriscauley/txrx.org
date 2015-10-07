@@ -18,7 +18,7 @@ class ToolLinkInline(admin.TabularInline):
 
 class ToolAdmin(OrderedModelAdmin):
   inlines = (ToolLinkInline,TaggedPhotoInline)
-  list_display = ('__unicode__','has_links','has_description','_materials','make','model',"lab",'order')
+  list_display = ('__unicode__','has_links','has_description','_materials','make','model',"room","lab",'order')
   list_filter = ('lab','functional')
   filter_horizontal = ('materials',)
   readonly_fields = ('has_links','has_description')
@@ -46,10 +46,24 @@ class CoursePermissionInline(admin.TabularInline):
   raw_id_fields = ('course',)
   extra = 0
 
+from django import forms
+from django.contrib.admin.widgets import FilteredSelectMultiple
+class GroupedToolForm(forms.ModelForm):
+  def __init__(self,*args,**kwargs):
+    super(GroupedToolForm,self).__init__(*args,**kwargs)
+    choices = {}
+    for tool in Tool.objects.all():
+      room = unicode(tool.room)
+      choices[room] = choices.get(room,[])
+      choices[room].append((tool.pk,unicode(tool)))
+    choices = tuple(sorted(choices.items()))
+    self.fields["tools"].choices = choices
+
 @admin.register(Permission)
 class PermissionAdmin(admin.ModelAdmin):
-  filter_horizontal = ('tools','criteria')
+  filter_horizontal = ('criteria',)
   inlines = [CoursePermissionInline]
+  form = GroupedToolForm
 
 admin.site.register(Lab,LabAdmin)
 admin.site.register(Tool,ToolAdmin)
