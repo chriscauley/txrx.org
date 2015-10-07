@@ -4,9 +4,10 @@ from django.contrib.contenttypes.admin import GenericTabularInline
 
 from media.admin import TaggedPhotoInline
 from lablackey.db.admin import OrderedModelAdmin
-from .models import Lab, Tool, ToolLink, TaggedTool, Permission
-from course.models import CoursePermission
+from .models import Lab, Tool, ToolLink, TaggedTool, Permission, Criterion
+from course.models import CoursePermission, CourseCriterion
 
+@admin.register(Lab)
 class LabAdmin(OrderedModelAdmin):
   inlines = (TaggedPhotoInline,)
   raw_id_fields = ('photo',)
@@ -16,6 +17,7 @@ class ToolLinkInline(admin.TabularInline):
   model = ToolLink
   fields = ("title","url","order")
 
+@admin.register(Tool)
 class ToolAdmin(OrderedModelAdmin):
   inlines = (ToolLinkInline,TaggedPhotoInline)
   list_display = ('__unicode__','has_links','has_description','_materials','make','model',"room","lab",'order')
@@ -65,5 +67,12 @@ class PermissionAdmin(admin.ModelAdmin):
   inlines = [CoursePermissionInline]
   form = GroupedToolForm
 
-admin.site.register(Lab,LabAdmin)
-admin.site.register(Tool,ToolAdmin)
+class CourseCriterionInline(admin.TabularInline):
+  extra = 0
+  raw_id_fields = ('course',)
+  model = CourseCriterion
+
+@admin.register(Criterion)
+class CriterionAdmin(admin.ModelAdmin):
+  inlines = [CourseCriterionInline]
+
