@@ -111,3 +111,8 @@ class Permission(models.Model):
   __unicode__ = lambda self: self.name
   def check_permission_for_user(self,user):
     return all([UserCriterion.objects.filter(user=user,criterion=c).count() for c in self.criteria.all()])
+  def get_all_user_ids(self,fieldname='user_id'):
+    groups = []
+    for criterion in self.criteria.all():
+      groups.append(set(criterion.usercriterion_set.all().values_list(fieldname,flat=True)))
+    return set.union(*groups)

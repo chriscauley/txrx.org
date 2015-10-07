@@ -383,8 +383,6 @@ class Enrollment(UserModel):
       for criterion in self.session.course.criterion_set.all():
         defaults = {'content_object':self}
         u,new = UserCriterion.objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
-        if new:
-          print u
   class Meta:
     ordering = ('-datetime',)
 
