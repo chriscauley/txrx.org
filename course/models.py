@@ -13,7 +13,7 @@ import datetime, time
 from media.models import FilesMixin, PhotosMixin
 from geo.models import Room
 from event.models import OccurrenceModel, reverse_ics
-from tool.models import ToolsMixin, Permission, Criterion
+from tool.models import ToolsMixin, Permission, Criterion, UserCriterion
 from lablackey.db.models import UserModel
 from lablackey.utils import cached_method, cached_property, latin1_to_ascii
 
@@ -380,6 +380,11 @@ class Enrollment(UserModel):
     super(Enrollment,self).save(*args,**kwargs)
     if self.completed:
       CourseCompletion.objects.get_or_create(user=self.user,course=self.session.course)
+      for criterion in self.session.course.criterion_set.all():
+        defaults = {'content_object':self}
+        u,new = UserCriterion.objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
+        if new:
+          print u
   class Meta:
     ordering = ('-datetime',)
 

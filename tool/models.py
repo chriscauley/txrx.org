@@ -92,6 +92,15 @@ class Criterion(models.Model):
   courses = models.ManyToManyField('course.Course')
   __unicode__ = lambda self: self.name
 
+class UserCriterion(models.Model):
+  user = models.ForeignKey(settings.AUTH_USER_MODEL)
+  criterion = models.ForeignKey(Criterion)
+  created = models.DateTimeField(auto_now_add=True)
+  content_type = models.ForeignKey("contenttypes.ContentType")
+  object_id = models.IntegerField()
+  content_object = GenericForeignKey('content_type', 'object_id')
+  __unicode__ = lambda self: "%s for %s"%(self.user,self.criterion)
+
 class Permission(models.Model):
   name = models.CharField(max_length=32)
   tools = models.ManyToManyField(Tool,blank=True)
@@ -100,3 +109,5 @@ class Permission(models.Model):
   room = models.ForeignKey(Room)
   safety = models.BooleanField(default=True)
   __unicode__ = lambda self: self.name
+  def check_permission_for_user(self,user):
+    return all([UserCriterion.objects.filter(user=user,criterion=c).count() for c in self.criteria.all()])

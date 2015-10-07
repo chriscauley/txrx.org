@@ -47,17 +47,19 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 class GroupedToolForm(forms.ModelForm):
   def __init__(self,*args,**kwargs):
     super(GroupedToolForm,self).__init__(*args,**kwargs)
-    choices = {}
+    """choices = {}
     for tool in Tool.objects.all():
       room = unicode(tool.room)
       choices[room] = choices.get(room,[])
       choices[room].append((tool.pk,unicode(tool)))
-    choices = tuple(sorted(choices.items()))
+    choices = tuple(sorted(choices.items()))"""
+    choices = [(tool.pk,"(%s) %s"%(tool.room.name,tool.name)) for tool in Tool.objects.all()]
+    choices = sorted(choices,key=lambda i:i[1])
     self.fields["tools"].choices = choices
 
 @admin.register(Permission)
 class PermissionAdmin(admin.ModelAdmin):
-  filter_horizontal = ('criteria',)
+  filter_horizontal = ('criteria','tools')
   form = GroupedToolForm
 
 @admin.register(Criterion)
