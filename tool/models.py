@@ -90,6 +90,7 @@ class ToolsMixin(object):
 class Criterion(models.Model):
   name = models.CharField(max_length=32)
   courses = models.ManyToManyField('course.Course')
+  supervisors = models.ManyToManyField(settings.AUTH_USER_MODEL)
   __unicode__ = lambda self: self.name
   def user_can_grant(self,user):
     for course in self.courses.all():

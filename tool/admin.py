@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
+from django.contrib.auth import get_user_model
 
 from media.admin import TaggedPhotoInline
 from lablackey.db.admin import OrderedModelAdmin
@@ -64,9 +65,15 @@ class PermissionAdmin(admin.ModelAdmin):
   _criteria = lambda self,obj: ', '.join([unicode(criteria) for criteria in obj.criteria.all()])
   form = GroupedToolForm
 
+class CriterionForm(forms.ModelForm):
+  def __init__(self,*args,**kwargs):
+    super(CriterionForm,self).__init__(*args,**kwargs)
+    self.fields['supervisors'].queryset = get_user_model().objects.filter(is_staff=True)
+
 @admin.register(Criterion)
 class CriterionAdmin(admin.ModelAdmin):
-  filter_horizontal = ("courses",)
+  filter_horizontal = ("courses",'supervisors')
+  form = CriterionForm
 
 @admin.register(UserCriterion)
 class UserCriterionAdmin(admin.ModelAdmin):

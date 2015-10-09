@@ -3,7 +3,10 @@
 {% block content %}
 {% for permission in permissions %}
 <div>
-  <h2>{{ permission }} - {% if permission in userpermissions %}True{% else %}False{% endif %}</h2>
+  <h2>{{ permission }} - {% if permission in my_permissions %}True{% else %}False{% endif %}</h2>
+  {% for criterion in permission.criteria.all %}
+  <div class="alert alert-{% if criterion in my_criteria %}success{% else %}danger{% endif %}">{{ criterion }}</div>
+  {% endfor %}
 </div>
 {% endfor %}
 {% endblock %}

@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 from membership.models import Level
+from tool.models import Criterion
 
 class UserManager(BaseUserManager):
   def _create_user(self, username,  email, password, is_staff, is_superuser, **extra_fields):
