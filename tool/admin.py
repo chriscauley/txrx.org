@@ -65,15 +65,9 @@ class PermissionAdmin(admin.ModelAdmin):
   _criteria = lambda self,obj: ', '.join([unicode(criteria) for criteria in obj.criteria.all()])
   form = GroupedToolForm
 
-class CriterionForm(forms.ModelForm):
-  def __init__(self,*args,**kwargs):
-    super(CriterionForm,self).__init__(*args,**kwargs)
-    self.fields['supervisors'].queryset = get_user_model().objects.filter(is_staff=True)
-
 @admin.register(Criterion)
 class CriterionAdmin(admin.ModelAdmin):
-  filter_horizontal = ("courses",'supervisors')
-  form = CriterionForm
+  filter_horizontal = ("courses",)
 
 @admin.register(UserCriterion)
 class UserCriterionAdmin(admin.ModelAdmin):

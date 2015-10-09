@@ -93,7 +93,6 @@ class ToolsMixin(object):
 class Criterion(models.Model):
   name = models.CharField(max_length=32)
   courses = models.ManyToManyField('course.Course')
-  supervisors = models.ManyToManyField(settings.AUTH_USER_MODEL)
   __unicode__ = lambda self: self.name
   def user_can_grant(self,user):
     for course in self.courses.all():
@@ -104,7 +103,6 @@ class Criterion(models.Model):
       'id': self.id,
       'name': self.name,
       'course_ids': list(self.courses.all().values_list('id',flat=True)),
-      'supervisor_ids': list(self.supervisors.all().values_list('id',flat=True))
     }
 
 
