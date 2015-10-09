@@ -57,6 +57,8 @@ class User(AbstractBaseUser, PermissionsMixin):
   _ht = _('Designates whether the user can log into this admin site.')
   is_staff = models.BooleanField(_('staff status'), default=False, help_text=_ht)
   is_active = models.BooleanField(_('active'), default=True)
+  _ht = "Toolmasters can give any user access to any Tool Criteria."
+  is_toolmaster models.BooleanField(default=False,help_text=_ht)
   date_joined = models.DateTimeField(_('date joined'),auto_now_add=True)
   objects = UserManager()
 

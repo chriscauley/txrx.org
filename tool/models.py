@@ -4,12 +4,15 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
+from django.template.loader import render_to_string
 
 from geo.models import Room
 from lablackey.db.models import SlugModel, OrderedModel
 from lablackey.utils import cached_property, cached_method
 from media.models import Photo, PhotosMixin
 from wmd.models import MarkDownField
+
+import json, os, datetime
 
 class Lab(PhotosMixin,OrderedModel):
   name = models.CharField(max_length=128)
@@ -96,6 +99,14 @@ class Criterion(models.Model):
     for course in self.courses.all():
       if course.session_set.filter(user=user):
         return True
+  def as_json(self):
+    return {
+      'id': self.id,
+      'name': self.name,
+      'course_ids': list(self.courses.all().values_list('id',flat=True)),
+      'supervisor_ids': list(self.supervisors.all().values_list('id',flat=True))
+    }
+
 
 class UserCriterion(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
@@ -113,6 +124,14 @@ class Permission(models.Model):
   _ht = "Requires all these criteria to access these tools."
   criteria = models.ManyToManyField(Criterion,blank=True,help_text=_ht)
   __unicode__ = lambda self: self.name
+  def as_json(self):
+    return {
+      'id': self.id,
+      'name': self.name,
+      'room_id': self.room_id,
+      'tool_ids': list(self.tools.all().values_list('id',flat=True)),
+      'criterion_ids': list(self.criteria.all().values_list('id',flat=True)),
+    }
   def check_for_user(self,user):
     return all([UserCriterion.objects.filter(user=user,criterion=c).count() for c in self.criteria.all()])
   def get_all_user_ids(self,fieldname='user_id'):
@@ -122,3 +141,18 @@ class Permission(models.Model):
     return set.union(*groups)
   def get_criteria_can_grant(self,user):
     return [(c,c.user_can_grant(user)) for c in self.criteria.all()]
+
+def reset_tools_json(context="no context provided"):
+  values = {
+    'permissions_json': json.dumps([p.as_json() for p in Permission.objects.all()]),
+    'criteria_json': json.dumps([c.as_json() for c in Criterion.objects.all()])
+  }
+  text = render_to_string('tool/tools.json',values)
+  f = open(os.path.join(settings.STATIC_ROOT,'_tools.json'),'w')
+  f.write(text)
+  f.close()
+  os.rename(os.path.join(settings.STATIC_ROOT,'_tools.json'),os.path.join(settings.STATIC_ROOT,'tools.json'))
+
+  dt = datetime.datetime.now()
+  if dt.hour == 0 and dt.minute == 0:
+    mail_admins("tools.json reset",context)
