@@ -1,8 +1,8 @@
+from django.contrib.admin.views.decorators import staff_member_required
+from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from django.shortcuts import get_object_or_404
-
-from tool.models import Tool, Lab
+from tool.models import Tool, Lab, Permission
 
 def lab_index(request):
   values = {'labs': Lab.objects.all()}
@@ -19,3 +19,11 @@ def tool_detail(request,tool_slug,pk):
     'lab': tool.lab,
   }
   return TemplateResponse(request,'tool/tool_detail.html',values)
+
+@staff_member_required
+def criterion_index(request):
+  permissions = Permission.objects.all()
+  values = {
+    'permission_criteria_tuples': [(p,p.get_criteria_can_grant(request.user)) for p in permissions]
+  }
+  return TemplateResponse(request,'criterion/index.html',values)

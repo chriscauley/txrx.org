@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+  {% for permission,criteria_tuples in permission_criteria_tuples %}
+  <div>
+    <h2>{{ permission }}</h2>
+    <ul>
+      {% for criteria,can_grant in criteria_tuples %}
+      <li>{{ criteria }} - {{ can_grant }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

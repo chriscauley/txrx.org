@@ -91,6 +91,10 @@ class Criterion(models.Model):
   name = models.CharField(max_length=32)
   courses = models.ManyToManyField('course.Course')
   __unicode__ = lambda self: self.name
+  def user_can_grant(self,user):
+    for course in self.courses.all():
+      if course.session_set.filter(user=user):
+        return True
 
 class UserCriterion(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
@@ -104,8 +108,8 @@ class UserCriterion(models.Model):
 class Permission(models.Model):
   name = models.CharField(max_length=32)
   tools = models.ManyToManyField(Tool,blank=True)
-  _ht = "All these criteria grants access to these tools."
-  criteria = models.ManyToManyField(Criterion,blank=True,help_text=_ht,related_name="+")
+  _ht = "Requires all these criteria to access these tools."
+  criteria = models.ManyToManyField(Criterion,blank=True,help_text=_ht)
   room = models.ForeignKey(Room)
   safety = models.BooleanField(default=True)
   __unicode__ = lambda self: self.name
@@ -116,3 +120,5 @@ class Permission(models.Model):
     for criterion in self.criteria.all():
       groups.append(set(criterion.usercriterion_set.all().values_list(fieldname,flat=True)))
     return set.union(*groups)
+  def get_criteria_can_grant(self,user):
+    return [(c,c.user_can_grant(user)) for c in self.criteria.all()]
