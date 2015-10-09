@@ -107,11 +107,10 @@ class UserCriterion(models.Model):
 
 class Permission(models.Model):
   name = models.CharField(max_length=32)
+  room = models.ForeignKey(Room)
   tools = models.ManyToManyField(Tool,blank=True)
   _ht = "Requires all these criteria to access these tools."
   criteria = models.ManyToManyField(Criterion,blank=True,help_text=_ht)
-  room = models.ForeignKey(Room)
-  safety = models.BooleanField(default=True)
   __unicode__ = lambda self: self.name
   def check_for_user(self,user):
     return all([UserCriterion.objects.filter(user=user,criterion=c).count() for c in self.criteria.all()])
