@@ -59,6 +59,7 @@ class User(AbstractBaseUser, PermissionsMixin):
   is_active = models.BooleanField(_('active'), default=True)
   _ht = "Toolmasters can give any user access to any Tool Criteria."
   is_toolmaster = models.BooleanField(default=False,help_text=_ht)
+  rfid = models.CharField(max_length=16,null=True,blank=True)
   date_joined = models.DateTimeField(_('date joined'),auto_now_add=True)
   objects = UserManager()
 
