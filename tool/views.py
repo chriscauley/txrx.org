@@ -1,4 +1,5 @@
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
@@ -19,6 +20,17 @@ def tool_detail(request,tool_slug,pk):
     'lab': tool.lab,
   }
   return TemplateResponse(request,'tool/tool_detail.html',values)
+
+@login_required
+def my_permissions(request):
+  values = {
+    'permissions': Permission.objects.all(),
+    'userpermissions': [p for p in Permission.objects.all() if p.check_for_user(request.user)],
+    'usercriteria': request.user.usercriterion_set.all(),
+    'completed_courses': [e.session.course for e in request.user.enrollment_set.filter(completed=True)],
+    'uncompleted_courses': [e.session.course for e in request.user.enrollment_set.filter(completed=False)]
+  }
+  return TemplateResponse(request,'criterion/my_permissions.html',values)
 
 @staff_member_required
 def criterion_index(request):

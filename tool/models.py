@@ -113,7 +113,7 @@ class Permission(models.Model):
   room = models.ForeignKey(Room)
   safety = models.BooleanField(default=True)
   __unicode__ = lambda self: self.name
-  def check_permission_for_user(self,user):
+  def check_for_user(self,user):
     return all([UserCriterion.objects.filter(user=user,criterion=c).count() for c in self.criteria.all()])
   def get_all_user_ids(self,fieldname='user_id'):
     groups = []

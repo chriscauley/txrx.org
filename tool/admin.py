@@ -4,7 +4,7 @@ from django.contrib.contenttypes.admin import GenericTabularInline
 
 from media.admin import TaggedPhotoInline
 from lablackey.db.admin import OrderedModelAdmin
-from .models import Lab, Tool, ToolLink, TaggedTool, Permission, Criterion
+from .models import Lab, Tool, ToolLink, TaggedTool, Permission, Criterion, UserCriterion
 
 @admin.register(Lab)
 class LabAdmin(OrderedModelAdmin):
@@ -60,9 +60,14 @@ class GroupedToolForm(forms.ModelForm):
 @admin.register(Permission)
 class PermissionAdmin(admin.ModelAdmin):
   filter_horizontal = ('criteria','tools')
+  list_display = ('__unicode__','_criteria')
+  _criteria = lambda self,obj: ', '.join([unicode(criteria) for criteria in obj.criteria.all()])
   form = GroupedToolForm
 
 @admin.register(Criterion)
 class CriterionAdmin(admin.ModelAdmin):
   filter_horizontal = ("courses",)
 
+@admin.register(UserCriterion)
+class UserCriterionAdmin(admin.ModelAdmin):
+  pass

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% for permission in permissions %}
+<div>
+  <h2>{{ permission }} - {% if permission in userpermissions %}True{% else %}False{% endif %}</h2>
+</div>
+{% endfor %}
+{% endblock %}
