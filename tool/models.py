@@ -104,6 +104,8 @@ class Criterion(models.Model):
       'name': self.name,
       'course_ids': list(self.courses.all().values_list('id',flat=True)),
     }
+  class Meta:
+    ordering = ('name',)
 
 class UserCriterion(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)

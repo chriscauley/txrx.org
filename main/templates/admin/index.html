@@ -1,12 +1,6 @@
 {% extends "suit:admin/index.html" %}
 {% load i18n admin_dashboard compress %}
 
-{% block extrastyle %}
-{{ block.super }}
-<link href="{{ STATIC_URL }}suit/extra_suit.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
-{% endblock %}
-
 {% block content %}
 {% if request.path == "/admin/" %}
 <div id="content-main">

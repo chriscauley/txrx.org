@@ -62,9 +62,11 @@ class GroupedToolForm(forms.ModelForm):
 class PermissionAdmin(admin.ModelAdmin):
   filter_horizontal = ('criteria','tools')
   list_editable = ("order",)
-  list_display = ('__unicode__','room','order','_criteria')
+  list_display = ('__unicode__','abbreviation','room','order','_criteria')
   fields = (('name','abbreviation'),'room','tools','criteria')
-  _criteria = lambda self,obj: ', '.join([unicode(criteria) for criteria in obj.criteria.all()])
+  _criteria = lambda self,obj: '<br/>'.join([unicode(criteria) for criteria in obj.criteria.all()])
+  _criteria.allow_tags = True
+  _criteria.short_description = "Required Criteria"
   form = GroupedToolForm
 
 @admin.register(Criterion)

@@ -103,7 +103,7 @@ class Room(models.Model):
     }
   def __unicode__(self):
     if self.name:
-      return "%s @ %s"%(self.name,self.location)
+      return "%s"%self.name
     return "%s"%self.location
   class Meta:
     ordering = ('name',)
