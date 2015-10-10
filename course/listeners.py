@@ -78,7 +78,7 @@ def handle_successful_payment(sender, **kwargs):
   enrollments = []
   error_sessions = []
   for i in range(1, item_count+1):
-    course_cost = int(float(params['mc_gross_%d'%i]))
+    course_cost = float(params['mc_gross_%d'%i])
     quantity = int(params['quantity%s'%i])
 
     try:
@@ -109,11 +109,11 @@ def handle_successful_payment(sender, **kwargs):
         "Expected Cost: %s"%(price_multiplier*session.course.fee * int(quantity)),
         "discount: %s"%user.level.discount_percentage,
         "Session Fee: %s"%session.course.fee,
-        "Session Id:%s"%session.id,
-        "Quantity:%s"%enrollment.quantity,
-        "PP Email:%s"%sender.payer_email,
-        "U Email:%s"%user.email,
-        "u_id:%s"%_uid, #if this is none they won't get a discount
+        "Session Id: %s"%session.id,
+        "Quantity: %s"%enrollment.quantity,
+        "PP Email: %s"%sender.payer_email,
+        "U Email: %s"%user.email,
+        "u_id: %s"%_uid, #if this is none they won't get a discount
       ]
       error_sessions.append("\n".join(l))
     if enrollment.session.total_students > enrollment.session.course.max_students:

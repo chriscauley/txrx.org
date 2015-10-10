@@ -15,8 +15,9 @@ import warnings
 warnings.showwarning = lambda *x: None
 
 def setUp(self):
+  # fee = 45 because it tests that discounts are including fractional dollars
   self.session1 = Session.objects.create(
-    course=Course.objects.filter(active=True,fee__gt=0).order_by("?")[0],
+    course=Course.objects.filter(active=True,fee=45).order_by("?")[0],
     user_id=1
   )
   ClassTime.objects.create(
@@ -65,6 +66,23 @@ class ListenersTest(TestCase):
     enrollment = self.session1.enrollment_set.get()
     self.assertEqual(enrollment.quantity,3)
     self.assertEqual(enrollment.user,user)
+  def test_discount(self):
+    email = "prexistinguser@txrxlabs.com"
+    get_user_model().objects.filter(email=email).delete()
+    user = get_user_model().objects.create(
+      username="preexisinguser",
+      email=email
+    )
+    user.level = Level.objects.filter(discount_percentage=10)[0]
+    user.save()
+    params = get_course_query(session=self.session1,quantities=[1],payer_email=email)
+    paypal_post(self,params)
+
+    # The above generates an enrollment error because someone over paid
+    subjects = ["[TXRX_DEV]Enrollment Error","[TXRX] Course enrollment confirmation"]
+    self.assertEqual(len(mail.outbox),2)
+    for message in mail.outbox:
+      self.assertTrue(message.subject in subjects)
 
 class UtilsTest(TestCase):
   """ Test the following parameters of the get_or_create_student functions.
