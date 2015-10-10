@@ -116,10 +116,12 @@ class UserCriterion(models.Model):
 
 class Permission(models.Model):
   name = models.CharField(max_length=32)
+  abbreviation = models.CharField(max_length=16,help_text="For badge.")
   room = models.ForeignKey(Room)
   tools = models.ManyToManyField(Tool,blank=True)
   _ht = "Requires all these criteria to access these tools."
   criteria = models.ManyToManyField(Criterion,blank=True,help_text=_ht)
+  order = models.IntegerField(default=999)
   __unicode__ = lambda self: self.name
   def as_json(self):
     return {
@@ -138,6 +140,8 @@ class Permission(models.Model):
     return set.union(*groups)
   def get_criteria_can_grant(self,user):
     return [(c,c.user_can_grant(user)) for c in self.criteria.all()]
+  class Meta:
+    ordering = ('room','order',)
 
 def reset_tools_json(context="no context provided"):
   values = {
