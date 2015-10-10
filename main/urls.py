@@ -44,6 +44,7 @@ urlpatterns = patterns(
   url(r'^tx/rx/return/$','course.views.paypal_return',name='paypal_redirect'),
   url(r'^contact/$','contact.views.contact',name='contact'),
   url(r'^dxfviewer/$','geo.views.dxfviewer',name='dxfviewer'),
+  url(r'^checkin/$', 'user.views.checkin', name='checkin'),
 )
 
 def activate_user(target):

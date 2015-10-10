@@ -8,7 +8,7 @@ from .forms import UserChangeForm, CustomUserCreationForm
 
 class UserAdmin(UserAdmin):
   fieldsets = (
-    (None, {'fields': ('username', 'email', 'password', ('first_name', 'last_name'),'level')}),
+    (None, {'fields': ('username', 'email', 'password', ('first_name', 'last_name'),('rfid','level'))}),
     (_('Permissions'),
      {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups')}),
     (_('Important dates'), {'fields': ('last_login', 'date_joined')}),

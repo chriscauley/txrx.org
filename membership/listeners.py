@@ -8,10 +8,6 @@ from .models import Status, Subscription, Level, Product, Flag
 
 from paypal.standard.ipn.signals import valid_ipn_received, invalid_ipn_received
 
-def mail_admins(a,b):
-  print "MAIL: "+a
-  print b
-
 def get_subscription(params,sender):
   subscr_id = params.get('subscr_id',None) or params.get('recurring_payment_id',None)
   if not subscr_id:

@@ -1,10 +1,12 @@
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.core import validators
+from django.core.mail import send_mail
 from django.db import models
 from django.utils import timezone
 from django.utils.http import urlquote
 from django.utils.translation import ugettext_lazy as _
-from django.core.mail import send_mail
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 from membership.models import Level
 from tool.models import Criterion
@@ -93,5 +95,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     send_membership_email('email/new_member',self.email,experimental=False)
     self.orientation_status = 'emailed'
     self.save()
+
+class UserCheckin(models.Model):
+  user = models.ForeignKey(User)
+  time_in = models.DateTimeField(auto_now_add=True)
+  time_out = models.DateTimeField(null=True,blank=True)
+  content_type = models.ForeignKey("contenttypes.ContentType")
+  object_id = models.IntegerField()
+  content_object = GenericForeignKey('content_type', 'object_id')
 
 from .listeners import *
