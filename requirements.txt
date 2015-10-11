@@ -37,3 +37,4 @@ python-social-auth
 -e git+https://github.com/chriscauley/django-wmd-editor.git#egg=django_wmd_editor
 -e git+ttps://github.com/chriscauley/lablackey.git#egg=lablackey
 django_paypal==0.2.5
+django-colorful

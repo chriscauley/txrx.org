@@ -60,7 +60,8 @@ class GroupedToolForm(forms.ModelForm):
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-  pass
+  list_display = ('__unicode__','row','column','color')
+  list_editable = ('row','column','color')
 
 @admin.register(Permission)
 class PermissionAdmin(admin.ModelAdmin):

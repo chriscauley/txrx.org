@@ -12,6 +12,7 @@ from lablackey.utils import cached_property, cached_method
 from media.models import Photo, PhotosMixin
 from wmd.models import MarkDownField
 
+from colorful.fields import RGBColorField
 import json, os, datetime
 
 class Lab(PhotosMixin,OrderedModel):
@@ -118,12 +119,12 @@ class UserCriterion(models.Model):
 
 class Group(models.Model):
   name = models.CharField(max_length=32)
-  color = models.CharField(max_length=32)
+  color = RGBColorField()
   column = models.IntegerField(choices=[(0,"left"),(1,"right")])
   row = models.IntegerField()
   __unicode__ = lambda self: self.name
   class Meta:
-    ordering = ('column','row')
+    ordering = ('name',)
 
 class Permission(models.Model):
   name = models.CharField(max_length=32)
@@ -153,7 +154,7 @@ class Permission(models.Model):
   def get_criteria_can_grant(self,user):
     return [(c,c.user_can_grant(user)) for c in self.criteria.all()]
   class Meta:
-    ordering = ('group','order',)
+    ordering = ('group','order')
 
 def reset_tools_json(context="no context provided"):
   values = {
