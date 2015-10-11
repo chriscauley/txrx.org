@@ -116,10 +116,20 @@ class UserCriterion(models.Model):
   content_object = GenericForeignKey('content_type', 'object_id')
   __unicode__ = lambda self: "%s for %s"%(self.user,self.criterion)
 
+class Group(models.Model):
+  name = models.CharField(max_length=32)
+  color = models.CharField(max_length=32)
+  column = models.IntegerField(choices=[(0,"left"),(1,"right")])
+  row = models.IntegerField()
+  __unicode__ = lambda self: self.name
+  class Meta:
+    ordering = ('column','row')
+
 class Permission(models.Model):
   name = models.CharField(max_length=32)
   abbreviation = models.CharField(max_length=16,help_text="For badge.")
   room = models.ForeignKey(Room)
+  group = models.ForeignKey(Group,null=True,blank=True)
   tools = models.ManyToManyField(Tool,blank=True)
   _ht = "Requires all these criteria to access these tools."
   criteria = models.ManyToManyField(Criterion,blank=True,help_text=_ht)
@@ -143,7 +153,7 @@ class Permission(models.Model):
   def get_criteria_can_grant(self,user):
     return [(c,c.user_can_grant(user)) for c in self.criteria.all()]
   class Meta:
-    ordering = ('room','order',)
+    ordering = ('group','order',)
 
 def reset_tools_json(context="no context provided"):
   values = {

@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 
 from media.admin import TaggedPhotoInline
 from lablackey.db.admin import OrderedModelAdmin
-from .models import Lab, Tool, ToolLink, TaggedTool, Permission, Criterion, UserCriterion
+from .models import Lab, Tool, ToolLink, TaggedTool, Group, Permission, Criterion, UserCriterion
 
 @admin.register(Lab)
 class LabAdmin(OrderedModelAdmin):
@@ -58,12 +58,16 @@ class GroupedToolForm(forms.ModelForm):
     choices = sorted(choices,key=lambda i:i[1])
     self.fields["tools"].choices = choices
 
+@admin.register(Group)
+class GroupAdmin(admin.ModelAdmin):
+  pass
+
 @admin.register(Permission)
 class PermissionAdmin(admin.ModelAdmin):
   filter_horizontal = ('criteria','tools')
-  list_editable = ("order",)
-  list_display = ('__unicode__','abbreviation','room','order','_criteria')
-  fields = (('name','abbreviation'),'room','tools','criteria')
+  list_editable = ('group',"order",)
+  list_display = ('__unicode__','abbreviation','group','order','_criteria')
+  fields = (('name','abbreviation'),('group','room'),'tools','criteria')
   _criteria = lambda self,obj: '<br/>'.join([unicode(criteria) for criteria in obj.criteria.all()])
   _criteria.allow_tags = True
   _criteria.short_description = "Required Criteria"
