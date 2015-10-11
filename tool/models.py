@@ -57,6 +57,10 @@ class Tool(PhotosMixin,OrderedModel):
     ct_id = ContentType.objects.get(model="thing").id
     tagged = list(TaggedTool.objects.filter(content_type__id=ct_id,tool=self))
     return [t.content_object for t in tagged]
+  @property
+  def as_json(self):
+    fields = ['id','name']
+    return {field:getattr(self,field) for field in fields}
 
 class ToolLink(OrderedModel):
   tool = models.ForeignKey(Tool)
@@ -99,11 +103,15 @@ class Criterion(models.Model):
     for course in self.courses.all():
       if course.session_set.filter(user=user):
         return True
+  @property
   def as_json(self):
+    course_fields = ['id','name']
+    courses_json = [{f:getattr(c,f) for f in course_fields} for c in self.courses.all()]
     return {
       'id': self.id,
       'name': self.name,
       'course_ids': list(self.courses.all().values_list('id',flat=True)),
+      'courses': courses_json
     }
   class Meta:
     ordering = ('name',)
@@ -136,13 +144,19 @@ class Permission(models.Model):
   criteria = models.ManyToManyField(Criterion,blank=True,help_text=_ht)
   order = models.IntegerField(default=999)
   __unicode__ = lambda self: self.name
+  tools_json = property(lambda self: [t.as_json for t in self.tools.all()])
+  criteria_json = property(lambda self: [c.as_json for c in self.criteria.all()])
+  @property
   def as_json(self):
     return {
       'id': self.id,
       'name': self.name,
+      'abbreviation': self.abbreviation,
       'room_id': self.room_id,
       'tool_ids': list(self.tools.all().values_list('id',flat=True)),
       'criterion_ids': list(self.criteria.all().values_list('id',flat=True)),
+      'criteria_json': self.criteria_json,
+      'tools_json': self.tools_json
     }
   def check_for_user(self,user):
     return all([UserCriterion.objects.filter(user=user,criterion=c).count() for c in self.criteria.all()])
@@ -158,8 +172,8 @@ class Permission(models.Model):
 
 def reset_tools_json(context="no context provided"):
   values = {
-    'permissions_json': json.dumps([p.as_json() for p in Permission.objects.all()]),
-    'criteria_json': json.dumps([c.as_json() for c in Criterion.objects.all()])
+    'permissions_json': json.dumps([p.as_json for p in Permission.objects.all()]),
+    'criteria_json': json.dumps([c.as_json for c in Criterion.objects.all()])
   }
   text = render_to_string('tool/tools.json',values)
   f = open(os.path.join(settings.STATIC_ROOT,'_tools.json'),'w')

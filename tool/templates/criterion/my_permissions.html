@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 
-{% block content %}
-{% for permission in permissions %}
-<div>
-  <h2>{{ permission }} - {% if permission in my_permissions %}True{% else %}False{% endif %}</h2>
-  {% for criterion in permission.criteria.all %}
-  <div class="alert alert-{% if criterion in my_criteria %}success{% else %}danger{% endif %}">{{ criterion }}</div>
-  {% endfor %}
-</div>
-{% endfor %}
+{% block main %}
+<badge></badge>
+{% endblock %}
+
+{% block extrajs %}
+<script type="riot/tag" src="{{ STATIC_URL }}tags/tool.tag"></script>
+<script>
+  var columns = {{ columns|safe }};
+  riot.mount("badge")
+</script>
 {% endblock %}

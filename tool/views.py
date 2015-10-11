@@ -3,7 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from tool.models import Tool, Lab, Permission
+from tool.models import Tool, Lab, Permission, Group
+
+import json
 
 def lab_index(request):
   values = {'labs': Lab.objects.all()}
@@ -23,12 +25,18 @@ def tool_detail(request,tool_slug,pk):
 
 @login_required
 def my_permissions(request):
+  columns = [{'rows':[]},{'rows':[]}]
+  for group in Group.objects.all():
+    g = {
+      'id': group.id,
+      'color': group.color,
+      'permissions': [],
+    }
+    for permission in group.permission_set.all():
+      g['permissions'].append(permission.as_json)
+    columns[group.column]['rows'].append(g)
   values = {
-    'permissions': Permission.objects.all(),
-    'my_permissions': [p for p in Permission.objects.all() if p.check_for_user(request.user)],
-    'my_criteria': [uc.criterion for uc in request.user.usercriterion_set.all()],
-    'completed_courses': [e.session.course for e in request.user.enrollment_set.filter(completed=True)],
-    'uncompleted_courses': [e.session.course for e in request.user.enrollment_set.filter(completed=False)]
+    'columns': json.dumps(columns)
   }
   return TemplateResponse(request,'criterion/my_permissions.html',values)
 
