@@ -12,12 +12,15 @@
 <badge>
   <div class="row">
     <div class="col-sm-4">
-      <div class="row">
-        <div each={ columns } class="col-sm-6">
-          <div each={ rows } style="background-color: {this.color}" class="well">
-            <a onclick={ parent.parent.loadPermission } each={ permissions } class="permission">
-              { abbreviation }
-            </a>
+      <div class="badge-box">
+        <div class="row">
+          <div each={ opts.columns } class="col-sm-6">
+            <div each={ rows } style="background-color: {this.color}" class="{ group: true, any: any }">
+              <a onclick={ parent.parent.loadPermission } each={ permissions }
+                 class="{ permission: true, has: has, has_not: !has }">
+                { abbreviation }
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -26,10 +29,19 @@
       <permission></permission>
     </div>
   </div>
-  <style scoped>
-    .permission { cursor: pointer; display: block; color: inherit; font-weight: bold; }
-  </style>
 
+  var that = this;
+  this.on("mount",function() {
+    this.user = window.TXRX.user;
+    this.opts.columns.forEach(function(i) {
+      i.rows.forEach(function(i2) {
+        i2.permissions.forEach(function(i3) {
+          if (that.user.permission_ids.indexOf(i3.id) > -1) { i3.has = i2.any = true; }
+        });
+      });
+    });
+    this.update();
+  });
   loadPermission(e) {
     riot.mount("permission",e.item);
   }

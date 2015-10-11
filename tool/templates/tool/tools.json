@@ -2,3 +2,4 @@ var TXRX = TXRX || {};
 (function() {
   TXRX.permissions = {{ permissions_json|safe }};
   TXRX.criteria = {{ criteria_json|safe }};
+})()

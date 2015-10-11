@@ -6,8 +6,9 @@
 
 {% block extrajs %}
 <script type="riot/tag" src="{{ STATIC_URL }}tags/tool.tag"></script>
+<script src="/user.json"></script>
 <script>
   var columns = {{ columns|safe }};
-  riot.mount("badge")
+  riot.mount("badge",{columns: columns})
 </script>
 {% endblock %}

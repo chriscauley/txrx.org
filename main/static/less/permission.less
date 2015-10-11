@@ -1,0 +1,25 @@
+badge {
+  .badge-box {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .permission { 
+    color: inherit;
+    cursor: pointer;
+    display: block;
+    font-weight: bold;
+    padding: 0 10px;
+    &.has_not {
+      opacity: 0;
+      outline: 1px dashed;
+      &:hover { opacity: 0.75; }
+    }
+  }
+  .group {
+    margin-bottom: 20px;
+    opacity: 0.2;
+    &.any, &:hover { opacity: 1; }
+    &:last-child { margin-bottom: 0; }
+  }
+}

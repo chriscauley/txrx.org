@@ -45,6 +45,7 @@ urlpatterns = patterns(
   url(r'^contact/$','contact.views.contact',name='contact'),
   url(r'^dxfviewer/$','geo.views.dxfviewer',name='dxfviewer'),
   url(r'^checkin/$', 'user.views.checkin', name='checkin'),
+  url(r'^user.json','user.views.user_json'),
 )
 
 def activate_user(target):

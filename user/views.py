@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from .models import User, UserCheckin
 from geo.models import Room
+from tool.models import UserCriterion, Permission
 
 import json, datetime
 
@@ -24,3 +25,15 @@ def checkin(request):
     'time_out': str(checkin.time_out) if checkin.time_out else None,
   }
   return HttpResponse(json.dumps(out))
+
+def user_json(request):
+  if not request.user:
+    return TemplateResponse(request,"user.json",{'user_json':'{}'});
+  values = {
+    'user_json': {
+      'pk': request.user.pk,
+      'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(request.user)],
+      'criterion_ids': [uc.criterion_id for uc in UserCriterion.objects.filter(user=request.user)],
+    }
+  }
+  return TemplateResponse(request,"user.json",values)

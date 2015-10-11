@@ -1,0 +1,4 @@
+var TXRX = window.TXRX || {};
+(function() {
+  TXRX.user = {{ user_json|safe }};
+})();
