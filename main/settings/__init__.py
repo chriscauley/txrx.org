@@ -9,6 +9,10 @@ MANAGERS = ADMINS = (
   ('chris cauley','chris@lablackey.com'),
 )
 
+INTERNAL_IPS = (
+  '50.194.167.97', #TXRX
+)
+
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.sqlite3',

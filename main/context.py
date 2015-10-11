@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
+from django.db import connection
 
 from tagging.models import Tag
 
@@ -91,6 +92,7 @@ def nav(request):
     pressitems = PressItem.objects.all(),
     login_redirect = login_redirect,
     SITE_DOMAIN = "https://txrxlabs.org",
+    sql_time_sum = lambda: sum([float(q['time'])*1000 for q in connection.queries]),
   )
 
 def motd(request):

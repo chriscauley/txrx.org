@@ -100,6 +100,8 @@ class Criterion(models.Model):
   courses = models.ManyToManyField('course.Course')
   __unicode__ = lambda self: self.name
   def user_can_grant(self,user):
+    if user.is_toolmaster:
+      return True
     for course in self.courses.all():
       if course.session_set.filter(user=user):
         return True

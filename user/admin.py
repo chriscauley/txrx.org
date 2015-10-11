@@ -10,7 +10,7 @@ class UserAdmin(UserAdmin):
   fieldsets = (
     (None, {'fields': ('username', 'email', 'password', ('first_name', 'last_name'),('rfid','level'))}),
     (_('Permissions'),
-     {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups')}),
+     {'fields': ('is_active', 'is_staff', 'is_superuser', 'is_toolmaster', 'groups')}),
     (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
   )
   add_fieldsets = (
