@@ -1,9 +1,11 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from tool.models import Tool, Lab, Group, Permission
+from course.models import Enrollment
+from tool.models import Tool, Lab, Group, Permission, Criterion, UserCriterion
 
 import json
 
@@ -39,3 +41,15 @@ def my_permissions(request):
     'columns': json.dumps(columns)
   }
   return TemplateResponse(request,'criterion/my_permissions.html',values)
+
+@staff_member_required
+def toggle_criterion(request):
+  User = get_user_model()
+  user = get_object_or_404(User,pk=request.GET['user_id'])
+  criterion = get_object_or_404(Criterion,pk=request.GET['criterion_id'])
+  if request.GET.get("has",None):
+    UserCriterion.objects.get(criterion=criterion,user=user).delete()
+  else:
+    defaults = {content_object: request.user}
+    UserCriterion.objects.get_or_create(criterion=criterion,user=user,defaults=defaults)
+  return HttpResponse(json.dumps(User.objects.get(pk=user.pk).criterion_ids))

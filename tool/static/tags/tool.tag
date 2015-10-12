@@ -91,21 +91,45 @@
       "json"
     )
   }
+  this.on("mount",function() { $("authorize-criterion [name=q]").focus(); })
 </authorize-criterion>
 
 <authorize-button>
-  <div class="alert alert-block alert-{ alert_class }">
-    <div class="pull-right">
-      { email }<br/>
-      { paypal_email }
+  <a class="alert alert-block alert-{ alert_class }" click={ toggle }>
+    <div class="row">
+      <div class="col-xs-2">
+        <i class="fa fa-{ 'check-': has }square-o fa-4x"></i>
+      </div>
+      <div class="col-xs-5">
+        { username }<br />
+        { full_name }&nbsp;
+      </div>
+      <div class="col-xs-5">
+        { email }<br/>
+        { paypal_email }
+      </div>
     </div>
-    { username }<br />
-    { full_name }&nbsp;
-  </div>
+  </a>
 
   var criterion_id = this.parent.opts.id;
+  var that = this;
   this.on("update",function() {
-    this.alert_class = (this.criterion_ids.indexOf(criterion_id) == -1)?"danger":"success";
+    this.has = this.criterion_ids.indexOf(criterion_id) != -1;
+    this.alert_class = this.has?"danger":"success";
   });
+
+  toggle (e) {
+    this.root.setAttribute("loading","true");
+    $.get(
+      "/tools/togglecriterion/",
+      {user_id: that.pk, has: that.has,criterion_id: criterion_id},
+      function(data) {
+        this.root.removeAttribute("loading");
+        this.criterion_ids = data;
+        this.update();
+      },
+      "json"
+    )
+  }
 
 </authorize-button>
