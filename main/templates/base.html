@@ -87,6 +87,10 @@
       {% endcomment %}
       {% endblock %}
     </div>
+    <script src="https://cdn.jsdelivr.net/g/riot@2.2(riot.min.js+compiler.min.js)"></script>
+    <script type="riot/tag" src="{{ STATIC_URL }}tags/checkin.tag"></script>
+    <script type="riot/tag" src="{{ STATIC_URL }}tags/tool.tag"></script>
+    <script type="riot/tag" src="{{ STATIC_URL }}tags/modal.tag"></script>
     {% compress js %}
     <script src="{{ STATIC_URL }}less/bootstrap/js/affix.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/button.js"></script>
@@ -100,8 +104,9 @@
     <script src="{{ STATIC_URL }}less/bootstrap/js/tooltip.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/popover.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/tab.js"></script>
+    <script src="{{ STATIC_URL }}js/unrest.js"></script>
+    <script src="{{ STATIC_URL }}js/router.js"></script>
     {% endcompress %}    
-    <script src="https://cdn.jsdelivr.net/g/riot@2.2(riot.min.js+compiler.min.js)"></script>
     {% block extrajs %}{% endblock %}
     <script src="{{ STATIC_URL }}js/jwt.js"></script>
     <script src="{{ STATIC_URL }}blog.js"></script>
