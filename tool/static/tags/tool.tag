@@ -14,7 +14,7 @@
     <div class="col-sm-4">
       <div class="badge-box">
         <div class="row">
-          <div each={ opts.columns } class="col-sm-6">
+          <div each={ columns } class="col-sm-6">
             <div each={ rows } style="background-color: {this.color}" class="{ group: true, any: any }">
               <a onclick={ parent.parent.loadPermission } each={ permissions }
                  class="{ permission: true, has: has, has_not: !has }">
@@ -32,12 +32,17 @@
 
   var that = this;
   this.on("mount",function() {
-    this.user = window.TXRX.user;
-    this.opts.columns.forEach(function(i) {
-      i.rows.forEach(function(i2) {
-        i2.permissions.forEach(function(i3) {
-          if (that.user.permission_ids.indexOf(i3.id) > -1) { i3.has = i2.any = true; }
-        });
+    that.columns = [{'rows':[]},{'rows':[]}]
+    window.TXRX.permissions.forEach(function(p) {
+      p.has = (window.TXRX.user.permission_ids.indexOf(p.id) > -1);
+    });
+    window.TXRX.groups.forEach(function(g) {
+      that.columns[g.column].rows.push(g);
+      g.permissions = window.TXRX.permissions.filter(function(p) {
+        if (p.group_id == g.id) {
+          if (p.has) { g.any = true }
+          return true
+        }
       });
     });
     this.update();

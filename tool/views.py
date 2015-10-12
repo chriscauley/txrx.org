@@ -25,23 +25,6 @@ def tool_detail(request,tool_slug,pk):
   }
   return TemplateResponse(request,'tool/tool_detail.html',values)
 
-@login_required
-def my_permissions(request):
-  columns = [{'rows':[]},{'rows':[]}]
-  for group in Group.objects.all():
-    g = {
-      'id': group.id,
-      'color': group.color,
-      'permissions': [],
-    }
-    for permission in group.permission_set.all():
-      g['permissions'].append(permission.as_json)
-    columns[group.column]['rows'].append(g)
-  values = {
-    'columns': json.dumps(columns)
-  }
-  return TemplateResponse(request,'criterion/my_permissions.html',values)
-
 @staff_member_required
 def toggle_criterion(request):
   User = get_user_model()

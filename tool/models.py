@@ -132,6 +132,9 @@ class Group(models.Model):
   color = RGBColorField()
   column = models.IntegerField(choices=[(0,"left"),(1,"right")])
   row = models.IntegerField()
+  @property
+  def as_json(self):
+    return {key:getattr(self,key) for key in ['id','name','color','row','column']}
   __unicode__ = lambda self: self.name
   class Meta:
     ordering = ('name',)
@@ -158,6 +161,7 @@ class Permission(models.Model):
       'tool_ids': list(self.tools.all().values_list('id',flat=True)),
       'criterion_ids': list(self.criteria.all().values_list('id',flat=True)),
       'criteria_json': self.criteria_json,
+      'group_id': self.group_id,
       'tools_json': self.tools_json
     }
   def check_for_user(self,user):
@@ -175,6 +179,7 @@ class Permission(models.Model):
 def reset_tools_json(context="no context provided"):
   values = {
     'permissions_json': json.dumps([p.as_json for p in Permission.objects.all()]),
+    'groups_json': json.dumps([g.as_json for g in Group.objects.all()]),
     'criteria_json': json.dumps([c.as_json for c in Criterion.objects.all()])
   }
   text = render_to_string('tool/tools.json',values)

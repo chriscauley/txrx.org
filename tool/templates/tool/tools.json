@@ -1,5 +1,6 @@
 var TXRX = TXRX || {};
 (function() {
   TXRX.permissions = {{ permissions_json|safe }};
+  TXRX.groups = {{ groups_json|safe }};
   TXRX.criteria = {{ criteria_json|safe }};
 })()
