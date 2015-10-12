@@ -17,7 +17,7 @@ def list_view(request,app_name,class_,serializer=None):
     Response(status=status.HTTP_401_UNAUTHORIZED)
   if request.method == 'GET':
     if hasattr(serializer,'get_queryset'):
-      items = serializer.get_queryset()
+      items = serializer.get_queryset(request)
     else:
       items = model.objects.all()
     serializer._many = True

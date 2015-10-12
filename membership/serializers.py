@@ -12,7 +12,7 @@ class FlagSizzler(BaseSizzler):
 
 class ActiveFlagSizzler(FlagSizzler):
   @classmethod
-  def get_queryset(class_):
+  def get_queryset(class_,request=None):
     return class_.Meta.model.objects.filter(status__in=Flag.ACTION_CHOICES)
   class Meta:
     model = Flag
