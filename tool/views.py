@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from tool.models import Tool, Lab, Permission, Group
+from tool.models import Tool, Lab, Group, Permission
 
 import json
 
@@ -39,11 +39,3 @@ def my_permissions(request):
     'columns': json.dumps(columns)
   }
   return TemplateResponse(request,'criterion/my_permissions.html',values)
-
-@staff_member_required
-def criterion_index(request):
-  permissions = Permission.objects.all()
-  values = {
-    'permission_criteria_tuples': [(p,p.get_criteria_can_grant(request.user)) for p in permissions]
-  }
-  return TemplateResponse(request,'criterion/index.html',values)

@@ -1,16 +1,29 @@
 (function() {
+  function mainMount(html,data) {
+    var tag_name = /[\w-]+/g.exec(html)[0];
+    document.getElementById("main").innerHTML = html;
+    riot.mount("modal");
+  }
   var _route = {
     checkout: function() {
-      document.getElementById("main").innerHTML = "<tool-checkout></tool-checkout>";
-      riot.mount("tool-checkout");
+      mainMount("<tool-checkout></tool-checkout>");
     },
     checkin: function() {
-      document.getElementById("main").innerHTML = "<modal><checkin></checkin></modal>";
-      riot.mount("modal");
+      mainMount("<modal><checkin></checkin></modal>");
+    },
+    criterion: function(pk) {
+      $.get(
+        "/api/tool/criterion/"+pk+"/",
+        function(data) {
+          mainMount("<authorize-criterion></authorize-criterion>",data);
+        },
+        'json'
+      );
     }
   };
   riot.route(function() {
     if (! _route[arguments[0]]) { return }
-    _route[arguments[0]].apply(Array.prototype.slice.call(arguments,1));
+    _route[arguments[0]].apply(this,Array.prototype.slice.call(arguments,1));
   });
+  riot.route(window.location.hash.slice(1))
 })();

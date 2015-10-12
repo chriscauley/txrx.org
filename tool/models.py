@@ -167,8 +167,8 @@ class Permission(models.Model):
     for criterion in self.criteria.all():
       groups.append(set(criterion.usercriterion_set.all().values_list(fieldname,flat=True)))
     return set.union(*groups)
-  def get_criteria_can_grant(self,user):
-    return [(c,c.user_can_grant(user)) for c in self.criteria.all()]
+  def get_grantable_criteria(self,user):
+    return [c for c in self.criteria.all() if c.user_can_grant(user)]
   class Meta:
     ordering = ('group','order')
 

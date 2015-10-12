@@ -83,7 +83,7 @@ def paypal_signal(sender,**kwargs):
     try:
       product = Product.objects.get(unit_price=amt,level=level)
     except Product.DoesNotExist:
-      b = "Could not find level product %s $%s for txn %s"
+      b = "Could not find level product \"%s\" (cost $%s) for txn %s"
       mail_admins("Bad IPN",b%(level,amt,sender.txn_id))
       return
     subscription = Subscription.objects.create(

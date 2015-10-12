@@ -56,3 +56,13 @@
   </div>
   
 </permission>
+
+<authorize-criterion>
+  <h1>{ opts.name }</h1>
+  <input type="text" name="q" onkeyup={ search } placeholder="Search by name or email" />
+  
+  search(e) {
+    uR.bounce(s,[e]);
+  }
+  function s(e) { console.log(e) }
+</authorize-criterion>
