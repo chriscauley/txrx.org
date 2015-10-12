@@ -51,9 +51,17 @@ var uR = (function() {
     });
   }
 
+  var bounceOuts = {};
+  function bounce(f,args,delay) {
+    delay = delay | 500;
+    clearTimeout(bounceOuts[f.name]);
+    bounceOuts[f.name] = setTimeout(function() { f.apply(this,args); },delay);
+  }
+
   return {
     serialize: serialize,
     ajax: ajax,
+    bounce: bounce,
   }
 })()
   
