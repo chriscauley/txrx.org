@@ -2,6 +2,7 @@ from django.db.models import Q
 from rest_framework import serializers
 
 from .models import User
+from tool.models import UserCriterion
 from api.serializers import BaseSizzler
 
 class SearchSizzler(BaseSizzler):
@@ -11,9 +12,11 @@ class SearchSizzler(BaseSizzler):
     q = request.REQUEST.get('q',None)
     qs = class_.Meta.model.objects.all()
     if q:
-      _Q = Q(username=q) | Q(usermembership__paypal_address=q) | Q(rfid=q) | Q(first_name=q) | Q(last_name=q)
-      qs = qs.objects.filter(_Q).filter(is_active=True)
+      _Q = Q()
+      for f in ['username','email','usermembership__paypal_email','rfid','first_name','last_name']:
+        _Q = _Q | Q(**{f+"__icontains":q})
+      qs = qs.filter(_Q).filter(is_active=True).distinct()
     return qs
   class Meta:
     model = User
-    fields = ('username','pk','email')
+    fields = ('username','pk','email','paypal_email','get_full_name','criterion_ids')

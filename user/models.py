@@ -9,7 +9,7 @@ from django.utils.http import urlquote
 from django.utils.translation import ugettext_lazy as _
 
 from membership.models import Level
-from tool.models import Criterion
+from tool.models import UserCriterion
 
 class UserManager(BaseUserManager):
   def _create_user(self, username,  email, password, is_staff, is_superuser, **extra_fields):
@@ -42,6 +42,7 @@ ORIENTATION_STATUS_CHOICES = [
 ]
 
 class User(AbstractBaseUser, PermissionsMixin):
+  criterion_ids = lambda self: UserCriterion.objects.filter(user=self).values_list('pk',flat=True)
   kwargs = dict(
     help_text=_('Required. 30 characters or fewer. Letters, digits, and ./+/-/_ only.'),
     validators=[
@@ -63,6 +64,7 @@ class User(AbstractBaseUser, PermissionsMixin):
   is_toolmaster = models.BooleanField(default=False,help_text=_ht)
   rfid = models.CharField(max_length=16,null=True,blank=True)
   date_joined = models.DateTimeField(_('date joined'),auto_now_add=True)
+  paypal_email = lambda self: self.usermembership.paypal_email
   objects = UserManager()
 
   #txrx fields

@@ -106,8 +106,10 @@
     <script src="{{ STATIC_URL }}less/bootstrap/js/tab.js"></script>
     <script src="{{ STATIC_URL }}js/unrest.js"></script>
     <script src="{{ STATIC_URL }}js/router.js"></script>
-    {% endcompress %}    
+    {% endcompress %}
     {% block extrajs %}{% endblock %}
+    <script src="/user.json?v={% now "ymd_his" %}"></script>
+    <script src="{{ STATIC_URL }}tools.json?v={% now "ymd_h" %}"></script>
     <script src="{{ STATIC_URL }}js/jwt.js"></script>
     <script src="{{ STATIC_URL }}blog.js"></script>
     <script src="{{ STATIC_URL }}js/favico.js"></script>

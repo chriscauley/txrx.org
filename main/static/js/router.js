@@ -2,7 +2,7 @@
   function mainMount(html,data) {
     var tag_name = /[\w-]+/g.exec(html)[0];
     document.getElementById("main").innerHTML = html;
-    riot.mount("modal");
+    riot.mount(tag_name,data);
   }
   var _route = {
     checkout: function() {
@@ -15,6 +15,7 @@
       $.get(
         "/api/tool/criterion/"+pk+"/",
         function(data) {
+          data.pk = pk;
           mainMount("<authorize-criterion></authorize-criterion>",data);
         },
         'json'

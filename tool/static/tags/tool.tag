@@ -58,11 +58,54 @@
 </permission>
 
 <authorize-criterion>
-  <h1>{ opts.name }</h1>
-  <input type="text" name="q" onkeyup={ search } placeholder="Search by name or email" />
-  
+  <div class="row">
+    <div class="col-sm-6">
+      <h1>{ opts.name }</h1>
+      <input type="text" name="q" onkeyup={ search } placeholder="Search by name or email" autocomplete="off" />
+      <div if={ results.length; }>
+        <authorize-button each={ results }>
+      </div>
+    </div>
+  </div>
+
+  var that = this;
+  that.results = [];
+  var old_value = '',value;
   search(e) {
+    value = document.querySelector("authorize-criterion [name=q]").value;
+    if (old_value == value) { return }
     uR.bounce(s,[e]);
+    old_value = value;
   }
-  function s(e) { console.log(e) }
+  function s(e) {
+    that.loading = true;
+    if (!value) { that.results = []; that.loading = false; return; }
+    $.get(
+      "/api/user/search/",
+      {q: value},
+      function(data) {
+        that.loading = false;
+        that.results = data;
+        that.update()
+      },
+      "json"
+    )
+  }
 </authorize-criterion>
+
+<authorize-button>
+  <div class="alert alert-block alert-{ alert_class }">
+    <div class="pull-right">
+      { email }<br/>
+      { paypal_email }
+    </div>
+    { username }<br />
+    { full_name }&nbsp;
+  </div>
+
+  var criterion_id = this.parent.opts.id;
+  this.on("update",function() {
+    this.alert_class = (this.criterion_ids.indexOf(criterion_id) == -1)?"danger":"success";
+  });
+
+</authorize-button>
