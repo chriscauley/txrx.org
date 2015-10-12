@@ -115,7 +115,7 @@
   var that = this;
   this.on("update",function() {
     this.has = this.criterion_ids.indexOf(criterion_id) != -1;
-    this.alert_class = this.has?"danger":"success";
+    this.alert_class = this.has?"success":"danger";
   });
 
   toggle (e) {
