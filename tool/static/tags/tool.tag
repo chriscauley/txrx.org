@@ -1,11 +1,7 @@
 <tool-checkout>
-  <div each={ permissions }>
-    <div each={ criteria }>
-      { name }
-    </div>
+  <div each={ window.TXRX.criteria }>
+    <a href="#criterion/{ id }" class="btn btn-block btn-success">{ name }</a>
   </div>
-
-  this.permissions = window.TXRX.permissions;
 
 </tool-checkout>
 
@@ -62,79 +58,85 @@
   
 </permission>
 
-<authorize-criterion>
-  <div class="row">
-    <div class="col-sm-6">
-      <h1>{ opts.name }</h1>
-      <input type="text" name="q" onkeyup={ search } placeholder="Search by name or email" autocomplete="off" />
-      <div if={ results.length; }>
-        <authorize-button each={ results }>
-      </div>
+<search-criterion>
+  <h2>Manage Tool Permission</h2>
+  <p>Search for students and grant/remove their privileges for { opts.name }.</p>
+  <input type="text" name="q" onkeyup={ search } placeholder="Search by name or email" autocomplete="off" />
+  <div if={ students.length; }>
+    <div each={ students }>
+      <button class="btn btn-primary btn-success btn-block" onclick={ parent.expand }>
+        <div class="row">
+          <div class="col-sm-4">{ username }<br />{ get_full_name }&nbsp;</div>
+          <div class="col-sm-8">{ email }<br/>{ paypal_email }
+          </div>
+        </div>
+      </button>
+      <checkbox each={ criteria } onclick={ parent.parent.toggleCriterion }>
+        { name }
+      </checkbox>
     </div>
   </div>
 
   var that = this;
-  that.results = [];
+  that.students = [];
   var old_value = '',value;
   search(e) {
-    value = document.querySelector("authorize-criterion [name=q]").value;
+    value = document.querySelector("search-criterion [name=q]").value;
     if (old_value == value) { return }
     uR.bounce(s,[e]);
     old_value = value;
   }
   function s(e) {
     that.loading = true;
-    if (!value) { that.results = []; that.loading = false; return; }
+    if (!value) { that.students = []; that.loading = false; return; }
     $.get(
       "/api/user/search/",
       {q: value},
       function(data) {
         that.loading = false;
-        that.results = data;
+        that.students = data;
         that.update()
       },
       "json"
     )
   }
-  this.on("mount",function() { $("authorize-criterion [name=q]").focus(); })
-</authorize-criterion>
+  this.on("mount",function() { $("search-criterion [name=q]").focus(); });
+  this.on("update", function() {
+    if (this.active_user) {
+      this.active_user.criteria.forEach(function(c) {
+        c.has = that.active_user.criterion_ids.indexOf(c.id) != -1;
+      });
+    }
+  });
 
-<authorize-button>
-  <a class="alert alert-block alert-{ alert_class }" click={ toggle }>
-    <div class="row">
-      <div class="col-xs-2">
-        <i class="fa fa-{ 'check-': has }square-o fa-4x"></i>
-      </div>
-      <div class="col-xs-5">
-        { username }<br />
-        { full_name }&nbsp;
-      </div>
-      <div class="col-xs-5">
-        { email }<br/>
-        { paypal_email }
-      </div>
-    </div>
+  expand(e) {
+    if (e.item.criteria) { e.item.criteria = this.active_user = null; return }
+    if (this.active_user) { this.active_user.criteria = null }
+    this.active_user = e.item;
+    e.item.criteria = window.TXRX.criteria;
+  }
+
+  toggleCriterion(e) {
+    $.get(
+      '/tools/toggle_criterion/',
+      { user_id: this.active_user.id, criterion_id: e.item.id },
+      function(data) {
+        that.active_user.criterion_ids = data;
+        that.update();
+      },
+      "json"
+    );
+  }
+</search-criterion>
+
+<checkbox>
+  <a class="alert alert-block alert-{ alert_class }">
+    <i class="fa fa-{ 'check-': has }square-o fa-3x"></i>
+    <yield/>
   </a>
 
-  var criterion_id = this.parent.opts.id;
-  var that = this;
   this.on("update",function() {
-    this.has = this.criterion_ids.indexOf(criterion_id) != -1;
     this.alert_class = this.has?"success":"danger";
   });
 
-  toggle (e) {
-    this.root.setAttribute("loading","true");
-    $.get(
-      "/tools/togglecriterion/",
-      {user_id: that.pk, has: that.has,criterion_id: criterion_id},
-      function(data) {
-        this.root.removeAttribute("loading");
-        this.criterion_ids = data;
-        this.update();
-      },
-      "json"
-    )
-  }
-
-</authorize-button>
+</checkbox>

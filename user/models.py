@@ -42,7 +42,7 @@ ORIENTATION_STATUS_CHOICES = [
 ]
 
 class User(AbstractBaseUser, PermissionsMixin):
-  criterion_ids = lambda self: UserCriterion.objects.filter(user=self).values_list('pk',flat=True)
+  criterion_ids = property(lambda self: list(UserCriterion.objects.filter(user=self).values_list('criterion_id',flat=True)))
   kwargs = dict(
     help_text=_('Required. 30 characters or fewer. Letters, digits, and ./+/-/_ only.'),
     validators=[

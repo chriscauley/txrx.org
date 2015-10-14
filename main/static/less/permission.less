@@ -24,8 +24,38 @@ badge {
   }
 }
 
-authorize-button {
-  .alert { display: block; }
-  .fa-4x { line-height: 0.75 }
-  .row { cursor: pointer; }
+checkbox {
+  display: block;
+  .alert {
+    cursor: pointer;
+    display: block;
+    padding-left: 60px;
+    position: relative;
+    .fa-3x {
+      left: 5px;
+      position: absolute;
+      top: 5px;
+    }
+  }
+}
+
+tool-checkout,search-criterion {
+  display: block;
+  max-width: 400px;
+  .btn { margin-bottom: 15px; }
+}
+
+[ur-loading] {
+  position: relative;
+  &:before {
+    background: rgba(0,0,0,0.5);
+    bottom: 0;
+    content: "";
+    display: block;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+  }
 }

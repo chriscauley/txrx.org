@@ -10,6 +10,7 @@ class SearchSizzler(BaseSizzler):
   @classmethod
   def get_queryset(class_,request):
     q = request.REQUEST.get('q',None)
+    session_id = request.REQUEST.get('session_id',None)
     qs = class_.Meta.model.objects.all()
     if q:
       _Q = Q()
@@ -19,4 +20,4 @@ class SearchSizzler(BaseSizzler):
     return qs
   class Meta:
     model = User
-    fields = ('username','pk','email','paypal_email','get_full_name','criterion_ids')
+    fields = ('username','id','email','paypal_email','get_full_name','criterion_ids')

@@ -1,4 +1,5 @@
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -30,9 +31,13 @@ def toggle_criterion(request):
   User = get_user_model()
   user = get_object_or_404(User,pk=request.GET['user_id'])
   criterion = get_object_or_404(Criterion,pk=request.GET['criterion_id'])
-  if request.GET.get("has",None):
-    UserCriterion.objects.get(criterion=criterion,user=user).delete()
+  ucs = UserCriterion.objects.filter(criterion=criterion,user=user)
+  if ucs:
+    print "deleted"
+    ucs.delete()
   else:
-    defaults = {content_object: request.user}
+    defaults = {'content_object': request.user}
+    print "created"
     UserCriterion.objects.get_or_create(criterion=criterion,user=user,defaults=defaults)
+  # send back the new user criterion ids to replace old data
   return HttpResponse(json.dumps(User.objects.get(pk=user.pk).criterion_ids))

@@ -12,14 +12,7 @@
       mainMount("<modal><checkin></checkin></modal>");
     },
     criterion: function(pk) {
-      $.get(
-        "/api/tool/criterion/"+pk+"/",
-        function(data) {
-          data.pk = pk;
-          mainMount("<authorize-criterion></authorize-criterion>",data);
-        },
-        'json'
-      );
+      mainMount("<search-criterion></search-criterion>",window.TXRX.criteria[pk]);
     },
     "my-permissions": function() { mainMount('<badge>') }
   };

@@ -30,6 +30,10 @@ def nav(request):
     {'name': 'twitter','url': 'https://twitter.com/txrxlabs' },
     {'name': 'instagram','url': 'https://instagram.com/txrxlabs/' },
   ]
+  toolmaster_sublinks = [
+    {'name': 'Tools','url': '/tools/'},
+    {'name': 'Permissions','url': '/beta/#criterion'}
+  ]
   _nav = [
     {"name": "About",
      "url": "/about-us/",
@@ -38,7 +42,10 @@ def nav(request):
     {"name": "Classes",
      "url": "/classes/",
      },
-    {'name': "Tools", "url": "/tools/"},
+    {'name': "Tools",
+     "url": "/tools/",
+     "sublinks": toolmaster_sublinks if request.user.is_toolmaster else [],
+    },
     {"name": "Blog",
      "url": "/blog/",
      "sublinks": blog_sublinks if request.user.is_staff else [],
