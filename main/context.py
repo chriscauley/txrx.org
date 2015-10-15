@@ -44,7 +44,7 @@ def nav(request):
      },
     {'name': "Tools",
      "url": "/tools/",
-     "sublinks": toolmaster_sublinks if request.user.is_toolmaster else [],
+     "sublinks": toolmaster_sublinks if (request.user.is_authenticated() and request.user.is_toolmaster) else [],
     },
     {"name": "Blog",
      "url": "/blog/",
