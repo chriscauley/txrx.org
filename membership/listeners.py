@@ -26,7 +26,7 @@ def paypal_flag(sender,reason=None,**kwargs):
     return
   Flag.objects.create(
     subscription=kwargs['subscription'],
-    reason=(reason or sender.txn_type)[:32],
+    reason=(reason or sender.txn_type),
   )
 
 @receiver(valid_ipn_received,dispatch_uid='paypal_signal')
@@ -55,9 +55,9 @@ def paypal_signal(sender,**kwargs):
     mail_admins("Flagged %s"%sender.txn_type,urls)
     return
   elif sender.txn_type == 'subscr_eot':
+    subscription.force_canceled()
     paypal_flag(sender,**kwargs)
     mail_admins("Flagged %s and canceled"%sender.txn_type,urls)
-    subscription.force_canceled()
     return
   elif sender.txn_type == 'subscr_cancel':
     if subscription:

@@ -26,7 +26,6 @@ def get_paypal_query(**kwargs):
     kwargs['first_name'] = kwargs.get('first_name') or user.first_name
     kwargs['last_name'] = kwargs.get('last_name') or user.last_name
     kwargs['payer_email'] = kwargs.get('payer_email') or user.payer_email
-
   defaults = {
     # unique to every purchase
     'txn_id': None,
@@ -82,4 +81,9 @@ def get_course_query(**kwargs):
     kwargs['quantity%s'%n] = quantity
     kwargs['mc_gross_%s'%n] = quantity*session.course.fee
     kwargs['item_number%s'%n] = session.pk
+  return get_paypal_query(**kwargs)
+
+def get_flag_query(txn_type,**kwargs):
+  kwargs['subscr_id'] = kwargs.get('subscr_id',None) or "I-"+randstring(12)
+  kwargs['txn_type'] = txn_type
   return get_paypal_query(**kwargs)

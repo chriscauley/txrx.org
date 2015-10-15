@@ -1,8 +1,9 @@
+from django.core import mail
 from django.contrib.auth import get_user_model
 from django.test import TestCase, RequestFactory
 
-from .models import Product, Level, Group, add_months
-from .paypal_utils import get_membership_query, paypal_post
+from .models import Product, Level, Group, add_months, Subscription, Flag
+from .paypal_utils import get_membership_query, paypal_post, get_flag_query
 from paypal.standard.ipn.models import PayPalIPN
 from six import text_type
 from six.moves.urllib.parse import urlencode
@@ -14,6 +15,8 @@ warnings.showwarning = lambda *x: None
 
 BASE_URL = 'http://dev.txrxlabs.org:8025'
 
+#this will be needed eventually, for now I just use the dev db
+"""
 def setUp():
   objects = [
     (Group,[
@@ -31,11 +34,44 @@ def setUp():
   ]
   for model,kwargs in objects:
     model.objects.create(**kwargs)
+"""
 
 class SimpleTest(TestCase):
-  def setUp(self):
-    self.factory = RequestFactory()
-  #  setUp()
+  def test_flags(self):
+    flag_transactions = [
+      'recurring_payment_skipped',"recurring_payment_failed","recurring_payment_suspended",
+      'recurring_payment_suspended_due_to_max_failed_payment',
+      "subscr_failed",'subscr_eot']
+    all_transactions = flag_transactions + [
+      'cart','subscr_signup','web_accept','send_money'
+    ]
+    for txn_type in all_transactions:
+      level = Level.objects.get(name="Hacker")
+      product = level.product_set.all()[0]
+      new_email = "new_email%s@txrxtesting.com"%product.pk
+      get_user_model().objects.filter(email=new_email).delete()
+      data = get_membership_query(product=product,payer_email=new_email)
+      paypal_post(self,data)
+      subscription = Subscription.objects.get(user__email=new_email)
+      subscr_id = subscription.subscr_id
+
+
+      # Now let's flag that account
+      mail.outbox = []
+      flag_data = get_flag_query(txn_type,payer_email=new_email,subscr_id=subscr_id)
+      paypal_post(self,flag_data)
+      subscription = Subscription.objects.get(user__email=new_email)
+      subjects = [m.subject for m in mail.outbox]
+      if txn_type in flag_transactions:
+        if txn_type == 'subscr_eot':
+          self.assertTrue('[TXRX_DEV]Flagged %s and canceled'%txn_type in subjects)
+          self.assertTrue(subscription.canceled)
+        else:
+          self.assertTrue('[TXRX_DEV]Flagged %s'%txn_type in subjects)
+          self.assertTrue(not subscription.canceled)
+        flag = Flag.objects.get(subscription=subscription)
+        self.assertEqual(flag.reason,txn_type)
+        self.assertEqual(flag.status,'new')
   def test_flag_workflow(self):
     """
     Create a user with a subscription and move it back to the past due date.

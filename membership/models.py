@@ -327,7 +327,7 @@ REASON_CHOICES = [
   ("recurring_payment_skipped", "PayPal Skipped"),
   ("recurring_payment_failed", "PayPal Failed Recurring"),
   ("recurring_payment_suspended", "PayPal Suspended"),
-  ('recurring_payment_suspended_due_',"PayPal End of Subscription"),
+  ('recurring_payment_suspended_due_to_max_failed_payment',"PayPal End of Subscription"),
   ("subscr_failed", "PayPal Failed Subscription"),
   ("subscr_eot", "PayPal End of Term"),
   ("manually_flagged","Manually Flagged"),
@@ -360,7 +360,7 @@ class FlagManager(models.Manager):
 
 class Flag(models.Model):
   subscription = models.ForeignKey(Subscription)
-  reason = models.CharField(max_length=32,choices=REASON_CHOICES)
+  reason = models.CharField(max_length=64,choices=REASON_CHOICES)
   status = models.CharField(max_length=32,default='new',choices=FLAG_STATUS_CHOICES)
   datetime = models.DateTimeField(auto_now_add=True)
   emailed = models.DateTimeField(null=True,blank=True)
