@@ -11,8 +11,8 @@
     checkin: function() {
       mainMount("<modal><checkin></checkin></modal>");
     },
-    criterion: function(pk) {
-      mainMount("<search-criterion></search-criterion>",window.TXRX.criteria[pk]);
+    toolmaster: function(search_term) {
+      mainMount("<toolmaster></toolmaster>",{search_term:search_term});
     },
     "my-permissions": function() { mainMount('<badge>') }
   };

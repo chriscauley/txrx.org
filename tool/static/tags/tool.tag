@@ -52,71 +52,60 @@
 <permission>
   <h1>{ opts.name }</h1>
   <div each={ opts.criteria_json }>
-    <h2>{ name }</h2>
-    <div each={ courses }>{ name }</div>
+    <h2><i class="fa fa-check fa-2x" if={ has }></i> { name }</h2>
+    <div each={ courses } class="course">
+      <i class="fa fa-check fa-2x" if={ has }></i>
+      { name }
+    </div>
   </div>
-  
+  this.course_ids = window.TXRX.user.completed_course_ids
+  this.on("update",function() {
+    if (this.opts.criteria_json) {
+      this.opts.criteria_json.forEach(function(criteria) {
+        criteria.has = window.TXRX.user.criterion_ids.indexOf(criteria.id) != -1;
+        criteria.courses.forEach(function(course) {
+          course.has = window.TXRX.user.completed_course_ids.indexOf(course.id) != -1;
+          console.log(course)
+        });
+      });
+    }
+  });
 </permission>
 
-<search-criterion>
-  <h2>Manage Tool Permission</h2>
-  <p>Search for students and grant/remove their privileges for { opts.name }.</p>
-  <input type="text" name="q" onkeyup={ search } placeholder="Search by name or email" autocomplete="off" />
-  <div if={ students.length; }>
-    <div each={ students }>
-      <button class="btn btn-primary btn-success btn-block" onclick={ parent.expand }>
-        <div class="row">
-          <div class="col-sm-4">{ username }<br />{ get_full_name }&nbsp;</div>
-          <div class="col-sm-8">{ email }<br/>{ paypal_email }
-          </div>
-        </div>
-      </button>
-      <checkbox each={ criteria } onclick={ parent.parent.toggleCriterion }>
+<toolmaster>
+  <search-users search_term={ opts.search_term }>
+    <h2>Manage Tool Permission</h2>
+    <p>Search for students and grant/remove their privileges for { opts.name }.</p>
+  </search-users>
+  <div if={ active_user } class="row">
+    <div class="col-sm-6">
+      <h3><u>Course Enrollments</u></h3>
+      <checkbox each={ student.enrollment_jsons } onclick={ parent.toggleEnrollment }>
+        { session_name }
+      </checkbox>
+    </div>
+    <div class="col-sm-6">
+      <h3><u>Tool Criteria</u></h3>
+      <checkbox each={ criteria } has={ id in parent.student.criterion_ids } cid={ id } pid={ parent.student.criterion_ids } onclick={ parent.toggleCriterion }>
         { name }
       </checkbox>
     </div>
   </div>
 
   var that = this;
-  that.students = [];
-  var old_value = '',value;
-  search(e) {
-    value = document.querySelector("search-criterion [name=q]").value;
-    if (old_value == value) { return }
-    uR.bounce(s,[e]);
-    old_value = value;
-  }
-  function s(e) {
-    that.loading = true;
-    if (!value) { that.students = []; that.loading = false; return; }
+  toggleCriterion(e) {
     $.get(
-      "/api/user/search/",
-      {q: value},
+      '/tools/toggle_criterion/',
+      { user_id: this.active_user.id, criterion_id: e.item.id },
       function(data) {
-        that.loading = false;
-        that.students = data;
-        that.update()
+        that.student.criterion_ids = data;
+        that.update();
       },
       "json"
-    )
-  }
-  this.on("mount",function() { $("search-criterion [name=q]").focus(); });
-  this.on("update", function() {
-    if (this.active_user) {
-      this.active_user.criteria.forEach(function(c) {
-        c.has = that.active_user.criterion_ids.indexOf(c.id) != -1;
-      });
-    }
-  });
-
-  expand(e) {
-    if (e.item.criteria) { e.item.criteria = this.active_user = null; return }
-    if (this.active_user) { this.active_user.criteria = null }
-    this.active_user = e.item;
-    e.item.criteria = window.TXRX.criteria;
+    );
   }
 
-  toggleCriterion(e) {
+  toggleEnrollment(e) {
     $.get(
       '/tools/toggle_criterion/',
       { user_id: this.active_user.id, criterion_id: e.item.id },
@@ -127,7 +116,76 @@
       "json"
     );
   }
-</search-criterion>
+
+  this.on("update", function() {
+    that.criteria  = window.TXRX.criteria;
+    if (that.active_user) {
+      that.criteria.forEach(function(c) {
+        c.has = that.student.criterion_ids.indexOf(c.id) != -1;
+      });
+    }
+  });
+
+  select(e) {
+    var target = this.root;
+    target.setAttribute("ur-loading","loading");
+    this.active_user = e.item;
+    $.get(
+      "/api/user/student/"+e.item.id+"/",
+      function(data) {
+        target.removeAttribute("ur-loading");
+        that.student = data;
+        that.update()
+      }
+    )
+  }
+</toolmaster>
+
+<search-users>
+  <yeild/>
+  <input type="text" name="q" onkeyup={ search } placeholder="Search by name or email" autocomplete="off"
+         value={ opts.search_term } />
+  <div class="results">
+    <div each={ students }>
+      <button class="btn btn-primary btn-success btn-block" onclick={ parent.parent.select }>
+        <div class="row">
+          <div class="col-sm-4">{ username }<br />{ get_full_name }&nbsp;</div>
+          <div class="col-sm-8">{ email }<br/>{ paypal_email }
+          </div>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  var that = this;
+  that.students = [];
+  var old_value = '',value;
+  search(e) {
+    value = that.root.querySelector("[name=q]").value;
+    if (old_value == value) { return }
+    uR.bounce(s,[e]);
+    old_value = value;
+  }
+  function s(e) {
+    var target = that.root.querySelector(".results");
+    target.setAttribute("ur-loading","loading")
+    if (!value) { that.students = []; target.removeAttribute("ur-loading"); return; }
+    $.get(
+      "/api/user/search/",
+      {q: value},
+      function(data) {
+        target.removeAttribute("ur-loading");
+        that.students = data;
+        that.update()
+      },
+      "json"
+    )
+  }
+  this.on("mount",function() {
+    that.root.querySelector("[name=q]").focus();
+    that.search();
+  });
+</search-users>
 
 <checkbox>
   <a class="alert alert-block alert-{ alert_class }">

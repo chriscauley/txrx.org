@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
+
 from .models import User, UserCheckin
+from course.models import Enrollment
 from geo.models import Room
 from tool.models import UserCriterion, Permission
 
@@ -29,11 +31,14 @@ def checkin(request):
 def user_json(request):
   if not request.user:
     return TemplateResponse(request,"user.json",{'user_json':'{}'});
+  enrollments = Enrollment.objects.filter(user=request.user,completed=True)
+  usercriteria = UserCriterion.objects.filter(user=request.user)
   values = {
     'user_json': {
       'pk': request.user.pk,
       'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(request.user)],
-      'criterion_ids': [uc.criterion_id for uc in UserCriterion.objects.filter(user=request.user)],
+      'criterion_ids': list(usercriteria.values_list('criterion_id',flat=True)),
+      'completed_course_ids': [e.session.course_id for e in enrollments],
     }
   }
   return TemplateResponse(request,"user.json",values)

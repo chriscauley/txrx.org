@@ -42,7 +42,6 @@ ORIENTATION_STATUS_CHOICES = [
 ]
 
 class User(AbstractBaseUser, PermissionsMixin):
-  criterion_ids = property(lambda self: list(UserCriterion.objects.filter(user=self).values_list('criterion_id',flat=True)))
   kwargs = dict(
     help_text=_('Required. 30 characters or fewer. Letters, digits, and ./+/-/_ only.'),
     validators=[
@@ -73,6 +72,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
   USERNAME_FIELD = 'username'
   REQUIRED_FIELDS = ['email']
+
+  @property
+  def criterion_ids(self):
+    return list(UserCriterion.objects.filter(user=self).values_list('criterion_id',flat=True))
+  @property
+  def enrollment_jsons(self):
+    return [e.as_json for e in self.enrollment_set.all().order_by("-session__first_date")]
 
   class Meta:
     verbose_name = _('user')

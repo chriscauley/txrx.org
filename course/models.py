@@ -373,6 +373,15 @@ class Enrollment(UserModel):
 
   objects = EnrollmentManager()
 
+  @property
+  def as_json(self):
+    return {
+      'id': self.id,
+      'session': self.session.as_json,
+      'session_name': unicode(self.session),
+      'completed': self.completed,
+    }
+
   __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.session)
   def save(self,*args,**kwargs):
     if not self.evaluation_date:

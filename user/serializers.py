@@ -6,7 +6,6 @@ from tool.models import UserCriterion
 from api.serializers import BaseSizzler
 
 class SearchSizzler(BaseSizzler):
-  permissions = classmethod(lambda class_,request: request.user.is_staff)
   @classmethod
   def get_queryset(class_,request):
     q = request.REQUEST.get('q',None)
@@ -20,4 +19,9 @@ class SearchSizzler(BaseSizzler):
     return qs
   class Meta:
     model = User
-    fields = ('username','id','email','paypal_email','get_full_name','criterion_ids')
+    fields = ('username','id','email','paypal_email','get_full_name')
+
+class StudentSizzler(BaseSizzler):
+  class Meta:
+    model = User
+    fields = ('enrollment_jsons','criterion_ids')

@@ -33,11 +33,9 @@ def toggle_criterion(request):
   criterion = get_object_or_404(Criterion,pk=request.GET['criterion_id'])
   ucs = UserCriterion.objects.filter(criterion=criterion,user=user)
   if ucs:
-    print "deleted"
     ucs.delete()
   else:
     defaults = {'content_object': request.user}
-    print "created"
     UserCriterion.objects.get_or_create(criterion=criterion,user=user,defaults=defaults)
   # send back the new user criterion ids to replace old data
   return HttpResponse(json.dumps(User.objects.get(pk=user.pk).criterion_ids))
