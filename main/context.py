@@ -32,7 +32,7 @@ def nav(request):
   ]
   toolmaster_sublinks = [
     {'name': 'Tools','url': '/tools/'},
-    {'name': 'Permissions','url': '/beta/#criterion'}
+    {'name': 'Permissions','url': '/beta/#toolmaster'}
   ]
   _nav = [
     {"name": "About",
