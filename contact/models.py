@@ -49,7 +49,10 @@ class Message(models.Model):
     if send_email:
       self.send()
   def send(self):
-    send_mail(self.subject,"Message from: %s\n\n%s"%(self.from_name,self.message),
-              self.from_email,[self.subject.get_email()])
+    send_mail(
+      "%s from %s"%(self.subject,self.from_name),
+      "Message from: %s\n\n%s"%(self.from_name,self.message),
+      self.from_email,[self.subject.get_email()]
+    )
   class Meta:
     verbose_name = "Message"

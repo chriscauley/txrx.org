@@ -3,7 +3,8 @@
 {% block main %}
 <div class="col-sm-6 col-md-7">
   <h1 class="page_title">Contact Us</h1>
-  <form method="POST" class="cvfloat">
+  <form method="POST" class="cvfloat" id="contact_form"
+        onsubmit="$('[type=submit]').attr('disabled','disabled');$('#contact_form').addClass('sending');return true;">
     {% csrf_token %}
     {% include "_form.html" %}
     <input type="submit" class="btn btn-primary" />
