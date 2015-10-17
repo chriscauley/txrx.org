@@ -24,4 +24,4 @@ class SearchSizzler(BaseSizzler):
 class StudentSizzler(BaseSizzler):
   class Meta:
     model = User
-    fields = ('enrollment_jsons','criterion_ids')
+    fields = ('enrollment_jsons','enrollment_criterion_ids','criterion_ids')

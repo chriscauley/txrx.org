@@ -30,12 +30,24 @@ def tool_detail(request,tool_slug,pk):
 def toggle_criterion(request):
   User = get_user_model()
   user = get_object_or_404(User,pk=request.GET['user_id'])
-  criterion = get_object_or_404(Criterion,pk=request.GET['criterion_id'])
-  ucs = UserCriterion.objects.filter(criterion=criterion,user=user)
-  if ucs:
-    ucs.delete()
-  else:
-    defaults = {'content_object': request.user}
-    UserCriterion.objects.get_or_create(criterion=criterion,user=user,defaults=defaults)
+  if request.GET.get('criterion_id'):
+    criterion = get_object_or_404(Criterion,pk=request.GET['criterion_id'])
+    if not criterion.user_can_grant(request.user):
+      return HttpResponseForbidden("You do not have permission to assign this criterion.")
+    ucs = UserCriterion.objects.filter(criterion=criterion,user=user)
+
+    if ucs:
+      ucs.delete()
+    else:
+      defaults = {'content_object': request.user}
+      UserCriterion.objects.get_or_create(criterion=criterion,user=user,defaults=defaults)
+  if request.GET.get('enrollment_id'):
+    enrollment = get_object_or_404(Enrollment,pk=request.GET["enrollment_id"])
+    if not (request.user.is_toolmaster or request.user == enrollment.session.user):
+      return HttpResponseForbidden("You do not have permission to modify this enrollment")
+    enrollment.completed = not enrollment.completed
+    enrollment.save()
   # send back the new user criterion ids to replace old data
-  return HttpResponse(json.dumps(User.objects.get(pk=user.pk).criterion_ids))
+  user = User.objects.get(pk=user.pk)
+  attrs = ['enrollment_jsons','enrollment_criterion_ids','criterion_ids']
+  return HttpResponse(json.dumps({attr: getattr(user,attr) for attr in attrs}))

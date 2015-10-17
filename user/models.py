@@ -79,7 +79,14 @@ class User(AbstractBaseUser, PermissionsMixin):
   @property
   def enrollment_jsons(self):
     return [e.as_json for e in self.enrollment_set.all().order_by("-session__first_date")]
-
+  @property
+  def enrollment_criterion_ids(self):
+    ucs = UserCriterion.objects.filter(
+      user=self,
+      content_type__model='enrollment',
+      object_id__in=self.enrollment_set.filter(completed=True).values_list("id")
+    )
+    return list(ucs.values_list('criterion_id',flat=True))
   class Meta:
     verbose_name = _('user')
     verbose_name_plural = _('users')

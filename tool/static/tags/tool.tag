@@ -76,7 +76,7 @@
     <h2>Manage Tool Permission</h2>
     <p>Search for students and grant/remove their privileges for { opts.name }.</p>
   </search-users>
-  <div if={ active_user } class="row">
+  <div if={ active_user } class="row buttons">
     <div class="col-sm-6">
       <h3><u>Course Enrollments</u></h3>
       <checkbox each={ student.enrollment_jsons } onclick={ parent.toggleEnrollment }>
@@ -93,24 +93,24 @@
 
   var that = this;
   toggleCriterion(e) {
-    $.get(
-      '/tools/toggle_criterion/',
-      { user_id: this.active_user.id, criterion_id: e.item.id },
-      function(data) {
-        that.student.criterion_ids = data;
-        that.update();
-      },
-      "json"
-    );
+    toggle(e,{ criterion_id: e.item.id });
   }
 
   toggleEnrollment(e) {
+    toggle(e,{ enrollment_id: e.item.id });
+  }
+
+  function toggle(e,d) {
+    if (e.item.locked) { return }
+    d.user_id = that.active_user.id;
+    var target = that.root.querySelector(".buttons")
+    target.setAttribute("ur-loading","loading");
     $.get(
-      '/classes/toggle_enrollment/',
-      { user_id: this.active_user.id, enrollment_id: e.item.id },
+      '/tools/toggle_criterion/',
+      d,
       function(data) {
-        console.log(e)
-        e.item.completed = data.completed;
+        target.removeAttribute("ur-loading");
+        that.student = data;
         that.update();
       },
       "json"
@@ -122,6 +122,7 @@
     if (that.active_user) {
       that.criteria.forEach(function(c) {
         c.has = that.student.criterion_ids.indexOf(c.id) != -1;
+        c.locked = that.student.enrollment_criterion_ids.indexOf(c.id) != -1;
       });
       that.student.enrollment_jsons.forEach(function(e){e.has = e.completed});
     }
@@ -147,19 +148,21 @@
   <input type="text" name="q" onkeyup={ search } placeholder="Search by name or email" autocomplete="off"
          value={ opts.search_term } />
   <div class="results">
-    <div each={ students }>
-      <button class="btn btn-primary btn-success btn-block" onclick={ parent.parent.select }>
+    <button class="btn btn-link" onclick={ back } if={ parent.active_user }>
+      &laquo; Back to results
+    </button>
+    <div each={ results }>
+      <button class="btn btn-{ parent.parent.active_user?'success':'primary' } btn-block" onclick={ parent.parent.select }>
         <div class="row">
           <div class="col-sm-4">{ username }<br />{ get_full_name }&nbsp;</div>
-          <div class="col-sm-8">{ email }<br/>{ paypal_email }
-          </div>
+          <div class="col-sm-8">{ email }<br/>{ paypal_email }</div>
         </div>
       </button>
     </div>
   </div>
 
   var that = this;
-  that.students = [];
+  that._results = [];
   var old_value = '',value;
   search(e) {
     value = that.root.querySelector("[name=q]").value;
@@ -170,32 +173,47 @@
   function s(e) {
     var target = that.root.querySelector(".results");
     target.setAttribute("ur-loading","loading")
-    if (!value) { that.students = []; target.removeAttribute("ur-loading"); return; }
+    if (!value) { that._results = []; target.removeAttribute("ur-loading"); return; }
     $.get(
       "/api/user/search/",
       {q: value},
       function(data) {
         target.removeAttribute("ur-loading");
-        that.students = data;
+        that._results = data;
         that.update()
       },
       "json"
     )
   }
+  back(e) {
+    this.parent.active_user = undefined;
+    this.parent.update()
+  }
   this.on("mount",function() {
     that.root.querySelector("[name=q]").focus();
     that.search();
+  });
+  this.on("update",function() {
+    if (this.parent.active_user) { this.results = [this.parent.active_user ] }
+    else { this.results = this._results }
   });
 </search-users>
 
 <checkbox>
   <a class="alert alert-block alert-{ alert_class }">
-    <i class="fa fa-{ 'check-': has }square-o fa-3x"></i>
+    <i class="fa fa-{ 'check-': has }square-o fa-3x" if={ !locked }></i>
+    <i class="fa fa-lock fa-3x" if={ locked }></i>
     <yield/>
   </a>
 
   this.on("update",function() {
-    this.alert_class = this.has?"success":"danger";
+    if (this.locked) {
+      this.icon = "lock";
+      this.alert_class = "warning";
+    } else {
+      this.alert_class = this.has?"success":"danger";
+      this.icon = this.has?"check-square-o":"square-o";
+    }
   });
 
 </checkbox>
