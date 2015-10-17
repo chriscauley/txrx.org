@@ -74,7 +74,7 @@
 <toolmaster>
   <search-users search_term={ opts.search_term }>
     <h2>Manage Tool Permission</h2>
-    <p>Search for students and grant/remove their privileges for { opts.name }.</p>
+    <p>Search for students to change their privileges and course completions.</p>
   </search-users>
   <div if={ active_user } class="row buttons">
     <div class="col-sm-6">
@@ -149,7 +149,7 @@
 </toolmaster>
 
 <search-users>
-  <yeild/>
+  <yield/>
   <input type="text" name="q" onkeyup={ search } placeholder="Search by name or email" autocomplete="off"
          value={ opts.search_term } />
   <div class="results">
