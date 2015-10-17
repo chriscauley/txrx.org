@@ -3,22 +3,17 @@ from django import forms
 from lablackey.db.forms import StaffMemberForm
 from lablackey.db.admin import NamedTreeModelAdmin, RawMixin
 
-from .models import Subject, Course, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseCompletion
+from .models import Subject, Course, Session, Enrollment, Term, ClassTime, Branding, Evaluation
 from event.admin import OccurrenceModelInline
 from media.admin import TaggedFileInline, TaggedPhotoAdmin
 from tool.admin import TaggedToolInline
-
-class CourseCompletionInline(RawMixin,admin.TabularInline):
-  model = CourseCompletion
-  extra = 0
-  raw_id_fields = ('user',)
 
 class CourseAdmin(TaggedPhotoAdmin):
   list_display = ("name","_notifies_count","active","tool_count","photo_count","content","visuals","presentation")
   list_editable = ("content","visuals","presentation")
   readonly_fields = ("_notifies",)
   filter_horizontal = ("subjects",)
-  inlines = [CourseCompletionInline, TaggedToolInline, TaggedFileInline]
+  inlines = [TaggedToolInline, TaggedFileInline]
   def tool_count(self,obj):
     return len(obj.get_tools())
   def photo_count(self,obj):

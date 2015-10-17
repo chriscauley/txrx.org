@@ -14,7 +14,7 @@ from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required, verify_unique_email
 
 from blog.models import Post
-from course.models import Course,CourseCompletion, Session
+from course.models import Course, Session
 from thing.models import Thing
 from lablackey.utils import FORBIDDEN
 
@@ -113,20 +113,6 @@ def course_names(request):
   out = []
   for c in Course.objects.all():
     out.append(','.join([str(c.id),c.name]))
-  return HttpResponse('\n'.join(out))
-
-def course_completion(request,year=None,month=None,day=None):
-  verify_api(request)
-  out = []
-  if year:
-    dt = datetime.date(int(year),int(month),int(day))
-  else:
-    dt = datetime.date.today()-datetime.timedelta(30)
-  completions = CourseCompletion.objects.filter(created__gte=dt)
-  if 'course_id' in request.GET:
-    completions = completions.filter(course_id=request.GET['course_id'])
-  for c in completions:
-    out.append(','.join([str(c.course.id),str(c.user.id)]))
   return HttpResponse('\n'.join(out))
 
 def member_index(request,username=None):

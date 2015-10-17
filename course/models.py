@@ -388,7 +388,6 @@ class Enrollment(UserModel):
       self.evaluation_date = list(self.session.all_occurrences)[-1].start
     super(Enrollment,self).save(*args,**kwargs)
     if self.completed:
-      CourseCompletion.objects.get_or_create(user=self.user,course=self.session.course)
       for criterion in self.session.course.criterion_set.all():
         defaults = {'content_object':self}
         u,new = UserCriterion.objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
@@ -396,10 +395,6 @@ class Enrollment(UserModel):
       UserCriterion.objects.filter(content_type__model="enrollment",object_id=self.id).delete()
   class Meta:
     ordering = ('-datetime',)
-
-class CourseCompletion(UserModel):
-  course = models.ForeignKey(Course)
-  created = models.DateTimeField(auto_now_add=True)
 
 FIVE_CHOICES = (
   (1,'1 - Did not meet expectations'),

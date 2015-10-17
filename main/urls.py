@@ -86,7 +86,6 @@ urlpatterns += patterns(
   url(r'^roland_email/(\d+)/(\d+)/(\d+)/$','roland_email',name='roland_email'),
   url(r'^api/users/$','user_emails'),
   url(r'^api/courses/$','course_names'),
-  url(r'^api/completions/$','course_completion'),
   url(r'^instructors/$','member_index',name='instructor_index'),
   url(r'^instructors/([^/]+)/$','member_detail',name='instructor_detail'),
   url(r'^u/$','member_index',name='member_index'),
