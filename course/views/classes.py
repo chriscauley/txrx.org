@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
-from django.http import QueryDict, Http404, HttpResponseRedirect, HttpResponse
+from django.http import QueryDict, Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
@@ -172,3 +172,13 @@ def delay_reschedule(request,course_pk,n_months):
     messages.success(request,"%s has been delayed for %s months"%(course,n_months))
   course.save()
   return HttpResponseRedirect(reverse("admin:index"))
+
+@staff_member_required
+def toggle_enrollment(request):
+  enrollment = get_object_or_404(Enrollment,pk=request.GET["enrollment_id"])
+  if not request.user.is_toolmaster or request.user == enrollment.session.user:
+    return HttpResponseForbidden("You do not have permission to modify this enrollment")
+  enrollment.completed = not enrollment.completed
+  enrollment.save()
+  return HttpResponse(json.dumps(enrollment.as_json))
+  

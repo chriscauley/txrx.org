@@ -65,7 +65,6 @@
         criteria.has = window.TXRX.user.criterion_ids.indexOf(criteria.id) != -1;
         criteria.courses.forEach(function(course) {
           course.has = window.TXRX.user.completed_course_ids.indexOf(course.id) != -1;
-          console.log(course)
         });
       });
     }
@@ -86,7 +85,7 @@
     </div>
     <div class="col-sm-6">
       <h3><u>Tool Criteria</u></h3>
-      <checkbox each={ criteria } has={ id in parent.student.criterion_ids } cid={ id } pid={ parent.student.criterion_ids } onclick={ parent.toggleCriterion }>
+      <checkbox each={ criteria } onclick={ parent.toggleCriterion }>
         { name }
       </checkbox>
     </div>
@@ -107,10 +106,11 @@
 
   toggleEnrollment(e) {
     $.get(
-      '/tools/toggle_criterion/',
-      { user_id: this.active_user.id, criterion_id: e.item.id },
+      '/classes/toggle_enrollment/',
+      { user_id: this.active_user.id, enrollment_id: e.item.id },
       function(data) {
-        that.active_user.criterion_ids = data;
+        console.log(e)
+        e.item.completed = data.completed;
         that.update();
       },
       "json"
@@ -123,6 +123,7 @@
       that.criteria.forEach(function(c) {
         c.has = that.student.criterion_ids.indexOf(c.id) != -1;
       });
+      that.student.enrollment_jsons.forEach(function(e){e.has = e.completed});
     }
   });
 
