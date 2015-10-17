@@ -79,13 +79,13 @@
   <div if={ active_user } class="row buttons">
     <div class="col-sm-6">
       <h3><u>Course Enrollments</u></h3>
-      <checkbox each={ student.enrollment_jsons } onclick={ parent.toggleEnrollment }>
+      <checkbox each={ student.enrollment_jsons } onclick={ parent.toggleEnrollment } if={ can_change }>
         { session_name }
       </checkbox>
     </div>
     <div class="col-sm-6">
       <h3><u>Tool Criteria</u></h3>
-      <checkbox each={ criteria } onclick={ parent.toggleCriterion }>
+      <checkbox each={ criteria } onclick={ parent.toggleCriterion } if={ can_change }>
         { name }
       </checkbox>
     </div>
@@ -120,11 +120,16 @@
   this.on("update", function() {
     that.criteria  = window.TXRX.criteria;
     if (that.active_user) {
+      var user = window.TXRX.user
       that.criteria.forEach(function(c) {
         c.has = that.student.criterion_ids.indexOf(c.id) != -1;
         c.locked = that.student.enrollment_criterion_ids.indexOf(c.id) != -1;
+        c.can_change = user.is_toolmaster || user.master_criterion_ids.indexOf(c.id) != -1;
       });
-      that.student.enrollment_jsons.forEach(function(e){e.has = e.completed});
+      that.student.enrollment_jsons.forEach(function(e){
+        e.has = e.completed;
+        e.can_change = user.is_toolmaster || user.session_ids.indexOf(e.session.id) != -1;
+      });
     }
   });
 
