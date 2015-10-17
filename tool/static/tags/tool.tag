@@ -151,7 +151,7 @@
 <search-users>
   <yield/>
   <input type="text" name="q" onkeyup={ search } placeholder="Search by name or email" autocomplete="off"
-         value={ opts.search_term } />
+         value={ opts.search_term } if={ !parent.active_user }/>
   <div class="results">
     <button class="btn btn-link" onclick={ back } if={ parent.active_user }>
       &laquo; Back to results
@@ -178,7 +178,12 @@
   function s(e) {
     var target = that.root.querySelector(".results");
     target.setAttribute("ur-loading","loading")
-    if (!value) { that._results = []; target.removeAttribute("ur-loading"); return; }
+    if (!value || value.length < 3) {
+      that._results = [];
+      target.removeAttribute("ur-loading");
+      that.update();
+      return;
+    }
     $.get(
       "/api/user/search/",
       {q: value},

@@ -392,6 +392,8 @@ class Enrollment(UserModel):
       for criterion in self.session.course.criterion_set.all():
         defaults = {'content_object':self}
         u,new = UserCriterion.objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
+    else:
+      UserCriterion.objects.filter(content_type__model="enrollment",object_id=self.id).delete()
   class Meta:
     ordering = ('-datetime',)
 

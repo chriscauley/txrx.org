@@ -8,7 +8,7 @@ from api.serializers import BaseSizzler
 class SearchSizzler(BaseSizzler):
   @classmethod
   def get_queryset(class_,request):
-    q = request.REQUEST.get('q',None)
+    q = request.REQUEST.get('q',None).strip()
     session_id = request.REQUEST.get('session_id',None)
     qs = class_.Meta.model.objects.all()
     if q:
