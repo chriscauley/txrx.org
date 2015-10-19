@@ -25,9 +25,9 @@ class FlagAdmin(admin.ModelAdmin):
   readonly_fields = ('action','datetime')
   list_display = ('__unicode__','status')
   def action(self,obj):
-    if not obj or not obj.pk or not obj.status in obj.ACTION_CHOICES:
+    if not obj or not obj.pk or not obj.status in obj.PAYMENT_ACTIONS:
       return "No action to be taken"
-    next_status, verbose, target_days = obj.ACTION_CHOICES[obj.status]
+    next_status, verbose, target_days = obj.PAYMENT_ACTIONS[obj.status]
     days_since_flag = (datetime.datetime.now()-obj.last_datetime).days
     _diff = abs(days_since_flag - target_days)
     if days_since_flag > target_days:

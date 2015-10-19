@@ -143,7 +143,7 @@ class Subscription(models.Model):
     if self.owed <= 0:
       Flag.objects.filter(
         subscription=self,
-        status__in=Flag.ACTION_CHOICES
+        status__in=Flag.PAYMENT_ACTIONS
       ).update(status="paid")
 
   class Meta:
@@ -331,6 +331,7 @@ REASON_CHOICES = [
   ("subscr_failed", "PayPal Failed Subscription"),
   ("subscr_eot", "PayPal End of Term"),
   ("manually_flagged","Manually Flagged"),
+  ("safety","Expiring Safety Criterion"),
 ]
 EMAIL_REASONS = {
   "payment_overdue": [
@@ -350,12 +351,17 @@ FLAG_STATUS_CHOICES = [
   ('canceled', 'Canceled (Manually)'),
   ('resolved', 'Resolved'),
   ('paid','Paid'),
+
+  ('new_safety','New'),
+  ('emailed_safety','Emailed'),
+  ('expired_safety','Expired (criterion revoked)'),
+  ('completed_safety','Completed (course taken)'),
 ]
 
 class FlagManager(models.Manager):
   def filter_pastdue(self,*args,**kwargs):
     # return flags that have actions needed
-    kwargs['status__in'] = Flag.ACTION_CHOICES
+    kwargs['status__in'] = Flag.PAYMENT_ACTIONS
     return self.filter(*args,**kwargs)
 
 class Flag(models.Model):
@@ -367,7 +373,7 @@ class Flag(models.Model):
   objects = FlagManager()
   user_id = lambda self: self.subscription.user_id
   __unicode__ = lambda self: "%s flagged for %s"%(self.subscription.user,self.reason)
-  ACTION_CHOICES = { # this should be renamed
+  PAYMENT_ACTIONS = {
     # current_status: [future_status, verbose_description, days_since_flag]
     'new': ['first_warning','Send First Warning',1],
     'first_warning': ['second_warning','Send Second Warning',7],
@@ -376,21 +382,22 @@ class Flag(models.Model):
   last_datetime = property(lambda self: self.emailed or self.datetime)
   @property
   def date_of_next_action(self):
-    if not self.status in self.ACTION_CHOICES:
+    if not self.status in self.PAYMENT_ACTIONS:
       return
-    return self.last_datetime + datetime.timedelta(self.ACTION_CHOICES[self.status][2])
+    return self.last_datetime + datetime.timedelta(self.PAYMENT_ACTIONS[self.status][2])
   @property
   def days_until_next_action(self):
     # add one because timedelta.days rounds down
     return (self.date_of_next_action - datetime.datetime.now()).days + 1
-  def apply_status(self,new_status):
+  def apply_status(self,new_status,mail=True):
     from membership.utils import send_membership_email
     context = {
       'flag': self,
       'last_warning_date': datetime.timedelta(21)+self.datetime,
     }
     try:
-      send_membership_email('email/overdue/%s'%new_status,self.subscription.user.email,context=context)
+      if mail:
+        send_membership_email('email/overdue/%s'%new_status,self.subscription.user.email,context=context)
     except TemplateDoesNotExist:
       print "template not found %s"%new_status
     self.status = new_status

@@ -13,7 +13,7 @@ class FlagSizzler(BaseSizzler):
 class ActiveFlagSizzler(FlagSizzler):
   @classmethod
   def get_queryset(class_,request=None):
-    return class_.Meta.model.objects.filter(status__in=Flag.ACTION_CHOICES)
+    return class_.Meta.model.objects.filter(status__in=Flag.PAYMENT_ACTIONS)
   class Meta:
     model = Flag
     fields = ['subscription','reason','status','datetime','emailed','days_until_next_action','last_datetime','user_id']

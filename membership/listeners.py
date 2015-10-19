@@ -21,7 +21,7 @@ def get_subscription(params,sender):
 def paypal_flag(sender,reason=None,**kwargs):
   if not kwargs['subscription']:
     return
-  if Flag.objects.filter(subscription=kwargs['subscription'],status__in=Flag.ACTION_CHOICES):
+  if Flag.objects.filter(subscription=kwargs['subscription'],status__in=Flag.PAYMENT_ACTIONS):
     mail_admins("Flag already exists"," #%s"%sender.pk)
     return
   Flag.objects.create(
@@ -94,7 +94,7 @@ def paypal_signal(sender,**kwargs):
     )
     Flag.objects.filter(
       subscription__user=subscription.user,
-      status__in=Flag.ACTION_CHOICES
+      status__in=Flag.PAYMENT_ACTIONS
     ).update(status="paid")
     if user.orientation_status == 'new':
       user.send_welcome_email()
@@ -112,5 +112,5 @@ def paypal_signal(sender,**kwargs):
   if subscription.owed <= 0:
     Flag.objects.filter(
       subscription=subscription,
-      status__in=Flag.ACTION_CHOICES
+      status__in=Flag.PAYMENT_ACTIONS
     ).update(status="paid")

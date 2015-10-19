@@ -21,7 +21,9 @@ from shop.models import Product
 from json import dumps
 import os
 
-_desc_help = "Line breaks and html tags will be preserved. Use html with care!"
+# These are used in creating the safety permissions
+SAFETY_ID = 102
+SAFETY_CRITERION_ID = 7
 
 def to_base32(s):
   key = '-abcdefghijklmnopqrstuvwxyz'
