@@ -6,11 +6,12 @@ export PROJECT_ROOT=$DIR/../../
 GIT_WORK_TREE=../ git checkout -f
 
 #for now just update lablackey every time.
-cd ~/lablackey
+cd /home/django/lablackey
+echo `pwd`
 git pull
 
 #same for riot-comments
-cd ~/django-riot-comments
+cd /home/django/django-riot-comments
 git pull
 
 cd $PROJECT_ROOT

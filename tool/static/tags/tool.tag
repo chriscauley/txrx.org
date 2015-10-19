@@ -164,6 +164,9 @@
         </div>
       </button>
     </div>
+    <div if={ !results.length }>
+      No results. Try changing query
+    </div>
   </div>
 
   var that = this;

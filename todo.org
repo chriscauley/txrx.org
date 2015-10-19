@@ -1,3 +1,6 @@
+* Permissions
+** Need safety training to not be a problem for 2 months after subscription being created.
+** Tie in wavers and orientation.
 * member flow
 ** New member
    set status to new

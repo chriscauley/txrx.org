@@ -9,7 +9,7 @@ from django.utils.http import urlquote
 from django.utils.translation import ugettext_lazy as _
 
 from membership.models import Level
-from tool.models import UserCriterion
+from tool.models import UserCriterion, Criterion
 
 class UserManager(BaseUserManager):
   def _create_user(self, username,  email, password, is_staff, is_superuser, **extra_fields):
@@ -109,7 +109,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     from membership.utils import send_membership_email
     send_membership_email('email/new_member',self.email,experimental=False)
     self.orientation_status = 'emailed'
+    self.create_fake_safety()
     self.save()
+  def create_fake_safety(self):
+    defaults = {
+      'content_object': self.subscription_set.all()[0]
+    }
+    criterion = Criterion.objects.get(id=7)
+    uc, new = UserCriterion.objects.get_or_create(
+      user=self,
+      criterion=criterion,
+      defaults=defaults
+    )
+    if new:
+      print uc,' created'
 
 class UserCheckin(models.Model):
   user = models.ForeignKey(User)
