@@ -31,7 +31,7 @@ class Command(BaseCommand):
           'flag': flag,
         }
         context.update(email_dict)
-        send_membership_email('email/overdue/%'%template,flag.subscription.user.email,context=context)
+        send_membership_email('email/flag/%'%template,flag.subscription.user.email,context=context)
         flag.emailed = now
         flag.save()
     if overdue_flags:

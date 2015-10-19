@@ -352,10 +352,10 @@ FLAG_STATUS_CHOICES = [
   ('resolved', 'Resolved'),
   ('paid','Paid'),
 
-  ('new_safety','New'),
-  ('emailed_safety','Emailed'),
-  ('expired_safety','Expired (criterion revoked)'),
-  ('completed_safety','Completed (course taken)'),
+  ('safety_new','New'),
+  ('safety_emailed','Emailed'),
+  ('safety_expired','Expired (criterion revoked)'),
+  ('safety_completed','Completed (course taken)'),
 ]
 
 class FlagManager(models.Manager):
@@ -390,6 +390,8 @@ class Flag(models.Model):
     # add one because timedelta.days rounds down
     return (self.date_of_next_action - datetime.datetime.now()).days + 1
   def apply_status(self,new_status,mail=True):
+    if self.status == new_status:
+      return
     from membership.utils import send_membership_email
     context = {
       'flag': self,
@@ -397,7 +399,7 @@ class Flag(models.Model):
     }
     try:
       if mail:
-        send_membership_email('email/overdue/%s'%new_status,self.subscription.user.email,context=context)
+        send_membership_email('email/flags/%s'%new_status,self.subscription.user.email,context=context)
     except TemplateDoesNotExist:
       print "template not found %s"%new_status
     self.status = new_status
