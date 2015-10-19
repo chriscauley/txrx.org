@@ -2,7 +2,8 @@
 {% for error in form.non_field_errors %}
 <div class="alert alert-danger">{{ error }}</div>
 {% endfor %}
-{% for field in form %}
+{% for field in form.hidden_fields %}{{ field }}{% endfor %}
+{% for field in form.visible_fields %}
 <div class="form-group {% if field.errors %}has-error{% endif %}">
   {% if not field.field.widget.attrs.placeholder %}{{ field.label_tag }}{% endif %}
   {{ field }}

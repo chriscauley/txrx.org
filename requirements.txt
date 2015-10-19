@@ -38,3 +38,4 @@ python-social-auth
 -e git+ttps://github.com/chriscauley/lablackey.git#egg=lablackey
 django_paypal==0.2.5
 django-colorful
+django-jsignature

@@ -405,5 +405,5 @@ class Flag(models.Model):
     self.status = new_status
     self.emailed = datetime.datetime.now()
     self.save()
-    
+
 from listeners import *

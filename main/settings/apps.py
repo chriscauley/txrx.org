@@ -25,6 +25,7 @@ INSTALLED_APPS = (
   'crop_override',
   'social.apps.django_app.default',
   'rest_framework',
+  'jsignature',
 
   #store
   'shop',
@@ -54,6 +55,7 @@ INSTALLED_APPS = (
   'thing',
   'notify',
   'api',
+  'redtape',
 )
 
 #mptt_comments

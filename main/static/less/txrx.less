@@ -459,4 +459,19 @@ ul.errorlist { color: red; }
 }
 
 #contact_form.sending:after {  content: "Sending ..."; }
-    
+
+.jsign-wrapper {
+  position: relative;
+  [value=Reset] {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}
+
+.redtape {
+  label { display: block; }
+  .form-group { float: left; width: 100%; }
+  [for=id__signature] { position: absolute; }
+  [type=text] { width: 250px; }
+}

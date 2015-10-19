@@ -47,6 +47,7 @@ urlpatterns = patterns(
   url(r'^dxfviewer/$','geo.views.dxfviewer',name='dxfviewer'),
   url(r'^checkin/$', 'user.views.checkin', name='checkin'),
   url(r'^user.json','user.views.user_json'),
+  url(r'redtape/(\d+)/$','redtape.views.document_detail'),
 )
 
 def activate_user(target):
