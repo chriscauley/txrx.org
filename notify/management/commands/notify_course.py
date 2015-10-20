@@ -6,7 +6,7 @@ from django.template.defaultfilters import striptags
 from django.template.loader import render_to_string
 
 from course.models import Session
-from lablackey.utils import mail_on_fail
+from lablackey.mail import mail_on_fail
 from membership.models import LimitedAccessKey
 
 import datetime
