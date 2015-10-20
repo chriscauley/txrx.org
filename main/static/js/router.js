@@ -14,7 +14,8 @@
     toolmaster: function(search_term) {
       mainMount("<toolmaster></toolmaster>",{search_term:search_term});
     },
-    "my-permissions": function() { mainMount('<badge>') }
+    "my-permissions": function() { mainMount('<badge>') },
+    rfid: function() { mainMount("<set-rfid>"); },
   };
   window.R = _route
   riot.route(function() {

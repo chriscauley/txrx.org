@@ -148,6 +148,55 @@
   }
 </toolmaster>
 
+<set-rfid>
+  <search-users>
+    <h2>Change RFID</h2>
+    <p>Find a user and then select them and you will be prompted for a new rfid</p>
+  </search-users>
+  <modal if={ active_user } cancel={ cancel }>
+    Swipe card or enter number.
+    <form onsubmit={ parent.submit }>
+      <input type="text" />
+    </form>
+    <button class="btn btn-block btn-primary" if={ parent.old_rfid } onclick={ parent.undo }>
+      Undo (reset to { parent.old_rfid })</button>
+  </modal>
+
+  var that = this;
+  select(e) {
+    this.active_user = e.item;
+    this.update();
+    this.root.querySelector("modal input").focus();
+  }
+  cancel(e) {
+    this.active_user = null;
+    this.update();
+  }
+  submit(e) {
+    var input = this.root.querySelector("modal input");
+    var number = input.value;
+    input.value = "";
+    var target = that.root.querySelector("modal .inner");
+    target.setAttribute("ur-loading","loading");
+    $.get(
+      '/api/change_rfid/',
+      {'user_id':this.active_user.id,'rfid':number},
+      function(data) {
+        target.removeAttribute("ur-loading");
+        that.old_rfid = data;
+        that.update();
+      },
+      "json"
+    );
+    return false;
+  }
+  undo(e) {
+    var input = this.root.querySelector("modal input");
+    input.value = this.old_rfid;
+    this.submit(e);
+  }
+</set-rfid>
+
 <search-users>
   <yield/>
   <input type="text" name="q" onkeyup={ search } placeholder="Search by name or email" autocomplete="off"
@@ -157,7 +206,8 @@
       &laquo; Back to results
     </button>
     <div each={ results }>
-      <button class="btn btn-{ parent.parent.active_user?'success':'primary' } btn-block" onclick={ parent.parent.select }>
+      <button class="btn btn-{ parent.parent.active_user?'success':'primary' } btn-block"
+              onclick={ parent.parent.select }>
         <div class="row">
           <div class="col-sm-4">{ username }<br />{ get_full_name }&nbsp;</div>
           <div class="col-sm-8">{ email }<br/>{ paypal_email }</div>

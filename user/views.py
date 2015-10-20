@@ -1,4 +1,7 @@
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth import get_user_model
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from .models import User, UserCheckin
@@ -47,3 +50,11 @@ def user_json(request):
     })
   }
   return TemplateResponse(request,"user.json",values)
+
+@staff_member_required
+def set_rfid(request):
+  user = get_object_or_404(get_user_model(),pk=request.GET['user_id'])
+  old_rfid = user.rfid
+  user.rfid = request.GET['rfid']
+  user.save()
+  return HttpResponse(json.dumps(old_rfid))
