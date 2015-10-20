@@ -74,4 +74,4 @@ class Command (BaseCommand):
     if errors:
       print "event errors\n--------%s\n\n"%'\n'.join(errors)
     if success:
-      print "event sucess\n--------%s\n\n"%'\n'.join(sucess)
+      print "event success\n--------%s\n\n"%'\n'.join(success)

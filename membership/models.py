@@ -327,7 +327,7 @@ REASON_CHOICES = [
   ("recurring_payment_skipped", "PayPal Skipped"),
   ("recurring_payment_failed", "PayPal Failed Recurring"),
   ("recurring_payment_suspended", "PayPal Suspended"),
-  ('recurring_payment_suspended_due_to_max_failed_payment',"PayPal End of Subscription"),
+  ('recurring_payment_suspended_due_to_max_failed_payment',"PayPal Max Failed Payment"),
   ("subscr_failed", "PayPal Failed Subscription"),
   ("subscr_eot", "PayPal End of Term"),
   ("manually_flagged","Manually Flagged"),
