@@ -56,6 +56,7 @@ INSTALLED_APPS = (
   'notify',
   'api',
   'redtape',
+  'schedule_poll',
 )
 
 #mptt_comments

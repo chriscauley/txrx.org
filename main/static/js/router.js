@@ -16,6 +16,7 @@
     },
     "my-permissions": function() { mainMount('<badge>') },
     rfid: function() { mainMount("<set-rfid>"); },
+    "week-hours": function() { mainMount("<week-hours>"); },
   };
   window.R = _route
   riot.route(function() {
