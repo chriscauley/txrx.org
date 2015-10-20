@@ -4,8 +4,10 @@ from django.utils.translation import ugettext_lazy as _
 
 from .models import User
 from membership.admin import UserMembershipInline, SubscriptionInline
+from course.admin import EnrollmentInline
 from .forms import UserChangeForm, CustomUserCreationForm
 
+@admin.register(User)
 class UserAdmin(UserAdmin):
   fieldsets = (
     (None, {'fields': ('username', 'email', 'password', ('first_name', 'last_name'),('rfid','level'))}),
@@ -28,6 +30,4 @@ class UserAdmin(UserAdmin):
   search_fields = ('username', 'email', 'first_name', 'last_name','usermembership__paypal_email')
   ordering = ('username',)
   readonly_fields = ('last_login','date_joined','level')
-  inlines = [UserMembershipInline, SubscriptionInline]
-
-admin.site.register(User, UserAdmin)
+  inlines = [UserMembershipInline, SubscriptionInline, EnrollmentInline]

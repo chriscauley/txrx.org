@@ -8,6 +8,7 @@ from event.admin import OccurrenceModelInline
 from media.admin import TaggedFileInline, TaggedPhotoAdmin
 from tool.admin import TaggedToolInline
 
+@admin.register(Course)
 class CourseAdmin(TaggedPhotoAdmin):
   list_display = ("name","_notifies_count","active","tool_count","photo_count","content","visuals","presentation")
   list_editable = ("content","visuals","presentation")
@@ -40,9 +41,15 @@ class ClassTimeInline(OccurrenceModelInline):
 
 class EnrollmentInline(admin.TabularInline):
   model = Enrollment
-  readonly_fields = ('user',)
+  readonly_fields = ('user','session',"edit")
+  exclude = ('completed','evaluated','emailed','transaction_ids','evaluation_date')
+  def edit(self,obj):
+    if obj:
+      return '<a href="/admin/course/enrollment/%s/">%s</a>'%(obj.pk,"Edit")
+  edit.allow_tags = True
   extra = 0
 
+@admin.register(Session)
 class SessionAdmin(TaggedPhotoAdmin):
   form = StaffMemberForm
   ordering = ('-first_date',)
@@ -60,20 +67,18 @@ class SessionAdmin(TaggedPhotoAdmin):
   class Media:
     js = ("js/course_admin.js",)
 
+@admin.register(Enrollment)
 class EnrollmentAdmin(RawMixin,admin.ModelAdmin):
   list_display = ("id",'user', 'session','datetime')
   list_filter = ("session", "user",)
   search_fields = ("user__username","user__email","user__usermembership__paypal_email")
   raw_id_fields = ("user","session")
 
+@admin.register(Evaluation)
 class EvaluationAdmin(RawMixin,admin.ModelAdmin):
   exclude = ('user','enrollment','anonymous')
   readonly_fields = ('get_user',)
 
 admin.site.register(Subject,NamedTreeModelAdmin)
-admin.site.register(Course,CourseAdmin)
-admin.site.register(Enrollment,EnrollmentAdmin)
-admin.site.register(Session,SessionAdmin)
 admin.site.register(Term)
 admin.site.register(Branding)
-admin.site.register(Evaluation,EvaluationAdmin)
