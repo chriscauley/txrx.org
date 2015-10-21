@@ -5,6 +5,11 @@
 {% block main %}
 <div class="col-sm-12">
   <h1 class="page-title">{{ session }}</h1>
+  {% if not session.active %}
+  <p class="alert alert-danger">
+    This session is not active (only you can see it). Contact the staff if you think this is an error.
+  </p>
+  {% endif %}
 </div>
 <div class="col-sm-12">
   <div class="well">
