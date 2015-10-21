@@ -212,6 +212,7 @@ class Session(UserModel,PhotosMixin,models.Model):
   course = models.ForeignKey(Course,null=True,blank=True)
   cancelled = models.BooleanField(default=False)
   active = models.BooleanField(default=True)
+  notified = models.DateTimeField(null=True,blank=True)
   publish_dt = models.DateTimeField(null=True,blank=True)
   _ht = "This will be automatically updated when you save the model. Do not change"
   first_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
