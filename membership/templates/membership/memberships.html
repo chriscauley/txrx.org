@@ -28,7 +28,9 @@ function setHiddenFields(that) {
     <span class="well membership">
       <h2>
         {{ m.name }}
-        <small>${{ m.monthly_product.unit_price|floatformat:0 }}{% if "Table Hacker" in m.name %}+{% endif %}/month</small>
+        <small>
+          ${{ m.monthly_product.unit_price|floatformat:0 }}{% if "Table Hacker" in m.name %}+{% endif %}/month
+        </small>
       </h2>
       {% if m.notes %}<br />
       {{ m.notes|safe }}{% endif %}
@@ -50,8 +52,7 @@ function setHiddenFields(that) {
         <input name="notify_url" type="hidden" value="{{ SITE_URL }}/tx/rx/ipn/handler/">
         <input name="cancel_return" type="hidden" value="{{ SITE_URL }}/shop/">
         <input name="return" type="hidden" value="{{ SITE_URL }}/shop/">
-        <select name="os0" onchange="setHiddenFields(this);" {% if "Table Hacker" in m.name and not "open" in request.GET %}
-                disabled="disabled"{% endif %}>
+        <select name="os0" onchange="setHiddenFields(this);">
           {% for product in m.products %}
           <option value="{{ m.name }} - {{ product.name }}">
             ${{ product.unit_price|floatformat:0 }} {{ product.name }}</option>
@@ -61,7 +62,7 @@ function setHiddenFields(that) {
         <input type="hidden" name="RETURNURL" value="{{ settings.SITE_URL }}/joined/{{ user.id }}/">
         <div class="button_box">
           <input type="image" name="submit" alt="PayPal - The safer, easier way to pay online!"
-                 {% if "Table Hacker" in m.name and not "open" in request.GET %} disabled="disabled"
+                 {% if "Table Hacker" in m.name and not "open" in request.GET %} onclick="tHackerAlert();return false;"
                  {% endif %} src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif">
           <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="" width="1" height="1" border="0">
         </div>
@@ -75,6 +76,9 @@ function setHiddenFields(that) {
       'months': {{ product.months }}, // "wait this many months between billings"
       }
       {% endfor %}
+      function tHackerAlert() {
+        alert("Availabilty for this membership is limited. \nPlease email membership@txrxlabs.org for more information.");
+      }
     </script>
     {% endfor %}
   </div>

@@ -158,6 +158,9 @@
     <form onsubmit={ parent.submit }>
       <input type="text" />
     </form>
+    <div class="alert alert-success" if={ parent.new_rfid }>
+      RFID set as: { parent.new_rfid }
+    </div>
     <button class="btn btn-block btn-primary" if={ parent.old_rfid } onclick={ parent.undo }>
       Undo (reset to { parent.old_rfid })</button>
   </modal>
@@ -169,7 +172,7 @@
     this.root.querySelector("modal input").focus();
   }
   cancel(e) {
-    this.active_user = null;
+    this.active_user = this.old_rfid = this.new_rfid = null;
     this.update();
   }
   submit(e) {
@@ -183,6 +186,7 @@
       {'user_id':this.active_user.id,'rfid':number},
       function(data) {
         target.removeAttribute("ur-loading");
+        that.new_rfid = number;
         that.old_rfid = data;
         that.update();
       },

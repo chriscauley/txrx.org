@@ -16,6 +16,7 @@ admin.site.register(Feature)
 admin.site.register(Group)
 
 class ContainerInline(admin.TabularInline):
+  raw_id_fields = ('user',)
   model = Container
   extra = 0
 
