@@ -12,13 +12,11 @@ from membership.models import LimitedAccessKey
 import datetime
 
 class Command (BaseCommand):
-  #@mail_on_fail
   def handle(self, *args, **options):
     dt = datetime.datetime.now()-datetime.timedelta(2)
-    new_sessions = Session.objects.filter(created__gte=dt,first_date__gte=datetime.datetime.now(),active=True)
-
+    new_sessions = Session.objects.filter(active=True,notified__isnull=True)
     if not new_sessions:
-      mail_admins("No classes","No new classes to email anyone about :(")
+      mail_admins("No classes","No new classes to notify anyone about :(")
       return
     courses = list(set([s.course for s in new_sessions]))
     users = get_user_model().objects.filter(notifycourse__course__in=courses).distinct()
@@ -36,3 +34,4 @@ class Command (BaseCommand):
         settings.DEFAULT_FROM_EMAIL,
         [user.email],
         )
+    print "Notified %s users of %s classes"%(len(users),len(new_sessions))
