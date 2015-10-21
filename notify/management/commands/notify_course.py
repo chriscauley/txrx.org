@@ -34,4 +34,5 @@ class Command (BaseCommand):
         settings.DEFAULT_FROM_EMAIL,
         [user.email],
         )
+    new_sessions.update(notified=datetime.datetime.now())
     print "Notified %s users of %s classes"%(len(users),len(new_sessions))

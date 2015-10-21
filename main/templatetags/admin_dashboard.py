@@ -1,6 +1,6 @@
 from django.template import Library
 
-from course.models import Course
+from course.models import Course, Session
 from event.utils import get_room_conflicts as _get_room_conflicts
 
 import datetime
@@ -23,4 +23,5 @@ def get_room_conflicts(context):
 @register.simple_tag(takes_context=True)
 def get_courses_needed(context):
   context['courses_needed'] = Course.objects.courses_needed()
+  context['inactive_sessions'] = Session.objects.filter(active=False)
   return ''

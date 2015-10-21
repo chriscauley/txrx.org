@@ -1,6 +1,17 @@
 {% load admin_dashboard i18n %}
 
 {% get_courses_needed %}
+{% if inactive_sessions %}
+<h1>Inactive Sessions</h1>
+<div class="alert alert-danger">
+The following sessions are inactive.
+<ul>
+  {% for session in inactive_sessions %}
+  <li><a href="/admin/course/session/{{ session.pk }}/">{{ session }}</a></li>
+{% endfor %}
+</ul>
+</div>
+{% endif %}
 {% if courses_needed %}
 <h1>Courses Needed (x{{ courses_needed|length }})</h1>
 {% for course in courses_needed %}
