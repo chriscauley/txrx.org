@@ -225,6 +225,8 @@ if __name__ == "__main__":
       continue
     if PayPalIPN.objects.filter(txn_id=txn_id):
       continue
+    if True:
+      raise ValueError("get_or_create_student has changed and the following line needs to be updated to match that")
     user,new = get_or_create_student(email,subscr_id=subscr_id,send_mail=False)
     if new:
       print '\t'.join([str(s) for s in [txn_type[:6],subscr_id,email,user]])

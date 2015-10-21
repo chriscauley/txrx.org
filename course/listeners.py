@@ -65,7 +65,7 @@ def handle_successful_payment(sender, **kwargs):
     return
   params = QueryDict(sender.query)
   _uid = str(params.get('custom',None))
-  user,new_user = get_or_create_student(sender.payer_email,u_id=_uid)
+  user,new_user = get_or_create_student(params)
   user.active = True
   user.save()
   if params.get('invoice',None):

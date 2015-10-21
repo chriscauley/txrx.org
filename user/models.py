@@ -121,8 +121,6 @@ class User(AbstractBaseUser, PermissionsMixin):
       criterion=criterion,
       defaults=defaults
     )
-    if new:
-      print uc,' created'
 
 class UserCheckin(models.Model):
   user = models.ForeignKey(User)

@@ -14,7 +14,10 @@ def validate_email(s):
   except forms.ValidationError:
     pass
 
-def get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True):
+def get_or_create_student(params,send_mail=True):
+  paypal_email = params.get('payer_email')
+  u_id = params.get('custom',None)
+  subscr_id = params.get('subscr_id',None) or params.get('recurring_payment_id',None)
   user, new = _get_or_create_student(paypal_email,u_id=u_id,subscr_id=subscr_id,send_mail=send_mail)
   if new:
     kwargs = dict(
@@ -26,6 +29,8 @@ def get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True):
     if send_mail:
       reset_password(user,**kwargs)
   user.active = True
+  user.first_name = user.first_name or params.get("first_name",None)
+  user.last_name = user.last_name or params.get("last_name",None)
   user.save()
   profile = user.usermembership
   profile.paypal_email = profile.paypal_email or paypal_email # they can set this if they want

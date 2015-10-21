@@ -42,7 +42,7 @@ def paypal_signal(sender,**kwargs):
     return # This has already been processed
   subscription = get_subscription(params,sender)
   kwargs['subscription'] = subscription
-  user,new_user = get_or_create_student(sender.payer_email,subscr_id=subscr_id)
+  user,new_user = get_or_create_student(params)
   urls = "https://txrxlabs.org/admin/ipn/paypalipn/%s/"%sender.pk
   urls += "\n\n%s http://txrxlabs.org/admin/user/user/%s/"%(new_user,user.pk)
   if subscription:
