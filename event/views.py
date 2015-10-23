@@ -111,5 +111,5 @@ def ics(request,module,model_str,pk,fname):
 def all_ics(request,fname):
   occurrences = EventOccurrence.objects.all()
 
-  calendar_object = make_ics(occurrences,title="TX/RX Labs Events")
+  calendar_object = make_ics(occurrences,title="TXRX Labs Events")
   return ics2response(calendar_object,fname=fname)

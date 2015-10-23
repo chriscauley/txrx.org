@@ -94,7 +94,7 @@ strptime = lambda s: datetime.datetime.strptime(s,"%Y-%m-%dT%H:%M:%SZ")
 
 """
 Non-paying Member
-TX/RX Supporter
+TXRX Supporter
 Amigotron
 Tinkerer
 Hacker
@@ -118,7 +118,7 @@ level_map = {
   "Table Membership (1/4 Bay Legacy)": 'Table Hacker',
   #"Tinkerer": '',
   "Tinkerer (Monthly Legacy)": 'Tinkerer',
-  #"TX/RX Supporter": ''
+  #"TXRX Supporter": ''
 }
 
 level_lookup = {

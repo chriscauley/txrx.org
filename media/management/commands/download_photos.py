@@ -84,7 +84,7 @@ class Command(BaseCommand):
       mail_admins("%s errors occurred in getting photos"%len(errors),
                   "The following errors occurred"+"\n\n---------\n".join(errors))
 
-    msg = '%s photos have been uploaded to TX/RX Labs from this email address.'\
+    msg = '%s photos have been uploaded to TXRX Labs from this email address.'\
         '\n\nTo modify the name and caption on these photos, visit the following url.\n\n%s'
     for addr,count in user_photos.items():
       if not user_from_email(user):
@@ -93,7 +93,7 @@ class Command(BaseCommand):
       if True:
         raise NotImplimentedError('need to create modify photos view')
       send_mail(
-        'New Photos at TX/RX Labs',
+        'New Photos at TXRX Labs',
         msg%(count,reverse('modify_photos')),
         'noreply@txrxlabs.org',
         [addr]

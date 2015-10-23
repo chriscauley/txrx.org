@@ -26,7 +26,7 @@ class Command (BaseCommand):
         'domain': settings.SITE_URL
       }
       send_mail(
-        "Please evaluate the class you took from TX/RX",
+        "Please evaluate the class you took from TXRX",
         render_to_string("email/pending_evaluation.html",_dict),
         settings.DEFAULT_FROM_EMAIL,
         [enrollment.user.email]

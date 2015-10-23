@@ -28,7 +28,7 @@ def setUp():
       {"discount_percentage": 10, "group": 3, "name": "Tinkerer", "order": 20},
       {"discount_percentage": 10, "group": 3, "name": "Hacker", "order": 21},
       {"discount_percentage": 10, "group": 3, "name": "Table Hacker", "order": 22},
-      {"discount_percentage": 0, "group": 1, "name": "TX/RX Supporter", "order": 1},
+      {"discount_percentage": 0, "group": 1, "name": "TXRX Supporter", "order": 1},
       {"discount_percentage": 5, "group": 1, "name": "Amigotron", "order": 2},
     ]),
   ]

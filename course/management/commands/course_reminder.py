@@ -34,7 +34,7 @@ class Command(BaseCommand):
         'class_time': class_time,
       }
       send_mail(
-        "[TX/RX] You're teaching tomorrow at %s!"%class_time.start.strftime("%I:%M"),
+        "[TXRX] You're teaching tomorrow at %s!"%class_time.start.strftime("%I:%M"),
         render_to_string("email/teaching_reminder.html",_dict),
         settings.DEFAULT_FROM_EMAIL,
         [instructor.email],
@@ -53,7 +53,7 @@ class Command(BaseCommand):
           continue
         sent.append(user.email)
         send_mail(
-          "[TX/RX] Class tomorrow!",
+          "[TXRX] Class tomorrow!",
           render_to_string("email/course_reminder.html",_dict),
           settings.DEFAULT_FROM_EMAIL,
           [user.email],

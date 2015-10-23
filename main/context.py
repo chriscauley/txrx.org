@@ -18,7 +18,7 @@ def nav(request):
     {'name': 'My Posts', 'url': '/blog/%s/'%request.user.username},
   ]
   about_links = [
-    {'name': 'About TX/RX', 'url': '/about-us/'},
+    {'name': 'About TXRX', 'url': '/about-us/'},
     {'name': 'Bylaws', 'url': '/bylaws/'},
     {'name': 'Meeting Minutes', 'url': '/minutes/'},     
     {'name': 'Google Groups (Public)', 'url': 'https://groups.google.com/forum/#!forum/txrxlabs'},

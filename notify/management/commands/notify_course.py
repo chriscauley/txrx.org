@@ -29,7 +29,7 @@ class Command (BaseCommand):
         'new_sessions': sessions,
         }
       send_mail(
-        "[TX/RX] New classes at the hackerspace",
+        "[TXRX] New classes at the hackerspace",
         render_to_string("notify/notify_course.html",_dict),
         settings.DEFAULT_FROM_EMAIL,
         [user.email],
