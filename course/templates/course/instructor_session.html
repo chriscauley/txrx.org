@@ -4,7 +4,11 @@
 
 {% block main %}
 <div class="col-sm-12">
-  <h1 class="page-title">{{ session }}</h1>
+  <h1 class="page-title">
+    {{ session.course.name }}
+    <a class="pull-right fa fa-pencil-square" href="/admin/user/user/{{ session.user_id }}/">
+      {{ session.user.username }}</a>
+  </h1>
   {% if not session.active %}
   <p class="alert alert-danger">
     This session is not active (only you can see it). Contact the staff if you think this is an error.
