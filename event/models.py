@@ -1,12 +1,15 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify, date, urlencode
 
-from media.models import PhotosMixin
-from wmd import models as wmd_models
 from geo.models import Room
+from media.models import PhotosMixin
+from lablackey.db.models import UserModel
 from lablackey.utils import cached_property
+from wmd import models as wmd_models
 
 import datetime, sys, json
 
@@ -43,6 +46,8 @@ class Event(PhotosMixin,models.Model):
   repeat = models.CharField(max_length=32,choices=REPEAT_CHOICES,null=True,blank=True,help_text=_ht)
   _ht = "If true, this class will not raise conflict warnings for events in the same room."
   no_conflict = models.BooleanField(default=False,help_text=_ht)
+  _ht = "Hidden stuff won't appear on the calendar."
+  hidden = models.BooleanField(default=False)
 
   get_short_name = lambda self: self.short_name or self.name
   @property
@@ -96,6 +101,14 @@ class OccurrenceModel(models.Model):
     return "http://www.google.com/calendar/event?action=TEMPLATE&text=%(name)s&dates=%(start)s/%(end)s&details=%(description)s&location=%(location)s&trp=false&sprop=%(site_name)s&sprop=name:%(url)s"%d
   class Meta:
     abstract = True
+
+class RSVP(UserModel):
+  content_type = models.ForeignKey("contenttypes.ContentType")
+  object_id = models.IntegerField()
+  content_object = GenericForeignKey('content_type', 'object_id')
+  datetime = models.DateTimeField(auto_now_add=True)
+  emailed = models.DateTimeField(null=True,blank=True)
+  quantity = models.IntegerField(default=0)
 
 class EventOccurrence(PhotosMixin,OccurrenceModel):
   event = models.ForeignKey(Event)
