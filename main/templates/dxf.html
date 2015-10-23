@@ -6,7 +6,7 @@
 {% block main %}
 <div id="map">
   <div class="col-sm-3">
-    <h1>Today at TXRX Labs</h1>
+    <h1>Today at {{ SITE_NAME }}</h1>
     {% for time,events in event_tuples %}
     <div class="well">
       <h2>{{ time|date:"P" }}</h2>
