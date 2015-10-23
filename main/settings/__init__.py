@@ -156,8 +156,8 @@ CONTACT_LINK = "<a href='%s'>%s</a>"%(CONTACT_EMAIL,CONTACT_EMAIL)
 EMAIL_SUBJECT_PREFIX = "[TXRX] "
 DEFAULT_FROM_EMAIL = "noreply@txrxlabs.org"
 SERVER_EMAIL = "noreply@txrxlabs.org"
-MEMBERSHIP_EMAIL = "chris.lazaroo@txrxlabs.org"
-EMAIL_BACKEND = "main.mail.DebugBackend"
+MEMBERSHIP_EMAIL = "info@txrxlabs.org"
+EMAIL_BACKEND = "lablackey.mail.DebugBackend"
 
 PER_PAGE = 10
 NEW_STUDENT_PASSWORD = "I am a new student, reset my passwrod asap"
