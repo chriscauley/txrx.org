@@ -7,6 +7,7 @@ from membership.paypal_utils import get_course_query, paypal_post
 from membership.models import Level
 
 from course.models import Session, Course, ClassTime, Enrollment
+from lablackey.tests import check_subjects
 
 import datetime
 
@@ -70,7 +71,7 @@ class ListenersTest(TestCase):
     email = "prexistinguser@txrxlabs.com"
     get_user_model().objects.filter(email=email).delete()
     user = get_user_model().objects.create(
-      username="preexisinguser",
+      username="preexistinguser",
       email=email
     )
     user.level = Level.objects.filter(discount_percentage=10)[0]
@@ -79,10 +80,7 @@ class ListenersTest(TestCase):
     paypal_post(self,params)
 
     # The above generates an enrollment error because someone over paid
-    subjects = ["[TXRX_DEV]Enrollment Error","[TXRX] Course enrollment confirmation"]
-    self.assertEqual(len(mail.outbox),2)
-    for message in mail.outbox:
-      self.assertTrue(message.subject in subjects)
+    self.assertTrue(check_subjects(["Enrollment Error","Course enrollment confirmation"]))
 
 class UtilsTest(TestCase):
   """ Test the following parameters of the get_or_create_student functions.
@@ -99,17 +97,16 @@ class UtilsTest(TestCase):
     paypal_post(self,params)
 
     # make sure only these two emails were sent to only that one address
-    subjects = ["[TXRX] Course enrollment confirmation","[TXRX] New account information"]
+    self.assertTrue(check_subjects(["Course enrollment confirmation","New account information"]))
     for message in mail.outbox:
-      self.assertTrue(message.subject in subjects)
       self.assertEqual([email], message.recipients())
 
     # now test same address with another class
     mail.outbox = []
     params = get_course_query(session=self.session2,payer_email=email)
     paypal_post(self,params)
+    self.assertTrue(check_subjects(["Course enrollment confirmation"]))
     for message in mail.outbox:
-      self.assertEqual(message.subject,subjects[0])
       self.assertEqual([email], message.recipients())
 
     # make sure a new account is not created and that the enrollments are right

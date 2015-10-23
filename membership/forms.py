@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
+from django.conf import settings
 
 from registration.models import RegistrationProfile
 
@@ -17,7 +18,7 @@ s = "What do you to hope accomplish at the hackerspace? What classes do you want
 e = "List any helpful skills or areas of expertise that might be relevent to the Lab. Also note if you would be interested in teaching classes in these areas."
 q = "Please let us know about any questions or comment you may have about the lab, its procedures, or goals."
 
-lr = "Reasons for joining TXRX Labs"
+lr = "Reasons for joining %s"%settings.SITE_NAME
 lp = "Previous projects of note"
 ls = "Skills you desire to learn"
 le = "Skills and area of expertise"

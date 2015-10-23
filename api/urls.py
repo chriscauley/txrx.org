@@ -32,7 +32,6 @@ def auto_serializer(model, modeladmin):
   return AutoSizzler
 
 def build_urls():
-  # This will do for now since I really need to get back to TXRX programming
   #! TODO This should be split into build_map and build_urls
   #! TODO look into how admin register goes and do it here too.
   app_map = {}

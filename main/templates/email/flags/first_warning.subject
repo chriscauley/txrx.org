@@ -1,1 +1,1 @@
-Your TXRX Labs membership is past due. (subscription {{ flag.subscription.subscr_id }})
+Your {{ SITE_NAME }} membership is past due. (subscription {{ flag.subscription.subscr_id }})

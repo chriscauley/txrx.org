@@ -73,7 +73,7 @@ def detail(request,pk,slug):
 
 def ics_classes_all(request,fname):
   occurrences = ClassTime.objects.all()
-  calendar_object = make_ics(occurrences,title="TXRX Labs Classes")
+  calendar_object = make_ics(occurrences,title="%s Classes"%settings.SITE_NAME)
   return ics2response(calendar_object,fname=fname)
 
 def ics_classes_user(request,u_id,api_key,fname):
@@ -84,7 +84,7 @@ def ics_classes_user(request,u_id,api_key,fname):
   occurrences = []
   for session in sessions:
     occurrences += session.classtime_set.all()
-  calendar_object = make_ics(occurrences,title="[TXRX] My Classes")
+  calendar_object = make_ics(occurrences,title="%sMy Classes"%settings.EMAIL_SUBJECT_PREFIX)
   return ics2response(calendar_object,fname=fname)
 
 @staff_member_required

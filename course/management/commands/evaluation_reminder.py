@@ -1,6 +1,6 @@
+from django.conf import settings
 from django.core.mail import send_mail
 from django.core.management.base import BaseCommand
-from django.conf import settings
 from django.template.loader import render_to_string
 
 from course.models import Enrollment
@@ -10,7 +10,7 @@ from membership.models import LimitedAccessKey
 import datetime
 
 class Command (BaseCommand):
-  @print_to_mail(subject="[LOG] Evaluation Reminder")
+  @print_to_mail(subject="Evaluation Reminder")
   def handle(self, *args, **options):
     yesterday = datetime.datetime.now()-datetime.timedelta(1)
     pe = Enrollment.objects.pending_evaluation()
@@ -26,7 +26,7 @@ class Command (BaseCommand):
         'domain': settings.SITE_URL
       }
       send_mail(
-        "Please evaluate the class you took from TXRX",
+        "Please evaluate the class you took from %s"%settings.SITE_NAME,
         render_to_string("email/pending_evaluation.html",_dict),
         settings.DEFAULT_FROM_EMAIL,
         [enrollment.user.email]

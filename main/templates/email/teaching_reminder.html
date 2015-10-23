@@ -1,6 +1,6 @@
 {% load i18n %}{% autoescape off %}
 
-This is a reminder that you have a class ({{ class_time.session.course }}) tomorrow at TXRX Labs. The class starts tomorrow ({{ class_time.start|date:"F d" }}) at {{ class_time.start|date:"h:i a" }}.
+This is a reminder that you have a class ({{ class_time.session.course }}) tomorrow at {{ SITE_NAME }}. The class starts tomorrow ({{ class_time.start|date:"F d" }}) at {{ class_time.start|date:"h:i a" }}.
 
 If you would like to not receive these notifications, please use one of the links below.
 

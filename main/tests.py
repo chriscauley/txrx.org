@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.core.management import call_command
 from django.core import mail
 
+from lablackey.tests import check_subjects
 from event.models import Event, EventOccurrence
 
 import datetime
@@ -19,15 +20,15 @@ class ManagementCommands(TestCase):
     call_command("repeat_events")
     self.assertEqual(e.eventoccurrence_set.count(),5)
     subjects = [m.subject for m in mail.outbox]
-    self.assertEqual(subjects,['[LOG] Repeating Events'])
+    self.assertTrue(check_subjects(['Repeating Events']))
 
-  def ztest_evaluation_reminder(self):
+  def test_evaluation_reminder(self):
     call_command("evaluation_reminder")
-  def ztest_recalculate_subscriptions(self):
+  def test_recalculate_subscriptions(self):
     call_command("recalculate_subscriptions")
-  def ztest_course_reminder(self):
+  def test_course_reminder(self):
     call_command("course_reminder")
-  def ztest_notify_course(self):
+  def test_notify_course(self):
     call_command("notify_course")
-  def ztest_reset_classes(self):
+  def test_reset_classes(self):
     call_command("reset_classes")

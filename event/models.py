@@ -89,7 +89,7 @@ class OccurrenceModel(models.Model):
       'start': date(self.start,"Ymd\THi00"),
       'end': date(self.end,"Ymd\THi00"),
       'description': urlencode(self.description),
-      'site_name': urlencode('TXRX Labs'),
+      'site_name': settings.SITE_NAME,
       'location': "205 Roberts Street, Houston TX, 77003",
       'url': 'http://txrxlabs.org/', #+urlencode(self.get_absolute_url()),
       }

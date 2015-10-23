@@ -11,7 +11,7 @@ from membership.models import LimitedAccessKey
 import datetime
 
 class Command (BaseCommand):
-  @print_to_mail(subject="[LOG] New Classes")
+  @print_to_mail(subject="New Classes")
   def handle(self, *args, **options):
     user = get_user_model()
     dt = datetime.datetime.now() + datetime.timedelta(-16)
@@ -29,7 +29,7 @@ class Command (BaseCommand):
         'new_sessions': new_sessions,
       }
       send_mail(
-        "[TXRX] New classes at the hackerspace",
+        "New classes at the hackerspace",
         render_to_string("email/new_classes.html",_dict),
         settings.DEFAULT_FROM_EMAIL,
         [user.email],

@@ -38,7 +38,7 @@ def add_month_dow(date):
     return next_month.replace(day=monthcalendar[weeknum-1][weekday])
 
 class Command (BaseCommand):
-  @print_to_mail(subject="[LOG] Repeating Events")
+  @print_to_mail(subject="Repeating Events")
   def handle(self, *args, **options):
     success = []
     errors = []

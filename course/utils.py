@@ -29,8 +29,8 @@ def get_or_create_student(params,send_mail=True):
     if send_mail:
       reset_password(user,**kwargs)
   user.active = True
-  user.first_name = user.first_name or params.get("first_name",None)
-  user.last_name = user.last_name or params.get("last_name",None)
+  user.first_name = user.first_name or params.get("first_name",'')
+  user.last_name = user.last_name or params.get("last_name",'')
   user.save()
   profile = user.usermembership
   profile.paypal_email = profile.paypal_email or paypal_email # they can set this if they want

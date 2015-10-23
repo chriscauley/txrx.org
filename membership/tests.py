@@ -4,6 +4,7 @@ from django.test import TestCase, RequestFactory
 
 from .models import Product, Level, Group, add_months, Subscription, Flag
 from .paypal_utils import get_membership_query, paypal_post, get_flag_query
+from lablackey.tests import check_subjects
 from paypal.standard.ipn.models import PayPalIPN
 from six import text_type
 from six.moves.urllib.parse import urlencode
@@ -61,15 +62,15 @@ class SimpleTest(TestCase):
       flag_data = get_flag_query(txn_type,payer_email=new_email,subscr_id=subscr_id)
       paypal_post(self,flag_data)
       subscription = Subscription.objects.get(user__email=new_email)
-      subjects = [m.subject for m in mail.outbox]
       if txn_type in flag_transactions:
         if txn_type == 'subscr_eot':
-          self.assertTrue('[TXRX_DEV]Flagged %s and canceled'%txn_type in subjects)
+          subjects = ['Flagged %s and canceled'%txn_type]
           self.assertTrue(subscription.canceled)
         else:
-          self.assertTrue('[TXRX_DEV]Flagged %s'%txn_type in subjects)
+          subjects = ['Flagged %s'%txn_type]
           self.assertTrue(not subscription.canceled)
         flag = Flag.objects.get(subscription=subscription)
+        self.assertTrue(check_subjects(subjects))
         self.assertEqual(flag.reason,txn_type)
         self.assertEqual(flag.status,'new')
   def test_flag_workflow(self):

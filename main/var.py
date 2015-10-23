@@ -1,4 +1,4 @@
-admin_comment_email = """A new comment has been added to the TXRX Labs website for "%(object_name)s"
+admin_comment_email = """A new comment has been added to the {{ SITE_NAME }} website for "%(object_name)s"
 
 View comment on site: %(object_url)s
 

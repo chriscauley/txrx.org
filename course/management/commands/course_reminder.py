@@ -1,6 +1,6 @@
+from django.conf import settings
 from django.core.mail import send_mail,mail_admins
 from django.core.management.base import BaseCommand
-from django.conf import settings
 from django.template.loader import render_to_string
 
 from course.models import ClassTime
@@ -11,7 +11,7 @@ from lablackey.mail import print_to_mail
 import datetime
 
 class Command(BaseCommand):
-  @print_to_mail(subject="[LOG] Course reminders")
+  @print_to_mail(subject="Course reminders")
   def handle(self, *args, **options):
     tomorrow = datetime.datetime.now().replace(hour=6)+datetime.timedelta(1)
     next_day = tomorrow + datetime.timedelta(1)
@@ -34,7 +34,7 @@ class Command(BaseCommand):
         'class_time': class_time,
       }
       send_mail(
-        "[TXRX] You're teaching tomorrow at %s!"%class_time.start.strftime("%I:%M"),
+        "You're teaching tomorrow at %s!"class_time.start.strftime("%I:%M"),
         render_to_string("email/teaching_reminder.html",_dict),
         settings.DEFAULT_FROM_EMAIL,
         [instructor.email],
@@ -53,7 +53,7 @@ class Command(BaseCommand):
           continue
         sent.append(user.email)
         send_mail(
-          "[TXRX] Class tomorrow!",
+          "Class tomorrow!",
           render_to_string("email/course_reminder.html",_dict),
           settings.DEFAULT_FROM_EMAIL,
           [user.email],

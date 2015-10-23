@@ -23,8 +23,8 @@ def get_paypal_query(**kwargs):
 
   user = kwargs.pop('user',None)
   if user:
-    kwargs['first_name'] = kwargs.get('first_name') or user.first_name
-    kwargs['last_name'] = kwargs.get('last_name') or user.last_name
+    kwargs['first_name'] = kwargs.get('first_name','') or user.first_name
+    kwargs['last_name'] = kwargs.get('last_name','') or user.last_name
     kwargs['payer_email'] = kwargs.get('payer_email') or user.payer_email
   defaults = {
     # unique to every purchase
