@@ -68,7 +68,6 @@ LOGOUT_REDIRECT = 'home'
 #compress
 COMPRESS_ENABLED = True
 
-#codrspace
 SITE_TAGLINE = "Houston's Hackerspace"
 VERSION = "0.1 Alpha"
 ANALYTICS_CODE = ''
