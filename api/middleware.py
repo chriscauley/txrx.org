@@ -8,11 +8,11 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 social_complete = '%s:complete'%getattr(settings,'SOCIAL_AUTH_URL_NAMESPACE','social')
 
-authentication_paths = [
+"""authentication_paths = [
   reverse('auth_login'),
   reverse(social_complete,args=['github']),
   reverse(social_complete,args=['google-oauth2']),
-]
+]"""
   
 class JWTMiddleware(object):
   def process_request(self, request):

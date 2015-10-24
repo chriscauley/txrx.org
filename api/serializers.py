@@ -11,9 +11,10 @@ import six, copy
 class PaginatedListSerializer(serializers.ListSerializer):
   def __init__(self,request,*args,**kwargs):
     self.request = request
-    queryset = kwargs.get('child', copy.deepcopy(self.child)).get_queryset(request)
-    paginator = Paginator(queryset, kwargs.pop('page_size',50))
-    self.page_query_param = kwargs.pop('page_query_param','page')
+    child = kwargs.get('child', copy.deepcopy(self.child))
+    queryset = child.get_queryset(request)
+    paginator = Paginator(queryset, child.page_size)
+    self.page_query_param = child.page_query_param
     page_number = request.query_params.get(self.page_query_param, 1)
 
     try:
@@ -63,6 +64,8 @@ class BaseSizzler(serializers.ModelSerializer):
   permissions = classmethod(lambda class_,request: request.user.is_staff)
   get_queryset = classmethod(lambda class_,request=None: class_.Meta.model.objects.all())
   many = False
+  page_size = 50
+  page_query_param = 'page'
   @classmethod
   def many_init(cls, *args, **kwargs):
     kwargs['child'] = cls()
