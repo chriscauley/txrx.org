@@ -8,7 +8,7 @@ from django.template.defaultfilters import slugify, date, urlencode
 from geo.models import Room
 from media.models import PhotosMixin
 from lablackey.db.models import UserModel
-from lablackey.utils import cached_property
+from lablackey.utils import cached_property, cached_method
 from wmd import models as wmd_models
 
 import datetime, sys, json
@@ -48,8 +48,12 @@ class Event(PhotosMixin,models.Model):
   no_conflict = models.BooleanField(default=False,help_text=_ht)
   _ht = "Hidden stuff won't appear on the calendar."
   hidden = models.BooleanField(default=False)
+  allow_rsvp = models.BooleanField(default=True)
+  max_rsvp = models.IntegerField(default=128)
 
   get_short_name = lambda self: self.short_name or self.name
+  def get_absolute_url(self):
+    return reverse("event:event_detail",args=[self.pk,slugify(self.name)])
   @property
   def all_occurrences(self):
     return self.eventoccurrence_set.all()
@@ -113,7 +117,7 @@ class RSVP(UserModel):
 class EventOccurrence(PhotosMixin,OccurrenceModel):
   event = models.ForeignKey(Event)
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
-  get_absolute_url = lambda self: reverse('event:occurrence_detail',args=(self.id,slugify(self.name)))
+  get_absolute_url = lambda self: "%s#%s"%(self.event.get_absolute_url(),self.pk)
   get_admin_url = lambda self: "/admin/event/event/%s/"%self.event.id
   name_override = models.CharField(null=True,blank=True,max_length=128)
   name = property(lambda self: self.name_override or self.event.name)
@@ -123,6 +127,13 @@ class EventOccurrence(PhotosMixin,OccurrenceModel):
   get_room = lambda self: self.event.room #! depracate me
   room = cached_property(lambda self: self.event.room,name="room")
   no_conflict = property(lambda self: self.event.no_conflict)
+
+  total_rsvp = property(lambda self: sum([r.quantity for r in self.get_rsvps()]))
+  full = property(lambda self: self.total_rsvp >= self.event.max_rsvp)
+  @cached_method
+  def get_rsvps(self):
+    _id = ContentType.objects.get(model="eventoccurrence").id
+    return RSVP.objects.filter(object_id=self.id,content_type_id=_id)
   def save(self,*args,**kwargs):
     # set the publish_dt to a week before the event
     self.publish_dt = self.start - datetime.timedelta(7)
