@@ -25,7 +25,6 @@ def reverse_ics(obj):
   f_name = '%s-%s.ics'%(slugify(obj.name),slugify(settings.SITE_NAME))
   return "%s/event/ics/%s/%s/%s/%s"%(settings.SITE_DOMAIN,module,model_str,obj.id,f_name)
 
-
 REPEAT_CHOICES = (
   ('','No Repeat'),
   ('weekly','Weekly'),
@@ -66,7 +65,14 @@ class Event(PhotosMixin,models.Model):
     if not self.upcoming_occurrences.count():
       return None
     return self.upcoming_occurrences[0]
-
+  def get_user_rsvps(self,user):
+    occurrence_ids = self.all_occurrences.values_list('id',flat=True)
+    rsvps = RSVP.objects.filter(
+      user=user,
+      object_id__in=occurrence_ids,
+      content_type_id=ContentType.objects.get(model="eventoccurrence").id
+    )
+    return {r.object_id:r.quantity for r in rsvps}
   def get_name(self):
     return self.name or self.room
 
@@ -130,10 +136,10 @@ class EventOccurrence(PhotosMixin,OccurrenceModel):
 
   total_rsvp = property(lambda self: sum([r.quantity for r in self.get_rsvps()]))
   full = property(lambda self: self.total_rsvp >= self.event.max_rsvp)
+  _cid = ContentType.objects.get(model="eventoccurrence").id
   @cached_method
   def get_rsvps(self):
-    _id = ContentType.objects.get(model="eventoccurrence").id
-    return RSVP.objects.filter(object_id=self.id,content_type_id=_id)
+    return RSVP.objects.filter(object_id=self.id,content_type_id=self._cid)
   def save(self,*args,**kwargs):
     # set the publish_dt to a week before the event
     self.publish_dt = self.start - datetime.timedelta(7)
