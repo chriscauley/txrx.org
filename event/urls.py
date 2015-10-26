@@ -12,7 +12,8 @@ urlpatterns = patterns(
   #url(r'weekly/(\d+\-\d+\-\d+)/(?P<page_number>\d+)/',"weekly",name="weekly"),
   #url(r'^(?P<page_number>\d+)/$', 'index', name="event_list"),
   #url(r'^tagged/(?P<slug>[^/]+)/(?P<page_number>\d+)/$', 'index', name="tagged"),
-  #url(r'^detail/(\d+)/$', 'detail', name="detail"),
+  url(r'^detail/(\d+)/(.+)/$', 'detail', name="event_detail"),
+  url(r'^rsvp/$', 'rsvp', name='rsvp'),
 
   # Depracated
   #url(r'^repeat/(monthly|weekly)/(\d+)/$','repeat_event',name='repeat_event'),

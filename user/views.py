@@ -40,13 +40,15 @@ def user_json(request):
   master_criterion_ids = list(_c.values_list('id',flat=True))
   values = {
     'user_json': json.dumps({
-      'pk': request.user.pk,
+      'id': request.user.id,
       'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(request.user)],
       'criterion_ids': list(usercriteria.values_list('criterion_id',flat=True)),
       'master_criterion_ids': master_criterion_ids,
       'session_ids': list(request.user.session_set.all().values_list('id',flat=True)),
       'completed_course_ids': [e.session.course_id for e in enrollments],
-      'is_toolmaster': request.user.is_toolmaster
+      'is_toolmaster': request.user.is_toolmaster,
+      'is_staff': request.user.is_staff,
+      'is_superuser': request.user.is_superuser,
     })
   }
   return TemplateResponse(request,"user.json",values)

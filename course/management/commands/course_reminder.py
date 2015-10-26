@@ -34,7 +34,7 @@ class Command(BaseCommand):
         'class_time': class_time,
       }
       send_mail(
-        "You're teaching tomorrow at %s!"class_time.start.strftime("%I:%M"),
+        "You're teaching tomorrow at %s!"%class_time.start.strftime("%I:%M"),
         render_to_string("email/teaching_reminder.html",_dict),
         settings.DEFAULT_FROM_EMAIL,
         [instructor.email],

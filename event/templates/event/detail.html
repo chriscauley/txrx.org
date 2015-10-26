@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load thumbnail short_codes txrx_tags %}
+
+{% block title %}{{ event }}{% endblock %}
+{% block header %}{% endblock %}
+
+{% block fb_title %}{{ event }} at {{ SITE_NAME }}{% endblock %}
+{% block fb_description %}{{ event.description|implosivo|escape }}{% endblock %}
+
+{% block main %}
+<h1 class="page_title">
+  {{ event }}
+  {% if request.user.is_superuser %}
+  <a href="/admin/event/event/{{ event.pk }}"><i class="fa fa-pencil-square"></i></a>
+  {% endif %}
+</h1>
+<div class="event-detail row">
+  <div class="col-sm-4 col-md-5">
+    <div class="slide-wrapper">
+      {% include "widgets/thing_slideshow.html" with thing=event %}
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="description">{{ event.description|explosivo }}</div>
+  </div>
+  <div class="col-xs-12 col-sm-4 col-md-3 pull-right" id="side"></div>
+</div>
+<script type="riot/tag" src="{{ STATIC_URL }}tags/event.tag"></script>
+<script>
+$(function() {
+  var user_reservations = {{ rsvps_json|safe }};
+  $.get(
+    "/api/event/eventdetail/{{ event.pk }}/",
+    function(data) {
+      data.user_reservations = user_reservations;
+      data.occurrences = data.upcoming_occurrences;
+      $("#side").prepend("<event-list>");
+      riot.mount("#side event-list",data);
+    },
+    "json"
+  )
+});
+</script>
+{% endblock %}

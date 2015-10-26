@@ -14,15 +14,10 @@ def list_view(request,app_name,class_,serializer=None):
   serializer = serializer or get_serializer(app_name,class_)
   model = serializer.Meta.model
   if hasattr(serializer,'permissions') and not serializer.permissions(request):
-    Response(status=status.HTTP_401_UNAUTHORIZED)
+    return Response(status=status.HTTP_401_UNAUTHORIZED)
   if request.method == 'GET':
-    if hasattr(serializer,'get_queryset'):
-      items = serializer.get_queryset(request)
-    else:
-      items = model.objects.all()
-    serializer._many = True
-    serializer = serializer(items, many=True)
-    return Response(serializer.data)
+    serializer = serializer(request, many=True)
+    return serializer.get_paginated_response()
 
   elif request.method == 'POST':
     serializer = serializer(data=request.data)
@@ -36,7 +31,7 @@ def detail_view(request,app_name,class_,pk,serializer=None):
   serializer = serializer or get_serializer(app_name,class_)
   model = serializer.Meta.model
   if hasattr(serializer,'permissions') and not serializer.permissions(request):
-    Response(status=status.HTTP_401_UNAUTHORIZED)
+    return Response(status=status.HTTP_401_UNAUTHORIZED)
   try:
     item = model.objects.get(pk=pk)
   except model.DoesNotExist:
