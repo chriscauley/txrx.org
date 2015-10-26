@@ -374,6 +374,7 @@ class Enrollment(UserModel):
   emailed = models.BooleanField(default=False)
   evaluation_date = models.DateTimeField(null=True,blank=True)
   transaction_ids = models.TextField(null=True,blank=True)
+  get_occurrences = lambda self: list(session.classtime_set.all())
 
   objects = EnrollmentManager()
 
