@@ -15,6 +15,8 @@ def validate_email(s):
     pass
 
 def get_or_create_student(params,send_mail=True):
+  if isinstance(params,(str,unicode)):
+    params = {'payer_email': params}
   paypal_email = params.get('payer_email')
   u_id = params.get('custom',None)
   subscr_id = params.get('subscr_id',None) or params.get('recurring_payment_id',None)

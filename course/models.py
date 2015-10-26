@@ -340,6 +340,7 @@ class Session(UserModel,PhotosMixin,models.Model):
 
 class ClassTime(OccurrenceModel):
   session = models.ForeignKey(Session)
+  emailed = models.DateTimeField(null=True,blank=True)
   def short_name(self):
     times = list(self.session.classtime_set.all())
     if len(times) == 1:
