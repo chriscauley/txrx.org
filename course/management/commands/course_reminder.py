@@ -4,6 +4,7 @@ from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 
 from course.models import ClassTime
+from event.models import EventOccurrence
 from membership.models import LimitedAccessKey
 
 from lablackey.mail import print_to_mail, send_template_email
@@ -22,9 +23,9 @@ class Command(BaseCommand):
     print "reminding %s class times"%len(class_times)
     instructor_count = 0
     student_count = 0
+    sent = []
     for class_time in class_times:
       instructor_count += 1
-      sent = []
       instructor = class_time.session.user
       _dict = {
         'user': instructor,

@@ -18,23 +18,32 @@ import warnings
 warnings.showwarning = lambda *x: None
 
 def setUp(self):
+  tomorrow = arrow.now().replace(days=1,hour=13,minute=00).datetime
+  next_day = arrow.now().replace(days=2,hour=13,minute=00).datetime
+  end = "14:00"
+
   # fee = 45 because it tests that discounts are including fractional dollars
   # Session 1 has class tomorrow and the next day from 1-2pm
   self.session1 = Session.objects.create(
     course=Course.objects.filter(active=True,fee=45).order_by("?")[0],
     user_id=1
   )
-  tomorrow = arrow.now().replace(days=1,hour=13,minute=00).datetime
-  next_day = arrow.now().replace(days=2,hour=13,minute=00).datetime
-  end = "14:00"
-  # Session 2 has class day after tomorrow at the same time as session 1
   ClassTime.objects.create(session=self.session1,start=tomorrow,end_time=end)
   ClassTime.objects.create(session=self.session1,start=next_day,end_time=end)
+
+  # Session 2 has class day after tomorrow at the same time as session 1
   self.session2 = Session.objects.create(
     course=Course.objects.filter(active=True,fee__gt=0).order_by("?")[0],
     user_id=1
   )
-  ClassTime.objects.create(session=self.session2,start=next_day,end_time=end)
+  ClassTime.objects.create(session=self.session2,start=tomorrow.replace(hour=18),end_time="19:00")
+
+  # conflict_session1 is the same time as session1. currently unused
+  self.conflict_session1 = Session.objects.create(
+    course=Course.objects.filter(active=True,fee__gt=0).order_by("?")[0],
+    user_id=1
+  )
+  ClassTime.objects.create(session=self.conflict_session1,start=next_day,end_time=end)
 
 class ListenersTest(TestCase):
   """This tests all possible purchases from paypal and to make sure prices line up.
@@ -142,8 +151,9 @@ class NotifyTest(TestCase):
     #make sure students and instructors get an email
     i_email = 'instructor@txrxtesting.com'
     s_email = 'student@txrxtesting.com'
+    s2_email = 'student2@txrxtesting.com'
     User = get_user_model()
-    User.objects.filter(email__in=[i_email,s_email]).delete()
+    User.objects.filter(email__in=[i_email,s_email,s2_email]).delete()
     instructor, new = get_or_create_student(i_email,send_mail=False)
     instructor.is_staff = True
     instructor.save()
@@ -153,11 +163,24 @@ class NotifyTest(TestCase):
     self.session1.save()
     self.session2.save()
 
+    # enroll student in 1 class
     student, new = get_or_create_student(s_email,send_mail=False)
     Enrollment.objects.create(user=student,session=self.session1)
+
+    # enroll student2 in 2 classes
+    student2,new = get_or_create_student(s2_email,send_mail=False)
+    Enrollment.objects.create(user=student,session=self.session1)
+
+    # send out reminders and check that they went out
     call_command("course_reminder")
     subjects = [u"You're teaching tomorrow at 1 p.m.", u'Class tomorrow!', 'Course reminders']
     recipients = [[i_email], [s_email], ['chris@lablackey.com']]
     self.assertTrue(check_subjects(subjects))
     self.assertTrue(check_recipients(recipients))
 
+    # send out reminders again. Make sure none went out
+    mail.outbox = []
+    call_command("course_reminder")
+    self.assertTrue(check_subjects([]))
+    self.assertTrue(check_recipients([]))
+    
