@@ -12,7 +12,6 @@ from lablackey.mail import print_to_mail, send_template_email
 import arrow
 
 class Command(BaseCommand):
-  @print_to_mail(subject="Course reminders")
   def handle(self, *args, **options):
     tomorrow = arrow.utcnow().replace(hour=6,days=1).datetime
     next_day = arrow.utcnow().replace(hour=6,days=2).datetime

@@ -169,12 +169,16 @@ class NotifyTest(TestCase):
 
     # enroll student2 in 2 classes
     student2,new = get_or_create_student(s2_email,send_mail=False)
-    Enrollment.objects.create(user=student,session=self.session1)
+    Enrollment.objects.create(user=student2,session=self.session1)
+    Enrollment.objects.create(user=student2,session=self.session2)
 
     # send out reminders and check that they went out
     call_command("course_reminder")
-    subjects = [u"You're teaching tomorrow at 1 p.m.", u'Class tomorrow!', 'Course reminders']
-    recipients = [[i_email], [s_email], ['chris@lablackey.com']]
+    subjects = [
+      u'Class tomorrow!', u'Class tomorrow!',
+      u"You're teaching tomorrow at 1 p.m.", u"You're teaching tomorrow at 6 p.m."
+    ]
+    recipients = [[i_email], [i_email], [s2_email], [s_email]]
     self.assertTrue(check_subjects(subjects))
     self.assertTrue(check_recipients(recipients))
 

@@ -26,8 +26,11 @@ class ManagementCommands(TestCase):
     call_command("evaluation_reminder")
   def test_recalculate_subscriptions(self):
     call_command("recalculate_subscriptions")
-  def test_course_reminder(self):
-    call_command("course_reminder")
+
+  # done in course.tests
+  #def test_course_reminder(self):
+  #  call_command("course_reminder")
+
   def test_notify_course(self):
     call_command("notify_course")
   def test_reset_classes(self):

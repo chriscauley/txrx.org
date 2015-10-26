@@ -5,7 +5,6 @@ from django.conf import settings
 import datetime,calendar, traceback
 
 from event.models import Event,EventOccurrence
-from lablackey.mail import print_to_mail
 
 def add_month(date):
   if not date:
@@ -38,7 +37,6 @@ def add_month_dow(date):
     return next_month.replace(day=monthcalendar[weeknum-1][weekday])
 
 class Command (BaseCommand):
-  @print_to_mail(subject="Repeating Events")
   def handle(self, *args, **options):
     success = []
     errors = []
@@ -71,6 +69,7 @@ class Command (BaseCommand):
         if settings.DEBUG:
           raise
         errors.append("%s error: \n%s"%(event,traceback.format_exc()))
+    print datetime.datetime.now()
     if errors:
       print "event errors\n--------%s\n\n"%'\n'.join(errors)
     if success:
