@@ -98,7 +98,10 @@ class ToolsMixin(object):
 
 class Criterion(models.Model):
   name = models.CharField(max_length=32)
+
+  # These fields will eventually need to be a generic many to many field but we don't have a ui for that
   courses = models.ManyToManyField('course.Course',blank=True)
+  documents = models.ManyToManyField('redtape.Document',blank=True)
   __unicode__ = lambda self: self.name
   def user_can_grant(self,user):
     if user.is_toolmaster:
@@ -127,6 +130,27 @@ class UserCriterion(models.Model):
   object_id = models.IntegerField()
   content_object = GenericForeignKey('content_type', 'object_id')
   __unicode__ = lambda self: "%s for %s"%(self.user,self.criterion)
+
+class CriterionModel(models.Model):
+  """A model that will generate a user criterion upon completion"""
+  datetime = models.DateTimeField(default=datetime.datetime.now)
+  completed = models.DateTimeField(null=True,blank=True)
+  automatic = False # If true criterion will be granted without completion
+  def save(self,*args,**kwargs):
+    if not self.pk and self.automatic:
+      self.completed = datetime.datetime.now()
+    super(CriterionModel,self).save(*args,**kwargs)
+    if self.user and self.completed:
+      for criterion in self.get_criteria():
+        defaults = {'content_object':self}
+        u,new = UserCriterion.objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
+        u.content_object = self
+        u.save()
+    else:
+      m = self.__class__.__name__.lower()
+      UserCriterion.objects.filter(content_type__model=m,object_id=self.id).delete()
+  class Meta:
+    abstract = True
 
 class Group(models.Model):
   name = models.CharField(max_length=32)
