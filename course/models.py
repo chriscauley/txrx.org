@@ -21,10 +21,6 @@ from shop.models import Product
 from json import dumps
 import os
 
-# These are used in creating the safety permissions
-SAFETY_ID = 102
-SAFETY_CRITERION_ID = 7
-
 def to_base32(s):
   key = '-abcdefghijklmnopqrstuvwxyz'
   s = s.strip('0987654321')

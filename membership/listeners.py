@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.mail import mail_admins
 from django.dispatch import receiver
 from django.http import QueryDict
@@ -5,6 +6,7 @@ from lablackey.utils import get_or_none, latin1_to_ascii
 
 from course.utils import get_or_create_student
 from .models import Status, Subscription, Level, Product, Flag
+from tool.models import Criterion
 
 from paypal.standard.ipn.signals import valid_ipn_received, invalid_ipn_received
 
@@ -96,7 +98,8 @@ def paypal_signal(sender,**kwargs):
       subscription__user=subscription.user,
       status__in=Flag.PAYMENT_ACTIONS
     ).update(status="paid")
-    if user.orientation_status == 'new':
+    if not user.usercriterion_set.filter(criterion_id=settings.ORIENTATION_CRITERION_ID):
+      # user has never been oriented, send welcome email
       user.send_welcome_email()
 
   status = Status.objects.create(

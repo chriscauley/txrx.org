@@ -4,7 +4,7 @@ from django.test import TestCase, RequestFactory
 
 from .models import Product, Level, Group, add_months, Subscription, Flag
 from .paypal_utils import get_membership_query, paypal_post, get_flag_query
-from lablackey.tests import check_subjects
+from lablackey.tests import check_subjects, check_recipients
 from paypal.standard.ipn.models import PayPalIPN
 from six import text_type
 from six.moves.urllib.parse import urlencode
@@ -101,6 +101,8 @@ class SimpleTest(TestCase):
       # reposting the same data should not change anything
       paypal_post(self,data)
       validate(new_email)
+      self.assertTrue(check_subjects([u'New account information', u'TXRX Member Application Status for new_email111']))
+      self.assertTrue(check_recipients([new_email,new_email]))
 
     get_user_model().objects.get(email=new_email).delete()
     PayPalIPN.objects.filter(txn_id=data['txn_id']).delete()

@@ -1,6 +1,7 @@
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from course.models import SAFETY_ID, Session
+from course.models import Session
 from membership.models import Flag, add_months
 from tool.models import UserCriterion
 
@@ -21,7 +22,7 @@ class Command(BaseCommand):
 
     # email anyone who must go to the next safety criteria or lose the permission
     temporary_criteria = safety_criteria.filter(content_type__model="subscription")
-    safety_sessions = Session.objects.filter(course_id=SAFETY_ID)
+    safety_sessions = Session.objects.filter(course_id=settings.SAFETY_ID)
     try:
       next_safety = safety_sessions.filter(
         first_date__gte=now+datetime.timedelta(7),

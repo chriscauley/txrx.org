@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -107,15 +108,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
   def send_welcome_email(self):
     from membership.utils import send_membership_email
-    send_membership_email('email/new_member',self.email,experimental=False)
-    self.orientation_status = 'emailed'
+    send_membership_email('email/new_member',self.email,context={'user': self},experimental=False)
     self.create_fake_safety()
     self.save()
   def create_fake_safety(self):
     defaults = {
       'content_object': self.subscription_set.all()[0]
     }
-    criterion = Criterion.objects.get(id=7)
+    criterion = Criterion.objects.get(id=settings.SAFETY_CRITERION_ID)
     uc, new = UserCriterion.objects.get_or_create(
       user=self,
       criterion=criterion,

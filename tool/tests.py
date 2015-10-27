@@ -1,8 +1,9 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.test import TestCase
 
-from course.models import Session, SAFETY_ID
+from course.models import Session
 from membership.models import Level, Flag
 from membership.paypal_utils import get_membership_query, paypal_post
 
@@ -19,9 +20,9 @@ class SafetyTest(TestCase):
     paypal_post(self,data)
 
     #! TODO this is bad for now should not need to delete an entire set of courses just for this
-    Session.objects.filter(course_id=SAFETY_ID).delete()
+    Session.objects.filter(course_id=settings.SAFETY_ID).delete()
     Flag.objects.all().delete()
-    self.session = Session.objects.create(course_id=SAFETY_ID,user_id=1)
+    self.session = Session.objects.create(course_id=settings.SAFETY_ID,user_id=1)
 
   def test_create_temporary_criterion(self):
     now = datetime.datetime.now()
