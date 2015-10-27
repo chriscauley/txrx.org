@@ -101,10 +101,8 @@ class SimpleTest(TestCase):
       # reposting the same data should not change anything
       paypal_post(self,data)
       validate(new_email)
-      username = new_email.split("@")[0]
-      self.assertTrue(check_subjects([u'New account information', u'TXRX Member Application Status for '+username]))
-      self.assertTrue(check_recipients([[new_email],[new_email]]))
-      mail.outbox = []
+      self.assertTrue(check_subjects([u'New account information', u'TXRX Member Application Status for new_email111']))
+      self.assertTrue(check_recipients([new_email,new_email]))
 
     get_user_model().objects.get(email=new_email).delete()
     PayPalIPN.objects.filter(txn_id=data['txn_id']).delete()

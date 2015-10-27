@@ -39,11 +39,11 @@ def setUp(self):
   ClassTime.objects.create(session=self.session2,start=tomorrow.replace(hour=18),end_time="19:00")
 
   # conflict_session1 is the same time as session1. currently unused
-  """self.conflict_session1 = Session.objects.create(
+  self.conflict_session1 = Session.objects.create(
     course=Course.objects.filter(active=True,fee__gt=0).order_by("?")[0],
     user_id=1
   )
-  ClassTime.objects.create(session=self.conflict_session1,start=next_day,end_time=end)"""
+  ClassTime.objects.create(session=self.conflict_session1,start=next_day,end_time=end)
 
 class ListenersTest(TestCase):
   """This tests all possible purchases from paypal and to make sure prices line up.
@@ -179,7 +179,6 @@ class NotifyTest(TestCase):
       u"You're teaching tomorrow at 1 p.m.", u"You're teaching tomorrow at 6 p.m."
     ]
     recipients = [[i_email], [i_email], [s2_email], [s_email]]
-    print [m.recipients() for m in mail.outbox]
     self.assertTrue(check_subjects(subjects))
     self.assertTrue(check_recipients(recipients))
 
