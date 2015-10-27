@@ -162,7 +162,7 @@ EMAIL_BACKEND = "lablackey.mail.DebugBackend"
 PER_PAGE = 10
 NEW_STUDENT_PASSWORD = "I am a new student, reset my passwrod asap"
 
-for s_file in ['apps','local']:
+for s_file in ['apps','local','txrx_labs']:
   try:
     f = 'main/settings/%s.py'%s_file
     exec(compile(open(os.path.abspath(f)).read(), f, 'exec'), globals(), locals())
