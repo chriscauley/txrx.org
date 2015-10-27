@@ -78,11 +78,20 @@
   </search-users>
   <div if={ active_user } class="row buttons">
     <div class="col-sm-6">
-      <h3><u>Course Enrollments</u></h3>
-      <checkbox each={ student.enrollment_jsons } onclick={ parent.toggleEnrollment } if={ can_change }>
-        { session_name }
-      </checkbox>
+      <div if={ student.enrollment_jsons.length }>
+        <h3><u>Course Enrollments</u></h3>
+        <checkbox each={ student.enrollment_jsons } onclick={ parent.toggleEnrollment } if={ can_change }>
+          { session_name }
+        </checkbox>
+      </div>
+      <div if={ student.signature_jsons.length }>
+        <h3><u>Document Completions</u></h3>
+        <checkbox each={ student.signature_jsons } onclick={ parent.toggleSignature } if={ can_change }>
+          { document_name }
+        </checkbox>
+      </div>
     </div>
+
     <div class="col-sm-6">
       <h3><u>Tool Criteria</u></h3>
       <checkbox each={ criteria } onclick={ parent.toggleCriterion } if={ can_change }>
@@ -98,6 +107,10 @@
 
   toggleEnrollment(e) {
     toggle(e,{ enrollment_id: e.item.id });
+  }
+
+  toggleSignature(e) {
+    toggle(e,{ signature_id: e.item.id });
   }
 
   function toggle(e,d) {
@@ -123,12 +136,17 @@
       var user = window.TXRX.user
       that.criteria.forEach(function(c) {
         c.has = that.student.criterion_ids.indexOf(c.id) != -1;
-        c.locked = that.student.enrollment_criterion_ids.indexOf(c.id) != -1;
+        c.locked = that.student.locked_criterion_ids.indexOf(c.id) != -1;
         c.can_change = user.is_toolmaster || user.master_criterion_ids.indexOf(c.id) != -1;
       });
       that.student.enrollment_jsons.forEach(function(e){
         e.has = e.completed;
         e.can_change = user.is_toolmaster || user.session_ids.indexOf(e.session.id) != -1;
+      });
+      that.student.signature_jsons.forEach(function(e) {
+        e.has = e.completed;
+        e.can_change = user.is_toolmaster;
+        console.log(e);
       });
     }
   });

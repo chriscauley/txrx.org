@@ -78,16 +78,24 @@ class User(AbstractBaseUser, PermissionsMixin):
   def criterion_ids(self):
     return list(UserCriterion.objects.filter(user=self).values_list('criterion_id',flat=True))
   @property
+  def signature_jsons(self):
+    return [s.as_json for s in self.signature_set.all().order_by('-datetime')]
+  @property
   def enrollment_jsons(self):
     return [e.as_json for e in self.enrollment_set.all().order_by("-session__first_date")]
   @property
-  def enrollment_criterion_ids(self):
-    ucs = UserCriterion.objects.filter(
+  def locked_criterion_ids(self):
+    ucs = list(UserCriterion.objects.filter(
       user=self,
       content_type__model='enrollment',
-      object_id__in=self.enrollment_set.filter(completed=True).values_list("id")
-    )
-    return list(ucs.values_list('criterion_id',flat=True))
+      object_id__in=self.enrollment_set.filter(completed__isnull=False).values_list("id")
+    ).values_list('criterion_id',flat=True))
+    ucs += list(UserCriterion.objects.filter(
+      user=self,
+      content_type__model='signature',
+      object_id__in=self.signature_set.filter(completed__isnull=False).values_list("id")
+    ).values_list('criterion_id',flat=True))
+    return ucs
   class Meta:
     verbose_name = _('user')
     verbose_name_plural = _('users')

@@ -6,9 +6,10 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from course.models import Enrollment
+from redtape.models import Signature
 from tool.models import Tool, Lab, Group, Permission, Criterion, UserCriterion
 
-import json
+import json, datetime
 
 def lab_index(request):
   values = {'labs': Lab.objects.all()}
@@ -45,9 +46,16 @@ def toggle_criterion(request):
     enrollment = get_object_or_404(Enrollment,pk=request.GET["enrollment_id"])
     if not (request.user.is_toolmaster or request.user == enrollment.session.user):
       return HttpResponseForbidden("You do not have permission to modify this enrollment")
-    enrollment.completed = not enrollment.completed
+    enrollment.completed = None if enrollment.completed else datetime.datetime.now()
     enrollment.save()
+  if request.GET.get('signature_id'):
+    signature = get_object_or_404(Signature,pk=request.GET["signature_id"])
+    if not request.user.is_toolmaster:
+      return HttpResponseForbidden("You do not have permission to modify this document")
+    signature.completed = None if signature.completed else datetime.datetime.now()
+    signature.save()
+
   # send back the new user criterion ids to replace old data
   user = User.objects.get(pk=user.pk)
-  attrs = ['enrollment_jsons','enrollment_criterion_ids','criterion_ids']
+  attrs = ['signature_jsons','enrollment_jsons','locked_criterion_ids','criterion_ids']
   return HttpResponse(json.dumps({attr: getattr(user,attr) for attr in attrs}))

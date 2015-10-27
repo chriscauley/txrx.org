@@ -387,6 +387,7 @@ class Enrollment(CriterionModel):
   def save(self,*args,**kwargs):
     if not self.evaluation_date:
       self.evaluation_date = list(self.session.all_occurrences)[-1].start
+    super(Enrollment,self).save(*args,**kwargs)
   class Meta:
     ordering = ('-datetime',)
 
