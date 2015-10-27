@@ -98,7 +98,7 @@ class ToolsMixin(object):
 
 class Criterion(models.Model):
   name = models.CharField(max_length=32)
-  courses = models.ManyToManyField('course.Course')
+  courses = models.ManyToManyField('course.Course',blank=True)
   __unicode__ = lambda self: self.name
   def user_can_grant(self,user):
     if user.is_toolmaster:
