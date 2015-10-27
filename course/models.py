@@ -13,7 +13,7 @@ import datetime, time
 from media.models import FilesMixin, PhotosMixin
 from geo.models import Room
 from event.models import OccurrenceModel, reverse_ics
-from tool.models import ToolsMixin, Permission, Criterion, UserCriterion
+from tool.models import ToolsMixin, Permission, Criterion, UserCriterion, CriterionModel
 from lablackey.db.models import UserModel
 from lablackey.utils import cached_method, cached_property, latin1_to_ascii
 
@@ -244,7 +244,7 @@ class Session(UserModel,PhotosMixin,models.Model):
 
   total_students = property(lambda self: sum([e.quantity for e in self.enrollment_set.all()]))
   evaluated_students = property(lambda self: self.get_evaluations().count())
-  completed_students = property(lambda self: self.enrollment_set.filter(completed=True).count())
+  completed_students = property(lambda self: self.enrollment_set.filter(completed__isnull=False).count())
   full = property(lambda self: self.total_students >= self.course.max_students)
   list_users = property(lambda self: [self.user])
 
@@ -360,12 +360,11 @@ class EnrollmentManager(models.Manager):
     kwargs['emailed'] = False
     return self.filter(*args,**kwargs)
 
-class Enrollment(UserModel):
+class Enrollment(CriterionModel):
+  user = models.ForeignKey(settings.AUTH_USER_MODEL)
   session = models.ForeignKey(Session)
-  datetime = models.DateTimeField(default=datetime.datetime.now)
   quantity = models.IntegerField(default=1)
 
-  completed = models.BooleanField(default=False)
   evaluated = models.BooleanField(default=False)
   emailed = models.BooleanField(default=False)
   evaluation_date = models.DateTimeField(null=True,blank=True)
@@ -374,28 +373,20 @@ class Enrollment(UserModel):
 
   objects = EnrollmentManager()
 
+  get_criteria = lambda self: self.session.course.criterion_set.all()
   @property
   def as_json(self):
     return {
       'id': self.id,
       'session': self.session.as_json,
       'session_name': unicode(self.session),
-      'completed': self.completed,
+      'completed': unicode(self.completed or ''),
     }
 
   __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.session)
   def save(self,*args,**kwargs):
     if not self.evaluation_date:
       self.evaluation_date = list(self.session.all_occurrences)[-1].start
-    super(Enrollment,self).save(*args,**kwargs)
-    if self.completed:
-      for criterion in self.session.course.criterion_set.all():
-        defaults = {'content_object':self}
-        u,new = UserCriterion.objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
-        u.content_object = self
-        u.save()
-    else:
-      UserCriterion.objects.filter(content_type__model="enrollment",object_id=self.id).delete()
   class Meta:
     ordering = ('-datetime',)
 
