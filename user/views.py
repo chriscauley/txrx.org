@@ -32,7 +32,7 @@ def checkin(request):
   return HttpResponse(json.dumps(out))
 
 def user_json(request):
-  if not request.user:
+  if not request.user.is_authenticated():
     return TemplateResponse(request,"user.json",{'user_json':'null'});
   enrollments = Enrollment.objects.filter(user=request.user,completed=True)
   usercriteria = UserCriterion.objects.filter(user=request.user)
