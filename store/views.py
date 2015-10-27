@@ -73,8 +73,8 @@ def receipts(request):
     o.save()
     return HttpResponseRedirect('.')
   values = {
-    'outstanding_orders': Order.objects.filter(status=Order.COMPLETED),
-    'delivered_orders': Order.objects.filter(status=Order.SHIPPED)[:20]
+    'outstanding_orders': Order.objects.filter(status=Order.COMPLETED).order_by("-id"),
+    'delivered_orders': Order.objects.filter(status=Order.SHIPPED).order_by("-id")[:10]
   }
   return TemplateResponse(request,'store/receipts.html',values)
 
