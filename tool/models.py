@@ -204,7 +204,7 @@ class Permission(models.Model):
 def reset_tools_json(context="no context provided"):
   values = {
     'permissions_json': json.dumps([p.as_json for p in Permission.objects.all()]),
-    'groups_json': json.dumps([g.as_json for g in Group.objects.all()]),
+    'groups_json': json.dumps([g.as_json for g in Group.objects.all().order_by("row","column")]),
     'criteria_json': json.dumps([c.as_json for c in Criterion.objects.all()])
   }
   text = render_to_string('tool/tools.json',values)

@@ -62,9 +62,7 @@ function setHiddenFields(that) {
         <input type="hidden" name="RETURNURL" value="{{ settings.SITE_URL }}/joined/{{ user.id }}/">
         <div class="button_box">
           <input type="image" name="submit" alt="PayPal - The safer, easier way to pay online!"
-                 {% if "Table Hacker" in m.name and not "open" in request.GET %} onclick="tHackerAlert();return false;"
-                 class="grayscale-me"
-                 {% endif %} src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif">
+                 id="m_{{ m|slugify }}" src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif">
           <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="" width="1" height="1" border="0">
         </div>
       </form>
@@ -77,9 +75,6 @@ function setHiddenFields(that) {
       'months': {{ product.months }}, // "wait this many months between billings"
       }
       {% endfor %}
-      function tHackerAlert() {
-        alert("Availabilty for this membership is limited. \nPlease email membership@txrxlabs.org for more information.");
-      }
     </script>
     {% endfor %}
   </div>
@@ -87,6 +82,28 @@ function setHiddenFields(that) {
 </div>
 <script type="text/javascript">
 $(document).ready(function() {$("select").change()});
+$(function() {
+  var HACKERKEYS = [];
+  var code = [38,38,40,40,37,39,37,39,66,65];
+  if (window.location.search.indexOf("open") != -1) { return }
+  var unlocked = false;
+  $("#m_table-hacker").addClass("grayscale-me").click(function() {
+    if (unlocked) {
+      return true
+    } else {
+      alert("Availabilty for this membership is limited. \nPlease email membership@txrxlabs.org for more information.");
+      return false;
+    }
+  });;
+  $(document).keyup(function(e) {
+    HACKERKEYS.push(e.keyCode);
+    var entries = HACKERKEYS.slice(-code.length);
+    for (var i = 0; i < code.length; ++i) { if (code[i] !== entries[i]) return false; }
+    $("#m_table-hacker").removeClass("grayscale-me");
+    alert("Table-Hacker Membership Unlocked!");
+    unlocked = true;
+  });
+});
 </script>
 <div class="clear"></div>
 {% endblock %}
