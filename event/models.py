@@ -124,7 +124,7 @@ class RSVP(UserModel):
 class EventOccurrence(PhotosMixin,OccurrenceModel):
   event = models.ForeignKey(Event)
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
-  get_absolute_url = lambda self: "%s#%s"%(self.event.get_absolute_url(),self.pk)
+  get_absolute_url = lambda self: reverse('event:occurrence_detail',args=(self.id,slugify(self.name)))
   get_admin_url = lambda self: "/admin/event/event/%s/"%self.event.id
   name_override = models.CharField(null=True,blank=True,max_length=128)
   name = property(lambda self: self.name_override or self.event.name)
