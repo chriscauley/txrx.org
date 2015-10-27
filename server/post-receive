@@ -1,16 +1,7 @@
 #!/bin/bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-export PROJECT_ROOT=$DIR/../../
-
-#for now just update lablackey every time.
-cd /home/django/lablackey
-echo `pwd`
-git pull
-
-#same for riot-comments
-cd /home/django/django-riot-comments
-git pull
+export PROJECT_ROOT=../../
 
 GIT_WORK_TREE=$PROJECT_ROOT../ git checkout -f
 
