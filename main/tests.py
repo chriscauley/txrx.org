@@ -20,7 +20,7 @@ class ManagementCommands(TestCase):
     call_command("repeat_events")
     self.assertEqual(e.eventoccurrence_set.count(),5)
     subjects = [m.subject for m in mail.outbox]
-    self.assertTrue(check_subjects(['Repeating Events']))
+    self.assertTrue(check_subjects([]))
 
   def test_evaluation_reminder(self):
     call_command("evaluation_reminder")
