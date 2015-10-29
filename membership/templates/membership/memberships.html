@@ -22,8 +22,8 @@ function setHiddenFields(that) {
 <br />
 <div id="memberships" class="row">
   {% for group in groups %}
-  <div class="{% if forloop.first %}col-lg-offset-2 {% endif %}col-lg-4 col-sm-6">
-    {% if groups|length != 1 %}<h2>{{ group }} Memberships:</h2>{% endif %}
+  <div class="col-lg-4 col-sm-6">
+    {% if groups|length != 1 %}<h2>{{ group }} Membership</h2>{% endif %}
     {% for m in group.active_levels %}
     <span class="well membership">
       <h2>
@@ -35,8 +35,8 @@ function setHiddenFields(that) {
       {% if m.notes %}<br />
       {{ m.notes|safe }}{% endif %}
       <ul class="membership_features">
-        {% for f in m.features %}
-        <li><i class="fa fa-check"></i> {{ f.text }}</li>
+        {% for feature in m.get_features %}
+        <li><i class="fa fa-check"></i> {{ feature.text }}</li>
         {% endfor %}
       </ul>
       <form name="_xclick" action="https://www.paypal.com/cgi-bin/webscr" method="post">

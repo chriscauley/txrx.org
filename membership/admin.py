@@ -69,9 +69,17 @@ class ProductInline(admin.TabularInline):
   exclude = ('slug',)
 
 @admin.register(Level)
-class MembershipAdmin(admin.ModelAdmin):
+class LevelAdmin(admin.ModelAdmin):
   list_display = ("name","order")
   list_editable = ("order",)
+  fieldsets = (
+    (None,{'fields': (('name','group'),('discount_percentage','order'))}),
+    ('For Profit Features',{
+      'classes': ('collapse',),
+      'fields': (('machine_credits','cost_per_credit'),'simultaneous_users',
+                 ('custom_training_cost','custom_training_max'))
+    }),
+  )
   inlines = (MembershipFeatureInline, ProductInline)
 
 class StatusInline(admin.TabularInline):

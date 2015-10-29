@@ -59,6 +59,32 @@ class Level(models.Model):
   group = models.ForeignKey(Group,null=True,blank=True)
   features = cached_property(lambda self:[a.feature for a in self.membershipfeature_set.all()],
                              name="features")
+
+  # Corporate membership features
+  machine_credits = models.IntegerField(default=0)
+  simultaneous_users = models.IntegerField(default=0)
+  cost_per_credit = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+  custom_training_cost = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+  custom_training_max = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+
+  def get_features(self):
+    if not self.cost_per_credit:
+      return self.features
+    credits = '%s Machine credits.'%self.machine_credits
+    if self.machine_credits:
+      credits = "%s Monthly non transferrable machine credits."%self.machine_credits
+    discount = "%s%% Discount on all training classes"%self.discount_percentage
+    if self.custom_training_cost:
+      discount += "and custom training sessions @ $%s hr(max %s hrs per month)"
+      discount = discount%(self.custom_training_cost,custom_training_max)
+    features = [
+      credits,
+      "Max %s simultaneous users."%self.simultaneous_users,
+      discount,
+      "Machine credits can be purchased @ $%s per credit."%self.cost_per_credit,
+    ]
+    return [{'text': f} for f in features]+self.features
+
   @cached_property
   def all_users(self):
     return get_user_model().objects.filter(subscription__product__level=self)
@@ -75,6 +101,8 @@ class Level(models.Model):
 
 MONTHS_CHOICES = (
   (1,"Monthly"),
+  (3,"Quarterly"),
+  (6,"Biannually"),
   (12,"Yearly"),
 )
 
