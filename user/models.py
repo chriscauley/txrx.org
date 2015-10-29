@@ -130,6 +130,11 @@ class User(AbstractBaseUser, PermissionsMixin):
       defaults=defaults
     )
 
+class UserNote(models.Model):
+  user = models.ForeignKey(User)
+  note = models.CharField(max_length=256)
+  added = models.DateTimeField(auto_now_add=True)
+
 class UserCheckin(models.Model):
   user = models.ForeignKey(User)
   time_in = models.DateTimeField(auto_now_add=True)

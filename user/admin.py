@@ -2,10 +2,15 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
-from .models import User
+from .models import User, UserNote
 from membership.admin import UserMembershipInline, SubscriptionInline
 from course.admin import EnrollmentInline
 from .forms import UserChangeForm, CustomUserCreationForm
+
+class UserNoteInline(admin.TabularInline):
+  model = UserNote
+  extra = 0
+  readonly_fields = ("added",)
 
 @admin.register(User)
 class UserAdmin(UserAdmin):
@@ -30,4 +35,4 @@ class UserAdmin(UserAdmin):
   search_fields = ('username', 'email', 'first_name', 'last_name','usermembership__paypal_email')
   ordering = ('username',)
   readonly_fields = ('last_login','date_joined','level')
-  inlines = [UserMembershipInline, SubscriptionInline, EnrollmentInline]
+  inlines = [UserMembershipInline, UserNoteInline, SubscriptionInline, EnrollmentInline]
