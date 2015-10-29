@@ -76,8 +76,8 @@ class Level(models.Model):
     discount = "%s%% Discount on all training classes"%self.discount_percentage
     if self.custom_training_cost:
       d2 = " and custom training sessions @ $%s hr(max %s hrs per month)"
-      discount = discount%(self.custom_training_cost,self.custom_training_max)
-      discount = d + d2
+      d2 = d2%(self.custom_training_cost,self.custom_training_max)
+      discount = discount + d2
     features = [
       credits,
       "Max %s simultaneous users."%self.simultaneous_users,
