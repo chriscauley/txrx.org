@@ -75,12 +75,13 @@ class Level(models.Model):
       credits = "%s Monthly non transferrable machine credits."%self.machine_credits
     discount = "%s%% Discount on all training classes"%self.discount_percentage
     if self.custom_training_cost:
-      discount += "and custom training sessions @ $%s hr(max %s hrs per month)"
+      d2 = " and custom training sessions @ $%s hr(max %s hrs per month)"
       discount = discount%(self.custom_training_cost,self.custom_training_max)
+      discount = d + d2
     features = [
       credits,
       "Max %s simultaneous users."%self.simultaneous_users,
-      discount,
+      discount+".",
       "Machine credits can be purchased @ $%s per credit."%self.cost_per_credit,
     ]
     return [{'text': f} for f in features]+self.features
