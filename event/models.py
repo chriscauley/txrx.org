@@ -120,6 +120,7 @@ class RSVP(UserModel):
   emailed = models.DateTimeField(null=True,blank=True)
   quantity = models.IntegerField(default=0)
   get_occurrences = lambda self: [self.content_object]
+  __unicode__ = lambda self: "%s for %s"%(self.user,self.content_object)
 
 class EventOccurrence(PhotosMixin,OccurrenceModel):
   event = models.ForeignKey(Event)

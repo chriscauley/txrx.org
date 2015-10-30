@@ -126,6 +126,7 @@ SUIT_CONFIG = {
      'models': (
        'event.event',
        'event.eventoccurrence',
+       'event.rsvp',
        'geo.location',
        'geo.room',
      )
