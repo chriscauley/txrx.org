@@ -7,9 +7,10 @@
   this.on("update", function() {
     that._c = opts.occurrences.length;
     that._s = (that._c > 1)?"s":"";
+    var user_reservations = that.opts.user_reservations || [];
     for (var i=0; i<opts.occurrences.length; i++) {
       var o = opts.occurrences[i];
-      o.quantity = that.opts.user_reservations[o.id] || 0;
+      o.quantity = user_reservations[o.id] || 0;
     };
   });
 </event-list>
@@ -33,7 +34,7 @@
   </div>
 
   var that = this;
-  this.start_string = new Date(this.start).toString("MMM d, yyyy h:mm tt");
+  this.start_string = new Date(this.start).toString("ddd MMM d, yyyy h:mm tt");
   
   this.admin_access = window.TXRX.user.is_superuser;
   this.authenticated = window.TXRX.user.id;

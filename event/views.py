@@ -109,3 +109,12 @@ def rsvp(request):
     rsvp.quantity = request.GET['quantity']
     rsvp.save()
   return HttpResponse(json.dumps(occurrence.event.get_user_rsvps(request.user)))
+
+def detail_json(request,event_pk):
+  event = get_object_or_404(Event,pk=event_pk)
+  fields = ['name','description','repeat','hidden','allow_rsvp']
+  out = {key:getattr(event,key) for key in fields}
+  fields = ['id','name','total_rsvp','start','end']
+  os = event.upcoming_occurrences[:10]
+  out['upcoming_occurrences'] = [{key: str(getattr(o,key)) for key in fields} for o in os]
+  return HttpResponse(json.dumps(out))

@@ -30,7 +30,7 @@
 $(function() {
   var user_reservations = {{ rsvps_json|safe }};
   $.get(
-    "/api/event/eventdetail/{{ event.pk }}/",
+    "/event/eventdetail_{{ event.pk }}.json",
     function(data) {
       data.user_reservations = user_reservations;
       data.occurrences = data.upcoming_occurrences;

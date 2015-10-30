@@ -21,6 +21,7 @@ class EventOccurrenceSerializer(serializers.ModelSerializer):
     model = EventOccurrence
     fields = ['id','name','total_rsvp','start','end']
 
+# this can't get through jwt so it's dead for now
 class EventDetailSizzler(BaseSizzler):
   permissions = classmethod(lambda class_, request: request.method == "GET")
   upcoming_occurrences = EventOccurrenceSerializer(many=True, read_only=True)
