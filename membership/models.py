@@ -72,11 +72,11 @@ class Level(models.Model):
       return self.features
     credits = '%s Machine credits.'%self.machine_credits
     if self.machine_credits:
-      credits = "%s Monthly non transferrable machine credits."%self.machine_credits
+      credits = "%s Monthly machine credits."%self.machine_credits
     discount = "%s%% Discount on all training classes"%self.discount_percentage
     if self.custom_training_cost:
-      d2 = " and custom training sessions @ $%s hr(max %s hrs per month)"
-      d2 = d2%(self.custom_training_cost,self.custom_training_max)
+      d2 = " and custom training sessions @ $%s/hr (max %s hrs per month)"
+      d2 = d2%(int(self.custom_training_cost),int(self.custom_training_max))
       discount = discount + d2
     features = [
       credits,
