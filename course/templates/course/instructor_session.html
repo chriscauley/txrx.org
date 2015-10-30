@@ -80,12 +80,14 @@
       When class is completedly over, check off the students who have completed the class and press submit.
       {% for enrollment in session.enrollment_set.all %}
       <p>
-        <input type="checkbox" name="completed"{% if enrollment.completed %}
-               checked="checked"{% endif %} value="{{ enrollment.id }}"/>
-        {{ enrollment.user.email }}
+        <label>
+          <input type="checkbox" name="completed"{% if enrollment.completed %}
+                 checked="checked"{% endif %} value="{{ enrollment.id }}"/>
+          {{ enrollment.user.email }}
+        </label>
       </p>
       {% endfor %}
-      <input type="submit" value="Update" />
+      <input type="submit" value="Update" class="btn btn-primary" />
     </form>
   </div>
 </div>
