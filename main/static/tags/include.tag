@@ -15,7 +15,6 @@
 <include>
   this.on("mount",function() {
     var tagname = this.opts.tagname;
-    if (tagname == "input") { return }
     var tag = document.createElement(tagname);
     this.root.appendChild(tag);
     riot.mount(tagname,tag);
