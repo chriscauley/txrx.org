@@ -12,7 +12,7 @@ from .utils import make_ics,ics2response
 from .models import Event, EventOccurrence, RSVP
 from course.models import ClassTime
 
-import datetime, json
+import datetime, json, arrow
 
 def index(request,daystring=None):
   start = datetime.date.today()
@@ -111,10 +111,19 @@ def rsvp(request):
   return HttpResponse(json.dumps(occurrence.event.get_user_rsvps(request.user)))
 
 def detail_json(request,event_pk):
+  now = arrow.now()
+  year = request.GET.get('year',now.year)
+  month = request.GET.get('month',now.month)
+  start = arrow.Arrow(year,month,1)
+  end = start.replace(months=1)
   event = get_object_or_404(Event,pk=event_pk)
   fields = ['name','description','repeat','hidden','allow_rsvp']
   out = {key:getattr(event,key) for key in fields}
   fields = ['id','name','total_rsvp','start','end']
-  os = event.upcoming_occurrences[:10]
-  out['upcoming_occurrences'] = [{key: str(getattr(o,key)) for key in fields} for o in os]
+  os = event.eventoccurrence_set.filter(start__gte=start.datetime,start__lt=end.datetime)
+  if not os.filter(start__gte=datetime.datetime.now()):
+    start = end
+    end = start.replace(months=1)
+    os = event.eventoccurrence_set.filter(start__gte=start.datetime,start__lt=end.datetime)
+  out['occurrences'] = [{key: str(getattr(o,key)) for key in fields} for o in os]
   return HttpResponse(json.dumps(out))

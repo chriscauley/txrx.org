@@ -14,16 +14,17 @@
   <a href="/admin/event/event/{{ event.pk }}"><i class="fa fa-pencil-square"></i></a>
   {% endif %}
 </h1>
-<div class="event-detail row">
-  <div class="col-sm-4 col-md-5">
-    <div class="slide-wrapper">
-      {% include "widgets/thing_slideshow.html" with thing=event %}
-    </div>
+<div class="row">
+  <div class="col-sm-8">
+    <div class="description lead">{{ event.description|explosivo }}</div>
   </div>
   <div class="col-sm-4">
-    <div class="description">{{ event.description|explosivo }}</div>
+    {% include "widgets/thing_slideshow.html" with thing=event %}
   </div>
-  <div class="col-xs-12 col-sm-4 col-md-3 pull-right" id="side"></div>
+</div>
+<div class="slide-wrapper">
+  {% include "widgets/thing_slideshow.html" with thing=event %}
+  <calendar></calendar>
 </div>
 <script type="riot/tag" src="{{ STATIC_URL }}tags/event.tag"></script>
 <script>
@@ -33,12 +34,10 @@ $(function() {
     "/event/eventdetail_{{ event.pk }}.json",
     function(data) {
       data.user_reservations = user_reservations;
-      data.occurrences = data.upcoming_occurrences;
-      $("#side").prepend("<event-list>");
-      riot.mount("#side event-list",data);
+      riot.mount("calendar",data);
     },
     "json"
-  )
+  );
 });
 </script>
 {% endblock %}

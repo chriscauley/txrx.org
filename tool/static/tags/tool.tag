@@ -146,7 +146,6 @@
       that.student.signature_jsons.forEach(function(e) {
         e.has = e.completed;
         e.can_change = user.is_toolmaster;
-        console.log(e);
       });
     }
   });
@@ -172,6 +171,7 @@
     <p>Find a user and then select them and you will be prompted for a new rfid</p>
   </search-users>
   <modal if={ active_user } cancel={ cancel }>
+    <h3>Selected: { parent.active_user.username }</h3>
     Swipe card or enter number.
     <form onsubmit={ parent.submit }>
       <input type="text" />
