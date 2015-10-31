@@ -89,6 +89,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/g/riot@2.2(riot.min.js+compiler.min.js)"></script>
     <script src="/user.json?v={% now "ymd_his" %}"></script>
+    <script type="riot/tag" src="{{ STATIC_URL }}tags/modal.tag"></script>
     {% compress js %}
     <script src="{{ STATIC_URL }}less/bootstrap/js/affix.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/button.js"></script>
@@ -102,7 +103,7 @@
     <script src="{{ STATIC_URL }}less/bootstrap/js/tooltip.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/popover.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/tab.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/date-en-US.js"></script> {# date formatting #}
+    <script src="{{ STATIC_URL }}js/moment.js"></script> {# date formatting #}
     {% endcompress %}
     {% block extrajs %}{% endblock %}
     <script src="{{ STATIC_URL }}blog.js"></script>
