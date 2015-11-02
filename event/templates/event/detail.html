@@ -19,7 +19,14 @@
     <div class="description lead">{{ event.description|explosivo }}</div>
   </div>
   <div class="col-sm-4">
+<<<<<<< HEAD
     {% include "widgets/thing_slideshow.html" with thing=event %}
+=======
+    <div class="description">{{ event.description|explosivo }}</div>
+    {% if event.rsvp_cutoff %}
+    <div class="alert alert-warning">{{ event.verbose_rsvp_cutoff }}</div>
+    {% endif %}
+>>>>>>> master
   </div>
 </div>
 <div class="slide-wrapper">

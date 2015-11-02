@@ -25,6 +25,7 @@
     <div if={ !full && authenticated }>
       <button class="btn btn-success rsvp" if={ !quantity } onclick={ makeRSVP }>RSVP for this event</button>
       <button class="btn btn-danger unrsvp" if={ quantity } onclick={ cancelRSVP }>Cancel RSVP</button>
+      <span if={ total_rsvp } data-reddot={ total_rsvp }></span>
     </div>
     <div if={ !full && !authenticated }>
       You must

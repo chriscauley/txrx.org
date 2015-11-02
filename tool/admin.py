@@ -77,6 +77,8 @@ class PermissionAdmin(admin.ModelAdmin):
 @admin.register(Criterion)
 class CriterionAdmin(admin.ModelAdmin):
   filter_horizontal = ("courses",)
+  raw_id_fields = ('user',)
+  read_only_fields = ("content_type","object_id")
 
 @admin.register(UserCriterion)
 class UserCriterionAdmin(admin.ModelAdmin):
