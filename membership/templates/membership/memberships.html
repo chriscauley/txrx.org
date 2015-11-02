@@ -52,6 +52,9 @@ function setHiddenFields(that) {
         <input name="notify_url" type="hidden" value="{{ SITE_URL }}/tx/rx/ipn/handler/">
         <input name="cancel_return" type="hidden" value="{{ SITE_URL }}/shop/">
         <input name="return" type="hidden" value="{{ SITE_URL }}/shop/">
+        {% if request.user.is_authenticated %}
+        <input type="hidden" name="custom" value="{{ request.user.pk }}"/>
+        {% endif %}
         <select name="os0" onchange="setHiddenFields(this);">
           {% for product in m.products %}
           <option value="{{ m.name }} - {{ product.name }}">
