@@ -11,7 +11,7 @@ from lablackey.db.models import UserModel
 from lablackey.utils import cached_property, cached_method
 from wmd import models as wmd_models
 
-import datetime, sys, json
+import datetime, sys, math
 
 def print_time(t):
   if t: return t.strftime('%I:%M %P')
@@ -35,20 +35,31 @@ REPEAT_CHOICES = (
 )
 
 class Event(PhotosMixin,models.Model):
+  _use_default_photo = True
   name = models.CharField(max_length=128,null=True,blank=True)
   _ht = "Optional. Alternative name for the calendar."
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   room = models.ForeignKey(Room,null=True,blank=True) #! remove ntbt when you remove location.
   get_room = lambda self: self.room
   description = wmd_models.MarkDownField(blank=True,null=True)
-  _ht = "If your changing this, you will need to manually delete all future incorrect events. Repeating events are auto-generated every night."
+  _ht = "If your changing this, you will need to manually delete all future incorrect events."
+  _ht += "Repeating events are auto-generated every night."
   repeat = models.CharField(max_length=32,choices=REPEAT_CHOICES,null=True,blank=True,help_text=_ht)
   _ht = "If true, this class will not raise conflict warnings for events in the same room."
   no_conflict = models.BooleanField(default=False,help_text=_ht)
   _ht = "Hidden stuff won't appear on the calendar."
   hidden = models.BooleanField(default=False)
   allow_rsvp = models.BooleanField(default=True)
+  _ht = "Number of days before event when RSVP is cut off (eg 0.5 means \"You must rsvp 12 hours before this event\")"
+  rsvp_cutoff = models.FloatField(default=0,help_text=_ht)
   max_rsvp = models.IntegerField(default=128)
+  @property
+  def verbose_rsvp_cutoff(self):
+    if self.rsvp_cutoff > 2:
+      s = "{} days".format(int(self.rsvp_cutoff))
+    else:
+      s = "{} hours".format(int(math.ceil(12*self.rsvp_cutoff)))
+    return "You must RSVP for this event at least {} before the event begins.".format(s)
 
   get_short_name = lambda self: self.short_name or self.name
   def get_absolute_url(self):
@@ -136,6 +147,7 @@ class EventOccurrence(PhotosMixin,OccurrenceModel):
   room = cached_property(lambda self: self.event.room,name="room")
   no_conflict = property(lambda self: self.event.no_conflict)
 
+  rsvp_cutoff = property(lambda self: self.start - datetime.timedelta(self.event.rsvp_cutoff))
   total_rsvp = property(lambda self: sum([r.quantity for r in self.get_rsvps()]))
   full = property(lambda self: self.total_rsvp >= self.event.max_rsvp)
   _cid = ContentType.objects.get(model="eventoccurrence").id

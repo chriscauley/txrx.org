@@ -22,6 +22,9 @@
   </div>
   <div class="col-sm-4">
     <div class="description">{{ event.description|explosivo }}</div>
+    {% if event.rsvp_cutoff %}
+    <div class="alert alert-warning">{{ event.verbose_rsvp_cutoff }}</div>
+    {% endif %}
   </div>
   <div class="col-xs-12 col-sm-4 col-md-3 pull-right" id="side"></div>
 </div>
