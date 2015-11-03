@@ -34,7 +34,7 @@ def paypal_flag(sender,reason=None,**kwargs):
 @receiver(valid_ipn_received,dispatch_uid='paypal_signal')
 @receiver(invalid_ipn_received,dispatch_uid='paypal_signal')
 def paypal_signal(sender,**kwargs):
-  if sender.txn_type == "web_accept":
+  if sender.txn_type in ["web_accept","send_money"]:
     return # payment from front page
   params = QueryDict(sender.query)
   subscr_id = params.get('subscr_id',None) or params.get('recurring_payment_id',None)
