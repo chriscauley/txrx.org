@@ -35,7 +35,7 @@
   </div>
 
   var that = this;
-  this.start_string = new Date(this.start).toString("ddd MMM d, yyyy h:mm tt");
+  this.start_string = moment(this.start).format("ddd MMM D, YYYY h:mm a");
   
   this.admin_access = window.TXRX.user.is_superuser;
   this.authenticated = window.TXRX.user.id;
