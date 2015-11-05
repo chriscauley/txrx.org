@@ -42,6 +42,7 @@ class Message(models.Model):
   subject = models.ForeignKey(Subject)
   message = models.TextField()
   user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
+  datetime = models.DateTimeField(auto_now_add=True)
   __unicode__ = lambda self: "%s: %s"%(self.user or self.from_email,self.subject)
   def save(self,*args,**kwargs):
     send_email = not self.pk

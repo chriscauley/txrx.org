@@ -17,6 +17,7 @@ class SubjectAdmin(admin.ModelAdmin):
 
 class MessageAdmin(admin.ModelAdmin):
   list_filter = ('subject',)
+  list_display = ("__unicode__","datetime")
 
 class FAQAdmin(admin.ModelAdmin):
   pass
