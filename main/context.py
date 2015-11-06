@@ -79,6 +79,7 @@ def nav(request):
   if 'auth' in request.path or 'accounts' in request.path:
     login_redirect = "/"
 
+  _e = EventOccurrence.objects.filter(start__gte=now,start__lte=now+datetime.timedelta(7),event__hidden=False)
   return dict(
     current = request.path.split('/')[1] or 'home',
     nav = _nav,
@@ -87,7 +88,7 @@ def nav(request):
     auth_form = AuthenticationForm,
     app_path = "/admin/login/",
     settings = settings,
-    upcoming_events = EventOccurrence.objects.filter(start__gte=now,start__lte=now+datetime.timedelta(7)),
+    upcoming_events = _e,
     #last_week = EventOccurrence.objects.filter(start__lte=now,photoset__isnull=False),
     tags = Tag.objects.all(),
     class_faqs = class_faqs,

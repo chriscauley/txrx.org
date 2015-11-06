@@ -89,7 +89,7 @@ def ics(request,module,model_str,pk,fname):
   return ics2response(calendar_object,fname=fname)
 
 def all_ics(request,fname):
-  occurrences = EventOccurrence.objects.all()
+  occurrences = EventOccurrence.objects.filter(event__hidden=False)
 
   calendar_object = make_ics(occurrences,title="%s Events"%settings.SITE_NAME)
   return ics2response(calendar_object,fname=fname)

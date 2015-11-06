@@ -22,7 +22,7 @@ def iter_times(start,end):
 def dxfviewer(request,pk=None):
   today = datetime.datetime.now().replace(hour=0,minute=0)
   tomorrow = today + datetime.timedelta(1)
-  events = EventOccurrence.objects.filter(start__gte=today,start__lte=tomorrow)
+  events = EventOccurrence.objects.filter(event__hidden=False,start__gte=today,start__lte=tomorrow)
   classtimes = ClassTime.objects.filter(start__gte=today,start__lte=tomorrow)
   events = list(events)+list(classtimes)
   event_dict = {}
