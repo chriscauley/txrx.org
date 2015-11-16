@@ -51,17 +51,24 @@ var uR = (function() {
     });
   }
 
-  var bounceOuts = {};
-  function bounce(f,args,delay) {
-    delay = delay | 500;
-    clearTimeout(bounceOuts[f.name]);
-    bounceOuts[f.name] = setTimeout(function() { f.apply(this,args); },delay);
-  }
+  function debounce(func, wait, immediate) {
+    var timeout, wait = wait | 200;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (immediate && !timeout) func.apply(context, args);
+    };
+  };
 
   return {
     serialize: serialize,
     ajax: ajax,
-    bounce: bounce,
+    debounce: debounce,
   }
 })()
   

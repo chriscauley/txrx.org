@@ -34,6 +34,7 @@
     opts.filterSearch(this.classes_q.value);
     riot.update();
   }
+  this.search = uR.debounce(this.search);
 </course-filters>
 <course-list>
   <div each={ opts.courses }>

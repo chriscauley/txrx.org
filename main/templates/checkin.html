@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block main %}{% endblock %}
+{% block main %}<checkin></checkin>{% endblock %}
 
 {% block extrajs %}
 <script src="{{ STATIC_URL }}tags/modal.tag" type="riot/tag"></script>
 <script src="{{ STATIC_URL }}tags/checkin.tag" type="riot/tag"></script>
-<script>riot.route("checkin");</script>
+<script>$(function(){riot.route("checkin");})</script>
 {% endblock %}

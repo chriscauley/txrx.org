@@ -245,12 +245,10 @@
   that._results = [];
   var old_value = '',value;
   search(e) {
+  console.log('bounce')
     value = that.root.querySelector("[name=q]").value;
     if (old_value == value) { return }
-    uR.bounce(s,[e]);
     old_value = value;
-  }
-  function s(e) {
     var target = that.root.querySelector(".results");
     target.setAttribute("ur-loading","loading")
     if (!value || value.length < 3) {
@@ -270,6 +268,7 @@
       "json"
     )
   }
+  this.search = uR.debounce(this.search);
   back(e) {
     this.parent.active_user = undefined;
     this.parent.update()

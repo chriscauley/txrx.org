@@ -11,10 +11,7 @@
 
   var that = this;
   var timeout;
-  press(e) {
-    uR.bounce(checkRFID,[],200);
-  }
-  function checkRFID() {
+  function press(e) {
     var rfid = that.rfid.value;
     if (!rfid) { return }
     that.root.classList.add('loading');
@@ -40,5 +37,5 @@
       "json"
     );
   }
-
+  this.press = uR.debounce(this.press);
 </checkin>
