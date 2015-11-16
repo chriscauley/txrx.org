@@ -12,7 +12,7 @@
     <div>{{ classtime|format_classtime }}</div>
     {% endfor %}
   </div>
-  {% if session.full %}
+  {% if session.full and not "overbook" in request.GET %}
   <b class="full">This session is full</b>
   {% else %}
   <div>

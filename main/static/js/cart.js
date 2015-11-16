@@ -96,7 +96,11 @@ function startCheckout() {
 }
 
 function verifyCheckout(data) {
-  if (data.length == 0) { createCookie("checkout_initiated","yes!",10);simpleCart.checkout(); return; }
+  if (window.location.search.indexOf("overbook") != -1 || (data.length == 0)) {
+    createCookie("checkout_initiated","yes!",10);
+    simpleCart.checkout();
+    return;
+  }
   var msg = "Sorry, some of the classes you're trying to take have filled since you first loaded this page."
   msg += "\nThe following have been removed from your cart:"
   for (var i=0; i < data.length; i++) {

@@ -303,12 +303,12 @@ function Cart(){
     }
     
     
-
+    var _regex = /(<([^>]+)>)/ig
     me.each(function(item,iter){
 
       counter = iter+1;
       
-      form.appendChild( me.createHiddenElement( "item_name_"		+ counter, item.name		) );
+      form.appendChild( me.createHiddenElement( "item_name_"		+ counter, item.name.replace(_regex,'')		) );
       form.appendChild( me.createHiddenElement( "quantity_"		+ counter, item.quantity	) );
       discount = me.discount || 1;
       form.appendChild( me.createHiddenElement( "amount_"			+ counter, item.price*discount		) );
