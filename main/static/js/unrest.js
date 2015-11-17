@@ -33,7 +33,7 @@ var uR = (function() {
       success: function(data) {
         if (opts.form) {
           form.removeAttribute("loading");
-          that.fields.forEach(function(item,i) { item.error = ''; });
+          forEach(that.fields,function(item,i) { item.error = ''; });
           that.non_field_errors = '';
         }
         opts.success(data);
@@ -42,7 +42,7 @@ var uR = (function() {
         if (opts.form) {
           form.removeAttribute("loading");
           var errors = JSON.parse(jqxhr.responseText);
-          that.fields.forEach(function(el,i) { el.error = errors[el.name]; });
+          forEach(that.fields,function(el,i) { el.error = errors[el.name]; });
           that.non_field_errors = errors.non_field_errors;
         }
         opts.error(jqxhr);
@@ -65,10 +65,14 @@ var uR = (function() {
     };
   };
 
+  function forEach(array,func) {
+    for (var i=0;i<array.length;i++) { func(array[i],i,array); }
+  }
   return {
     serialize: serialize,
     ajax: ajax,
     debounce: debounce,
+    forEach: forEach,
   }
 })()
   
