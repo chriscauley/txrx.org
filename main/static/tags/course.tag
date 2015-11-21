@@ -76,15 +76,19 @@
     </div>
     <div class="instructor">with { instructor_name }</div>
     <b class="full" if={ closed_status == 'full' }>This session is full</b>
-    <div if={ !closed_status }>
-      <button class="btn btn-primary" onclick={ parent.add } if={ fee && !incart }>
+    <div if={ !closed_status && fee }>
+      <button class="btn btn-primary" onclick={ parent.add } if={ !incart }>
         Add this session to cart</button>
-      <button class="btn btn-primary fa fa-shopping-cart" onclick={ parent.viewCart } if={ fee && incart }>
+      <button class="btn btn-primary fa fa-shopping-cart" onclick={ parent.viewCart } if={ incart }>
         View Cart</button>
-      <button class="btn btn-success rsvp" onclick={ parent.rsvp } if={ !fee && !rsvpd }>
+    </div>
+    <div if={ !closed_status && !fee }>
+      <button class="btn btn-success rsvp" onclick={ parent.rsvp } if={ !rsvpd && parent.user.id }>
         RSVP for this event</button>
-      <button class="btn btn-danger unrsvp" onclick={ parent.unrsvp } if={ !fee && rsvpd }>
+      <button class="btn btn-danger unrsvp" onclick={ parent.unrsvp } if={ rsvpd && parent.user.id }>
         Cancel RSVP</button>
+      <a if={ !parent.user.id } href="/accounts/login/?next={ window.location.href }">
+        Login to RSVP</a>
       <div class="alert alert-warning" if={ message }>{ message }</div>
     </div>
   </div>
@@ -130,9 +134,9 @@
   this.on("update",function() {
     uR.forEach(this.opts.active_sessions,function(session) {
       if (window.location.search.indexOf("overbook="+session.id) != -1) { session.closed_status = ""; }
-      session.rsvpd = window.TXRX.user.enrollments[session.id];
-      session.incart = !!window.simpleCart.items[session.id];
       session.fee = that.opts.fee;
+      if (window.TXRX.user.enrollments) { session.rsvpd = window.TXRX.user.enrollments[session.id]; }
+      session.incart = !!window.simpleCart.items[session.id];
       uR.forEach(session.classtimes,function(classtime) {
         classtime.moment = moment(classtime.start);
         classtime.start_time = showSmartTime(classtime.moment);
