@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from .models import User, UserCheckin
+from event.models import RSVP
 from course.models import Enrollment
 from geo.models import Room
 from tool.models import Criterion, UserCriterion, Permission
@@ -49,6 +50,7 @@ def user_json(request):
       'is_toolmaster': request.user.is_toolmaster,
       'is_staff': request.user.is_staff,
       'is_superuser': request.user.is_superuser,
+      'enrollments': {e.session_id:e.quantity for e in request.user.enrollment_set.all()},
     })
   }
   return TemplateResponse(request,"user.json",values)

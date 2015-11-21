@@ -237,7 +237,8 @@ class Session(UserModel,PhotosMixin,models.Model):
       'instructor_name': self.get_instructor_name(),
       'instructor_pk': self.user_id,
       'course_id': self.course_id,
-      'enrolled_status': enrolled_status
+      'enrolled_status': enrolled_status,
+      'classtimes': [c.as_json for c in self.classtime_set.all()],
     }
   json = property(lambda self: dumps(self.as_json))
   get_room = lambda self: self.course.room
@@ -349,6 +350,12 @@ class ClassTime(OccurrenceModel):
   description = cached_property(lambda self:self.session.course.description,name="description")
   name = cached_property(lambda self: self.session.course.name,name="name")
   room = cached_property(lambda self: self.session.course.room,name="room")
+  @property
+  def as_json(self):
+    return {
+      'start': str(self.start),
+      'end': str(self.end),
+    }
   class Meta:
     ordering = ("start",)
 

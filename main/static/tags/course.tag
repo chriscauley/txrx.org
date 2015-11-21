@@ -64,3 +64,79 @@
     </a>
   </div>
 </course-list>
+
+<session-list>
+  <div class="session well" id="s{ id }" each={ opts.active_sessions }>
+    <a if={ parent.user.is_superuser || instructor_pk == parent.user.id }
+       href="/classes/instructor_session/{ id }/" class="instructor-link fa fa-edit"></a>
+    <a if={ parent.user.is_superuser } href="/admin/course/session/{ id }/"
+       class="admin-link fa fa-pencil-square"></a>
+    <div class="date" each={ classtimes }>
+      { moment.format("ddd MMM D") } { start_time } - { end_time } 
+    </div>
+    <div class="instructor">with { instructor_name }</div>
+    <b class="full" if={ closed_status == 'full' }>This session is full</b>
+    <div if={ !closed_status }>
+      <button class="btn btn-primary" onclick={ parent.add } if={ fee && !incart }>
+        Add this session to cart</button>
+      <button class="btn btn-primary fa fa-shopping-cart" onclick={ parent.viewCart } if={ fee && incart }>
+        View Cart</button>
+      <button class="btn btn-success rsvp" onclick={ parent.rsvp } if={ !fee && rsvpd }>
+        RSVP for this event</button>
+      <button class="btn btn-danger unrsvp" onclick={ parent.unrsvp } if={ !fee && !rsvpd }>
+        Cancel RSVP</button>
+    </div>
+  </div>
+
+  this.user = window.TXRX.user;
+  var that = this;
+  add(e) {
+    addClass(e.item);
+  }
+  viewCart(e) {
+    $("#cartModal").modal({show:true});
+  }
+  function _rsvp(e,url) {
+    var target = document.getElementById("s"+e.id);
+    target.setAttribute("ur-loading","loading");
+    $.get(
+      url,
+      function(data) {
+        target.removeAttribute("ur-loading","loading");
+        window.TXRX.user.rsvps[e.item.id] = data.quantity;
+        that.update();
+      },
+      "json"
+    );
+  }
+  rsvp(e) {
+    var url = "/classes/rsvp/"+e.item.id+"/";
+    _rsvp(e,url);
+  }
+  unrsvp(e) {
+    var url = "/classes/unrsvp/"+e.item.id+"/";
+    _rsvp(e,url);
+  }
+  function showSmartTime(moment) {
+    if (moment.minutes() == 0) {
+      if (moment.hours() == 0) { return "midnight" }
+      if (moment.hours() == 12) { return "noon" }
+      return moment.format("ha")
+    }
+    return moment.format("h:mma")
+  }
+  this.on("update",function() {
+    uR.forEach(this.opts.active_sessions,function(session) {
+      if (window.location.search.indexOf("overbook="+session.id) != -1) { session.closed_status = ""; }
+      session.rsvpd = window.TXRX.user.enrollments[session.id];
+      session.incart = !!window.simpleCart.items[session.id];
+      session.fee = that.opts.fee;
+      uR.forEach(session.classtimes,function(classtime) {
+        classtime.moment = moment(classtime.start);
+        classtime.start_time = showSmartTime(classtime.moment);
+        classtime.end_moment = moment(classtime.end);
+        classtime.end_time = showSmartTime(classtime.end_moment);
+      });
+    });
+  });
+</session-list>

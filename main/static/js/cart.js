@@ -10,12 +10,8 @@ function showCart() {
   $("#cart-modal").modal({width: 400, modal: true, minHight: 300});
 }
 
-function addClass(session_id) {
-  $(".SessionList .error").hide();
-  if (!session_id) { session_id = $("#session_selector").val(); }
-  if (!session_id) { $(".SessionList .error").show(); return; }
-  var session = window.SESSIONS_ON_PAGE[session_id];
-  addItem(session.name,session.fee,session_id);
+function addClass(session) {
+  addItem(session.name,session.fee,session.id);
   toggleCourses(session.name);
   $("#cartModal").modal({show:true})
 }
@@ -43,7 +39,8 @@ function toggleCourses(name) {
     if ($(this).find(".itemName").text() == name) {
       $(this).addClass("recentAdd");
     }
-  })
+  });
+  riot.update('*');
 }
 
 function applyFilters(that) {
@@ -73,7 +70,7 @@ function rsvp(session_id,url) {
       row.removeClass("loading");
       row.find(".RsvpLink").removeClass("attending");
       if (data[0]>0) {
-	row.find(".RsvpLink").addClass("attending");
+        row.find(".RsvpLink").addClass("attending");
       }
       $(".class-enrollment").hide();
     },

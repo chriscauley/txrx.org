@@ -1,3 +1,4 @@
+{#! DEPRACATED in favor of riot tag session-list #}
 {% load txrx_tags %}
 <div class="session well" id="s{{ session.id }}">
   {% if request.user.is_superuser or request.user == session.user %}

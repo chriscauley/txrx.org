@@ -129,7 +129,7 @@ def rsvp(request,session_pk):
     m = "You must be logged in to rsvp. Click the icon at the top right of the page to login or register"
     return HttpResponse(json.dumps([0,m,session.full]))
   enrollment,new = Enrollment.objects.get_or_create(user=request.user,session=session)
-  if "drop" in request.GET:
+  if "unrsvp" in request.path:
     enrollment.delete()
     q = 0
     m = "You are no longer signed up for this."

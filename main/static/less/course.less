@@ -13,7 +13,7 @@
   &.enrolled { background: #A9CEE0; }
 }
  
-.course, .SessionList .session {
+.course, session-list .session {
   &:hover {
     background: fade(@brand-primary,20);
   }
@@ -84,7 +84,7 @@
   }
 }
 
-.SessionList, event-list {
+session-list, event-list {
   position: relative;
   .fee {
     border-color: transparent;
@@ -193,7 +193,7 @@
 #unscheduled-courses .price { display: none; }
 
 @media (max-width: @screen-xs-max) {
-  .SessionList .fee {
+  session-list .fee {
     float: right;
     font-size: 24px;
     line-height: 1;
@@ -218,7 +218,7 @@
   }
 }
 
-.SessionList {
+session-list {
   .RsvpLink, .EnrollLink {
     text-align: center;
   }
@@ -315,7 +315,7 @@
   cursor: help;
 }
 
-.SessionList {
+session-list {
   .add { display: inline-block; }
   .view-cart, .add-to-cart, .rsvp, .unrsvp {
     font-size: 12px;
