@@ -81,10 +81,11 @@
         Add this session to cart</button>
       <button class="btn btn-primary fa fa-shopping-cart" onclick={ parent.viewCart } if={ fee && incart }>
         View Cart</button>
-      <button class="btn btn-success rsvp" onclick={ parent.rsvp } if={ !fee && rsvpd }>
+      <button class="btn btn-success rsvp" onclick={ parent.rsvp } if={ !fee && !rsvpd }>
         RSVP for this event</button>
-      <button class="btn btn-danger unrsvp" onclick={ parent.unrsvp } if={ !fee && !rsvpd }>
+      <button class="btn btn-danger unrsvp" onclick={ parent.unrsvp } if={ !fee && rsvpd }>
         Cancel RSVP</button>
+      <div class="alert alert-warning" if={ message }>{ message }</div>
     </div>
   </div>
 
@@ -97,13 +98,14 @@
     $("#cartModal").modal({show:true});
   }
   function _rsvp(e,url) {
-    var target = document.getElementById("s"+e.id);
+    var target = document.getElementById("s"+e.item.id);
     target.setAttribute("ur-loading","loading");
     $.get(
       url,
       function(data) {
         target.removeAttribute("ur-loading","loading");
-        window.TXRX.user.rsvps[e.item.id] = data.quantity;
+        window.TXRX.user.enrollments[e.item.id] = data.quantity;
+        e.item.message = data.message;
         that.update();
       },
       "json"

@@ -136,17 +136,10 @@ def rsvp(request,session_pk):
   elif session.full:
     q = enrollment.quantity
     m = "Sorry, this event is full. Visit the class page to see when it will be offered again."    
-  elif "plus_one" in request.GET:
-    enrollment.quantity += 1
-    enrollment.save()
-    q = enrollment.quantity
-    m = "You have RSVP'd for %s people. If you can't make it, please come back and unenroll."%q
-    if session.full:
-      m += "<br /> <b>This event is now full!</b>"
   else:
     q = 1
     m = "You have RSVP'd for this event. If you can't make it, please come back and unenroll."
-  return HttpResponse(json.dumps([q,m,session.full]))
+  return HttpResponse(json.dumps({'quantity': q,'message': m,'full':session.full}))
 
 def start_checkout(request):
   if not 'cart' in request.GET:
