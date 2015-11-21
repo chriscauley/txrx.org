@@ -7,8 +7,8 @@
 {% block extrajs %}
 <script src="{{ STATIC_URL }}classes.json?v={% now "ymd_hi" %}"></script>
 <script src="{{ STATIC_URL }}sessions.json?v={% now "ymd_his" %}"></script>
-<script src="{{ STATIC_URL }}tags/course.tag" type="riot/tag"></script>
-<script src="{{ STATIC_URL }}js/course.js?v2"></script>
+<script src="{{ STATIC_URL }}tags/course.tag?v=1.1" type="riot/tag"></script>
+<script src="{{ STATIC_URL }}js/course.js?v=1.1"></script>
 <script>
 var USER_SESSIONS = [
   {% for session in user_sessions %}
