@@ -158,6 +158,14 @@ class EventOccurrence(PhotosMixin,OccurrenceModel):
     # set the publish_dt to a week before the event
     self.publish_dt = self.start - datetime.timedelta(7)
     super(EventOccurrence,self).save(*args,**kwargs)
+  @property
+  def as_json(self):
+    return {
+      'room_id': self.event.room_id,
+      'name': self.name,
+      'start': str(self.start),
+      'end': str(self.end)
+    }
   class Meta:
     ordering = ('start',)
 
