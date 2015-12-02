@@ -21,13 +21,13 @@
 
   click(e) {
     opts.filterSubjects(e.item?e.item.value:"");
-    opts.active_subject = e.item.value;
-    this.toggle.checked = false;
+    opts.active_subject = (e.item || {}).value;
+    this.toggle_filters.checked = false;
     riot.update();
   }
   apply(e) {
     opts.filterSearch(this.classes_q.value);
-    this.toggle.checked = false;
+    this.toggle_filters.checked = false;
     riot.update();
   }
   search(e) {
@@ -37,7 +37,7 @@
   this.search = uR.debounce(this.search);
 </course-filters>
 <course-list>
-  <div each={ opts.courses }>
+  <div each={ opts.courses } if={ visible }>
     <a href={ url } class="course well { well_class }" id="c{ id }">
       <div class="picture">
         <img src={ im.url } width={ im.width } height={ im.height } />

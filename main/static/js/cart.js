@@ -117,7 +117,9 @@ function verifyCheckout(data) {
 }
 
 $(document).ajaxError(function() {
-  alert("An unknown error has occurred. Please try again or email us at classes@txrxlabs.org")
+  if (!window.IGNORE_AJAX_ERRORS) {
+    alert("An unknown error has occurred. Please try again or email us at classes@txrxlabs.org")
+  }
 });
 $(function() {
   if (simpleCart && simpleCart.items && window.SESSIONS_ON_PAGE){
