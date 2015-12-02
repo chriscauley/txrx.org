@@ -245,7 +245,6 @@
   that._results = [];
   var old_value = '',value;
   search(e) {
-  console.log('bounce')
     value = that.root.querySelector("[name=q]").value;
     if (old_value == value) { return }
     old_value = value;
