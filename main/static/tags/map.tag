@@ -20,8 +20,8 @@
       <div class="legend">
         <h1>Legend</h1>
         <ul class="event_list">
-          <li class="room" each={ roomgroup }>
-            <span class="room_marker" style="background: url({ fill.file.url }) center"></span>
+          <li class="room" each={ roomgroups }>
+            <span class="room_marker" style="background: url({ fill }) center"></span>
             <span>{ name }</span>
           </li>
         </ul>
@@ -33,12 +33,11 @@
   findRoom(e) {
     var x = e.offsetX;
     var y = e.offsetY;
-    for (var ri=0;ri<rooms.length;ri++) {
-      var room = rooms[ri];
+    uR.forEach(that.dxfs, function(room) {
       if ((room.x < x) && (x < room.x + room.w) && (room.y < y) && (y < room.y + room.h)) {
         console.log(room.id);
       }
-    }
+    });
   }
   this.on("mount",function() {
     this._location = -1;
@@ -48,12 +47,16 @@
       function(data) {
         that.data = data;
         that.update();
+        that.roomgroups = [];
+        for (rg_id in that.data.roomgroups) { that.roomgroups.push(that.data.roomgroups[rg_id]); }
         for (room_id in that.data.rooms) {
           var room = that.data.rooms[room_id];
           var roomgroup = that.data.roomgroups[room.roomgroup_id];
           if (!roomgroup) { continue; }
           room.fill = roomgroup.fill;
           room.color = roomgroup.color;
+          uR.debounce(that.update.bind(this));
+          that.update();
         };
       },
       'json'
@@ -62,8 +65,9 @@
   this.on("update",function() {
     if (!this.data) { this.root.setAttribute('ur-loading','mask'); return; }
     this.root.removeAttribute('ur-loading');
-    this._location ++;
-    if (this._location >= this.opts.locations.length) { this._location = 0; }
+    //this._location ++;
+    //if (this._location >= this.opts.locations.length) { this._location = 0; }
+    that._location = 0;
     this.location = this.data.locations[this.opts.locations[this._location]];
     calculateBounds();
     initCanvas();
@@ -71,11 +75,12 @@
   });
 
   // Math for the canvas
-  var x_max = -Infinity, y_max = -Infinity, x_min = Infinity, y_min = Infinity, WIDTH, HEIGHT;
+  var x_max, y_max, x_min, x_max, WIDTH, HEIGHT;
   var scale = 5.3;
   var rotate = true, mirror_x = false, mirror_y = true;
 
   function calculateBounds() {
+    x_max = -Infinity, y_max = -Infinity, x_min = Infinity, y_min = Infinity;
     for (var di=0;di<that.location.dxfs.length;di++) {
       var dxf = that.location.dxfs[di];
       for (pi=0;pi<dxf.points.length;pi++) {
@@ -86,7 +91,6 @@
         y_min = Math.min(y_min,p[1]);
       }
     }
-
     WIDTH = (x_max - x_min)*scale+4;
     HEIGHT = (y_max - y_min)*scale+2;
 
@@ -98,6 +102,9 @@
     // correct so that it's 0,0 for x_min,y_min
     for (var di=0;di<that.location.dxfs.length;di++) {
       var dxf = that.location.dxfs[di];
+      // these next two lines are lame, it should be done in some othe manner
+      if (dxf.scaled) { continue }
+      dxf.scaled = true;
       for (pi=0;pi<dxf.points.length;pi++) {
         p = dxf.points[pi];
         if (rotate) {
