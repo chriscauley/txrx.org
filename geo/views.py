@@ -48,11 +48,5 @@ def locations_json(request):
     'roomgroups': { g.id: g.as_json for g in RoomGroup.objects.all() }
   }))
 
-def dxfviewer(request,pk=None):
-  if not pk:
-    pk = 1
-  values = {
-    'location': Location.objects.get(pk=pk),
-    'roomgroups': RoomGroup.objects.all(),
-  }
-  return TemplateResponse(request,'dxf.html',values)
+def dxfviewer(request):
+  return TemplateResponse(request,'dxf.html',{})

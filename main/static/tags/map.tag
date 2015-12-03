@@ -1,31 +1,26 @@
 <floorplan>
   <div class="left">
     <h1>Today at TXRX Labs</h1>
-    <div class="well" each={ events }>
-      <h2>{{ time|date:"P" }}</h2>
+    <div class="well" each={ time_blocks }>
+      <h2>{ time }</h2>
       <ul class="event_list">
-        {% for event in events %}
-        <li class="room">
-          <span class="room_marker" style="background:{{ event.room.roomgroup.color }}">
-            {{ event.room.map_key|default_if_none:"" }}</span>
-          <span>{{ event.name }}</span>
+        <li class="room" each={ events }>
+          <span class="room_marker" style="background:url({ fill });">{ map_key }</span>
+          <span>{ name }</span>
         </li>
-        {% endfor %}
       </ul>
     </div>
   </div>
-  <div class="col-sm-9">
-    <div id="floorplan_wrapper">
-      <canvas onclick={ findRoom }></canvas>
-      <div class="legend">
-        <h1>Legend</h1>
-        <ul class="event_list">
-          <li class="room" each={ roomgroups }>
-            <span class="room_marker" style="background: url({ fill }) center"></span>
-            <span>{ name }</span>
-          </li>
-        </ul>
-      </div>
+  <div id="floorplan_wrapper">
+    <canvas onclick={ findRoom }></canvas>
+    <div class="legend">
+      <h1>Legend</h1>
+      <ul class="event_list">
+        <li class="room" each={ roomgroups }>
+          <span class="room_marker" style="background: url({ fill }) center"></span>
+          <span>{ name }</span>
+        </li>
+      </ul>
     </div>
   </div>
 
@@ -55,9 +50,8 @@
           if (!roomgroup) { continue; }
           room.fill = roomgroup.fill;
           room.color = roomgroup.color;
-          uR.debounce(that.update.bind(this));
-          that.update();
         };
+        uR.debounce(that.update.bind(that))();
       },
       'json'
     );
@@ -75,11 +69,13 @@
   });
 
   // Math for the canvas
-  var x_max, y_max, x_min, x_max, WIDTH, HEIGHT;
-  var scale = 5.3;
+  var x_max, y_max, x_min, x_max, WIDTH, HEIGHT, scale, durn;
   var rotate = true, mirror_x = false, mirror_y = true;
 
   function calculateBounds() {
+    // these next two lines are lame, it should be done in some othe manner
+    if (durn) { return }
+    durn = true;
     x_max = -Infinity, y_max = -Infinity, x_min = Infinity, y_min = Infinity;
     for (var di=0;di<that.location.dxfs.length;di++) {
       var dxf = that.location.dxfs[di];
@@ -91,20 +87,25 @@
         y_min = Math.min(y_min,p[1]);
       }
     }
-    WIDTH = (x_max - x_min)*scale+4;
-    HEIGHT = (y_max - y_min)*scale+2;
-
+    var bar_width = 300;
+    var wrapper = document.getElementById("floorplan_wrapper");
+    var wrapper_width = wrapper.offsetWidth;
+    var wrapper_height = wrapper.offsetHeight;
+    var wrapper_ratio = wrapper_width/wrapper_height;
+    WIDTH = (x_max - x_min)
+    HEIGHT = (y_max - y_min);
     if (rotate) {
-      HEIGHT = (x_max - x_min)*scale;
-      WIDTH = (y_max - y_min)*scale;
+      HEIGHT = (x_max - x_min);
+      WIDTH = (y_max - y_min);
     }
+    var ratio = WIDTH/HEIGHT;
+    scale = (wrapper_ratio < ratio)?wrapper_width/WIDTH:wrapper_height/HEIGHT;
+    HEIGHT *= scale;
+    WIDTH *= scale;
 
     // correct so that it's 0,0 for x_min,y_min
     for (var di=0;di<that.location.dxfs.length;di++) {
       var dxf = that.location.dxfs[di];
-      // these next two lines are lame, it should be done in some othe manner
-      if (dxf.scaled) { continue }
-      dxf.scaled = true;
       for (pi=0;pi<dxf.points.length;pi++) {
         p = dxf.points[pi];
         if (rotate) {
