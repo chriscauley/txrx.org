@@ -74,19 +74,26 @@ def paypal_signal(sender,**kwargs):
   if not 'mc_gross' in params:
     mail_admins("Bad IPN","no mc_gross in txn %s"%sender.txn_id)
     return
+  if not subscription and params.get("item_number",None):
+    try:
+      subscription = Subscription.objects.get(pk=params['item_number'],amount=amt)
+    except Subscription.DoesNotExist:
+      b = "Could not find subscription #%s for $%s and txn %s"%(params['item_number'],amt,sender.txn_id)
+      mail_admins("Bad IPN: no subscription",b)
+      return
   amt = float(params['mc_gross'])
   if not subscription:
     try:
       level = Level.objects.get(name=params.get('option_name1',''))
     except Level.DoesNotExist:
       b = "Could not find level \"%s\" for txn %s"%(params.get('option_name1',''),sender.txn_id)
-      mail_admins("Bad IPN",b)
+      mail_admins("Bad IPN: no level",b)
       return
     try:
       product = Product.objects.get(unit_price=amt,level=level)
     except Product.DoesNotExist:
       b = "Could not find level product \"%s\" (cost $%s) for txn %s"
-      mail_admins("Bad IPN",b%(level,amt,sender.txn_id))
+      mail_admins("Bad IPN: no product",b%(level,amt,sender.txn_id))
       return
     subscription = Subscription.objects.create(
       user=user,

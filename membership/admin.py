@@ -102,6 +102,8 @@ class SubscriptionAdmin(admin.ModelAdmin):
   raw_id_fields = ('user',)
   readonly_fields = ('_action','paid_until','canceled','owed','edit_user')
   def _action(self,obj):
+    if not (obj and obj.pk):
+      return "Save before creating actions."
     url = reverse("force_cancel",args=[obj.pk])+"?next=/admin/membership/subscription/%s/"%obj.pk
     if obj and obj.pk and not obj.canceled:
       return "<a href='%s'>%s</a>"%(url,"Force Cancel")
