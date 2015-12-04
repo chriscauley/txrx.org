@@ -232,6 +232,7 @@ class Session(UserModel,PhotosMixin,models.Model):
       enrolled_status = "Completed: %s/%s/%s"%(d.month,d.day,d.year)
     return {
       'id': self.pk,
+      'name': "<b>%s</b> %s"%(self.course,self.first_date.strftime("%m/%d/%Y")),
       'closed_status': self.closed_string if (self.closed or self.full) else None,
       'short_dates': short_dates,
       'instructor_name': self.get_instructor_name(),
