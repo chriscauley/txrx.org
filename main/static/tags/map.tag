@@ -1,11 +1,11 @@
 <floorplan>
   <div class="left">
     <h1>Today at TXRX Labs</h1>
-    <div class="well" each={ time_blocks }>
+    <div class="well" each={ event_blocks }>
       <h2>{ time }</h2>
       <ul class="event_list">
         <li class="room" each={ events }>
-          <span class="room_marker" style="background:url({ fill });">{ map_key }</span>
+          <span class="room_marker" style="background: { color };">{ map_key }</span>
           <span>{ name }</span>
         </li>
       </ul>
@@ -34,6 +34,7 @@
       }
     });
   }
+  that.bounceUp = uR.debounce(that.update.bind(that));
   this.on("mount",function() {
     this._location = -1;
     that.fill_images = {};
@@ -50,12 +51,30 @@
           if (!roomgroup) { continue; }
           room.fill = roomgroup.fill;
           room.color = roomgroup.color;
+          that.bounceUp();
         };
-        uR.debounce(that.update.bind(that))();
+        loadEvents();
       },
       'json'
     );
   });
+  function loadEvents() {
+    $.get(
+      '/geo/events.json',
+      function(data) {
+        that.event_blocks = data;
+        uR.forEach(that.event_blocks,function(block) {
+          block.time = moment(block.datetime).format('h:mm a')
+          uR.forEach(block.events,function(event) {
+            event.color = that.data.rooms[event.room_id].color;
+            event.map_key = that.data.rooms[event.room_id].map_key;
+          });
+        });
+        that.bounceUp();
+      },
+      'json'
+    )
+  }
   this.on("update",function() {
     if (!this.data) { this.root.setAttribute('ur-loading','mask'); return; }
     this.root.removeAttribute('ur-loading');
@@ -87,7 +106,7 @@
         y_min = Math.min(y_min,p[1]);
       }
     }
-    var bar_width = 300;
+    var bar_width = 340;
     var wrapper = document.getElementById("floorplan_wrapper");
     var wrapper_width = wrapper.offsetWidth;
     var wrapper_height = wrapper.offsetHeight;
