@@ -39,8 +39,9 @@ $(function() {
   }
 
   // course lists and search
-  var current_search, scheduled_courses = [], unscheduled_courses = [];
+  var current_search = '', scheduled_courses = [], unscheduled_courses = [];
   function filterSubjects(value) {
+    current_search = current_search.toLowerCase();
     uR.forEach(ALL_CLASSES, function(c) {
       c.visible = true;
       if (!!value && c.subject_ids.indexOf(value) == -1) { c.visible = false; }
