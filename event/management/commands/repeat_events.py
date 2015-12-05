@@ -32,7 +32,10 @@ def add_month_dow(date):
   if not monthcalendar[0][weekday]:
     weeknum += 1
   try:
-    return next_month.replace(day=monthcalendar[weeknum][weekday])
+    day = monthcalendar[weeknum][weekday]
+    if not day:
+      raise IndexError
+    return next_month.replace(day=day)
   except IndexError: # last week of month
     return next_month.replace(day=monthcalendar[weeknum-1][weekday])
 
