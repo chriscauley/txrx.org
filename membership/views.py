@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.models import FlatPage
 from django.contrib import messages
-from django.http import HttpResponseRedirect, Http404, HttpResponse
+from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
@@ -18,7 +18,7 @@ from course.models import Course, Session
 from thing.models import Thing
 from lablackey.utils import FORBIDDEN
 
-import datetime
+import datetime, json
 
 def join_us(request):
   values = {
@@ -193,3 +193,13 @@ def update_flag_status(request,flag_pk,new_status=None):
     return HttpResponse("Membership status changed to %s"%flag.get_status_display())
   messages.success(request,"Membership status changed to %s"%flag.get_status_display())
   return HttpResponseRedirect('/admin/membership/flag/%s/'%flag_pk)
+
+def door_access(request):
+  if not (request.META['REMOTE_ADDR'] in getattr(settings,'DOOR_IPS',[]) or request.user.is_superuser):
+    return HttpResponseForbidden("I am Vinz Clortho keymaster of Gozer... Gozer the Traveller, he will come in one of the pre-chosen forms. During the rectification of the Vuldronaii, the Traveller came as a large and moving Torb! Then, during the third reconciliation of the last of the Meketrex Supplicants they chose a new form for him... that of a Giant Sloar! many Shubs and Zulls knew what it was to be roasted in the depths of the Sloar that day I can tell you.")
+  out = {}
+  for level in Level.objects.all():
+    subscriptions = Subscription.objects.filter(canceled__isnull=True,product__level=level,user__rfid__isnull=False)
+    out[level.order] = list(subscriptions.distinct().values_list('user__rfid',flat=True))
+  out[99999] = list(get_user_model().objects.filter(is_gatekeeper=True).values_list('rfid',flat=True))
+  return HttpResponse(json.dumps(out))
