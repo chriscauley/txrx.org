@@ -169,6 +169,22 @@ class EventOccurrence(PhotosMixin,OccurrenceModel):
   class Meta:
     ordering = ('start',)
 
+class CheckInPoint(models.Model):
+  room = models.ForeignKey(Room)
+  __unicode__ = lambda self: "%s"%self.room
+  class Meta:
+    ordering = ('room__name',)
+
+class CheckIn(UserModel):
+  datetime = models.DateTimeField(auto_now_add=True)
+  object_id = models.IntegerField(null=True,blank=True)
+  content_type = models.ForeignKey("contenttypes.ContentType",null=True,blank=True)
+  content_object = GenericForeignKey('content_type', 'object_id')
+  checkinpoint = models.ForeignKey(CheckInPoint)
+  __unicode__ = lambda self: "%s @ %s - %s"%(self.user,self.checkinpoint,self.datetime)
+  class Meta:
+    ordering = ('-datetime',)
+
 #these signals fire and mess up loaddata
 if not 'loaddata' in sys.argv:
   from .signals import *

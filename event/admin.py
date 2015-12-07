@@ -5,11 +5,19 @@ from django.core.urlresolvers import reverse
 from django.forms.models import BaseInlineFormSet
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Event, EventOccurrence, RSVP
+from .models import Event, EventOccurrence, RSVP, CheckIn, CheckInPoint
 from event.utils import get_room_conflicts
 from media.admin import TaggedPhotoAdmin
 
 import datetime,functools
+
+@admin.register(CheckIn)
+class CheckInAdmin(admin.ModelAdmin):
+  pass
+
+@admin.register(CheckInPoint)
+class CheckInPointAdmin(admin.ModelAdmin):
+  pass
 
 class OccurrenceModelFormSet(BaseInlineFormSet):
   def check_conflicts(self,obj):

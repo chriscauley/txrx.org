@@ -131,7 +131,7 @@ def member_detail(request,username=None):
     'profile': user.usermembership,
     'things': things,
     'posts': posts
-    }
+  }
   return TemplateResponse(request,"membership/member_detail.html",values)
 
 @staff_member_required
@@ -200,6 +200,7 @@ def door_access(request):
   out = {}
   for level in Level.objects.all():
     subscriptions = Subscription.objects.filter(canceled__isnull=True,product__level=level,user__rfid__isnull=False)
+    subscriptions = subscriptions.exclude(user__rfid="")
     out[level.order] = list(subscriptions.distinct().values_list('user__rfid',flat=True))
   out[99999] = list(get_user_model().objects.filter(is_gatekeeper=True).values_list('rfid',flat=True))
   return HttpResponse(json.dumps(out))

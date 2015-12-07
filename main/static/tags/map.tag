@@ -147,6 +147,7 @@
       if (room) {
         dxf.in_calendar = room.in_calendar
         dxf.map_key = room.map_key;
+        dxf.name = room.name;
         if (room && that.data.roomgroups[room.roomgroup_id]) {
           var roomgroup = that.data.roomgroups[room.roomgroup_id];
           dxf.fill = roomgroup.fill;

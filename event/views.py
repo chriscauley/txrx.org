@@ -2,17 +2,19 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.template.response import TemplateResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from .utils import make_ics,ics2response
-from .models import Event, EventOccurrence, RSVP
+from .models import Event, EventOccurrence, RSVP, CheckIn
 from course.models import ClassTime
 
-import datetime, json
+import datetime, json, arrow
 
 def index(request,daystring=None):
   start = datetime.date.today()
@@ -120,3 +122,24 @@ def detail_json(request,event_pk):
   os = event.upcoming_occurrences[:10]
   out['upcoming_occurrences'] = [{key: str(getattr(o,key)) for key in fields} for o in os]
   return HttpResponse(json.dumps(out))
+
+@csrf_exempt
+def checkin(request):
+  User = get_user_model()
+  try:
+    user = User.objects.get(rfid=request.POST['rfid'])
+  except User.DoesNotExist:
+    response = HttpResponse("Unable to find that user. Try again or contact the staff.")
+    response.status_code=401
+    return response
+  kwargs = {
+    'object_id': request.POST.get('object_id',None),
+    'checkinpoint_id': request.POST.get('checkinpoint_id',None),
+    'content_type_id': request.POST.get('content_type_id',None),
+    'user': user,
+  }
+  # ignore checkins for the same thing with in 10 minutes of each other
+  ten_ago = arrow.now().replace(minutes=-10).datetime
+  if not CheckIn.objects.filter(datetime__gte=ten_ago,**kwargs):
+    CheckIn.objects.create(**kwargs)
+  return HttpResponse(json.dumps("%s has been checked in."%user))
