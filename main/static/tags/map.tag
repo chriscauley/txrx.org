@@ -38,8 +38,13 @@
   this.on("mount",function() {
     this._location = -1;
     that.fill_images = {};
+    loadLocations();
+    setInterval(loadEvents,10*60*1000);
+    setInterval(loadLocations,24*60*60*1000);
+  });
+  function loadLocations() {
     $.get(
-      '/geo/locations.json?pks='+this.opts.locations,
+      '/geo/locations.json?pks='+that.opts.locations,
       function(data) {
         that.data = data;
         that.update();
@@ -57,7 +62,7 @@
       },
       'json'
     );
-  });
+  }
   function loadEvents() {
     $.get(
       '/geo/events.json',
