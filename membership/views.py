@@ -202,9 +202,11 @@ def door_access(request):
   if fieldname in ['email','paypal_email','password']:
     return fail
   out = {}
+  base_subs = Subscription.objects.filter(canceled__isnull=True)
+  base_subs = base_subs.exclude(user__rfid="").exclude(user__rfid__isnull=True)
   for level in Level.objects.all():
-    subscriptions = Subscription.objects.filter(canceled__isnull=True,product__level=level,user__rfid__isnull=False)
-    subscriptions = subscriptions.exclude(user__rfid="")
+    subscriptions = base_subs.filter(product__level=level)
     out[level.order] = list(subscriptions.distinct().values_list('user__'+fieldname,flat=True))
-  out[99999] = list(get_user_model().objects.filter(is_gatekeeper=True).values_list(fieldname,flat=True))
+  gatekeepers = get_user_model().objects.filter(is_gatekeeper=True).exclude(rfid__isnull=True).exclude(rfid="")
+  out[99999] = list(gatekeepers.values_list(fieldname,flat=True))
   return HttpResponse(json.dumps(out))
