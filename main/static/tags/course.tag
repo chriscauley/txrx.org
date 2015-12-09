@@ -67,6 +67,11 @@
 </course-list>
 
 <session-list>
+  <h1 class="fee page_title" if={ opts.active_sessions }>
+    <span if={ opts.fee }>${ opts.fee }</span>
+    <span if={ !opts.fee }>Free</span>
+  </h1>
+  <h3 if={ opts.active_sessions }>Upcoming Sessions:</h3>
   <div class="session well" id="s{ id }" each={ opts.active_sessions }>
     <a if={ parent.user.is_superuser || instructor_pk == parent.user.id }
        href="/classes/instructor_session/{ id }/" class="instructor-link fa fa-edit"></a>
