@@ -13,6 +13,7 @@ urlpatterns = patterns(
   url(r'^$', 'classes.index'),
   url(r'^(instructor|myclasses)/$','classes.user_ajax',name='user_ajax'),
   url(r'^course_(\d+).json$','ajax.course_json'),
+  url(r'^past_sessions.json$', 'ajax.past_sessions_json'),
 
   url(r'^toggle_enrollment/$', 'classes.toggle_enrollment'),
   url(r'^u?n?rsvp/(\d+)/','classes.rsvp'),

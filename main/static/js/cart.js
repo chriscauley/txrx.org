@@ -60,24 +60,6 @@ function applyFilters(that) {
   }
 }
 
-function rsvp(session_id,url) {
-  var row = $("#s"+session_id);
-  row.addClass("loading");
-  row.find(".message").hide();
-  $.get(
-    url,
-    function(data) {
-      row.removeClass("loading");
-      row.find(".RsvpLink").removeClass("attending");
-      if (data[0]>0) {
-        row.find(".RsvpLink").addClass("attending");
-      }
-      $(".class-enrollment").hide();
-    },
-    "json"
-  )
-}
-
 function startCheckout() {
   var data = [];
   var cart_items = simpleCart.items;

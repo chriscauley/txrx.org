@@ -36,6 +36,7 @@
   }
   this.search = uR.debounce(this.search);
 </course-filters>
+
 <course-list>
   <div each={ opts.courses } if={ visible }>
     <a href={ url } class="course well { well_class }" id="c{ id }">
@@ -92,14 +93,33 @@
       <div class="alert alert-warning" if={ message }>{ message }</div>
     </div>
   </div>
+  <a if={ user.is_superuser && opts.past_session_count } class="btn btn-success btn-block"
+     onclick={ loadPastSessions }>
+    Show { opts.past_session_count } Archived Sessions</a>
 
   this.user = window.TXRX.user;
   var that = this;
+  console.log(this.opts);
   add(e) {
     addClass(e.item);
   }
   viewCart(e) {
     $("#cartModal").modal({show:true});
+  }
+  loadPastSessions(e) {
+    var target = e.target;
+    target.setAttribute("ur-loading","loading");
+    $.get(
+      '/classes/past_sessions.json?id='+that.opts.id,
+      {},
+      function(data) {
+        target.removeAttribute("ur-loading","loading");
+        that.opts.active_sessions = that.opts.active_sessions.concat(data);
+        that.opts.past_session_count = 0;
+        that.update();
+      },
+      'json'
+    );
   }
   function _rsvp(e,url) {
     var target = document.getElementById("s"+e.item.id);

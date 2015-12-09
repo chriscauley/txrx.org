@@ -111,6 +111,7 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
       'next_time': time.mktime(self.first_date.timetuple()) if self.active_sessions else 0,
       'fee': self.fee,
       'active_sessions': [s.as_json for s in self.active_sessions],
+      'past_session_count': len(self.archived_sessions),
       'short_description': self.get_short_description(),
       'requirements': self.requirements
     }
@@ -146,6 +147,13 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
     # sessions haven't ended yet (and maybe haven't started)
     first_date = datetime.datetime.now()-datetime.timedelta(0.5)
     return list(self.sessions.filter(last_date__gte=first_date))
+
+  @property
+  def archived_sessions(self):
+    # opposite of active_sessions
+    first_date = datetime.datetime.now()-datetime.timedelta(0.5)
+    last_year = first_date - datetime.timedelta(365)
+    return list(self.sessions.filter(last_date__lt=first_date,last_date__gte=last_year))
 
   sessions = lambda self: Session.objects.filter(course=self,active=True)
   sessions = cached_property(sessions,name="sessions")
