@@ -85,13 +85,9 @@
 }
 
 session-list, event-list {
+  display: block;
+  margin-bottom: 20px;
   position: relative;
-  .fee {
-    border-color: transparent;
-    position: absolute;
-    right: 0;
-    top: -54px;
-  }
   .session,event-occurrence {
     display: block;
     margin-bottom: 10px;
@@ -102,14 +98,6 @@ session-list, event-list {
     .admin-link { font-size: 2em; position: absolute; right: 5px; top: 0; }
     .full { color: @brand-danger; }
     .alert { margin: 5px 0 0; }
-  }
-  .add_session_box {
-    text-align: center;
-    select {
-      display: inline-block;
-      margin-bottom: 10px;
-    }
-    button { margin-bottom: 20px; }
   }
 }
 
@@ -220,9 +208,6 @@ session-list, event-list {
 }
 
 session-list {
-  .RsvpLink, .EnrollLink {
-    text-align: center;
-  }
   .error { display: none; }
   [type="radio"] {
     display:none;
@@ -234,40 +219,7 @@ session-list {
     }
   }
 }
-.RsvpLink .message {
-  color: black;
-  bottom: 0;
-  display: none;
-  background: white;
-  box-shadow: inset 0 0 5px #55F;
-  padding: 5px 20px 5px 5px;
-  position: absolute;
-  right: 100%;
-  text-decoration: none;
-  width: 300px;
-  &:after {
-    background: url("/static/img/icon_x_red.png") no-repeat center;
-    color: #F33;
-    content: "";
-    display: block;
-    font-size: 1.5em;
-    position: absolute;
-    height: 10px;
-    line-height: 10px;
-    margin-top: -5px;
-    right: 10px;
-    top: 50%;
-    width: 10px;
-  }
-}
 
-@media (max-width: @screen-sm-max) {
-  .RsvpLink .message {
-    bottom: auto;
-    right: 0;
-    width: 213px;
-  }
-}
 .session {
   &.loading {
     &:before {
@@ -317,15 +269,12 @@ session-list {
 }
 
 session-list {
-  .add { display: inline-block; }
-  .view-cart, .add-to-cart, .rsvp, .unrsvp {
+  .btn {
     font-size: 12px;
     margin: 5px auto 0;
     padding: 3px 6px;
     text-transform: uppercase;
   }
-  .in-cart .add-to-cart, .view-cart { display: none; }
-  .add-to-cart, .in-cart .view-cart { display: block; }
 }
 
 .notify_course {
@@ -336,57 +285,6 @@ session-list {
 
 .recentAdd {
   box-shadow: inset 0 0 5px #3ac2f5, 0 0 5px #3ac2f5;
-}
-
-.RsvpLink {
-  .is_full,.unrsvp { display: none; }
-  &.attending {
-    .unrsvp { display: inline-block; }
-    .rsvp { display: none; }
-  }
-  .number_attending {
-    bottom: 100%;
-    left: 0;
-    position: absolute;
-  }
-}
-.full .RsvpLink {
-  .rsvp { display: none; }
-  .is_full { display: block; }
-  .not_full { display: none; }
-}
-
-.RsvpLink .message {
-  color: black;
-  bottom: 0;
-  display: none;
-  background: white;
-  box-shadow: inset 0 0 5px #55F;
-  padding: 5px 20px 5px 5px;
-  position: absolute;
-  right: 100%;
-  text-decoration: none;
-  width: 300px;
-  &:after {
-    background: url("/static/img/icon_x_red.png") no-repeat center;
-    color: #F33;
-    content: "";
-    display: block;
-    font-size: 1.5em;
-    position: absolute;
-    height: 10px;
-    line-height: 10px;
-    margin-top: -5px;
-    right: 10px;
-    top: 50%;
-    width: 10px;
-  }
-}
-
-.RsvpLink .message {
-  bottom: auto;
-  right: 0;
-  width: 213px;
 }
 
 // classes cart
