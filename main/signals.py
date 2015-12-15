@@ -10,6 +10,8 @@ from .var import admin_comment_email, comment_response_email
 
 _u = lambda s: settings.SITE_URL + s
 
+comment_admins = getattr(settings,"COMMENT_ADMINS",[settings.ADMINS[0][1]])
+
 def new_comment_connection(sender, instance=None, created=False,**kwargs):
   if not created:
     return
@@ -47,6 +49,6 @@ def new_comment_connection(sender, instance=None, created=False,**kwargs):
     except AttributeError:
       pass
 
-  mail_admins('New Comment',admin_comment_email%_dict,users)
+  send_mail('New Comment',admin_comment_email%_dict,settings.DEFAULT_FROM_EMAIL,comment_admins)
 
 post_save.connect(new_comment_connection, sender=MpttComment)
