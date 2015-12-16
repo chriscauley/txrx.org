@@ -17,6 +17,10 @@
     overflow: auto;
     z-index: 1000;
   }
+  :scope.absolute { position: absolute; }
+  @media (max-width: 480px) { /* we'll need all the space we can get in mobile */
+    :scope.absolute { position: fixed; }
+  }
   :scope, .mask {
     bottom: 0;
     left: 0;
@@ -59,6 +63,7 @@
   }
   </style>
 
+  var that = this;
   cancel(e) {
     (this.opts.cancel || function(){})(e);
     this.unmount();
@@ -67,4 +72,5 @@
     (this.opts.success || function(){})();
     this.unmount();
   }
+  this.parent.on("update",function() { that.update() });
 </modal>

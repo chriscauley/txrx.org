@@ -58,7 +58,11 @@ def user_json(request):
 @staff_member_required
 def set_rfid(request):
   user = get_object_or_404(get_user_model(),pk=request.GET['user_id'])
-  old_rfid = user.rfid
+  response = {
+    'username': user.username,
+    'old_rfid': user.rfid,
+  }
   user.rfid = request.GET['rfid']
   user.save()
-  return HttpResponse(json.dumps(old_rfid))
+  response['new_rfid'] = user.rfid
+  return HttpResponse(json.dumps(response))
