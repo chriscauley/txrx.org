@@ -16,6 +16,7 @@ class Command(BaseCommand):
     tomorrow = arrow.utcnow().replace(hour=6,days=1).datetime
     next_day = arrow.utcnow().replace(hour=6,days=2).datetime
     class_times = ClassTime.objects.filter(start__gte=tomorrow,start__lte=next_day,emailed__isnull=True)
+    class_times = class_times.exclude(session__course__active=False).distinct()
     if not class_times:
       return
     print "showing classes from %s to %s"%(tomorrow,next_day)
