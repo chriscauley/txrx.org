@@ -19,10 +19,10 @@
     "week-hours": function() { mainMount("<week-hours>"); },
   };
   window.R = _route
-  riot.route(function() {
-    var page_name = arguments[0] || "home";
-    if (! _route[page_name]) { return }
-    _route[page_name].apply(this,Array.prototype.slice.call(arguments,1));
+  riot.route(function(name) {
+    console.log(name);
+    if (! _route[name]) { return }
+    _route[name].apply(this,Array.prototype.slice.call(arguments,1));
   });
-  riot.route(window.location.hash.slice(1))
+  riot.route.start(true);
 })();

@@ -14,7 +14,7 @@ _urls = lambda *ns: [url(r'^%s/'%n, include('%s.urls'%n, namespace=n, app_name=n
 
 urlpatterns = patterns(
   '',
-  url(r'^beta/$','main.views.beta'),
+  url(r'^beta/','main.views.beta'),
   url(r'^$','main.views.index',name="home"),
   url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
   url(r'^admin/', include(admin.site.urls)),
