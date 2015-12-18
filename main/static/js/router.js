@@ -19,10 +19,11 @@
     "week-hours": function() { mainMount("<week-hours>"); },
   };
   window.R = _route
-  riot.route(function(name) {
-    console.log(name);
+  function route(name) {
     if (! _route[name]) { return }
     _route[name].apply(this,Array.prototype.slice.call(arguments,1));
-  });
-  riot.route.start(true);
+  };
+  TXRX.route = route;
+  pathpart = window.location.pathname.split("/")[2]
+  route(pathpart);
 })();

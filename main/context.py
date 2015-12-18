@@ -32,8 +32,10 @@ def nav(request):
   ]
   toolmaster_sublinks = [
     {'name': 'Tools','url': '/tools/'},
-    {'name': 'Permissions','url': '/beta/#toolmaster'}
+    {'name': 'Permissions','url': '/beta/toolmaster'}
   ]
+  if request.user.username in ['chriscauley','gavi']:
+    toolmaster_sublinks.append({'name': 'Set RFID','url': '/beta/rfid'})
   _nav = [
     {"name": "About",
      "url": "/about-us/",
