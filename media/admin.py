@@ -51,7 +51,6 @@ class TaggedPhotoAdmin(admin.ModelAdmin):
       'obj': obj,
       'STATIC_URL':settings.STATIC_URL
     }
-    print values
     return render_to_string('photo/dropphoto.html',values)
   dropphoto.allow_tags = True
 
