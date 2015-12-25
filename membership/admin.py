@@ -121,14 +121,10 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
 class SubscriptionInline(admin.TabularInline):
   model = Subscription
-  readonly_fields = ('edit','subscr_id','created','canceled','paid_until','product','amount','owed')
+  readonly_fields = ('subscr_id','created','canceled','paid_until','product','amount','owed')
   ordering = ('-canceled',)
   extra = 0
   #has_add_permission = lambda self,obj: False
-  def edit(self,obj):
-    # add this class to open in popup related-widget-wrapper-link
-    return "<a class='change-related' href='/admin/membership/subscription/%s/'></a>"%obj.pk
-  edit.allow_tags = True
 
 class UserMembershipInline(admin.StackedInline):
   list_display = ("__unicode__",'photo')

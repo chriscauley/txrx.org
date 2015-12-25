@@ -1,0 +1,8 @@
+{% extends "suit:admin/edit_inline/tabular.html" %}
+{% load txrx_tags %}
+{% block field_content %}
+{% if forloop.parentloop.first and inline_admin_form.form.instance.pk%}
+{{ inline_admin_form.form.instance|get_admin_link }}
+{% endif %}
+{{ block.super }}
+{% endblock %}
