@@ -34,6 +34,12 @@ REPEAT_CHOICES = (
   ('month-number','Monthly (by day number)'),
 )
 
+ICON_CHOICES = (
+  ("public","Open to the public"),
+  ("private","Private - Invitation only"),
+  ("rsvp","RSVP Required"),
+)
+
 class Event(PhotosMixin,models.Model):
   _use_default_photo = True
   name = models.CharField(max_length=128,null=True,blank=True)
@@ -53,6 +59,7 @@ class Event(PhotosMixin,models.Model):
   _ht = "Number of days before event when RSVP is cut off (eg 0.5 means \"You must rsvp 12 hours before this event\")"
   rsvp_cutoff = models.FloatField(default=0,help_text=_ht)
   max_rsvp = models.IntegerField(default=128)
+  icon = models.CharField(max_length=16,choices=ICON_CHOICES)
   @property
   def verbose_rsvp_cutoff(self):
     if self.rsvp_cutoff > 2:

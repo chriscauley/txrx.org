@@ -72,9 +72,12 @@ class EventOccurrenceInline(OccurrenceModelInline):
 
 @admin.register(Event)
 class EventAdmin(TaggedPhotoAdmin):
-  list_display = ("__unicode__","repeat")
+  list_display = ("__unicode__","repeat","upcoming_count","icon")
+  list_editable = ("icon",)
   inlines = [EventOccurrenceInline]
   search_fields = ['name']
+  def upcoming_count(self,obj):
+    return obj.upcoming_occurrences.count()
 
 @admin.register(EventOccurrence)
 class EventOccurrenceAdmin(TaggedPhotoAdmin):
