@@ -23,13 +23,16 @@ Events at TXRX
       <td></td>
       <td></td>
       <td class="event">
-        <p class="m">Monthly event</p>
+        <p class="public">Publc</p>
       </td>
       <td class="event">
-        <p class="c">Class session</p>
+        <p class="rsvp">RSVP/Signup Required</p>
       </td>
       <td class="event">
-        <p class="w">Weekly event</p>
+        <p class="private">Private (Invitation Only)</p>
+      </td>
+      <td class="event">
+        <p class="course">Class (Signup Required)</p>
       </td>
     </tr>
     {% for week in weeks %}
@@ -43,11 +46,7 @@ Events at TXRX
           {% for occurrence in occurrences %}
           <p class="event">
             <b>{{ occurrence.start|date:"f a" }}</b>
-            {% if occurrence.event %}{# actual event #}
-            <a class="{{ occurrence.event.repeat|slice:":1"|default_if_none:"n" }}" href="{{ occurrence.get_absolute_url }}">{{ occurrence.short_name }}</a>
-            {% else %}{# course.short_name #}
-            <a class="c" href="{{ occurrence.get_absolute_url }}">{{ occurrence.short_name }}</a>
-            {% endif %}
+            <a class="{{ occurrence.icon }}" href="{{ occurrence.get_absolute_url }}">{{ occurrence.short_name }}</a>
           </p>
           {% endfor %}
         </div>

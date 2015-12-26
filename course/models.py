@@ -359,6 +359,7 @@ class ClassTime(OccurrenceModel):
   description = cached_property(lambda self:self.session.course.description,name="description")
   name = cached_property(lambda self: self.session.course.name,name="name")
   room = cached_property(lambda self: self.session.course.room,name="room")
+  icon = 'course'
   @property
   def as_json(self):
     return {
