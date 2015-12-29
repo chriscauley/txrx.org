@@ -153,7 +153,8 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
     # opposite of active_sessions
     first_date = datetime.datetime.now()-datetime.timedelta(0.5)
     last_year = first_date - datetime.timedelta(365)
-    return list(self.sessions.filter(last_date__lt=first_date,last_date__gte=last_year))
+    sessions = self.session_set.filter(last_date__lt=first_date,last_date__gte=last_year)
+    return list(sessions.order_by("-first_date"))
 
   sessions = lambda self: Session.objects.filter(course=self,active=True)
   sessions = cached_property(sessions,name="sessions")
