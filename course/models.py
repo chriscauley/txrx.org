@@ -216,6 +216,9 @@ class Session(UserModel,PhotosMixin,models.Model):
   course = models.ForeignKey(Course,null=True,blank=True)
   cancelled = models.BooleanField(default=False)
   active = models.BooleanField(default=True)
+  _ht = "Private classes cannot be signed up for and do not appear on the session page unless " \
+        "the user is manually enrolled. It will appear on calendar but it will be marked in red."
+  private = models.BooleanField(default=False,help_text=_ht)
   notified = models.DateTimeField(null=True,blank=True)
   publish_dt = models.DateTimeField(null=True,blank=True)
   _ht = "This will be automatically updated when you save the model. Do not change"
@@ -238,16 +241,20 @@ class Session(UserModel,PhotosMixin,models.Model):
     if datetime.datetime.now() > self.last_date:
       d = self.last_date
       enrolled_status = "Completed: %s/%s/%s"%(d.month,d.day,d.year)
+    closed_status = self.closed_string if (self.closed or self.full) else None
+    if self.private:
+      closed_status = 'private'
     return {
       'id': self.pk,
       'name': "<b>%s</b> %s"%(self.course,self.first_date.strftime("%m/%d/%Y")),
-      'closed_status': self.closed_string if (self.closed or self.full) else None,
+      'closed_status': closed_status,
       'short_dates': short_dates,
       'instructor_name': self.get_instructor_name(),
       'instructor_pk': self.user_id,
       'course_id': self.course_id,
       'enrolled_status': enrolled_status,
       'classtimes': [c.as_json for c in self.classtime_set.all()],
+      'private': True
     }
   json = property(lambda self: dumps(self.as_json))
   get_room = lambda self: self.course.room
@@ -349,9 +356,12 @@ class ClassTime(OccurrenceModel):
   emailed = models.DateTimeField(null=True,blank=True)
   def short_name(self):
     times = list(self.session.classtime_set.all())
-    if len(times) == 1:
-      return self.session.course.get_short_name()
-    return "%s (%s/%s)"%(self.session.course.get_short_name(),times.index(self)+1,len(times))
+    s = self.session.course.get_short_name()
+    if len(times) != 1:
+      s = "%s (%s/%s)"%(s,times.index(self)+1,len(times))
+    if self.session.private:
+      return "[PRIVATE] " + s
+    return s
   get_absolute_url = lambda self: self.session.get_absolute_url()
   get_absolute_url = cached_method(get_absolute_url,name='get_absolute_url')
   get_admin_url = lambda self: "/admin/course/session/%s/"%self.session.id
@@ -360,7 +370,7 @@ class ClassTime(OccurrenceModel):
   description = cached_property(lambda self:self.session.course.description,name="description")
   name = cached_property(lambda self: self.session.course.name,name="name")
   room = cached_property(lambda self: self.session.course.room,name="room")
-  icon = 'course'
+  icon = property(lambda self: 'private' if self.session.private else 'course')
   @property
   def as_json(self):
     return {
@@ -478,7 +488,7 @@ def reset_classes_json(context="no context provided"):
   os.rename(os.path.join(settings.STATIC_ROOT,'_classes.json'),os.path.join(settings.STATIC_ROOT,'classes.json'))
 
   cutoff = datetime.datetime.now() - datetime.timedelta(1)
-  text = dumps([s.pk for s in Session.objects.filter(last_date__gte=cutoff) if s.full])
+  text = dumps([s.pk for s in Session.objects.filter(last_date__gte=cutoff) if s.full or s.private])
   f = open(os.path.join(settings.STATIC_ROOT,'_sessions.json'),'w')
   f.write("var FULL_SESSIONS = "+text)
   f.close()

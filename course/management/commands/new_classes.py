@@ -16,6 +16,7 @@ class Command (BaseCommand):
     user = get_user_model()
     dt = datetime.datetime.now() + datetime.timedelta(-16)
     new_sessions = Session.objects.filter(created__gte=dt,first_date__gte=datetime.datetime.now())
+    new_sessions = new_sessions.exclude(private=True)
     if not new_sessions:
       print "No classes","No new classes to email anyone about :("
       return
