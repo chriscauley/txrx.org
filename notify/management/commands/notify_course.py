@@ -14,7 +14,7 @@ import datetime
 class Command (BaseCommand):
   def handle(self, *args, **options):
     dt = datetime.datetime.now()-datetime.timedelta(2)
-    new_sessions = Session.objects.filter(active=True,notified__isnull=True)
+    new_sessions = Session.objects.filter(active=True,notified__isnull=True).exclude(private=True)
     if not new_sessions:
       mail_admins("No classes","No new classes to notify anyone about :(")
       return
