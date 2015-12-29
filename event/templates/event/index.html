@@ -46,7 +46,8 @@ Events at TXRX
           {% for occurrence in occurrences %}
           <p class="event">
             <b>{{ occurrence.start|date:"f a" }}</b>
-            <a class="{{ occurrence.icon }}" href="{{ occurrence.get_absolute_url }}">{{ occurrence.short_name }}</a>
+            <a class="{{ occurrence.class_name }}" href="{{ occurrence.get_absolute_url }}">
+              {{ occurrence.short_name }}</a>
           </p>
           {% endfor %}
         </div>

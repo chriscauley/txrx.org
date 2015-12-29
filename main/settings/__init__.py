@@ -141,7 +141,7 @@ COMPRESS_PRECOMPILERS = (
 ACCOUNT_ACTIVATION_DAYS = 7
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
-SITE_URL = "http://txrxlabs.org"
+SITE_URL = "https://txrxlabs.org"
 SITE_DOMAIN = "txrxlabs.org"
 SITE_NAME = "TXRX Labs"
 WEBMASTER = "chris@lablackey.com"

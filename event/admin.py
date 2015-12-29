@@ -65,7 +65,7 @@ class FuturePastListFilter(admin.SimpleListFilter):
 
 class EventOccurrenceInline(OccurrenceModelInline):
   model = EventOccurrence
-  fields = ('name_override','start','end_time')
+  fields = ('name_override','start','end_time','url_override')
   def get_queryset(self,request):
     qs = super(EventOccurrenceInline,self).get_queryset(request)
     return qs.filter(start__gte=datetime.datetime.now())
@@ -82,6 +82,7 @@ class EventAdmin(TaggedPhotoAdmin):
 @admin.register(EventOccurrence)
 class EventOccurrenceAdmin(TaggedPhotoAdmin):
   search_fields = ['event__name']
+  raw_id_fields = ['event']
   list_filter = (FuturePastListFilter,)
 
 @admin.register(RSVP)
