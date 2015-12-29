@@ -87,4 +87,9 @@ class EventOccurrenceAdmin(TaggedPhotoAdmin):
 
 @admin.register(RSVP)
 class RSVPAdmin(admin.ModelAdmin):
-  pass
+  list_display = ['__unicode__','user_link']
+  def user_link(self,obj):
+    u = obj.user
+    html = '<a href="/admin/user/user/{}/" class="fa fa-user"> {} {} ({})</a>'
+    return html.format(u.id,u.first_name, u.last_name, u.username)
+  user_link.allow_tags = True
