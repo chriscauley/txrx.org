@@ -119,6 +119,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 ROOT_URLCONF = 'main.urls'
 
+from django.contrib import messages
+MESSAGE_TAGS = { messages.ERROR: 'danger' }
+
 TEMPLATE_DIRS = (
   os.path.join(SPATH,"templates"),
   os.path.join(SPATH,"../lablackey/templates"),
