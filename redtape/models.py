@@ -4,11 +4,12 @@ from django.db import models
 from tool.models import CriterionModel
 
 class Document(models.Model):
-  name = models.CharField(max_length=64)
+  name = models.CharField(max_length=512)
   content = models.TextField(null=True,blank=True)
   _ht = "If checked, user must log into site before viewing/signing document"
   login_required = models.BooleanField(default=False,help_text=_ht)
   __unicode__ = lambda self: self.name
+  get_absolute_url = lambda self: reverse('signed_document',args=[self.id,slugify(self.name)])
 
 class Signature(CriterionModel):
   document = models.ForeignKey(Document)
@@ -18,7 +19,7 @@ class Signature(CriterionModel):
   signature = models.ImageField(upload_to="signatures/%m-%d-%y")
   user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
   get_criteria = lambda self: self.document.criterion_set.all()
-  __unicode__ = lambda self: "%s - %s"%(self.name_typed,self.date_typed)
+  __unicode__ = lambda self: "%s: %s - %s"%(self.document,self.name_typed,self.date_typed)
   @property
   def as_json(self):
     return {
