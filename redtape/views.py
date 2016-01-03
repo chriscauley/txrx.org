@@ -7,7 +7,7 @@ from django.template.response import TemplateResponse
 from .models import Document
 from .forms import SignatureForm
 
-def document_detail(request,document_pk):
+def document_detail(request,document_pk,slug=None): #ze slug does notzing!
   document = get_object_or_404(Document,pk=document_pk)
   if document.login_required and not request.user.is_authenticated():
     return login_required(document_detail)(request,document_pk)
