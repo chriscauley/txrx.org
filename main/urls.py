@@ -129,6 +129,15 @@ urlpatterns += patterns(
   url(r'(%s)'%fps,'django.contrib.flatpages.views.flatpage',name='map'),
 )
 
+from django.views.static import serve
+from django.contrib.auth.decorators import user_passes_test
+
+is_superuser = lambda user:user.is_superuser
+urlpatterns += patterns(
+    '',
+    url(r'^media/(?P<path>signatures/.*)$',user_passes_test(is_superuser)(serve),
+        {'document_root': settings.MEDIA_ROOT,'show_indexes': False}),
+)
 if settings.DEBUG:
   urlpatterns += patterns(
     '',
