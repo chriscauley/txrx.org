@@ -88,7 +88,10 @@ def roland_email(request,y=2012,m=1,d=1):
 
   writer = csv.writer(response)
   for user in get_user_model().objects.filter(date_joined__gt=dt,is_active=True):
-    writer.writerow([user.email,user.username,str(user.date_joined)])
+    if "email" in request.GET:
+      writer.writerow([user.email])
+    else:
+      writer.writerow([user.email,user.username,str(user.date_joined)])
 
   return response
 
