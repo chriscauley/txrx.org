@@ -82,6 +82,7 @@
     </div>
     <div class="instructor">with { instructor_name }</div>
     <b class="full" if={ closed_status == 'full' }>This session is full</b>
+    <b class="full" if={ closed_status == 'private' }>This session is private</b>
     <div if={ !closed_status && fee }>
       <button class="btn btn-primary" onclick={ parent.add } if={ !incart }>
         Add this session to cart</button>

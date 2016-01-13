@@ -41,12 +41,8 @@ class ClassTimeInline(OccurrenceModelInline):
 
 class EnrollmentInline(admin.TabularInline):
   model = Enrollment
-  readonly_fields = ('user','session',"edit")
+  readonly_fields = ('user','session')
   exclude = ('completed','evaluated','emailed','transaction_ids','evaluation_date')
-  def edit(self,obj):
-    if obj:
-      return '<a href="/admin/course/enrollment/%s/">%s</a>'%(obj.pk,"Edit")
-  edit.allow_tags = True
   extra = 0
 
 @admin.register(Session)

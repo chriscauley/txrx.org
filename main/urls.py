@@ -14,7 +14,7 @@ _urls = lambda *ns: [url(r'^%s/'%n, include('%s.urls'%n, namespace=n, app_name=n
 
 urlpatterns = patterns(
   '',
-  url(r'^beta/$','main.views.beta'),
+  url(r'^beta/','main.views.beta'),
   url(r'^$','main.views.index',name="home"),
   url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
   url(r'^admin/', include(admin.site.urls)),
@@ -49,7 +49,7 @@ urlpatterns = patterns(
   url(r'^geo/locations.json$','geo.views.locations_json'),
   url(r'^checkin/$', 'user.views.checkin', name='checkin'),
   url(r'^user.json','user.views.user_json'),
-  url(r'redtape/(\d+)/$','redtape.views.document_detail'),
+  url(r'redtape/(\d+)/(.*)$','redtape.views.document_detail',name='signed_document'),
 )
 
 def activate_user(target):
@@ -129,6 +129,15 @@ urlpatterns += patterns(
   url(r'(%s)'%fps,'django.contrib.flatpages.views.flatpage',name='map'),
 )
 
+from django.views.static import serve
+from django.contrib.auth.decorators import user_passes_test
+
+is_superuser = lambda user:user.is_superuser
+urlpatterns += patterns(
+    '',
+    url(r'^media/(?P<path>signatures/.*)$',user_passes_test(is_superuser)(serve),
+        {'document_root': settings.MEDIA_ROOT,'show_indexes': False}),
+)
 if settings.DEBUG:
   urlpatterns += patterns(
     '',

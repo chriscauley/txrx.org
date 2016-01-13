@@ -119,6 +119,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 ROOT_URLCONF = 'main.urls'
 
+from django.contrib import messages
+MESSAGE_TAGS = { messages.ERROR: 'danger' }
+
 TEMPLATE_DIRS = (
   os.path.join(SPATH,"templates"),
   os.path.join(SPATH,"../lablackey/templates"),
@@ -141,7 +144,7 @@ COMPRESS_PRECOMPILERS = (
 ACCOUNT_ACTIVATION_DAYS = 7
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
-SITE_URL = "http://txrxlabs.org"
+SITE_URL = "https://txrxlabs.org"
 SITE_DOMAIN = "txrxlabs.org"
 SITE_NAME = "TXRX Labs"
 WEBMASTER = "chris@lablackey.com"

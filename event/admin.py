@@ -65,22 +65,31 @@ class FuturePastListFilter(admin.SimpleListFilter):
 
 class EventOccurrenceInline(OccurrenceModelInline):
   model = EventOccurrence
-  fields = ('name_override','start','end_time')
+  fields = ('name_override','start','end_time','url_override')
   def get_queryset(self,request):
     qs = super(EventOccurrenceInline,self).get_queryset(request)
     return qs.filter(start__gte=datetime.datetime.now())
 
 @admin.register(Event)
 class EventAdmin(TaggedPhotoAdmin):
-  list_display = ("__unicode__","repeat")
+  list_display = ("__unicode__","repeat","upcoming_count","icon")
+  list_editable = ("icon",)
   inlines = [EventOccurrenceInline]
   search_fields = ['name']
+  def upcoming_count(self,obj):
+    return obj.upcoming_occurrences.count()
 
 @admin.register(EventOccurrence)
 class EventOccurrenceAdmin(TaggedPhotoAdmin):
   search_fields = ['event__name']
+  raw_id_fields = ['event']
   list_filter = (FuturePastListFilter,)
 
 @admin.register(RSVP)
 class RSVPAdmin(admin.ModelAdmin):
-  pass
+  list_display = ['__unicode__','user_link']
+  def user_link(self,obj):
+    u = obj.user
+    html = '<a href="/admin/user/user/{}/" class="fa fa-user"> {} {} ({})</a>'
+    return html.format(u.id,u.first_name, u.last_name, u.username)
+  user_link.allow_tags = True

@@ -91,11 +91,14 @@ admin.site.register(PayPalIPN,CustomIPNAdmin)
 
 from main.signals import *
 
-#try:
-#  @admin.register(LogEntry)
-#  class LogEntryAdmin(admin.ModelAdmin):
-#    list_filter = ('content_type','user')
-#    list_display = ('__unicode__','action_time','content_type','user')
-#    raw_id_fields = ('user',)
-#except:
-#  pass
+try:
+  from django.contrib.contenttypes.models import ContentType
+  if settings.DEBUG:
+    @admin.register(LogEntry)
+    class LogEntryAdmin(admin.ModelAdmin):
+      list_filter = ('content_type','user')
+      list_display = ('__unicode__','action_time','content_type','user')
+      raw_id_fields = ('user',)
+    ContentType._meta.ordering = ('model',)
+except:
+  pass

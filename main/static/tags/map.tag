@@ -39,8 +39,7 @@
     this._location = -1;
     that.fill_images = {};
     loadLocations();
-    setInterval(loadEvents,10*60*1000);
-    setInterval(loadLocations,24*60*60*1000);
+    setInterval(loadLocations,5*60*1000);
   });
   function loadLocations() {
     $.get(
@@ -90,6 +89,7 @@
     calculateBounds();
     initCanvas();
     createRooms();
+    draw();
   });
 
   // Math for the canvas
@@ -142,7 +142,10 @@
       }
     }
   }
+  doon = false;
   function createRooms() {
+    if (doon) { return }
+    doon = true
     that.dxfs = [];
     var floorplan_wrapper = document.getElementById('floorplan_wrapper');
     var room_map = {};
@@ -167,6 +170,7 @@
         y_max = Math.max(y_max,p[1]);
         y_min = Math.min(y_min,p[1]);
       }
+
       if (dxf.fill && !that.fill_images[dxf.fill]) {
         var img = document.createElement('img');
         img.src = dxf.fill;
@@ -197,7 +201,6 @@
         floorplan_wrapper.appendChild(room_marker);
       }
     }
-    draw();
   }
   function rect(r,ctx) {
     ctx.beginPath();

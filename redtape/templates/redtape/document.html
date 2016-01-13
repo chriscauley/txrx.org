@@ -4,10 +4,23 @@
 {% block main %}
 <div class="row">
   <div class="col-sm-6">
+    <h1 class="center">{{ document.name }}</h1>
     <form method="POST" enctype="multipart/form-data" class="redtape">
       {{ document.content|explosivo }}
       {% csrf_token %}
+      {% for field in document.fields_json %}
+      {% if field.type == "header" %}
+      <h3>{{ field.name }}</h3>
+      {% else %}
+      <div class="form-group">
+        <label for="id_{{ field.slug }}">{{ field.name }}{% if field.required %}*{% endif %}</label>
+        <input type="{{ field.type }}" name="{{ field.slug }}" {% if field.required %}required="true"{% endif %}>
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% if document.signature_required %}
       {% include "_form.html" %}
+      {% endif %}
       <center style="clear: both;">
         <input type="submit" class="btn btn-success" value="I agree to the terms and conditions">
       </center>
