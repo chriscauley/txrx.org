@@ -1,4 +1,4 @@
-comment-list,comment,comment-form {
+comment-list,comment,comment-form, [riot-tag=comment-form] {
   display: block;
 }
 comment-list {
@@ -73,7 +73,7 @@ comment-list comment {
   }
 }
 
-comment-form .md {
+comment-form .md, [riot-tag=comment-form] .md {
   display: none;
   margin-bottom: 20px;
   &.show { display: block; }
