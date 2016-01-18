@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 from django.db import models
 
+from lablackey.utils import cached_method
 from tool.models import CriterionModel
 import json
 
@@ -57,6 +58,18 @@ class DocumentField(models.Model):
   input_type = models.CharField(max_length=64,choices=INPUT_TYPE_CHOICES)
   choices = models.TextField(null=True,blank=True,help_text="Javascript array object for choice fields.")
   required = models.BooleanField(default=False)
+  __unicode__ = lambda self: "%s for %s"%(self.slug or self.name,self.document)
+  def get_options(self,choices=None):
+    # valid choices are [[VALUE_1,VERBOSE_1],...] or [VERBOSE_1,...]
+    choices = choices or json.loads(self.choices)
+    return choices if isinstance(choices[0],list) else zip(choices,choices)
+  @cached_method
+  def get_optgroups(self):
+    # returns None if self.choices is not in the optgroup format
+    # optgroup format: [[OPTGROUP_NAME,[LISTOFCHOICES]]
+    choices = json.loads(self.choices)
+    if isinstance(choices[0],list) and isinstance(choices[0][1],list):
+      return [[label,self.get_options(options)] for label,options in choices]
   @property
   def as_json(self):
     return {
@@ -64,6 +77,7 @@ class DocumentField(models.Model):
       'slug': self.slug or slugify(self.name),
       'type': self.input_type,
       'required': self.required,
+      'choices': self.get_optgroups() or self.get_options()
     }
   class Meta:
     ordering = ('order',)

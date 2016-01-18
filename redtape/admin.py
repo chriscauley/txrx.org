@@ -2,6 +2,8 @@ from django.contrib import admin
 
 from .models import Document, Signature, DocumentField
 
+import json
+
 class DocumentFieldInline(admin.TabularInline):
   model = DocumentField
   extra = 0
@@ -9,7 +11,10 @@ class DocumentFieldInline(admin.TabularInline):
 
 @admin.register(DocumentField)
 class DocumentFieldAdmin(admin.ModelAdmin):
-  pass
+  readonly_fields = ("_choices",)
+  def _choices(self,obj):
+    return "<pre>%s</pre>"%json.dumps(obj.get_optgroups() or obj.get_options(),indent=4)
+  _choices.allow_tags = True
 
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):

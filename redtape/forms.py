@@ -15,18 +15,29 @@ class SignatureForm(forms.ModelForm):
     self.document = kwargs.pop('document')
     super(SignatureForm, self).__init__(*args, **kwargs)
     self.fields.pop('document')
-    if not self.document.signature_required:
-      self.fields.pop('date_typed')
-      self.fields.pop('name_typed')
-      self.fields.pop('_signature')
     # generate extra fields
     self.extra_fields = []
     for field in self.document.fields_json:
       if field['type'] == 'header':
         continue
       self.extra_fields.append(field['slug'])
-      self.fields[field['slug']] = forms.CharField(required=field['required'])
-
+      if field['type'] == 'select':
+        choices = field['choices']
+        if not field['required']:
+          choices = [('',[('','No Response')])] + choices
+        self.fields[field['slug']] = forms.ChoiceField(required=field['required'],choices=choices)
+      else:
+        self.fields[field['slug']] = forms.CharField(required=field['required'])
+    if not self.document.signature_required:
+      self.fields.pop('date_typed')
+      self.fields.pop('name_typed')
+      self.fields.pop('_signature')
+    else:
+      # put signature fields at the end
+      self.fields['date_typed'] = self.fields.pop('date_typed')
+      self.fields['name_typed'] = self.fields.pop('name_typed')
+      self.fields['_signature'] = self.fields.pop('_signature')
+      
   def save(self,*args,**kwargs):
     commit = kwargs.pop("commit",True)
     kwargs['commit'] = False
