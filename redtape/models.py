@@ -46,6 +46,7 @@ INPUT_TYPE_CHOICES = [
   ('phone','Phone'),
   ('email','Email'),
   ('header','Design Element (non-input)'),
+  ('select','Select'),
 ]
 
 class DocumentField(models.Model):
@@ -54,6 +55,7 @@ class DocumentField(models.Model):
   slug = models.CharField(max_length=64,help_text="For fields with the same name",null=True,blank=True)
   order = models.IntegerField(default=999)
   input_type = models.CharField(max_length=64,choices=INPUT_TYPE_CHOICES)
+  choices = models.TextField(null=True,blank=True,help_text="Javascript array object for choice fields.")
   required = models.BooleanField(default=False)
   @property
   def as_json(self):

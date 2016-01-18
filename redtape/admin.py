@@ -5,6 +5,11 @@ from .models import Document, Signature, DocumentField
 class DocumentFieldInline(admin.TabularInline):
   model = DocumentField
   extra = 0
+  exclude = ("choices","slug")
+
+@admin.register(DocumentField)
+class DocumentFieldAdmin(admin.ModelAdmin):
+  pass
 
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
