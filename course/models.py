@@ -386,7 +386,7 @@ class ClassTime(OccurrenceModel):
 class EnrollmentManager(models.Manager):
   def pending_evaluation(self,*args,**kwargs):
     kwargs['evaluation_date__lte'] = datetime.datetime.now()
-    kwargs['evaluation_date__gte'] = datetime.datetime.now()-datetime.timedelta(30)
+    kwargs['evaluation_date__gte'] = datetime.datetime.now()-datetime.timedelta(60)
     kwargs['evaluated'] = False
     kwargs['emailed'] = False
     return self.filter(*args,**kwargs)

@@ -9,6 +9,8 @@ from django.template.response import TemplateResponse
 from ..models import Course, Term, Subject, Session, Enrollment, ClassTime, Evaluation
 from ..forms import EmailInstructorForm, EvaluationForm
 from event.utils import make_ics,ics2response
+from redtape.models import Document
+from redtape.forms import SignatureForm
 
 from paypal.standard.ipn.models import *
 
@@ -24,6 +26,14 @@ def index(request):
 def detail(request,enrollment_id):
   enrollment = get_object_or_404(Enrollment,pk=enrollment_id,user=request.user)
   form = EvaluationForm(request.POST or None,enrollment=enrollment)
+  signature_form = None
+  DOCUMENT_ID = 1
+  if not request.user.signature_set.filter(document_id=DOCUMENT_ID):
+    signature_form = SignatureForm(request.POST or None,document=Document.objects.get(id=DOCUMENT_ID))
+    if signature_form.is_valid():
+      signature_form.instance.user = request.user
+      signature_form.save()
+      signature_form = None
   if request.POST and form.is_valid():
     evaluation = form.save(commit=False)
     evaluation.user = request.user
@@ -31,7 +41,7 @@ def detail(request,enrollment_id):
     evaluation.save()
     messages.success(request,"Your evaluation has been submitted. Thank you for your feedback!")
     return HttpResponseRedirect(reverse("course:evaluation_index"))
-  values = { 'enrollment': enrollment, 'form': form }
+  values = { 'enrollment': enrollment, 'form': form, 'signature_form': signature_form }
   return TemplateResponse(request,"course/evaluation_form.html",values)
 
 @login_required
