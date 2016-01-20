@@ -19,6 +19,7 @@ class DocumentFieldAdmin(admin.ModelAdmin):
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
   inlines = [DocumentFieldInline]
+  list_display = ("__unicode__","signature_required","login_required")
 
 @admin.register(Signature)
 class SignatureAdmin(admin.ModelAdmin):

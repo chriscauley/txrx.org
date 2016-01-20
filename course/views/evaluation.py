@@ -27,7 +27,7 @@ def detail(request,enrollment_id):
   enrollment = get_object_or_404(Enrollment,pk=enrollment_id,user=request.user)
   form = EvaluationForm(request.POST or None,enrollment=enrollment)
   signature_form = None
-  DOCUMENT_ID = 1
+  DOCUMENT_ID = 4
   if not request.user.signature_set.filter(document_id=DOCUMENT_ID):
     signature_form = SignatureForm(request.POST or None,document=Document.objects.get(id=DOCUMENT_ID))
     if signature_form.is_valid():
