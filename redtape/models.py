@@ -61,12 +61,16 @@ class DocumentField(models.Model):
   __unicode__ = lambda self: "%s for %s"%(self.slug or self.name,self.document)
   def get_options(self,choices=None):
     # valid choices are [[VALUE_1,VERBOSE_1],...] or [VERBOSE_1,...]
+    if not self.choices:
+      return
     choices = choices or json.loads(self.choices)
     return choices if isinstance(choices[0],list) else zip(choices,choices)
   @cached_method
   def get_optgroups(self):
     # returns None if self.choices is not in the optgroup format
     # optgroup format: [[OPTGROUP_NAME,[LISTOFCHOICES]]
+    if not self.choices:
+      return
     choices = json.loads(self.choices)
     if isinstance(choices[0],list) and isinstance(choices[0][1],list):
       return [[label,self.get_options(options)] for label,options in choices]
