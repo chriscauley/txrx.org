@@ -36,3 +36,4 @@ class UserAdmin(UserAdmin):
   ordering = ('username',)
   readonly_fields = ('last_login','date_joined','level')
   inlines = [UserMembershipInline, UserNoteInline, SubscriptionInline, EnrollmentInline]
+  list_filter = list(UserAdmin.list_filter) + ['usermembership__voting_rights']
