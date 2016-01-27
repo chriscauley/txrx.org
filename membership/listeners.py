@@ -64,7 +64,6 @@ def paypal_signal(sender,**kwargs):
   elif sender.txn_type == 'subscr_cancel':
     if subscription:
       subscription.force_canceled()
-      mail_admins("New Cancelation",urls)
     return
 
   if sender.txn_type != "subscr_payment":

@@ -78,7 +78,7 @@ def handle_successful_payment(sender, **kwargs):
   enrollments = []
   error_sessions = []
   for i in range(1, item_count+1):
-    course_cost = float(params['mc_gross_%d'%i])
+    pp_amount = float(params['mc_gross_%d'%i])
     quantity = int(params['quantity%s'%i])
 
     try:
@@ -103,9 +103,10 @@ def handle_successful_payment(sender, **kwargs):
     enrollment.save()
     enrollments.append(enrollment)
     price_multiplier = (100-user.level.discount_percentage) / 100.
-    if course_cost != price_multiplier*session.course.fee * int(quantity):
+    # We're ignoring people who overpay since this happens when a member doesn't login (no discount)
+    if pp_amount < price_multiplier*session.course.fee * int(quantity):
       l = [
-        "PP cost: %s"%course_cost,
+        "PP cost: %s"%pp_amount,
         "Expected Cost: %s"%(price_multiplier*session.course.fee * int(quantity)),
         "discount: %s"%user.level.discount_percentage,
         "Session Fee: %s"%session.course.fee,
