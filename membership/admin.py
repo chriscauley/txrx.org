@@ -146,8 +146,8 @@ class ProposalInline(admin.StackedInline):
 
 class MeetingMinutesForm(forms.ModelForm):
   User = get_user_model()
-  kwargs = dict(widget=forms.CheckboxSelectMultiple(),required=False)
   _q = User.objects.filter(usermembership__voting_rights=True,usermembership__suspended=False)
+  kwargs = dict(widget=forms.CheckboxSelectMultiple(),required=False)
   voters_present = forms.ModelMultipleChoiceField(queryset=_q,**kwargs)
   _q = User.objects.filter(usermembership__voting_rights=True,usermembership__suspended=True)
   kwargs = dict(widget=forms.CheckboxSelectMultiple(),required=False)

@@ -116,7 +116,7 @@ def paypal_signal(sender,**kwargs):
     amount=amt,
   )
   if not subscription.subscr_id:
-    subscripiton.subscr_id = subscr_id
+    subscription.subscr_id = subscr_id
     subscription.save()
   # need to get subscription again because status forced it to recalculate
   subscription = status.subscription
