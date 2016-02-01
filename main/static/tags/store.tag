@@ -28,6 +28,9 @@
     Load More</button>
 
   window.PRODUCTS.visible = 18;
+  this.on("mount",function() {
+    window.PRODUCT_LIST = this;
+  });
   this.on("update",function() {
     this.products = window.PRODUCTS.list;
     if (window.PRODUCTS.c) {

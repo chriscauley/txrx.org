@@ -77,9 +77,9 @@ function timeit(f) {
 }
 
 // how to disable/enable timeit
-function timeit(f) { return f }
+//function timeit(f) { return f }
 
 // this is just so that I can easily timeit
 var resetProductList = timeit(function() {
-  riot.update('product-list');
+  window.PRODUCT_LIST.update()
 });
