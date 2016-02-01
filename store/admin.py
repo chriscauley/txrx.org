@@ -9,6 +9,7 @@ class CategoryAdmin(NamedTreeModelAdmin):
 
 class ConsumableAdmin(TaggedPhotoAdmin):
   list_display = ('__unicode__','in_stock','unit_price','_status')
+  list_filter = ('categories',)
   exclude = ('slug',)
   def _status(self,obj=None):
     out = ''
