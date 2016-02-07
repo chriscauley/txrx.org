@@ -1,11 +1,14 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .models import Document
+from .models import Document, Signature
 from .forms import SignatureForm
+
+from lablackey.utils import get_or_none
 
 def document_detail(request,document_pk,slug=None): #ze slug does notzing!
   document = get_object_or_404(Document,pk=document_pk)
@@ -24,3 +27,12 @@ def document_detail(request,document_pk,slug=None): #ze slug does notzing!
     'document': document,
   }
   return TemplateResponse(request,"redtape/document.html",values)
+
+@login_required
+def index(request):
+  d_ids = getattr(settings,"REQUIRED_DOCUMENT_IDS",[])
+  documents = Document.objects.filter(id__in=d_ids)
+  values = {
+    'documents_signatures': [(d,get_or_none(Signature,document_id=d.id,user=request.user)) for d in documents],
+  }
+  return TemplateResponse(request,"redtape/index.html",values)

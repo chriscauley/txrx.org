@@ -1,0 +1,13 @@
+{% if documents_needed %}
+<div class="alert alert-warning">
+  <p>
+    We're going digital! Please take a moment to sign the orientation documents at {{ SITE_NAME }}.
+    If you've already signed these we would like to take a moment to resign them to save us
+    the time required to type in all 350 paper documents that we have collected over the past year.
+    The terms and conditions of these documents have not been changed, only made digital.
+  </p>
+  <br/>
+  <a href="{% url "redtape_index" %}" class="btn btn-primary">
+      Sign {{ documents_needed }} document{{ documents_needed|pluralize }}.</a>
+</div>
+{% endif %}
