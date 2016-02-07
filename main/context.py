@@ -7,10 +7,12 @@ from tagging.models import Tag
 
 from event.models import EventOccurrence
 from course.models import ClassTime, Enrollment
+from course.views.ajax import get_needed_sessions
 from blog.models import PressItem
 
-import datetime,time
+import datetime, time
 
+_needed = lambda: get_needed_sessions().filter(needed_completed__isnull=True).count()
 def nav(request):
   blog_sublinks = [
     {'name': 'Blog Home', 'url': '/blog/'},
@@ -32,7 +34,8 @@ def nav(request):
   ]
   toolmaster_sublinks = [
     {'name': 'Tools','url': '/tools/'},
-    {'name': 'Permissions','url': '/beta/toolmaster'}
+    {'name': 'Permissions','url': '/beta/toolmaster'},
+    {'name': 'Materials Needed','url': '/beta/needed-sessions/','reddot': _needed }
   ]
   if request.user.username in ['chriscauley','gavi']:
     toolmaster_sublinks.append({'name': 'Set RFID','url': '/beta/rfid'})

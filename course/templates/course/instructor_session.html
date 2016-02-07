@@ -87,6 +87,12 @@
         </label>
       </p>
       {% endfor %}
+      <p>
+        Also take a moment to look over all the materials needed to teach again.
+        Make a note of anything that is missing and we'll order it now.
+        If you don't need anything write "no" so we know you checked.
+      </p>
+      {% include "_form.html" with form=needed_form %}
       <input type="submit" value="Update" class="btn btn-primary" />
     </form>
   </div>

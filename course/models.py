@@ -228,6 +228,8 @@ class Session(UserModel,PhotosMixin,models.Model):
   created = models.DateTimeField(auto_now_add=True) # for emailing new classes
   # depracated?
   branding = models.ForeignKey(Branding,null=True,blank=True)
+  needed = models.TextField("What is needed?",blank=True,default="")
+  needed_completed = models.DateField(null=True,blank=True)
 
   __unicode__ = lambda self: latin1_to_ascii("%s (%s - %s)"%(self.course, self.user,self.first_date.date()))
   title = property(lambda self: "%s (%s)"%(self.course.name,self.first_date.date()))

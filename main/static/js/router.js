@@ -4,6 +4,14 @@
     document.getElementById("main").innerHTML = html;
     riot.mount(tag_name,data);
   }
+  function fromTemplate(template_name) {
+    riot.compile(
+      "/static/templates/"+template_name+".html",
+      function(html) {
+        mainMount("<"+template_name+">");
+      }
+    );
+  }
   var _route = {
     checkout: function() {
       mainMount("<tool-checkout></tool-checkout>");
@@ -17,6 +25,7 @@
     "my-permissions": function() { mainMount('<badge>') },
     rfid: function() { mainMount("<set-rfid>"); },
     "week-hours": function() { mainMount("<week-hours>"); },
+    "needed-sessions": function() { fromTemplate("needed-sessions"); }
   };
   window.R = _route
   function route(name) {
