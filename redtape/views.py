@@ -14,7 +14,10 @@ def document_detail(request,document_pk,slug=None): #ze slug does notzing!
   document = get_object_or_404(Document,pk=document_pk)
   if document.login_required and not request.user.is_authenticated():
     return login_required(document_detail)(request,document_pk)
-  form = SignatureForm(request.POST or None,request.FILES or None,document=document)
+  instance = None
+  if request.user.is_authenticated():
+    instance = get_or_none(Signature,document_id=document_pk,user=request.user)
+  form = SignatureForm(request.POST or None,request.FILES or None,document=document,instance=instance)
   if form.is_valid():
     signature = form.save(commit=False)
     if request.user.is_authenticated():

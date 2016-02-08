@@ -5,6 +5,8 @@ from django.db import models
 
 from lablackey.utils import cached_method
 from tool.models import CriterionModel
+
+from jsignature.fields import JSignatureField
 import json
 
 class Document(models.Model):
@@ -22,7 +24,7 @@ class Signature(CriterionModel):
   automatic = True
   date_typed = models.CharField("Type Todays Date",max_length=64,null=True,blank=True)
   name_typed = models.CharField("Type Your Name",max_length=128,null=True,blank=True)
-  signature = models.ImageField(upload_to="signatures/%m-%d-%y",null=True,blank=True)
+  signature = JSignatureField(null=True,blank=True)
   user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
   data = models.TextField(null=True,blank=True)
   get_criteria = lambda self: self.document.criterion_set.all()
