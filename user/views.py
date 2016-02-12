@@ -10,21 +10,22 @@ from course.models import Enrollment
 from geo.models import Room
 from tool.models import Criterion, UserCriterion, Permission
 
+from lablackey.utils import get_or_none
+
 import json, datetime
 
 def checkin(request):
-  if not request.is_ajax():
-    return TemplateResponse(request,"checkin.html",{})
-  try:
-    user = User.objects.get(rfid=request.GET.get('rfid','no one has this as an rfid'))
-  except User.DoesNotExist:
+  user = get_or_none(User,rfid=request.GET.get('rfid','no one has this as an rfid'))
+  email = request.GET.get("email","notavaildemail")
+  user = user or get_or_none(User,email=email)
+  user = user or get_or_none(User,usermembership__paypal_email=email)
+  if not user:
     return HttpResponse(json.dumps({'status': 404}))
   defaults = {'content_object': Room.objects.get(name='')}
   checkin, new = UserCheckin.objects.get_or_create(user=user,time_out__isnull=True,defaults=defaults)
   if not new:
     checkin.time_out = datetime.datetime.now()
     checkin.save()
-
   out = {
     'user': user.username,
     'time_in': str(checkin.time_in),

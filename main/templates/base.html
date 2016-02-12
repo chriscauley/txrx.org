@@ -9,6 +9,8 @@
     {% include "_styles.html" %}
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
     <script type="text/javascript">
+      var TXRX = TXRX || {};
+      TXRX.SITE_NAME = "{{ settings.SITE_NAME }}";
       var SHOP = {
         {% if settings.DEBUG %}
         base_url: "http://dev.txrxlabs.org:8009",
@@ -87,7 +89,7 @@
       {% endcomment %}
       {% endblock %}
     </div>
-    <script src="https://cdn.jsdelivr.net/riot/2.3/riot+compiler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/riot/2.3.12/riot+compiler.min.js"></script>
     <script src="/user.json?v={% now "ymd_his" %}"></script>
     {% compress js %}
     <script src="{{ STATIC_URL }}less/bootstrap/js/affix.js"></script>
@@ -105,6 +107,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/moment.js"></script> {# date formatting #}
     <script src="{{ STATIC_URL }}bower/ur/unrest.js"></script>
     {% endcompress %}
+    <script src="{{ STATIC_URL }}bower/ur/form.tag" type="riot/tag"></script>
     {% block extrajs %}{% endblock %}
     <script src="{{ STATIC_URL }}js/blog.js"></script>
     <script src="{{ STATIC_URL }}js/favico.js"></script>
