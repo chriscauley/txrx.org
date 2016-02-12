@@ -1,0 +1,25 @@
+body.kiosk {
+  .navbar {
+    position: relative;
+    &:before {
+      content: "";
+      display: block;
+      bottom: 0;
+      left: 0;
+      position: absolute;
+      right:0;
+      top: 0;
+    }
+  }
+  footer, .navbar-collapse.collapse { display: none !important; }
+  .navbar-header { float: none; text-align: center; }
+  .navbar-brand { float: none; }
+  email-checkin, checkin {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    text-align: center;
+    width: 450px;
+    .btn { font-size:1.5em; }
+  }
+}
