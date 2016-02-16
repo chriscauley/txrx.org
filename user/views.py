@@ -7,7 +7,9 @@ from django.template.response import TemplateResponse
 from .models import User, UserCheckin
 from event.models import RSVP
 from course.models import Enrollment
+from course.utils import get_or_create_student
 from geo.models import Room
+from redtape.models import Signature
 from tool.models import Criterion, UserCriterion, Permission
 
 from lablackey.utils import get_or_none
@@ -20,7 +22,9 @@ def checkin(request):
   user = user or get_or_none(User,email=email)
   user = user or get_or_none(User,usermembership__paypal_email=email)
   if not user:
-    return HttpResponse(json.dumps({'status': 404}))
+    return HttpResponse(json.dumps({'no_user': email}))
+  if not user.signature_set(document_id=2):
+    return HttpResponse(json.dumps({'no_waiver': email}))
   defaults = {'content_object': Room.objects.get(name='')}
   checkin, new = UserCheckin.objects.get_or_create(user=user,time_out__isnull=True,defaults=defaults)
   if not new:
@@ -32,6 +36,12 @@ def checkin(request):
     'time_out': str(checkin.time_out) if checkin.time_out else None,
   }
   return HttpResponse(json.dumps(out))
+
+def checkin_register(request):
+  keys = ['email','first_name','last_name',"password"]
+  user,new = get_or_create_student({k,request.POST[k] for key in keys
+    'email': request.POST['email'],
+    'first_name': request.POST
 
 def user_json(request):
   if not request.user.is_authenticated():

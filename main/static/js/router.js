@@ -16,11 +16,8 @@
     checkout: function() {
       mainMount("tool-checkout");
     },
-    checkin: function() {
-      mainMount("checkin");
-    },
-    "email-checkin": function() {
-      mainMount("email-checkin");
+    "checkin-home": function() {
+      mainMount("checkin-home");
     },
     toolmaster: function(search_term) {
       mainMount("toolmaster",{search_term:search_term});

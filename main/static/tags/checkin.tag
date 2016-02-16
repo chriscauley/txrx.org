@@ -1,4 +1,4 @@
-<checkin>
+<checkin-home>
   <h1>Welcome to { TXRX.SITE_NAME }</h1>
   <p class="lead">
     Please swipe your RFID card to checkin.
@@ -14,21 +14,37 @@
     <input type="submit" class="btn btn-primary" />
   </div>
   <div if={ status } class="alert alert-success">
-    { status.user } checked in at { status.time_ins }
-  </div>
-  <div if={ status.time_out } class="alert alert-success">
-    { status.user } checked out at { status.time_outs }<br/>
-    Time Difference: { status.diffs }
+    { status.user } checked in at { status.sin }
+    <div if={ status.time_out }>
+      Checked out at { status.sout }<br/>
+    </div>
   </div>
 
   var self = this;
   this.on("mount", function() {
     this.last_press = new Date();
+    this.status = this.opts.status;
     document.body.classList.add("kiosk");
     document.addEventListener("keypress",this.press);
+    this.update();
+    uR.ajax({
+      url: "/redtape/documents.json",
+      success: function(data) {
+        TXRX.documents = {};
+        uR.forEach(data,function(d) { TXRX.documents[d.id] = d });
+      }
+    });
+    var e = uR.getQueryParameter("e");
+    if (e) { TXRX.mainMount("checkin-register",{ email: 'arst@oairesnt.com' }) }
+  });
+  this.on("update", function() {
+    if (this.status) {
+      this.status.sin = moment(this.status.time_in).format("h:mm a");
+      this.status.sout = moment(this.status.time_out).format("h:mm a");
+    }
   });
   emailCheckin(e) {
-    TXRX.mainMount("email-checkin");
+    TXRX.mainMount("checkin-email");
   }
   press(e) {
     var num = e.keyCode - 48;
@@ -61,13 +77,52 @@
   }
   this.checkRFID = uR.debounce(this.checkRFID,100);
 
-</checkin>
+</checkin-home>
 
-<email-checkin>
-  <h1>Welcome to { TXRX.SITE_NAME }</h1>
-  <p class="lead">Enter your email below to checkin.</p>
-  <ur-form schema={ schema }></ur-form>
+<checkin-email>
+  <p class="lead">
+    Enter your email below to checkin.
+  </p>
+  <ur-form schema={ schema } action="/checkin_ajax/"></ur-form>
   schema = [
     { name: 'email', type: 'email' },
   ]
-</email-checkin>
+  ajax_success(data,response) {
+    if (data.no_user) { TXRX.mainMount("checkin-register",{ email: data.no_user }) }
+    else if (data.no_waiver) { TXRX.mainMount("checkin-waiver",{ email: data.no_waiver }) }
+    else { TXRX.mainMount('checkin',{status: data}) }
+  }
+</checkin-email>
+
+<checkin-register>
+  <p class="lead">
+    We could not find an account with that email.<br/>
+    Please create one now or press "Go Back".
+  </p>
+  <ur-form action="/checkin/signup/"></ur-form>
+
+  this.schema = [
+    { name: "email", type: "email", value: this.opts.email },
+    { name: "first_name" },
+    { name: "last_name" },
+    { name: "password", type: "password", minlength: 8 }
+  ]
+</checkin-register>
+
+<checkin-waiver>
+  <p class="lead">
+    We could not find a safty waiver on file for you.<br/>
+    Please read and sign the following document.
+    If you want to try a different email or RFID card,
+    <a onclick={ goBack }>go back</a> to the previous screen.
+  </p>
+  <ur-form action="/checkin/waiver/">
+  <h2>{ TXRX.documents[2].name }</h2>
+  <ur-markdown>{ TXRX.documents[2].content }</ur-markdown>
+  </ur-form>
+
+  this.schema = TXRX.documents[2].schema;
+  this.schema.push({ name: "name_typed", })
+  this.schema.push({ name: "date_typed", })
+
+</checkin-waiver>

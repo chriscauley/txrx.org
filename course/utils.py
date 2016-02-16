@@ -17,16 +17,18 @@ def validate_email(s):
 def get_or_create_student(params,send_mail=True):
   if isinstance(params,(str,unicode)):
     params = {'payer_email': params}
-  paypal_email = params.get('payer_email')
+  paypal_email = params.get('payer_email',None)
+  email = params.get("email",paypal_email)
   u_id = params.get('custom',None)
   subscr_id = params.get('subscr_id',None) or params.get('recurring_payment_id',None)
-  user, new = _get_or_create_student(paypal_email,u_id=u_id,subscr_id=subscr_id,send_mail=send_mail)
+  user, new = _get_or_create_student(email,u_id=u_id,subscr_id=subscr_id,send_mail=send_mail)
   if new:
+    template_name = params.get("template_name","welcome_classes")
     kwargs = dict(
-      subject_template_name="email/welcome_classes.subject",
-      email_template_name="email/welcome_classes.html"
+      subject_template_name="email/%s.subject"%template_name,
+      email_template_name="email/%s.html"%template_name
     )
-    user.set_password(settings.NEW_STUDENT_PASSWORD)
+    user.set_password(params.get("password",settings.NEW_STUDENT_PASSWORD))
     user.save()
     if send_mail:
       reset_password(user,**kwargs)

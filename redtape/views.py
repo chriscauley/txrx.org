@@ -1,11 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from .models import Document
 from .forms import SignatureForm
+
+import json
 
 def document_detail(request,document_pk,slug=None): #ze slug does notzing!
   document = get_object_or_404(Document,pk=document_pk)
@@ -24,3 +26,7 @@ def document_detail(request,document_pk,slug=None): #ze slug does notzing!
     'document': document,
   }
   return TemplateResponse(request,"redtape/document.html",values)
+
+def documents_json(request):
+  documents = Document.objects.all()
+  return HttpResponse(json.dumps([d.as_json for d in documents]))
