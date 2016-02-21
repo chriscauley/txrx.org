@@ -214,7 +214,7 @@ class Session(UserModel,PhotosMixin,models.Model):
         self.last_date = _a[-1].end
         self.save()
   get_ics_url = lambda self: reverse_ics(self)
-  course = models.ForeignKey(Course,null=True,blank=True)
+  course = models.ForeignKey(Course)
   cancelled = models.BooleanField(default=False)
   active = models.BooleanField(default=True)
   _ht = "Private classes cannot be signed up for and do not appear on the session page unless " \
@@ -316,7 +316,7 @@ class Session(UserModel,PhotosMixin,models.Model):
   def save(self,*args,**kwargs):
     #this may be depracated, basically the site fails hard if instructors don't have membership profiles
     from membership.models import UserMembership
-    if not self.pk:
+    if not self.pk and self.course:
       c = self.course
       c.active = True
       c.save()
