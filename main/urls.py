@@ -44,6 +44,7 @@ urlpatterns = patterns(
   url(r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
   url(r'^tx/rx/return/$','course.views.paypal_return',name='paypal_redirect'),
   url(r'^contact/$','contact.views.contact',name='contact'),
+  url(r'^contact/(\w+).(\w+)_(\d+)-(.*).png$','contact.views.tracking_pixel',name="tracking_pixel"),
   url(r'^dxfviewer/$','geo.views.dxfviewer',name='dxfviewer'),
   url(r'^geo/events.json','geo.views.events_json'),
   url(r'^geo/locations.json$','geo.views.locations_json'),
