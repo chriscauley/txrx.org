@@ -35,10 +35,10 @@
     <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" />
     <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}cv/float.css" />
     {% block head %}{% endblock %}
-    <meta property="og:title" content="{% block fb_title %}TXRX Labs: Houston's Hackerspace{% endblock %}" />
+    <meta property="og:title" content="{% block fb_title %}{{ SITE_NAME }}: {{ SITE_TAGLINE }}{% endblock %}" />
     <meta property="og:site_name" content="{{ SITE_NAME }}" />
     <meta property="og:url" content="{{ request.build_absolute_uri }}" />
-    <meta property="og:description" content="{% block fb_description %}TXRX Labs is Houston's nonprofit Hackerspace. Since 2008, TX/RX has aimed to provide a communal space for the public to learn and create. Located in the East End and serving the greater Houston area, TX/RX offers members use of 30,000 square feet of work space including a wood shop, metal shop, bike shop, rapid fabrication lab, electronics lab, art lab, computer lab, and coworking space. A diverse series of classes are taught with the goal of making seemingly complex skills attainable to anyone. By creating an open environment to share knowledge, collaborate, and build, TX/RX has become the home for 250 thinkers, tinkerers, hackers, artists, crafters, coders, and makers.{% endblock %}" />
+    <meta property="og:description" content="{% block fb_description %}{{ SITE_NAME }} is Houston's nonprofit Hackerspace. Since 2008, TXRX has aimed to provide a communal space for the public to learn and create. Located in the East End and serving the greater Houston area, TXRX offers members use of 30,000 square feet of work space including a wood shop, metal shop, bike shop, rapid fabrication lab, electronics lab, art lab, computer lab, and coworking space. A diverse series of classes are taught with the goal of making seemingly complex skills attainable to anyone. By creating an open environment to share knowledge, collaborate, and build, TXRX has become the home for 250 thinkers, tinkerers, hackers, artists, crafters, coders, and makers.{% endblock %}" />
     {#! <meta property="og:image" content="https:///txrxlabs.org/" /> #}
     <meta property="fb:app_id" content="" />
     <!--[if lt IE 9]>
@@ -87,6 +87,8 @@
       {% endcomment %}
       {% endblock %}
     </div>
+    <script src="https://cdn.jsdelivr.net/riot/2.3/riot+compiler.min.js"></script>
+    <script src="/user.json?v={% now "ymd_his" %}"></script>
     {% compress js %}
     <script src="{{ STATIC_URL }}less/bootstrap/js/affix.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/button.js"></script>
@@ -100,14 +102,14 @@
     <script src="{{ STATIC_URL }}less/bootstrap/js/tooltip.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/popover.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/tab.js"></script>
-    {% endcompress %}    
-    <script src="https://cdn.jsdelivr.net/g/riot@2.0.14(riot.min.js+compiler.min.js)"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/moment.js"></script> {# date formatting #}
+    <script src="{{ STATIC_URL }}bower/ur/unrest.js"></script>
+    {% endcompress %}
     {% block extrajs %}{% endblock %}
-    <script src="{{ STATIC_URL }}blog.js"></script>
+    <script src="{{ STATIC_URL }}js/blog.js"></script>
     <script src="{{ STATIC_URL }}js/favico.js"></script>
     <script>
-      var f = new Favico({animation : 'popFade'});
-      f.badge({{ pending_evaluations.count }});
+      new Favico({animation : 'popFade'}).badge({{ pending_evaluations.count }});
     </script>
     <script src="{{ STATIC_URL }}cv/float.js"></script>
     <script>
@@ -124,7 +126,7 @@
       })();
 
     </script>
-    {% block extra_body %}
-    {% endblock %}
+    {% block extra_body %}{% endblock %}
+    {% include "_sql_queries.html" %}
   </body>
 </html>

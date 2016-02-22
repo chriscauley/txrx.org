@@ -24,6 +24,8 @@ INSTALLED_APPS = (
   'tagging',
   'crop_override',
   'social.apps.django_app.default',
+  'rest_framework',
+  'jsignature',
 
   #store
   'shop',
@@ -50,9 +52,11 @@ INSTALLED_APPS = (
   'membership',
   'main',
   'event',
-  'feed', #TODO!
   'thing',
   'notify',
+  'api',
+  'redtape',
+  'schedule_poll',
 )
 
 #mptt_comments
@@ -64,7 +68,6 @@ LOGOUT_REDIRECT = 'home'
 #compress
 COMPRESS_ENABLED = True
 
-#codrspace
 SITE_TAGLINE = "Houston's Hackerspace"
 VERSION = "0.1 Alpha"
 ANALYTICS_CODE = ''
@@ -85,6 +88,7 @@ RECAPTCHA_PRIVATE_KEY = '6Lc53egSAAAAACCvXuucwYu_M3mn-ZQsOlc4Ly_0'
 SUIT_CONFIG = {
   # header
   'ADMIN_NAME': 'TXRX Labs',
+  'SEARCH_URL': '/admin/user/user/',
   # 'HEADER_DATE_FORMAT': 'l, j. F Y',
   # 'HEADER_TIME_FORMAT': 'H:i',
 
@@ -93,7 +97,6 @@ SUIT_CONFIG = {
   # 'CONFIRM_UNSAVED_CHANGES': True, # Default True
 
   # menu
-  # 'SEARCH_URL': '/admin/auth/user/',
   # 'MENU_ICONS': {
   #  'sites': 'icon-leaf',
   #  'auth': 'icon-lock',
@@ -123,6 +126,7 @@ SUIT_CONFIG = {
      'models': (
        'event.event',
        'event.eventoccurrence',
+       'event.rsvp',
        'geo.location',
        'geo.room',
      )
@@ -146,6 +150,8 @@ SUIT_CONFIG = {
        'membership.levels',
        'membership.group',
        'membership.officer',
+       'membership.subscription',
+       'membership.flag',
        'user.user',
      )
     },
@@ -154,6 +160,7 @@ SUIT_CONFIG = {
     'registration',
     #'sites',
     #'tagging',
+    'store',
     'thing',
     'tool',
     #{'label': 'Settings', 'icon':'icon-cog', 'models': ('auth.user', 'auth.group')},

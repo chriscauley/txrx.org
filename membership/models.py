@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.template.loader import TemplateDoesNotExist
 from sorl.thumbnail import ImageField
 
 from course.models import Session, Term, Course
@@ -14,7 +15,7 @@ from shop.models import Product
 
 from wmd.models import MarkDownField
 
-import datetime, random, string, calendar
+import datetime, random, string, calendar, decimal
 
 def rand32():
   seed = string.letters+string.digits
@@ -24,7 +25,7 @@ class Group(models.Model):
   name = models.CharField(max_length=64)
   order = models.IntegerField(default=0)
   __unicode__ = lambda self: self.name
-  active_memberships = lambda self: self.membership_set.filter(product__isnull=False).distinct()
+  active_levels = lambda self: self.level_set.filter(product__isnull=False).distinct()
   class Meta:
     ordering = ("order",)
 
@@ -43,23 +44,51 @@ class Area(models.Model):
 class Container(models.Model):
   number = models.IntegerField()
   area = models.ForeignKey(Area)
-  __unicode__ = lambda self: self.name
+  user = models.ForeignKey(settings.AUTH_USER_MODEL)
+  __unicode__ = lambda self: "%s #%s"%(self.area,self.number)
   class Meta:
     ordering = ('number',)
 
-class Membership(models.Model):
+class Level(models.Model):
   name = models.CharField(max_length=64)
   order = models.IntegerField("Level")
   products = cached_property(lambda self: self.product_set.filter(active=True),name="products")
-  monthly_product = lambda self: self.products.filter(months=1)[0]
-  yearly_product = lambda self: self.products.filter(months=12)[0]
+  monthly_product = property(lambda self: self.products.filter(months=1)[0])
+  yearly_product = property(lambda self: self.products.filter(months=12)[0])
   discount_percentage = models.IntegerField(default=0)
   group = models.ForeignKey(Group,null=True,blank=True)
   features = cached_property(lambda self:[a.feature for a in self.membershipfeature_set.all()],
                              name="features")
+
+  # Corporate membership features
+  machine_credits = models.IntegerField(default=0)
+  simultaneous_users = models.IntegerField(default=0)
+  cost_per_credit = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+  custom_training_cost = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+  custom_training_max = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+
+  def get_features(self):
+    if not self.cost_per_credit:
+      return self.features
+    credits = '%s Machine credits.'%self.machine_credits
+    if self.machine_credits:
+      credits = "%s Monthly machine credits."%self.machine_credits
+    discount = "%s%% Discount on all training classes"%self.discount_percentage
+    if self.custom_training_cost:
+      d2 = " and custom training sessions @ $%s/hr (max %s hrs per month)"
+      d2 = d2%(int(self.custom_training_cost),int(self.custom_training_max))
+      discount = discount + d2
+    features = [
+      credits,
+      "Max %s simultaneous users."%self.simultaneous_users,
+      discount+".",
+      "Machine credits can be purchased @ $%s per credit."%self.cost_per_credit,
+    ]
+    return [{'text': f} for f in features]+self.features
+
   @cached_property
   def all_users(self):
-    return get_user_model().objects.filter(subscription__product__membership=self)
+    return get_user_model().objects.filter(subscription__product__level=self)
   def count_all_users(self):
     return self.all_users.count()
   def count_active_users(self):
@@ -73,14 +102,16 @@ class Membership(models.Model):
 
 MONTHS_CHOICES = (
   (1,"Monthly"),
+  (3,"Quarterly"),
+  (6,"Biannually"),
   (12,"Yearly"),
 )
 
 class Product(Product):
-  membership = models.ForeignKey(Membership)
+  level = models.ForeignKey(Level)
   months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
   order = models.IntegerField(default=0)
-  __unicode__ = lambda self: "%s months of %s"%(self.months,self.membership)
+  __unicode__ = lambda self: "%s months of %s"%(self.months,self.level)
   def save(self,*args,**kwargs):
     self.slug = "__membershipproduct__%s"%(self.pk or random.random())
     super(Product,self).save(*args,**kwargs)
@@ -89,82 +120,85 @@ class Product(Product):
 
 class Subscription(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
-  subscr_id = models.CharField(max_length=20,null=True,blank=True)
+  _ht = "Only used with PayPal subscriptions. Do not touch."
+  subscr_id = models.CharField(max_length=20,null=True,blank=True,help_text=_ht)
   created = models.DateTimeField(default=datetime.datetime.now)
   canceled = models.DateTimeField(null=True,blank=True)
   paid_until = models.DateTimeField(null=True,blank=True)
-  product = models.ForeignKey(Product,null=True,blank=True)
-  container = models.ForeignKey(Container,null=True,blank=True)
+  product = models.ForeignKey(Product)
   # self.amount should match self.product, but can be used as an override
   amount = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   owed = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   last_status = property(lambda self: (self.status_set.all().order_by('-datetime') or [None])[0])
+  __unicode__ = lambda self: "%s for %s"%(self.user,self.product)
   def force_canceled(self):
-    self.canceled = add_months(self.last_status.datetime,self.product.months)
+    self.canceled = datetime.datetime.now()
     self.save()
     self.recalculate()
+    self.flag_set.exclude(status__in=['final_warning','resolved','paid']).update(status='canceled')
   def bs_class(self):
+    if Flag.objects.filter_pastdue(subscription=self):
+      return "warning"
+    if self.canceled:
+      return "info"
+    if not self.status_set.count():
+      return "success"
     if self.owed > 0:
       return "danger"
-    if self.canceled:
-      return "warning"
     return "success"
   def verbose_status(self):
     if self.owed > 0:
       return "Overdue by %s"%self.owed
     if self.canceled:
-      return "Canceled"
-    return self.paid_until.strftime("Paid until %b %-d, %Y")
-  @property
-  def bg(self):
-    if self.owed > 0:
-      return "#ff8888"
-    if self.canceled:
-      return "#88ffff"
-    if self.owed < 0:
-      return "#88ff88"
-    return "transparent"
+      return self.canceled.strftime("Canceled %b %-d, %Y")
+    if self.paid_until:
+      return self.paid_until.strftime("Paid until %b %-d, %Y")
   def recalculate(self,modify_membership=True):
     now = self.canceled or datetime.datetime.now()
     for months in range(1200): # 100 years
       if add_months(self.created,months) >= now:
         break
-    amount_due = months * self.amount / self.product.months
+    amount_due = decimal.Decimal(months * self.amount / self.product.months)
     amount_paid = sum([s.amount for s in self.status_set.all()])
     self.owed = amount_due-amount_paid
     if self.canceled:
       self.owed = 0
-    self.paid_until = add_months(self.created,int(self.product.months*amount_paid/self.amount))
+    self.paid_until = add_months(self.created,int(self.product.months*amount_paid/decimal.Decimal(self.amount)))
     self.save()
     last = self.last_status
     if last:
-      um = self.user.usermembership
+      user = self.user
       if modify_membership:
-        um.membership = self.product.membership
-      um.end = max(last.datetime,um.end or last.datetime)
-      um.start = min(um.start or self.created,self.created)
-      um.container = None if self.canceled else self.container
-      um.save()
-    
+        user.level = self.product.level
+      user.save()
+    if self.owed <= 0:
+      Flag.objects.filter(
+        subscription=self,
+        status__in=Flag.PAYMENT_ACTIONS
+      ).update(status="paid")
+
   class Meta:
-    ordering = ('created',)
+    ordering = ('-created',)
 
 PAYMENT_METHOD_CHOICES = (
   ('paypal','PayPalIPN'),
-  ('cash', 'Cash'),
-  ('adjustment', 'Adjustment'),
+  ('cash', 'Cash/Check'),
+  ('adjustment', 'Adjustment (gift from lab)'),
   ('refund', 'Refund'),
   ('legacy','Legacy (PayPal)'),
 )
 
 class Status(models.Model):
   amount = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+  payment_method = models.CharField(max_length=16,choices=PAYMENT_METHOD_CHOICES,default="cash")
+  notes = models.CharField(max_length=128,null=True,blank=True)
+  datetime = models.DateTimeField(default=datetime.datetime.now)
   subscription = models.ForeignKey(Subscription)
   paypalipn = models.ForeignKey("ipn.PayPalIPN",null=True,blank=True)
-  datetime = models.DateTimeField(default=datetime.datetime.now)
-  notes = models.CharField(max_length=128,null=True,blank=True)
-  payment_method = models.CharField(max_length=16,choices=PAYMENT_METHOD_CHOICES,default="cash")
+  transaction_id = models.CharField(max_length=32,null=True,blank=True)
   def save(self,*args,**kwargs):
+    if self.paypalipn:
+      self.transaction_id = self.paypalipn.txn_id
     super(Status,self).save(*args,**kwargs)
     self.subscription.recalculate()
 
@@ -182,7 +216,7 @@ class Feature(models.Model):
 
 class MembershipFeature(models.Model):
   feature = models.ForeignKey(Feature)
-  membership = models.ForeignKey(Membership)
+  level = models.ForeignKey(Level)
   order = models.IntegerField(default=0)
   class Meta:
     ordering = ("order",)
@@ -201,13 +235,8 @@ def add_months(d,months):
 
 class UserMembership(models.Model):
   user = models.OneToOneField(settings.AUTH_USER_MODEL)
-  membership = models.ForeignKey(Membership,default=1)
-  start = models.DateTimeField(null=True,blank=True)
-  end = models.DateTimeField(null=True,blank=True)
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
-  waiver = models.FileField("Waivers",upload_to="waivers/",null=True,blank=True)
-  container = models.ForeignKey(Container,null=True,blank=True)
 
   photo = models.ForeignKey(Photo,null=True,blank=True)
   bio = MarkDownField(null=True,blank=True)
@@ -326,15 +355,86 @@ class Survey(models.Model):
   questions = models.TextField(blank=True)
 
 REASON_CHOICES = [
-  ('paypal_skipped', 'PayPal Skipped'),
+  ("recurring_payment_skipped", "PayPal Skipped"),
+  ("recurring_payment_failed", "PayPal Failed Recurring"),
+  ("recurring_payment_suspended", "PayPal Suspended"),
+  ('recurring_payment_suspended_due_to_max_failed_payment',"PayPal Max Failed Payment"),
+  ("subscr_failed", "PayPal Failed Subscription"),
+  ("subscr_eot", "PayPal End of Term"),
+  ("manually_flagged","Manually Flagged"),
+  ("safety","Expiring Safety Criterion"),
+]
+EMAIL_REASONS = {
+  "payment_overdue": [
+    "recurring_payment_skipped",
+    "recurring_payment_failed",
+    "recurring_payment_suspended",
+    "subscr_failed",
+    "subscr_eot"
+  ],
+}
+
+FLAG_STATUS_CHOICES = [
+  ('new','New'),
+  ('first_warning', 'Warned Once'),
+  ('second_warning', 'Warned Twice'),
+  ('final_warning', 'Canceled (Automatically)'), #! TODO Let's rename this to 'expired'
+  ('canceled', 'Canceled (Manually)'),
+  ('resolved', 'Resolved'),
+  ('paid','Paid'),
+
+  ('safety_new','New'),
+  ('safety_emailed','Emailed'),
+  ('safety_expired','Expired (criterion revoked)'),
+  ('safety_completed','Completed (course taken)'),
 ]
 
-class UserFlag(models.Model):
-  user = models.OneToOneField(settings.AUTH_USER_MODEL)
+class FlagManager(models.Manager):
+  def filter_pastdue(self,*args,**kwargs):
+    # return flags that have actions needed
+    kwargs['status__in'] = Flag.PAYMENT_ACTIONS
+    return self.filter(*args,**kwargs)
+
+class Flag(models.Model):
+  subscription = models.ForeignKey(Subscription)
+  reason = models.CharField(max_length=64,choices=REASON_CHOICES)
+  status = models.CharField(max_length=32,default='new',choices=FLAG_STATUS_CHOICES)
   datetime = models.DateTimeField(auto_now_add=True)
-  content_type = models.ForeignKey("contenttypes.ContentType")
-  object_id = models.IntegerField()
-  content_object = GenericForeignKey('content_type', 'object_id')
-  reason = models.CharField(max_length=32,choices=REASON_CHOICES)
+  emailed = models.DateTimeField(null=True,blank=True)
+  objects = FlagManager()
+  user_id = lambda self: self.subscription.user_id
+  __unicode__ = lambda self: "%s flagged for %s"%(self.subscription.user,self.reason)
+  PAYMENT_ACTIONS = {
+    # current_status: [future_status, verbose_description, days_since_flag]
+    'new': ['first_warning','Send First Warning',1],
+    'first_warning': ['second_warning','Send Second Warning',7],
+    'second_warning': ['final_warning','Cancel and send cancellation notice', 4],
+  }
+  last_datetime = property(lambda self: self.emailed or self.datetime)
+  @property
+  def date_of_next_action(self):
+    if not self.status in self.PAYMENT_ACTIONS:
+      return
+    return self.last_datetime + datetime.timedelta(self.PAYMENT_ACTIONS[self.status][2])
+  @property
+  def days_until_next_action(self):
+    # add one because timedelta.days rounds down
+    return (self.date_of_next_action - datetime.datetime.now()).days + 1
+  def apply_status(self,new_status,mail=True):
+    if self.status == new_status:
+      return
+    from membership.utils import send_membership_email
+    context = {
+      'flag': self,
+      'last_warning_date': datetime.timedelta(21)+self.datetime,
+    }
+    try:
+      if mail:
+        send_membership_email('email/flags/%s'%new_status,self.subscription.user.email,context=context)
+    except TemplateDoesNotExist:
+      print "template not found %s"%new_status
+    self.status = new_status
+    self.emailed = datetime.datetime.now()
+    self.save()
 
 from listeners import *

@@ -1,6 +1,6 @@
 {% load i18n %}{% autoescape off %}
 
-Thank you for registering for classes at TXRX Labs. {% if new_user %}An account was created for you at txrxlabs.org using this email address. You should receive an email along side this one with instructions on how to set your password.{% endif %}
+Thank you for registering for classes at {{ SITE_NAME }}. {% if new_user %}An account was created for you at txrxlabs.org using this email address. You should receive an email along side this one with instructions on how to set your password.{% endif %}
 
 You have been added to the following class{{ enrollments|pluralize:"es" }}. If you have any further questions please email classes@txrxlabs.org
 

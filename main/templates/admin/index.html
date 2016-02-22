@@ -1,184 +1,42 @@
-{% extends "admin/base_site.html" %}
-{% load i18n admin_static admin_dashboard %}
-
-{% block extrastyle %}
-  {{ block.super }}
-{% endblock %}
-
-{% block coltype %}colMS{% endblock %}
-
-{% block bodyclass %}dashboard{% endblock %}
-
-{% block breadcrumbs %}{% endblock %}
+{% extends "suit:admin/index.html" %}
+{% load i18n admin_dashboard compress %}
 
 {% block content %}
-  <div id="content-main">
-    {% if request.path == "/admin/" %}
-    {% get_room_conflicts %}
-    {% if room_conflicts %}
-    <h1>Potential room conflicts</h1>
-    {% for room,conflicts in room_conflicts %}
-    <div class="module" style="width: 375px;">
-      <table class="table-overview applist" summary="{% blocktrans %}Conflicting classes and events.{% endblocktrans %}"
-             style="width: 100%">
-        <caption>Conflict at {{ room.name }}</caption>
-        <tr><td>
-            <dl>
-              {% for times,events in conflicts %}
-              <dt>{{ times.0.date }} ({{ times.0|date:"G:i" }} - {{ times.1|date:"G:i" }})</dt>
-              <dd>
-                <ul class="actionlist">
-                  {% for event in events %}
-                  <li> 
-                    <a href="{{ event.get_absolute_url }}">
-                      <i class="icon-share" title="View on Site"></i></a>
-                    <a href="{{ event.get_admin_url }}">
-                      <i class="icon-edit" title="Edit Event in Admin"></i></a>
-                    {% if event.session %}
-                    <a href="{{ event.session.course.get_admin_url }}">
-                      <i class="icon-pencil" title="Edit Course in Admin"></i></a>
-                    {% endif %}
-                    {{ event.short_name }}
-                  </li>
-                  {% endfor %}
-                </ul>
-              </dd>
-              {% if not forloop.last %}<br />{% endif %}
-              {% endfor %}
-            </dl>
-        </td></tr>
-      </table>
-    </div>
-    {% endfor %}
-    {% endif %}
-    {% get_courses_needed %}
-    {% if courses_needed %}
-    <h1>Courses Needed (x{{ courses_needed|length }})</h1>
-    {% for course in courses_needed %}
-    <div class="module" style="width: 375px;">
-      <table class="table-overview applist" summary="{% blocktrans %}Conflicting classes and events.{% endblocktrans %}"
-             style="width: 100%">
-        <tr><td>
-            <dl>
-              <dt><h2>{{ course }}</h2></dt>
-              <dd>
-                <div>
-                  {% if course.last_session %}
-                  {% if course.last_session.past %}
-                  Last taught
-                  {% else %}
-                  <b style="color:red">[{{ course.last_session.closed_string|upper }}]</b> with
-                  {% endif %}
-                  {{ course.last_session.user }} on {{ course.last_session.first_date|date:"m/d/Y" }}
-                  {% else %}
-                  <b>Never Taught</b>
-                  {% endif %}
-                </div>
-                <div><big>{{ course.notifycourse_set.count }}</big> People on waiting list</div>
-              </dd>
-              <dd>
-                <br />
-                {% if course.last_session %}
-                <a class="btn btn-success" href="{{ course.last_session.get_absolute_url }}">
-                  <i class="icon-share" title="View Session on Site"></i> View</a>
-                <a class="btn btn-success" href="{{ course.last_session.get_admin_url }}">
-                  <i class="icon-search" title="Edit Session in Admin"></i> Edit</a>
-                {% endif %}
-                <a class="btn btn-success" href="{% url "admin:course_session_add" %}">
-                  <i class="icon-plus" title="Add New Session"></i> New</a>
-              </dd>
-              <dd>
-                <br />
-                {% for n in "136" %}
-                <a href="{% url "course:delay_reschedule" course.pk n %}">
-                  <button class="btn btn-warning" title="Delay for {{ n }} Months">
-                    <i class="icon-plus"></i>{{ n }} Mo</button></a>
-                {% endfor %}
-                <a href="{% url "course:delay_reschedule" course.pk "close" %}">
-                  <button class="btn btn-warning" title="Delay for {{ n }} Months">
-                    Deactivate</button></a>
-              </dd>
-            </dl>
-        </td></tr>
-      </table>
-    </div>
-    {% endfor %}
-    {% endif %}
-    {% else %} {# not at "/admin/" #}
-    {% if app_list %}
-      {% for app in app_list %}
-        <div class="module">
-          <table class="table-overview applist" summary="{% blocktrans with name=app.name %}Models available in the {{ name }} application.{% endblocktrans %}">
-            <caption><a href="{{ app.app_url }}" class="section">{% trans app.name %}</a></caption>
-            {% for model in app.models %}
-              <tr>
-                <th scope="row">{{ model.name }}</th>
-                {% if model.admin_url %}
-                  <td>
-                    <a href="{{ model.admin_url }}" class="changelink icon">{% trans 'Change' %}</a>
-                  </td>
-                {% else %}
-                  <td>&nbsp;</td>
-                {% endif %}
-
-                {% if model.add_url %}
-                  <td><a href="{{ model.add_url }}" class="addlink icon"><i
-                          class="icon-plus-sign icon-alpha75"></i>{% trans 'Add' %}
-                  </a></td>
-                {% else %}
-                  <td>&nbsp;</td>
-                {% endif %}
-              </tr>
-            {% endfor %}
-          </table>
-        </div>
-      {% endfor %}
-    {% else %}
-      <p>{% trans "You don't have permission to edit anything." %}</p>
-    {% endif %}
-    {% endif %}
-  </div>
+{% if request.path == "/admin/" %}
+<div id="content-main">
+  {% if request.user|is_event_coordinator %}{% include "admin/txrx/_room_conflicts.html" %}{% endif %}
+  {% if request.user|is_course_manager %}{% include "admin/txrx/_courses_needed.html" %}{% endif %}
+</div>
+{% else %}
+{{ block.super }}
+{% endif %}
 {% endblock %}
 
 
 {% block sidebar %}
-  <div id="content-related">
-    <div class="module" id="recent-actions-module">
-      <h4 class="italic-title">{% trans 'My Actions' %}</h4>
+{% if request.path == "/admin/" %}
+<div id="content-related">
+  <flag-list></flag-list>
+</div>
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}
 
-      {% load log %}
-      {% get_admin_log 10 as admin_log for_user user %}
-      {% if not admin_log %}
-        <p>{% trans 'None available' %}</p>
-      {% else %}
-        <ul class="actionlist">
-          {% for entry in admin_log %}
-            <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}text-error{% endif %}">
-
-              <i class="{% if entry.is_addition %}icon-plus{% endif %}{% if entry.is_change %}icon-pencil{% endif %}{% if entry.is_deletion %}icon-trash{% endif %} icon-alpha5"></i>
-
-              {% spaceless %}
-                {% if entry.is_addition %}{% trans 'added'|capfirst %}{% endif %}
-                {% if entry.is_change %}{% trans 'changed'|capfirst %}{% endif %}
-                {% if entry.is_deletion %}{% trans 'deleted'|capfirst %}{% endif %}
-
-                {% if entry.content_type %}
-                  <span class="mini quiet">{% filter capfirst %}
-                    {% trans entry.content_type.name %}{% endfilter %}</span>
-                {% else %}
-                  <span class="mini quiet">{% trans 'Unknown content' %}</span>
-                {% endif %}
-              {% endspaceless %}&nbsp;
-
-              {% if entry.is_deletion or not entry.get_admin_url %}
-                <span class="color-grey">{{ entry.object_repr }}</span>
-              {% else %}
-                <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
-              {% endif %}
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    </div>
-  </div>
+{% block extrajs %}
+{{ block.super }}
+{% compress js %}
+<script src="{{ STATIC_URL }}bower/ur/unrest.js"></script>
+<script src="{{ STATIC_URL }}js/jwt.js"></script>
+<script src="{{ STATIC_URL }}js/admin_index.js"></script>
+{% endcompress %}
+<script src="https://cdn.jsdelivr.net/riot/2.3/riot+compiler.min.js"></script>
+<script src="{{ STATIC_URL }}tags/admin.tag" type="riot/tag"></script>
+<script src="{{ STATIC_URL }}tags/auth.tag" type="riot/tag"></script>
+<script src="{{ STATIC_URL }}tags/input-fields.tag" type="riot/tag"></script>
+<script src="{{ STATIC_URL }}bower/ur/modal.tag" type="riot/tag"></script>
+{% compress css %}
+<link type="text/less" rel="stylesheet" href="{{ STATIC_URL }}less/admin_index.less" />
+{% endcompress %}
+{% if settings.DEBUG %}<script>openPasswordChange();</script>{% endif %}
 {% endblock %}

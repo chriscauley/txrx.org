@@ -1,6 +1,7 @@
 $(function() {
   var active_subject;
-  // set enrollment status for ALL_CLASSES
+
+  // set enrollment status for ALL_CLASSES, this can be moved to course.tag 
   for (var si=0; si<USER_SESSIONS.length;si++) {
     session = USER_SESSIONS[si];
     for (var ci=0; ci<ALL_CLASSES.length;ci++) {
@@ -13,10 +14,13 @@ $(function() {
   }
 
   // assign ALL_CLASSES to subjects and generate search string
+  // this should be part of the mount or update section of course list
   for (var ci=0; ci<ALL_CLASSES.length; ci++) {
     var course = ALL_CLASSES[ci];
     course.search_string = [course.name,course.short_description,course.subject_names.join(' ')];
     course.search_string = course.search_string.join(' ').toLowerCase();
+
+    //Tally number of active classes in each subject.
     for (var csi=0; csi<course.subject_ids.length; csi++) {
       for (var si=0; si< CLASS_SUBJECTS.length; si++) {
         var subject = CLASS_SUBJECTS[si];
@@ -25,26 +29,33 @@ $(function() {
         else { subject.inactive_courses += 1; }
       }
     }
+    course.full_sessions = [];
+    course.open_sessions = [];
+    for (var si=0;si<course.active_sessions.length;si++) {
+      var session = course.active_sessions[si];
+      if (FULL_SESSIONS.indexOf(session.id) == -1) { course.open_sessions.push(session); }
+      else { course.full_sessions.push(session); }
+    }
   }
 
   // course lists and search
-  var current_search, active_subject, scheduled_courses, unscheduled_courses;
-
+  var current_search = '', scheduled_courses = [], unscheduled_courses = [];
   function filterSubjects(value) {
-    scheduled_courses = [];
-    unscheduled_courses = [];
-    for (var i=0;i<ALL_CLASSES.length;i++) {
-      var c = ALL_CLASSES[i];
-      if (!!value && c.subject_ids.indexOf(value) == -1) { continue; }
-      if (!!current_search && c.search_string.indexOf(current_search) == -1 ) { continue; }
-      if (c.next_time == 0) { unscheduled_courses.push(c); }
-      else { scheduled_courses.push(c); }
-    }
-    $("#scheduled-courses").replaceWith('<course-list id="scheduled-courses"></course-list>');
-    $("#unscheduled-courses").replaceWith('<course-list id="unscheduled-courses"></course-list>');
-    riot.mount("#scheduled-courses",{courses: scheduled_courses});
-    riot.mount("#unscheduled-courses",{courses: unscheduled_courses});
+    current_search = current_search.toLowerCase();
+    uR.forEach(ALL_CLASSES, function(c) {
+      c.visible = true;
+      if (!!value && c.subject_ids.indexOf(value) == -1) { c.visible = false; }
+      if (!!current_search && c.search_string.indexOf(current_search) == -1 ) { c.visible = false; }
+    });
+    riot.update('course-list');
   }
+
+  uR.forEach(ALL_CLASSES,function(c) {
+    if (c.next_time == 0) { unscheduled_courses.push(c); }
+    else { scheduled_courses.push(c); }
+  });
+  riot.mount("#scheduled-courses",{courses: scheduled_courses});
+  riot.mount("#unscheduled-courses",{courses: unscheduled_courses});
 
   function filterSearch(value) {
     current_search = value;

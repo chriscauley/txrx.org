@@ -12,8 +12,13 @@ urlpatterns = patterns(
 
   url(r'^$', 'classes.index'),
   url(r'^(instructor|myclasses)/$','classes.user_ajax',name='user_ajax'),
+  url(r'^course_(\d+).json$','ajax.course_json'),
+  url(r'^past_sessions.json$', 'ajax.past_sessions_json'),
+  url(r'^needed.json$','ajax.needed_json'),
 
-  url(r'^rsvp/(\d+)/','classes.rsvp',name='rsvp'),
+  url(r'^clone_session/(\d+)/$','classes.clone_session',name='clone_session'),
+  url(r'^toggle_enrollment/$', 'classes.toggle_enrollment'),
+  url(r'^u?n?rsvp/(\d+)/','classes.rsvp'),
   url(r'^term/(\d+)/', 'classes.index'),
   url(r'^ics/(all_classes).ics$','classes.ics_classes_all',name='ics_classes_all'),
   url(r'^ics/(\d+)/([^/]+)/(my-classes).ics$','classes.ics_classes_user',name='ics_classes_user'),

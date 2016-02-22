@@ -5,7 +5,7 @@
 {% block title %}{{ course }}{% endblock %}
 {% block header %}{% endblock %}
 
-{% block fb_title %}{{ course }} at TXRX Labs{% endblock %}
+{% block fb_title %}{{ course }} at {{ SITE_NAME }}{% endblock %}
 {% block fb_description %}{{ course.description|implosivo|escape }}{% endblock %}
 
 {% block main %}
@@ -70,7 +70,7 @@
       {% if notify_course %}
       <a href="{% url "clear_notification" "notify_course" request.user.id notify_course.id %}">
         <button class="btn btn-danger">
-          Don't send me emails when this class is scheduled
+          Do not send me emails when this class is scheduled
         </button>
       </a>
       {% else %}
@@ -101,31 +101,7 @@
     <div style="clear: both;"></div>
   </div>
   <div class="col-xs-12 col-sm-4 col-md-3 pull-right" id="side">
-    <div class="SessionList">
-      {% if course.active_sessions %}
-      <h1 class="fee page_title">
-        {% if course.fee %}
-        ${{ course.fee }}
-        {% else %}
-        Free
-        {% endif %}
-      </h1>
-      <h3>Upcoming Sessions:</h3>
-      {% endif %}
-      {% if "archive" in request.GET %}
-      {% for session in course.session_set.all|slice:"::-1" %}
-      {% include "course/_session_row.html" %}
-      {% endfor %}
-      {% else %}
-      {% for session in course.active_sessions %}
-      {% include "course/_session_row.html" %}
-      {% endfor %}
-      {% if request.user.is_superuser %}
-      <center><a href="?archive"><button class="btn-success btn">
-          View archived classes</button></a></center><br/>
-      {% endif %}
-      {% endif %}
-    </div>
+    <session-list></session-list>
     <center>{% include "_social.html" with thing=course %}</center>
     <br/>
     <center><button class="btn btn-danger return_policy" onclick="$('.session_return_policy').toggle();return false;">
@@ -153,4 +129,18 @@
 </div>
 {% endblock %}
 
-{% block extrajs %}{% include "_comment_media.html" %}{% endblock %}
+{% block extrajs %}
+{% include "_comment_media.html" %}
+<script type="riot/tag" src="/static/tags/course.tag?v=1.2"></script>
+<script>
+$(function() {
+  $.get(
+    '/classes/course_{{ course.id }}.json',
+    function(data) {
+      riot.mount('session-list',data);
+    },
+    "json"
+  )
+});
+</script>
+{% endblock %}

@@ -8,7 +8,7 @@ from paypal.standard.ipn.models import PayPalIPN
 from course.models import Enrollment, Session
 from course.utils import get_or_create_student
 from user.models import User
-from membership.models import Subscription, Status, Membership, Product, UserMembership
+from membership.models import Subscription, Status, Level, Product, UserMembership
 
 #Status.objects.all().delete()
 #Subscription.objects.all().delete()
@@ -94,13 +94,13 @@ strptime = lambda s: datetime.datetime.strptime(s,"%Y-%m-%dT%H:%M:%SZ")
 
 """
 Non-paying Member
-TX/RX Supporter
+TXRX Supporter
 Amigotron
 Tinkerer
 Hacker
 Table Hacker
 """
-membership_map = {
+level_map = {
   "Artist": 'Tinkerer',
   "Crafter": 'Hacker',
   "Table Artist": 'Table Hacker',
@@ -118,10 +118,10 @@ membership_map = {
   "Table Membership (1/4 Bay Legacy)": 'Table Hacker',
   #"Tinkerer": '',
   "Tinkerer (Monthly Legacy)": 'Tinkerer',
-  #"TX/RX Supporter": ''
+  #"TXRX Supporter": ''
 }
 
-membership_lookup = {
+level_lookup = {
   'Amigotron': [110,220],#['20.00', '10.00'], ['110.00', '220.00']],
   'TX/RX Supporter': [110],
   'Tinkerer': [225,250,440,275,550],
@@ -129,7 +129,7 @@ membership_lookup = {
   'Table Hacker': [1815,1595, 1200],
 }
 
-membership_skips = ['Auto Membership', 'Table']
+level_skips = ['Auto Membership', 'Table']
 
 def process_subscrpayment(d,user,txn_id=None,subscr_id=None,**kwargs):
   if subscr_id in ['I-CY935RUG8XY2','I-NSJ6LKWJ7TB6']:
@@ -151,28 +151,28 @@ def process_subscrpayment(d,user,txn_id=None,subscr_id=None,**kwargs):
       opt_names[name] = ordertime
     if not amt in amts[name]:
       amts[name].append(amt)
-    membership_name = membership_map.get(name,name)
+    level_name = level_map.get(name,name)
     try:
-      membership = Membership.objects.get(name=membership_name)
-    except Membership.DoesNotExist:
-      print '"%s" membership not found: $%s %s - %s'%(membership_name,amt,d['EMAIL'][0],ordertime)
+      level = Level.objects.get(name=level_name)
+    except Level.DoesNotExist:
+      print '"%s" membership not found: $%s %s - %s'%(level_name,amt,d['EMAIL'][0],ordertime)
       break
     _d = monthly
     amt = int(float(amt))
     #if amt == 270:
     #  print sorted(d.items())
     months = 1
-    if amt in membership_lookup[membership_name]:
+    if amt in level_lookup[level_name]:
       _d = yearly
       months = 12
-    if not membership_name in _d:
-      _d[membership_name] = []
-    if not amt in _d[membership_name]:
-      _d[membership_name].append(amt)
+    if not level_name in _d:
+      _d[level_name] = []
+    if not amt in _d[level_name]:
+      _d[level_name].append(amt)
     try:
-      product = Product.objects.filter(membership__name=membership_name,months=months)[0]
+      product = Product.objects.filter(level__name=level_name,months=months)[0]
     except IndexError:
-      print "Cannot find %s @ %s"%(membership_name,months)
+      print "Cannot find %s @ %s"%(level_name,months)
       return
     defaults = {'product': product, 'created': ordertime,'user': user, 'amount': amt}
     subscription, new = Subscription.objects.get_or_create(subscr_id=subscr_id,defaults=defaults)
@@ -225,6 +225,8 @@ if __name__ == "__main__":
       continue
     if PayPalIPN.objects.filter(txn_id=txn_id):
       continue
+    if True:
+      raise ValueError("get_or_create_student has changed and the following line needs to be updated to match that")
     user,new = get_or_create_student(email,subscr_id=subscr_id,send_mail=False)
     if new:
       print '\t'.join([str(s) for s in [txn_type[:6],subscr_id,email,user]])

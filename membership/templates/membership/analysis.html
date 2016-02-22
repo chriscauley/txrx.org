@@ -16,49 +16,47 @@
   <div class="col-sm-6">
     <table class="table" style="text-align: center">
       <tr>
-        <td style="background-color:#ff8888">PAST DUE</td>
-        <td style="background-color:#88ffff">CANCELED</td>
-        <td style="background-color:#88ff88">SURPLUS DUES</td>
+        <td class="alert alert-success">ALL GOOD</td>
+        <td class="alert alert-danger">PAST DUE</td>
+        <td class="alert alert-info">CANCELED</td>
+        <td class="alert alert-warning">HAS FLAG</td>
       </tr>
     </table>
   </div>
 
 <ul class="nav nav-tabs" role="tablist">
-  {% for membership,users in memberships %}
+  {% for level,users in level_users %}
   <li role="presentation"{% if forloop.first %} class="active"{% endif %}>
-    <a href="#{{ membership.name|slugify }}" aria-controls="home" role="tab" data-toggle="tab">
-      {{ membership }} ({{ membership.count_active_users }}/{{ membership.count_all_users }})
+    <a href="#{{ level.name|slugify }}" aria-controls="home" role="tab" data-toggle="tab">
+      {{ level }} ({{ level.count_active_users }}/{{ level.count_all_users }})
   </a></li>
   {% endfor %}
 </ul>
 
 <div class="tab-content">
-  {% for membership,users in memberships %}
-  <div role="tabpanel" class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ membership.name|slugify }}">
+  {% for level,users in level_users %}
+  <div role="tabpanel" class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ level.name|slugify }}">
     <table class="table table-striped">
       <tr>
         <th>Username</th>
-        <th>Start</th>
-        <th>End</th>
         <th>Enrollments</th>
         <th>Subscriptions</th>
       </tr>
       {% for user in users %}
       <tr>
         <td><a href="/admin/user/user/{{ user.pk }}/">{{ user }}</a></td>
-        <td>{{ user.usermembership.start }}</td>
-        <td>{{ user.usermembership.end }}</td>
         <td>{{ user.enrollment_set.count }}</td>
         <td>
           {% for subscription in user.usermembership.all_subscriptions %}
-          <div style="background: {{ subscription.bg }}">
+          <div class="alert-{{ subscription.bs_class }}">
             <a href="/admin/membership/subscription/{{ subscription.pk }}/" class="fa fa-edit"></a>
             <a href="https://mail.google.com/mail/u/0/#search/{{ subscription.subscr_id }}" class="fa fa-search"></a>
             {{ subscription.subscr_id }}
             ${{ subscription.owed|floatformat:0 }}/{{ subscription.amount|floatformat:0 }}
             [{{ subscription.created|date:'m/Y' }} {{ subscription.last_status.datetime|date:'m/Y' }}]
             {% if not subscription.canceled %}
-            <a href="/force_cancel/{{ subscription.pk }}/">cancel</a>
+            <a href="/force_cancel/{{ subscription.pk }}/" class="fa fa-trash"></a>
+            <a href="/flag_subscription/{{ subscription.pk }}/" class="fa fa-flag"></a>
             {% endif %}
           </div>
           {% endfor %}

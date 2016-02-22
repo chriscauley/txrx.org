@@ -7,22 +7,27 @@ from django.template.loader import render_to_string
 
 from notify.models import NotifyCourse
 from .utils import get_or_create_student
+from lablackey.utils import latin1_to_ascii
 
 import traceback
 
+#! TODO this needs to be moved to store.listeners
 def handle_successful_store_payment(sender, user):
   from shop.models import Product, Order, OrderPayment, Cart
-  params = QueryDict(sender.query)
+  try:
+    params = QueryDict(sender.query)
+  except UnicodeEncodeError:
+    params = QueryDict(latin1_to_ascii(sender.query))
   try:
     order = Order.objects.get(pk=params['invoice'])
   except Order.DoesNotExist:
     mail_admins("repeat transaction for %s"%sender.txn_id,"")
     return
   total = 0
-  try:
-    item_count = int(params['num_cart_items'])
-  except:
-    item_count = 1
+  if not "num_cart_items" in params:
+    mail_admins("No cart items found for %s"%sender.txn_id,"")
+    return
+  item_count = int(params['num_cart_items'])
   products = []
   for i in range(1,item_count+1):
     total += int(float(params['mc_gross_%d'%i]))
@@ -30,7 +35,7 @@ def handle_successful_store_payment(sender, user):
     try:
       product = Product.objects.get(pk=int(params['item_number%d'%i]))
     except Product.DoesNotExist:
-      main_admins("Product fail for %s"%sender.txn_id,"")
+      mail_admins("Product fail for %s"%sender.txn_id,"")
       continue
     products.append(product)
     product.decrease_stock(quantity)
@@ -52,27 +57,28 @@ _duid2='course.listners.handle_successful_payment'
 @receiver(payment_was_successful, dispatch_uid=_duid2)
 def handle_successful_payment(sender, **kwargs):
   from course.models import Enrollment, Session, reset_classes_json
-  #add them to the classes they are enrolled in
+
+  # these two errors occurred because of the donate button on the front page.
+  # they can be removed by checking for that
+  if not sender.txn_type == "cart":
+    # handled by membership.listeners
+    return
   params = QueryDict(sender.query)
-  _uid = params.get('custom',None)
-  user,new_user = get_or_create_student(sender.payer_email,u_id=_uid)
+  _uid = str(params.get('custom',None))
+  user,new_user = get_or_create_student(params)
   user.active = True
   user.save()
   if params.get('invoice',None):
     return handle_successful_store_payment(sender,user)
-  if sender.txn_type in ["subscr_payment",'recurring_payment']:
-    # handled by membership.listeners
+  if not "num_cart_items" in params:
+    mail_admins("No cart items found for %s"%sender.txn_id,"")
     return
-  try:
-    item_count = int(params['num_cart_items'])
-  except:
-    item_count = 1
+  item_count = int(params['num_cart_items'])
 
   enrollments = []
   error_sessions = []
-  admin_subject = "New course enrollment"
   for i in range(1, item_count+1):
-    course_cost = int(float(params['mc_gross_%d'%i]))
+    pp_amount = float(params['mc_gross_%d'%i])
     quantity = int(params['quantity%s'%i])
 
     try:
@@ -96,14 +102,19 @@ def handle_successful_payment(sender, **kwargs):
       enrollment.quantity += quantity
     enrollment.save()
     enrollments.append(enrollment)
-    if course_cost != session.course.fee * int(quantity):
+    price_multiplier = (100-user.level.discount_percentage) / 100.
+    # We're ignoring people who overpay since this happens when a member doesn't login (no discount)
+    if pp_amount < price_multiplier*session.course.fee * int(quantity):
       l = [
-        "PP cost: %s"%course_cost,
+        "PP cost: %s"%pp_amount,
+        "Expected Cost: %s"%(price_multiplier*session.course.fee * int(quantity)),
+        "discount: %s"%user.level.discount_percentage,
         "Session Fee: %s"%session.course.fee,
-        "Session Id:%s"%session.id,
-        "Quantity:%s"%enrollment.quantity,
-        "PP Email:%s"%sender.payer_email,
-        "U Email:%s"%user.email,
+        "Session Id: %s"%session.id,
+        "Quantity: %s"%enrollment.quantity,
+        "PP Email: %s"%sender.payer_email,
+        "U Email: %s"%user.email,
+        "u_id: %s"%_uid, #if this is none they won't get a discount
       ]
       error_sessions.append("\n".join(l))
     if enrollment.session.total_students > enrollment.session.course.max_students:
@@ -116,7 +127,8 @@ def handle_successful_payment(sender, **kwargs):
     'new_user': new_user,
   }
   body = render_to_string("email/course_enrollment.html",values)
-  send_mail("Course enrollment confirmation",body,settings.DEFAULT_FROM_EMAIL,[user.email])
+  subject = "Course enrollment confirmation"
+  send_mail(subject,body,settings.DEFAULT_FROM_EMAIL,[user.email])
   if error_sessions:
     mail_admins("Enrollment Error","\n\n".join(error_sessions))
   reset_classes_json("classes reset during course enrollment")

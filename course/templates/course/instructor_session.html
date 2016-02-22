@@ -1,10 +1,19 @@
 {% extends "base.html" %}
 
-{% block title %}Instructor: {{ session.course }}{% endblock %}
+{% block title %}Instructor: {{ session }}{% endblock %}
 
 {% block main %}
 <div class="col-sm-12">
-  <h1 class="page-title">{{ session.course.name }}</h1>
+  <h1 class="page-title">
+    {{ session.course.name }}
+    <a class="pull-right fa fa-pencil-square" href="/admin/user/user/{{ session.user_id }}/">
+      {{ session.user.username }}</a>
+  </h1>
+  {% if not session.active %}
+  <p class="alert alert-danger">
+    This session is not active (only you can see it). Contact the staff if you think this is an error.
+  </p>
+  {% endif %}
 </div>
 <div class="col-sm-12">
   <div class="well">
@@ -71,15 +80,20 @@
       When class is completedly over, check off the students who have completed the class and press submit.
       {% for enrollment in session.enrollment_set.all %}
       <p>
-        <input type="checkbox" name="completed"{% if enrollment.completed %}
-               checked="checked"{% endif %} value="{{ enrollment.id }}"/>
-        {{ enrollment.user }}
-        {% if enrollment.user.first_name or enrollment.user.last_name %}
-        ({{ enrollment.user.first_name }} {{ enrollment.user.last_name }})
-        {% endif %}
+        <label>
+          <input type="checkbox" name="completed"{% if enrollment.completed %}
+                 checked="checked"{% endif %} value="{{ enrollment.id }}"/>
+          {{ enrollment.user.email }}
+        </label>
       </p>
       {% endfor %}
-      <input type="submit" value="Update" />
+      <p>
+        Also take a moment to look over all the materials needed to teach again.
+        Make a note of anything that is missing and we'll order it now.
+        If you don't need anything write "no" so we know you checked.
+      </p>
+      {% include "_form.html" with form=needed_form %}
+      <input type="submit" value="Update" class="btn btn-primary" />
     </form>
   </div>
 </div>

@@ -10,7 +10,7 @@
     </button>
     <a class="navbar-brand" href="/">
       <img src="{{ STATIC_URL }}img/new_logo.png" height="49"
-           alt="TXRX Labs - {{ SITE_TAGLINE }}" title="TXRX Labs - {{ SITE_TAGLINE }}"/></a>
+           alt="{{ SITE_NAME }} - {{ SITE_TAGLINE }}" title="{{ SITE_NAME }} - {{ SITE_TAGLINE }}"/></a>
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
@@ -22,7 +22,8 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ n.name }} <b class="caret"></b></a>
         <ul class="dropdown-menu">
           {% for sublink in n.sublinks %}
-          <li><a href="{{ sublink.url }}">{{ sublink.name }}</a></li>
+          <li><a href="{{ sublink.url }}"{% if sublink.reddot %} data-reddot="{{ sublink.reddot }}"{% endif %}>
+              {{ sublink.name }}</a></li>
           {% endfor %}
         </ul>
       </li>

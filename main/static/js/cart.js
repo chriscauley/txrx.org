@@ -10,12 +10,8 @@ function showCart() {
   $("#cart-modal").modal({width: 400, modal: true, minHight: 300});
 }
 
-function addClass(session_id) {
-  $(".SessionList .error").hide();
-  if (!session_id) { session_id = $("#session_selector").val(); }
-  if (!session_id) { $(".SessionList .error").show(); return; }
-  var session = window.SESSIONS_ON_PAGE[session_id];
-  addItem(session.name,session.fee,session_id);
+function addClass(session) {
+  addItem(session.name,session.fee,session.id);
   toggleCourses(session.name);
   $("#cartModal").modal({show:true})
 }
@@ -43,7 +39,8 @@ function toggleCourses(name) {
     if ($(this).find(".itemName").text() == name) {
       $(this).addClass("recentAdd");
     }
-  })
+  });
+  riot.update('*');
 }
 
 function applyFilters(that) {
@@ -63,24 +60,6 @@ function applyFilters(that) {
   }
 }
 
-function rsvp(session_id,url) {
-  var row = $("#s"+session_id);
-  row.addClass("loading");
-  row.find(".message").hide();
-  $.get(
-    url,
-    function(data) {
-      row.removeClass("loading");
-      row.find(".RsvpLink").removeClass("attending");
-      if (data[0]>0) {
-	row.find(".RsvpLink").addClass("attending");
-      }
-      $(".class-enrollment").hide();
-    },
-    "json"
-  )
-}
-
 function startCheckout() {
   var data = [];
   var cart_items = simpleCart.items;
@@ -96,7 +75,11 @@ function startCheckout() {
 }
 
 function verifyCheckout(data) {
-  if (data.length == 0) { createCookie("checkout_initiated","yes!",10);simpleCart.checkout(); return; }
+  if (window.location.search.indexOf("overbook") != -1 || (data.length == 0)) {
+    createCookie("checkout_initiated","yes!",10);
+    simpleCart.checkout();
+    return;
+  }
   var msg = "Sorry, some of the classes you're trying to take have filled since you first loaded this page."
   msg += "\nThe following have been removed from your cart:"
   for (var i=0; i < data.length; i++) {
@@ -116,7 +99,9 @@ function verifyCheckout(data) {
 }
 
 $(document).ajaxError(function() {
-  alert("An unknown error has occurred. Please try again or email us at classes@txrxlabs.org")
+  if (!window.IGNORE_AJAX_ERRORS) {
+    alert("An unknown error has occurred. Please try again or email us at classes@txrxlabs.org")
+  }
 });
 $(function() {
   if (simpleCart && simpleCart.items && window.SESSIONS_ON_PAGE){

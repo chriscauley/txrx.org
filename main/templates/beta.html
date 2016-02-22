@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}{% endblock %}
+
+{% block extrajs %}
+<script type="riot/tag" src="{{ STATIC_URL }}tags/checkin.tag"></script>
+<script type="riot/tag" src="{{ STATIC_URL }}tags/tool.tag"></script>
+<script type="riot/tag" src="{{ STATIC_URL }}bower/ur/modal.tag"></script>
+<script type="riot/tag" src="{{ STATIC_URL }}tags/poll.tag"></script>
+<script src="{{ STATIC_URL }}tools.json?v={% now "ymd_h" %}"></script>
+<script src="{{ STATIC_URL }}js/router.js"></script>
+<script src="{{ STATIC_URL }}js/jwt.js"></script>
+{% endblock %}

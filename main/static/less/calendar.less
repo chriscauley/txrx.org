@@ -19,11 +19,12 @@
   }
   .mini-month { display: none; }
   .event {
-    .m { .calVariant(@state-danger-bg; @state-danger-border; @state-danger-text); }
-    .c { .calVariant(@state-info-bg; @state-info-border; @state-info-text); }
-    .w, .t { .calVariant(@state-success-bg; @state-success-border; @state-success-text); }
-    .n { .calVariant(white; @gray-light; inherit); }
-    .m, .c, .w, .t, .b, .n {
+    .private { .calVariant(@state-danger-bg; @state-danger-border; @state-danger-text); }
+    .rsvp { .calVariant(@state-warning-bg; @state-warning-border; @state-warning-text); }
+    .course { .calVariant(@state-info-bg; @state-info-border; @state-info-text); }
+    .public { .calVariant(@state-success-bg; @state-success-border; @state-success-text); }
+    .none { .calVariant(white; @gray-light; inherit); } //depracated?
+    .private, .course, .public, .none, .course, .rsvp {
       display: block;
       padding: 3px 5px;
       position: relative;

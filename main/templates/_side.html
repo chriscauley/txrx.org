@@ -1,7 +1,19 @@
+{% if not "artistsupportgrant" in request.path %}
 <section>
-  <h3 class="block_title">About TXRX Labs</h3>
+  <h3 class="block_title">Artist Support Grant</h3>
   <p>
-    Established in 2008, TXRX Labs is a non-profit hackerspace for the greater Houston area.
+    The {{ SITE_NAME }} Artist Support Grant provides 6 months of access to the unique facilities
+    and training for which TXRX Labs is already well known to Artists allowing them to
+    further develop their practice and technique.
+  </p>
+  <a class="btn btn-block btn-primary" href="/artistsupportgrant">Click here to learn more</a>
+</section>
+{% endif %}
+
+<section>
+  <h3 class="block_title">About {{ SITE_NAME }}</h3>
+  <p>
+    Established in 2008, {{ SITE_NAME }} is a non-profit hackerspace for the greater Houston area.
     Housed in the East End District, we offer courses in and access to our rapid prototyping lab,
     woodshop, machineshop, electronics lab, and a wide variety of other tools. Our goal is to
     educate the public about technology and show how seemingly complex techniques can be used
@@ -11,7 +23,7 @@
     <input type="hidden" name="cmd" value="_donations">
     <input type="hidden" name="business" value="txrxlabs@gmail.com">
     <input type="hidden" name="lc" value="US">
-    <input type="hidden" name="item_name" value="TXRX Labs">
+    <input type="hidden" name="item_name" value="{{ SITE_NAME }}">
     <input type="hidden" name="item_number" value="side-button">
     <input type="hidden" name="no_note" value="0">
     <input type="hidden" name="currency_code" value="USD">
@@ -25,7 +37,7 @@
 </section>
 
 <section class="events_box">
-  <h3 class="block_title">This Week at TXRX</h3>
+  <h3 class="block_title">This Week at {{ SITE_NAME }}</h3>
   <ul class="list-unstyled">
     {% for event in upcoming_events %}
     <li>

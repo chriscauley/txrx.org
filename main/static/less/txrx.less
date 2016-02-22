@@ -96,14 +96,16 @@ h3.block_title {
     padding: 15px 20px;
     text-align: left; 
     width: 350px;
+    h2 { margin-bottom: 10px; }
     .membership_features {
-      height: 180px;
+      min-height: 180px;
       list-style: none;
       margin: 0;
-      padding: 10px 0;
+      padding: 0;
     }
     .membership_features li {
       padding-bottom: 10px;
+      &:last-child { padding: 0; }
     }
   }
   .button_box { padding-top: 15px; }
@@ -456,4 +458,27 @@ ul.errorlist { color: @brand-danger; }
     + .room_form { display: block; }
   }
   [name=room_selector] { display:none; }
+}
+
+#contact_form.sending:after {  content: "Sending ..."; }
+
+.jsign-wrapper {
+  position: relative;
+  [value=Reset] {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}
+
+.redtape {
+  label { display: block; }
+  .form-group { float: left; width: 100%; }
+  [for=id__signature] { position: absolute; }
+  [type=text] { width: 250px; }
+}
+
+.grayscale-me {
+  -webkit-filter: grayscale(1);
+  filter: grayscale(1);
 }

@@ -1,3 +1,4 @@
+{#! DEPRACATED in favor of riot tag session-list #}
 {% load txrx_tags %}
 <div class="session well" id="s{{ session.id }}">
   {% if request.user.is_superuser or request.user == session.user %}
@@ -12,7 +13,7 @@
     <div>{{ classtime|format_classtime }}</div>
     {% endfor %}
   </div>
-  {% if session.full %}
+  {% if session.full and not "overbook" in request.GET %}
   <b class="full">This session is full</b>
   {% else %}
   <div>
@@ -46,5 +47,6 @@
   window.SESSIONS_ON_PAGE[{{ session.id }}] = {
   'name': "<b>{{ session.course }}</b> {{ session.first_date|date:"m/d/Y" }}",
   'fee': {{ session.course.fee }},
+  //'requirements': {{ session.course.requirments }},
   };
 </script>

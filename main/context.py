@@ -1,15 +1,18 @@
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
+from django.db import connection
 
 from tagging.models import Tag
 
 from event.models import EventOccurrence
 from course.models import ClassTime, Enrollment
+from course.views.ajax import get_needed_sessions
 from blog.models import PressItem
 
-import datetime,time
+import datetime, time
 
+_needed = lambda: get_needed_sessions().filter(needed_completed__isnull=True).count()
 def nav(request):
   blog_sublinks = [
     {'name': 'Blog Home', 'url': '/blog/'},
@@ -17,7 +20,7 @@ def nav(request):
     {'name': 'My Posts', 'url': '/blog/%s/'%request.user.username},
   ]
   about_links = [
-    {'name': 'About TX/RX', 'url': '/about-us/'},
+    {'name': 'About TXRX', 'url': '/about-us/'},
     {'name': 'Bylaws', 'url': '/bylaws/'},
     {'name': 'Meeting Minutes', 'url': '/minutes/'},     
     {'name': 'Google Groups (Public)', 'url': 'https://groups.google.com/forum/#!forum/txrxlabs'},
@@ -26,9 +29,16 @@ def nav(request):
   ]
   social_nav = [
     {'name': 'facebook','url': 'https://www.facebook.com/TxRxLabs' },
-    #{'name': 'instagram','url': '' },
     {'name': 'twitter','url': 'https://twitter.com/txrxlabs' },
+    {'name': 'instagram','url': 'https://instagram.com/txrxlabs/' },
   ]
+  toolmaster_sublinks = [
+    {'name': 'Tools','url': '/tools/'},
+    {'name': 'Permissions','url': '/beta/toolmaster'},
+    {'name': 'Materials Needed','url': '/beta/needed-sessions/','reddot': _needed }
+  ]
+  if request.user.username in ['chriscauley','gavi']:
+    toolmaster_sublinks.append({'name': 'Set RFID','url': '/beta/rfid'})
   _nav = [
     {"name": "About",
      "url": "/about-us/",
@@ -37,7 +47,10 @@ def nav(request):
     {"name": "Classes",
      "url": "/classes/",
      },
-    {'name': "Tools", "url": "/tools/"},
+    {'name': "Tools",
+     "url": "/tools/",
+     "sublinks": toolmaster_sublinks if (request.user.is_authenticated() and request.user.is_toolmaster) else [],
+    },
     {"name": "Blog",
      "url": "/blog/",
      "sublinks": blog_sublinks if request.user.is_staff else [],
@@ -65,12 +78,13 @@ def nav(request):
   if request.user.is_authenticated():
     my_classes_ics = "%s/classes/ics/%s/%s/my-classes.ics"
     my_classes_ics = my_classes_ics%(settings.SITE_DOMAIN,request.user.id,request.user.usermembership.api_key)
-    member_discount = (100.-request.user.usermembership.membership.discount_percentage)/100
+    member_discount = (100.-request.user.level.discount_percentage)/100
 
   login_redirect = request.path
   if 'auth' in request.path or 'accounts' in request.path:
     login_redirect = "/"
 
+  _e = EventOccurrence.objects.filter(start__gte=now,start__lte=now+datetime.timedelta(7),event__hidden=False)
   return dict(
     current = request.path.split('/')[1] or 'home',
     nav = _nav,
@@ -79,7 +93,7 @@ def nav(request):
     auth_form = AuthenticationForm,
     app_path = "/admin/login/",
     settings = settings,
-    upcoming_events = EventOccurrence.objects.filter(start__gte=now,start__lte=now+datetime.timedelta(7)),
+    upcoming_events = _e,
     #last_week = EventOccurrence.objects.filter(start__lte=now,photoset__isnull=False),
     tags = Tag.objects.all(),
     class_faqs = class_faqs,
@@ -91,6 +105,7 @@ def nav(request):
     pressitems = PressItem.objects.all(),
     login_redirect = login_redirect,
     SITE_DOMAIN = "https://txrxlabs.org",
+    sql_time_sum = lambda: sum([float(q['time'])*1000 for q in connection.queries]),
   )
 
 def motd(request):

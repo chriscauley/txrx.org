@@ -1,0 +1,67 @@
+badge {
+  .badge-box {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .permission { 
+    color: inherit;
+    cursor: pointer;
+    display: block;
+    font-weight: bold;
+    padding: 0 10px;
+    &.has_not {
+      opacity: 0;
+      outline: 1px dashed;
+      &:hover { opacity: 0.75; }
+    }
+  }
+  .group {
+    margin-bottom: 20px;
+    opacity: 0.2;
+    &.any, &:hover { opacity: 1; }
+    &:last-child { margin-bottom: 0; }
+  }
+}
+
+checkbox {
+  display: block;
+  .alert {
+    cursor: pointer;
+    display: block;
+    padding-left: 45px;
+    position: relative;
+    &.alert-warning { cursor: disabled; }
+    .fa-3x {
+      left: 5px;
+      position: absolute;
+      top: 0;
+    }
+  }
+}
+
+tool-checkout,search-users {
+  display: block;
+  max-width: 400px;
+  .btn {
+    margin-bottom: 15px;
+    &:focus { outline: 0; }
+  }
+  a { cursor: pointer }
+}
+
+[ur-loading] {
+  position: relative;
+  &:before {
+    background: rgba(192,192,192,0.5);
+    bottom: 0;
+    box-shadow: inset 0 0 50px #888;
+    content: "";
+    display: block;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+  }
+}

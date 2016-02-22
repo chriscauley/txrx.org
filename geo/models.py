@@ -48,8 +48,12 @@ class Location(GeoModel):
     if self.dxf:
       self.generate_dxf_entities()
   @property
-  def dxf_as_json(self):
-    return json.dumps([dxf.as_json for dxf in DXFEntity.objects.all()])
+  def as_json(self):
+    return {
+      'id': self.id,
+      'name': self.name,
+      'dxfs': [dxf.as_json for dxf in DXFEntity.objects.all()],
+    }
   def generate_dxf_entities(self):
     if not ezdxf:
       return
@@ -81,6 +85,13 @@ class RoomGroup(models.Model):
   color = models.CharField(max_length=32)
   fill = models.ForeignKey('media.Photo',null=True,blank=True)
   __unicode__ = lambda self: self.name
+  @property
+  def as_json(self):
+    return {
+      'name': self.name,
+      'color': self.color,
+      'fill': self.fill.file.url,
+    }
 
 class Room(models.Model):
   name = models.CharField(max_length=128,null=True,blank=True)
@@ -95,16 +106,12 @@ class Room(models.Model):
   def as_json(self):
     return {
       'name': self.name,
-      'color': self.roomgroup.color if self.roomgroup else "white",
-      'short_name': self.short_name,
+      'roomgroup_id': self.roomgroup_id,
+      'short_name': self.get_short_name(),
       'in_calendar': self.in_calendar,
       'map_key': self.map_key,
-      'fill': self.roomgroup.fill.file.url if (self.roomgroup and self.roomgroup.fill) else None,
     }
-  def __unicode__(self):
-    if self.name:
-      return "%s @ %s"%(self.name,self.location)
-    return "%s"%self.location
+  __unicode__ = lambda self: "%s"%(self.name or self.location)
   class Meta:
     ordering = ('name',)
     unique_together = ('name','location')
@@ -120,7 +127,7 @@ class DXFEntity(models.Model):
       'id': self.pk,
       'points': json.loads(self.points),
       'dxftype': self.dxftype,
-      'room': self.room.as_json if self.room else None,
+      'room_id': self.room_id
     }
   class Meta:
     ordering = ('pk',)

@@ -5,8 +5,10 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from ..models import Session
-from ..forms import EmailInstructorForm
+from ..forms import EmailInstructorForm, NeededForm
 from lablackey.utils import FORBIDDEN
+
+import datetime
 
 @login_required
 def email(request,session_pk):
@@ -25,15 +27,21 @@ def session(request,session_pk):
   allowed = allowed or request.user == session.user
   if not allowed:
     return FORBIDDEN
-  values = {'session': session}
+  needed_form = NeededForm(request.POST or None,instance=session)
   if request.POST:
+    if needed_form.is_valid():
+      session = needed_form.save()
     if not (request.user.is_superuser or request.user == session.user):
       messages.error(request,"Only an instructor can do that")
       return HttpResponseRedirect(request.path)
     ids = [int(i) for i in request.POST.getlist('completed')]
     for enrollment in session.enrollment_set.all():
-      enrollment.completed = enrollment.id in ids
+      if enrollment.id in ids:
+        enrollment.completed = datetime.datetime.now()
+      elif enrollment.completed:
+        enrollment.completed = None
       enrollment.save()
     messages.success(request,"Course completion status saved for all students in this class.")
     return HttpResponseRedirect(request.path)
+  values = { 'session': session, 'needed_form': needed_form }
   return TemplateResponse(request,"course/instructor_session.html",values)

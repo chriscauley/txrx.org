@@ -5,20 +5,20 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.models import FlatPage
 from django.contrib import messages
-from django.http import HttpResponseRedirect, Http404, HttpResponse
+from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .models import Membership, Group, MeetingMinutes, Officer, UserMembership, Subscription
+from .models import Level, Group, MeetingMinutes, Officer, UserMembership, Subscription, Flag
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required, verify_unique_email
 
 from blog.models import Post
-from course.models import Course,CourseCompletion, Session
+from course.models import Course, Session
 from thing.models import Thing
 from lablackey.utils import FORBIDDEN
 
-import datetime
+import datetime, json
 
 def join_us(request):
   values = {
@@ -31,8 +31,7 @@ def join_us(request):
 def user_settings(request):
   user = request.user
   user_form = UserForm(request.POST or None, instance=user)
-  user_membership = user.usermembership
-  usermembership_form = UserMembershipForm(request.POST or None, request.FILES or None, instance=user_membership)
+  usermembership_form = UserMembershipForm(request.POST or None, request.FILES or None, instance=user.usermembership)
   if request.POST and all([user_form.is_valid(),usermembership_form.is_valid()]):
     user_form.save()
     usermembership_form.save()
@@ -88,8 +87,11 @@ def roland_email(request,y=2012,m=1,d=1):
   response['Content-Disposition'] = 'attachment; filename="txrx_emails_%s-%s-%s.csv"'%(y,m,d)
 
   writer = csv.writer(response)
-  for user in get_user_model().objects.filter(date_joined__gt=dt,is_active=True):
-    writer.writerow([user.email,user.username,str(user.date_joined)])
+  for user in get_user_model().objects.filter(last_login__gt=dt,is_active=True):
+    if "email" in request.GET:
+      writer.writerow([user.email])
+    else:
+      writer.writerow([user.email,user.username,str(user.date_joined)])
 
   return response
 
@@ -116,20 +118,6 @@ def course_names(request):
     out.append(','.join([str(c.id),c.name]))
   return HttpResponse('\n'.join(out))
 
-def course_completion(request,year=None,month=None,day=None):
-  verify_api(request)
-  out = []
-  if year:
-    dt = datetime.date(int(year),int(month),int(day))
-  else:
-    dt = datetime.date.today()-datetime.timedelta(30)
-  completions = CourseCompletion.objects.filter(created__gte=dt)
-  if 'course_id' in request.GET:
-    completions = completions.filter(course_id=request.GET['course_id'])
-  for c in completions:
-    out.append(','.join([str(c.course.id),str(c.user.id)]))
-  return HttpResponse('\n'.join(out))
-
 def member_index(request,username=None):
   instructors = UserMembership.objects.list_instructors()
   values = { 'instructors': instructors }
@@ -146,28 +134,82 @@ def member_detail(request,username=None):
     'profile': user.usermembership,
     'things': things,
     'posts': posts
-    }
+  }
   return TemplateResponse(request,"membership/member_detail.html",values)
 
 @staff_member_required
 def analysis(request):
-  order = request.GET.get('order','-usermembership__end')
+  order = request.GET.get('order','-subscription__status')
   orders = [
-    ('-usermembership__end','Last Payment'),
+    ('-subscription__status','Last Payment'),
     ('-subscription__owed','Money owed'),
   ]
-  memberships = []
-  for level in Membership.objects.filter(order__gt=0):
-    users = get_user_model().objects.filter(usermembership__membership=level).order_by(order).distinct()
-    memberships.append((level,users))
+  level_users = []
+  for level in Level.objects.filter(order__gt=0):
+    users = get_user_model().objects.filter(level=level)
+    if not "canceled" in request.GET:
+      users = users.filter(subscription__canceled__isnull=True)
+    level_users.append((level,users.order_by(order).distinct()))
   values = {
-    'memberships': memberships,
+    'level_users': level_users,
     'order': order,
     'orders': orders
   }
   return TemplateResponse(request,"membership/analysis.html",values)
 
 @staff_member_required
-def force_cancel(self,pk):
-  Subscription.objects.get(pk=pk).force_canceled()
+def force_cancel(request,pk):
+  subscription = Subscription.objects.get(pk=pk)
+  if "undo" in request.GET:
+    subscription.canceled = None
+    subscription.save()
+    subscription.recalculate()
+    messages.success(request,"Subscription #%s un-canceled"%pk)
+  else:
+    subscription.force_canceled()
+    messages.success(request,"Subscription #%s set to canceled"%pk)
+  if request.GET.get("next",None):
+    return HttpResponseRedirect(request.GET['next'])
   return HttpResponse('')
+
+@staff_member_required
+def flag_subscription(request,pk):
+  subscription = Subscription.objects.get(pk=pk)
+  flag,new = Flag.objects.get_or_create(
+    subscription=subscription,
+    reason="manually_flagged",
+  )
+  messages.success(request,"Subscription #%s flagged, you can edit it below"%pk)
+  return HttpResponseRedirect("/admin/membership/flag/%s/"%flag.pk)
+
+@staff_member_required
+def containers(request):
+  return TemplateResponse(request,'membership/containers.html',{})
+
+@staff_member_required
+def update_flag_status(request,flag_pk,new_status=None):
+  flag = get_object_or_404(Flag,pk=flag_pk)
+  if not new_status:
+    new_status = flag.PAYMENT_ACTIONS[flag.status][0]
+  flag.apply_status(new_status)
+  if request.is_ajax():
+    return HttpResponse("Membership status changed to %s"%flag.get_status_display())
+  messages.success(request,"Membership status changed to %s"%flag.get_status_display())
+  return HttpResponseRedirect('/admin/membership/flag/%s/'%flag_pk)
+
+def door_access(request):
+  fieldname = request.GET.get('fieldname','rfid')
+  fail = HttpResponseForbidden("I am Vinz Clortho keymaster of Gozer... Gozer the Traveller, he will come in one of the pre-chosen forms. During the rectification of the Vuldronaii, the Traveller came as a large and moving Torb! Then, during the third reconciliation of the last of the Meketrex Supplicants they chose a new form for him... that of a Giant Sloar! many Shubs and Zulls knew what it was to be roasted in the depths of the Sloar that day I can tell you.")
+  if not (request.META['REMOTE_ADDR'] in getattr(settings,'DOOR_IPS',[]) or request.user.is_superuser):
+    return fail
+  if fieldname in ['email','paypal_email','password']:
+    return fail
+  out = {}
+  base_subs = Subscription.objects.filter(canceled__isnull=True)
+  base_subs = base_subs.exclude(user__rfid="").exclude(user__rfid__isnull=True)
+  for level in Level.objects.all():
+    subscriptions = base_subs.filter(product__level=level)
+    out[level.order] = list(subscriptions.distinct().values_list('user__'+fieldname,flat=True))
+  gatekeepers = get_user_model().objects.filter(is_gatekeeper=True).exclude(rfid__isnull=True).exclude(rfid="")
+  out[99999] = list(gatekeepers.values_list(fieldname,flat=True))
+  return HttpResponse(json.dumps(out))
