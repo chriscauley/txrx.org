@@ -1,8 +1,8 @@
 from django import forms
 from django.core.mail import send_mail
 
-from .models import Evaluation, FIVE_CHOICES
-from db.forms import PlaceholderModelForm
+from .models import Evaluation, FIVE_CHOICES, Session
+from lablackey.db.forms import PlaceholderModelForm
 
 class RequestForm(forms.Form):
   """
@@ -65,3 +65,8 @@ class EvaluationForm(PlaceholderModelForm):
       'question1','question2','question3','question4',
       'anonymous'
     )
+
+class NeededForm(PlaceholderModelForm):
+  class Meta:
+    model = Session
+    fields = ('needed', )

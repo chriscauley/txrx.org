@@ -1,0 +1,132 @@
+{% load compress %}
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>{% block full_title %}{% block title %}{% endblock %} - {{ SITE_NAME }}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="google-site-verification" content="5BXTZkZEubZ_azCsu7q469YXtV6tYbDOVeTQ2enG88o" />
+    {% block extra_head %}{% endblock %}
+    {% include "_styles.html" %}
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+    <script type="text/javascript">
+      var SHOP = {
+        {% if settings.DEBUG %}
+        base_url: "http://dev.txrxlabs.org:8009",
+        email: 'chris@lablackey.com'
+        {% else %}
+        base_url: "https://txrxlabs.org",
+        email: 'txrxlabs@gmail.com'
+        {% endif %}
+      }
+      SHOP.notify_url = SHOP.base_url + "/tx/rx/ipn/handler/";
+      var _USER_NUMBER = {{ request.user.pk|default_if_none:"undefined" }};
+      {% if request.user.is_superuser %}
+      var _418 = true;
+      {% endif %}
+    </script>
+    
+    <link rel="shortcut icon" href="/favicon.ico" />
+    {% compress js %}
+    <script src="{{ STATIC_URL }}js/jquery-1.11.2.js"></script>
+    <script src="{{ STATIC_URL }}js/init.js"></script>
+    <script src="{{ STATIC_URL }}lightbox/js/lightbox.min.js"></script>
+    <script src="{{ STATIC_URL }}js/jsi18n.js"></script>
+    {% endcompress %}
+    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" />
+    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}cv/float.css" />
+    {% block head %}{% endblock %}
+    <meta property="og:title" content="{% block fb_title %}{{ SITE_NAME }}: {{ SITE_TAGLINE }}{% endblock %}" />
+    <meta property="og:site_name" content="{{ SITE_NAME }}" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+    <meta property="og:description" content="{% block fb_description %}{{ SITE_NAME }} is Houston's nonprofit Hackerspace. Since 2008, TXRX has aimed to provide a communal space for the public to learn and create. Located in the East End and serving the greater Houston area, TXRX offers members use of 30,000 square feet of work space including a wood shop, metal shop, bike shop, rapid fabrication lab, electronics lab, art lab, computer lab, and coworking space. A diverse series of classes are taught with the goal of making seemingly complex skills attainable to anyone. By creating an open environment to share knowledge, collaborate, and build, TXRX has become the home for 250 thinkers, tinkerers, hackers, artists, crafters, coders, and makers.{% endblock %}" />
+    {#! <meta property="og:image" content="https:///txrxlabs.org/" /> #}
+    <meta property="fb:app_id" content="" />
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+    <![endif]-->
+    {% block analytics %}{{ ANALYTICS_CODE|safe }}{% endblock %}
+    {% comment %}
+    <script type="text/javascript" src="//ws.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">stLight.options({publisher: "56794c5c-23aa-4e30-b62c-dcc177306755", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
+    {% endcomment %}
+  </head>
+  <body>
+    {# this can eventually be moved int _cart.html #}
+    {% include "course/_cart.html" %}
+    <div class="container">
+      {% block nav %}{% include "_nav.html" with page="home" %}{% endblock %}
+      {% block messages %}{% include "_messages.html" %}{% endblock %}
+
+      <div class="row" id="main">
+        {% block main %}
+        <div class="col-sm-8">
+          {% block header %}
+          <h1 class="page_title">{% block header_content %}{{ SITE_TAGLINE }}{% endblock %}</h1>
+          {% endblock %}
+          {% block content %}{% endblock %}
+        </div>
+        <div class="col-sm-4" id="side">
+          {% block side %}{% include "_side.html" %}{% endblock %}
+        </div>
+        {% endblock %}
+      </div>
+      
+      {% block footer %}
+      <footer>
+        {% include "footer.html" %}
+      </footer>
+      {% comment %}
+      <div id="bot_right">
+        {% if request.theme == "dark" %}
+        <a href="?set_theme=default">Who turned out the Lights?</a>
+        {% else %}
+        <a href="?set_theme=dark">The Darkness Calls</a>
+        {% endif %}
+      </div>
+      {% endcomment %}
+      {% endblock %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/riot/2.3/riot+compiler.min.js"></script>
+    <script src="/user.json?v={% now "ymd_his" %}"></script>
+    {% compress js %}
+    <script src="{{ STATIC_URL }}less/bootstrap/js/affix.js"></script>
+    <script src="{{ STATIC_URL }}less/bootstrap/js/button.js"></script>
+    <script src="{{ STATIC_URL }}less/bootstrap/js/collapse.js"></script>
+    <script src="{{ STATIC_URL }}less/bootstrap/js/modal.js"></script>
+    <script src="{{ STATIC_URL }}less/bootstrap/js/scrollspy.js"></script>
+    <script src="{{ STATIC_URL }}less/bootstrap/js/transition.js"></script>
+    <script src="{{ STATIC_URL }}less/bootstrap/js/alert.js"></script>
+    <script src="{{ STATIC_URL }}less/bootstrap/js/carousel.js"></script>
+    <script src="{{ STATIC_URL }}less/bootstrap/js/dropdown.js"></script>
+    <script src="{{ STATIC_URL }}less/bootstrap/js/tooltip.js"></script>
+    <script src="{{ STATIC_URL }}less/bootstrap/js/popover.js"></script>
+    <script src="{{ STATIC_URL }}less/bootstrap/js/tab.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/moment.js"></script> {# date formatting #}
+    <script src="{{ STATIC_URL }}bower/ur/unrest.js"></script>
+    {% endcompress %}
+    {% block extrajs %}{% endblock %}
+    <script src="{{ STATIC_URL }}js/blog.js"></script>
+    <script src="{{ STATIC_URL }}js/favico.js"></script>
+    <script>
+      new Favico({animation : 'popFade'}).badge({{ pending_evaluations.count }});
+    </script>
+    <script src="{{ STATIC_URL }}cv/float.js"></script>
+    <script>
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-39204768-1']);
+      _gaq.push(['_setDomainName','txrxlabs.org']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+    {% block extra_body %}{% endblock %}
+    {% include "_sql_queries.html" %}
+  </body>
+</html>

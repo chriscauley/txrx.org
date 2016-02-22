@@ -1,0 +1,95 @@
+{% load notify_utils %}
+<nav class="navbar navbar-default" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="/">
+      <img src="{{ STATIC_URL }}img/new_logo.png" height="49"
+           alt="{{ SITE_NAME }} - {{ SITE_TAGLINE }}" title="{{ SITE_NAME }} - {{ SITE_TAGLINE }}"/></a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="navbar-collapse-1">
+    <ul class="nav navbar-nav main-nav">
+      {% for n in nav %}
+      {% if n.sublinks %}
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ n.name }} <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          {% for sublink in n.sublinks %}
+          <li><a href="{{ sublink.url }}"{% if sublink.reddot %} data-reddot="{{ sublink.reddot }}"{% endif %}>
+              {{ sublink.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% else %}
+      <li class="{{ n.class }}"><a href="{{ n.url }}">{{ n.name }}</a></li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    <ul class="nav navbar-nav navbar-right auth">
+      <li>
+        <button class="btn btn-primary btn-cart" data-toggle="modal" data-target="#cartModal">
+          <i class="fa fa-shopping-cart"></i>
+          <span class="simpleCart_quantity"></span> classes
+          (<span class="simpleCart_total"></span>)
+        </button>
+        <button class="btn btn-primary store-button" onclick="openCart();return false;">
+          <i class="fa fa-shopping-cart"></i>
+          <span class="quantity"></span> items
+          (<span class="total"></span>)
+        </button>
+      </li>
+      <li class="social">
+        {% for n in social_nav %}
+        <a href="{{ n.url }}"><i class="fa fa-{{ n.name }}"></i></a>
+        {% endfor %}
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <i class="fa fa-user"></i>
+          {% if user.is_authenticated %}
+          {{ user.username }}
+          {% else %}
+          Log In/Register
+          {% endif %}
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+          {% if user.is_authenticated %}
+          {% if user.is_staff %}
+          <li><a href="/admin/"><i class="fa fa-pencil-square"></i> Admin</a></li>
+          {% endif %}
+          <li><a href="{% url "logout" %}"><i class="fa fa-power-off"></i> Log out</a></li>
+          <li><a href="{% url "account_settings" %}"><i class="fa fa-gear"></i> Settings</a></li>
+          {% for notification in request|get_notifications %}
+          <li><a href="{{ notification.url }}"{% if notification.new_count %}
+                 data-reddot="{{ notification.new_count }}"{% endif %}>
+              {{ notification.link_text }}
+          </a></li>
+          {% endfor %}
+          {% else %}
+          <li><a class="fa-hover txrx" href="/accounts/register/">
+              <i class="fa fa-user"></i> Register</a></li>
+          <li><a class="fa-hover txrx" href="/accounts/login/?next={{ login_redirect }}">
+              <i class="fa fa-user"></i> Log in with Username</a></li>
+          <li><center>--- or ---</center></li>
+          <li><a class="fa-hover google" href="{% url "social:begin" "google-oauth2" %}?next={{ login_redirect }}">
+              <i class="fa fa-google-plus"></i> Connect with Google</a></li>
+          <li><a class="fa-hover github" href="{% url "social:begin" "github" %}?next={{ login_redirect }}">
+              <i class="fa fa-github"></i> Connect with GitHub</a></li>
+          {% if "pyauth" in request.GET %}
+          <li><a class="fa-hover facebook" href="{% url "social:begin" "facebook" %}?next={{ login_redirect }}">
+              <i class="fa fa-facebook"></i> Connect with Facebook</a></li>
+          {% endif %}
+          {% endif %}
+        </ul>
+      </li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>

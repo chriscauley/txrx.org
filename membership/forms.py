@@ -3,12 +3,13 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
+from django.conf import settings
 
 from registration.models import RegistrationProfile
 
 from .models import UserMembership
 from .utils import verify_unique_email
-from db.forms import PlaceholderModelForm, PlaceholderForm, placeholder_fields
+from lablackey.db.forms import PlaceholderModelForm, PlaceholderForm, placeholder_fields
 
 from registration import signals
 from registration.forms import RegistrationForm
@@ -17,7 +18,7 @@ s = "What do you to hope accomplish at the hackerspace? What classes do you want
 e = "List any helpful skills or areas of expertise that might be relevent to the Lab. Also note if you would be interested in teaching classes in these areas."
 q = "Please let us know about any questions or comment you may have about the lab, its procedures, or goals."
 
-lr = "Reasons for joining TX/RX Labs"
+lr = "Reasons for joining %s"%settings.SITE_NAME
 lp = "Previous projects of note"
 ls = "Skills you desire to learn"
 le = "Skills and area of expertise"
@@ -65,6 +66,8 @@ class SurveyForm(PlaceholderForm):
   questions = forms.CharField(label=lq,help_text=q,**kwargs)
 
 class UserMembershipForm(PlaceholderModelForm):
+  #! TODO: this technically is a vulnerability (someone could try to steal in very weird circumstances)
+  # I need to add a verified paypal email and set it to false when they do this.
   def clean_paypal_email(self,*args,**kwargs):
     user = self.instance.user
     if not verify_unique_email(self.cleaned_data.get('paypal_email'),user=user):

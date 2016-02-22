@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load short_codes %}
+
+{% block main %}
+<div class="row">
+  <div class="col-sm-6">
+    <h1 class="center">{{ document.name }}</h1>
+    <form method="POST" enctype="multipart/form-data" class="redtape">
+      {{ document.content|explosivo }}
+      {% csrf_token %}
+      {% include "_form.html" %}
+      <center style="clear: both;">
+        <input type="submit" class="btn btn-success" value="I agree to the terms and conditions">
+      </center>
+    </form>
+  </div>
+</div>
+{% endblock %}

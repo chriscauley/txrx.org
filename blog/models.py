@@ -8,30 +8,12 @@ from timezones.fields import TimeZoneField
 import tagging
 
 from .templatetags.short_codes import explosivo
-from txrx.utils import cached_property
-from feed.models import FeedItemModel
+from lablackey.db.models import UserModel
+from lablackey.utils import cached_property
 from media.models import Photo, PhotosMixin
-from db.models import SlugModel, OrderedModel
+from lablackey.db.models import SlugModel, OrderedModel
 
-try:
-  from south.modelsinspector import add_introspection_rules
-  add_introspection_rules([], ["^timezones\.fields\.TimeZoneField"])
-except ImportError:
-  #necessary if you're not going to use south
-  pass
-
-#depracated 9/2014
-"""
-from django.core.cache import cache
-from django.utils.http import urlquote
-def invalidate_cache_key(fragment_name, *variables):
-  args = md5_constructor(u':'.join([urlquote(var) for var in variables]))
-  cache_key = 'template.cache.%s.%s' % (fragment_name, args.hexdigest())
-  cache.delete(cache_key)
-"""
-
-class Post(FeedItemModel,PhotosMixin):
-  feed_item_type = 'blog'
+class Post(PhotosMixin,UserModel):
   STATUS_CHOICES = (
     ('draft', 'Draft'),
     ('published', 'Published'),
@@ -73,15 +55,6 @@ class Post(FeedItemModel,PhotosMixin):
   @models.permalink
   def get_absolute_url(self):
     return ("post_detail", [self.user.username, self.slug])
-
-  """def update_feed(self):
-    feed_item = FeedItem.get_for_object(self)
-    feed_item.title = self.title
-    feed_item.thumbnail = prep_thumbnail(self.photo.file)
-    feed_item.publish_dt = self.publish_dt
-    feed_item.item_type = 'blog'
-    feed_item.user = self.user
-    feed_item.save()"""
 
 tagging.register(Post)
 

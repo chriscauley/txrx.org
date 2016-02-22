@@ -1,0 +1,22 @@
+<style type="text/css">
+  form { width: 660px; padding: 0; }
+  form, ul { margin: 0; }
+  ul { padding: 0 20px; }
+  li { min-height: 10px; overflow: hidden; list-style: none; padding-bottom: 20px;}
+  .helptext, label { float: left; width: 300px; }
+  .helptext { color: #4c4; font-size: 0.8em; }
+  textarea { float: right; height: 70px; width: 310px;}
+  html { overflow: hidden; }
+  h1 { margin: 0.3em 0; font-size: 1.5em; }
+</style>
+<h1 class="ss-form-title">TXRX New Member Questionaire</h1>
+Please fill this form out to complete your membership @ {{ SITE_NAME }}. This form will be used to help let you know about events and projects at the lab that may be of interest to you.
+<br />
+<form method="POST">
+  {% csrf_token %}
+  <ul>
+  {{ form.as_ul }}
+  </ul>
+  <input type="submit" />
+</form>
+<script type="text/javascript">

@@ -1,11 +1,13 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.contenttypes.generic import GenericTabularInline
+from django.contrib.contenttypes.admin import GenericTabularInline
+from django.contrib.auth import get_user_model
 
 from media.admin import TaggedPhotoInline
-from db.admin import OrderedModelAdmin
-from .models import Lab, Tool, ToolLink, TaggedTool
+from lablackey.db.admin import OrderedModelAdmin
+from .models import Lab, Tool, ToolLink, TaggedTool, Group, Permission, Criterion, UserCriterion
 
+@admin.register(Lab)
 class LabAdmin(OrderedModelAdmin):
   inlines = (TaggedPhotoInline,)
   raw_id_fields = ('photo',)
@@ -15,10 +17,10 @@ class ToolLinkInline(admin.TabularInline):
   model = ToolLink
   fields = ("title","url","order")
 
+@admin.register(Tool)
 class ToolAdmin(OrderedModelAdmin):
   inlines = (ToolLinkInline,TaggedPhotoInline)
-  list_display = ('__unicode__','has_links','has_description','_materials',
-                  'make','model',"lab",'order')
+  list_display = ('__unicode__','has_links','has_description','_materials','make','model',"room","lab",'order')
   list_filter = ('lab','functional')
   filter_horizontal = ('materials',)
   readonly_fields = ('has_links','has_description')
@@ -32,8 +34,7 @@ class ToolAdmin(OrderedModelAdmin):
     m = obj.materials
     if not m.count():
       return'<img src="/static/admin/img/icon-no.gif" alt="False">'
-    _s = (m.filter(parent__isnull=True).count(),m.filter(parent__isnull=False).count())
-    return "%s (%s)"%_s
+    return "%s (%s)"%(m.filter(parent__isnull=True).count(),m.filter(parent__isnull=False).count())
   _materials.allow_tags = True
 
 #See note above corresponding model
@@ -42,5 +43,42 @@ class TaggedToolInline(GenericTabularInline):
   raw_id_fields = ('tool',)
   extra = 0
 
-admin.site.register(Lab,LabAdmin)
-admin.site.register(Tool,ToolAdmin)
+from django import forms
+from django.contrib.admin.widgets import FilteredSelectMultiple
+class GroupedToolForm(forms.ModelForm):
+  def __init__(self,*args,**kwargs):
+    super(GroupedToolForm,self).__init__(*args,**kwargs)
+    """choices = {}
+    for tool in Tool.objects.all():
+      room = unicode(tool.room)
+      choices[room] = choices.get(room,[])
+      choices[room].append((tool.pk,unicode(tool)))
+    choices = tuple(sorted(choices.items()))"""
+    choices = [(tool.pk,"(%s) %s"%(tool.room.name,tool.name)) for tool in Tool.objects.all()]
+    choices = sorted(choices,key=lambda i:i[1])
+    self.fields["tools"].choices = choices
+
+@admin.register(Group)
+class GroupAdmin(admin.ModelAdmin):
+  list_display = ('__unicode__','row','column','color')
+  list_editable = ('row','column','color')
+
+@admin.register(Permission)
+class PermissionAdmin(admin.ModelAdmin):
+  filter_horizontal = ('criteria','tools')
+  list_editable = ('group',"order",)
+  list_display = ('__unicode__','abbreviation','group','order','_criteria')
+  fields = (('name','abbreviation'),('group','room'),'tools','criteria')
+  _criteria = lambda self,obj: '<br/>'.join([unicode(criteria) for criteria in obj.criteria.all()])
+  _criteria.allow_tags = True
+  _criteria.short_description = "Required Criteria"
+  form = GroupedToolForm
+
+@admin.register(Criterion)
+class CriterionAdmin(admin.ModelAdmin):
+  filter_horizontal = ("courses",)
+
+@admin.register(UserCriterion)
+class UserCriterionAdmin(admin.ModelAdmin):
+  raw_id_fields = ('user',)
+  readonly_fields = ("content_type","object_id",'criterion')

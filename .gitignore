@@ -17,6 +17,7 @@ scripts/backups
 env/*
 environ/*
 .environ/*
+.e/*
 src/*
 .pydev
 .pydevproject
@@ -25,8 +26,8 @@ src/*
 node/*
 
 #relevant to development
-txrx/local.db
-txrx/settings/local.py
+main/local.db
+main/settings/local.py
 *.sql
 scripts/anon.db
 scripts/backup.json

@@ -6,19 +6,17 @@ from django.template.defaultfilters import striptags
 from django.template.loader import render_to_string
 
 from course.models import Session
-from txrx.utils import mail_on_fail
+from lablackey.mail import mail_on_fail
 from membership.models import LimitedAccessKey
 
 import datetime
 
 class Command (BaseCommand):
-  #@mail_on_fail
   def handle(self, *args, **options):
     dt = datetime.datetime.now()-datetime.timedelta(2)
-    new_sessions = Session.objects.filter(created__gte=dt,first_date__gte=datetime.datetime.now(),active=True)
-
+    new_sessions = Session.objects.filter(active=True,notified__isnull=True).exclude(private=True)
     if not new_sessions:
-      mail_admins("No classes","No new classes to email anyone about :(")
+      mail_admins("No classes","No new classes to notify anyone about :(")
       return
     courses = list(set([s.course for s in new_sessions]))
     users = get_user_model().objects.filter(notifycourse__course__in=courses).distinct()
@@ -31,8 +29,10 @@ class Command (BaseCommand):
         'new_sessions': sessions,
         }
       send_mail(
-        "[TX/RX] New classes at the hackerspace",
+        "New classes at the hackerspace",
         render_to_string("notify/notify_course.html",_dict),
         settings.DEFAULT_FROM_EMAIL,
         [user.email],
         )
+    new_sessions.update(notified=datetime.datetime.now())
+    print "Notified %s users of %s classes"%(len(users),len(new_sessions))

@@ -9,10 +9,22 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.template.response import TemplateResponse
 
-from tagging.models import Tag
-
 from blog.models import Post
+
+from tagging.models import Tag
+from NextPlease import pagination
 import datetime, difflib
+
+@pagination("posts")
+def home(request):
+  posts = Post.objects.filter(status="published",publish_dt__lte=datetime.datetime.now())
+  _t = Tag.objects.cloud_for_model(Post)
+  tags = sorted([(t,t.count) for t in _t if t.count > 1],key=lambda t:-t[1])
+  values = {
+    "posts": posts,
+    "post_tags": tags,
+    }
+  return TemplateResponse(request,"blog/home.html",values)
 
 def post_detail(request, username, slug, template_name="blog/detail.html"):
   user = get_object_or_404(get_user_model(), username=username)
@@ -52,7 +64,7 @@ def post_list(request, username, post_type='published',template_name="blog/index
 
 def posts_by_tag(request,name):
   tag = get_object_or_404(Tag,name=name)
-  items = tag.items.filter(content_type__app_label="blog",content_type__name="post",object_id__isnull=False)
+  items = tag.items.filter(content_type__app_label="blog",content_type__model="post",object_id__isnull=False)
   posts = [item.object for item in items]
   values = {
     "posts": posts,

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load short_codes mptt_comments_tags %}
+{% load short_codes %}
 
 {% block title %}{% firstof post.title "Untitled" %} by {{ post.user.username }}{% endblock %}
 
@@ -17,8 +17,10 @@
   {% if post.status != "deleted" %}
   {% include "blog/_content.html" with post=post %}
   {% endif %}
-  {% display_comment_toplevel_for post %}
+  <comment-list data-object_pk="{{ post.pk }}" data-content_type="blog.post"></comment-list>
 </div>
 {% endblock %}
+
+{% block extrajs %}{% include "_comment_media.html" %}{% endblock %}
 
 {% block footer %}{% endblock %}

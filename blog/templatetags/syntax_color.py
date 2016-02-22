@@ -28,15 +28,6 @@ def _colorize_table(value, lang=None):
     return mark_safe(highlight(value, get_lexer(value, lang), HtmlFormatter(style=GithubStyle)))
 
 
-def generate_pygments_css(path=None):
-    if path is None:
-        import os
-        path = os.path.join(os.getcwd(), 'pygments.css')
-    f = open(path, 'w')
-    f.write(HtmlFormatter(style=GithubStyle).get_style_defs('.highlight'))
-    f.close()
-
-
 def get_lexer(value, lang):
     if lang:
         if '.' in lang:

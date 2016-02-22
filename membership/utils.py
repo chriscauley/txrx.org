@@ -1,9 +1,16 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 
 from .models import LimitedAccessKey
+from lablackey.mail import send_template_email
 
 import datetime
+
+def send_membership_email(*args,**kwargs):
+  kwargs['from_email'] = settings.MEMBERSHIP_EMAIL
+  send_template_email(*args,**kwargs)
 
 def limited_login_required(function):
   """

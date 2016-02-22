@@ -5,17 +5,18 @@ from django.template.defaultfilters import striptags
 from django.template.loader import render_to_string
 
 from course.models import Session
-from txrx.utils import mail_on_fail
+from lablackey.mail import mail_on_fail
 from membership.models import LimitedAccessKey
 
 import datetime
 
 class Command (BaseCommand):
-  @print_to_mail(subject="[LOG] New Classes")
+  @print_to_mail(subject="New Classes")
   def handle(self, *args, **options):
     user = get_user_model()
     dt = datetime.datetime.now() + datetime.timedelta(-16)
     new_sessions = Session.objects.filter(created__gte=dt,first_date__gte=datetime.datetime.now())
+    new_sessions = new_sessions.exclude(private=True)
     if not new_sessions:
       print "No classes","No new classes to email anyone about :("
       return
@@ -29,7 +30,7 @@ class Command (BaseCommand):
         'new_sessions': new_sessions,
       }
       send_mail(
-        "[TX/RX] New classes at the hackerspace",
+        "New classes at the hackerspace",
         render_to_string("email/new_classes.html",_dict),
         settings.DEFAULT_FROM_EMAIL,
         [user.email],

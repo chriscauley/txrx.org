@@ -1,17 +1,17 @@
+from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib import messages
-from django.http import QueryDict, Http404, HttpResponseRedirect, HttpResponse
+from django.http import QueryDict, Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from ..models import Course, Term, Subject, Session, Enrollment, ClassTime
 from ..forms import EmailInstructorForm, EvaluationForm
-from membership.models import UserMembership
 from notify.models import NotifyCourse
-from db.utils import get_or_none
+from lablackey.utils import get_or_none
 from event.utils import make_ics,ics2response
 
 from paypal.standard.ipn.models import *
@@ -44,9 +44,15 @@ def index(request):
 def user_ajax(request,template):
   return TemplateResponse(request,"course/_%s.html"%template,get_course_values(request.user))
 
+#the old way we did classes had session detail pages
 def detail_redirect(request,slug):
-  session = get_object_or_404(Session,slug=slug)
-  return HttpResponseRedirect(session.course.get_absolute_url())
+  pk = slug.split("_")[-1]
+  if pk.isdigit():
+    try:
+      return HttpResponseRedirect(Session.objects.get(pk=pk).get_absolute_url())
+    except Session.DoesNotExist:
+      pass
+  return HttpResponseRedirect("/classes/")
 
 def detail(request,pk,slug):
   course = get_object_or_404(Course,pk=pk)
@@ -68,7 +74,7 @@ def detail(request,pk,slug):
 
 def ics_classes_all(request,fname):
   occurrences = ClassTime.objects.all()
-  calendar_object = make_ics(occurrences,title="TX/RX Labs Classes")
+  calendar_object = make_ics(occurrences,title="%s Classes"%settings.SITE_NAME)
   return ics2response(calendar_object,fname=fname)
 
 def ics_classes_user(request,u_id,api_key,fname):
@@ -79,7 +85,7 @@ def ics_classes_user(request,u_id,api_key,fname):
   occurrences = []
   for session in sessions:
     occurrences += session.classtime_set.all()
-  calendar_object = make_ics(occurrences,title="[TX/RX] My Classes")
+  calendar_object = make_ics(occurrences,title="%sMy Classes"%settings.EMAIL_SUBJECT_PREFIX)
   return ics2response(calendar_object,fname=fname)
 
 @staff_member_required
@@ -92,7 +98,7 @@ def course_full(request):
 
 def course_totals(request):
   if not request.user.is_superuser:
-    raise Http404
+    raise Http404('Page not found')
   term_list = []
   args = ('session','session__course')
   enrollments = Enrollment.objects.select_related(*args)
@@ -123,26 +129,21 @@ def rsvp(request,session_pk):
     m = "You must be logged in to rsvp. Click the icon at the top right of the page to login or register"
     return HttpResponse(json.dumps([0,m,session.full]))
   enrollment,new = Enrollment.objects.get_or_create(user=request.user,session=session)
-  if "drop" in request.GET:
+  if "unrsvp" in request.path:
     enrollment.delete()
     q = 0
     m = "You are no longer signed up for this."
   elif session.full:
     q = enrollment.quantity
     m = "Sorry, this event is full. Visit the class page to see when it will be offered again."    
-  elif "plus_one" in request.GET:
-    enrollment.quantity += 1
-    enrollment.save()
-    q = enrollment.quantity
-    m = "You have RSVP'd for %s people. If you can't make it, please come back and unenroll."%q
-    if session.full:
-      m += "<br /> <b>This event is now full!</b>"
   else:
     q = 1
     m = "You have RSVP'd for this event. If you can't make it, please come back and unenroll."
-  return HttpResponse(json.dumps([q,m,session.full]))
+  return HttpResponse(json.dumps({'quantity': q,'message': m,'full':session.full}))
 
 def start_checkout(request):
+  if not 'cart' in request.GET:
+    raise Http404('cart information missing from request')
   cart_items = json.loads(request.GET['cart'])
   out = []
   for cart_item in cart_items:
@@ -155,7 +156,7 @@ def start_checkout(request):
 def delay_reschedule(request,course_pk,n_months):
   user = request.user
   if not (user.is_superuser or user.groups.filter(name="Class Coordinator")):
-    raise Http404()
+    raise Http404('Page not found.')
   course = get_object_or_404(Course,pk=course_pk)
   if n_months == "close":
     course.active = False
@@ -165,3 +166,32 @@ def delay_reschedule(request,course_pk,n_months):
     messages.success(request,"%s has been delayed for %s months"%(course,n_months))
   course.save()
   return HttpResponseRedirect(reverse("admin:index"))
+
+@staff_member_required
+def toggle_enrollment(request):
+  enrollment = get_object_or_404(Enrollment,pk=request.GET["enrollment_id"])
+  if not request.user.is_toolmaster or request.user == enrollment.session.user:
+    return HttpResponseForbidden("You do not have permission to modify this enrollment")
+  enrollment.completed = not enrollment.completed
+  enrollment.save()
+  return HttpResponse(json.dumps(enrollment.as_json))
+
+@staff_member_required
+def clone_session(request,course_pk):
+  session = Course.objects.get(pk=course_pk).session_set.order_by("-first_date")[0]
+  clone = Session(
+    course_id = session.course_id,
+    user_id = session.user_id,
+    first_date = session.first_date,
+    last_date = session.last_date,
+    active=False,
+  )
+  clone.save()
+  for classtime in session.classtime_set.all():
+    ClassTime(
+      start=classtime.start,
+      end_time=classtime.end_time,
+      session=clone
+    ).save()
+  messages.success(request,"Session has been cloned. Modify dates and mark active.")
+  return HttpResponseRedirect("/admin/course/session/%s/"%clone.pk)

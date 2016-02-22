@@ -4,9 +4,8 @@
 {% block full_title %}Settings - {{ SITE_NAME }}{% endblock %}
 {% block header_content %}Edit your account settings{% endblock %}
 
-{% block main %}
-<p>If you want to change your password click <a href="{% url "auth_password_change" %}">here</a></p>
-<form method="POST" enctype="multipart/form-data" class="jvFloatForm">
+{% block content %}
+<form method="POST" enctype="multipart/form-data" class="cvfloat">
   {% csrf_token %}
   {% for form in forms %}{% for error in form.non_field_errors %}
   <div class="alert alert-danger">{{ error }}</div>
@@ -33,4 +32,56 @@
 </p>
 {% endif %}
 {% endif %}
+{% endblock %}
+
+{% block side %}
+<h1>Other settings</h1>
+<p>If you want to change your password click <a href="{% url "auth_password_change" %}">here</a></p>
+<p>
+  Membership Status:
+</p>
+{% for subscription in request.user.subscription_set.all %}
+<div class="alert alert-{{ subscription.bs_class }}">
+  <h4>
+    {% if subscription.product.months == 1 %}Monthly{% else %}Yearly{% endif %}
+    {{ subscription.product.level }}
+    {% if subscription.subscr_id %}[{{ subscription.subscr_id }}]{% endif %}
+  </h4>
+  {% if subscription.status_set.count or subscription.canceled %}
+  <div>Start Date: {{ subscription.created|date:"M n, Y" }}</div>
+  <div>{{ subscription.verbose_status }}</div>
+  {% else %}
+  <b>
+    Start subscription for
+    ${{ subscription.amount}}/{% if subscription.product.months == 1 %}Month{% else %}Year{% endif %}
+  </b>
+  <form name="_xclick" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+    <input type="hidden" name="cmd" value="_xclick-subscriptions">
+    <input type="hidden" name="business" value="{{ settings.PAYPAL_RECEIVER_EMAIL }}">
+    <input type="hidden" name="no_shipping" value="1">
+    <input type="hidden" name="on0" value="{{ subscription.product.level.name }}">
+    <input type="hidden" name="a3" value="{{ subscription.amount }}">
+    <input type="hidden" name="p3" value="{{ subscription.product.months }}">
+    <input type="hidden" name="t3" value="M">
+    <input type="hidden" name="src" value="1">
+    <input type="hidden" name="sra" value="1">
+    <input type="hidden" name="item_number" value="{{ subscription.pk }}">
+    <input name="notify_url" type="hidden" value="{{ SITE_URL }}/tx/rx/ipn/handler/">
+    <input name="cancel_return" type="hidden" value="{{ SITE_URL }}{{ request.path }}">
+    <input name="return" type="hidden" value="{{ SITE_URL }}">
+    {% if request.user.is_authenticated %}
+    <input type="hidden" name="custom" value="{{ request.user.pk }}"/>
+    {% endif %}
+    <input type="hidden" name="os0" value="{{ subscription.product.level.name }} - {{subscription.product.name }}">
+    <input type="hidden" name="currency_code" value="USD">
+    <div class="button_box">
+      <input type="image" name="submit" alt="PayPal - The safer, easier way to pay online!"
+             id="m_{{ subscription.product.level|slugify }}"
+             src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif">
+      <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="" width="1" height="1" border="0">
+    </div>
+  </form>
+  {% endif %}
+</div>
+{% endfor %}
 {% endblock %}

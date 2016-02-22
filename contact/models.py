@@ -1,9 +1,11 @@
-from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.core.mail import send_mail
 from django.db import models
 
+import markdown
+
 class Person(models.Model):
-  user = models.ForeignKey(get_user_model(),null=True,blank=True)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
   _ht = "Use if desired email is not in a user account. THIS FIELD DOES NOTHING IF THERE IS A USER"
   email = models.EmailField(null=True,blank=True,help_text=_ht)
   __unicode__ = lambda self: str(self.user or self.email)
@@ -39,17 +41,29 @@ class SubjectFAQ(models.Model):
 class Message(models.Model):
   from_name = models.CharField("Name",max_length=128)
   from_email = models.EmailField("Email")
+  read_count = models.IntegerField(default=0)
+  marked_read = models.BooleanField(default=False)
   subject = models.ForeignKey(Subject)
   message = models.TextField()
-  user = models.ForeignKey(get_user_model(),null=True,blank=True)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
+  datetime = models.DateTimeField(auto_now_add=True)
   __unicode__ = lambda self: "%s: %s"%(self.user or self.from_email,self.subject)
+  pixel_code = property(lambda self: "course.message_%s-%s"%(self.id,self.datetime))
+  def get_tracking_pixel(self):
+    return "<img src='%s.png'>"%(settings.SITE_URL+"/contact/"+self.pixel_code)
   def save(self,*args,**kwargs):
     send_email = not self.pk
     super(Message,self).save(*args,**kwargs)
     if send_email:
       self.send()
   def send(self):
-    send_mail(self.subject,"Message from: %s\n\n%s"%(self.from_name,self.message),
-              self.from_email,[self.subject.get_email()])
+    text = "Message from: %s\n\n%s"%(self.from_name,self.message)
+    send_mail(
+      "%s from %s"%(self.subject,self.from_name),
+      text,
+      self.from_email,
+      [self.subject.get_email()],
+      html_message=markdown.markdown(text)+self.get_tracking_pixel()
+    )
   class Meta:
     verbose_name = "Message"

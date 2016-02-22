@@ -1,15 +1,23 @@
 from django.contrib import admin
-from django.contrib.contenttypes.generic import GenericTabularInline
+from django.contrib.contenttypes.admin import GenericTabularInline
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.forms.models import BaseInlineFormSet
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Event, EventOccurrence
+from .models import Event, EventOccurrence, RSVP, CheckIn, CheckInPoint
 from event.utils import get_room_conflicts
-from media.admin import TaggedPhotoInline
+from media.admin import TaggedPhotoAdmin
 
 import datetime,functools
+
+@admin.register(CheckIn)
+class CheckInAdmin(admin.ModelAdmin):
+  pass
+
+@admin.register(CheckInPoint)
+class CheckInPointAdmin(admin.ModelAdmin):
+  pass
 
 class OccurrenceModelFormSet(BaseInlineFormSet):
   def check_conflicts(self,obj):
@@ -57,20 +65,31 @@ class FuturePastListFilter(admin.SimpleListFilter):
 
 class EventOccurrenceInline(OccurrenceModelInline):
   model = EventOccurrence
-  fields = ('name_override','start','end_time')
-  def queryset(self,request):
-    qs = super(EventOccurrenceInline,self).queryset(request)
+  fields = ('name_override','start','end_time','url_override')
+  def get_queryset(self,request):
+    qs = super(EventOccurrenceInline,self).get_queryset(request)
     return qs.filter(start__gte=datetime.datetime.now())
 
-class EventAdmin(admin.ModelAdmin):
-  list_display = ("__unicode__","repeat")
-  inlines = [EventOccurrenceInline,TaggedPhotoInline]
+@admin.register(Event)
+class EventAdmin(TaggedPhotoAdmin):
+  list_display = ("__unicode__","repeat","upcoming_count","icon")
+  list_editable = ("icon",)
+  inlines = [EventOccurrenceInline]
   search_fields = ['name']
+  def upcoming_count(self,obj):
+    return obj.upcoming_occurrences.count()
 
-class EventOccurrenceAdmin(admin.ModelAdmin):
-  inlines = [TaggedPhotoInline]
+@admin.register(EventOccurrence)
+class EventOccurrenceAdmin(TaggedPhotoAdmin):
   search_fields = ['event__name']
+  raw_id_fields = ['event']
   list_filter = (FuturePastListFilter,)
 
-admin.site.register(Event,EventAdmin)
-admin.site.register(EventOccurrence,EventOccurrenceAdmin)
+@admin.register(RSVP)
+class RSVPAdmin(admin.ModelAdmin):
+  list_display = ['__unicode__','user_link']
+  def user_link(self,obj):
+    u = obj.user
+    html = '<a href="/admin/user/user/{}/" class="fa fa-user"> {} {} ({})</a>'
+    return html.format(u.id,u.first_name, u.last_name, u.username)
+  user_link.allow_tags = True

@@ -1,12 +1,12 @@
 from django.contrib import admin
 from .models import Thing, Material
 
-from db.admin import NamedTreeModelAdmin
-from media.admin import TaggedPhotoInline, TaggedFileInline
+from lablackey.db.admin import NamedTreeModelAdmin, RawMixin
+from media.admin import TaggedPhotoAdmin, TaggedFileInline
 from tool.admin import TaggedToolInline
 
-class ThingAdmin(admin.ModelAdmin):
-  inlines = [TaggedPhotoInline, TaggedToolInline, TaggedFileInline]
+class ThingAdmin(RawMixin,TaggedPhotoAdmin):
+  inlines = [TaggedToolInline, TaggedFileInline]
   raw_id_fields = ('user','parent','session')
   list_display = ('title','active','featured','_missing')
   list_editable = ('active','featured')

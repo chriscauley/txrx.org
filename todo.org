@@ -1,21 +1,28 @@
+* Permissions
+** Need safety training to not be a problem for 2 months after subscription being created.
+** Tie in wavers and orientation.
+* member flow
+** New member
+   set status to new
+   show new members in admin
+   email new user from admin, set to emailed
+   get email, set orientation
+   go to orientation, mark oriented
+** Paid
+* membership changes
+** ipn txn_types
+   subscr_signup - reset old_expiration_date
+   subscr_payment - push old_expiration_date out
+   subscr_cancel - 
+   subscr_modify - 
+   subscr_failed - 
+   subscr_eot - not used
+* contract page
+** list
+   services
+   materials
+   time frame
+   file formats
+   policies
 * classes
 ** add an exit survey - what classes would you like to take?
-* side bar
-** donate button
-** blog posts
-** zphotos?
-* Cody
-** Remove lablackey
-** combine all tagging stuff into a forked django tagging
-*** codrspace forms
-*** autocomplete
-*** django-tagging (main)
-** display tags and link to a tag page
-* prepare for class on txrxlabs.org
-** make build files
-* voting members
-** add to profile
-** get current list and add to the data
-** by laws
-* put membership meetings on the events
-* put meetings minutes on the web

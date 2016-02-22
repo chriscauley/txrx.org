@@ -1,0 +1,9 @@
+{% extends "registration/base.html" %}
+
+{% block content %}
+<form method="POST" class="cvfloat">
+  {% csrf_token %}
+  {% include "_form.html" %}
+  <input type="submit" />
+</form>
+{% endblock %}

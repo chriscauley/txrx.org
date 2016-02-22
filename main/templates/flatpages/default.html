@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load thumbnail short_codes%}
+
+{% block full_title %}{{ flatpage.title }}{% endblock %}
+{% block header %}{% endblock %}
+
+{% block content %}
+<div id="flatpage">
+{{ flatpage.content|explosivo }}
+</div>
+{% endblock %}
+
+{% block side %}
+{% if request.path == "/map/" %}
+{% include "sides/_contact_us.html" %}
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}

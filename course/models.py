@@ -5,22 +5,21 @@ from django.core.urlresolvers import reverse
 from django.core.validators import MaxLengthValidator
 from django.template.defaultfilters import slugify, truncatewords, striptags
 from django.template.loader import render_to_string
-from db.models import UserModel, NamedTreeModel
+from lablackey.db.models import UserModel, NamedTreeModel
 from sorl.thumbnail import ImageField, get_thumbnail
 from crop_override import get_override
 import datetime, time
 
-from feed.models import FeedItemModel
 from media.models import FilesMixin, PhotosMixin
 from geo.models import Room
 from event.models import OccurrenceModel, reverse_ics
-from tool.models import ToolsMixin
-from txrx.utils import cached_method, cached_property, latin1_to_ascii
+from tool.models import ToolsMixin, Permission, Criterion, UserCriterion, CriterionModel
+from lablackey.db.models import UserModel
+from lablackey.utils import cached_method, cached_property, latin1_to_ascii
 
+from shop.models import Product
 from json import dumps
 import os
-
-_desc_help = "Line breaks and html tags will be preserved. Use html with care!"
 
 def to_base32(s):
   key = '-abcdefghijklmnopqrstuvwxyz'
@@ -75,10 +74,10 @@ class CourseManager(models.Manager):
     query_set = self.filter(*args,**kwargs)
 
     # select only courses with only full and closed sessions
-    courses = [course for course in query_set if not course.open_sessions]
+    courses = [course for course in query_set if not [s for s in course.active_sessions if not s.full]]
     return courses
 
-class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
+class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
   name = models.CharField(max_length=64)
   slug = property(lambda self: slugify(self.name))
   active = models.BooleanField(default=True) # only used with the reshedule view
@@ -112,15 +111,14 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
       'next_time': time.mktime(self.first_date.timetuple()) if self.active_sessions else 0,
       'fee': self.fee,
       'active_sessions': [s.as_json for s in self.active_sessions],
-      'open_sessions': [s.as_json for s in self.open_sessions],
-      'full_sessions': [s.as_json for s in self.full_sessions],
+      'past_session_count': len(self.archived_sessions),
       'short_description': self.get_short_description(),
-      'enrolled_status': "Enroll",
+      'requirements': self.requirements
     }
-    out['visible_session'] = (out['open_sessions']+out['full_sessions']+[None])[0]
+    out['enrolled_status'] = "Enroll" if out['active_sessions'] else "Details"
     return out
 
-  fee = models.IntegerField(null=True,blank=True)
+  fee = models.IntegerField(null=True,blank=True,default=0)
   fee_notes = models.CharField(max_length=256,null=True,blank=True)
   requirements = models.CharField(max_length=256,null=True,blank=True)
   prerequisites = models.CharField(max_length=256,null=True,blank=True)
@@ -150,13 +148,13 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
     first_date = datetime.datetime.now()-datetime.timedelta(0.5)
     return list(self.sessions.filter(last_date__gte=first_date))
 
-  @cached_property
-  def open_sessions(self):
-    return [s for s in self.active_sessions if not s.full]
-
-  @cached_property
-  def full_sessions(self):
-    return [s for s in self.active_sessions if s.full]
+  @property
+  def archived_sessions(self):
+    # opposite of active_sessions
+    first_date = datetime.datetime.now()-datetime.timedelta(0.5)
+    last_year = first_date - datetime.timedelta(365)
+    sessions = self.session_set.filter(last_date__lt=first_date,last_date__gte=last_year)
+    return list(sessions.order_by("-first_date"))
 
   sessions = lambda self: Session.objects.filter(course=self,active=True)
   sessions = cached_property(sessions,name="sessions")
@@ -190,7 +188,7 @@ class Course(models.Model,PhotosMixin,ToolsMixin,FilesMixin):
     ordering = ("name",)
 
 class CourseSubscription(UserModel):
-  course = models.ForeignKey(Course)
+   course = models.ForeignKey(Course)
 
 class Branding(models.Model):
   name = models.CharField(max_length=32)
@@ -199,7 +197,7 @@ class Branding(models.Model):
   get_small_image = lambda self: self.small_image_override or self.image
   __unicode__ = lambda self: self.name
 
-class Session(FeedItemModel,PhotosMixin):
+class Session(UserModel,PhotosMixin,models.Model):
   def __init__(self,*args,**kwargs):
     super(Session,self).__init__(*args,**kwargs)
     if self.pk:
@@ -210,28 +208,28 @@ class Session(FeedItemModel,PhotosMixin):
       if not _a:
         return
       if not _a[0].start == self.first_date:
-        print "setting first_date"
         self.first_date = _a[0].start
         self.save()
       if not _a[-1].end == self.last_date:
-        print "setting last_date"
         self.last_date = _a[-1].end
         self.save()
   get_ics_url = lambda self: reverse_ics(self)
-  feed_item_type = 'session'
-  course = models.ForeignKey(Course,null=True,blank=True)
-  slug = models.CharField(max_length=255)
+  course = models.ForeignKey(Course)
   cancelled = models.BooleanField(default=False)
   active = models.BooleanField(default=True)
-  publish_dt = models.DateTimeField(null=True,blank=True) # for rss feed
+  _ht = "Private classes cannot be signed up for and do not appear on the session page unless " \
+        "the user is manually enrolled. It will appear on calendar but it will be marked in red."
+  private = models.BooleanField(default=False,help_text=_ht)
+  notified = models.DateTimeField(null=True,blank=True)
+  publish_dt = models.DateTimeField(null=True,blank=True)
   _ht = "This will be automatically updated when you save the model. Do not change"
   first_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
   last_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
   created = models.DateTimeField(auto_now_add=True) # for emailing new classes
   # depracated?
-  ts_help = "Only used to set dates on creation."
-  time_string = models.CharField(max_length=128,help_text=ts_help,default='not implemented')
   branding = models.ForeignKey(Branding,null=True,blank=True)
+  needed = models.TextField("What is needed?",blank=True,default="")
+  needed_completed = models.DateField(null=True,blank=True)
 
   __unicode__ = lambda self: latin1_to_ascii("%s (%s - %s)"%(self.course, self.user,self.first_date.date()))
   title = property(lambda self: "%s (%s)"%(self.course.name,self.first_date.date()))
@@ -246,25 +244,31 @@ class Session(FeedItemModel,PhotosMixin):
     if datetime.datetime.now() > self.last_date:
       d = self.last_date
       enrolled_status = "Completed: %s/%s/%s"%(d.month,d.day,d.year)
+    closed_status = self.closed_string if (self.closed or self.full) else None
+    if self.private:
+      closed_status = 'private'
     return {
-      'closed_status': self.closed_string if (self.closed or self.full) else None,
+      'id': self.pk,
+      'name': "<b>%s</b> %s"%(self.course,self.first_date.strftime("%m/%d/%Y")),
+      'closed_status': closed_status,
       'short_dates': short_dates,
       'instructor_name': self.get_instructor_name(),
       'instructor_pk': self.user_id,
       'course_id': self.course_id,
-      'enrolled_status': enrolled_status
+      'enrolled_status': enrolled_status,
+      'classtimes': [c.as_json for c in self.classtime_set.all()],
+      'private': True
     }
   json = property(lambda self: dumps(self.as_json))
   get_room = lambda self: self.course.room
 
   total_students = property(lambda self: sum([e.quantity for e in self.enrollment_set.all()]))
-  evaluated_students = property(lambda self: self.enrollment_set.filter(evaluated=True).count())
-  completed_students = property(lambda self: self.enrollment_set.filter(completed=True).count())
-  _full = lambda self: self.total_students >= self.course.max_students
-  full = property(_full)
+  evaluated_students = property(lambda self: self.get_evaluations().count())
+  completed_students = property(lambda self: self.enrollment_set.filter(completed__isnull=False).count())
+  full = property(lambda self: self.total_students >= self.course.max_students)
   list_users = property(lambda self: [self.user])
 
-  #! much of this if deprecated after course remodel
+  #! mucch of this if deprecated after course remodel
   description = property(lambda self: self.course.description)
   @cached_property
   def first_photo(self):
@@ -275,7 +279,7 @@ class Session(FeedItemModel,PhotosMixin):
   # course can have files or session can override them
   @cached_method
   def get_files(self):
-    return self.course.get_files() or self.course.get_files()
+    return self._get_files() or self.course.get_files()
 
   #calendar crap
   name = property(lambda self: self.course.name)
@@ -312,20 +316,18 @@ class Session(FeedItemModel,PhotosMixin):
   def save(self,*args,**kwargs):
     #this may be depracated, basically the site fails hard if instructors don't have membership profiles
     from membership.models import UserMembership
-    if not self.pk:
+    if not self.pk and self.course:
       c = self.course
       c.active = True
       c.save()
     if self.active and not self.publish_dt:
       publish_dt = datetime.datetime.now()
     profile,_ = UserMembership.objects.get_or_create(user=self.user)
-    self.slug = self.slug or 'arst' # can't save without one, we'll set this below
-    super(Session,self).save(*args,**kwargs)
-    self.slug = slugify("%s_%s"%(self.course,self.id))
     super(Session,self).save(*args,**kwargs)
 
-    #now reset classe json just in case anything changed
-    reset_classes_json("classes reset during session save")
+    # now a class product needs to be made (or not)
+    defaults = {'slug': "%s_%s"%(unicode(self)[:40],self.pk),'name': unicode(self)}
+    s,new = SessionProduct.objects.get_or_create(session=self,defaults=defaults)
   @cached_method
   def get_absolute_url(self):
     return self.course.get_absolute_url()
@@ -354,54 +356,73 @@ class Session(FeedItemModel,PhotosMixin):
 
 class ClassTime(OccurrenceModel):
   session = models.ForeignKey(Session)
+  emailed = models.DateTimeField(null=True,blank=True)
   def short_name(self):
     times = list(self.session.classtime_set.all())
-    if len(times) == 1:
-      return self.session.course.get_short_name()
-    return "%s (%s/%s)"%(self.session.course.get_short_name(),times.index(self)+1,len(times))
+    s = self.session.course.get_short_name()
+    if len(times) != 1:
+      s = "%s (%s/%s)"%(s,times.index(self)+1,len(times))
+    if self.session.private:
+      return "[PRIVATE] " + s
+    return s
   get_absolute_url = lambda self: self.session.get_absolute_url()
+  get_absolute_url = cached_method(get_absolute_url,name='get_absolute_url')
   get_admin_url = lambda self: "/admin/course/session/%s/"%self.session.id
   get_room = lambda self: self.session.course.room
   no_conflict = lambda self: self.session.course.no_conflict
   description = cached_property(lambda self:self.session.course.description,name="description")
   name = cached_property(lambda self: self.session.course.name,name="name")
   room = cached_property(lambda self: self.session.course.room,name="room")
+  icon = property(lambda self: 'private' if self.session.private else 'course')
+  @property
+  def as_json(self):
+    return {
+      'room_id': self.session.course.room_id,
+      'name': self.short_name(),
+      'start': str(self.start),
+      'end': str(self.end),
+    }
   class Meta:
     ordering = ("start",)
 
 class EnrollmentManager(models.Manager):
   def pending_evaluation(self,*args,**kwargs):
     kwargs['evaluation_date__lte'] = datetime.datetime.now()
-    kwargs['evaluation_date__gte'] = datetime.datetime.now()-datetime.timedelta(30)
+    kwargs['evaluation_date__gte'] = datetime.datetime.now()-datetime.timedelta(60)
     kwargs['evaluated'] = False
     kwargs['emailed'] = False
     return self.filter(*args,**kwargs)
 
-class Enrollment(UserModel):
+class Enrollment(CriterionModel):
+  user = models.ForeignKey(settings.AUTH_USER_MODEL)
   session = models.ForeignKey(Session)
-  datetime = models.DateTimeField(default=datetime.datetime.now)
   quantity = models.IntegerField(default=1)
 
-  completed = models.BooleanField(default=False)
   evaluated = models.BooleanField(default=False)
   emailed = models.BooleanField(default=False)
   evaluation_date = models.DateTimeField(null=True,blank=True)
+  transaction_ids = models.TextField(null=True,blank=True)
+  get_occurrences = lambda self: list(session.classtime_set.all())
 
   objects = EnrollmentManager()
+
+  get_criteria = lambda self: self.session.course.criterion_set.all()
+  @property
+  def as_json(self):
+    return {
+      'id': self.id,
+      'session': self.session.as_json,
+      'session_name': unicode(self.session),
+      'completed': unicode(self.completed or ''),
+    }
 
   __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.session)
   def save(self,*args,**kwargs):
     if not self.evaluation_date:
       self.evaluation_date = list(self.session.all_occurrences)[-1].start
     super(Enrollment,self).save(*args,**kwargs)
-    if self.completed:
-      CourseCompletion.objects.get_or_create(user=self.user,course=self.session.course)
   class Meta:
     ordering = ('-datetime',)
-
-class CourseCompletion(UserModel):
-  course = models.ForeignKey(Course)
-  created = models.DateTimeField(auto_now_add=True)
 
 FIVE_CHOICES = (
   (1,'1 - Did not meet expectations'),
@@ -414,7 +435,7 @@ FIVE_CHOICES = (
 class Evaluation(UserModel):
   _kwargs = dict(validators=[MaxLengthValidator(512)],max_length=512,null=True,blank=True)
 
-  enrollment = models.ForeignKey(Enrollment,unique=True)
+  enrollment = models.OneToOneField(Enrollment)
   datetime = models.DateTimeField(auto_now_add=True)
 
   p_ht = "Rate the instructor on subject knowledge, pace of the course and communication skills"
@@ -469,11 +490,22 @@ def reset_classes_json(context="no context provided"):
   f.close()
   os.rename(os.path.join(settings.STATIC_ROOT,'_classes.json'),os.path.join(settings.STATIC_ROOT,'classes.json'))
 
+  cutoff = datetime.datetime.now() - datetime.timedelta(1)
+  text = dumps([s.pk for s in Session.objects.filter(last_date__gte=cutoff) if s.full or s.private])
+  f = open(os.path.join(settings.STATIC_ROOT,'_sessions.json'),'w')
+  f.write("var FULL_SESSIONS = "+text)
+  f.close()
+  os.rename(os.path.join(settings.STATIC_ROOT,'_sessions.json'),os.path.join(settings.STATIC_ROOT,'sessions.json'))
+
   # for now email chris whenever this happens so that he can check
   # if it's firing too often or during a request
   dt = datetime.datetime.now()
-  if dt.hour == 0:
+  if dt.hour == 0 and dt.minute == 0:
     mail_admins("classes.json reset",context)
 
-from .listeners import *
+class SessionProduct(Product):
+  session = models.OneToOneField(Session)
+  class Meta:
+    ordering = ('pk',)
 
+from .listeners import *

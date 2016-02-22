@@ -1,0 +1,11 @@
+{% extends "store/base.html" %}
+
+{% block title %}Shop{% endblock %}
+
+{% block products %}
+<product-list></product-list>
+{% endblock %}
+
+{% block pjs %}
+<script>var CART = {{ cart|safe }};</script>
+{% endblock %}

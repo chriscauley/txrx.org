@@ -1,0 +1,28 @@
+/*@font1: "Novecentosanswide-Book";
+@font2: "Novecentosanswide-Normal";
+
+.navFont {
+  font-family: @font1;
+  font-weight: bold;
+}*/
+body { margin: 0 auto 50px; width: 100%;}
+body,html { overflow-x: hidden; }
+
+@media (max-width: @screen-xs-max) {
+  .container{
+    max-width:@screen-xs-min;
+  }
+}
+
+@media (max-width: @screen-xs-max) {
+  .hidden246:nth-child(n+3) { display: none; }
+  .hidden112:nth-child(n+2) { display: none; }
+}
+@media (max-width: @screen-sm-max) {
+  .hidden246:nth-child(n+5) { display: none; }
+  .hidden112:nth-child(n+2) { display: none; }
+}
+@media (max-width: @screen-md-max) {
+  .hidden246:nth-child(n+7) { display: none; }
+  .hidden112:nth-child(n+3) { display: none; }
+}

@@ -1,9 +1,0 @@
-{% load mptt_tags %}
-
-{% for comment, tree in comments|tree_info %}
-{% if forloop.first and display_link %}{% with obj=comment.content_object %}
-Comments for: <a href="{{ obj.get_absolute_url }}">{{ obj }}</a>
-{% endwith %}{% endif %}
-{% include "comments/display_comment.html" %}
-
-{% endfor %}

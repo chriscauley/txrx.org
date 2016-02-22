@@ -1,4 +1,5 @@
 from django.contrib import admin
+from lablackey.db.admin import RawMixin
 from .models import City, Location, Room, DXFEntity, RoomGroup
 
 class LocationAdmin(admin.ModelAdmin):
@@ -12,7 +13,7 @@ class DXFEntityAdmin(admin.ModelAdmin):
   list_display = ('__unicode__','room')
   list_editable = ('room',)
 
-class RoomGroupAdmin(admin.ModelAdmin):
+class RoomGroupAdmin(RawMixin,admin.ModelAdmin):
   raw_id_fields = ('fill',)
 
 admin.site.register(Room,RoomAdmin)

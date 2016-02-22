@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load short_codes thumbnail crop_util %}
+
+{% block full_title %}Welcome to {{ SITE_NAME }}{% endblock %}
+{% block header %}{% endblock %}
+
+{% block content %}
+<!-- hello bradley -->
+{% thumbnail banner.src "700x100" upscale="false" crop="noop" as im %}
+<section class="banner row">
+  {% if banner.header %}<h3 class="block_title">{{ banner.header }}</h3>{% endif %}
+  <div class="col-xs-12">
+    <center><a href="{{ banner.url }}"><img src="{{ im.url }}" /></a></center>
+  </div>
+</section>
+{% endthumbnail %}
+<section class="FeaturedThings row">
+  <h3 class="block_title">Featured Projects</h3>
+  <div class="things">
+    {% for thing in things %}{# this needs to be unified with tool_detail and generalized #}
+    {% thumbnail thing.first_photo|get_override:"square_crop" "300x300" crop="center" as im %}
+    <div class="thing thing{{ forloop.counter }} col-xs-6 col-md-4 col-lg-3 hidden246">
+      <a href="{{ thing.get_absolute_url }}">
+        <img src="{{ im.url }}" />
+        <div class="hover">
+          <div class="title">
+            {{ thing.title }}
+            <div class="author"> by {{ thing.user }}</div>
+          </div>
+        </div>
+      </a>
+    </div>
+    {% endthumbnail %}
+    {% endfor %}
+  </div>
+  <a class="ViewAll colored-link" href="{% url "thing_index" %}">View More Projects &raquo;</a>
+</section>
+<section class="BlogList row">
+  <h3 class="block_title">Recent Blogs</h3>
+  {% include "_blog_list.html" %}
+  <a class="ViewAll" href="{% url "blog_home" %}">View More Blogs &raquo;</a>
+</section>
+{% endblock %}

@@ -2,16 +2,22 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
-from .models import User
-from membership.admin import UserMembershipInline
+from .models import User, UserNote
+from membership.admin import UserMembershipInline, SubscriptionInline
+from course.admin import EnrollmentInline
 from .forms import UserChangeForm, CustomUserCreationForm
 
+class UserNoteInline(admin.TabularInline):
+  model = UserNote
+  extra = 0
+  readonly_fields = ("added",)
+
+@admin.register(User)
 class UserAdmin(UserAdmin):
   fieldsets = (
-    (None, {'fields': ('username', 'email', 'password')}),
-    (_('Personal info'), {'fields': ('first_name', 'last_name')}),
+    (None, {'fields': ('username', 'email', 'password', ('first_name', 'last_name'),('rfid','level'))}),
     (_('Permissions'),
-     {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+     {'fields': ('is_active', 'is_staff', 'is_superuser', ('is_toolmaster', 'is_gatekeeper'), 'groups')}),
     (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
   )
   add_fieldsets = (
@@ -28,7 +34,6 @@ class UserAdmin(UserAdmin):
   _enrollments.allow_tags = True
   search_fields = ('username', 'email', 'first_name', 'last_name','usermembership__paypal_email')
   ordering = ('username',)
-  readonly_fields = ('last_login','date_joined')
-  inlines = [UserMembershipInline]
-
-admin.site.register(User, UserAdmin)
+  readonly_fields = ('last_login','date_joined','level')
+  inlines = [UserMembershipInline, UserNoteInline, SubscriptionInline, EnrollmentInline]
+  list_filter = list(UserAdmin.list_filter) + ['usermembership__voting_rights']

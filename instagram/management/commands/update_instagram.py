@@ -2,11 +2,10 @@ from django.core.management.base import BaseCommand
 from django.core.mail import send_mail
 from django.conf import settings
 
-from simplejson import loads
 import requests, os
 
 from instagram.models import InstagramTag, InstagramLocation, InstagramUser, InstagramPhoto
-from txrx.utils import mail_on_fail
+from lablackey.utils import mail_on_fail
 
 class Command (BaseCommand):
   @mail_on_fail

@@ -1,0 +1,161 @@
+* New member orientation
+** rtfp!
+** Three ways to get tool usage
+*** Checkout -  if you already know
+    email membership@txrxlabs.org to schedule
+    checkout areas, not tools
+    checkout safety + usage
+*** Classes - Can't find one? Email membership@txrxlabs.org
+*** Apprenticeship
+    Some one teaches you
+    you do low level work
+    eventually you'll be checked out
+** google groups
+   membership business
+   reserve tools - 5h (email if needed longer)
+   first come first served if not reserved
+** Storage
+*** You get a drawer when (you want one and have stuff to put in your drawer)
+*** long running projects need Membership approval
+*** There are places to store extra materials (steel, plastic, wood, etc)
+*** Clearly label what is yours - if you don't put your name on it it is property of the lab
+*** If you store materials here to long we'll complain to you. This is not a storage space
+*** stuff gets moved around. If you don't want your stainless to get scratched you need to protect it
+*** If you can't fit your project in your bay or drawer, you need to take it home or get it out of the way
+*** If not it may eventually get scraped.
+** Cleaning
+*** Put tools back
+*** Sweep up debris
+** Request access to the member forums
+*** google groups or bottom of the site
+*** request membership and we'll add you
+*** Email the forums 24 hours in advance by mailing the list
+*** You can't request anything for more than 5 hours unless it's a 3d printer
+*** Check the calendar because courses and meetups take priority over your reservation
+** Meetups
+*** Check the calendar for meetups
+*** If you want to set up a meetup let us (officers) know 
+*** The open houses are the best time to get advice. If not ask the google groups for who can help you
+*** Member meetings are the last Sunday of every month
+*** You must apply for voting membership in advance of the meeting and then we'll let you in.
+** Safety
+*** You must attend safety meetings in the first two months of being here if you want to use the shops
+*** If you can't make the safety orientation, email us and we'll schedule a one on one
+** materials
+*** you break it you bought it on bandsaw blades
+*** bring most materials!
+** project types
+*** we are a non-profit. If you're doing for profit work you need to talk to us and we may ask you to pay more
+* Safety orientation
+** This is not a training session, we have classes for every individual tool
+** This place is a gian experiment
+   We are here to give people access to things that they normally wouldn't have access to
+   As as a result there is no one cleaning up, checking safety on a daily basis
+   It's easy to break equipment or hurt yourself, you're responsible for yourself
+   Remember that you're taking advantage of the hard work of people who have built TXRX
+   Be safe and respectful of those who have made this place for you
+   Not everyone is at the same level!
+   Some people come from an industrial background, others don't
+** Be aware of your surroundings
+   If you see someone not being safe, say something
+   Keep an eye out for safety hazards and point them out to officers or email membership@txrxlabs.org
+** You don't know who used things before you.
+   In your house you people don't move things, but in the lab, 20 people have used it since you last did
+   Re-configure machines, check safety equipment EVERY time you use it.
+** General PPE
+*** ALWAYS wear safety glasses
+    Just because you're not working doesn't mean you can't get hurt by someone else
+    Even someone 30 feet away can send debris far enought to hurt you
+    Even something as simple as an air hose can send debris flying and get in your eye
+    Feel free to buy your own safety glasses because ours kind of suck
+    Safety glasses are even needed in the "safe" side of txrx (etching chemicals can blind you)
+    Think about people around you when you work
+    If someone approaches you without safety glasses, tell them to put them on
+*** Ear protection
+    Even sitting next to a dishwasher for 4 hours can damage your hearing
+    We have foam ear plugs, the big ear muffs are much better
+    Keep a pair of ear plugs on you just in case
+    In general, having PPE near you will greatly increase your likelyhood of using it
+    If you're going to do something really loud, let people in the lab know
+    You don't want to startle people who are working with dangerous tools
+*** clothing protection
+**** Feet
+     There is heavy metal stuff that can shear your foot clean off
+     If you're going to work in the shop by yourself you need to invest in a pair of work boots
+     If you have exposed ankles, falling hot or sharp debris can get in your shoe.
+**** Material
+     Stay away from plastics - if something hot hits it plastics melt into your skin
+     Materials that char (natural fibers) clean off your skin very easily
+     Long work pants and a work shirt protects you from razor sharp steel
+     The wood shop is a little more forgiving, so we're more lax about shorts
+     Damaged clothing is just begging for injury
+     Baggy clothes can get caught on tools or other items and inhibit your motion
+**** Hair + jewelry
+     If you have long hair, put in a pony tail and have it in a bun or inside your shirt
+     People have broken ther neck by having the hair caught in a lathe
+     Hair catches on fire if your welding
+     Jewelry can get easily caught
+     A watch is a great conductor that can short out a welder and melt to your arm
+     If a ring gets crushed it has to be cut off your finger, making the injury much much worse
+*** Fumes
+    Make sure you have plenty of ventilation
+    Damage from fumes is cumulative! You don't know you're doing damage, but it'll give you lung cancer in a decade
+    Use a mask for anything with dust
+*** Electricity
+    120 Volts isn't that bad, but can be dangerous
+    the 480 V triple phase almost certainly will hurt you
+    Increased power is increased danger
+    You have to almost intentionally hurt yourself with a hand shear
+    A press break will take your hand off without slowing down
+    If there are exposed wires, water near electical equipment, or anything else tell us
+    It's easy to break wires with heavy or hot stuff
+    Not only should you report damaged electrical, but be sure not to avoid damaging cords
+    DO NOT BREAK OFF GROUNDING PINS ON EXTENSION CORDS
+*** You're not a certified repair person
+    Do not repair anything
+    Report to us
+    Ronnie will put big pieces of silver electrical tape on it that says "BROKEN"
+    In general anything that is not hooked up should be considered broken 
+*** Fire safety
+    There are places to keep solvents and other flamable materials
+    Don't leave oily rags around
+    Check for flamable materials before you work (other peoples oily rags)
+    Be on the lookout! if something starts smoking when it shouldn't, stop working and figure out why
+    There are fire extinguishers around, be mindful of those
+*** Ladders
+    Don't use things as ladders that aren't ladders!
+    Ladders are good for climbing on
+    other things aren't
+    Someone put a ladder on a palet rack and knocked a machine over.
+    If someone had been on the other side, they would have died
+    Do not over load racks or place things precariously on them
+    Watch for other people who do
+    Putting an open box of a chemical on a rack is a hazard because someone who doesn't know might spill some
+    If it's dangerous it must be labeled
+    If it's dangerous you must consult us as to where to store it
+* Software
+** Free
+  AVG
+  Acrobat
+  Notepad++
+  preform
+  Laserworks
+  Chrome
+  Python
+  Arduino
+  sketchup
+  123D Make
+  Inkscape
+  Inkskape + BBS DXF Exporter
+  Eagle
+  Makerware
+  Doraware
+  Draftsight
+  Sheetcam 
+  Maya 2015
+  Inventor 2015
+  Autocad 2015
+** pirate
+  Meshcam (?)
+  Illustrator
+  Photoshop

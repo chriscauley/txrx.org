@@ -5,7 +5,6 @@ from django.conf import settings
 import datetime,calendar, traceback
 
 from event.models import Event,EventOccurrence
-from txrx.utils import print_to_mail
 
 def add_month(date):
   if not date:
@@ -33,12 +32,14 @@ def add_month_dow(date):
   if not monthcalendar[0][weekday]:
     weeknum += 1
   try:
-    return next_month.replace(day=monthcalendar[weeknum][weekday])
+    day = monthcalendar[weeknum][weekday]
+    if not day:
+      raise IndexError
+    return next_month.replace(day=day)
   except IndexError: # last week of month
     return next_month.replace(day=monthcalendar[weeknum-1][weekday])
 
 class Command (BaseCommand):
-  @print_to_mail(subject="[LOG] Repeating Events")
   def handle(self, *args, **options):
     success = []
     errors = []
@@ -71,7 +72,8 @@ class Command (BaseCommand):
         if settings.DEBUG:
           raise
         errors.append("%s error: \n%s"%(event,traceback.format_exc()))
+    print datetime.datetime.now()
     if errors:
       print "event errors\n--------%s\n\n"%'\n'.join(errors)
     if success:
-      print "event sucess\n--------%s\n\n"%'\n'.join(sucess)
+      print "event success\n--------%s\n\n"%'\n'.join(success)

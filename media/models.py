@@ -1,13 +1,13 @@
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 
-from crop_override import CropOverride, OriginalImage
-
 from instagram.models import InstagramPhoto
-from txrx.utils import cached_method, cached_property
+from lablackey.utils import cached_method, cached_property
 
+from crop_override import CropOverride, OriginalImage
+from sorl.thumbnail import get_thumbnail
 import os
 
 class FileModel(models.Model):
@@ -90,6 +90,14 @@ class Photo(FileModel):
   _ph = "Usages: None"
   portrait_crop = CropOverride('Portrait Crop (2:3)', aspect='2x3',help_text=_ph,**kwargs)
   external_url = models.URLField(null=True,blank=True)
+  thumbnail_url = property(lambda self: get_thumbnail(self.file,"200x200",crop="center").url)
+  @property
+  def as_json(self):
+    return {
+      'id': self.id,
+      'name': self.name,
+      'thumbnail': self.thumbnail_url,
+    }
   @property
   def external_type(self):
     for t in ['gfycat','youtube','vortex']:
@@ -110,33 +118,35 @@ class TaggedPhoto(models.Model):
   photo = models.ForeignKey(Photo)
   content_type = models.ForeignKey("contenttypes.ContentType")
   object_id = models.IntegerField()
-  content_object = generic.GenericForeignKey('content_type', 'object_id')
+  content_object = GenericForeignKey('content_type', 'object_id')
   order = models.IntegerField(default=9999)
 
-class PhotosMixin():
+class PhotosMixin(object):
   @cached_property
   def first_photo(self):
     try:
       return self.get_photos()[0]
     except IndexError:
-      return Photo.objects.get(pk=144)
+      return Photo.objects.get(id=144)
   @cached_property
   def _ct_id(self):
     return ContentType.objects.get_for_model(self.__class__).id
   @cached_method
   def get_photos(self):
+    if getattr(self,"_use_default_photo",False):
+      return self._get_photos() or [Photo.objects.get(id=144)]
     return self._get_photos()
   def _get_photos(self):
     return list(Photo.objects.filter(taggedphoto__content_type_id=self._ct_id,
                                      taggedphoto__object_id=self.id).order_by("taggedphoto__order"))
 
-class FilesMixin():
+class FilesMixin(object):
   @cached_property
   def first_file(self):
     try:
       return self.get_files()[0]
     except IndexError:
-      return MiscFile.objects.get(pk=144)
+      return MiscFile.objects.get(id=144)
   @cached_property
   def _ct_id(self):
     return ContentType.objects.get_for_model(self.__class__).id
@@ -145,11 +155,14 @@ class FilesMixin():
     return self._get_files()
   def _get_files(self):
     return list(MiscFile.objects.filter(taggedfile__content_type_id=self._ct_id,
-                                     taggedfile__object_id=self.id).order_by("taggedfile__order"))
+                                        taggedfile__object_id=self.id).order_by("taggedfile__order"))
+  class Meta:
+    abstract = True
+
 
 class TaggedFile(models.Model):
   file = models.ForeignKey(MiscFile)
   content_type = models.ForeignKey("contenttypes.ContentType")
   object_id = models.IntegerField()
-  content_object = generic.GenericForeignKey('content_type', 'object_id')
+  content_object = GenericForeignKey('content_type', 'object_id')
   order = models.IntegerField(default=9999)

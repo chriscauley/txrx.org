@@ -1,4 +1,5 @@
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -7,10 +8,13 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Photo, PhotoTag
+from .models import Photo, PhotoTag, TaggedPhoto
 from .forms import PhotoForm, PhotoFilterForm, ZipForm, PhotoTagForm
 
 from NextPlease import pagination
+from PIL import Image
+
+import json
 
 @staff_member_required
 @pagination('photos',per_page=12,orphans=5)
@@ -75,9 +79,9 @@ def bulk_tag_index(request):
 @staff_member_required
 @pagination('photos',per_page=96,orphans=5)
 def bulk_tag_detail(request,tag_id):
-  phototag = PhotoTag.objects.get(pk=tag_id)
+  phototag = PhotoTag.objects.get(id=tag_id)
   if request.POST:
-    photo = Photo.objects.get(pk=request.POST['photo_pk'])
+    photo = Photo.objects.get(id=request.POST['photo_id'])
     if request.POST['checked'] == 'true':
       photo.tags.add(phototag)
     else:
@@ -89,3 +93,72 @@ def bulk_tag_detail(request,tag_id):
     'photos': Photo.objects.all()
   }
   return TemplateResponse(request,"photo/bulk_tag_detail.html",values)
+
+@staff_member_required
+def photo_search(request):
+  q = request.GET['q']
+  photos = Photo.objects.filter(Q(name__icontains=q)|Q(caption__icontains=q))
+  return HttpResponse(json.dumps([p.as_json for p in photos]))
+
+@staff_member_required
+def tag_photo(request):
+  natural_key = request.GET.get('content_type').split('.')
+  content_type = ContentType.objects.get_by_natural_key(*natural_key)
+  photo = Photo.objects.get(id=request.GET['photo_id'])
+  tag,new = TaggedPhoto.objects.get_or_create(
+    photo=photo,
+    object_id=request.GET['object_id'],
+    content_type=content_type,
+  )
+  return HttpResponse(json.dumps(new))
+
+@staff_member_required
+def bulk_photo_upload(request):
+  image_list = []
+  if request.method == "POST" and request.FILES:
+    natural_key = request.POST.get('content_type').split('.')
+    content_type = ContentType.objects.get_by_natural_key(*natural_key)
+    for f in request.FILES.getlist('file'):
+      try:
+        Image.open(f)
+      except IOError:
+        image_list.append({
+          'error':"This does not appear to be a valid image",
+          'name': f.name
+        })
+        continue
+      photo = Photo.objects.create(
+        file=f,
+        user=request.user
+      )
+      image_list.append(photo.as_json)
+      TaggedPhoto.objects.create(
+        photo=photo,
+        object_id=request.POST['object_id'],
+        content_type=content_type,
+      )
+  return HttpResponse(json.dumps(image_list))
+
+@csrf_exempt
+@staff_member_required
+def untag_photo(request):
+  natural_key = request.POST.get('content_type').split('.')
+  content_type = ContentType.objects.get_by_natural_key(*natural_key)
+  TaggedPhoto.objects.filter(content_type=content_type,
+                          object_id=request.POST['object_id'],
+                          photo__id=request.POST['photo_id']).delete()
+  return HttpResponse('')
+
+@csrf_exempt
+@staff_member_required
+def delete_photo(request,pk):
+  Photo.objects.filter(pk=pk).delete()
+  return HttpResponse('')
+
+@csrf_exempt
+@staff_member_required
+def edit_photo(request,pk):
+  photo = Photo.objects.get(pk=pk)
+  photo.name = request.POST['name'].replace('\n','').strip()
+  photo.save()
+  return HttpResponse('')

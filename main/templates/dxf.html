@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block main %}
+<div id="map">
+  <floorplan></floorplan>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script type="riot/tag" src="{{ STATIC_URL }}tags/map.tag"></script>
+<script type="riot/tag" src="{{ STATIC_URL }}bower/ur/modal.tag"></script>
+<script>
+riot.mount("floorplan",{ locations: [1,2], });
+(function() {
+  var input = "";
+  window.IGNORE_AJAX_ERRORS = true;
+  window.addEventListener("keypress", function(e){
+    if (e.keyCode == 13) { // enter key
+      $.post(
+        '/event/checkin/',
+        {rfid: input, checkinpoint_id: 2},
+        function(data) {
+          modal = document.createElement("modal");
+          modal.innerHTML = data;
+          document.body.appendChild(modal);
+          mount = riot.mount("modal",{close_in: 30000});
+          window.modal = mount;
+        },
+        'json'
+      );
+      input = "";
+    } else if (e.keyCode > 47 && e.keyCode < 58) {
+      input += e.keyCode-48;
+    }
+  })
+})();
+</script>
+{% endblock %}

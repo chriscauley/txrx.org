@@ -1,76 +1,47 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from django.db import models, migrations
 import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+import wmd.models
+import media.models
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Event'
-        db.create_table('event_event', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
-            ('location', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geo.Location'])),
-            ('description', self.gf('wmd.models.MarkDownField')(null=True, blank=True)),
-        ))
-        db.send_create_signal('event', ['Event'])
+    dependencies = [
+    ]
 
-        # Adding model 'EventOccurrence'
-        db.create_table('event_eventoccurrence', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('start', self.gf('django.db.models.fields.DateTimeField')()),
-            ('end', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('name_override', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
-            ('description_override', self.gf('wmd.models.MarkDownField')(null=True, blank=True)),
-            ('event', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['event.Event'])),
-        ))
-        db.send_create_signal('event', ['EventOccurrence'])
-
-
-    def backwards(self, orm):
-        # Deleting model 'Event'
-        db.delete_table('event_event')
-
-        # Deleting model 'EventOccurrence'
-        db.delete_table('event_eventoccurrence')
-
-
-    models = {
-        'event.event': {
-            'Meta': {'object_name': 'Event'},
-            'description': ('wmd.models.MarkDownField', [], {'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['geo.Location']"}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'})
-        },
-        'event.eventoccurrence': {
-            'Meta': {'object_name': 'EventOccurrence'},
-            'description_override': ('wmd.models.MarkDownField', [], {'null': 'True', 'blank': 'True'}),
-            'end': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'event': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['event.Event']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name_override': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
-            'start': ('django.db.models.fields.DateTimeField', [], {})
-        },
-        'geo.city': {
-            'Meta': {'object_name': 'City'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'latlon': ('geo.widgets.LocationField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'state': ('django.contrib.localflavor.us.models.USStateField', [], {'max_length': '2'})
-        },
-        'geo.location': {
-            'Meta': {'object_name': 'Location'},
-            'address': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
-            'address2': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
-            'city': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'to': "orm['geo.City']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'latlon': ('geo.widgets.LocationField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
-            'zip_code': ('django.db.models.fields.IntegerField', [], {'default': '77007'})
-        }
-    }
-
-    complete_apps = ['event']
+    operations = [
+        migrations.CreateModel(
+            name='Event',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=128, null=True, blank=True)),
+                ('short_name', models.CharField(help_text=b'Optional. Alternative name for the calendar.', max_length=64, null=True, blank=True)),
+                ('description', wmd.models.MarkDownField(null=True, blank=True)),
+                ('repeat', models.CharField(blank=True, max_length=32, null=True, help_text=b'If your changing this, you will need to manually delete all future incorrect events. Repeating events are auto-generated every night.', choices=[(b'', b'No Repeat'), (b'weekly', b'Weekly'), (b'biweekly', b'Bi Weekly'), (b'triweekly', b'Tri Weekly'), (b'month-dow', b'Monthly (Nth weekday of every month)'), (b'month-number', b'Monthly (by day number)')])),
+                ('no_conflict', models.BooleanField(default=False, help_text=b'If true, this class will not raise conflict warnings for events in the same room.')),
+            ],
+            options={
+            },
+            bases=(media.models.PhotosMixin, models.Model),
+        ),
+        migrations.CreateModel(
+            name='EventOccurrence',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('start', models.DateTimeField()),
+                ('end_time', models.TimeField()),
+                ('created', models.DateTimeField(auto_now_add=True)),
+                ('publish_dt', models.DateTimeField(default=datetime.datetime.now)),
+                ('name_override', models.CharField(max_length=128, null=True, blank=True)),
+                ('description_override', wmd.models.MarkDownField(null=True, blank=True)),
+                ('event', models.ForeignKey(to='event.Event')),
+            ],
+            options={
+                'ordering': ('start',),
+            },
+            bases=(media.models.PhotosMixin, models.Model),
+        ),
+    ]

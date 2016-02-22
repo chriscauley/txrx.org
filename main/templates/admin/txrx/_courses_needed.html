@@ -1,0 +1,66 @@
+{% load admin_dashboard i18n %}
+
+{% get_courses_needed %}
+{% if inactive_sessions %}
+<h1>Inactive Sessions</h1>
+<div class="alert alert-danger">
+  The following sessions are inactive.
+  <ul>
+    {% for session in inactive_sessions %}
+    <li><a href="/admin/course/session/{{ session.pk }}/">{{ session }}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% if courses_needed %}
+<h1>Courses Needed (x{{ courses_needed|length }})</h1>
+{% for course in courses_needed %}
+<div class="module" style="width: 375px;">
+  <table class="table-overview applist" summary="{% blocktrans %}Conflicting classes and events.{% endblocktrans %}"
+         style="width: 100%">
+    <tr><td>
+        <dl>
+          <dt><h2>{{ course }}</h2></dt>
+          <dd>
+            <div>
+              {% if course.last_session %}
+              {% if course.last_session.past %}
+              Last taught
+              {% else %}
+              <b style="color:red">[{{ course.last_session.closed_string|upper }}]</b> with
+              {% endif %}
+              {{ course.last_session.user }} on {{ course.last_session.first_date|date:"m/d/Y" }}
+              {% else %}
+              <b>Never Taught</b>
+              {% endif %}
+            </div>
+            <div><big>{{ course.notifycourse_set.count }}</big> People on waiting list</div>
+          </dd>
+          {% if course.last_session %}
+          <dd>
+            <br />
+            <a class="btn btn-success" href="{{ course.last_session.get_absolute_url }}">
+              <i class="icon-share" title="View Session on Site"></i> View</a>
+            <a class="btn btn-success" href="{{ course.last_session.get_admin_url }}">
+              <i class="icon-search" title="Edit Session in Admin"></i> Edit</a>
+            <a class="btn btn-success" href="{% url "course:clone_session" course.pk %}">
+              <i class="icon-plus" title="Clone Last Session"></i> Clone</a>
+          </dd>
+          {% endif %}
+          <dd>
+            <br />
+            {% for n in "136" %}
+            <a href="{% url "course:delay_reschedule" course.pk n %}">
+              <button class="btn btn-warning" title="Delay for {{ n }} Months">
+                <i class="icon-plus"></i>{{ n }} Mo</button></a>
+            {% endfor %}
+            <a href="{% url "course:delay_reschedule" course.pk "close" %}">
+              <button class="btn btn-warning" title="Delay for {{ n }} Months">
+                Deactivate</button></a>
+          </dd>
+        </dl>
+    </td></tr>
+  </table>
+</div>
+{% endfor %}
+{% endif %}

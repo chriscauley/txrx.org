@@ -4,6 +4,7 @@
   <li><h3 class="block_title margin-top">Past Courses</h3></li>
   {% endif %}{% endifchanged %}
   <li>
+    {% if not session.active %}<b style="color: red;">[INACTIVE]</b>{% endif %}
     <a href="{% url "course:instructor_session" session.pk %}"> {{ session.course }}</a>
     ({{ session.get_short_dates }} - {{ session.first_date.year }})
     <p>

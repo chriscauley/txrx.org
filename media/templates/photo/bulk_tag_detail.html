@@ -20,7 +20,7 @@
     label.classList.add("loading");
     $.post(
       '.',
-      {photo_pk: this.value,checked:this.checked},
+      {photo_id: this.value,checked:this.checked},
       function(data) { console.log(label);label.classList.remove("loading"); }
     )
   }

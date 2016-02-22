@@ -1,3 +1,4 @@
+{% load compress %}
 <div class="modal fade" id="cartModal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -8,10 +9,10 @@
         <h4 class="modal-title">Shopping Cart</h4>
       </div>
       <div class="modal-body">
+        {% compress js %}
         <script type="text/javascript" src="{{ STATIC_URL }}js/simpleCart.js"></script>
-        <script type="text/javascript">
-          simpleCart.email = "{{ settings.PAYPAL_RECEIVER_EMAIL }}";</script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/cart.js"></script>
+        {% endcompress %}
         <div id="cart">
           <div class="well">
             <div id="cartEmpty">Your cart is empty</div>
@@ -31,36 +32,13 @@
             and reminder the day before your class. If you want to use a different email, enter it above.
           </div>
           {% endif %}
-          <center><button class="btn btn-danger return_policy" onclick="$('.return_policy').toggle();return false;">View our return policy</button></center>
+          <center><button class="btn btn-danger return_policy" onclick="$('.return_policy').toggle();return false;">
+              View our return policy</button></center>
           <div class="alert alert-danger return_policy" style="display:none;">
             {% include "course/_return_policy.html" with format="html" %}
           </div>
         </div>
         <script>
-function createCookie(name,value,days) {
-  if (days) {
-    var date = new Date();
-    date.setTime(date.getTime()+(days*24*60*60*1000));
-    var expires = "; expires="+date.toGMTString();
-  }
-  else var expires = "";
-  document.cookie = name+"="+value+expires+"; path=/";
-}
-
-function readCookie(name) {
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(';');
-  for(var i=0;i < ca.length;i++) {
-    var c = ca[i];
-    while (c.charAt(0)==' ') c = c.substring(1,c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-  }
-  return null;
-}
-
-function eraseCookie(name) {
-  createCookie(name,"",-1);
-}
 function simple_cart_ready() {
   {% if "success" in request.GET %}simpleCart.empty();{% endif %}
   if (!!readCookie("checkout_initiated")) {simpleCart.empty(); eraseCookie("checkout_initiated");}
@@ -69,7 +47,7 @@ function simple_cart_ready() {
 simpleCart.cartHeaders = ["Name", "Quantity", "Increment", "Decrement", "Total", "Remove"];
 simpleCart.discount = {{ member_discount }};
 simpleCart.ready(simple_cart_ready)
-$(".itemRemove a").live("click",toggleCourses);
+$(".itemRemove a").on("click",toggleCourses);
         </script>
       </div>
       <div class="modal-footer">
@@ -85,8 +63,8 @@ $(".itemRemove a").live("click",toggleCourses);
   <div id="mobileCart" class="alert alert-success">
     <button class="btn btn-primary btn-cart" data-toggle="modal" data-target="#cartModal">
       <i class="fa fa-shopping-cart"></i>
-      <span class="simpleCart_quantity">1</span> items
-      (<span class="simpleCart_total">$60.00</span>)
+      <span class="simpleCart_quantity"></span> items
+      (<span class="simpleCart_total"></span>)
     </button>
   </div>
 </div>

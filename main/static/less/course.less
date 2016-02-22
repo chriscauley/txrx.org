@@ -1,0 +1,375 @@
+@pictureWidth: 206px;
+
+.course {
+  &:hover {
+    background: fade(@brand-primary,20);
+  }
+  color: inherit;
+  display: block;
+  max-height: 153px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  &.enrolled { background: #A9CEE0; }
+}
+ 
+.course, session-list .session {
+  &:hover {
+    background: fade(@brand-primary,20);
+  }
+}
+.needs_ajax {
+  &:before { content: "Loading..."; }
+}
+
+.course {
+  .picture {
+    left: 5px;
+    position: absolute;
+    top: 5px;
+    width: 206px;
+    img {
+      height: auto;
+      width: 100%;
+    }
+  }
+  .details {
+    min-height: 140px;
+    margin-left: @pictureWidth + 10px;
+    padding-bottom: 30px;
+    position: relative;
+    .name, .description { padding-right: 80px; }
+    .description {
+      max-height: 4.2em;
+      line-height: 1.4em;
+      overflow: hidden;
+    }
+  }
+  .price {
+    font-size: 25px;
+    position: absolute;
+    right: 5px;
+    text-align: center;
+    top: 5px;
+    width: 70px;
+  }
+  [data-status] {
+    background: @brand-primary;
+    color: white;
+    font-weight: bold;
+    padding: 3px 8px;
+    position: absolute;
+    text-transform: uppercase;
+    &:before { content: attr(data-status); }
+  }
+  .full_sessions, .open_sessions { display: none; }
+  [data-status=Enroll] {
+    + div {
+      .full_sessions, .open_sessions {
+        display: inline-block;
+      }
+    }
+  }
+  .details [data-status] {
+    bottom: -3px;
+    right: 0;
+  }    
+  .picture [data-status] { display: none; }
+}
+
+// classes that are not scheduled
+.course_divider ~ div .course {
+  [data-status=Enroll]:before {
+    content: "details";
+  }
+}
+
+session-list, event-list {
+  display: block;
+  margin-bottom: 20px;
+  position: relative;
+  .session,event-occurrence {
+    display: block;
+    margin-bottom: 10px;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    .instructor-link { font-size: 2em; left: 5px; position: absolute; top: 0; }
+    .admin-link { font-size: 2em; position: absolute; right: 5px; top: 0; }
+    .full { color: @brand-danger; }
+    .alert { margin: 5px 0 0; }
+  }
+}
+
+session-list .fee {
+  border-color: transparent;
+  position: absolute;
+  right: 0;
+  top: -54px;
+}
+
+.course .details {
+  .closed_string {
+    color: red;
+    text-transform: uppercase;
+    &:before { content: "["; }
+    &:after { content: "]"; }
+    &:empty { display: none; }
+  }
+  .title {
+    color: @brand-primary;
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1.1em;
+    overflow: hidden;
+    padding: 0 70px 5px 0;
+    position: relative;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .sessions {
+    border-top: 1px solid;
+    bottom: 0;
+    line-height: 1em;
+    min-height: 27px;
+    margin: 0;
+    padding: 10px 80px 2px 0;
+    position: absolute;
+    width: 100%;
+    .next_session:before { color: black; content: "Next Session: "; }
+    .private, .full { color: @brand-danger; }
+    .open_sessions { color: @brand-success; }
+    .full_sessions { color: @brand-danger; }
+  }
+  .subjects {
+    color: darken(@borderGray,10%);
+    text-transform: uppercase;
+    span { display: inline-block; padding-right: 15px; }
+  }
+}
+
+@media (max-width: @screen-sm-max) {
+  .course {
+    max-height: none;
+    .picture [data-status] {
+      bottom: 0;
+      display: block;
+      left: 0;
+    }
+    .picture [data-status=Enroll], [data-status=Enroll] { display: none; }
+    .details {
+      [data-status] { display: none; }
+      .subjects { display: none; }
+      .description {
+        padding-right: 0;
+        max-height: none;
+      }
+      .title {
+        padding-right: 0;
+        white-space: normal;
+      }
+      .sessions {
+        padding-right: 10px;
+        .next_session:before { color: black; content: "Next: "; }
+        .full_sessions, .open_sessions {
+          display: inline-block;
+        }
+      }
+    }
+    .price {
+      background: rgba(255,255,255,0.85);
+      left: 5px;
+      margin: 5px;
+    }
+  }
+}
+
+#unscheduled-courses .price { display: none; }
+
+@media (max-width: @screen-xs-max) {
+  session-list .fee {
+    float: right;
+    font-size: 24px;
+    line-height: 1;
+    position: static;
+  }
+}
+
+@media (max-width: @screen-xs-max) {
+  .course {
+    .picture {
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+    .picture, .details {
+      position: relative;;
+    }
+    .details {
+      margin: 20px 0 0;
+      padding-left: 10px;
+    }
+  }
+}
+
+session-list {
+  .error { display: none; }
+  [type="radio"] {
+    display:none;
+    + label { cursor: pointer; }
+    &:checked + label {
+      background-color: @successBackground;
+      .fa-check,.fa-dot-circle-o { display: block; }
+      .fa-circle-o { display: none; }
+    }
+  }
+}
+
+.session {
+  &.loading {
+    &:before {
+      background: rgba(0,0,0,0.25);
+      content: '';
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: 1;
+    }
+    // mostly from font-awesome
+    &:after {
+      -webkit-animation: fa-spin 1.5s infinite linear;
+      animation: fa-spin 1.5s infinite linear;
+      color: white;
+      display: inline-block;
+      font: normal normal normal 14px/1 FontAwesome;
+      font-size: inherit;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      content: "\f110";
+      font-size: 3em;
+      height: 0;
+      left: 50%;
+      line-height: 0;
+      margin-left: -0.5em;
+      position: absolute;
+      text-align: center;
+      top: 50%;
+      width: 1em;
+      z-index: 2
+    }
+  }
+}
+
+.course-detail {
+  .fee { padding-right: 0; }
+}
+
+.has_notes span {
+  border-bottom: dashed 1px;
+  color: #0088cc;
+  cursor: help;
+}
+
+session-list {
+  .btn {
+    font-size: 12px;
+    margin: 5px auto 0;
+    padding: 3px 6px;
+    text-transform: uppercase;
+  }
+}
+
+.notify_course {
+  margin-top: 10px;
+  text-align: center;
+  .btn { white-space: normal; }
+}
+
+.recentAdd {
+  box-shadow: inset 0 0 5px #3ac2f5, 0 0 5px #3ac2f5;
+}
+
+// classes cart
+@cartWidth: 100px;
+
+#cart {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+#cart {
+  .cartHeaders { display: none; }
+  .itemContainer {
+    padding: 3px;
+    position: relative;
+    margin-bottom: 5px;
+    min-height: 20px;
+    overflow: hidden;
+    text-align: center;
+    &:nth-child(2n+1) { background-color: rgba(0,0,0,0.05); }
+  }
+
+  .itemName {
+    font-size: 12px;
+    padding-right: 15px;
+    text-align: left;
+    b { font-size: 1.1em; }
+  }
+
+  .itemQuantity, .itemDecrement, .itemIncrement {
+    display: inline-block;
+    line-height: 1em;
+    vertical-align: middle;
+  }
+  .itemQuantity, .itemDecrement { padding-right: 10px; }
+  .itemIncrement { padding-right: 5px; }
+  .itemDecrement, .itemIncrement { font-size: 1.2em; }
+  .itemQuantity {
+    font-weight: bold;
+    &:before { content: "Quantity: "; font-weight: normal; }
+  }
+  .itemTotal {
+    font-weight: bold;
+    &:before { content: "Item Total: "; font-weight: normal; }
+  }
+  .simpleCart_finalTotal { font-size: 1.1em; font-weight: bold; }
+  .itemRemove {
+    font-size: 0;
+    right: 0;
+    position: absolute;
+    top: 6px;
+    a {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      margin-top: 1px;
+      line-height: 14px;
+      background-image: url("/static/img/icon_x_red.png");
+      background-repeat: no-repeat;
+    }
+  }
+}
+
+#cart {
+  .subtotals {
+    border-top: 1px solid @borderGray;
+    margin: 10px auto 0;
+    padding-top: 5px;
+    width: 75%;
+  }
+  .cartSubtotal, .cartDiscount {
+    font-weight: bold;
+    text-align: center;
+    &:before { font-weight: normal; }
+  }
+  .cartSubtotal:before { content: "Cart Subtotal: "; }
+  .cartDiscount:before { content: "Discount: "; }
+  .checkout-box { text-align: center; }
+}
+
+.btn-cart { display: none; }

@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load thumbnail crop_util short_codes%}
-{% load mptt_comments_tags %}
 
 {% block header %}{% endblock %}
 {% block title %}{{ thing }} by {{ thing.user }}{% endblock %}
@@ -58,7 +57,9 @@
     </section>
   </div>
 </div>
-<div class="col-xs-12">
-  {% display_comment_toplevel_for thing %}
+<div class="col-xs-12 col-sm-8 col-md-9">
+  <comment-list data-object_pk="{{ thing.pk }}" data-content_type="thing.thing"></comment-list>
 </div>
 {% endblock %}
+
+{% block extrajs %}{% include "_comment_media.html" %}{% endblock %}

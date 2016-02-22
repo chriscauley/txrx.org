@@ -1,6 +1,6 @@
 from django.db import models
 
-from db.models import UserModel
+from lablackey.db.models import UserModel
 from course.models import Session, Course
 
 class NotifyCourse(UserModel):

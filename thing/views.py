@@ -6,7 +6,7 @@ from django.template.response import TemplateResponse
 
 from .forms import ThingForm
 from .models import Thing, Material
-from db.utils import get_or_none
+from lablackey.utils import get_or_none
 from tool.models import Tool, TaggedTool
 
 from NextPlease import pagination
@@ -30,7 +30,7 @@ filters = {
 def thing_index(request):
   things = Thing.objects.filter(active=True)
   #tool_filter = filters['tool']()
-  #contenttype = ContentType.objects.get(name="thing")
+  #contenttype = ContentType.objects.get(model="thing")
   #for tool in tool_filter['options']:
   #  tool.count = TaggedTool.objects.filter(tool_id=tool.id,content_type=contenttype).count()
   #tool_filter['options'] = [t for t in tool_filter['options'] if t.count > 1]

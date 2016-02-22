@@ -6,7 +6,7 @@ from course.models import ClassTime
 from geo.models import Room
 from .models import EventOccurrence
 
-import icalendar, datetime, math
+import icalendar, datetime, math, arrow
 from itertools import groupby
 from operator import itemgetter
 from pytz import timezone,utc
@@ -59,7 +59,7 @@ def make_ics(occurrences=None,title=None):
 def ics2response(calendar_object,fname):
   icalstream = calendar_object.to_ical().replace('TZID=UTC;', '')
 
-  response = HttpResponse(icalstream, mimetype='text/calendar')
+  response = HttpResponse(icalstream, content_type='text/calendar')
 
   response['Filename'] = '%s.ics'%fname
   response['Content-Disposition'] = 'attachment; filename=%s.ics'%fname
@@ -79,6 +79,7 @@ def iter_times(start,end):
 def get_room_conflicts(base_occurrence=None):
   block_size = 60*30 #seconds per half hour
   if base_occurrence:
+    # only look only during the time of this class accorss all rooms
     start_time = base_occurrence.start-datetime.timedelta(0,block_size)
     end_time = base_occurrence.end+datetime.timedelta(0,block_size)
     room = base_occurrence.room
@@ -89,6 +90,7 @@ def get_room_conflicts(base_occurrence=None):
                                                  event__room=room)
     rooms = [base_occurrence.room]
   else:
+    # Look accross the next 60 days in all rooms
     start_time = datetime.datetime.now()-datetime.timedelta(0,block_size)
     end_time = datetime.datetime.now()+datetime.timedelta(60)
     class_times = ClassTime.objects.filter(start__gte=start_time,start__lte=end_time,
@@ -144,3 +146,19 @@ def get_room_conflicts(base_occurrence=None):
     if room_conflicts:
       out.append((room,room_conflicts))
   return out
+
+def _conflicts(a,b):
+  return not (a.ends < b.starts or b.ends < a.starts)
+
+def user_conflicts(user,new_rsvps=[],ignore_old=False):
+  # Get user_occurrences - everything that the user is signed up for from now into the future
+  arrow.now()
+  user_occurrences = list(ClassTime.objects.filter(start__gte=now,session__enrollment__user=user))
+  user_rsvps = user.rsvp_set.all()
+  for rsvp in user_rsvps:
+    user_occurrences += rsvp.get_occurrences()
+  new_occurrences = []
+  for event in new_rsvps:
+    new_occurrences += event.get_occurrences
+  
+  # Check for conflict in new_occurrences and new_occurrences + old_occurrences

@@ -1,24 +1,20 @@
 from django.contrib import admin
 from django import forms
-from db.forms import StaffMemberForm
-from db.admin import NamedTreeModelAdmin
+from lablackey.db.forms import StaffMemberForm
+from lablackey.db.admin import NamedTreeModelAdmin, RawMixin
 
-from .models import Subject, Course, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseCompletion
+from .models import Subject, Course, Session, Enrollment, Term, ClassTime, Branding, Evaluation
 from event.admin import OccurrenceModelInline
-from media.admin import TaggedPhotoInline, TaggedFileInline
+from media.admin import TaggedFileInline, TaggedPhotoAdmin
 from tool.admin import TaggedToolInline
 
-class CourseCompletionInline(admin.TabularInline):
-  model = CourseCompletion
-  extra = 0
-  raw_id_fields = ('user',)
-
-class CourseAdmin(admin.ModelAdmin):
+@admin.register(Course)
+class CourseAdmin(TaggedPhotoAdmin):
   list_display = ("name","_notifies_count","active","tool_count","photo_count","content","visuals","presentation")
   list_editable = ("content","visuals","presentation")
   readonly_fields = ("_notifies",)
   filter_horizontal = ("subjects",)
-  inlines = [CourseCompletionInline, TaggedPhotoInline, TaggedToolInline, TaggedFileInline]
+  inlines = [TaggedToolInline, TaggedFileInline]
   def tool_count(self,obj):
     return len(obj.get_tools())
   def photo_count(self,obj):
@@ -45,40 +41,40 @@ class ClassTimeInline(OccurrenceModelInline):
 
 class EnrollmentInline(admin.TabularInline):
   model = Enrollment
-  readonly_fields = ('user',)
+  readonly_fields = ('user','session')
+  exclude = ('completed','evaluated','emailed','transaction_ids','evaluation_date')
   extra = 0
 
-class SessionAdmin(admin.ModelAdmin):
+@admin.register(Session)
+class SessionAdmin(TaggedPhotoAdmin):
   form = StaffMemberForm
   ordering = ('-first_date',)
   raw_id_fields = ('course','user')
   readonly_fields = ('_first_date','_last_date','get_room')
   list_display = ("__unicode__","first_date","active")
-  list_filter = ("publish_dt",)
+  list_filter = ("publish_dt",'active')
   _first_date = lambda self,obj: getattr(obj,'first_date','Will be set on save')
   _first_date.short_description = 'first classtime'
   _last_date = lambda self,obj: getattr(obj,'last_date','Will be set on save')
   _last_date.short_description = 'last classtime'
   exclude = ('time_string','slug','publish_dt')
-  inlines = (ClassTimeInline, EnrollmentInline, TaggedPhotoInline)
+  inlines = (ClassTimeInline, EnrollmentInline)
   search_fields = ("user__username","user__email","course__name")
   class Media:
     js = ("js/course_admin.js",)
 
-class EnrollmentAdmin(admin.ModelAdmin):
-  list_display = ("id",'user', 'session', )
+@admin.register(Enrollment)
+class EnrollmentAdmin(RawMixin,admin.ModelAdmin):
+  list_display = ("id",'user', 'session','datetime')
   list_filter = ("session", "user",)
   search_fields = ("user__username","user__email","user__usermembership__paypal_email")
   raw_id_fields = ("user","session")
 
-class EvaluationAdmin(admin.ModelAdmin):
+@admin.register(Evaluation)
+class EvaluationAdmin(RawMixin,admin.ModelAdmin):
   exclude = ('user','enrollment','anonymous')
   readonly_fields = ('get_user',)
 
 admin.site.register(Subject,NamedTreeModelAdmin)
-admin.site.register(Course,CourseAdmin)
-admin.site.register(Enrollment,EnrollmentAdmin)
-admin.site.register(Session,SessionAdmin)
 admin.site.register(Term)
 admin.site.register(Branding)
-admin.site.register(Evaluation,EvaluationAdmin)

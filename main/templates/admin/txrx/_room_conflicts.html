@@ -1,0 +1,39 @@
+{% load admin_dashboard i18n %}
+
+{% get_room_conflicts %}
+{% if room_conflicts %}
+<h1>Potential room conflicts</h1>
+{% for room,conflicts in room_conflicts %}
+<div class="module" style="width: 375px;">
+  <table class="table-overview applist" summary="{% blocktrans %}Conflicting classes and events.{% endblocktrans %}"
+         style="width: 100%">
+    <caption>Conflict at {{ room.name }}</caption>
+    <tr><td>
+        <dl>
+          {% for times,events in conflicts %}
+          <dt>{{ times.0.date }} ({{ times.0|date:"G:i" }} - {{ times.1|date:"G:i" }})</dt>
+          <dd>
+            <ul class="actionlist">
+              {% for event in events %}
+              <li>
+                <a href="{{ event.get_absolute_url }}">
+                  <i class="icon-share" title="View on Site"></i></a>
+                <a href="{{ event.get_admin_url }}">
+                  <i class="icon-edit" title="Edit Event in Admin"></i></a>
+                {% if event.session %}
+                <a href="{{ event.session.course.get_admin_url }}">
+                  <i class="icon-pencil" title="Edit Course in Admin"></i></a>
+                {% endif %}
+                {{ event.short_name }}
+              </li>
+              {% endfor %}
+            </ul>
+          </dd>
+          {% if not forloop.last %}<br />{% endif %}
+          {% endfor %}
+        </dl>
+    </td></tr>
+  </table>
+</div>
+{% endfor %}
+{% endif %}

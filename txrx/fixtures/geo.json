@@ -1,1 +1,0 @@
-[{"pk": 1, "model": "geo.city", "fields": {"latlon": "29.76019,-95.36932999999999", "state": "TX", "name": "Houston"}}, {"pk": 1, "model": "geo.location", "fields": {"latlon": "29.7583882,-95.35068810000001", "city": 1, "name": "TX/RX Labs", "address2": "", "address": "2010 Commerce Street", "zip_code": 77007}}]

@@ -1,20 +1,24 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        pass
+    dependencies = [
+        ('course', '0001_initial'),
+    ]
 
-    def backwards(self, orm):
-        pass
-
-    models = {
-        
-    }
-
-    complete_apps = ['notify']
+    operations = [
+        migrations.CreateModel(
+            name='NotifyCourse',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('course', models.ForeignKey(to='course.Course')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+    ]
