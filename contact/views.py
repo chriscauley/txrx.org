@@ -39,5 +39,5 @@ def tracking_pixel(request,app,model,pk,datetime):
   except Exception,e:
     mail_admins("Bad Tracking Pixel","\n".join([app,model,pk,datetime,str(e)]))
   response = HttpResponse(content_type="image/png")
-  Image.new('RGBA', (100, 10), (255,80,0,255)).save(response,"PNG")
+  Image.new('RGBA', (1, 1), (255,80,0,0)).save(response,"PNG")
   return response

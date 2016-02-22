@@ -58,7 +58,6 @@ class Message(models.Model):
       self.send()
   def send(self):
     text = "Message from: %s\n\n%s"%(self.from_name,self.message)
-    print markdown.markdown(text)+self.get_tracking_pixel()
     send_mail(
       "%s from %s"%(self.subject,self.from_name),
       text,
