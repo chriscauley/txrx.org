@@ -129,24 +129,17 @@ def rsvp(request,session_pk):
     m = "You must be logged in to rsvp. Click the icon at the top right of the page to login or register"
     return HttpResponse(json.dumps([0,m,session.full]))
   enrollment,new = Enrollment.objects.get_or_create(user=request.user,session=session)
-  if "drop" in request.GET:
+  if "unrsvp" in request.path:
     enrollment.delete()
     q = 0
     m = "You are no longer signed up for this."
   elif session.full:
     q = enrollment.quantity
     m = "Sorry, this event is full. Visit the class page to see when it will be offered again."    
-  elif "plus_one" in request.GET:
-    enrollment.quantity += 1
-    enrollment.save()
-    q = enrollment.quantity
-    m = "You have RSVP'd for %s people. If you can't make it, please come back and unenroll."%q
-    if session.full:
-      m += "<br /> <b>This event is now full!</b>"
   else:
     q = 1
     m = "You have RSVP'd for this event. If you can't make it, please come back and unenroll."
-  return HttpResponse(json.dumps([q,m,session.full]))
+  return HttpResponse(json.dumps({'quantity': q,'message': m,'full':session.full}))
 
 def start_checkout(request):
   if not 'cart' in request.GET:
@@ -182,4 +175,23 @@ def toggle_enrollment(request):
   enrollment.completed = not enrollment.completed
   enrollment.save()
   return HttpResponse(json.dumps(enrollment.as_json))
-  
+
+@staff_member_required
+def clone_session(request,course_pk):
+  session = Course.objects.get(pk=course_pk).session_set.order_by("-first_date")[0]
+  clone = Session(
+    course_id = session.course_id,
+    user_id = session.user_id,
+    first_date = session.first_date,
+    last_date = session.last_date,
+    active=False,
+  )
+  clone.save()
+  for classtime in session.classtime_set.all():
+    ClassTime(
+      start=classtime.start,
+      end_time=classtime.end_time,
+      session=clone
+    ).save()
+  messages.success(request,"Session has been cloned. Modify dates and mark active.")
+  return HttpResponseRedirect("/admin/course/session/%s/"%clone.pk)

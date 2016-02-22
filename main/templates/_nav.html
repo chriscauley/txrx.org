@@ -22,7 +22,8 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ n.name }} <b class="caret"></b></a>
         <ul class="dropdown-menu">
           {% for sublink in n.sublinks %}
-          <li><a href="{{ sublink.url }}">{{ sublink.name }}</a></li>
+          <li><a href="{{ sublink.url }}"{% if sublink.reddot %} data-reddot="{{ sublink.reddot }}"{% endif %}>
+              {{ sublink.name }}</a></li>
           {% endfor %}
         </ul>
       </li>

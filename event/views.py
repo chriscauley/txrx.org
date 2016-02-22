@@ -2,14 +2,16 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.template.response import TemplateResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from .utils import make_ics,ics2response
-from .models import Event, EventOccurrence, RSVP
+from .models import Event, EventOccurrence, RSVP, CheckIn
 from course.models import ClassTime
 
 import datetime, json, arrow
@@ -89,7 +91,7 @@ def ics(request,module,model_str,pk,fname):
   return ics2response(calendar_object,fname=fname)
 
 def all_ics(request,fname):
-  occurrences = EventOccurrence.objects.all()
+  occurrences = EventOccurrence.objects.filter(event__hidden=False)
 
   calendar_object = make_ics(occurrences,title="%s Events"%settings.SITE_NAME)
   return ics2response(calendar_object,fname=fname)
@@ -135,3 +137,24 @@ def detail_json(request,event_pk):
   out['upcoming_occurrences'] = [{key: str(getattr(o,key)) for key in fields} for o in os]
 >>>>>>> master
   return HttpResponse(json.dumps(out))
+
+@csrf_exempt
+def checkin(request):
+  User = get_user_model()
+  try:
+    user = User.objects.get(rfid=request.POST['rfid'])
+  except User.DoesNotExist:
+    response = HttpResponse("Unable to find that user. Try again or contact the staff.")
+    response.status_code=401
+    return response
+  kwargs = {
+    'object_id': request.POST.get('object_id',None),
+    'checkinpoint_id': request.POST.get('checkinpoint_id',None),
+    'content_type_id': request.POST.get('content_type_id',None),
+    'user': user,
+  }
+  # ignore checkins for the same thing with in 10 minutes of each other
+  ten_ago = arrow.now().replace(minutes=-10).datetime
+  if not CheckIn.objects.filter(datetime__gte=ten_ago,**kwargs):
+    CheckIn.objects.create(**kwargs)
+  return HttpResponse(json.dumps("%s has been checked in."%user))

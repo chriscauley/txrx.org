@@ -39,23 +39,23 @@ $(function() {
   }
 
   // course lists and search
-  var current_search, active_subject, scheduled_courses, unscheduled_courses;
-
+  var current_search = '', scheduled_courses = [], unscheduled_courses = [];
   function filterSubjects(value) {
-    scheduled_courses = [];
-    unscheduled_courses = [];
-    for (var i=0;i<ALL_CLASSES.length;i++) {
-      var c = ALL_CLASSES[i];
-      if (!!value && c.subject_ids.indexOf(value) == -1) { continue; }
-      if (!!current_search && c.search_string.indexOf(current_search) == -1 ) { continue; }
-      if (c.next_time == 0) { unscheduled_courses.push(c); }
-      else { scheduled_courses.push(c); }
-    }
-    $("#scheduled-courses").replaceWith('<course-list id="scheduled-courses"></course-list>');
-    $("#unscheduled-courses").replaceWith('<course-list id="unscheduled-courses"></course-list>');
-    riot.mount("#scheduled-courses",{courses: scheduled_courses});
-    riot.mount("#unscheduled-courses",{courses: unscheduled_courses});
+    current_search = current_search.toLowerCase();
+    uR.forEach(ALL_CLASSES, function(c) {
+      c.visible = true;
+      if (!!value && c.subject_ids.indexOf(value) == -1) { c.visible = false; }
+      if (!!current_search && c.search_string.indexOf(current_search) == -1 ) { c.visible = false; }
+    });
+    riot.update('course-list');
   }
+
+  uR.forEach(ALL_CLASSES,function(c) {
+    if (c.next_time == 0) { unscheduled_courses.push(c); }
+    else { scheduled_courses.push(c); }
+  });
+  riot.mount("#scheduled-courses",{courses: scheduled_courses});
+  riot.mount("#unscheduled-courses",{courses: unscheduled_courses});
 
   function filterSearch(value) {
     current_search = value;

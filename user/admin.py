@@ -17,7 +17,7 @@ class UserAdmin(UserAdmin):
   fieldsets = (
     (None, {'fields': ('username', 'email', 'password', ('first_name', 'last_name'),('rfid','level'))}),
     (_('Permissions'),
-     {'fields': ('is_active', 'is_staff', 'is_superuser', 'is_toolmaster', 'groups')}),
+     {'fields': ('is_active', 'is_staff', 'is_superuser', ('is_toolmaster', 'is_gatekeeper'), 'groups')}),
     (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
   )
   add_fieldsets = (
@@ -36,3 +36,4 @@ class UserAdmin(UserAdmin):
   ordering = ('username',)
   readonly_fields = ('last_login','date_joined','level')
   inlines = [UserMembershipInline, UserNoteInline, SubscriptionInline, EnrollmentInline]
+  list_filter = list(UserAdmin.list_filter) + ['usermembership__voting_rights']

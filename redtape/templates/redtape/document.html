@@ -4,6 +4,7 @@
 {% block main %}
 <div class="row">
   <div class="col-sm-6">
+    <h1 class="center">{{ document.name }}</h1>
     <form method="POST" enctype="multipart/form-data" class="redtape">
       {{ document.content|explosivo }}
       {% csrf_token %}

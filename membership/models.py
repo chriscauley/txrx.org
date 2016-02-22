@@ -139,10 +139,12 @@ class Subscription(models.Model):
   def bs_class(self):
     if Flag.objects.filter_pastdue(subscription=self):
       return "warning"
-    if self.owed > 0:
-      return "danger"
     if self.canceled:
       return "info"
+    if not self.status_set.count():
+      return "success"
+    if self.owed > 0:
+      return "danger"
     return "success"
   def verbose_status(self):
     if self.owed > 0:

@@ -214,5 +214,3 @@ def reset_tools_json(context="no context provided"):
   os.rename(os.path.join(settings.STATIC_ROOT,'_tools.json'),os.path.join(settings.STATIC_ROOT,'tools.json'))
 
   dt = datetime.datetime.now()
-  if dt.hour == 0 and dt.minute == 0:
-    mail_admins("tools.json reset",context)

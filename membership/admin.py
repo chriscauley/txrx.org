@@ -102,6 +102,8 @@ class SubscriptionAdmin(admin.ModelAdmin):
   raw_id_fields = ('user',)
   readonly_fields = ('_action','paid_until','canceled','owed','edit_user')
   def _action(self,obj):
+    if not (obj and obj.pk):
+      return "Save before creating actions."
     url = reverse("force_cancel",args=[obj.pk])+"?next=/admin/membership/subscription/%s/"%obj.pk
     if obj and obj.pk and not obj.canceled:
       return "<a href='%s'>%s</a>"%(url,"Force Cancel")
@@ -119,14 +121,10 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
 class SubscriptionInline(admin.TabularInline):
   model = Subscription
-  readonly_fields = ('edit','subscr_id','created','canceled','paid_until','product','amount','owed')
+  readonly_fields = ('subscr_id','created','canceled','paid_until','product','amount','owed')
   ordering = ('-canceled',)
   extra = 0
   #has_add_permission = lambda self,obj: False
-  def edit(self,obj):
-    # add this class to open in popup related-widget-wrapper-link
-    return "<a class='change-related' href='/admin/membership/subscription/%s/'></a>"%obj.pk
-  edit.allow_tags = True
 
 class UserMembershipInline(admin.StackedInline):
   list_display = ("__unicode__",'photo')
@@ -148,8 +146,8 @@ class ProposalInline(admin.StackedInline):
 
 class MeetingMinutesForm(forms.ModelForm):
   User = get_user_model()
-  kwargs = dict(widget=forms.CheckboxSelectMultiple(),required=False)
   _q = User.objects.filter(usermembership__voting_rights=True,usermembership__suspended=False)
+  kwargs = dict(widget=forms.CheckboxSelectMultiple(),required=False)
   voters_present = forms.ModelMultipleChoiceField(queryset=_q,**kwargs)
   _q = User.objects.filter(usermembership__voting_rights=True,usermembership__suspended=True)
   kwargs = dict(widget=forms.CheckboxSelectMultiple(),required=False)

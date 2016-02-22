@@ -171,13 +171,12 @@
     <p>Find a user and then select them and you will be prompted for a new rfid</p>
   </search-users>
   <modal if={ active_user } cancel={ cancel }>
-    <h3>Selected: { parent.active_user.username }</h3>
-    Swipe card or enter number.
+    Swipe card or enter number for { parent.active_user.username }.
     <form onsubmit={ parent.submit }>
       <input type="text" />
     </form>
     <div class="alert alert-success" if={ parent.new_rfid }>
-      RFID set as: { parent.new_rfid }
+      RFID for { parent.username } set as: { parent.new_rfid }
     </div>
     <button class="btn btn-block btn-primary" if={ parent.old_rfid } onclick={ parent.undo }>
       Undo (reset to { parent.old_rfid })</button>
@@ -190,7 +189,7 @@
     this.root.querySelector("modal input").focus();
   }
   cancel(e) {
-    this.active_user = this.old_rfid = this.new_rfid = null;
+    this.active_user = this.old_rfid = this.new_rfid = this.username = null;
     this.update();
   }
   submit(e) {
@@ -204,8 +203,9 @@
       {'user_id':this.active_user.id,'rfid':number},
       function(data) {
         target.removeAttribute("ur-loading");
-        that.new_rfid = number;
-        that.old_rfid = data;
+        that.new_rfid = data.new_rfid;
+        that.old_rfid = data.old_rfid;
+        that.username = data.username;
         that.update();
       },
       "json"
@@ -247,10 +247,7 @@
   search(e) {
     value = that.root.querySelector("[name=q]").value;
     if (old_value == value) { return }
-    uR.bounce(s,[e]);
     old_value = value;
-  }
-  function s(e) {
     var target = that.root.querySelector(".results");
     target.setAttribute("ur-loading","loading")
     if (!value || value.length < 3) {
@@ -270,6 +267,7 @@
       "json"
     )
   }
+  this.search = uR.debounce(this.search);
   back(e) {
     this.parent.active_user = undefined;
     this.parent.update()

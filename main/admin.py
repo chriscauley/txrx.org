@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin.models import LogEntry
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.forms import *
@@ -88,4 +89,16 @@ class CustomIPNAdmin(PayPalIPNAdmin):
 admin.site.register(FlatPage,FlatPageAdmin)
 admin.site.register(PayPalIPN,CustomIPNAdmin)
 
-from .signals import *
+from main.signals import *
+
+try:
+  from django.contrib.contenttypes.models import ContentType
+  if settings.DEBUG:
+    @admin.register(LogEntry)
+    class LogEntryAdmin(admin.ModelAdmin):
+      list_filter = ('content_type','user')
+      list_display = ('__unicode__','action_time','content_type','user')
+      raw_id_fields = ('user',)
+    ContentType._meta.ordering = ('model',)
+except:
+  pass

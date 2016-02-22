@@ -111,6 +111,7 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
       'next_time': time.mktime(self.first_date.timetuple()) if self.active_sessions else 0,
       'fee': self.fee,
       'active_sessions': [s.as_json for s in self.active_sessions],
+      'past_session_count': len(self.archived_sessions),
       'short_description': self.get_short_description(),
       'requirements': self.requirements
     }
@@ -146,6 +147,14 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
     # sessions haven't ended yet (and maybe haven't started)
     first_date = datetime.datetime.now()-datetime.timedelta(0.5)
     return list(self.sessions.filter(last_date__gte=first_date))
+
+  @property
+  def archived_sessions(self):
+    # opposite of active_sessions
+    first_date = datetime.datetime.now()-datetime.timedelta(0.5)
+    last_year = first_date - datetime.timedelta(365)
+    sessions = self.session_set.filter(last_date__lt=first_date,last_date__gte=last_year)
+    return list(sessions.order_by("-first_date"))
 
   sessions = lambda self: Session.objects.filter(course=self,active=True)
   sessions = cached_property(sessions,name="sessions")
@@ -205,9 +214,12 @@ class Session(UserModel,PhotosMixin,models.Model):
         self.last_date = _a[-1].end
         self.save()
   get_ics_url = lambda self: reverse_ics(self)
-  course = models.ForeignKey(Course,null=True,blank=True)
+  course = models.ForeignKey(Course)
   cancelled = models.BooleanField(default=False)
   active = models.BooleanField(default=True)
+  _ht = "Private classes cannot be signed up for and do not appear on the session page unless " \
+        "the user is manually enrolled. It will appear on calendar but it will be marked in red."
+  private = models.BooleanField(default=False,help_text=_ht)
   notified = models.DateTimeField(null=True,blank=True)
   publish_dt = models.DateTimeField(null=True,blank=True)
   _ht = "This will be automatically updated when you save the model. Do not change"
@@ -216,6 +228,8 @@ class Session(UserModel,PhotosMixin,models.Model):
   created = models.DateTimeField(auto_now_add=True) # for emailing new classes
   # depracated?
   branding = models.ForeignKey(Branding,null=True,blank=True)
+  needed = models.TextField("What is needed?",blank=True,default="")
+  needed_completed = models.DateField(null=True,blank=True)
 
   __unicode__ = lambda self: latin1_to_ascii("%s (%s - %s)"%(self.course, self.user,self.first_date.date()))
   title = property(lambda self: "%s (%s)"%(self.course.name,self.first_date.date()))
@@ -230,14 +244,20 @@ class Session(UserModel,PhotosMixin,models.Model):
     if datetime.datetime.now() > self.last_date:
       d = self.last_date
       enrolled_status = "Completed: %s/%s/%s"%(d.month,d.day,d.year)
+    closed_status = self.closed_string if (self.closed or self.full) else None
+    if self.private:
+      closed_status = 'private'
     return {
       'id': self.pk,
-      'closed_status': self.closed_string if (self.closed or self.full) else None,
+      'name': "<b>%s</b> %s"%(self.course,self.first_date.strftime("%m/%d/%Y")),
+      'closed_status': closed_status,
       'short_dates': short_dates,
       'instructor_name': self.get_instructor_name(),
       'instructor_pk': self.user_id,
       'course_id': self.course_id,
-      'enrolled_status': enrolled_status
+      'enrolled_status': enrolled_status,
+      'classtimes': [c.as_json for c in self.classtime_set.all()],
+      'private': True
     }
   json = property(lambda self: dumps(self.as_json))
   get_room = lambda self: self.course.room
@@ -296,7 +316,7 @@ class Session(UserModel,PhotosMixin,models.Model):
   def save(self,*args,**kwargs):
     #this may be depracated, basically the site fails hard if instructors don't have membership profiles
     from membership.models import UserMembership
-    if not self.pk:
+    if not self.pk and self.course:
       c = self.course
       c.active = True
       c.save()
@@ -339,23 +359,36 @@ class ClassTime(OccurrenceModel):
   emailed = models.DateTimeField(null=True,blank=True)
   def short_name(self):
     times = list(self.session.classtime_set.all())
-    if len(times) == 1:
-      return self.session.course.get_short_name()
-    return "%s (%s/%s)"%(self.session.course.get_short_name(),times.index(self)+1,len(times))
+    s = self.session.course.get_short_name()
+    if len(times) != 1:
+      s = "%s (%s/%s)"%(s,times.index(self)+1,len(times))
+    if self.session.private:
+      return "[PRIVATE] " + s
+    return s
   get_absolute_url = lambda self: self.session.get_absolute_url()
+  get_absolute_url = cached_method(get_absolute_url,name='get_absolute_url')
   get_admin_url = lambda self: "/admin/course/session/%s/"%self.session.id
   get_room = lambda self: self.session.course.room
   no_conflict = lambda self: self.session.course.no_conflict
   description = cached_property(lambda self:self.session.course.description,name="description")
   name = cached_property(lambda self: self.session.course.name,name="name")
   room = cached_property(lambda self: self.session.course.room,name="room")
+  icon = property(lambda self: 'private' if self.session.private else 'course')
+  @property
+  def as_json(self):
+    return {
+      'room_id': self.session.course.room_id,
+      'name': self.short_name(),
+      'start': str(self.start),
+      'end': str(self.end),
+    }
   class Meta:
     ordering = ("start",)
 
 class EnrollmentManager(models.Manager):
   def pending_evaluation(self,*args,**kwargs):
     kwargs['evaluation_date__lte'] = datetime.datetime.now()
-    kwargs['evaluation_date__gte'] = datetime.datetime.now()-datetime.timedelta(30)
+    kwargs['evaluation_date__gte'] = datetime.datetime.now()-datetime.timedelta(60)
     kwargs['evaluated'] = False
     kwargs['emailed'] = False
     return self.filter(*args,**kwargs)
@@ -458,7 +491,7 @@ def reset_classes_json(context="no context provided"):
   os.rename(os.path.join(settings.STATIC_ROOT,'_classes.json'),os.path.join(settings.STATIC_ROOT,'classes.json'))
 
   cutoff = datetime.datetime.now() - datetime.timedelta(1)
-  text = dumps([s.pk for s in Session.objects.filter(last_date__gte=cutoff) if s.full])
+  text = dumps([s.pk for s in Session.objects.filter(last_date__gte=cutoff) if s.full or s.private])
   f = open(os.path.join(settings.STATIC_ROOT,'_sessions.json'),'w')
   f.write("var FULL_SESSIONS = "+text)
   f.close()

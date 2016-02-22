@@ -1,0 +1,48 @@
+<needed-sessions>
+  <div class="well { completed: needed_completed }" each={ sessions }>
+    <h2>{ course }</h2>
+    <h3>with { user } on { first_date }</h3>
+    <h3 if={ needed_completed }>Completed { needed_completed }</h3>
+    <div class="row">
+      <div class="col-sm-8">{ needed }</div>
+      <div class="col-sm-4">
+        <button if={ needed_completed } class="btn btn-danger" onclick={ markComplete }>Mark Incomplete</button>
+        <button if={ !needed_completed } class="btn btn-primary" onclick={ markComplete }>Mark Complete</button>
+      </div>
+    </div>
+  </div>
+
+  <style scoped>
+    :scope {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 500px;
+    }
+    .well { width: 100%; }
+    .completed { order: 2; }
+  </style>
+
+  var self = this;
+
+  ajax(e,q) {
+    if (e.item) { q += "="+e.item.id; }
+    uR.ajax({
+      url: "/classes/needed.json?"+q,
+      type: e.item?"POST":"GET",
+      target: e.target,
+      success: function(data) {
+        self.sessions = data;
+      },
+      that: this
+    });
+  }
+
+  this.on("mount",function() {
+    this.ajax({target: this.root},"");
+  });
+
+  markComplete(e) {
+    this.ajax(e,(e.item.needed_completed?"in":"")+"complete");
+  }
+
+</needed-sessions>

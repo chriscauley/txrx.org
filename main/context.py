@@ -7,10 +7,12 @@ from tagging.models import Tag
 
 from event.models import EventOccurrence
 from course.models import ClassTime, Enrollment
+from course.views.ajax import get_needed_sessions
 from blog.models import PressItem
 
-import datetime,time
+import datetime, time
 
+_needed = lambda: get_needed_sessions().filter(needed_completed__isnull=True).count()
 def nav(request):
   blog_sublinks = [
     {'name': 'Blog Home', 'url': '/blog/'},
@@ -32,8 +34,11 @@ def nav(request):
   ]
   toolmaster_sublinks = [
     {'name': 'Tools','url': '/tools/'},
-    {'name': 'Permissions','url': '/beta/#toolmaster'}
+    {'name': 'Permissions','url': '/beta/toolmaster'},
+    {'name': 'Materials Needed','url': '/beta/needed-sessions/','reddot': _needed }
   ]
+  if request.user.username in ['chriscauley','gavi']:
+    toolmaster_sublinks.append({'name': 'Set RFID','url': '/beta/rfid'})
   _nav = [
     {"name": "About",
      "url": "/about-us/",
@@ -79,6 +84,7 @@ def nav(request):
   if 'auth' in request.path or 'accounts' in request.path:
     login_redirect = "/"
 
+  _e = EventOccurrence.objects.filter(start__gte=now,start__lte=now+datetime.timedelta(7),event__hidden=False)
   return dict(
     current = request.path.split('/')[1] or 'home',
     nav = _nav,
@@ -87,7 +93,7 @@ def nav(request):
     auth_form = AuthenticationForm,
     app_path = "/admin/login/",
     settings = settings,
-    upcoming_events = EventOccurrence.objects.filter(start__gte=now,start__lte=now+datetime.timedelta(7)),
+    upcoming_events = _e,
     #last_week = EventOccurrence.objects.filter(start__lte=now,photoset__isnull=False),
     tags = Tag.objects.all(),
     class_faqs = class_faqs,

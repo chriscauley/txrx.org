@@ -82,4 +82,5 @@ class CriterionAdmin(admin.ModelAdmin):
 
 @admin.register(UserCriterion)
 class UserCriterionAdmin(admin.ModelAdmin):
-  pass
+  raw_id_fields = ('user',)
+  readonly_fields = ("content_type","object_id",'criterion')

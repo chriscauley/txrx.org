@@ -52,6 +52,9 @@ function setHiddenFields(that) {
         <input name="notify_url" type="hidden" value="{{ SITE_URL }}/tx/rx/ipn/handler/">
         <input name="cancel_return" type="hidden" value="{{ SITE_URL }}/shop/">
         <input name="return" type="hidden" value="{{ SITE_URL }}/shop/">
+        {% if request.user.is_authenticated %}
+        <input type="hidden" name="custom" value="{{ request.user.pk }}"/>
+        {% endif %}
         <select name="os0" onchange="setHiddenFields(this);">
           {% for product in m.products %}
           <option value="{{ m.name }} - {{ product.name }}">
@@ -83,9 +86,6 @@ function setHiddenFields(that) {
 <script type="text/javascript">
 $(document).ready(function() {$("select").change()});
 $(function() {
-  var HACKERKEYS = [];
-  var code = [38,38,40,40,37,39,37,39,66,65];
-  if (window.location.search.indexOf("open") != -1) { return }
   var unlocked = false;
   $("#m_table-hacker").addClass("grayscale-me").click(function() {
     if (unlocked) {
@@ -95,14 +95,12 @@ $(function() {
       return false;
     }
   });;
-  $(document).keyup(function(e) {
-    HACKERKEYS.push(e.keyCode);
-    var entries = HACKERKEYS.slice(-code.length);
-    for (var i = 0; i < code.length; ++i) { if (code[i] !== entries[i]) return false; }
+  function cheat() {
     $("#m_table-hacker").removeClass("grayscale-me");
     alert("Table-Hacker Membership Unlocked!");
     unlocked = true;
-  });
+  }
+  cheatCode(cheat,'open')
 });
 </script>
 <div class="clear"></div>

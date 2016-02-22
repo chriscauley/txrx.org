@@ -51,6 +51,21 @@ function updateCartButton() {
   if (total) { button.show(); }
 }
 
+function cheatCode(f,qs) {
+  var HACKERKEYS = [];
+  var code = [38,38,40,40,37,39,37,39,66,65];
+  $(document).keyup(function(e) {
+    HACKERKEYS.push(e.keyCode);
+    var entries = HACKERKEYS.slice(-code.length);
+    for (var i = 0; i < code.length; ++i) { if (code[i] !== entries[i]) return false; }
+    f();
+  });
+  if (window.location.search.indexOf(qs) == -1) { return }
+  console.log(window.location.search)
+  console.log(window.location.search.indexOf(qs))
+  f();
+}
+
 function timeit(f) {
   return function() {
     var start = new Date().valueOf();
@@ -62,9 +77,9 @@ function timeit(f) {
 }
 
 // how to disable/enable timeit
-function timeit(f) { return f }
+//function timeit(f) { return f }
 
 // this is just so that I can easily timeit
 var resetProductList = timeit(function() {
-  riot.update('product-list');
+  window.PRODUCT_LIST.update()
 });

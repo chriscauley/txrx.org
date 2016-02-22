@@ -34,9 +34,16 @@ REPEAT_CHOICES = (
   ('month-number','Monthly (by day number)'),
 )
 
+ICON_CHOICES = (
+  ("public","Open to the public"),
+  ("private","Private - Invitation only"),
+  ("rsvp","RSVP Required"),
+)
+
 class Event(PhotosMixin,models.Model):
   _use_default_photo = True
   name = models.CharField(max_length=128,null=True,blank=True)
+  url = models.CharField(max_length=256,null=True,blank=True)
   _ht = "Optional. Alternative name for the calendar."
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   room = models.ForeignKey(Room,null=True,blank=True) #! remove ntbt when you remove location.
@@ -53,6 +60,7 @@ class Event(PhotosMixin,models.Model):
   _ht = "Number of days before event when RSVP is cut off (eg 0.5 means \"You must rsvp 12 hours before this event\")"
   rsvp_cutoff = models.FloatField(default=0,help_text=_ht)
   max_rsvp = models.IntegerField(default=128)
+  icon = models.CharField(max_length=16,choices=ICON_CHOICES)
   @property
   def verbose_rsvp_cutoff(self):
     if self.rsvp_cutoff > 2:
@@ -120,6 +128,14 @@ class OccurrenceModel(models.Model):
       'url': 'http://txrxlabs.org/', #+urlencode(self.get_absolute_url()),
       }
     return "http://www.google.com/calendar/event?action=TEMPLATE&text=%(name)s&dates=%(start)s/%(end)s&details=%(description)s&location=%(location)s&trp=false&sprop=%(site_name)s&sprop=name:%(url)s"%d
+  @property
+  def is_external(self):
+    url = self.get_absolute_url()
+    return not (url.startswith('/') or url.startswith(settings.SITE_URL))
+  @property
+  def class_name(self):
+    extra = " fa fa-external-link" if self.is_external else ""
+    return self.icon + extra
   class Meta:
     abstract = True
 
@@ -136,20 +152,26 @@ class RSVP(UserModel):
 class EventOccurrence(PhotosMixin,OccurrenceModel):
   event = models.ForeignKey(Event)
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
-  get_absolute_url = lambda self: reverse('event:occurrence_detail',args=(self.id,slugify(self.name)))
   get_admin_url = lambda self: "/admin/event/event/%s/"%self.event.id
   name_override = models.CharField(null=True,blank=True,max_length=128)
   name = property(lambda self: self.name_override or self.event.name)
   short_name = property(lambda self: self.name_override or self.event.get_short_name())
+  url = property(lambda self: self.url_override or self.event.url)
   description_override = wmd_models.MarkDownField(blank=True,null=True)
   description = property(lambda self: self.description_override or self.event.description)
   get_room = lambda self: self.event.room #! depracate me
   room = cached_property(lambda self: self.event.room,name="room")
   no_conflict = property(lambda self: self.event.no_conflict)
 
+  url_override = models.CharField(max_length=256,null=True,blank=True)
+  _get_absolute_url = lambda self: reverse('event:occurrence_detail',args=(self.id,slugify(self.name)))
+  get_absolute_url = lambda self: self.url_override or self.event.url or self._get_absolute_url()
+  get_absolute_url = cached_method(get_absolute_url,name="get_absolute_url")
+
   rsvp_cutoff = property(lambda self: self.start - datetime.timedelta(self.event.rsvp_cutoff))
   total_rsvp = property(lambda self: sum([r.quantity for r in self.get_rsvps()]))
   full = property(lambda self: self.total_rsvp >= self.event.max_rsvp)
+  icon = property(lambda self: self.event.icon)
   _cid = ContentType.objects.get(model="eventoccurrence").id
   @cached_method
   def get_rsvps(self):
@@ -158,8 +180,32 @@ class EventOccurrence(PhotosMixin,OccurrenceModel):
     # set the publish_dt to a week before the event
     self.publish_dt = self.start - datetime.timedelta(7)
     super(EventOccurrence,self).save(*args,**kwargs)
+  @property
+  def as_json(self):
+    return {
+      'room_id': self.event.room_id,
+      'name': self.name,
+      'start': str(self.start),
+      'end': str(self.end)
+    }
   class Meta:
     ordering = ('start',)
+
+class CheckInPoint(models.Model):
+  room = models.ForeignKey(Room)
+  __unicode__ = lambda self: "%s"%self.room
+  class Meta:
+    ordering = ('room__name',)
+
+class CheckIn(UserModel):
+  datetime = models.DateTimeField(auto_now_add=True)
+  object_id = models.IntegerField(null=True,blank=True)
+  content_type = models.ForeignKey("contenttypes.ContentType",null=True,blank=True)
+  content_object = GenericForeignKey('content_type', 'object_id')
+  checkinpoint = models.ForeignKey(CheckInPoint)
+  __unicode__ = lambda self: "%s @ %s - %s"%(self.user,self.checkinpoint,self.datetime)
+  class Meta:
+    ordering = ('-datetime',)
 
 #these signals fire and mess up loaddata
 if not 'loaddata' in sys.argv:

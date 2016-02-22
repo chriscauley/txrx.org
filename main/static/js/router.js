@@ -4,6 +4,14 @@
     document.getElementById("main").innerHTML = html;
     riot.mount(tag_name,data);
   }
+  function fromTemplate(template_name) {
+    riot.compile(
+      "/static/templates/"+template_name+".html",
+      function(html) {
+        mainMount("<"+template_name+">");
+      }
+    );
+  }
   var _route = {
     checkout: function() {
       mainMount("<tool-checkout></tool-checkout>");
@@ -17,12 +25,14 @@
     "my-permissions": function() { mainMount('<badge>') },
     rfid: function() { mainMount("<set-rfid>"); },
     "week-hours": function() { mainMount("<week-hours>"); },
+    "needed-sessions": function() { fromTemplate("needed-sessions"); }
   };
   window.R = _route
-  riot.route(function() {
-    var page_name = arguments[0] || "home";
-    if (! _route[page_name]) { return }
-    _route[page_name].apply(this,Array.prototype.slice.call(arguments,1));
-  });
-  riot.route(window.location.hash.slice(1))
+  function route(name) {
+    if (! _route[name]) { return }
+    _route[name].apply(this,Array.prototype.slice.call(arguments,1));
+  };
+  TXRX.route = route;
+  pathpart = window.location.pathname.split("/")[2]
+  route(pathpart);
 })();

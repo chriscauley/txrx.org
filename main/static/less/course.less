@@ -13,7 +13,7 @@
   &.enrolled { background: #A9CEE0; }
 }
  
-.course, .SessionList .session {
+.course, session-list .session {
   &:hover {
     background: fade(@brand-primary,20);
   }
@@ -84,14 +84,10 @@
   }
 }
 
-.SessionList, event-list {
+session-list, event-list {
+  display: block;
+  margin-bottom: 20px;
   position: relative;
-  .fee {
-    border-color: transparent;
-    position: absolute;
-    right: 0;
-    top: -54px;
-  }
   .session,event-occurrence {
     display: block;
     margin-bottom: 10px;
@@ -101,15 +97,15 @@
     .instructor-link { font-size: 2em; left: 5px; position: absolute; top: 0; }
     .admin-link { font-size: 2em; position: absolute; right: 5px; top: 0; }
     .full { color: @brand-danger; }
+    .alert { margin: 5px 0 0; }
   }
-  .add_session_box {
-    text-align: center;
-    select {
-      display: inline-block;
-      margin-bottom: 10px;
-    }
-    button { margin-bottom: 20px; }
-  }
+}
+
+session-list .fee {
+  border-color: transparent;
+  position: absolute;
+  right: 0;
+  top: -54px;
 }
 
 .course .details {
@@ -143,7 +139,7 @@
     position: absolute;
     width: 100%;
     .next_session:before { color: black; content: "Next Session: "; }
-    .full { color: @brand-danger; }
+    .private, .full { color: @brand-danger; }
     .open_sessions { color: @brand-success; }
     .full_sessions { color: @brand-danger; }
   }
@@ -193,7 +189,7 @@
 #unscheduled-courses .price { display: none; }
 
 @media (max-width: @screen-xs-max) {
-  .SessionList .fee {
+  session-list .fee {
     float: right;
     font-size: 24px;
     line-height: 1;
@@ -218,10 +214,7 @@
   }
 }
 
-.SessionList {
-  .RsvpLink, .EnrollLink {
-    text-align: center;
-  }
+session-list {
   .error { display: none; }
   [type="radio"] {
     display:none;
@@ -233,40 +226,7 @@
     }
   }
 }
-.RsvpLink .message {
-  color: black;
-  bottom: 0;
-  display: none;
-  background: white;
-  box-shadow: inset 0 0 5px #55F;
-  padding: 5px 20px 5px 5px;
-  position: absolute;
-  right: 100%;
-  text-decoration: none;
-  width: 300px;
-  &:after {
-    background: url("/static/img/icon_x_red.png") no-repeat center;
-    color: #F33;
-    content: "";
-    display: block;
-    font-size: 1.5em;
-    position: absolute;
-    height: 10px;
-    line-height: 10px;
-    margin-top: -5px;
-    right: 10px;
-    top: 50%;
-    width: 10px;
-  }
-}
 
-@media (max-width: @screen-sm-max) {
-  .RsvpLink .message {
-    bottom: auto;
-    right: 0;
-    width: 213px;
-  }
-}
 .session {
   &.loading {
     &:before {
@@ -315,16 +275,13 @@
   cursor: help;
 }
 
-.SessionList {
-  .add { display: inline-block; }
-  .view-cart, .add-to-cart, .rsvp, .unrsvp {
+session-list {
+  .btn {
     font-size: 12px;
     margin: 5px auto 0;
     padding: 3px 6px;
     text-transform: uppercase;
   }
-  .in-cart .add-to-cart, .view-cart { display: none; }
-  .add-to-cart, .in-cart .view-cart { display: block; }
 }
 
 .notify_course {
@@ -335,57 +292,6 @@
 
 .recentAdd {
   box-shadow: inset 0 0 5px #3ac2f5, 0 0 5px #3ac2f5;
-}
-
-.RsvpLink {
-  .is_full,.unrsvp { display: none; }
-  &.attending {
-    .unrsvp { display: inline-block; }
-    .rsvp { display: none; }
-  }
-  .number_attending {
-    bottom: 100%;
-    left: 0;
-    position: absolute;
-  }
-}
-.full .RsvpLink {
-  .rsvp { display: none; }
-  .is_full { display: block; }
-  .not_full { display: none; }
-}
-
-.RsvpLink .message {
-  color: black;
-  bottom: 0;
-  display: none;
-  background: white;
-  box-shadow: inset 0 0 5px #55F;
-  padding: 5px 20px 5px 5px;
-  position: absolute;
-  right: 100%;
-  text-decoration: none;
-  width: 300px;
-  &:after {
-    background: url("/static/img/icon_x_red.png") no-repeat center;
-    color: #F33;
-    content: "";
-    display: block;
-    font-size: 1.5em;
-    position: absolute;
-    height: 10px;
-    line-height: 10px;
-    margin-top: -5px;
-    right: 10px;
-    top: 50%;
-    width: 10px;
-  }
-}
-
-.RsvpLink .message {
-  bottom: auto;
-  right: 0;
-  width: 213px;
 }
 
 // classes cart
