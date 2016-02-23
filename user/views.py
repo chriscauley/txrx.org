@@ -39,9 +39,7 @@ def checkin(request):
 
 def checkin_register(request):
   keys = ['email','first_name','last_name',"password"]
-  user,new = get_or_create_student({k,request.POST[k] for key in keys
-    'email': request.POST['email'],
-    'first_name': request.POST
+  user,new = get_or_create_student({k:request.POST[k] for key in keys})
 
 def user_json(request):
   if not request.user.is_authenticated():
