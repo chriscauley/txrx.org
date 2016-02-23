@@ -29,8 +29,8 @@
 }
 
 .slideshow .full-screen {
-  background: rgba(0,0,0,0.5);
-  color: white;
+  background: fade(@gray-darker,50%);
+  color: @gray-darker;
   display: block;
   font-size: 25px;
   height: 40px;
@@ -47,7 +47,7 @@
 .slideshow {
   .external {
     display: block;
-    color: white;
+    color: @gray-lighter;
     left: 50%;
     position: absolute;
     text-align: center;
@@ -63,7 +63,7 @@
       line-height:50px;
       margin: -25px 0 0 -25px;
       opacity: 0.75;
-      text-shadow: 0 0 10px rgba(50,50,50,0.5);
+      text-shadow: 0 0 10px fade(@gray-dark,50%);
       width: 50px;
       &:hover { opacity: 1; }
       &.youtube { background: url(/static/img/yt_med.png) no-repeat center; }
