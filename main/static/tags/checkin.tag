@@ -7,11 +7,19 @@
     Unknown RFID card. Please go find Chris or Gaby to get it entered in the system.
   </div>
   <ur-form action="/checkin_ajax/" button_text="Check In"></ur-form>
-
+  <div if={ status } class="alert alert-success">
+    { status.user } checked in at { status.sin }
+  </div>
   var self = this;
+  function validateRFIDOrEmail(value,riot_tag) {
+    var input = self.root.querySelector("[name=rfid]")
+    if (!value && input && !input.value) {
+      riot_tag.errors = ["Please enter email or swipe your card"]
+    }
+  }
   this.schema = [
-    { name: "rfid", type: "hidden" },
-    { name: "email", type: "email" }
+    { name: "rfid", type: "hidden", required: false },
+    { name: "email", type: "email", required: false, validate: validateRFIDOrEmail }
   ];
   this.on("mount", function() {
     this.last_press = new Date();
@@ -28,7 +36,6 @@
     });
     var e = uR.getQueryParameter("e");
     if (e) { TXRX.mainMount("checkin-register",{ email: "arst@oairesnt.com" }) }
-    console.log(this.tags);
   });
   this.on("update", function() {
     if (this.status) {

@@ -23,7 +23,7 @@ def checkin_ajax(request):
   user = user or get_or_none(User,usermembership__paypal_email=email)
   if not user:
     return HttpResponse(json.dumps({'no_user': email}))
-  if not user.signature_set(document_id=2):
+  if not user.signature_set.filter(document_id=2):
     return HttpResponse(json.dumps({'no_waiver': email}))
   defaults = {'content_object': Room.objects.get(name='')}
   checkin, new = UserCheckin.objects.get_or_create(user=user,time_out__isnull=True,defaults=defaults)
