@@ -23,6 +23,7 @@ class Category(PhotosMixin,NamedTreeModel):
       [image.width,image.height,image.url],
       [c.as_json for c in self.category_set.all()],
     ]
+  #! TODO make this go to store filtered by category
   class Meta:
     ordering = ('order',)
 
@@ -36,6 +37,8 @@ class Consumable(PhotosMixin,Product):
   in_stock = models.IntegerField(null=True,blank=True,help_text=_ht)
   _ht2 = "Amount purchased at a time. Used to make the quick refill process."
   purchase_quantity = models.IntegerField(default=1,help_text=_ht2)
+  #! TODO make this go to a filtered version of shop
+  get_absolute_url = lambda self: "/shop/"
   def decrease_stock(self,quantity):
     if self.in_stock is None:
       return
@@ -60,7 +63,6 @@ class Consumable(PhotosMixin,Product):
   def save(self,*args,**kwargs):
     self.slug = slugify(self.name)[:50]
     super(Consumable,self).save(*args,**kwargs)
-  get_absolute_url = lambda self: reverse('product_detail',args=[self.pk,self.slug])
   class Meta:
     ordering = ('name',)
 
