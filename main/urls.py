@@ -52,6 +52,7 @@ urlpatterns = patterns(
   url(r'^user.json','user.views.user_json'),
   url(r'redtape/(\d+)/(.*)$','redtape.views.document_detail',name='signed_document'),
   url(r'redtape/documents.json$','redtape.views.documents_json'),
+  url(r'redtape/aggregate/(\d+)/$','redtape.views.aggregate',name='redtape')
 )
 
 def activate_user(target):
