@@ -121,21 +121,11 @@ def detail_json(request,event_pk):
   event = get_object_or_404(Event,pk=event_pk)
   fields = ['name','description','repeat','hidden','allow_rsvp']
   out = {key:getattr(event,key) for key in fields}
-<<<<<<< HEAD
-  fields = ['id','name','total_rsvp','start','end']
-  os = event.eventoccurrence_set.filter(start__gte=start.datetime,start__lt=end.datetime)
-  if not os.filter(start__gte=datetime.datetime.now()):
-    start = end
-    end = start.replace(months=1)
-    os = event.eventoccurrence_set.filter(start__gte=start.datetime,start__lt=end.datetime)
-  out['occurrences'] = [{key: str(getattr(o,key)) for key in fields} for o in os]
-=======
   fields = ['id','name','total_rsvp','start','end','rsvp_cutoff']
   if request.user.is_superuser:
     fields.append("total_rsvp")
   os = event.upcoming_occurrences[:10]
   out['upcoming_occurrences'] = [{key: str(getattr(o,key)) for key in fields} for o in os]
->>>>>>> master
   return HttpResponse(json.dumps(out))
 
 @csrf_exempt
