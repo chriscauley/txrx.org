@@ -89,7 +89,7 @@
       {% endcomment %}
       {% endblock %}
     </div>
-    <script src="https://cdn.jsdelivr.net/riot/2.3.12/riot+compiler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/riot/2.3.16/riot+compiler.min.js"></script>
     <script src="/user.json?v={% now "ymd_his" %}"></script>
     {% compress js %}
     <script src="{{ STATIC_URL }}less/bootstrap/js/affix.js"></script>
@@ -131,5 +131,6 @@
     </script>
     {% block extra_body %}{% endblock %}
     {% include "_sql_queries.html" %}
+    {% csrf_token %}
   </body>
 </html>
