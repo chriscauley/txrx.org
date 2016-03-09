@@ -76,7 +76,7 @@ def nav(request):
   my_classes_ics = None
   member_discount = 1
   documents_needed = 0
-  if request.user.is_authenticated():
+  if request.user.is_authenticated() and settings.DEBUG:
     my_classes_ics = "%s/classes/ics/%s/%s/my-classes.ics"
     my_classes_ics = my_classes_ics%(settings.SITE_DOMAIN,request.user.id,request.user.usermembership.api_key)
     member_discount = (100.-request.user.level.discount_percentage)/100

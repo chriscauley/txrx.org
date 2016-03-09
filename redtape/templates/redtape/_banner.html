@@ -6,8 +6,9 @@
     the time required to type in all 350 paper documents that we have collected over the past year.
     The terms and conditions of these documents have not been changed, only made digital.
   </p>
-  <br/>
-  <a href="{% url "redtape_index" %}" class="btn btn-primary">
+  <center>
+    <a href="{% url "redtape_index" %}" class="btn btn-primary">
       Sign {{ documents_needed }} document{{ documents_needed|pluralize }}.</a>
+  </center>
 </div>
 {% endif %}
