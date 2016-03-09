@@ -146,7 +146,6 @@
       that.student.signature_jsons.forEach(function(e) {
         e.has = e.completed;
         e.can_change = user.is_toolmaster;
-        console.log(e);
       });
     }
   });
