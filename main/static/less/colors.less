@@ -8,6 +8,12 @@
 @grayLight: #999;
 @borderGray: #b8baba;
 
+@brandFacebook: #3b5998;
+@brandGithub: #333333;
+@brandGoogle: #d34836;
+@brandTwitter: #55ACEE;
+@brandPinterest: #cc2127;
+
 .fa-hover {
   .fa { position: relative; text-align: center; width: 1.5em; }
   &:hover {
@@ -19,8 +25,8 @@
       width: 1em;
     }
   }
-  &.facebook:hover { background: #3b5998 !important; }
-  &.github:hover { background: #333333 !important; }
-  &.txrx:hover { background: #333333 !important; }
-  &.google:hover { background: #d34836 !important; }
+  &.facebook:hover { background: @brandFacebook !important; }
+  &.github:hover { background: @brandGithub !important; }
+  &.txrx:hover { background: @brandGithub !important; }
+  &.google:hover { background: @brandGoogle !important; }
 }

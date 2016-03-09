@@ -48,9 +48,9 @@ urlpatterns = patterns(
   url(r'^dxfviewer/$','geo.views.dxfviewer',name='dxfviewer'),
   url(r'^geo/events.json','geo.views.events_json'),
   url(r'^geo/locations.json$','geo.views.locations_json'),
-  url(r'^checkin/$', 'user.views.checkin', name='checkin'),
+  url(r'^checkin_ajax/$', 'user.views.checkin_ajax', name='checkin_ajax'),
   url(r'^user.json','user.views.user_json'),
-  url(r'redtape/(\d+)/(.*)$','redtape.views.document_detail',name='signed_document'),
+  url(r'^redtape/',include("redtape.urls")),
 )
 
 def activate_user(target):

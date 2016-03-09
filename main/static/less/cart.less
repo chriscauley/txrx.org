@@ -9,7 +9,7 @@ cart {
     right: 0;
     top: 0;
   }
-  .mask { background: rgba(0,0,0,0.25); z-index: 999; }
+  .mask { background: fade(@gray-darker,25%); z-index: 999; }
   .content {
     background: white;
     margin: 30px auto;
@@ -19,7 +19,7 @@ cart {
     z-index: 1001
   }
   .header {
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid @gray-lighter;
     padding: 15px;
   }
   .footer {
@@ -41,7 +41,7 @@ cart .items {
   text-align: center;
   .item {
     position: relative;
-    &:nth-child(2n+1) { background-color: rgba(0,0,0,0.05); }
+    &:nth-child(2n+1) { background-color: fade(@gray-darker, 5%); }
   }
   .name {
     font-size: 12px;

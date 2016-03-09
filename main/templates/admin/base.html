@@ -32,5 +32,16 @@
   .form-row .edit {font-size: 2em; position: absolute; right: 105%; text-decoration: none !important; z-index: 1; }
   .field-voters_present ul { width: 300px; }
   .field-voters_present li { width: 150px; display: inline-block; }
+  .field-signature .controls { position: relative; }
+  .field-signature .controls:before {
+    bottom: 0;
+    content: "";
+    display: block;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .field-signature .controls .btn { display: none; }
 </style>
 {% endblock %}

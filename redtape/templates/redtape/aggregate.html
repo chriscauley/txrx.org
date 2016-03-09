@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content  %}
+<h2>How did you hear about us?</h2>
+<table class="table table-striped">
+  {% for key,count in results %}
+  <tr>
+    <td>{{ key }}</td>
+    <td>{{ count }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h2>Others</h2>
+{% for key, rs in others %}
+<h3>{{ key }}</h3>
+<table class="table table-striped">
+  {% for result in rs %}
+  <tr>
+    <td>{{ result }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endfor %}
+{% endblock %}

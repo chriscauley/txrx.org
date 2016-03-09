@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load short_codes %}
+
+{% block main %}
+<div style="width: 550px; max-width: 100%; margin: 0 auto;">
+  <h1 class="center">Required Documents for {{ SITE_NAME }}</h1>
+  <br />
+  {% for document,signature in documents_signatures %}
+  <div class="well center">
+    <h3>{{ document }}</h3>
+    <div class="center">
+      <a class="btn btn-{% if signature %}primary{% else %}danger{% endif %}"
+         href="{{ document.get_absolute_url }}">
+        {% if signature %}Signed {{ signature.datetime|date:"m/d/Y" }}{% else %}Unsigned{% endif %}
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

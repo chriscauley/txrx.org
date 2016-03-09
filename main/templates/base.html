@@ -9,15 +9,18 @@
     {% include "_styles.html" %}
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
     <script type="text/javascript">
+      var TXRX = TXRX || {};
+      TXRX.SITE_NAME = "{{ settings.SITE_NAME }}";
       var SHOP = {
         {% if settings.DEBUG %}
-        base_url: "http://dev.txrxlabs.org:8009",
+        base_url: "http://dev.txrxlabs.org:8025",
         email: 'chris@lablackey.com'
         {% else %}
         base_url: "https://txrxlabs.org",
         email: 'txrxlabs@gmail.com'
         {% endif %}
       }
+      {% if settings.DEBUG %}TXRX.DEBUG = true;{% endif %}
       SHOP.notify_url = SHOP.base_url + "/tx/rx/ipn/handler/";
       var _USER_NUMBER = {{ request.user.pk|default_if_none:"undefined" }};
       {% if request.user.is_superuser %}
@@ -87,7 +90,7 @@
       {% endcomment %}
       {% endblock %}
     </div>
-    <script src="https://cdn.jsdelivr.net/riot/2.3/riot+compiler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/riot/2.3.16/riot+compiler.min.js"></script>
     <script src="/user.json?v={% now "ymd_his" %}"></script>
     <script type="riot/tag" src="{{ STATIC_URL }}tags/modal.tag"></script>
     {% compress js %}
@@ -106,6 +109,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/moment.js"></script> {# date formatting #}
     <script src="{{ STATIC_URL }}bower/ur/unrest.js"></script>
     {% endcompress %}
+    <script src="{{ STATIC_URL }}bower/ur/form.tag" type="riot/tag"></script>
     {% block extrajs %}{% endblock %}
     <script src="{{ STATIC_URL }}js/blog.js"></script>
     <script src="{{ STATIC_URL }}js/favico.js"></script>
@@ -129,5 +133,6 @@
     </script>
     {% block extra_body %}{% endblock %}
     {% include "_sql_queries.html" %}
+    {% csrf_token %}
   </body>
 </html>

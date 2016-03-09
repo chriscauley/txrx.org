@@ -22,8 +22,10 @@ DATABASES = {
     'PASSWORD': '',
     'HOST': '',
     'PORT': '',
-    }
   }
+}
+
+REQUIRED_DOCUMENT_IDS = [1,2,3]
 
 ALLOWED_HOSTS = ['.txrxlabs.org']
 

@@ -5,11 +5,11 @@ from django.db import connection
 
 from tagging.models import Tag
 
-from event.models import EventOccurrence
+from blog.models import PressItem
 from course.models import ClassTime, Enrollment
 from course.views.ajax import get_needed_sessions
-from blog.models import PressItem
-
+from event.models import EventOccurrence
+from redtape.models import Signature
 import datetime, time
 
 _needed = lambda: get_needed_sessions().filter(needed_completed__isnull=True).count()
@@ -75,10 +75,13 @@ def nav(request):
 
   my_classes_ics = None
   member_discount = 1
-  if request.user.is_authenticated():
+  documents_needed = 0
+  if request.user.is_authenticated() and settings.DEBUG:
     my_classes_ics = "%s/classes/ics/%s/%s/my-classes.ics"
     my_classes_ics = my_classes_ics%(settings.SITE_DOMAIN,request.user.id,request.user.usermembership.api_key)
     member_discount = (100.-request.user.level.discount_percentage)/100
+    d_ids = getattr(settings,"REQUIRED_DOCUMENT_IDS",[])
+    documents_needed = len(d_ids) - Signature.objects.filter(document_id__in=d_ids,user=request.user).count()
 
   login_redirect = request.path
   if 'auth' in request.path or 'accounts' in request.path:
@@ -86,6 +89,7 @@ def nav(request):
 
   _e = EventOccurrence.objects.filter(start__gte=now,start__lte=now+datetime.timedelta(7),event__hidden=False)
   return dict(
+    documents_needed = documents_needed,
     current = request.path.split('/')[1] or 'home',
     nav = _nav,
     social_nav = social_nav,

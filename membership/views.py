@@ -87,7 +87,7 @@ def roland_email(request,y=2012,m=1,d=1):
   response['Content-Disposition'] = 'attachment; filename="txrx_emails_%s-%s-%s.csv"'%(y,m,d)
 
   writer = csv.writer(response)
-  for user in get_user_model().objects.filter(last_login__gt=dt,is_active=True):
+  for user in get_user_model().objects.filter(date_joined__gt=dt,is_active=True):
     if "email" in request.GET:
       writer.writerow([user.email])
     else:

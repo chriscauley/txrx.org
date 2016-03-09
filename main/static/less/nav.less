@@ -2,7 +2,7 @@
 .navbar-brand { padding: 0 10px 0 0; }
 .navbar-collapse { max-height: none; }
 .navbar-nav > li.current a:after {
-  background: #ecedee;
+  background: @gray-lighter;
   content: "";
   display: block;
   height: 2px;
@@ -27,8 +27,8 @@
   }
 }
 @media (max-width: @screen-xs-max) {
-  nav li { border-bottom: 1px solid rgba(0,0,0,0.1); }
-  nav > ul > li { border-top: 1px solid rgba(0,0,0,0.1); }
+  nav li { border-bottom: 1px solid fade(@gray-darker,10%); }
+  nav > ul > li { border-top: 1px solid fade(@gray-darker,10%); }
 }
 @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
   .navbar-default .navbar-nav > li > a { font-size: 13px; }
@@ -37,8 +37,8 @@
   .nav > li.social {
     margin-left: 15px;
     margin-right: 15px;
-    border-left: 2px solid rgba(0,0,0,0.3);
-    border-right: 2px solid rgba(0,0,0,0.3);
+    border-left: 2px solid fade(@gray-darker,30%);
+    border-right: 2px solid fade(@gray-darker,30%);
     padding-left: 10px;
     padding-right: 10px;
     margin-top: 2px;

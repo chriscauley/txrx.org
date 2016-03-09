@@ -116,18 +116,15 @@
   function toggle(e,d) {
     if (e.item.locked) { return }
     d.user_id = that.active_user.id;
-    var target = that.root.querySelector(".buttons")
-    target.setAttribute("ur-loading","loading");
-    $.get(
-      '/tools/toggle_criterion/',
-      d,
-      function(data) {
-        target.removeAttribute("ur-loading");
+    uR.ajax({
+      url: '/tools/toggle_criterion/',
+      data: d,
+      success: function(data) {
         that.student = data;
         that.update();
       },
-      "json"
-    );
+      target: that.root.querySelector(".buttons")
+    });
   }
 
   this.on("update", function() {
@@ -151,17 +148,15 @@
   });
 
   select(e) {
-    var target = this.root;
-    target.setAttribute("ur-loading","loading");
     this.active_user = e.item;
-    $.get(
-      "/api/user/student/"+e.item.id+"/",
-      function(data) {
-        target.removeAttribute("ur-loading");
+    uR.ajax({
+      url: "/api/user/student/"+e.item.id+"/",
+      success: function(data) {
         that.student = data;
         that.update()
-      }
-    )
+      },
+      target: this.root
+    })
   }
 </toolmaster>
 
@@ -196,20 +191,16 @@
     var input = this.root.querySelector("modal input");
     var number = input.value;
     input.value = "";
-    var target = that.root.querySelector("modal .inner");
-    target.setAttribute("ur-loading","loading");
-    $.get(
-      '/api/change_rfid/',
-      {'user_id':this.active_user.id,'rfid':number},
-      function(data) {
-        target.removeAttribute("ur-loading");
+    uR.ajax({
+      url: '/api/change_rfid/',
+      data: {'user_id':this.active_user.id,'rfid':number},
+      success: function(data) {
         that.new_rfid = data.new_rfid;
         that.old_rfid = data.old_rfid;
         that.username = data.username;
-        that.update();
       },
-      "json"
-    );
+      target: that.root.querySelector("modal .inner")
+    });
     return false;
   }
   undo(e) {
@@ -222,7 +213,7 @@
 <search-users>
   <yield/>
   <input type="text" name="q" onkeyup={ search } placeholder="Search by name or email" autocomplete="off"
-         value={ opts.search_term } if={ !parent.active_user }/>
+         if={ !parent.active_user }/>
   <div class="results">
     <button class="btn btn-link" onclick={ back } if={ parent.active_user }>
       &laquo; Back to results
@@ -248,24 +239,20 @@
     value = that.root.querySelector("[name=q]").value;
     if (old_value == value) { return }
     old_value = value;
-    var target = that.root.querySelector(".results");
-    target.setAttribute("ur-loading","loading")
     if (!value || value.length < 3) {
       that._results = [];
-      target.removeAttribute("ur-loading");
       that.update();
       return;
     }
-    $.get(
-      "/api/user/search/",
-      {q: value},
-      function(data) {
-        target.removeAttribute("ur-loading");
+    uR.ajax({
+      url: "/api/user/search/",
+      data: {q: value},
+      success: function(data) {
         that._results = data;
         that.update()
       },
-      "json"
-    )
+      target: that.root.querySelector(".results")
+    })
   }
   this.search = uR.debounce(this.search);
   back(e) {
@@ -274,6 +261,7 @@
   }
   this.on("mount",function() {
     that.root.querySelector("[name=q]").focus();
+    that.root.querySelector("[name=q]").value = that.opts.value || "";
     that.search();
   });
   this.on("update",function() {

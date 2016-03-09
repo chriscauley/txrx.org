@@ -2,6 +2,10 @@ from django.contrib import admin
 
 from .models import Document, Signature, DocumentField
 
+from jsignature.utils import draw_signature
+import base64
+import cStringIO
+
 import json
 
 class DocumentFieldInline(admin.TabularInline):
@@ -23,13 +27,8 @@ class DocumentAdmin(admin.ModelAdmin):
 
 @admin.register(Signature)
 class SignatureAdmin(admin.ModelAdmin):
-  readonly_fields = ('datetime','document','date_typed','name_typed','user','_signature','_data')
-  exclude = ('completed','data','signature')
-  def _signature(self,obj):
-    if not obj.signature:
-      return
-    return "<img src='%s'>"%obj.signature.url
-  _signature.allow_tags = True
+  readonly_fields = ('datetime','document','date_typed','name_typed','user','_data')
+  exclude = ('completed','data')
   def _data(self,obj):
     fields = obj.get_fields()
     rows = "".join(["<tr><th>{name}</th><td>{value}</td></tr>".format(**f) for f in fields])
