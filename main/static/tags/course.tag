@@ -45,6 +45,7 @@
         <div class="enrolled-status" status={ enrolled_status }></div>
       </div>
       <div class="details">
+        <div class="subjects" each={ subject in subject_names } if={ TXRX.DEBUG }>{ subject }</div>
         <div class="title">{ name }</div>
         <div class="description">{ short_description }</div>
         <div class="enrolled-status" data-status={ enrolled_status }></div>

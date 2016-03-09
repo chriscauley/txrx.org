@@ -13,13 +13,14 @@
       TXRX.SITE_NAME = "{{ settings.SITE_NAME }}";
       var SHOP = {
         {% if settings.DEBUG %}
-        base_url: "http://dev.txrxlabs.org:8009",
+        base_url: "http://dev.txrxlabs.org:8025",
         email: 'chris@lablackey.com'
         {% else %}
         base_url: "https://txrxlabs.org",
         email: 'txrxlabs@gmail.com'
         {% endif %}
       }
+      {% if settings.DEBUG %}TXRX.DEBUG = true;{% endif %}
       SHOP.notify_url = SHOP.base_url + "/tx/rx/ipn/handler/";
       var _USER_NUMBER = {{ request.user.pk|default_if_none:"undefined" }};
       {% if request.user.is_superuser %}
