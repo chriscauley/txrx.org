@@ -18,6 +18,14 @@ class Document(models.Model):
   __unicode__ = lambda self: self.name
   get_absolute_url = lambda self: reverse('signed_document',args=[self.id,slugify(self.name)])
   fields_json = property(lambda self: [f.as_json for f in self.documentfield_set.all()])
+  @property
+  def as_json(self):
+    return {
+      'id': self.id,
+      'name': self.name,
+      'content': self.content,
+      'schema': self.fields_json
+    }
 
 class Signature(CriterionModel):
   document = models.ForeignKey(Document)

@@ -2,19 +2,19 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import jsignature.fields
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('redtape', '0008_auto_20160207_1915'),
+        ('course', '0020_auto_20160206_2120'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='signature',
-            name='signature',
-            field=jsignature.fields.JSignatureField(null=True, blank=True),
+            model_name='session',
+            name='course',
+            field=models.ForeignKey(default=1, to='course.Course'),
+            preserve_default=False,
         ),
     ]

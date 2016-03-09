@@ -21,13 +21,6 @@ def index(request):
 def products_json(request):
   return HttpResponse(reset_products_json())
 
-def detail(request,pk,slug):
-  product = get_object_or_404(Consumable,pk=pk)
-  values = {
-    'product': product,
-  }
-  return TemplateResponse(request,'store/detail.html',values)
-
 @csrf_exempt
 def cart_edit(request):
   cart = get_or_create_cart(request,save=True)

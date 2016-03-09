@@ -175,4 +175,23 @@ def toggle_enrollment(request):
   enrollment.completed = not enrollment.completed
   enrollment.save()
   return HttpResponse(json.dumps(enrollment.as_json))
-  
+
+@staff_member_required
+def clone_session(request,course_pk):
+  session = Course.objects.get(pk=course_pk).session_set.order_by("-first_date")[0]
+  clone = Session(
+    course_id = session.course_id,
+    user_id = session.user_id,
+    first_date = session.first_date,
+    last_date = session.last_date,
+    active=False,
+  )
+  clone.save()
+  for classtime in session.classtime_set.all():
+    ClassTime(
+      start=classtime.start,
+      end_time=classtime.end_time,
+      session=clone
+    ).save()
+  messages.success(request,"Session has been cloned. Modify dates and mark active.")
+  return HttpResponseRedirect("/admin/course/session/%s/"%clone.pk)

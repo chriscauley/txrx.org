@@ -22,15 +22,15 @@
 }
 .things a { /*home behavior */
   .hover {
-    background: #444;
+    background: @gray-dark;
     background: fade(@gray-dark,80%);
-    color: white;
+    color: @btn-default-bg;
     display: none;
     font-size: 20px;
     height: 100%;
     left: 0;
     position: absolute;
-    text-shadow: 0 0 5px black;
+    text-shadow: 0 0 5px @gray-darker;
     top: 0;
     width: 100%;
     .title {
@@ -40,7 +40,7 @@
       position: absolute;
       width: 100%;
       .author {
-	border-top: 1px white solid;
+	border-top: 1px @btn-default-bg solid;
 	font-size: 0.8em;
 	padding-top: 5px;
       }

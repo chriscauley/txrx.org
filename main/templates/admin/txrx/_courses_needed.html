@@ -36,17 +36,17 @@
             </div>
             <div><big>{{ course.notifycourse_set.count }}</big> People on waiting list</div>
           </dd>
+          {% if course.last_session %}
           <dd>
             <br />
-            {% if course.last_session %}
             <a class="btn btn-success" href="{{ course.last_session.get_absolute_url }}">
               <i class="icon-share" title="View Session on Site"></i> View</a>
             <a class="btn btn-success" href="{{ course.last_session.get_admin_url }}">
               <i class="icon-search" title="Edit Session in Admin"></i> Edit</a>
-            {% endif %}
-            <a class="btn btn-success" href="{% url "admin:course_session_add" %}">
-              <i class="icon-plus" title="Add New Session"></i> New</a>
+            <a class="btn btn-success" href="{% url "course:clone_session" course.pk %}">
+              <i class="icon-plus" title="Clone Last Session"></i> Clone</a>
           </dd>
+          {% endif %}
           <dd>
             <br />
             {% for n in "136" %}
