@@ -4,13 +4,13 @@ from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 
 from course.models import Enrollment
-from lablackey.mail import print_to_mail
+from lablackey.mail import mail_on_fail
 from membership.models import LimitedAccessKey
 
 import datetime
 
 class Command (BaseCommand):
-  @print_to_mail(subject="Evaluation Reminder")
+  @mail_on_fail
   def handle(self, *args, **options):
     yesterday = datetime.datetime.now()-datetime.timedelta(1)
     pe = Enrollment.objects.pending_evaluation()

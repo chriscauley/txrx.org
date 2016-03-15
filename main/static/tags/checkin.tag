@@ -6,7 +6,7 @@
   <div if={ rfid_error } class="alert alert-danger">
     Unknown RFID card. Please go find Chris or Gaby to get it entered in the system.
   </div>
-  <ur-form action="/checkin_ajax/" button_text="Check In"></ur-form>
+  <ur-form action="/checkin_ajax/" button_text="Check In" schema={ schema }></ur-form>
   <div if={ status } class="alert alert-success">
     { status.user } checked in at { status.sin }
   </div>

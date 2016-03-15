@@ -11,7 +11,7 @@ from membership.models import LimitedAccessKey
 import datetime
 
 class Command (BaseCommand):
-  @print_to_mail(subject="New Classes")
+  @mail_on_fail
   def handle(self, *args, **options):
     user = get_user_model()
     dt = datetime.datetime.now() + datetime.timedelta(-16)
