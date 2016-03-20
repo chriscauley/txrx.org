@@ -82,7 +82,7 @@ class Photo(FileModel):
   approved = models.BooleanField(default=False)
   source = models.CharField(choices=SOURCE_CHOICES,default="web",max_length=16)
   tags = models.ManyToManyField(PhotoTag,blank=True)
-  kwargs = dict(upload_to='uploads/photos/%Y-%m', original='file')
+  kwargs = dict(upload_to='uploads/photos/%Y-%m', original='file',max_length=200)
   _sh = "Usages: Blog Photo, Tool Photo"
   square_crop = CropOverride('Square Crop (1:1)', aspect='1x1',help_text=_sh,**kwargs)
   _lh = "Usages: Featured Blog Photo, Lab Photo"
