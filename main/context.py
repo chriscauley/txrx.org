@@ -76,12 +76,13 @@ def nav(request):
   my_classes_ics = None
   member_discount = 1
   documents_needed = 0
-  if request.user.is_authenticated() and settings.DEBUG:
+  if request.user.is_authenticated():
     my_classes_ics = "%s/classes/ics/%s/%s/my-classes.ics"
     my_classes_ics = my_classes_ics%(settings.SITE_DOMAIN,request.user.id,request.user.usermembership.api_key)
     member_discount = (100.-request.user.level.discount_percentage)/100
-    d_ids = getattr(settings,"REQUIRED_DOCUMENT_IDS",[])
-    documents_needed = len(d_ids) - Signature.objects.filter(document_id__in=d_ids,user=request.user).count()
+    if settings.DEBUG:
+      d_ids = getattr(settings,"REQUIRED_DOCUMENT_IDS",[])
+      documents_needed = len(d_ids) - Signature.objects.filter(document_id__in=d_ids,user=request.user).count()
 
   login_redirect = request.path
   if 'auth' in request.path or 'accounts' in request.path:
