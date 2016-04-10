@@ -22,7 +22,7 @@ function setHiddenFields(that) {
 <br />
 <div id="memberships" class="row">
   {% for group in groups %}
-  <div class="col-lg-4 col-sm-6">
+  <div class="{% if forloop.first %}col-lg-offset-2 {% endif %}col-lg-4 col-sm-6">
     {% if groups|length != 1 %}<h2>{{ group }} Membership</h2>{% endif %}
     {% for m in group.active_levels %}
     <span class="well membership">
@@ -87,7 +87,7 @@ function setHiddenFields(that) {
 $(document).ready(function() {$("select").change()});
 $(function() {
   var unlocked = false;
-  $("#m_table-hacker").addClass("grayscale-me").click(function() {
+  $("#m_table-hacker,#m_maker-for-profit").addClass("grayscale-me").click(function() {
     if (unlocked) {
       return true
     } else {
@@ -96,7 +96,7 @@ $(function() {
     }
   });;
   function cheat() {
-    $("#m_table-hacker").removeClass("grayscale-me");
+    $("#m_table-hacker,#m_maker-for-profit").removeClass("grayscale-me");
     alert("Table-Hacker Membership Unlocked!");
     unlocked = true;
   }
