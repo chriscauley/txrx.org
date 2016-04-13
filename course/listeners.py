@@ -23,8 +23,8 @@ def handle_successful_store_payment(sender, user):
   except Order.DoesNotExist:
     mail_admins("repeat transaction for %s"%sender.txn_id,"")
     return
-  #if order.status == Order.COMPLETED:
-  #  return
+  if order.status == Order.COMPLETED:
+    return
   total = 0
   if not "num_cart_items" in params:
     mail_admins("No cart items found for %s"%sender.txn_id,"")
