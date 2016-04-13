@@ -1,3 +1,16 @@
+* roland 4/12
+** TXRX changes
+*** Hook up card numbers to accounts
+*** Sale page bugs
+*** Update the tool pages
+    Checkout Items (drill bits, etc)
+    Sale Items
+*** Assign places to members
+*** Equipment scheduling
+*** Scheduling tools/areas per class scheduled by time
+** Leisure learning
+** Offering the website to other people
+*** profit sharing/licensing fee/yearly charge
 * Permissions
 ** Need safety training to not be a problem for 2 months after subscription being created.
 ** Tie in wavers and orientation.

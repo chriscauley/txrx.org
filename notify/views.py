@@ -8,6 +8,8 @@ from course.models import Course
 from membership.utils import limited_login_required
 from .models import NotifyCourse
 
+from lablackey.utils import FORBIDDEN
+
 @login_required
 def notify_course(request,course_id):
   course = get_object_or_404(Course,pk=course_id)
