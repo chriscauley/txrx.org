@@ -31,9 +31,7 @@ def checkin_ajax(request):
     checkin.time_out = datetime.datetime.now()
     checkin.save()
   out = {
-    'user': user.username,
-    'time_in': str(checkin.time_in),
-    'time_out': str(checkin.time_out) if checkin.time_out else None,
+    'messages': [{'level': 'success', 'body': '%s checked in at %s'%(user,checkin.time)}]
   }
   return HttpResponse(json.dumps(out))
 

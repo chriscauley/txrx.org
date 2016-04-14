@@ -7,9 +7,6 @@
     Unknown RFID card. Please go find Chris or Gaby to get it entered in the system.
   </div>
   <ur-form action="/checkin_ajax/" button_text="Check In" schema={ schema }></ur-form>
-  <div if={ status } class="alert alert-success">
-    { status.user } checked in at { status.sin }
-  </div>
   var self = this;
   function validateRFIDOrEmail(value,riot_tag) {
     var input = self.root.querySelector("[name=rfid]")
@@ -23,7 +20,6 @@
   ];
   this.on("mount", function() {
     this.last_press = new Date();
-    this.status = this.opts.status;
     document.body.classList.add("kiosk");
     document.addEventListener("keypress",this.press);
     this.update();
@@ -37,40 +33,24 @@
     var e = uR.getQueryParameter("e");
     if (e) { TXRX.mainMount("checkin-register",{ email: "arst@oairesnt.com" }) }
   });
-  this.on("update", function() {
-    if (this.status) {
-      this.status.sin = moment(this.status.time_in).format("h:mm a");
-      this.status.sout = moment(this.status.time_out).format("h:mm a");
-    }
-  });
   emailCheckin(e) {
     TXRX.mainMount("checkin-email");
   }
   press(e) {
     var num = e.keyCode - 48;
     if (self.current_number && self.current_number.length == 10 && e.keyCode == 13) {
+      console.log('clearing');
       // enter pressed after 10 fast numbers
       document.getElementById("id_email").value = "";
       document.getElementById("id_rfid").value = self.current_number;
       this.tags['ur-form'].submit();
       return e;
     }
-    if (num > 9 || num < 0) { return };
+    if (num > 9 || num < 0) { return e };
     // my rfid reader is never > 25ms between digits
     if (e.timeStamp - self.last_press > 100) { self.current_number = ""; }
     self.last_press = e.timeStamp;
     self.current_number += num;
-  }
-  ajax_success(data) {
-    data.time_in = new Date(data.time_in);
-    data.time_ins = data.time_in.getHours()%12 + ":" + data.time_in.getMinutes()
-    if (data.time_out) {
-      data.time_out = new Date(data.time_out);
-      data.time_outs = data.time_out.getHours()%12 + ":" + data.time_out.getMinutes()
-      var minutes = (data.time_out.valueOf() - data.time_in.valueOf())*0.001/60;
-      data.diffs = Math.floor(minutes/60) + " hours " + Math.floor(minutes % 60) + " minutes"
-    }
-    self.status = data;
   }
 
 </checkin-home>
