@@ -85,6 +85,7 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   get_short_name = lambda self: self.short_name or self.name
   subjects = models.ManyToManyField(Subject)
+  no_discount = models.BooleanField(default=False)
 
   presentation = models.BooleanField("Evaluate Presentation",default=True)
   visuals = models.BooleanField("Evaluate Visuals",default=True)
@@ -113,7 +114,8 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
       'active_sessions': [s.as_json for s in self.active_sessions],
       'past_session_count': len(self.archived_sessions),
       'short_description': self.get_short_description(),
-      'requirements': self.requirements
+      'requirements': self.requirements,
+      'no_discount': self.no_discount,
     }
     out['enrolled_status'] = "Enroll" if out['active_sessions'] else "Details"
     return out

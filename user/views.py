@@ -12,17 +12,20 @@ from geo.models import Room
 from redtape.models import Signature
 from tool.models import Criterion, UserCriterion, Permission
 
-from lablackey.utils import get_or_none
+from lablackey.utils import get_or_none, JsonResponse
 
 import json, datetime
 
 def checkin_ajax(request):
-  user = get_or_none(User,rfid=request.GET.get('rfid',None) or 'no one has this as an rfid')
+  rfid = request.GET.get('rfid',None)
+  user = get_or_none(User,rfid=rfid or 'notavalidrfid')
   email = request.GET.get("email",None) or "notavaildemail"
   user = user or get_or_none(User,email=email)
   user = user or get_or_none(User,usermembership__paypal_email=email)
+  if rfid and not user:
+    return JsonResponse({'next': "new_rfid"})
   if not user:
-    return HttpResponse(json.dumps({'no_user': email}))
+    return JsonResponse({'errors': {'non_field_errors': 'Unable to find user. Contact the staff'}})
   if not user.signature_set.filter(document_id=2):
     return HttpResponse(json.dumps({'no_waiver': email}))
   defaults = {'content_object': Room.objects.get(name='')}
