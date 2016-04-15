@@ -49,7 +49,7 @@ function Cart(){
   me.currency = USD;
   me.checkoutTo = PayPal;
   me.email = "";
-  me.merchantId	 = "";
+  me.merchantId   = "";
   me.successUrl = null;
   me.cancelUrl = null;
   me.cookieDuration = 30; // default duration in days
@@ -62,13 +62,13 @@ function Cart(){
   /*
     cart headers:
     you can set these to which ever order you would like, and the cart will display the appropriate headers
-    and item info.	any field you have for the items in the cart can be used, and 'Total' will automatically
+    and item info.  any field you have for the items in the cart can be used, and 'Total' will automatically
     be price*quantity.
 
     there are keywords that can be used:
 
     1) "_input" - the field will be a text input with the value set to the given field. when the user
-    changes the value, it will update the cart.	 this can be useful for quantity. (ie "Quantity_input")
+    changes the value, it will update the cart.   this can be useful for quantity. (ie "Quantity_input")
 
     2) "increment" - a link with "+" that will increase the item quantity by 1
 
@@ -85,7 +85,7 @@ function Cart(){
 
   */
   /******************************************************
-			function for setting options 
+      function for setting options 
   ******************************************************/
   me.options = function( values ){
     me.each(values, function( value , x , name ){
@@ -96,17 +96,17 @@ function Cart(){
 
 
   /******************************************************
-			add/remove items to cart
+      add/remove items to cart
   ******************************************************/
 
   me.add = function ( values ) {
     var me=this;
     /* load cart values if not already loaded */
-    if( !me.pageIsReady		) {
+    if( !me.pageIsReady    ) {
       me.initializeView();
       me.update();
     }
-    if( !me.isLoaded		) {
+    if( !me.isLoaded    ) {
       me.load();
       me.update();
     }
@@ -154,7 +154,7 @@ function Cart(){
     
     me.each(function(item){
       if( item.id !== id ){
-	tempArray[item.id] = item;
+        tempArray[item.id] = item;
       }
     });
     this.items = tempArray;
@@ -166,7 +166,7 @@ function Cart(){
   };
 
   /******************************************************
-			 item accessor functions
+       item accessor functions
   ******************************************************/
 
   me.find = function (criteria) {
@@ -176,18 +176,18 @@ function Cart(){
     
     var results = [];
     
-    me.each(function(item,x,next){ 	
+    me.each(function(item,x,next){   
       
       fits = true;
       
       me.each( criteria , function(value,j,name){
-	if( !item[name] || item[name] != value ){
-	  fits = false;
-	}
+        if( !item[name] || item[name] != value ){
+          fits = false;
+        }
       });
       
       if( fits ){
-	results.push( item );
+        results.push( item );
       }
     });
     return (results.length === 0 ) ? null : results;
@@ -211,11 +211,11 @@ function Cart(){
     
     for( next in items ){
       if( typeof items[next] !== "function" ){
-	result = cb.call( me , items[next] , x , next );
-	if( result === false ){
-	  return;
-	}
-	x++;
+        result = cb.call( me , items[next] , x , next );
+        if( result === false ){
+          return;
+        }
+        x++;
       }
     }
     
@@ -232,7 +232,7 @@ function Cart(){
 
 
   /******************************************************
-			 checkout management
+       checkout management
   ******************************************************/
 
   me.checkout = function() {
@@ -308,20 +308,20 @@ function Cart(){
 
       counter = iter+1;
       
-      form.appendChild( me.createHiddenElement( "item_name_"		+ counter, item.name.replace(_regex,'')		) );
-      form.appendChild( me.createHiddenElement( "quantity_"		+ counter, item.quantity	) );
+      form.appendChild( me.createHiddenElement( "item_name_"    + counter, item.name.replace(_regex,'')    ) );
+      form.appendChild( me.createHiddenElement( "quantity_"    + counter, item.quantity  ) );
       discount = me.discount || 1;
-      form.appendChild( me.createHiddenElement( "amount_"			+ counter, item.price*discount		) );
-      form.appendChild( me.createHiddenElement( "item_number_"	+ counter, item.id			) );
+      form.appendChild( me.createHiddenElement( "amount_"      + counter, item.price*discount    ) );
+      form.appendChild( me.createHiddenElement( "item_number_"  + counter, item.id      ) );
       
       var option_count = 0;
 
       me.each( item , function( value, x , field ){
-	if( field !== "id" && field !== "price" && field !== "quantity" && field !== "name" && field !== "shipping" && option_count < 10) {
-	  form.appendChild( me.createHiddenElement( "on" + option_count + "_"	+ counter, 	field ) );
-	  form.appendChild( me.createHiddenElement( "os" + option_count + "_"	+ counter, 	value ) );
-	  option_count++;
-	}
+        if( field !== "id" && field !== "price" && field !== "quantity" && field !== "name" && field !== "shipping" && option_count < 10) {
+          form.appendChild( me.createHiddenElement( "on" + option_count + "_"  + counter,   field ) );
+          form.appendChild( me.createHiddenElement( "os" + option_count + "_"  + counter,   value ) );
+          option_count++;
+        }
       });
 
       form.appendChild( me.createHiddenElement( "option_index_" + counter, option_count) );
@@ -363,23 +363,23 @@ function Cart(){
       
       counter = iter+1;
       
-      form.appendChild( me.createHiddenElement( "item_name_"		+ counter, item.name		) );
-      form.appendChild( me.createHiddenElement( "item_quantity_"	+ counter, item.quantity	) );
-      form.appendChild( me.createHiddenElement( "item_price_"		+ counter, item.price		) );
-      form.appendChild( me.createHiddenElement( "item_currency_"	+ counter, me.currency		) );
-      form.appendChild( me.createHiddenElement( "item_tax_rate_"	+ counter, me.taxRate		) );
-      form.appendChild( me.createHiddenElement( "_charset_"				 , ""				) );
+      form.appendChild( me.createHiddenElement( "item_name_"    + counter, item.name    ) );
+      form.appendChild( me.createHiddenElement( "item_quantity_"  + counter, item.quantity  ) );
+      form.appendChild( me.createHiddenElement( "item_price_"    + counter, item.price    ) );
+      form.appendChild( me.createHiddenElement( "item_currency_"  + counter, me.currency    ) );
+      form.appendChild( me.createHiddenElement( "item_tax_rate_"  + counter, me.taxRate    ) );
+      form.appendChild( me.createHiddenElement( "_charset_"         , ""        ) );
 
       descriptionString = "";
 
       me.each( item , function( value , x , field ){
-	
-	if( field !== "id"		&&
-	    field !== "quantity" &&
-	    field !== "price" ) {
-	  
-	  descriptionString = descriptionString + ", " + field + ": " + value;
-	}
+        
+        if( field !== "id"    &&
+            field !== "quantity" &&
+            field !== "price" ) {
+          
+          descriptionString = descriptionString + ", " + field + ": " + value;
+        }
       });
       
       descriptionString = descriptionString.substring( 1 );
@@ -413,7 +413,7 @@ function Cart(){
 
 
   /******************************************************
-				data storage and retrival
+        data storage and retrival
   ******************************************************/
 
   /* load cart from cookie */
@@ -435,24 +435,24 @@ function Cart(){
       info,
       newItem,
       y=0;
-      if(chunkCount>0) {	
-	for( y=0;y<chunkCount;y++){
-	  dataArray.push( readCookie( simpleCart.storagePrefix + 'simpleCart_' + (1 + y ) ) );
-	}
-	
-	dataString = unescape( dataArray.join("") );
-	data = dataString.split("++");
+      if(chunkCount>0) {  
+        for( y=0;y<chunkCount;y++){
+          dataArray.push( readCookie( simpleCart.storagePrefix + 'simpleCart_' + (1 + y ) ) );
+        }
+        
+        dataString = unescape( dataArray.join("") );
+        data = dataString.split("++");
       }
       for(var x=0, xlen=data.length;x<xlen;x++){
 
-	info = data[x].split('||');
-	newItem = new CartItem();
+        info = data[x].split('||');
+        newItem = new CartItem();
 
-	if( newItem.parseValuesFromArray( info ) ){
-	  newItem.checkQuantityAndPrice();
-	  /* store the new item in the cart */
-	  me.items[newItem.id] = newItem;
-	}
+        if( newItem.parseValuesFromArray( info ) ){
+          newItem.checkQuantityAndPrice();
+          /* store the new item in the cart */
+          me.items[newItem.id] = newItem;
+        }
       }
     }
     
@@ -490,21 +490,21 @@ function Cart(){
 
 
   /******************************************************
-				 view management
+         view management
   ******************************************************/
 
   me.initializeView = function() {
     var me = this;
-    me.totalOutlets				= getElementsByClassName('simpleCart_total');
-    me.quantityOutlets			= getElementsByClassName('simpleCart_quantity');
-    me.cartDivs					= getElementsByClassName('simpleCart_items');
-    me.taxCostOutlets			= getElementsByClassName('simpleCart_taxCost');
-    me.taxRateOutlets			= getElementsByClassName('simpleCart_taxRate');
-    me.shippingCostOutlets		= getElementsByClassName('simpleCart_shippingCost');
-    me.finalTotalOutlets		= getElementsByClassName('simpleCart_finalTotal');
+    me.totalOutlets        = getElementsByClassName('simpleCart_total');
+    me.quantityOutlets      = getElementsByClassName('simpleCart_quantity');
+    me.cartDivs          = getElementsByClassName('simpleCart_items');
+    me.taxCostOutlets      = getElementsByClassName('simpleCart_taxCost');
+    me.taxRateOutlets      = getElementsByClassName('simpleCart_taxRate');
+    me.shippingCostOutlets    = getElementsByClassName('simpleCart_shippingCost');
+    me.finalTotalOutlets    = getElementsByClassName('simpleCart_finalTotal');
 
     me.addEventToArray( getElementsByClassName('simpleCart_checkout') , simpleCart.checkout , "click");
-    me.addEventToArray( getElementsByClassName('simpleCart_empty')	, simpleCart.empty , "click" );
+    me.addEventToArray( getElementsByClassName('simpleCart_empty')  , simpleCart.empty , "click" );
     
     me.Shelf = new Shelf();
     me.Shelf.readPage();
@@ -523,12 +523,12 @@ function Cart(){
   };
 
   me.updateViewTotals = function() {
-    var outlets = [ ["quantity"		, "none"		] ,
-		    ["total"		, "currency"	] ,
-		    ["shippingCost" , "currency"	] ,
-		    ["taxCost"		, "currency"	] ,
-		    ["taxRate"		, "percentage"	] ,
-		    ["finalTotal"	, "currency"	] ];
+    var outlets = [ ["quantity"    , "none"    ] ,
+                    ["total"    , "currency"  ] ,
+                    ["shippingCost" , "currency"  ] ,
+                    ["taxCost"    , "currency"  ] ,
+                    ["taxRate"    , "percentage"  ] ,
+                    ["finalTotal"  , "currency"  ] ];
 
     for( var x=0,xlen=outlets.length; x<xlen;x++){
 
@@ -537,21 +537,21 @@ function Cart(){
       element;
 
       for( var y = 0,ylen = me[ arrayName ].length; y<ylen; y++ ){ 
-	switch( outlets[x][1] ){
-	case "none":
-	  outputString = "" + me[outlets[x][0]];
-	  break;
-	case "currency":
-	  outputString = me.valueToCurrencyString( me[outlets[x][0]] );
-	  break;
-	case "percentage":
-	  outputString = me.valueToPercentageString( me[outlets[x][0]] );
-	  break;
-	default:
-	  outputString = "" + me[outlets[x][0]];
-	  break;
-	}
-	me[arrayName][y].innerHTML = "" + outputString;
+        switch( outlets[x][1] ){
+        case "none":
+          outputString = "" + me[outlets[x][0]];
+          break;
+        case "currency":
+          outputString = me.valueToCurrencyString( me[outlets[x][0]] );
+          break;
+        case "percentage":
+          outputString = me.valueToPercentageString( me[outlets[x][0]] );
+          break;
+        default:
+          outputString = "" + me[outlets[x][0]];
+          break;
+        }
+        me[arrayName][y].innerHTML = "" + outputString;
       }
     }
   };
@@ -569,9 +569,9 @@ function Cart(){
       newCell.innerHTML = me.print( headerInfo[0] );
       newCell.className = "item" + headerInfo[0];
       for(var z=1,zlen=headerInfo.length;z<zlen;z++){
-	if( headerInfo[z].toLowerCase() == "noheader" ){
-	  newCell.style.display = "none";
-	}
+        if( headerInfo[z].toLowerCase() == "noheader" ){
+          newCell.style.display = "none";
+        }
       }
       newRow.appendChild( newCell );
 
@@ -584,15 +584,15 @@ function Cart(){
       newRow = document.createElement('div');
 
       for(var y=0,ylen = me.cartHeaders.length; y<ylen; y++ ){
-	newCell = document.createElement('div');
-	info = me.cartHeaders[y].split("_");
-	
-	outputValue = me.createCartRow( info , item , outputValue );
+        newCell = document.createElement('div');
+        info = me.cartHeaders[y].split("_");
+        
+        outputValue = me.createCartRow( info , item , outputValue );
 
-	newCell.innerHTML = outputValue;
-	newCell.className = "item" + info[0];
-	
-	newRow.appendChild( newCell );
+        newCell.innerHTML = outputValue;
+        newCell.className = "item" + info[0];
+        
+        newRow.appendChild( newCell );
       }
       newRow.className = "itemContainer";
       newRows[x+1] = newRow;
@@ -605,14 +605,14 @@ function Cart(){
       /* delete current rows in div */
       var div = me.cartDivs[x];
       if( div.childNodes && div.appendChild ){
-	while( div.childNodes[0] ){
-	  div.removeChild( div.childNodes[0] );
-	}
-	
+        while( div.childNodes[0] ){
+          div.removeChild( div.childNodes[0] );
+        }
         
-	for(var j=0, jLen = newRows.length; j<jLen; j++){
-	  div.appendChild( newRows[j] );
-	}
+        
+        for(var j=0, jLen = newRows.length; j<jLen; j++){
+          div.appendChild( newRows[j] );
+        }
       }
 
     }
@@ -654,23 +654,23 @@ function Cart(){
       break;
     default: 
       outputValue = item[ info[0].toLowerCase() ] ? 
-	typeof 	item[info[0].toLowerCase()] === 'function' ?
-	item[info[0].toLowerCase()].call(item) :
-	item[info[0].toLowerCase()] :
+        typeof   item[info[0].toLowerCase()] === 'function' ?
+        item[info[0].toLowerCase()].call(item) :
+        item[info[0].toLowerCase()] :
       " ";
       break;
-    }	
+    }  
     
     for( var y=1,ylen=info.length;y<ylen;y++){
       option = info[y].toLowerCase();
       switch( option ){
       case "image":
       case "img":
-	outputValue = me.valueToImageString( outputValue );		
-	break;
+        outputValue = me.valueToImageString( outputValue );    
+        break;
       case "input":
-	outputValue = me.valueToTextInput( outputValue , "onchange=\"simpleCart.items[\'" + item.id + "\'].set(\'" + info[0].toLowerCase() + "\' , this.value);\""	);
-	break;
+        outputValue = me.valueToTextInput( outputValue , "onchange=\"simpleCart.items[\'" + item.id + "\'].set(\'" + info[0].toLowerCase() + "\' , this.value);\""  );
+        break;
       case "div":
       case "span":
       case "h1":
@@ -678,16 +678,16 @@ function Cart(){
       case "h3":
       case "h4":
       case "p":
-	outputValue = me.valueToElement( option , outputValue , "" );
-	break;
+        outputValue = me.valueToElement( option , outputValue , "" );
+        break;
       case "noheader":
-	break;
+        break;
       default:
-	error( "unkown header option: " + option );
-	break;
+        error( "unkown header option: " + option );
+        break;
       }
       
-    }		  
+    }      
     return outputValue;
   };
 
@@ -698,9 +698,9 @@ function Cart(){
     for(var x=0,xlen=array.length; x<xlen; x++ ){
       element = array[x];
       if( element.addEventListener ) {
-	element.addEventListener(theEvent, functionCall , false );
+        element.addEventListener(theEvent, functionCall , false );
       } else if( element.attachEvent ) {
-	element.attachEvent( "on" + theEvent, functionCall );
+        element.attachEvent( "on" + theEvent, functionCall );
       }
     }
   };
@@ -716,7 +716,7 @@ function Cart(){
 
 
   /******************************************************
-			Event Management
+      Event Management
   ******************************************************/
   
   // bind a callback to a simpleCart event
@@ -742,7 +742,7 @@ function Cart(){
     var returnval = true;
     if( typeof me.events[name] !== 'undefined' && typeof me.events[name][0] === 'function'){
       for( var x=0,xlen=me.events[name].length; x<xlen; x++ ){
-	returnval = me.events[name][x].apply( me , (options ? options : [] ) );
+        returnval = me.events[name][x].apply( me , (options ? options : [] ) );
       }
     }
     if( returnval === false ){
@@ -767,7 +767,7 @@ function Cart(){
 
 
   /******************************************************
-				Currency management
+        Currency management
   ******************************************************/
 
   me.currencySymbol = function() {
@@ -818,7 +818,7 @@ function Cart(){
   };
 
   /******************************************************
-				Formatting
+        Formatting
   ******************************************************/
 
 
@@ -855,7 +855,7 @@ function Cart(){
   };
 
   /******************************************************
-				Duplicate management
+        Duplicate management
   ******************************************************/
 
   me.hasItem = function ( item ) {
@@ -869,14 +869,14 @@ function Cart(){
       matches = true;
       
       me.each( item , function( value , x , field ){ 
-	
-	if( field !== "quantity" && field !== "id" && item[field] !== testItem[field] ){
-	  matches = false;
-	}
+        
+        if( field !== "quantity" && field !== "id" && item[field] !== testItem[field] ){
+          matches = false;
+        }
       });
       
       if( matches ){
-	match = testItem;
+        match = testItem;
       }
       
     });
@@ -884,7 +884,7 @@ function Cart(){
   };
   
   /******************************************************
-				Language managment
+        Language managment
   ******************************************************/
   me.ln = {
     "en_us": {
@@ -910,7 +910,7 @@ function Cart(){
 
 
   /******************************************************
-				Cart Update managment
+        Cart Update managment
   ******************************************************/
 
   me.update = function() {
@@ -928,16 +928,16 @@ function Cart(){
   me.updateTotals = function() {
     
     me.total = 0 ;
-    me.quantity	 = 0;
+    me.quantity   = 0;
     me.each(function(item){ 
       
       if( item.quantity < 1 ){
-	item.remove();
+        item.remove();
       } else if( item.quantity !== null && item.quantity !== "undefined" ){
-	me.quantity = parseInt(me.quantity,10) + parseInt(item.quantity,10);
+        me.quantity = parseInt(me.quantity,10) + parseInt(item.quantity,10);
       }
       if( item.price ){
-	me.total = parseFloat(me.total) + parseInt(item.quantity,10)*parseFloat(item.price);
+        me.total = parseFloat(me.total) + parseInt(item.quantity,10)*parseFloat(item.price);
       }
       
     });
@@ -952,18 +952,18 @@ function Cart(){
   me.shipping = function(){
     if( parseInt(me.quantity,10)===0 )
       return 0;
-    var shipping =	parseFloat(me.shippingFlatRate) +
+    var shipping =  parseFloat(me.shippingFlatRate) +
       parseFloat(me.shippingTotalRate)*parseFloat(me.total) +
       parseFloat(me.shippingQuantityRate)*parseInt(me.quantity,10),
     next;
     
-    me.each(function(nextItem){ 		
+    me.each(function(nextItem){     
       if( nextItem.shipping ){
-	if( typeof nextItem.shipping == 'function' ){
-	  shipping += parseFloat(nextItem.shipping());
-	} else {
-	  shipping += parseFloat(nextItem.shipping);
-	}
+        if( typeof nextItem.shipping == 'function' ){
+          shipping += parseFloat(nextItem.shipping());
+        } else {
+          shipping += parseFloat(nextItem.shipping);
+        }
       }
     });
 
@@ -980,11 +980,11 @@ function Cart(){
 }
 
 /********************************************************************************************************
- *			Cart Item Object
+ *      Cart Item Object
  ********************************************************************************************************/
 
 function CartItem() {
-  while( simpleCart.items["c" + simpleCart.nextId] )	
+  while( simpleCart.items["c" + simpleCart.nextId] )  
     simpleCart.nextId++;
   
   this.id = "c" + simpleCart.nextId;
@@ -998,25 +998,25 @@ CartItem.prototype = {
     if( typeof( this[field] ) !== "function" && field !== "id" ){
       value = "" + value;
       if( field == "quantity"){
-	value = value.replace( /[^(\d|\.)]*/gi , "" );
-	value = value.replace(/,*/gi, "");
-	value = parseInt(value,10);
+        value = value.replace( /[^(\d|\.)]*/gi , "" );
+        value = value.replace(/,*/gi, "");
+        value = parseInt(value,10);
       } else if( field == "price" ){
-	value = value.replace( /[^(\d|\.)]*/gi, "");
-	value = value.replace(/,*/gi , "");
-	value = parseFloat( value );
+        value = value.replace( /[^(\d|\.)]*/gi, "");
+        value = value.replace(/,*/gi , "");
+        value = parseFloat( value );
       }
       if( typeof(value) == "number" && isNaN( value ) ){
-	error( "Improperly formatted input.");
+        error( "Improperly formatted input.");
       } else {
-	if( typeof( value ) === "string" ){
-	  if( value.match(/\~|\=/) ){
-	    error("Special character ~ or = not allowed: " + value);
-	  }
-	  value = value.replace(/\~|\=/g, "");
-	}
-	this[field] = value;
-	this.checkQuantityAndPrice();
+        if( typeof( value ) === "string" ){
+          if( value.match(/\~|\=/) ){
+            error("Special character ~ or = not allowed: " + value);
+          }
+          value = value.replace(/\~|\=/g, "");
+        }
+        this[field] = value;
+        this.checkQuantityAndPrice();
       }
     } else {
       error( "Cannot change " + field + ", this is a reserved field.");
@@ -1041,7 +1041,7 @@ CartItem.prototype = {
   print : function () {
     var returnString = '',
     field;
-    simpleCart.each(this ,function(item,x,name){ 	
+    simpleCart.each(this ,function(item,x,name){   
       returnString+= escape(name) + "=" + escape(item) + "||";
     });
     return returnString.substring(0,returnString.length-2);
@@ -1057,8 +1057,8 @@ CartItem.prototype = {
       this.quantity = ("" + this.quantity).replace(/,*/gi, "" );
       this.quantity = parseInt( ("" + this.quantity).replace( /[^(\d|\.)]*/gi, "") , 10);
       if( isNaN(this.quantity) ){
-	error('Quantity is not a number.');
-	this.quantity = 1;
+        error('Quantity is not a number.');
+        this.quantity = 1;
       }
     }
 
@@ -1069,8 +1069,8 @@ CartItem.prototype = {
       this.price = ("" + this.price).replace(/,*/gi, "" );
       this.price = parseFloat( ("" + this.price).replace( /[^(\d|\.)]*/gi, "") );
       if( isNaN(this.price) ){
-	error('Price is not a number.');
-	this.price = 0.00;
+        error('Price is not a number.');
+        this.price = 0.00;
       }
     }
   },
@@ -1080,25 +1080,25 @@ CartItem.prototype = {
     if( array && array.length && array.length > 0) {
       for(var x=0, xlen=array.length; x<xlen;x++ ){
 
-	/* ensure the pair does not have key delimeters */
-	array[x] = array[x].replace(/\|\|/g, "| |");
-	array[x] = array[x].replace(/\+\+/g, "+ +");
-	if( array[x].match(/\~/) ){
-	  error("Special character ~ not allowed: " + array[x]);
-	}
-	array[x] = array[x].replace(/\~/g, "");
-	
+        /* ensure the pair does not have key delimeters */
+        array[x] = array[x].replace(/\|\|/g, "| |");
+        array[x] = array[x].replace(/\+\+/g, "+ +");
+        if( array[x].match(/\~/) ){
+          error("Special character ~ not allowed: " + array[x]);
+        }
+        array[x] = array[x].replace(/\~/g, "");
+        
 
-	/* split the pair and save the unescaped values to the item */
-	var value = array[x].split('=');
-	if( value.length>1 ){
-	  if( value.length>2 ){
-	    for(var j=2, jlen=value.length;j<jlen;j++){
-	      value[1] = value[1] + "=" + value[j];
-	    }
-	  }
-	  this[ unescape(value[0]).toLowerCase() ] = unescape(value[1]);
-	}
+        /* split the pair and save the unescaped values to the item */
+        var value = array[x].split('=');
+        if( value.length>1 ){
+          if( value.length>2 ){
+            for(var j=2, jlen=value.length;j<jlen;j++){
+              value[1] = value[1] + "=" + value[j];
+            }
+          }
+          this[ unescape(value[0]).toLowerCase() ] = unescape(value[1]);
+        }
       }
       return true;
     } else {
@@ -1115,7 +1115,7 @@ CartItem.prototype = {
 
 
 /********************************************************************************************************
- *			Shelf Object for managing items on shelf that can be added to cart
+ *      Shelf Object for managing items on shelf that can be added to cart
  ********************************************************************************************************/
 
 function Shelf(){
@@ -1144,20 +1144,20 @@ Shelf.prototype = {
       var node = item.childNodes[x];
       if( node.className && node.className.match(/item_[^ ]+/) ){
 
-	var data = /item_[^ ]+/.exec(node.className)[0].split("_");
+        var data = /item_[^ ]+/.exec(node.className)[0].split("_");
 
-	if( data[1] == "add" || data[1] == "Add" ){
-	  var tempArray = [];
-	  tempArray.push( node );
-	  var addFunction = simpleCart.Shelf.addToCart(newItem.id);
-	  simpleCart.addEventToArray( tempArray , addFunction , "click");
-	  node.id = newItem.id;
-	} else {
-	  newItem[data[1]]  = node;
-	}
+        if( data[1] == "add" || data[1] == "Add" ){
+          var tempArray = [];
+          tempArray.push( node );
+          var addFunction = simpleCart.Shelf.addToCart(newItem.id);
+          simpleCart.addEventToArray( tempArray , addFunction , "click");
+          node.id = newItem.id;
+        } else {
+          newItem[data[1]]  = node;
+        }
       }
       if( node.childNodes[0] ){
-	this.checkChildren( node , newItem );
+        this.checkChildren( node , newItem );
       }
     }
   },
@@ -1170,9 +1170,9 @@ Shelf.prototype = {
   addToCart : function ( id ) {
     return function(){
       if( simpleCart.Shelf.items[id]){
-	simpleCart.Shelf.items[id].addToCart();
+        simpleCart.Shelf.items[id].addToCart();
       } else {
-	error( "Shelf item with id of " + id + " does not exist.");
+        error( "Shelf item with id of " + id + " does not exist.");
       }
     };
   }
@@ -1180,7 +1180,7 @@ Shelf.prototype = {
 
 
 /********************************************************************************************************
- *			Shelf Item Object
+ *      Shelf Item Object
  ********************************************************************************************************/
 
 
@@ -1201,35 +1201,35 @@ ShelfItem.prototype = {
     
     for( field in this ){
       if( typeof( this[field] ) !== "function" && field !== "id" ){
-	valueString = "";
+        valueString = "";
 
-	switch(field){
-	case "price":
-	  if( this[field].value ){
-	    valueString = this[field].value;
-	  } else if( this[field].innerHTML ) {
-	    valueString = this[field].innerHTML;
-	  }
-	  /* remove all characters from price except digits and a period */
-	  valueString = valueString.replace( /[^(\d|\.)]*/gi , "" );
-	  valueString = valueString.replace( /,*/ , "" );
-	  break;
-	case "image":
-	  valueString = this[field].src;
-	  break;
-	default:
-	  if( this[field].value ){
-	    valueString = this[field].value;
-	  } else if( this[field].innerHTML ) {
-	    valueString = this[field].innerHTML;
-	  } else if( this[field].src ){
-	    valueString = this[field].src;
-	  } else {
-	    valueString = this[field];
-	  }
-	  break;
-	}
-	outStrings.push( field + "=" + valueString );
+        switch(field){
+        case "price":
+          if( this[field].value ){
+            valueString = this[field].value;
+          } else if( this[field].innerHTML ) {
+            valueString = this[field].innerHTML;
+          }
+          /* remove all characters from price except digits and a period */
+          valueString = valueString.replace( /[^(\d|\.)]*/gi , "" );
+          valueString = valueString.replace( /,*/ , "" );
+          break;
+        case "image":
+          valueString = this[field].src;
+          break;
+        default:
+          if( this[field].value ){
+            valueString = this[field].value;
+          } else if( this[field].innerHTML ) {
+            valueString = this[field].innerHTML;
+          } else if( this[field].src ){
+            valueString = this[field].src;
+          } else {
+            valueString = this[field];
+          }
+          break;
+        }
+        outStrings.push( field + "=" + valueString );
       }
     }
 
@@ -1286,10 +1286,10 @@ var getElementsByClassName = function (className, tag, elm){
       returnElements = [],
       current;
       for(var i=0, il=elements.length; i<il; i+=1){
-	current = elements[i];
-	if(!nodeName || nodeName.test(current.nodeName)) {
-	  returnElements.push(current);
-	}
+        current = elements[i];
+        if(!nodeName || nodeName.test(current.nodeName)) {
+          returnElements.push(current);
+        }
       }
       return returnElements;
     };
@@ -1306,16 +1306,16 @@ var getElementsByClassName = function (className, tag, elm){
       elements,
       node;
       for(var j=0, jl=classes.length; j<jl; j+=1){
-	classesToCheck += "[contains(concat(' ', @class, ' '), ' " + classes[j] + " ')]";
+        classesToCheck += "[contains(concat(' ', @class, ' '), ' " + classes[j] + " ')]";
       }
       try {
-	elements = document.evaluate(".//" + tag + classesToCheck, elm, namespaceResolver, 0, null);
+        elements = document.evaluate(".//" + tag + classesToCheck, elm, namespaceResolver, 0, null);
       }
       catch (e) {
-	elements = document.evaluate(".//" + tag + classesToCheck, elm, null, 0, null);
+        elements = document.evaluate(".//" + tag + classesToCheck, elm, null, 0, null);
       }
       while ((node = elements.iterateNext())) {
-	returnElements.push(node);
+        returnElements.push(node);
       }
       return returnElements;
     };
@@ -1331,20 +1331,20 @@ var getElementsByClassName = function (className, tag, elm){
       returnElements = [],
       match;
       for(var k=0, kl=classes.length; k<kl; k+=1){
-	classesToCheck.push(new RegExp("(^|\\s)" + classes[k] + "(\\s|$)"));
+        classesToCheck.push(new RegExp("(^|\\s)" + classes[k] + "(\\s|$)"));
       }
       for(var l=0, ll=elements.length; l<ll; l+=1){
-	current = elements[l];
-	match = false;
-	for(var m=0, ml=classesToCheck.length; m<ml; m+=1){
-	  match = classesToCheck[m].test(current.className);
-	  if (!match) {
-	    break;
-	  }
-	}
-	if (match) {
-	  returnElements.push(current);
-	}
+        current = elements[l];
+        match = false;
+        for(var m=0, ml=classesToCheck.length; m<ml; m+=1){
+          match = classesToCheck[m].test(current.className);
+          if (!match) {
+            break;
+          }
+        }
+        if (match) {
+          returnElements.push(current);
+        }
       }
       return returnElements;
     };
@@ -1354,7 +1354,7 @@ var getElementsByClassName = function (className, tag, elm){
 
 
 /********************************************************************************************************
- *	Helpers
+ *  Helpers
  ********************************************************************************************************/
 
 
@@ -1371,7 +1371,7 @@ function error( message ){
   try{
     console.log( message );
   }catch(err){
-    //	alert( message );
+    //  alert( message );
   }
 }
 
