@@ -108,7 +108,19 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/moment.js"></script> {# date formatting #}
     <script src="{{ STATIC_URL }}bower/ur/unrest.js"></script>
     {% endcompress %}
+    <script>
+      var USER_SESSIONS = [
+        {% for s in user_sessions %}{{ s.json|safe }}{% if not forloop.last %},{% endif %}{% endfor %}
+      ]
+      USER_COURSE_IDS = [];
+    </script>
     <script src="{{ STATIC_URL }}bower/ur/form.tag" type="riot/tag"></script>
+    <script src="{{ STATIC_URL }}classes.json?v={% now "ymd_hi" %}"></script>
+    <script src="{{ STATIC_URL }}sessions.json?v={% now "ymd_his" %}"></script>
+    <script src="{{ STATIC_URL }}tags/course.tag?v=1.1" type="riot/tag"></script>
+    <script src="{{ STATIC_URL }}js/course.js?v=1.2"></script>
+    <script src="{{ STATIC_URL }}js/simpleCart.js"></script>
+    <script src="{{ STATIC_URL }}js/cart.js"></script>
     {% block extrajs %}{% endblock %}
     <script src="{{ STATIC_URL }}js/blog.js"></script>
     <script src="{{ STATIC_URL }}js/favico.js"></script>

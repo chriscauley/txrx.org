@@ -1,6 +1,5 @@
 $(function() {
   var active_subject;
-
   // set enrollment status for ALL_CLASSES, this can be moved to course.tag 
   for (var si=0; si<USER_SESSIONS.length;si++) {
     session = USER_SESSIONS[si];
@@ -13,12 +12,16 @@ $(function() {
     }
   }
 
+  window.NO_DISCOUNT = [];
   // assign ALL_CLASSES to subjects and generate search string
   // this should be part of the mount or update section of course list
   for (var ci=0; ci<ALL_CLASSES.length; ci++) {
     var course = ALL_CLASSES[ci];
     course.search_string = [course.name,course.short_description,course.subject_names.join(' ')];
     course.search_string = course.search_string.join(' ').toLowerCase();
+    if (course.no_discount) {
+      uR.forEach(course.active_sessions, function(s) { window.NO_DISCOUNT.push(s.id); });
+    }
 
     //Tally number of active classes in each subject.
     for (var csi=0; csi<course.subject_ids.length; csi++) {

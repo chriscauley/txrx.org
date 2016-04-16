@@ -134,3 +134,11 @@ $(function() {
     }
   });
 });
+
+function simple_cart_ready() {
+  if (!!readCookie("checkout_initiated")) { simpleCart.empty(); eraseCookie("checkout_initiated"); }
+  toggleCourses();
+};
+simpleCart.cartHeaders = ["Name", "Quantity", "Increment", "Decrement", "Total", "Remove"];
+simpleCart.ready(simple_cart_ready)
+$(".itemRemove a").on("click",toggleCourses);

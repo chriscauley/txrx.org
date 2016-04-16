@@ -74,12 +74,10 @@ def nav(request):
     ]
 
   my_classes_ics = None
-  member_discount = 1
   documents_needed = 0
   if request.user.is_authenticated():
     my_classes_ics = "%s/classes/ics/%s/%s/my-classes.ics"
     my_classes_ics = my_classes_ics%(settings.SITE_DOMAIN,request.user.id,request.user.usermembership.api_key)
-    member_discount = (100.-request.user.level.discount_percentage)/100
     if settings.DEBUG:
       d_ids = getattr(settings,"REQUIRED_DOCUMENT_IDS",[])
       documents_needed = len(d_ids) - Signature.objects.filter(document_id__in=d_ids,user=request.user).count()
@@ -103,7 +101,6 @@ def nav(request):
     tags = Tag.objects.all(),
     class_faqs = class_faqs,
     my_classes_ics = my_classes_ics,
-    member_discount = member_discount,
     all_ics = '%s/event/ics/all_events.ics'%settings.SITE_DOMAIN, #! move to event.context
     calendar_protocols = ['http://www.google.com/calendar/render?cid=http://','webcal://'], #! move to event.context
     all_classes_ics = '%s/classes/ics/all_classes.ics'%settings.SITE_DOMAIN, #! move to course.context

@@ -310,8 +310,7 @@ function Cart(){
       
       form.appendChild( me.createHiddenElement( "item_name_"    + counter, item.name.replace(_regex,'')    ) );
       form.appendChild( me.createHiddenElement( "quantity_"    + counter, item.quantity  ) );
-      discount = me.discount || 1;
-      form.appendChild( me.createHiddenElement( "amount_"      + counter, item.price*discount    ) );
+      form.appendChild( me.createHiddenElement( "amount_"      + counter, item.total_price    ) );
       form.appendChild( me.createHiddenElement( "item_number_"  + counter, item.id      ) );
       
       var option_count = 0;
@@ -619,15 +618,14 @@ function Cart(){
 
     var subtotals = document.querySelector(".checkout-box .subtotals");
     subtotals.innerHTML = "";
-    if (me.discount != 1 && me.total) {
+    if (me.total_discount) {
       var e = document.createElement("div");
-      var _total = (me.total/me.discount).toFixed(2);
       var subtotal = document.createElement("div");
       subtotal.className = "cartSubtotal";
-      subtotal.innerHTML = "$" + _total;
+      subtotal.innerHTML = "$" + me.sub_total;
       var discount = document.createElement("div");
       discount.className = "cartDiscount";
-      discount.innerHTML = "$" + (_total*(1-me.discount)).toFixed(2) + " ("+Math.round(100*(1-me.discount))+"%)";
+      discount.innerHTML = "$" + me.total_discount.toFixed(2);
       e.appendChild(subtotal);
       e.appendChild(discount);
       subtotals.appendChild(e);
@@ -926,24 +924,30 @@ function Cart(){
   };
 
   me.updateTotals = function() {
-    
     me.total = 0 ;
-    me.quantity   = 0;
-    me.each(function(item){ 
-      
+    me.quantity = 0;
+    me.total_discount = 0;
+    me.sub_total = 0;
+    var member_discount_percent = TXRX.user.member_discount_percent || 0;
+    me.each(function(item){
+      item.discount_percent = 0;
+      if (member_discount_percent && window.NO_DISCOUNT.indexOf(parseInt(item.id)) == -1) {
+        item.discount_percent = member_discount_percent;
+        item.discount_verbose = "TXRX Membership: " + item.discount_percent + "% Off";
+      }
       if( item.quantity < 1 ){
         item.remove();
       } else if( item.quantity !== null && item.quantity !== "undefined" ){
         me.quantity = parseInt(me.quantity,10) + parseInt(item.quantity,10);
       }
       if( item.price ){
-        me.total = parseFloat(me.total) + parseInt(item.quantity,10)*parseFloat(item.price);
+        var pre_discount = parseInt(item.quantity,10)*parseFloat(item.price);
+        me.sub_total += pre_discount;
+        item.total_price = (100-item.discount_percent)/100*pre_discount;
+        me.total = parseFloat(me.total) + item.total_price;
+        me.total_discount += pre_discount - item.total_price;
       }
-      
     });
-    if (me.discount) {
-      me.total = me.total * me.discount;
-    }
     me.shippingCost = me.shipping();
     me.taxCost = parseFloat(me.total)*me.taxRate;
     me.finalTotal = me.shippingCost + me.taxCost + me.total;

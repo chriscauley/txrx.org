@@ -9,10 +9,6 @@
         <h4 class="modal-title">Shopping Cart</h4>
       </div>
       <div class="modal-body">
-        {% compress js %}
-        <script type="text/javascript" src="{{ STATIC_URL }}js/simpleCart.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}js/cart.js"></script>
-        {% endcompress %}
         <div id="cart">
           <div class="well">
             <div id="cartEmpty">Your cart is empty</div>
@@ -38,17 +34,6 @@
             {% include "course/_return_policy.html" with format="html" %}
           </div>
         </div>
-        <script>
-function simple_cart_ready() {
-  {% if "success" in request.GET %}simpleCart.empty();{% endif %}
-  if (!!readCookie("checkout_initiated")) {simpleCart.empty(); eraseCookie("checkout_initiated");}
-  toggleCourses();
-};
-simpleCart.cartHeaders = ["Name", "Quantity", "Increment", "Decrement", "Total", "Remove"];
-simpleCart.discount = {{ member_discount }};
-simpleCart.ready(simple_cart_ready)
-$(".itemRemove a").on("click",toggleCourses);
-        </script>
       </div>
       <div class="modal-footer">
         <button type="button" class="pull-left btn btn-default" data-dismiss="modal" onclick="toggleCourses();">

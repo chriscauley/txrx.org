@@ -107,7 +107,6 @@
 
   this.user = window.TXRX.user;
   var that = this;
-  console.log(this.opts);
   add(e) {
     addClass(e.item);
   }
