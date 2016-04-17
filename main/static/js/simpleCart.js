@@ -578,9 +578,11 @@ function Cart(){
     newRow.className = "cartHeaders";
     newRows[0] = newRow;
 
+    var without_discount = 0; // #! TODO add explanation that some classes don't get discounts
     /* create a row for each item in the cart */
     me.each(function(item, x){
       newRow = document.createElement('div');
+      if (!item.discount_percentage) { without_discount++; }
 
       for(var y=0,ylen = me.cartHeaders.length; y<ylen; y++ ){
         newCell = document.createElement('div');

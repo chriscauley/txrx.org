@@ -77,7 +77,7 @@ class Event(PhotosMixin,models.Model):
     return self.eventoccurrence_set.all()
   @property
   def upcoming_occurrences(self):
-    return self.eventoccurrence_set.filter(start__gte=datetime.datetime.now())
+    return self.eventoccurrence_set.filter(start__gte=datetime.datetime.now()-datetime.timedelta(0.5))
 
   @property
   def next_occurrence(self):
