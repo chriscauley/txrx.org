@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
+from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.forms.models import BaseInlineFormSet
@@ -84,6 +85,16 @@ class EventOccurrenceAdmin(TaggedPhotoAdmin):
   search_fields = ['event__name']
   raw_id_fields = ['event']
   list_filter = (FuturePastListFilter,)
+  readonly_fields = ['_rsvps']
+  def _rsvps(self,obj):
+    rsvps = RSVP.objects.filter(
+      object_id=obj.id,
+      content_type__model=obj._meta.model_name,
+      content_type__app_label=obj._meta.app_label
+    )
+    s = '<a href="/admin/event/rsvp/{r.id}">{r}</a>'
+    return '<br/>'.join([s.format(**{'r': r}) for r in rsvps])
+  _rsvps.allow_tags = True
 
 @admin.register(RSVP)
 class RSVPAdmin(admin.ModelAdmin):
