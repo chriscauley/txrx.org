@@ -10,7 +10,6 @@ psycopg2
 django-suit
 django-contrib-comments
 ezdxf
-simplejson
 
 #image stuff
 -e git+https://github.com/chriscauley/sorl-thumbnail.git#egg=sorl-thumbnail

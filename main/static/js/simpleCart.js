@@ -585,7 +585,6 @@ function Cart(){
       for(var y=0,ylen = me.cartHeaders.length; y<ylen; y++ ){
         newCell = document.createElement('div');
         info = me.cartHeaders[y].split("_");
-        
         outputValue = me.createCartRow( info , item , outputValue );
 
         newCell.innerHTML = outputValue;
@@ -637,6 +636,10 @@ function Cart(){
     switch( info[0].toLowerCase() ){
     case "total":
       outputValue = me.valueToCurrencyString(parseFloat(item.price)*parseInt(item.quantity,10) );
+      if (item.discount_verbose) {
+        outputValue = "<span style='text-decoration: line-through'>" + outputValue + "</span> ";
+        outputValue += me.valueToCurrencyString(item.total_price);
+      }
       break;
     case "increment":
       outputValue = me.valueToLink( "<i class='fa fa-plus-circle'></i>" , "javascript:;" , "onclick=\"simpleCart.items[\'" + item.id + "\'].increment();\"" );
@@ -649,6 +652,9 @@ function Cart(){
       break;
     case "price":
       outputValue = me.valueToCurrencyString( item[ info[0].toLowerCase() ] ? item[info[0].toLowerCase()] : " " );
+      break;
+    case "discount":
+      outputValue = item.discount_verbose || "";
       break;
     default: 
       outputValue = item[ info[0].toLowerCase() ] ? 
@@ -933,7 +939,7 @@ function Cart(){
       item.discount_percent = 0;
       if (member_discount_percent && window.NO_DISCOUNT.indexOf(parseInt(item.id)) == -1) {
         item.discount_percent = member_discount_percent;
-        item.discount_verbose = "TXRX Membership: " + item.discount_percent + "% Off";
+        item.discount_verbose = "TXRX Membership: <b>" + item.discount_percent + "% Off</b>";
       }
       if( item.quantity < 1 ){
         item.remove();

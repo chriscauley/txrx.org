@@ -4,7 +4,6 @@ function showLogin() {
 }
 
 simpleCart.successURL = window.location.origin+"/classes/?success";
-simpleCart.cartHeaders = ["Name", "Price", "Decrement", "Increment","Quantity", "Remove"];
 simpleCart.email = window.SHOP.email;
 function showCart() {
   $("#cart-modal").modal({width: 400, modal: true, minHight: 300});
@@ -139,6 +138,6 @@ function simple_cart_ready() {
   if (!!readCookie("checkout_initiated")) { simpleCart.empty(); eraseCookie("checkout_initiated"); }
   toggleCourses();
 };
-simpleCart.cartHeaders = ["Name", "Quantity", "Increment", "Decrement", "Total", "Remove"];
+simpleCart.cartHeaders = ["Name", "Quantity", "Increment", "Decrement", "Total", "Remove", "Discount"];
 simpleCart.ready(simple_cart_ready)
 $(".itemRemove a").on("click",toggleCourses);
