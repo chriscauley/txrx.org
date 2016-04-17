@@ -251,7 +251,7 @@ class Session(UserModel,PhotosMixin,models.Model):
       closed_status = 'private'
     return {
       'id': self.pk,
-      'name': "<b>%s</b> %s"%(self.course,self.first_date.strftime("%m/%d/%Y")),
+      'name': "<b>%s</b> %s"%(self.course,short_dates),
       'closed_status': closed_status,
       'short_dates': short_dates,
       'instructor_name': self.get_instructor_name(),
