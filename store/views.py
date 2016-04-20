@@ -1,4 +1,5 @@
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
@@ -9,8 +10,9 @@ from .models import Category, reset_products_json, Consumable
 from shop.models import Product, CartItem, Order
 from shop.util.cart import get_or_create_cart
 
-import json;
+import json, datetime
 
+@login_required
 def index(request):
   cart = json.dumps({ci.product_id: ci.quantity for ci in get_or_create_cart(request).items.all()})
   values = {
@@ -28,8 +30,6 @@ def cart_edit(request):
   product = Consumable.objects.get(pk=request.POST['pk'])
   defaults = {'quantity': 0}
   cart_item,new = CartItem.objects.get_or_create(product=product,cart=cart,defaults=defaults)
-  if new:
-    print "created!"
   if quantity:
     cart_item.quantity = quantity
     cart_item.save()
@@ -62,8 +62,12 @@ def start_checkout(request):
 def receipts(request):
   if request.POST:
     o = Order.objects.get(pk=request.POST['pk'])
-    o.status = request.POST['status']
+    o.status = int(request.POST['status'])
     o.save()
+    now = datetime.datetime.now().strftime("%m/%d/%Y at %H:%M")
+    status = "delivered" if o.get_status_display() == Order.COMPLETED else "Outstanding"
+    t = "%s marked as %s on %s"%(request.user,status,now)
+    o.extra_info.create(text=t)
     return HttpResponseRedirect('.')
   values = {
     'outstanding_orders': Order.objects.filter(status=Order.COMPLETED).order_by("-id"),

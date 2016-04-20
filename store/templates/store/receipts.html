@@ -4,7 +4,7 @@
 
 {% block content %}
 <div id="receipts">
-  <h1>Outstanding Orders</h1>
+  <h1>Outstanding Orders <a class="pull-right fa fa-list" href="/admin/shop/order/"></a></h1>
   {% for order in outstanding_orders %}
   <div class="well">
     <form method="POST">
@@ -15,7 +15,11 @@
     <b>Order #{{ order.pk }} - {{ order.user }}<br/> {{ order.created|date:"m/d@P" }}</b>
     <ul>
       {% for item in order.items.all %}
-      <li><b>{{ item.quantity }}x</b> {{item.product }}</li>
+      <li><b>{{ item.quantity }}x</b> {{ item.product }}</li>
+      {% endfor %}
+      {% if order.extra_info.all %}<br/>{% endif %}
+      {% for info in order.extra_info.all %}
+      <li>{{ info.text }}</li>
       {% endfor %}
     </ul>
   </div>
@@ -34,6 +38,10 @@
     <ul>
       {% for item in order.items.all %}
       <li><b>{{ item.quantity }}x</b> {{item.product }}</li>
+      {% endfor %}
+      {% if order.extra_info.all %}<br/>{% endif %}
+      {% for info in order.extra_info.all %}
+      <li>{{ info.text }}</li>
       {% endfor %}
     </ul>
   </div>
