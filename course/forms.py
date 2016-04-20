@@ -12,7 +12,6 @@ class RequestForm(forms.Form):
 
   example_form = RequestForm(request,initial={'city':'Houston'})
   user = example_form.request.user
-
   """
   def __init__(self,request,*args,**kwargs):
     data = request.POST or request.GET or None

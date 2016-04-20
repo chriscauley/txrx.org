@@ -448,7 +448,7 @@ class Evaluation(UserModel):
   content = models.IntegerField("Course Content",choices=FIVE_CHOICES,help_text=c_ht,default=0)
   content_comments = models.TextField("Comments",**_kwargs)
 
-  v_ht = "How helpful did you find the handouts and audiovisuals presented in this course?"
+  v_ht = "How helpful did you find the handouts and audio visuals presented in this course?"
   visuals = models.IntegerField("Handouts/Audio/Visuals",choices=FIVE_CHOICES,help_text=v_ht,default=0)
   visuals_comments = models.TextField("Comments",**_kwargs)
 

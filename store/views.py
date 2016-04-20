@@ -65,7 +65,7 @@ def receipts(request):
     o.status = int(request.POST['status'])
     o.save()
     now = datetime.datetime.now().strftime("%m/%d/%Y at %H:%M")
-    status = "delivered" if o.get_status_display() == Order.COMPLETED else "Outstanding"
+    status = "delivered" if o.status == Order.SHIPPED else "outstanding"
     t = "%s marked as %s on %s"%(request.user,status,now)
     o.extra_info.create(text=t)
     return HttpResponseRedirect('.')
