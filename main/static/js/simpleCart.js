@@ -310,7 +310,7 @@ function Cart(){
       
       form.appendChild( me.createHiddenElement( "item_name_"    + counter, item.name.replace(_regex,'')    ) );
       form.appendChild( me.createHiddenElement( "quantity_"    + counter, item.quantity  ) );
-      form.appendChild( me.createHiddenElement( "amount_"      + counter, item.total_price    ) );
+      form.appendChild( me.createHiddenElement( "amount_"      + counter, item.price_per    ) );
       form.appendChild( me.createHiddenElement( "item_number_"  + counter, item.id      ) );
       
       var option_count = 0;
@@ -950,6 +950,7 @@ function Cart(){
       }
       if( item.price ){
         var pre_discount = parseInt(item.quantity,10)*parseFloat(item.price);
+        item.price_per = (100-item.discount_percent)/100*parseFloat(item.price);
         me.sub_total += pre_discount;
         item.total_price = (100-item.discount_percent)/100*pre_discount;
         me.total = parseFloat(me.total) + item.total_price;
