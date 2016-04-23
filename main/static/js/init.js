@@ -71,7 +71,6 @@ function timeit(f) {
     var start = new Date().valueOf();
     var out = f.apply(this,arguments);
     var t = new Date().valueOf()-start;
-    console.log(t)
     return out
   }
 }
@@ -83,3 +82,14 @@ function timeit(f) {
 var resetProductList = timeit(function() {
   window.PRODUCT_LIST.update()
 });
+
+TXRX.schema = {
+  new_rfid: [
+    { name: 'username', placeholder: "Username or email" },
+    { name: 'password', type: 'password' },
+    { name: 'rfid', type: 'hidden' },
+  ]
+}
+
+uR.config.button_class = "btn-primary";
+uR.config.cancel_class = "btn-danger";
