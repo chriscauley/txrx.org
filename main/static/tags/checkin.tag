@@ -13,6 +13,9 @@
     <p class="lead">Enter your email below to checkin</p>
     <ur-form action="/checkin_ajax/" button_text="Check In" schema={ email_schema }></ur-form>
   </div>
+  <ul if={ messages } class="messagelist">
+    <li each={ messages } class="alert alert-{ level }">{ body }</li>
+  </ul>
 
   var self = this;
   this.email_schema = [
@@ -40,13 +43,13 @@
     this.email_checkin = !this.email_checkin;
   }
   fakeRFID(e) {
-    var rfid ="0123456789";
-    var i = rfid.length;
-    while (i--) { this.press({keyCode: parseInt(rfid[rfid.length-i-1])+48,timeStamp: new Date() }); }
+    var i = 10;
+    while (i--) { this.press({keyCode: Math.floor(Math.random()*10)+48,timeStamp: new Date() }); }
     this.press({keyCode:13});
   }
   this.ajax_success = function(data,response) {
     if (data.next) {
+      data.parent = self;
       if (!self.root.querySelector(data.next)) {
         var element = document.createElement(data.next);
         self.root.appendChild(element);
@@ -82,9 +85,17 @@
     <p class="lead">
       The RFID card you used is not in our system. Please enter your email and password to have this RFID affiliated with your account.
     </p>
-    <ur-form schema={ TXRX.schema.new_rfid } initial={ parent.opts } action="/add_rfid/" method="POST"></ur-form>
+    <ur-form schema={ TXRX.schema.new_rfid } initial={ parent.opts } action="/add_rfid/" method="POST"
+             ajax_success={ parent.ajax_success }></ur-form>
   </modal>
 
+  var self = this;
+  self.parent = self.opts.parent;
+  ajax_success(data) {
+    self.parent.messages = data.messages;
+    self.parent.update();
+    self.unmount();
+  }
 </new-rfid>
 
 <checkin-email>

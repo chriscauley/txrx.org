@@ -46,7 +46,7 @@ def add_rfid(request):
   user = user or get_or_none(User,usermembership__paypal_email=username)
   if not user or not user.check_password(request.POST['password']):
     return JsonResponse({'errors': {'non_field_errors': ['Incorrect username/email and password combination.']}})
-  if User.objects.filter(rfid__number=rfid):
+  if User.objects.filter(rfid=rfid):
     return # This generates an error. It'll email the admins if someone tries to hack this.
   user.rfid = rfid
   user.save()
