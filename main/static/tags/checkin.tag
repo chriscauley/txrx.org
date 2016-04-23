@@ -1,22 +1,22 @@
 <checkin-home>
   <h1>Welcome to { TXRX.SITE_NAME }</h1>
-  <p class="lead">
-    Please swipe your RFID card or enter your email to checkin.
-  </p>
-  <div if={ rfid_error } class="alert alert-danger">
-    Unknown RFID card. Please go find Chris or Gaby to get it entered in the system.
+  <div if={ !email_checkin }>
+    <p class="lead">Please swipe your RFID to checkin.</p>
+    <button onclick={ toggleCheckin } class="btn btn-primary">Checking Using Email</button>
+    <br />
+    <button if={ TXRX.DEBUG } onclick={ fakeRFID } class="btn btn-warning">Fake RFID</button>
+    <div if={ rfid_error } class="alert alert-danger">
+      Unknown RFID card. Please go find Chris or Gaby to get it entered in the system.
+    </div>
   </div>
-  <ur-form action="/checkin_ajax/" button_text="Check In" schema={ schema }></ur-form>
+  <div if={ email_checkin }>
+    <p class="lead">Enter your email below to checkin</p>
+    <ur-form action="/checkin_ajax/" button_text="Check In" schema={ email_schema }></ur-form>
+  </div>
+
   var self = this;
-  function validateRFIDOrEmail(value,riot_tag) {
-    var input = self.root.querySelector("[name=rfid]")
-    if (!value && input && !input.value) {
-      riot_tag.errors = ["Please enter email or swipe your card"]
-    }
-  }
-  this.schema = [
-    { name: "rfid", type: "hidden", required: false },
-    { name: "email", type: "email", required: false, validate: validateRFIDOrEmail }
+  this.email_schema = [
+    { name: "email", type: "email" }
   ];
   this.on("mount", function() {
     this.last_press = new Date();
@@ -36,14 +36,35 @@
   emailCheckin(e) {
     TXRX.mainMount("checkin-email");
   }
+  toggleCheckin(e) {
+    this.email_checkin = !this.email_checkin;
+  }
+  fakeRFID(e) {
+    var rfid ="0123456789";
+    var i = rfid.length;
+    while (i--) { this.press({keyCode: parseInt(rfid[rfid.length-i-1])+48,timeStamp: new Date() }); }
+    this.press({keyCode:13});
+  }
+  this.ajax_success = function(data,response) {
+    if (data.next) {
+      if (!self.root.querySelector(data.next)) {
+        var element = document.createElement(data.next);
+        self.root.appendChild(element);
+      }
+      riot.mount(data.next,data);
+      return;
+    }
+  }
   press(e) {
     var num = e.keyCode - 48;
     if (self.current_number && self.current_number.length == 10 && e.keyCode == 13) {
-      console.log('clearing');
       // enter pressed after 10 fast numbers
-      document.getElementById("id_email").value = "";
-      document.getElementById("id_rfid").value = self.current_number;
-      this.tags['ur-form'].submit();
+      uR.ajax({
+        url: "/checkin_ajax/",
+        data: { rfid: self.current_number },
+        target: this.root.querySelector("button"),
+        success: this.ajax_success,
+      });
       return e;
     }
     if (num > 9 || num < 0) { return e };
@@ -54,6 +75,17 @@
   }
 
 </checkin-home>
+
+<new-rfid>
+  <modal>
+    <h1>Unknown RFID</h1>
+    <p class="lead">
+      The RFID card you used is not in our system. Please enter your email and password to have this RFID affiliated with your account.
+    </p>
+    <ur-form schema={ TXRX.schema.new_rfid } initial={ parent.opts } action="/add_rfid/" method="POST"></ur-form>
+  </modal>
+
+</new-rfid>
 
 <checkin-email>
   <p class="lead">
