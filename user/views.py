@@ -23,7 +23,7 @@ def checkin_ajax(request):
   user = user or get_or_none(User,email=email)
   user = user or get_or_none(User,usermembership__paypal_email=email)
   if rfid and not user:
-    return JsonResponse({'next': "new_rfid"})
+    return JsonResponse({'next': "new-rfid", 'rfid': rfid})
   if not user:
     return JsonResponse({'errors': {'non_field_errors': 'Unable to find user. Contact the staff'}})
   if not user.signature_set.filter(document_id=2):
@@ -37,6 +37,21 @@ def checkin_ajax(request):
     'messages': [{'level': 'success', 'body': '%s checked in at %s'%(user,checkin.time)}]
   }
   return HttpResponse(json.dumps(out))
+
+def add_rfid(request):
+  rfid = request.POST['rfid']
+  username = request.POST['username']
+  user = get_or_none(User,username=username)
+  user = user or get_or_none(User,email=username)
+  user = user or get_or_none(User,usermembership__paypal_email=username)
+  if not user or not user.check_password(request.POST['password']):
+    return JsonResponse({'errors': {'non_field_errors': ['Incorrect username/email and password combination.']}})
+  if User.objects.filter(rfid__number=rfid):
+    return # This generates an error. It'll email the admins if someone tries to hack this.
+  user.rfid = rfid
+  user.save()
+  messages = [{'level': 'success', 'body': 'RFID set. Please swipe now to checkin'}]
+  return JsonResponse({'messages': messages})
 
 def checkin_register(request):
   keys = ['email','first_name','last_name',"password"]

@@ -50,6 +50,7 @@ urlpatterns = patterns(
   url(r'^geo/events.json','geo.views.events_json'),
   url(r'^geo/locations.json$','geo.views.locations_json'),
   url(r'^checkin_ajax/$', 'user.views.checkin_ajax', name='checkin_ajax'),
+  url(r'^add_rfid/$', 'user.views.add_rfid', name='add_rfid'),
   url(r'^user.json','user.views.user_json'),
   url(r'^redtape/',include("redtape.urls")),
 )
