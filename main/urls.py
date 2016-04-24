@@ -78,6 +78,7 @@ urlpatterns += patterns(
   url(r'^auth/password_reset/$',activate_user(password_reset)),
   url(r'^auth/',include('django.contrib.auth.urls')),
   url(r'^force_login/(\d+)/$', 'main.views.force_login'),
+  url(r'^api/remove_rfid/$','user.views.remove_rfid'),
   url(r'^api/change_rfid/$','user.views.set_rfid'),
   url(r'^api/',include("api.urls")),
   url(r'^api-token-auth/', 'rest_framework_jwt.views.obtain_jwt_token'),

@@ -166,15 +166,18 @@
     <p>Find a user and then select them and you will be prompted for a new rfid</p>
   </search-users>
   <modal if={ active_user } cancel={ cancel }>
+    <h1>Alter RFIDs</h1>
     Swipe card or enter number for { parent.active_user.username }.
     <form onsubmit={ parent.submit }>
       <input type="text" />
     </form>
-    <div class="alert alert-success" if={ parent.new_rfid }>
-      RFID for { parent.username } set as: { parent.new_rfid }
+    <div if={ parent.active_user.rfids.length }>
+      <h3>Delete Current RIFDs</h3>
+      <div each={ number,i in parent.active_user.rfids } class="alert alert-danger">
+        { number }
+        <a class="pull-right fa fa-close" onclick={ parent.parent.remove }></a>
+      </div>
     </div>
-    <button class="btn btn-block btn-primary" if={ parent.old_rfid } onclick={ parent.undo }>
-      Undo (reset to { parent.old_rfid })</button>
   </modal>
 
   var that = this;
@@ -194,19 +197,18 @@
     uR.ajax({
       url: '/api/change_rfid/',
       data: {'user_id':this.active_user.id,'rfid':number},
-      success: function(data) {
-        that.new_rfid = data.new_rfid;
-        that.old_rfid = data.old_rfid;
-        that.username = data.username;
-      },
+      success: function(data) { that.active_user.rfids = data.rfids; that.update(); },
       target: that.root.querySelector("modal .inner")
     });
     return false;
   }
-  undo(e) {
-    var input = this.root.querySelector("modal input");
-    input.value = this.old_rfid;
-    this.submit(e);
+  remove(e) {
+    uR.ajax({
+      url: '/api/remove_rfid/',
+      data: {'user_id':that.active_user.id,'rfid':e.item.number},
+      success: function(data) { that.active_user.rfids = data.rfids; that.update() },
+      target: that.root.querySelector("modal .inner")
+    });
   }
 </set-rfid>
 

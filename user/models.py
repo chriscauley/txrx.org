@@ -75,6 +75,8 @@ class User(AbstractBaseUser, PermissionsMixin):
   USERNAME_FIELD = 'username'
   REQUIRED_FIELDS = ['email']
 
+  rfids = property(lambda self: self.rfid_set.all().values_list('number',flat=True))
+
   @property
   def criterion_ids(self):
     return list(UserCriterion.objects.filter(user=self).values_list('criterion_id',flat=True))

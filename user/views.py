@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .models import User, UserCheckin
+from .models import User, UserCheckin, RFID
 from event.models import RSVP
 from course.models import Enrollment
 from course.utils import get_or_create_student
@@ -83,7 +83,15 @@ def set_rfid(request):
   user = get_object_or_404(get_user_model(),pk=request.GET['user_id'])
   RFID.objects.get_or_create(user=user,number=request.GET['rfid'])
   response = {
-    'username': user.username,
-    'rfids': RFID.objects.filter(user=user).values_list("number",flat=True),
+    'rfids': list(RFID.objects.filter(user=user).values_list("number",flat=True)),
+  }
+  return HttpResponse(json.dumps(response))
+
+@staff_member_required
+def remove_rfid(request):
+  user = get_object_or_404(get_user_model(),pk=request.GET['user_id'])
+  RFID.objects.get(user=user,number=request.GET['rfid']).delete()
+  response = {
+    'rfids': list(RFID.objects.filter(user=user).values_list("number",flat=True)),
   }
   return HttpResponse(json.dumps(response))
