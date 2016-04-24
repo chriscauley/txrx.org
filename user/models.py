@@ -64,7 +64,6 @@ class User(AbstractBaseUser, PermissionsMixin):
   is_toolmaster = models.BooleanField(default=False,help_text=_ht)
   _ht = "Gatekeepers have 24/7 building access."
   is_gatekeeper = models.BooleanField(default=False,help_text=_ht)
-  rfid = models.CharField(max_length=16,null=True,blank=True)
   date_joined = models.DateTimeField(_('date joined'),auto_now_add=True)
   paypal_email = lambda self: self.usermembership.paypal_email
   objects = UserManager()
@@ -131,6 +130,11 @@ class User(AbstractBaseUser, PermissionsMixin):
       criterion=criterion,
       defaults=defaults
     )
+
+class RFID(models.Model):
+  user = models.ForeignKey(User)
+  number = models.CharField(max_length=16,unique=True)
+  __unicode__ = lambda self: "%s (%s)"%(self.user,self.number)
 
 class UserNote(models.Model):
   user = models.ForeignKey(User)
