@@ -134,6 +134,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class RFID(models.Model):
   user = models.ForeignKey(User)
   number = models.CharField(max_length=16,unique=True)
+  added = models.DateTimeField(auto_now_add=True)
   __unicode__ = lambda self: "%s (%s)"%(self.user,self.number)
 
 class UserNote(models.Model):

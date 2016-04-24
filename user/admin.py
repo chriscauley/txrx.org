@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
-from .models import User, UserNote#, RFID
+from .models import User, UserNote, RFID
 from membership.admin import UserMembershipInline, SubscriptionInline
 from course.admin import EnrollmentInline
 from .forms import UserChangeForm, CustomUserCreationForm
