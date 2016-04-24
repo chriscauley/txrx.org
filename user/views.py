@@ -18,7 +18,7 @@ import json, datetime
 
 def checkin_ajax(request):
   rfid = request.GET.get('rfid',None)
-  user = get_or_none(User,rfid=rfid or 'notavalidrfid')
+  user = get_or_none(User,rfid__number=rfid or 'notavalidrfid')
   email = request.GET.get("email",None) or "notavaildemail"
   user = user or get_or_none(User,email=email)
   user = user or get_or_none(User,usermembership__paypal_email=email)
@@ -46,10 +46,7 @@ def add_rfid(request):
   user = user or get_or_none(User,usermembership__paypal_email=username)
   if not user or not user.check_password(request.POST['password']):
     return JsonResponse({'errors': {'non_field_errors': ['Incorrect username/email and password combination.']}})
-  if User.objects.filter(rfid=rfid):
-    return # This generates an error. It'll email the admins if someone tries to hack this.
-  user.rfid = rfid
-  user.save()
+  RFID.objects.get_or_create(user=user,number=rfid)
   messages = [{'level': 'success', 'body': 'RFID set. Please swipe now to checkin'}]
   return JsonResponse({'messages': messages})
 
@@ -84,11 +81,9 @@ def user_json(request):
 @staff_member_required
 def set_rfid(request):
   user = get_object_or_404(get_user_model(),pk=request.GET['user_id'])
+  RFID.objects.get_or_create(user=user,number=request.GET['rfid'])
   response = {
     'username': user.username,
-    'old_rfid': user.rfid,
+    'rfids': RFID.objects.filter(user=user).values_list("number",flat=True),
   }
-  user.rfid = request.GET['rfid']
-  user.save()
-  response['new_rfid'] = user.rfid
   return HttpResponse(json.dumps(response))

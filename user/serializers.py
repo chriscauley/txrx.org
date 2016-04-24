@@ -12,7 +12,7 @@ class SearchSizzler(BaseSizzler):
     qs = class_.Meta.model.objects.all()
     if q:
       _Q = Q()
-      for f in ['username','email','usermembership__paypal_email','rfid','first_name','last_name']:
+      for f in ['username','email','usermembership__paypal_email','first_name','last_name']:
         _Q = _Q | Q(**{f+"__icontains":q})
       qs = qs.filter(_Q).filter(is_active=True).distinct()
     return qs

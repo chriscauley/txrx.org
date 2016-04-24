@@ -198,7 +198,7 @@ def update_flag_status(request,flag_pk,new_status=None):
   return HttpResponseRedirect('/admin/membership/flag/%s/'%flag_pk)
 
 def door_access(request):
-  fieldname = request.GET.get('fieldname','rfid')
+  fieldname = request.GET.get('fieldname','rfid__number')
   fail = HttpResponseForbidden("I am Vinz Clortho keymaster of Gozer... Gozer the Traveller, he will come in one of the pre-chosen forms. During the rectification of the Vuldronaii, the Traveller came as a large and moving Torb! Then, during the third reconciliation of the last of the Meketrex Supplicants they chose a new form for him... that of a Giant Sloar! many Shubs and Zulls knew what it was to be roasted in the depths of the Sloar that day I can tell you.")
   if not (request.META['REMOTE_ADDR'] in getattr(settings,'DOOR_IPS',[]) or request.user.is_superuser):
     return fail

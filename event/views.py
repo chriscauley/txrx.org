@@ -127,7 +127,7 @@ def detail_json(request,event_pk):
 def checkin(request):
   User = get_user_model()
   try:
-    user = User.objects.get(rfid=request.POST['rfid'])
+    user = User.objects.get(rfid__number=request.POST['rfid'])
   except User.DoesNotExist:
     response = HttpResponse("Unable to find that user. Try again or contact the staff.")
     response.status_code=401
