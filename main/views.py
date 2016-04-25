@@ -15,7 +15,7 @@ import random, datetime
 redirect = lambda request,url: HttpResponseRedirect(url)
 predirect = lambda request,url: HttpResponsePermanentRedirect(url)
 
-def beta(request):
+def beta(request,page_name=None):
   return TemplateResponse(request,"beta.html",{})
 
 def gfycat(request):
