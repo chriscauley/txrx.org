@@ -206,10 +206,10 @@ def door_access(request):
     return fail
   out = {}
   base_subs = Subscription.objects.filter(canceled__isnull=True)
-  base_subs = base_subs.exclude(user__rfid="").exclude(user__rfid__isnull=True)
+  base_subs = base_subs.exclude(user__rfid__isnull=True)
   for level in Level.objects.all():
     subscriptions = base_subs.filter(product__level=level)
     out[level.order] = list(subscriptions.distinct().values_list('user__'+fieldname,flat=True))
-  gatekeepers = get_user_model().objects.filter(is_gatekeeper=True).exclude(rfid__isnull=True).exclude(rfid="")
+  gatekeepers = get_user_model().objects.filter(is_gatekeeper=True).exclude(rfid__isnull=True)
   out[99999] = list(gatekeepers.values_list(fieldname,flat=True))
   return HttpResponse(json.dumps(out))
