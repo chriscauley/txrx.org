@@ -12,28 +12,17 @@
       }
     );
   }
-  var _route = {
-    checkout: function() {
-      mainMount("tool-checkout");
-    },
-    "checkin-home": function() {
-      mainMount("checkin-home");
-    },
-    toolmaster: function(search_term) {
+  uR._routes = {
+    "/(checkin)/": function() { mainMount("checkin-home"); },
+    "/(checkout)/": function() { mainMount("tool-checkout"); },
+    "/(toolmaster)/": function(search_term) {
       mainMount("toolmaster",{search_term:search_term});
     },
-    "my-permissions": function() { mainMount('badge') },
-    rfid: function() { mainMount("set-rfid"); },
-    "week-hours": function() { mainMount("week-hours"); },
-    "needed-sessions": function() { fromTemplate("needed-sessions"); }
+    "/my-permissions/": function() { mainMount('badge') },
+    "/rfid/": function() { mainMount("set-rfid"); },
+    "/week-hours/": function() { mainMount("week-hours"); },
+    "/needed-sessions/": function() { fromTemplate("needed-sessions"); }
   };
-  window.R = _route
-  function route(name) {
-    if (! _route[name]) { return }
-    _route[name].apply(this,Array.prototype.slice.call(arguments,1));
-  };
-  TXRX.route = route;
   TXRX.mainMount = mainMount;
-  pathpart = window.location.pathname.split("/")[2]
-  route(pathpart);
+  uR.route(window.location.pathname);
 })();

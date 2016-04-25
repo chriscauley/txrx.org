@@ -46,8 +46,12 @@ def add_rfid(request):
   user = user or get_or_none(User,usermembership__paypal_email=username)
   if not user or not user.check_password(request.POST['password']):
     return JsonResponse({'errors': {'non_field_errors': ['Incorrect username/email and password combination.']}})
+  if user.rfid_set.count():
+    m = 'You already have an RFID card registered. Please see staff if you need to change cards.'
+    messages = [{'level': 'danger', 'body': m}]
+    return JsonResponse({'messages': messages})
   RFID.objects.get_or_create(user=user,number=rfid)
-  messages = [{'level': 'success', 'body': 'RFID set. Please swipe now to checkin'}]
+  messages = [{'level': 'success', 'body': 'RFID set. Please swipe now to checkin.'}]
   return JsonResponse({'messages': messages})
 
 def checkin_register(request):
