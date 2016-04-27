@@ -4,7 +4,7 @@
 {% block title %}{{ event }}{% endblock %}
 {% block header %}{% endblock %}
 
-{% block fb_title %}{{ event }} at {{ SITE_NAME }}{% endblock %}
+{% block fb_title %}{{ event }} at {{ settings.SITE_NAME }}{% endblock %}
 {% block fb_description %}{{ event.description|implosivo|escape }}{% endblock %}
 
 {% block main %}

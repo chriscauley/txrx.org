@@ -1,5 +1,5 @@
 {% load i18n %}{% autoescape off %}
-Welcome to {{ SITE_NAME }}. You are receiving this email because an account was automatically created for you when you signed up for a class or membership. You can use this account to login and verify what classes you have enrolled in. If you sign up for more classes, they will automatically be associated to this email (through your paypal account), so logging in is not necessary to sign up for more classes.
+Welcome to {{ site_name }}. You are receiving this email because an account was automatically created for you when you signed up for a class or membership. You can use this account to login and verify what classes you have enrolled in. If you sign up for more classes, they will automatically be associated to this email (through your paypal account), so logging in is not necessary to sign up for more classes.
 
 {% trans "Please go to the following page and choose a new password:" %}
 {% block reset_link %}
@@ -11,6 +11,6 @@ Welcome to {{ SITE_NAME }}. You are receiving this email because an account was 
 
 {% trans "Thank you and we hope to see you soon!" %}
 
-{{ SITE_NAME }}
+{{ site_name }}
 
 {% endautoescape %}

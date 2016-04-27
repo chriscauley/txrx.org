@@ -128,6 +128,7 @@ def handle_successful_payment(sender, **kwargs):
     'enrollments': enrollments,
     'user': user,
     'new_user': new_user,
+    'settings': settings
   }
   body = render_to_string("email/course_enrollment.html",values)
   subject = "Course enrollment confirmation"

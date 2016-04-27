@@ -23,7 +23,8 @@ class Command (BaseCommand):
       _dict = {
         'evaluation': enrollment,
         'la_key': LimitedAccessKey.new(enrollment.user),
-        'domain': settings.SITE_URL
+        'domain': settings.SITE_URL,
+        'settings': settings
       }
       send_mail(
         "Please evaluate the class you took from %s"%settings.SITE_NAME,
