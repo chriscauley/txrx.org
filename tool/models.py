@@ -45,6 +45,11 @@ class Tool(PhotosMixin,OrderedModel):
   functional = models.BooleanField(default=True)
   repair_date = models.DateField(null=True,blank=True)
   get_status = lambda self: "Functional" if self.functional else "Non-functional"
+  @property
+  def choice_name(self):
+    if self.room:
+      return "(%s) %s"%(self.room.name,self.name)
+    return self.name
   class Meta:
     ordering = ("lab","order")
   # Abstract the next two!

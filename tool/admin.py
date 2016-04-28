@@ -54,7 +54,7 @@ class GroupedToolForm(forms.ModelForm):
       choices[room] = choices.get(room,[])
       choices[room].append((tool.pk,unicode(tool)))
     choices = tuple(sorted(choices.items()))"""
-    choices = [(tool.pk,"(%s) %s"%(tool.room.name,tool.name)) for tool in Tool.objects.all()]
+    choices = [(tool.pk,tool.choice_name) for tool in Tool.objects.all()]
     choices = sorted(choices,key=lambda i:i[1])
     self.fields["tools"].choices = choices
 
