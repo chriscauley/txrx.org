@@ -22,6 +22,7 @@
     { name: "email", type: "email" }
   ];
   this.on("mount", function() {
+    this.current_number = ""
     this.last_press = new Date();
     document.body.classList.add("kiosk");
     document.addEventListener("keypress",this.press);
@@ -57,6 +58,9 @@
       riot.mount(data.next,data);
       return;
     }
+    clearTimeout(this.timeout);
+    this.messages = data.messages;
+    this.timeout = setTimeout(function() { self.messages = []; self.update(); },10000);
   }
   press(e) {
     var num = e.keyCode - 48;
@@ -67,12 +71,13 @@
         data: { rfid: self.current_number },
         target: this.root.querySelector("button"),
         success: this.ajax_success,
+        that: this,
       });
       return e;
     }
     if (num > 9 || num < 0) { return e };
     // my rfid reader is never > 25ms between digits
-    if (e.timeStamp - self.last_press > 100) { self.current_number = ""; }
+    if (e.timeStamp - self.last_press > 200) { self.current_number = ""; }
     self.last_press = e.timeStamp;
     self.current_number += num;
   }

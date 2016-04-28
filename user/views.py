@@ -27,14 +27,14 @@ def checkin_ajax(request):
   if not user:
     return JsonResponse({'errors': {'non_field_errors': 'Unable to find user. Contact the staff'}})
   if not user.signature_set.filter(document_id=2):
-    return HttpResponse(json.dumps({'no_waiver': email}))
+    pass #return HttpResponse(json.dumps({'no_waiver': email}))
   defaults = {'content_object': Room.objects.get(name='')}
   checkin, new = UserCheckin.objects.get_or_create(user=user,time_out__isnull=True,defaults=defaults)
-  if not new:
-    checkin.time_out = datetime.datetime.now()
-    checkin.save()
+  #if not new:
+  #  checkin.time_out = datetime.datetime.now()
+  #  checkin.save()
   out = {
-    'messages': [{'level': 'success', 'body': '%s checked in at %s'%(user,checkin.time)}]
+    'messages': [{'level': 'success', 'body': '%s checked in at %s'%(user,checkin.time_in)}]
   }
   return HttpResponse(json.dumps(out))
 
