@@ -7,7 +7,6 @@
     <meta name="google-site-verification" content="5BXTZkZEubZ_azCsu7q469YXtV6tYbDOVeTQ2enG88o" />
     {% block extra_head %}{% endblock %}
     {% include "_styles.html" %}
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
     <script type="text/javascript">
       var TXRX = TXRX || {};
       TXRX.SITE_NAME = "{{ settings.SITE_NAME }}";
@@ -37,8 +36,6 @@
     <script src="{{ STATIC_URL }}lightbox/js/lightbox.min.js"></script>
     <script src="{{ STATIC_URL }}js/jsi18n.js"></script>
     {% endcompress %}
-    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" />
-    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}cv/float.css" />
     {% block head %}{% endblock %}
     <meta property="og:title" content="{% block fb_title %}{{ settings.SITE_NAME }}: {{ SITE_TAGLINE }}{% endblock %}" />
     <meta property="og:site_name" content="{{ settings.SITE_NAME }}" />
@@ -102,7 +99,6 @@
     <script src="{{ STATIC_URL }}less/bootstrap/js/scrollspy.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/transition.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/alert.js"></script>
-    <script src="{{ STATIC_URL }}less/bootstrap/js/carousel.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/dropdown.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/tooltip.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/popover.js"></script>
@@ -147,4 +143,7 @@
     {% include "_sql_queries.html" %}
     {% csrf_token %}
   </body>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" />
+  <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" />
+  <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}cv/float.css" />
 </html>
