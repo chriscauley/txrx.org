@@ -45,7 +45,7 @@
         <div class="enrolled-status" status={ enrolled_status }></div>
       </div>
       <div class="details">
-        <div class="subjects" each={ subject in subject_names } if={ TXRX.DEBUG }>{ subject }</div>
+        <div class="subjects" if={ TXRX.DEBUG }><span each={ subject in subject_names }>{ subject }</span></div>
         <div class="title">{ name }</div>
         <div class="description">{ short_description }</div>
         <div class="enrolled-status" data-status={ enrolled_status }></div>
@@ -88,8 +88,8 @@
     <div if={ !closed_status && fee }>
       <button class="btn btn-primary" onclick={ parent.add } if={ !incart }>
         Add this session to cart</button>
-      <button class="btn btn-primary fa fa-shopping-cart" onclick={ parent.viewCart } if={ incart }>
-        View Cart</button>
+      <button class="btn btn-primary" onclick={ parent.viewCart } if={ incart }>
+        <i class="fa fa-shopping-cart"></i> View Cart</button>
     </div>
     <div if={ !closed_status && !fee }>
       <button class="btn btn-success rsvp" onclick={ parent.rsvp } if={ !rsvpd && parent.user.id }>

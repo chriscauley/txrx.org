@@ -9,6 +9,8 @@
     {% include "_styles.html" %}
     <script type="text/javascript">
       var TXRX = TXRX || {};
+      window.TXRX._ready = [];
+      window.TXRX.ready = function(func) { TXRX._ready.push(func); };
       TXRX.SITE_NAME = "{{ settings.SITE_NAME }}";
       var SHOP = {
         {% if settings.DEBUG %}
@@ -90,7 +92,6 @@
       {% endblock %}
     </div>
     <script src="https://cdn.jsdelivr.net/riot/2.3.16/riot+compiler.min.js"></script>
-    <script src="/user.json?v={% now "ymd_his" %}"></script>
     {% compress js %}
     <script src="{{ STATIC_URL }}less/bootstrap/js/affix.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/button.js"></script>

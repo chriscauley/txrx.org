@@ -60,27 +60,26 @@ def checkin_register(request):
 
 def user_json(request):
   if not request.user.is_authenticated():
-    return TemplateResponse(request,"user.json",{'user_json':'{}'});
+    return JsonResponse({})
   enrollments = Enrollment.objects.filter(user=request.user,completed__isnull=False)
   usercriteria = UserCriterion.objects.filter(user=request.user)
   _c = Criterion.objects.filter(courses__session__user=request.user).distinct()
   master_criterion_ids = list(_c.values_list('id',flat=True))
-  values = {
-    'user_json': json.dumps({
-      'id': request.user.id,
-      'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(request.user)],
-      'criterion_ids': list(usercriteria.values_list('criterion_id',flat=True)),
-      'master_criterion_ids': master_criterion_ids,
-      'session_ids': list(request.user.session_set.all().values_list('id',flat=True)),
-      'completed_course_ids': [e.session.course_id for e in enrollments],
-      'is_toolmaster': request.user.is_toolmaster,
-      'is_staff': request.user.is_staff,
-      'is_superuser': request.user.is_superuser,
-      'enrollments': {e.session_id:e.quantity for e in request.user.enrollment_set.all()},
-      'member_discount_percent': request.user.level.discount_percentage,
-    })
+  out = {
+    'id': request.user.id,
+    'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(request.user)],
+    'criterion_ids': list(usercriteria.values_list('criterion_id',flat=True)),
+    'master_criterion_ids': master_criterion_ids,
+    'session_ids': list(request.user.session_set.all().values_list('id',flat=True)),
+    'completed_course_ids': [e.session.course_id for e in enrollments],
+    'is_toolmaster': request.user.is_toolmaster,
+    'is_staff': request.user.is_staff,
+    'is_superuser': request.user.is_superuser,
+    'enrollments': {e.session_id:e.quantity for e in request.user.enrollment_set.all()},
+    'member_discount_percent': request.user.level.discount_percentage,
   }
-  return TemplateResponse(request,"user.json",values)
+  #valuestools = Tool.objects.filter(permission__id__in=permission_ids).distinct()
+  return JsonResponse(out);
 
 @staff_member_required
 def set_rfid(request):

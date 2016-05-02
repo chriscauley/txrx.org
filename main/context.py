@@ -34,11 +34,11 @@ def nav(request):
   ]
   toolmaster_sublinks = [
     {'name': 'Tools','url': '/tools/'},
-    {'name': 'Permissions','url': '/beta/toolmaster'},
-    {'name': 'Materials Needed','url': '/beta/needed-sessions/','reddot': _needed }
+    {'name': 'Permissions','url': '/toolmaster'},
+    {'name': 'Materials Needed','url': '/needed-sessions/','reddot': _needed }
   ]
-  if request.user.username in ['chriscauley','gavi']:
-    toolmaster_sublinks.append({'name': 'Set RFID','url': '/beta/rfid'})
+  if getattr(request.user,'is_gatekeeper',False):
+    toolmaster_sublinks.append({'name': 'Set RFID','url': '/rfid'})
   _nav = [
     {"name": "About",
      "url": "/about-us/",

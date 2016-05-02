@@ -132,14 +132,11 @@
 {% block extrajs %}
 {% include "_comment_media.html" %}
 <script>
-$(function() {
-  $.get(
-    '/classes/course_{{ course.id }}.json',
-    function(data) {
-      riot.mount('session-list',data);
+  uR.ajax({
+    url: '/classes/course_{{ course.id }}.json',
+    success: function(data) {
+      TXRX.ready(function() { riot.mount('session-list',data); });
     },
-    "json"
-  )
-});
+  });
 </script>
 {% endblock %}
