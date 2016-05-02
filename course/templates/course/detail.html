@@ -66,6 +66,14 @@
       {% endfor %}
     </div>
     {% endif %}
+    {% if settings.DEBUG and course.get_tools %}
+    <div>
+      <h2>This class is needed to use the following tool{{ course.get_tools|pluralize:"s" }}:</h2>
+      {% for tool in course.get_tools %}
+      <a href="{{ tool.get_absolute_url }}">{{ tool }}</a><br/>
+      {% endfor %}
+    </div>
+    {% endif %}
     <p class="notify_course">
       {% if notify_course %}
       <a href="{% url "clear_notification" "notify_course" request.user.id notify_course.id %}">

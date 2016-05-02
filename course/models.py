@@ -13,7 +13,7 @@ import datetime, time
 from media.models import FilesMixin, PhotosMixin
 from geo.models import Room
 from event.models import OccurrenceModel, reverse_ics
-from tool.models import ToolsMixin, Permission, Criterion, UserCriterion, CriterionModel
+from tool.models import ToolsMixin, Permission, Criterion, UserCriterion, CriterionModel, Tool
 from lablackey.db.models import UserModel
 from lablackey.utils import cached_method, cached_property, latin1_to_ascii
 
@@ -143,6 +143,11 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
   __unicode__ = lambda self: self.name
   get_absolute_url = lambda self: reverse("course:detail",args=[self.pk,self.slug])
   get_admin_url = lambda self: "/admin/course/course/%s/"%self.id
+
+  @cached_method
+  def get_tools(self):
+    criterion_ids = Criterion.objects.filter(courses=self).values_list("id",flat=True)
+    return Tool.objects.filter(permission__criteria__id__in=criterion_ids).distinct()
 
   @cached_property
   def active_sessions(self):
