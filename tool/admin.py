@@ -20,10 +20,15 @@ class ToolLinkInline(admin.TabularInline):
 @admin.register(Tool)
 class ToolAdmin(OrderedModelAdmin):
   inlines = (ToolLinkInline,TaggedPhotoInline)
-  list_display = ('__unicode__','has_links','has_description','_materials','make','model',"room","lab",'order')
+  list_display = ('__unicode__','has_links','has_description','_materials',"room","lab",'order','permission')
   list_filter = ('lab','functional')
   filter_horizontal = ('materials',)
+  list_editable = ('permission',)
   readonly_fields = ('has_links','has_description')
+  def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    if db_field.name == "permission":
+      kwargs["queryset"] = Permission.objects.all().order_by("name")
+    return super(ToolAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
   def has_links(self,obj):
     return bool(obj.links())
   has_links.boolean = True

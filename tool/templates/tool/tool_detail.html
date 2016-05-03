@@ -29,6 +29,22 @@
     <a href="{{ link.url }}">{{ link.title }}</a><br />
     {% endfor %}
     {% endif %}
+    {% with permissions=tool.permission_set.all %}
+    {% if permissions and settings.DEBUG %}
+    <div>
+      {% if permission.length == 1 %}<h2>This tool requires the following permission:</h2>{% endif %}
+      {% if permission.length != 1 %}<h2>This tool requires any of the following permissions:</h2>{% endif %}
+      {% for permission in permissions %}
+      <div class="well">
+        <h3>{{ permission }}</h3>
+        {% for criterion in permission.criteria.all %}
+        <a class="btn btn-primary criteria_check{{ criterion.id }}">{{ criterion }}</a>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
     {% if tool.materials.all %}
     <h4>Material{{ tool.materials.all|pluralize:"s" }} used</h4>
     {{ tool.materials.all|join:", " }}

@@ -44,6 +44,7 @@ class Tool(PhotosMixin,OrderedModel):
   get_absolute_url = lambda self: reverse("tool_detail",args=[self.slug,self.id])
   functional = models.BooleanField(default=True)
   repair_date = models.DateField(null=True,blank=True)
+  permission = models.ForeignKey("Permission",null=True,blank=True)
   get_status = lambda self: "Functional" if self.functional else "Non-functional"
   @property
   def choice_name(self):
@@ -174,7 +175,7 @@ class Permission(models.Model):
   abbreviation = models.CharField(max_length=16,help_text="For badge.")
   room = models.ForeignKey(Room)
   group = models.ForeignKey(Group,null=True,blank=True)
-  tools = models.ManyToManyField(Tool,blank=True)
+  tools = models.ManyToManyField(Tool,blank=True,related_name="+")
   _ht = "Requires all these criteria to access these tools."
   criteria = models.ManyToManyField(Criterion,blank=True,help_text=_ht)
   order = models.IntegerField(default=999)
