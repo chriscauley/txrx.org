@@ -60,6 +60,19 @@ class Tool(PhotosMixin,OrderedModel):
     tagged = list(TaggedTool.objects.filter(content_type__id=ct_id,tool=self))
     return [t.content_object for t in tagged]
   @cached_property
+  def ordered_courses(self):
+    singles = []
+    groups = []
+    for criterion in self.permission.criteria.all():
+      if criterion.courses.count() == 1:
+        singles.append(criterion.courses.all()[0])
+      elif criterion.courses.all():
+        groups.append(criterion.courses.all())
+    return singles,groups
+  single_courses = property(lambda self: self.ordered_courses[0])
+  group_courses = property(lambda self: self.ordered_courses[1])
+  number_required_courses = property(lambda self: len(self.single_courses) + len(self.group_courses))
+  @cached_property
   def things(self):
     ct_id = ContentType.objects.get(model="thing").id
     tagged = list(TaggedTool.objects.filter(content_type__id=ct_id,tool=self))
