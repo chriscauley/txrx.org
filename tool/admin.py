@@ -70,7 +70,7 @@ class GroupAdmin(admin.ModelAdmin):
 
 @admin.register(Permission)
 class PermissionAdmin(admin.ModelAdmin):
-  filter_horizontal = ('criteria','tools')
+  filter_horizontal = ('criteria',)
   list_editable = ('group',"order",)
   list_display = ('__unicode__','abbreviation','group','order','_criteria')
   fields = (('name','abbreviation'),('group','room'),'tools','criteria')

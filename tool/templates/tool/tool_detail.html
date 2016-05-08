@@ -45,7 +45,11 @@
       {% endif %}
       {% for group in tool.group_courses %}
       <div class="well">
-        <h3>Any of these classes:</h3>
+        {% if tool.single_courses or not forloop.first %}
+        <h3>And one or more these classes:</h3>
+        {% else %}
+        <h3>One or more these classes:</h3>
+        {% endif %}
         {% for course in group %}
         <a class="btn btn-primary btn-block" data-course-check="{{ course.id }}"
            href="{{ course.get_absolute_url }}">{{ course }}</a>

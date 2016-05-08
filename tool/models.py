@@ -188,12 +188,11 @@ class Permission(models.Model):
   abbreviation = models.CharField(max_length=16,help_text="For badge.")
   room = models.ForeignKey(Room)
   group = models.ForeignKey(Group,null=True,blank=True)
-  tools = models.ManyToManyField(Tool,blank=True,related_name="+")
   _ht = "Requires all these criteria to access these tools."
   criteria = models.ManyToManyField(Criterion,blank=True,help_text=_ht)
   order = models.IntegerField(default=999)
   __unicode__ = lambda self: self.name
-  tools_json = property(lambda self: [t.as_json for t in self.tools.all()])
+  tools_json = property(lambda self: [t.as_json for t in self.tool_set.all()])
   criteria_json = property(lambda self: [c.as_json for c in self.criteria.all()])
   @property
   def as_json(self):
@@ -202,7 +201,7 @@ class Permission(models.Model):
       'name': self.name,
       'abbreviation': self.abbreviation,
       'room_id': self.room_id,
-      'tool_ids': list(self.tools.all().values_list('id',flat=True)),
+      'tool_ids': list(self.tool_set.all().values_list('id',flat=True)),
       'criterion_ids': list(self.criteria.all().values_list('id',flat=True)),
       'criteria_json': self.criteria_json,
       'group_id': self.group_id,
