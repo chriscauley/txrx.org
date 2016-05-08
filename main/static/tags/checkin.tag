@@ -2,7 +2,7 @@
   <h1>Welcome to { TXRX.SITE_NAME }</h1>
   <div if={ !email_checkin }>
     <p class="lead">Please swipe your RFID to checkin.</p>
-    <button onclick={ toggleCheckin } class="btn btn-primary">Checking Using Email</button>
+    <button if={ TXRX.DEBUG } onclick={ toggleCheckin } class="btn btn-primary">Checking Using Email</button>
     <br />
     <button if={ TXRX.DEBUG } onclick={ fakeRFID } class="btn btn-warning">Fake RFID</button>
     <div if={ rfid_error } class="alert alert-danger">
