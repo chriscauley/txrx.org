@@ -25,6 +25,7 @@ class Category(PhotosMixin,NamedTreeModel):
     ]
   #! TODO make this go to store filtered by category
   class Meta:
+    verbose_name_plural = "Categories"
     ordering = ('order',)
 
 class Consumable(PhotosMixin,Product):

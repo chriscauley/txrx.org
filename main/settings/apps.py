@@ -160,7 +160,14 @@ SUIT_CONFIG = {
     'registration',
     #'sites',
     #'tagging',
-    'store',
+    {'app': 'store',
+     'icon': 'icon-cart',
+     'models': (
+       'store.category',
+       'store.consumable',
+       'shop.order',
+     )
+   },
     'thing',
     'tool',
     #{'label': 'Settings', 'icon':'icon-cog', 'models': ('auth.user', 'auth.group')},
