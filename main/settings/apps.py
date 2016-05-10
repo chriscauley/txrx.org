@@ -1,4 +1,4 @@
-INSTALLED_APPS = (
+INSTALLED_APPS = [
   'lablackey',
   'suit',
   'django.contrib.auth',
@@ -57,7 +57,7 @@ INSTALLED_APPS = (
   'api',
   'redtape',
   'schedule_poll',
-)
+]
 
 #mptt_comments
 COMMENTS_APP = 'mptt_comments'

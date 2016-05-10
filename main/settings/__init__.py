@@ -177,7 +177,7 @@ for s_file in ['apps','local','txrx_labs']:
 
 
 if DEBUG:
-  INSTALLED_APPS += ('devserver',)
+  INSTALLED_APPS.insert(2,'devserver')
 else:
   TEMPLATE_LOADERS = (
     ('django.template.loaders.cached.Loader', (
