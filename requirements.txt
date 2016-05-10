@@ -1,10 +1,10 @@
-django
-pip install git+git://github.com/dcramer/django-devserver#egg=django-devserver
+django==1.8.12
+-e git+https://github.com/dcramer/django-devserver.git#egg=django-devserver
 -e git+https://github.com/chriscauley/django-registration.git#egg=django-registration
 django_compressor
 django-localflavor
 djangorestframework
-pip install djangorestframework-jwt
+djangorestframework-jwt
 BeautifulSoup==3.2.1
 psycopg2
 django-suit
@@ -34,7 +34,7 @@ python-social-auth
 
 -e git+https://github.com/chriscauley/django-shop.git#egg=django-shop
 -e git+https://github.com/chriscauley/django-wmd-editor.git#egg=django_wmd_editor
--e git+ttps://github.com/chriscauley/lablackey.git#egg=lablackey
+#-e git+https://github.com/chriscauley/lablackey.git#egg=lablackey
 django_paypal==0.2.5
 django-colorful
 django-jsignature

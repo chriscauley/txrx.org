@@ -1,8 +1,8 @@
 <checkin-home>
   <h1>Welcome to { TXRX.SITE_NAME }</h1>
-  <div if={ !email_checkin }>
+  <div if={ kiosk && !email_checkin }>
     <p class="lead">Please swipe your RFID to checkin.</p>
-    <button if={ TXRX.DEBUG } onclick={ toggleCheckin } class="btn btn-primary">Checking Using Email</button>
+    <button if={ TXRX.DEBUG } onclick={ toggleCheckin } class="btn btn-success">Checking Using Email</button>
     <br />
     <button if={ TXRX.DEBUG } onclick={ fakeRFID } class="btn btn-warning">Fake RFID</button>
     <div if={ rfid_error } class="alert alert-danger">
@@ -12,6 +12,7 @@
   <div if={ email_checkin }>
     <p class="lead">Enter your email below to checkin</p>
     <ur-form action="/checkin_ajax/" button_text="Check In" schema={ email_schema }></ur-form>
+    <button if={ kiosk } onclick={ toggleCheckin } class="btn btn-success">Checkin Using RFID</button>
   </div>
   <ul if={ messages } class="messagelist">
     <li each={ messages } class="alert alert-{ level }">{ body }</li>
@@ -22,6 +23,11 @@
     { name: "email", type: "email" }
   ];
   this.on("mount", function() {
+    this.email_checkin = true;
+    if (window.location.search.indexOf("kiosk") != -1) {
+      this.kiosk = true;
+      this.email_checkin = false;
+    }
     this.current_number = ""
     this.last_press = new Date();
     document.body.classList.add("kiosk");

@@ -1,4 +1,12 @@
 body.kiosk {
+  .container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+    justify-content: center;
+  }
+  header, #main { flex-basis: initial }
   .navbar {
     position: relative;
     &:before {
@@ -14,6 +22,8 @@ body.kiosk {
   footer, .navbar-collapse.collapse { display: none !important; }
   .navbar-header { float: none; text-align: center; }
   .navbar-brand { float: none; }
+  .navbar { margin-top: 0; padding-top: 0; }
+  .navbar-toggle { display: none; }
   checkin-email, checkin-home, checkin-register {
     display: block;
     margin: 0 auto;
