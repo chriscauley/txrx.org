@@ -3,10 +3,14 @@ from django import forms
 from lablackey.db.forms import StaffMemberForm
 from lablackey.db.admin import NamedTreeModelAdmin, RawMixin
 
-from .models import Subject, Course, Session, Enrollment, Term, ClassTime, Branding, Evaluation
+from .models import Subject, Course, CourseRoomTime, Session, Enrollment, Term, ClassTime, Branding, Evaluation
 from event.admin import OccurrenceModelInline
 from media.admin import TaggedFileInline, TaggedPhotoAdmin
 from tool.admin import TaggedToolInline
+
+class CourseRoomTimeInline(admin.TabularInline):
+  model = CourseRoomTime
+  extra = 0
 
 @admin.register(Course)
 class CourseAdmin(TaggedPhotoAdmin):
@@ -14,7 +18,7 @@ class CourseAdmin(TaggedPhotoAdmin):
   list_editable = ("content","visuals","presentation")
   readonly_fields = ("_notifies",)
   filter_horizontal = ("subjects",)
-  inlines = [TaggedToolInline, TaggedFileInline]
+  inlines = [CourseRoomTimeInline, TaggedToolInline, TaggedFileInline]
   def tool_count(self,obj):
     return len(obj.get_tools())
   def photo_count(self,obj):
@@ -22,9 +26,10 @@ class CourseAdmin(TaggedPhotoAdmin):
   def _notifies_count(self,obj):
     return obj.notifycourse_set.count()
   def _notifies(self,obj):
-    out = "<b>%s notifies</b><br />"%self._notifies_count(obj)
+    _click = "href='javascript:;' onclick='$(this).siblings().toggle();'"
+    out = "<a %s><b>%s notifies (click to toggle)</b></a>"%(_click,self._notifies_count(obj))
     for notify in obj.notifycourse_set.all():
-      out += "%s<br/>"%notify.user.email
+      out += "<div style='display: none;'>%s</div>"%notify.user.email
     return out
   _notifies.allow_tags = True
   # duplicated from models.py because of how the admin handles M2M

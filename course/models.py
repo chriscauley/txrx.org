@@ -194,6 +194,25 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
   class Meta:
     ordering = ("name",)
 
+DAY_CHOICES = [
+  (0, "All"),
+  (1, "Day 1"),
+  (2, "Day 2"),
+  (3, "Day 3"),
+  (4, "Day 4"),
+  (5, "Day 5"),
+]
+
+class CourseRoomTime(models.Model):
+  course = models.ForeignKey(Course)
+  room = models.ForeignKey(Room)
+  hours_at = models.FloatField(default=0,help_text="Number of hours at location. 0 = Until class ends.")
+  day = models.IntegerField(default=0,choices=DAY_CHOICES)
+  order = models.IntegerField(default=999)
+  __unicode__ = lambda self: "%s at %s in %s"%(self.get_day_display(),self.time,self.room)
+  class Meta:
+    ordering = ('day','order')
+
 class CourseSubscription(UserModel):
    course = models.ForeignKey(Course)
 
