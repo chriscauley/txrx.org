@@ -83,7 +83,7 @@
         <label>
           <input type="checkbox" name="completed"{% if enrollment.completed %}
                  checked="checked"{% endif %} value="{{ enrollment.id }}"/>
-          {{ enrollment.user.email }}
+          {{ enrollment.user.first_name }} {{ enrollment.user.last_name }} - {{ enrollment.user.email }}
         </label>
       </p>
       {% endfor %}
