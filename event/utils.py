@@ -4,7 +4,7 @@ from django.template.defaultfilters import slugify
 
 from course.models import ClassTime
 from geo.models import Room
-from .models import EventOccurrence
+from .models import EventOccurrence, OccurrenceModel # Occurrence model used to make non-db objects
 
 import icalendar, datetime, math, arrow
 from itertools import groupby
@@ -83,20 +83,20 @@ def get_room_conflicts(base_occurrence=None):
     start_time = base_occurrence.start-datetime.timedelta(0,block_size)
     end_time = base_occurrence.end+datetime.timedelta(0,block_size)
     room = base_occurrence.room
-    class_times = ClassTime.objects.filter(start__gte=start_time,start__lte=end_time,
-                                           session__course__no_conflict=False,
-                                           session__course__room=room)
-    occurrences = EventOccurrence.objects.filter(start__gte=start_time,event__no_conflict=False,
-                                                 event__room=room)
-    rooms = [base_occurrence.room]
+    _class_times = ClassTime.objects.filter(start__gte=start_time,start__lte=end_time,
+                                           session__course__no_conflict=False)
+    occurrences = EventOccurrence.objects.filter(start__gte=start_time,event__no_conflict=False)
   else:
     # Look accross the next 60 days in all rooms
     start_time = datetime.datetime.now()-datetime.timedelta(0,block_size)
     end_time = datetime.datetime.now()+datetime.timedelta(60)
-    class_times = ClassTime.objects.filter(start__gte=start_time,start__lte=end_time,
+    _class_times = ClassTime.objects.filter(start__gte=start_time,start__lte=end_time,
                                            session__course__no_conflict=False)
     occurrences = EventOccurrence.objects.filter(start__gte=start_time,event__no_conflict=False)
-    rooms = Room.objects.all()
+  rooms = Room.objects.all()
+  class_times = []
+  for ct in _class_times:
+    class_times += ct.build_class_times()
   schedule = {room:{} for room in rooms}
   event_tuples = []
 
@@ -127,6 +127,7 @@ def get_room_conflicts(base_occurrence=None):
   room_conflicts = [r for r in room_conflicts.items() if r[1]]
   out = []
   for room,conflicts in room_conflicts:
+    has_base_occurrence = not base_occurrence
     reshuffled_conflicts = []
     room_conflicts = []
     conflicts.sort(key=lambda i:i[0])
@@ -142,8 +143,10 @@ def get_room_conflicts(base_occurrence=None):
       for e in _event_mess:
         events += e
       events = list(set(events))
+      if not has_base_occurrence and base_occurrence in events:
+        has_base_occurence = True
       room_conflicts.append((times,events))
-    if room_conflicts:
+    if room_conflicts and has_base_occurrence:
       out.append((room,room_conflicts))
   return out
 

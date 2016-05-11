@@ -210,6 +210,7 @@ class CourseRoomTime(models.Model):
   day = models.IntegerField(default=0,choices=DAY_CHOICES)
   order = models.IntegerField(default=999)
   __unicode__ = lambda self: "%s at %s in %s"%(self.get_day_display(),self.time,self.room)
+  seconds_at = property(lambda self: self.hours_at * 3600)
   class Meta:
     ordering = ('day','order')
 
@@ -409,6 +410,38 @@ class ClassTime(OccurrenceModel):
       'start': str(self.start),
       'end': str(self.end),
     }
+  @cached_method
+  def build_class_times(self):
+    course = self.session.course
+
+    # 1-indexed day number
+    daynumber = self.session.classtime_set.filter(start__gte=self.start).count()
+    roomtimes = course.courseroomtime_set.filter(day=daynumber)
+    roomtimes = roomtimes or course.courseroomtime_set.filter(day=0)
+    if not roomtimes:
+      return [self]
+    out = []
+    current_datetime = self.start
+    for roomtime in roomtimes:
+      remaining = current_datetime.start-self.end
+      occurrence = OccurrenceModel(
+        start=current_datetime,
+        end_time=(current_datetime + datetime.timedelta(roomtime.seconds_at) or remaining).time(),
+      )
+      occurrence.name = "%s at %s for %s hours"%(course,roomtime.room,roomtime.hours_at)
+      occurrence.room = roomtime.room
+      current_datetime = occurence.end
+      out.push(occurrence)
+    if occurence.end != self.end:
+      remaining = current_datetime.start-self.end
+      occurrence = OccurrenceModel(
+        start=current_datetime,
+        end_time=self.end_time
+      )
+      occurrence.room = roomtime.room
+      occurrence.name = "%s at %s until end (%s)"%(course,course.room,occurrenc.end_time)
+      out.push(occurrence)
+    return out
   class Meta:
     ordering = ("start",)
 
