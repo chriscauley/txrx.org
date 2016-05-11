@@ -17,6 +17,9 @@
   <ul if={ messages } class="messagelist">
     <li each={ messages } class="alert alert-{ level }">{ body }</li>
   </ul>
+  <ul if={ classtimes }>
+    <li each={ classtimes }>{{ classtime.session.name }}</li>
+  </ul>
 
   var self = this;
   this.email_schema = [
@@ -64,6 +67,10 @@
       riot.mount(data.next,data);
       return;
     }
+    self.classtimes = data.classtimes;
+    uR.forEach(self.classtimes || [],function(classtime) {
+      classtime.session = data.sessions[classtime.session_id];
+    });
     clearTimeout(this.timeout);
     this.messages = data.messages;
     this.timeout = setTimeout(function() { self.messages = []; self.update(); },10000);

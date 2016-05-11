@@ -1,12 +1,13 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from .models import User, UserCheckin, RFID
 from event.models import RSVP
-from course.models import Enrollment
+from course.models import Enrollment, ClassTime
 from course.utils import get_or_create_student
 from geo.models import Room
 from redtape.models import Signature
@@ -33,8 +34,14 @@ def checkin_ajax(request):
   #if not new:
   #  checkin.time_out = datetime.datetime.now()
   #  checkin.save()
+  today = datetime.date.today()
+  tomorrow = today + datetime.timedelta(1)
+  _q = Q(session__enrollment__user=user) | Q(session__user=user)
+  _ct = ClassTime.objects.filter(_q,start__gte=today,start__lte=tomorrow)
   out = {
-    'messages': [{'level': 'success', 'body': '%s checked in at %s'%(user,checkin.time_in)}]
+    'messages': [{'level': 'success', 'body': '%s checked in at %s'%(user,checkin.time_in)}],
+    'classtimes': [c.as_json for c in _ct],
+    'sessions': {c.session_id: c.session.as_json for c in _ct},
   }
   return HttpResponse(json.dumps(out))
 

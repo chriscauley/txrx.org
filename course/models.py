@@ -385,6 +385,7 @@ class ClassTime(OccurrenceModel):
   def as_json(self):
     return {
       'room_id': self.session.course.room_id,
+      'session_id': self.session_id,
       'name': self.short_name(),
       'start': str(self.start),
       'end': str(self.end),
