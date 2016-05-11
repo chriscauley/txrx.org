@@ -61,8 +61,6 @@ function cheatCode(f,qs) {
     f();
   });
   if (window.location.search.indexOf(qs) == -1) { return }
-  console.log(window.location.search)
-  console.log(window.location.search.indexOf(qs))
   f();
 }
 

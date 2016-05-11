@@ -23,6 +23,8 @@ def checkin_ajax(request):
   email = request.GET.get("email",None) or "notavaildemail"
   user = user or get_or_none(User,email=email)
   user = user or get_or_none(User,usermembership__paypal_email=email)
+  if request.user.is_authenticated():
+    user = user or get_or_none(User,id=request.GET.get("user_id",None))
   if rfid and not user:
     return JsonResponse({'next': "new-rfid", 'rfid': rfid})
   if not user:
