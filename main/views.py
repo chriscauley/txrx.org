@@ -16,7 +16,10 @@ redirect = lambda request,url: HttpResponseRedirect(url)
 predirect = lambda request,url: HttpResponsePermanentRedirect(url)
 
 def beta(request,page_name=None):
-  return TemplateResponse(request,"beta.html",{})
+  values = {
+    'BODY_CLASS': "kiosk" if request.path in ["/checkin/"] else "",
+  }
+  return TemplateResponse(request,"beta.html",values)
 
 def gfycat(request):
   return TemplateResponse(request,"gfycat.html",{'slug':request.GET.get('url').split('/')[-1]})
