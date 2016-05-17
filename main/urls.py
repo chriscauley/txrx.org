@@ -37,6 +37,7 @@ urlpatterns = patterns(
   url(r'^media_files/',include('media.urls')),
   url(r'^shop/',include('store.urls')),
   url(r'^products.js$','store.views.products_json'),
+  url(r'^product_is_a_fail/(.*)/$','main.views.index',name="product_detail"),
 
   # comments and javascript translation
   url(r'^comments/',include('mptt_comments.urls')),
@@ -115,7 +116,8 @@ urlpatterns += patterns(
   url(r'^containers/$','containers'),
   url(r'^update_flag_status/(\d+)/$','update_flag_status',name='update_flag_status'),
   url(r'^update_flag_status/(\d+)/([\w\d\-\_]+)/$','update_flag_status',name='update_flag_status'),
-  url(r'^door_access.json$','door_access',name='door_access')
+  url(r'^door_access.json$','door_access',name='door_access'),
+  url(r'^tool_permission_table/$','tool_permission_table',name='tool_permission_table'),
 )
 
 #notify urls

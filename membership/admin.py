@@ -15,6 +15,10 @@ import datetime
 admin.site.register(Feature)
 admin.site.register(Group)
 
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+  list_display = ('name','__unicode__')
+
 class ContainerInline(admin.TabularInline):
   raw_id_fields = ('user',)
   model = Container
@@ -73,7 +77,7 @@ class LevelAdmin(admin.ModelAdmin):
   list_display = ("name","order")
   list_editable = ("order",)
   fieldsets = (
-    (None,{'fields': (('name','group'),('discount_percentage','order'))}),
+    (None,{'fields': (('name','group'),('discount_percentage','order'),'permission_description')}),
     ('For Profit Features',{
       'classes': ('collapse',),
       'fields': (('machine_credits','cost_per_credit'),'simultaneous_users',

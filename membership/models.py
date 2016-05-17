@@ -59,6 +59,7 @@ class Level(models.Model):
   group = models.ForeignKey(Group,null=True,blank=True)
   features = cached_property(lambda self:[a.feature for a in self.membershipfeature_set.all()],
                              name="features")
+  permission_description = models.TextField(blank=True,default="")
 
   # Corporate membership features
   machine_credits = models.IntegerField(default=0)
@@ -113,7 +114,7 @@ class Product(Product):
   order = models.IntegerField(default=0)
   __unicode__ = lambda self: "%s months of %s"%(self.months,self.level)
   def save(self,*args,**kwargs):
-    self.slug = "__membershipproduct__%s"%(self.pk or random.random())
+    self.slug = "__membershipproduct__%s"%(self.pk or random.randint(0,10000))
     super(Product,self).save(*args,**kwargs)
   class Meta:
     ordering = ("order",)

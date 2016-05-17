@@ -16,6 +16,8 @@ from .utils import limited_login_required, verify_unique_email
 from blog.models import Post
 from course.models import Course, Session
 from thing.models import Thing
+from tool.models import Permission, Tool
+
 from lablackey.utils import FORBIDDEN
 
 import datetime, json
@@ -204,6 +206,9 @@ def door_access(request,permission_pk=None,tool_pk=None):
     return fail
   if fieldname in ['email','paypal_email','password']:
     return fail
+
+  if 'permission_id' in request.GET:
+    permission = get_object_or_404(Permission,id=request.GET['permission_id'])
   out = {}
   base_subs = Subscription.objects.filter(canceled__isnull=True)
   base_subs = base_subs.exclude(user__rfid__isnull=True)
@@ -213,3 +218,14 @@ def door_access(request,permission_pk=None,tool_pk=None):
   gatekeepers = get_user_model().objects.filter(is_gatekeeper=True).exclude(rfid__isnull=True)
   out[99999] = list(gatekeepers.values_list(fieldname,flat=True))
   return HttpResponse(json.dumps(out))
+
+@staff_member_required
+def tool_permission_table(request):
+  permissions = Permission.objects.all().order_by("name")
+  permissions_tools = [(p,p.tool_set.all().order_by('name')) for p in permissions]
+  permissions_tools.append((None,Tool.objects.filter(permission=None).order_by('name')))
+  values = {
+    'permission_tools': permissions_tools,
+    'levels': Level.objects.all()
+  }
+  return TemplateResponse(request,'tool/tool_permission_table.html',values)
