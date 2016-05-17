@@ -1,5 +1,5 @@
 <checkin-home>
-  <h1>Welcome to { TXRX.SITE_NAME }</h1>
+  <img src="/static/logos/Logo-1_vertical_color_475x375.png" width="200" />
   <div if={ kiosk && !email_checkin }>
     <p class="lead">Please swipe your RFID to checkin.</p>
     <button if={ TXRX.DEBUG } onclick={ toggleCheckin } class="btn btn-success">Checking Using Email</button>
