@@ -59,3 +59,14 @@ def toggle_criterion(request):
   user = User.objects.get(pk=user.pk)
   attrs = ['signature_jsons','enrollment_jsons','locked_criterion_ids','criterion_ids']
   return HttpResponse(json.dumps({attr: getattr(user,attr) for attr in attrs}))
+
+@staff_member_required
+def tool_permission_table(request):
+  permissions = Permission.objects.all().order_by("name")
+  permissions_tools = [(p,p.tool_set.all().order_by('name')) for p in permissions]
+  permissions_tools.append((None,Tool.objects.filter(permission=None).order_by('name')))
+  values = {
+    'permission_tools': permissions_tools,
+  }
+  return TemplateResponse(request,'tool/tool_permission_table.html',values)
+  

@@ -38,7 +38,8 @@ def nav(request):
     {'name': 'Materials Needed','url': '/needed-sessions/','reddot': _needed }
   ]
   if getattr(request.user,'is_gatekeeper',False):
-    toolmaster_sublinks.append({'name': 'Set RFID','url': '/rfid'})
+    toolmaster_sublinks.append({'name': 'Set RFID','url': '/rfid/'})
+    toolmaster_sublinks.append({'name': 'Tool/Permission Table','url': '/tools/tool_permission_table/'})
   _nav = [
     {"name": "About",
      "url": "/about-us/",

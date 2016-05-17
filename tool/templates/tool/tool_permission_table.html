@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="tp_table">
+  <div class="row">
+    {% for permission,tools in permission_tools %}
+    <div class="col-sm-4">
+      <h1>
+        {% if permission %}
+        <span>{{ permission.pk }}</span> <a {#href="{{ permission.get_absolute_url }}"#}>{{ permission }}</a>
+        <a href="/admin/tool/permission/{{ permission.pk }}/" class="fa fa-pencil-square right"></a>
+        {% else %}
+        None Assigned
+        {% endif %}
+      </h1>
+      <ul>
+        {% for tool in tools %}
+        <li>
+          <span>{{ tool.pk }}</span> <a href="{{ tool.get_absolute_url }}">{{ tool }}</a>
+          <a href="/admin/tool/tool/{{ tool.pk }}/" class="fa fa-pencil-square right"></a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% if forloop.counter|divisibleby:3 %}
+  </div>
+  <div class="row">
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

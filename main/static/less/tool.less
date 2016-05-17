@@ -11,3 +11,27 @@
     display: block;
   }
 }
+
+.tp_table {
+  .row { margin-bottom: 20px; }
+  h1, li {
+    list-style: none;
+    position: relative;
+    padding-right: 1em;
+    margin-left: 1em;
+    &:hover {
+      background: lightgray;
+      .right { display: block; }
+    }
+    .right {
+      bottom: 0;
+      display: none;
+      height: 1em;
+      margin: auto;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+  span { display: block; padding-right: 0.25em; position: absolute; top: 0; right: 100%; }
+}
