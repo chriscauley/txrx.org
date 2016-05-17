@@ -32,24 +32,26 @@
     </div>
   </div>
 
-  var that = this;
+  var self = this;
   this.on('mount',function() {
     this.start_string = moment(this.start).format("ddd MMM D, YYYY h:mm a");
-    this.admin_access = window.TXRX.user.is_superuser;
-    this.authenticated = window.TXRX.user.id;
-    this.update();
+    TXRX.ready(function() {
+      self.admin_access = window.TXRX.user.is_superuser;
+      self.authenticated = window.TXRX.user.id;
+      self.update();
+    });
   });
   function updateRSVP(item,quantity) {
     item.quantity = quantity;
-    var target = that['loading-target'];
+    var target = self['loading-target'];
     target.setAttribute("ur-loading","loading");
     $.get(
       '/event/rsvp/',
       {occurrence_id: item.id,quantity: quantity},
       function(data) {
         target.removeAttribute("ur-loading");
-        that.parent.opts.user_reservations = data;
-        that.parent.update();
+        self.parent.opts.user_reservations = data;
+        self.parent.update();
       },
       "json"
     );
