@@ -2,17 +2,32 @@
 
 {% block main %}
 <div class="tp_table">
+  <h1>Membership Levels</h1>
+  <div class="row">
+    {% for level in levels %}
+    <div class="col-sm-4">
+      <h2><span>{{ level.order }}</span>{{ level }}</h2>
+      <p>{{ level.permission_description }}</p>
+    </div>
+    {% if forloop.counter|divisibleby:3 %}
+  </div>
+  <div class="row">
+    {% endif %}
+    {% endfor %}
+  </div>
+  <hr/>
+  <h1>Permissions and tools</h1>
   <div class="row">
     {% for permission,tools in permission_tools %}
     <div class="col-sm-4">
-      <h1>
+      <h2>
         {% if permission %}
         <span>{{ permission.pk }}</span> <a {#href="{{ permission.get_absolute_url }}"#}>{{ permission }}</a>
         <a href="/admin/tool/permission/{{ permission.pk }}/" class="fa fa-pencil-square right"></a>
         {% else %}
         None Assigned
         {% endif %}
-      </h1>
+      </h2>
       <ul>
         {% for tool in tools %}
         <li>

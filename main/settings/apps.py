@@ -147,7 +147,7 @@ SUIT_CONFIG = {
      'icon':'icon-user',
      'models': (
        'membership.meetingminutes',
-       'membership.levels',
+       'membership.level',
        'membership.group',
        'membership.officer',
        'membership.subscription',

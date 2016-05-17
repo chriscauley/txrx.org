@@ -6,5 +6,4 @@ urlpatterns = patterns(
   url(r'^lab/([^/]+)_(\d+)/$','lab_detail',name='lab_detail'),
   url(r'^([^/]+)_(\d+)/$','tool_detail',name='tool_detail'),
   url(r'^toggle_criterion/$','toggle_criterion'),
-  url(r'^tool_permission_table/$','tool_permission_table',name='tool_permission_table'),
 )
