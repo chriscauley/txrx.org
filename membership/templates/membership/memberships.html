@@ -86,8 +86,9 @@ function setHiddenFields(that) {
 <script type="text/javascript">
 $(document).ready(function() {$("select").change()});
 $(function() {
+  var locked_selector = "#m_table-hacker,#m_maker-for-profit,#m_studio-resident";
   var unlocked = false;
-  $("#m_table-hacker,#m_maker-for-profit").addClass("grayscale-me").click(function() {
+  $(locked_selector).addClass("grayscale-me").click(function() {
     if (unlocked) {
       return true
     } else {
@@ -96,8 +97,8 @@ $(function() {
     }
   });;
   function cheat() {
-    $("#m_table-hacker,#m_maker-for-profit").removeClass("grayscale-me");
-    alert("Table-Hacker and Maker Memberships Unlocked!");
+    $(locked_selector).removeClass("grayscale-me");
+    alert("Table and Maker Memberships Unlocked!");
     unlocked = true;
   }
   cheatCode(cheat,'open')
