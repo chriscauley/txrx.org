@@ -57,6 +57,7 @@
         });
       }
     });
+    cheatCode(function() { window.location.reload(false) });
   });
   toggleCheckin(e) {
     this.email_checkin = !this.email_checkin;
