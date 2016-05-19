@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
 from django.db.models import Q
@@ -38,6 +39,8 @@ def checkin_ajax(request):
   #  checkin.save()
   today = datetime.date.today()
   tomorrow = today + datetime.timedelta(1)
+  if settings.DEBUG:
+    tomorrow = tomorrow+datetime.timedelta(10)
   _q = Q(session__enrollment__user=user) | Q(session__user=user)
   _ct = ClassTime.objects.filter(_q,start__gte=today,start__lte=tomorrow)
   out = {

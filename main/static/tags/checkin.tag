@@ -1,25 +1,32 @@
 <checkin-home>
-  <img src="/static/logos/Logo-1_vertical_color_475x375.png" width="200" />
-  <div if={ kiosk && !email_checkin }>
-    <p class="lead">Please swipe your RFID to checkin.</p>
-    <button if={ TXRX.DEBUG } onclick={ toggleCheckin } class="btn btn-success">Checking Using Email</button>
-    <br />
-    <button if={ TXRX.DEBUG } onclick={ fakeRFID } class="btn btn-warning">Fake RFID</button>
-    <div if={ rfid_error } class="alert alert-danger">
-      Unknown RFID card. Please go find Chris or Gaby to get it entered in the system.
+  <div class="inner">
+    <img src="/static/logos/Logo-1_vertical_color_475x375.png" width="200" />
+    <div if={ kiosk && !email_checkin }>
+      <p class="lead">Please swipe your RFID to checkin.</p>
+      <button if={ TXRX.DEBUG } onclick={ toggleCheckin } class="btn btn-success">Checking Using Email</button>
+      <br />
+      <button if={ TXRX.DEBUG } onclick={ fakeRFID } class="btn btn-warning">Fake RFID</button>
+      <div if={ rfid_error } class="alert alert-danger">
+        Unknown RFID card. Please go find Chris or Gaby to get it entered in the system.
+      </div>
+    </div>
+    <div if={ email_checkin }>
+      <p class="lead">Enter your email below to checkin</p>
+      <ur-form action="/checkin_ajax/" button_text="Check In" schema={ email_schema }></ur-form>
+      <button if={ kiosk } onclick={ toggleCheckin } class="btn btn-success">Checkin Using RFID</button>
+    </div>
+    <ul if={ messages } class="messagelist">
+      <li each={ messages } class="alert alert-{ level }">{ body }</li>
+    </ul></div>
+  <div if={ classtimes }>
+    <div each={ classtimes } class="classes">
+      <h3><u>{ start_string }-{ end_string }</u></h3>
+      <div>
+        { instructor?"Teaching:":"" } { session.course_name }.<br/>
+        Meet at: { first_room.name }
+      </div>
     </div>
   </div>
-  <div if={ email_checkin }>
-    <p class="lead">Enter your email below to checkin</p>
-    <ur-form action="/checkin_ajax/" button_text="Check In" schema={ email_schema }></ur-form>
-    <button if={ kiosk } onclick={ toggleCheckin } class="btn btn-success">Checkin Using RFID</button>
-  </div>
-  <ul if={ messages } class="messagelist">
-    <li each={ messages } class="alert alert-{ level }">{ body }</li>
-  </ul>
-  <ul if={ classtimes }>
-    <li each={ classtimes }>{{ classtime.session.name }}</li>
-  </ul>
 
   var self = this;
   this.email_schema = [
@@ -80,6 +87,8 @@
     self.classtimes = data.classtimes;
     uR.forEach(self.classtimes || [],function(classtime) {
       classtime.session = data.sessions[classtime.session_id];
+      classtime.start_string = moment(classtime.start).format("h:mm A");
+      classtime.end_string = moment(classtime.end).format("h:mm A");
     });
     clearTimeout(this.timeout);
     this.messages = data.messages;

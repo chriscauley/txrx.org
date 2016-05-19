@@ -86,7 +86,9 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
   get_short_name = lambda self: self.short_name or self.name
   subjects = models.ManyToManyField(Subject)
   no_discount = models.BooleanField(default=False)
-
+  @cached_property
+  def first_room(self):
+    return (self.courseroomtime_set.all() or [self])[0].room
   presentation = models.BooleanField("Evaluate Presentation",default=True)
   visuals = models.BooleanField("Evaluate Visuals",default=True)
   content = models.BooleanField("Evaluate Content",default=True)
@@ -277,6 +279,7 @@ class Session(UserModel,PhotosMixin,models.Model):
     return {
       'id': self.pk,
       'name': "<b>%s</b> %s"%(self.course,short_dates),
+      'course_name': self.course.name,
       'closed_status': closed_status,
       'short_dates': short_dates,
       'instructor_name': self.get_instructor_name(),
@@ -284,7 +287,7 @@ class Session(UserModel,PhotosMixin,models.Model):
       'course_id': self.course_id,
       'enrolled_status': enrolled_status,
       'classtimes': [c.as_json for c in self.classtime_set.all()],
-      'private': True
+      'private': True,
     }
   json = property(lambda self: dumps(self.as_json))
   get_room = lambda self: self.course.room
@@ -403,12 +406,15 @@ class ClassTime(OccurrenceModel):
   icon = property(lambda self: 'private' if self.session.private else 'course')
   @property
   def as_json(self):
+    room = self.session.course.first_room
     return {
       'room_id': self.session.course.room_id,
       'session_id': self.session_id,
       'name': self.short_name(),
       'start': str(self.start),
       'end': str(self.end),
+      #! this should just be an id on session or course with a separate lookup
+      'first_room': { 'id': room.id, 'name': room.name }
     }
   @cached_method
   def build_class_times(self):
