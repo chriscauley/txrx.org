@@ -51,8 +51,7 @@ def _get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True)
   if str(u_id).isdigit():
     user = User.objects.get(id=u_id)
     return user, new
-  user = User.objects.get_or_none(paypal_email__iexact=paypal_email)
-  user = user or User.objects.get_or_none(email__iexact=paypal_email)
+  user = User.objects.get_from_anything(paypal_email)
   if user:
     return user, new
   if validate_email(str(u_id)):

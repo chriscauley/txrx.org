@@ -3,7 +3,6 @@ from django.http import QueryDict, Http404, HttpResponseRedirect
 from django.template.response import TemplateResponse
 
 from ..models import Session
-from lablackey.utils import get_or_none
 
 from paypal.standard.ipn.models import *
 
@@ -33,8 +32,7 @@ def paypal_return(request):
   sessions = Session.objects.filter(pk__in=session_ids)
   matched_user = None
   if not request.user.is_authenticated():
-    matched_user = get_or_none(User,email=email)
-    matched_user = matched_user or get_or_none(User,paypal_email=email)
+    matched_user = User.objects.get_from_anything(email)
   values = {
     'email': email,
     'sessions': sessions,

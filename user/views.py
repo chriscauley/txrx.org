@@ -22,8 +22,7 @@ def checkin_ajax(request):
   rfid = request.GET.get('rfid',None)
   user = get_or_none(User,rfid__number=rfid or 'notavalidrfid')
   email = request.GET.get("email",None) or "notavaildemail"
-  user = user or get_or_none(User,email=email)
-  user = user or get_or_none(User,paypal_email=email)
+  user = User.objects.get_from_anything(email)
   if request.user.is_authenticated():
     user = user or get_or_none(User,id=request.GET.get("user_id",None))
   if rfid and not user:
@@ -56,9 +55,7 @@ def add_rfid(request):
   if request.user.is_authenticated():
     user = request.user
   else:
-    user = get_or_none(User,username=username)
-    user = user or get_or_none(User,email=username)
-    user = user or get_or_none(User,paypal_email=username)
+    user = User.objects.get_from_anything(username)
     if not user or not user.check_password(request.POST['password']):
       return JsonResponse({'errors': {'non_field_errors': ['Incorrect username/email and password combination.']}})
   if user.rfid_set.count():
