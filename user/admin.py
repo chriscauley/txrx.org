@@ -35,7 +35,7 @@ class UserAdmin(UserAdmin):
   def _enrollments(self,obj):
     return "<br/>".join(unicode(e.session) for e in obj.enrollment_set.all())
   _enrollments.allow_tags = True
-  search_fields = ('username', 'email', 'first_name', 'last_name','usermembership__paypal_email')
+  search_fields = ('username', 'email', 'first_name', 'last_name','paypal_email')
   ordering = ('username',)
   readonly_fields = ('last_login','date_joined','level')
   inlines = [UserMembershipInline, RFIDInline, UserNoteInline, SubscriptionInline, EnrollmentInline]

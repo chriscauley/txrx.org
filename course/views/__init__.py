@@ -34,7 +34,7 @@ def paypal_return(request):
   matched_user = None
   if not request.user.is_authenticated():
     matched_user = get_or_none(User,email=email)
-    matched_user = matched_user or get_or_none(User,usermembership__paypal_email=email)
+    matched_user = matched_user or get_or_none(User,paypal_email=email)
   values = {
     'email': email,
     'sessions': sessions,

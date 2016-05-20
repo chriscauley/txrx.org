@@ -35,10 +35,8 @@ def get_or_create_student(params,send_mail=True):
   user.active = True
   user.first_name = user.first_name or params.get("first_name",'')
   user.last_name = user.last_name or params.get("last_name",'')
+  user.paypal_email = user.paypal_email or paypal_email # they can set this if they want
   user.save()
-  profile = user.usermembership
-  profile.paypal_email = profile.paypal_email or paypal_email # they can set this if they want
-  profile.save()
   return user, new
 
 def _get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True):
@@ -53,7 +51,7 @@ def _get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True)
   if str(u_id).isdigit():
     user = User.objects.get(id=u_id)
     return user, new
-  user = User.objects.get_or_none(usermembership__paypal_email__iexact=paypal_email)
+  user = User.objects.get_or_none(paypal_email__iexact=paypal_email)
   user = user or User.objects.get_or_none(email__iexact=paypal_email)
   if user:
     return user, new

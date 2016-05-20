@@ -110,7 +110,7 @@ def user_emails(request):
   verify_api(request)
   out = []
   for u in get_user_model().objects.all():
-    out.append(','.join([str(u.id),u.email or '',u.usermembership.paypal_email or '']))
+    out.append(','.join([str(u.id),u.email or '',u.paypal_email or '']))
   return HttpResponse('\n'.join(out))
 
 def course_names(request):

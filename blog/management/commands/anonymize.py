@@ -21,7 +21,7 @@ class Command(BaseCommand):
     u=User.objects.using('anon').filter(is_superuser=True)[0]
     u.username='admin'
     u.save()
-    UserMembership.objects.all().update(paypal_email=None)
+    User.objects.all().update(paypal_email=None)
     print "%s users with normal emails"%User.objects.using('anon').exclude(email__startswith="user__").count()
     print "%s users with normal names"%User.objects.using('anon').exclude(username__startswith="user__").count()
     print "%s users with paypal emails"%User.objects.using('anon').filter(usermembership__isnull=True).count()

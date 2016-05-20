@@ -43,7 +43,7 @@ def user_from_email(email):
   except User.DoesNotExist:
     pass
   try:
-    return User.objects.get(usermembership__paypal_email=email)
+    return User.objects.get(paypal_email=email)
   except:
     pass
 
@@ -56,5 +56,5 @@ def verify_unique_email(email,user=None):
     other_users = other_users.exclude(pk=user.pk)
   by_email = other_users.filter(email__iexact=email)
   by_username = other_users.filter(username__iexact=email)
-  by_paypal_email = other_users.filter(usermembership__paypal_email__iexact=email)
+  by_paypal_email = other_users.filter(paypal_email__iexact=email)
   return not (by_email or by_username or by_paypal_email)

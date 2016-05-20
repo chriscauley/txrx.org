@@ -134,12 +134,11 @@ class UserMembershipInline(admin.StackedInline):
   list_display = ("__unicode__",'photo')
   list_editable = ('photo',)
   list_filter = ('user__is_staff',)
-  search_fields = ('user__email','user__username','paypal_email')
+  search_fields = ('user__email','user__username')
   raw_id_fields = ('photo',)
   fields = (
-    'bio','paypal_email',
+    'bio', 'photo',
     ('voting_rights','suspended'),
-    'photo',
   )
   model = UserMembership
 

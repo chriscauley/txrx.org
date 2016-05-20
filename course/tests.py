@@ -57,7 +57,7 @@ class ListenersTest(TestCase):
     email = "preexistinguser@txrxlabstest.com"
     paypal_email = "adifferentemail@txrxlabstest.com"
     q1 = Q(email__in=[email,paypal_email])
-    q2 = Q(usermembership__paypal_email__in=[email,paypal_email])
+    q2 = Q(paypal_email__in=[email,paypal_email])
     get_user_model().objects.filter(q1|q2).delete()
     user = get_user_model().objects.create(
       username="preexisinguser",
@@ -128,7 +128,7 @@ class UtilsTest(TestCase):
     email = "preexistinguser@txrxlabstest.com"
     paypal_email = "adifferentemail@txrxlabstest.com"
     q1 = Q(email__in=[email,paypal_email])
-    q2 = Q(usermembership__paypal_email__in=[email,paypal_email])
+    q2 = Q(paypal_email__in=[email,paypal_email])
     get_user_model().objects.filter(q1|q2).delete()
     user = get_user_model().objects.create(
       username="preexisinguser",
@@ -143,7 +143,7 @@ class UtilsTest(TestCase):
     user = get_user_model().objects.get(email=email) # refresh instance
     self.assertEqual(get_user_model().objects.filter(q1|q2).count(),1)
     self.assertEqual(self.session1.enrollment_set.get(user=user).quantity,1)
-    self.assertEqual(user.usermembership.paypal_email,paypal_email)
+    self.assertEqual(user.paypal_email,paypal_email)
 
 class NotifyTest(TestCase):
   setUp = setUp

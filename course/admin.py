@@ -72,7 +72,7 @@ class SessionAdmin(TaggedPhotoAdmin):
 class EnrollmentAdmin(RawMixin,admin.ModelAdmin):
   list_display = ("id",'user', 'session','datetime')
   list_filter = ("session", "user",)
-  search_fields = ("user__username","user__email","user__usermembership__paypal_email")
+  search_fields = ("user__username","user__email","user__paypal_email")
   raw_id_fields = ("user","session")
 
 @admin.register(Evaluation)
