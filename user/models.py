@@ -34,6 +34,8 @@ class UserManager(BaseUserManager):
       return self.get(*args,**kwargs)
     except (self.model.DoesNotExist, self.model.MultipleObjectsReturned):
       pass
+  def get_from_anything(self,value):
+    return self.get_or_none(models.Q(username=value) | models.Q(email=value) | models.Q(paypal_email=value))
 
 ORIENTATION_STATUS_CHOICES = [
   ('new','New'),
@@ -54,7 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     error_messages={'unique': _("A user with that username already exists."),}
   )
   username = models.CharField(_('username'), max_length=30, unique=True, **kwargs)
-  email = models.EmailField(_('email address'), max_length=254, unique=True)
+  email = models.EmailField(_('email address'), max_length=255, unique=True)
   first_name = models.CharField(_('first name'), max_length=30, blank=True)
   last_name = models.CharField(_('last name'), max_length=30, blank=True)
   _ht = _('Designates whether the user can log into this admin site.')
@@ -65,7 +67,7 @@ class User(AbstractBaseUser, PermissionsMixin):
   _ht = "Gatekeepers have 24/7 building access."
   is_gatekeeper = models.BooleanField(default=False,help_text=_ht)
   date_joined = models.DateTimeField(_('date joined'),auto_now_add=True)
-  paypal_email = lambda self: self.usermembership.paypal_email
+  paypal_email = models.EmailField(max_length=255,null=True,blank=True) #! TODO make me unique
   objects = UserManager()
 
   #txrx fields
