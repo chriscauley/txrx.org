@@ -24,7 +24,10 @@ def checkin_ajax(request):
   email = request.GET.get("email",None) or "notavaildemail"
   user = User.objects.get_from_anything(email)
   if request.user.is_authenticated():
-    user = user or get_or_none(User,id=request.GET.get("user_id",None))
+    user = request.user
+  else:
+    user = user or get_or_none(User,email=email)
+    user = user or get_or_none(User,usermembership__paypal_email=email)
   if rfid and not user:
     return JsonResponse({'next': "new-rfid", 'rfid': rfid})
   if not user:
@@ -47,9 +50,12 @@ def checkin_ajax(request):
     'classtimes': [c.as_json for c in _ct],
     'sessions': {c.session_id: c.session.as_json for c in _ct},
   }
+  if request.GET.get('set_rfid',None):
+    # user is coming from a url that wants to add an rfid
+    return add_rfid(request)
   return HttpResponse(json.dumps(out))
 
-def add_rfid(request):
+def add_rfid(request,out={ 'messages': [] }):
   rfid = request.POST['rfid']
   username = request.POST['username']
   if request.user.is_authenticated():
@@ -57,14 +63,15 @@ def add_rfid(request):
   else:
     user = User.objects.get_from_anything(username)
     if not user or not user.check_password(request.POST['password']):
-      return JsonResponse({'errors': {'non_field_errors': ['Incorrect username/email and password combination.']}})
-  if user.rfid_set.count():
+      out['errors'] = {'non_field_errors': ['Incorrect username/email and password combination.']}
+      return JsonResponse(out)
+  if user.rfid_set.exclude(number=rfid).count():
     m = 'You already have an RFID card registered. Please see staff if you need to change cards.'
-    messages = [{'level': 'danger', 'body': m}]
-    return JsonResponse({'messages': messages})
+    out['messages'].push({'level': 'danger', 'body': m})
+    return JsonResponse(out)
   RFID.objects.get_or_create(user=user,number=rfid)
-  messages = [{'level': 'success', 'body': 'RFID set. Please swipe now to checkin.'}]
-  return JsonResponse({'messages': messages})
+  out['messages'].push({'level': 'success', 'body': 'RFID set. Please swipe now to checkin.'})
+  return JsonResponse(out)
 
 def checkin_register(request):
   keys = ['email','first_name','last_name',"password"]

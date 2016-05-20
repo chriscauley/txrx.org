@@ -29,7 +29,8 @@ urlpatterns = patterns(
   url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
   url(r'^admin/', include(admin.site.urls)),
   url(r'^blog/',include('blog.urls')),
-  url(r'arst/(?P<pk>\d+)','main.views.intentional_500',name="order_detail"),
+  url(r'^arst/(?P<pk>\d+)','main.views.intentional_500',name="order_detail"),
+  url(r'^arst/(.*)','main.views.intentional_500',name="product_detail"),
   url(r'^(\d{4})/(\d{1,2})/(\d{1,2})/([^/]+)/','blog.views.post_redirect'),
   url(r'^500/$','main.views.intentional_500'),
   url(r'^event/',include('event.urls',namespace="event",app_name="event")),
@@ -37,7 +38,6 @@ urlpatterns = patterns(
   url(r'^media_files/',include('media.urls')),
   url(r'^shop/',include('store.urls')),
   url(r'^products.js$','store.views.products_json'),
-  url(r'^product_is_a_fail/(.*)/$','main.views.index',name="product_detail"),
 
   # comments and javascript translation
   url(r'^comments/',include('mptt_comments.urls')),
@@ -85,7 +85,9 @@ urlpatterns += patterns(
   '',
   url(r'^accounts/settings/$','membership.views.user_settings',name='account_settings'),
   url(r'^accounts/register/$','membership.views.register'),
+  url(r'^accounts/login/$', 'main.views.login',name="auth_login"),
   url(r'^accounts/', include('registration.urls')),
+  url(r'^accounts/', include('nopassword.urls')),
   url(r'^auth/password_reset/$',activate_user(password_reset)),
   url(r'^auth/',include('django.contrib.auth.urls')),
   url(r'^force_login/(\d+)/$', 'main.views.force_login'),

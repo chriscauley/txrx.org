@@ -5,6 +5,7 @@ django_compressor
 django-localflavor
 djangorestframework
 djangorestframework-jwt
+django-nopassword
 BeautifulSoup==3.2.1
 psycopg2
 django-suit

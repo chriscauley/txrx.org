@@ -26,6 +26,7 @@ INSTALLED_APPS = [
   'social.apps.django_app.default',
   'rest_framework',
   'jsignature',
+  'nopassword',
 
   #store
   'shop',

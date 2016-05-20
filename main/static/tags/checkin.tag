@@ -57,7 +57,7 @@
         self.email_checkin = false;
         uR.ajax({
           url: "/checkin_ajax/",
-          data: { user_id: TXRX.user.id },
+          data: { user_id: TXRX.user.id, set_rfid: uR.getQueryParameter("set_rfid") || "" },
           success: self.ajax_success,
           target: self.root,
           that: self,
@@ -113,7 +113,6 @@
     self.last_press = e.timeStamp;
     self.current_number += num;
   }
-
 </checkin-home>
 
 <new-rfid>

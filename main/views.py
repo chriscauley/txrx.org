@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.views import login as auth_login
 from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
@@ -14,6 +16,14 @@ import random, datetime
 
 redirect = lambda request,url: HttpResponseRedirect(url)
 predirect = lambda request,url: HttpResponsePermanentRedirect(url)
+
+def alt_login(request):
+  form = AuthenticationForm(request,data=request.POST or None)
+  if request.POST.get("nopassword",None):
+    
+  if form.is_valid():
+    return auth_login(request)
+  
 
 def beta(request,page_name=None):
   values = {
