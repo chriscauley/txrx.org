@@ -40,7 +40,7 @@ class Command(BaseCommand):
         print 'next',next_safety
         defaults = {'status': 'new_safety'}
         flag, new = Flag.objects.get_or_create(
-          subscription=temporary_criteria.content_object,
+          subscription=criterion.content_object,
           reason="safety",
           defaults=defaults,
         )

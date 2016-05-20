@@ -89,7 +89,7 @@ class ListenersTest(TestCase):
     paypal_post(self,params)
 
     # The above generates an enrollment error because someone over paid
-    self.assertTrue(check_subjects(["Enrollment Error","Course enrollment confirmation"]))
+    self.assertTrue(check_subjects(["Course enrollment confirmation"]))
 
 class UtilsTest(TestCase):
   """ Test the following parameters of the get_or_create_student functions.

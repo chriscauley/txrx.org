@@ -75,7 +75,7 @@ class UserMembershipForm(PlaceholderModelForm):
       raise forms.ValidationError(e)
     return self.cleaned_data.get('paypal_email')
   class Meta:
-    fields = ('by_line','bio','paypal_email','notify_global','notify_classes','notify_comments','notify_sessions')
+    fields = ('by_line','bio','notify_global','notify_classes','notify_comments','notify_sessions')
     model = UserMembership
 
 class UserForm(PlaceholderModelForm):
