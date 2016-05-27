@@ -42,8 +42,11 @@ def cart_edit(request):
 def start_checkout(request):
   cart = get_or_create_cart(request,save=True)
   cart.update(request)
-  order = Order.objects.create_from_cart(cart,request)
-  order.status = Order.COMPLETED
+  try:
+    order = Order.objects.get(cart_pk=cart.pk)
+  except Order.DoesNotExist:
+    order = Order.objects.create_from_cart(cart,request)
+  order.status = Order.CONFIRMED
   order.save()
   out = {
     'order_pk': order.pk,
