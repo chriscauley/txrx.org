@@ -43,8 +43,8 @@ def start_checkout(request):
   cart = get_or_create_cart(request,save=True)
   cart.update(request)
   try:
-    order = Order.objects.get(cart_pk=cart.pk)
-  except Order.DoesNotExist:
+    order = Order.objects.filter(cart_pk=cart.pk)[0]
+  except IndexError:
     order = Order.objects.create_from_cart(cart,request)
   order.status = Order.CONFIRMED
   order.save()
