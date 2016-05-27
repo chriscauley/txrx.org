@@ -26,7 +26,7 @@ def join_us(request):
   values = {
     'groups': Group.objects.all(),
     'flatpage':lambda:FlatPage.objects.get(url='/join-us/'),
-    }
+  }
   return TemplateResponse(request,"membership/memberships.html",values)
 
 @login_required

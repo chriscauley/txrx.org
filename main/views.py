@@ -20,7 +20,7 @@ predirect = lambda request,url: HttpResponsePermanentRedirect(url)
 def alt_login(request):
   form = AuthenticationForm(request,data=request.POST or None)
   if request.POST.get("nopassword",None):
-    
+    pass
   if form.is_valid():
     return auth_login(request)
   
