@@ -8,6 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('membership', '0038_level_permission_description'),
+        ('user', '0018_transfer_paypal'),
     ]
 
     operations = [

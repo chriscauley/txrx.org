@@ -5,8 +5,7 @@ from django.db import migrations, models
 
 def transfer_paypal(apps,schema_editor):
     User = apps.get_model('user','user')
-    for u in User.objects.filter(usermembership__paypal_email__isnull=False):
-        print u.usermembership.paypal_email
+    for u in User.objects.all():
         u.paypal_email = u.usermembership.paypal_email
         u.save()
 
