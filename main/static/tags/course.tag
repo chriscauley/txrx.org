@@ -39,7 +39,7 @@
 
 <course-list>
   <div each={ opts.courses } if={ visible }>
-    <a href={ url } class="course well { well_class }" id="c{ id }">
+    <a href={ url } class="course well { well_class }" id="course_{ id }">
       <div class="picture">
         <img src={ im.url } width={ im.width } height={ im.height } />
         <div class="enrolled-status" status={ enrolled_status }></div>
