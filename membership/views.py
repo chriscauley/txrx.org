@@ -200,22 +200,31 @@ def update_flag_status(request,flag_pk,new_status=None):
   return HttpResponseRedirect('/admin/membership/flag/%s/'%flag_pk)
 
 def door_access(request,permission_pk=None,tool_pk=None):
-  fieldname = request.GET.get('fieldname','rfid__number')
   fail = HttpResponseForbidden("I am Vinz Clortho keymaster of Gozer... Gozer the Traveller, he will come in one of the pre-chosen forms. During the rectification of the Vuldronaii, the Traveller came as a large and moving Torb! Then, during the third reconciliation of the last of the Meketrex Supplicants they chose a new form for him... that of a Giant Sloar! many Shubs and Zulls knew what it was to be roasted in the depths of the Sloar that day I can tell you.")
   if not (request.META['REMOTE_ADDR'] in getattr(settings,'DOOR_IPS',[]) or request.user.is_superuser):
     return fail
+
+  #fieldname is intended to be used only for testing
+  fieldname = request.GET.get('fieldname','rfid__number')
   if fieldname in ['email','paypal_email','password']:
     return fail
 
+  permission = None
   if 'permission_id' in request.GET:
     permission = get_object_or_404(Permission,id=request.GET['permission_id'])
+    permission_user_ids = permission.get_all_user_ids()
   out = {}
   base_subs = Subscription.objects.filter(canceled__isnull=True)
   base_subs = base_subs.exclude(user__rfid__isnull=True)
   for level in Level.objects.all():
-    subscriptions = base_subs.filter(product__level=level)
-    out[level.order] = list(subscriptions.distinct().values_list('user__'+fieldname,flat=True))
-  gatekeepers = get_user_model().objects.filter(is_gatekeeper=True).exclude(rfid__isnull=True)
+    subscriptions = base_subs.filter(product__level=level).distinct()
+    if permission:
+      subscriptions = subscriptions.filter(user_id__in=permission_user_ids)
+    out[level.order] = list(subscriptions.values_list('user__'+fieldname,flat=True))
+  if permission:
+    gatekeepers = get_user_model().objects.filter(is_toolmaster=True).exclude(rfid__isnull=True)
+  else:
+    gatekeepers = get_user_model().objects.filter(is_gatekeeper=True).exclude(rfid__isnull=True)
   out[99999] = list(gatekeepers.values_list(fieldname,flat=True))
   return HttpResponse(json.dumps(out))
 
