@@ -6,7 +6,10 @@
   <div class="row">
     {% for level in levels %}
     <div class="col-sm-4">
-      <h2><span>{{ level.order }}</span>{{ level }}</h2>
+      <h2>
+        <span>{{ level.order }}</span>{{ level }}
+        <a href="/admin/membership/level/{{ level.pk }}/" class="fa fa-pencil-square right"></a>
+      </h2>
       <p>{{ level.permission_description }}</p>
     </div>
     {% if forloop.counter|divisibleby:3 %}
