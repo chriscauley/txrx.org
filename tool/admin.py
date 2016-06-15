@@ -5,7 +5,11 @@ from django.contrib.auth import get_user_model
 
 from media.admin import TaggedPhotoInline
 from lablackey.db.admin import OrderedModelAdmin
-from .models import Lab, Tool, ToolLink, TaggedTool, Group, Permission, Criterion, UserCriterion
+from .models import Lab, Tool, ToolLink, TaggedTool, Group, Permission, Criterion, UserCriterion, APIKey
+
+#@admin.register(APIKey)
+#class APIKeyAdmin(admin.ModelAdmin):
+#  readonly_fields = ['key']
 
 @admin.register(Lab)
 class LabAdmin(OrderedModelAdmin):

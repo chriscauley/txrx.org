@@ -14,7 +14,7 @@ from media.models import Photo, PhotosMixin
 from wmd.models import MarkDownField
 
 from colorful.fields import RGBColorField
-import json, os, datetime
+import json, os, datetime, string, random
 
 class Lab(PhotosMixin,OrderedModel):
   name = models.CharField(max_length=128)
@@ -232,3 +232,10 @@ def reset_tools_json(context="no context provided"):
   os.rename(os.path.join(settings.STATIC_ROOT,'_tools.json'),os.path.join(settings.STATIC_ROOT,'tools.json'))
 
   dt = datetime.datetime.now()
+
+def new_key():
+  return "".join([random.choice(string.letters+string.digits) for i in range(30)])
+
+class APIKey(models.Model):
+  key = models.CharField(max_length=30,default=new_key)
+  __unicode__ = lambda self: self.key
