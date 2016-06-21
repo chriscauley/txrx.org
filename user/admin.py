@@ -18,7 +18,7 @@ class RFIDInline(admin.TabularInline):
 @admin.register(User)
 class UserAdmin(UserAdmin):
   fieldsets = (
-    (None, {'fields': ('username', 'email', 'password', ('first_name', 'last_name'),'level')}),
+    (None, {'fields': ('username', 'password', ('email','paypal_email'), ('first_name', 'last_name'),'level')}),
     (_('Permissions'),
      {'fields': ('is_active', 'is_staff', 'is_superuser', ('is_toolmaster', 'is_gatekeeper'), 'groups')}),
     (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
