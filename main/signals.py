@@ -32,7 +32,6 @@ def new_comment_connection(sender, instance=None, created=False,**kwargs):
     # email whoever wrote the parent comment
     user = instance.parent.user
     if user.usermembership.notify_comments and user.usermembership.notify_global:
-      print user
       # this conditional is incase they opt out
       key = LimitedAccessKey.new(user).key
       _dict['unsubscribe_url'] = _u(reverse("unsubscribe",args=['comments',user.id])+"?LA_KEY="+key)
@@ -44,11 +43,12 @@ def new_comment_connection(sender, instance=None, created=False,**kwargs):
         [user.email])
   else:
     # email the course instructor or whoever is in the "users" list
+    users = getattr(settings,'COMMENT_ADMINS',[])
     try:
-      users = [user.email for user in instance.content_object.list_users]
+      users += [user.email for user in instance.content_object.list_users]
     except AttributeError:
       pass
-
-  send_mail('New Comment',admin_comment_email%_dict,settings.DEFAULT_FROM_EMAIL,comment_admins)
+    subject = 'New comment on %s'%instance.content_object
+    send_mail(subject,admin_comment_email%_dict,settings.DEFAULT_FROM_EMAIL,list(set(users)))
 
 post_save.connect(new_comment_connection, sender=MpttComment)

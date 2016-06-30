@@ -192,7 +192,7 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
     return notes
   @property
   def list_users(self):
-    return list(set([s.user for s in self.session_set.all()]))
+    return list(set([s.user for s in self.active_sessions]))
   class Meta:
     ordering = ("name",)
 
