@@ -219,6 +219,31 @@ class Permission(models.Model):
   class Meta:
     ordering = ('group','order')
 
+class Schedule(models.Model):
+  name = models.CharField(max_length=32)
+  __unicode__ = lambda self: self.name
+  def save(self,*args,**kwargs):
+    super(Schedule,self).save(*args,**kwargs)
+    if not self.scheduleday_set.count():
+      for i,d in DOW_CHOICES:
+        ScheduleDay.objects.create(schedule=self,dow=i)
+
+DOW_CHOICES = zip(range(7),['Su','Mo','Tu','We','Th','Fr','Sa'])
+
+class ScheduleDay(models.Model):
+  schedule = models.ForeignKey(Schedule)
+  dow = models.IntegerField(choices=DOW_CHOICES)
+  start_time = models.TimeField(default="10:00")
+  end_time = models.TimeField(default="22:00")
+  __unicode__ = lambda self: "%s: %s-%s"%(self.get_dow_display(),self.start_time,self.end_time)
+  class Meta:
+    ordering = ('dow',)
+
+class PermissionSchedule(models.Model):
+  permission = models.ForeignKey(Permission)
+  schedule = models.ForeignKey(Schedule)
+  levels = models.ManyToManyField('membership.Level')
+
 def reset_tools_json(context="no context provided"):
   values = {
     'permissions_json': json.dumps([p.as_json for p in Permission.objects.all()]),
@@ -239,3 +264,4 @@ def new_key():
 class APIKey(models.Model):
   key = models.CharField(max_length=30,default=new_key)
   __unicode__ = lambda self: self.key
+

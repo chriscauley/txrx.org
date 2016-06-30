@@ -1,15 +1,37 @@
-from django import forms
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 from django.contrib.auth import get_user_model
 
 from media.admin import TaggedPhotoInline
 from lablackey.db.admin import OrderedModelAdmin
-from .models import Lab, Tool, ToolLink, TaggedTool, Group, Permission, Criterion, UserCriterion, APIKey
+from .models import (Lab, Tool, ToolLink, TaggedTool, Group, Permission, Criterion, UserCriterion, APIKey,
+                     Schedule, ScheduleDay, PermissionSchedule)
 
 #@admin.register(APIKey)
 #class APIKeyAdmin(admin.ModelAdmin):
 #  readonly_fields = ['key']
+
+class ScheduleDayInline(admin.TabularInline):
+  model = ScheduleDay
+  extra = 0
+  def has_add_permission(self,request):
+    return not request.path.endswith("/add/")
+
+@admin.register(Schedule)
+class ScheduleAdmin(admin.ModelAdmin):
+  inlines = [ScheduleDayInline]
+  readonly_fields = ['instructions']
+  def get_readonly_fields(self,request,obj=None):
+    if obj and obj.pk:
+      return []
+    return super(ScheduleAdmin,self).get_readonly_fields(request,obj)
+  def get_inline_instances(self, request, obj=None):
+    if not obj or not obj.pk:
+      return []
+    return super(ScheduleAdmin,self).get_inline_instances(request,obj)
+  def instructions(self,obj=None):
+    if not obj or not obj.pk:
+      return "Save and continue editing and a template will be made off with every day set at 10am-10pm."
 
 @admin.register(Lab)
 class LabAdmin(OrderedModelAdmin):
@@ -52,36 +74,26 @@ class TaggedToolInline(GenericTabularInline):
   raw_id_fields = ('tool',)
   extra = 0
 
-from django import forms
-from django.contrib.admin.widgets import FilteredSelectMultiple
-class GroupedToolForm(forms.ModelForm):
-  def __init__(self,*args,**kwargs):
-    super(GroupedToolForm,self).__init__(*args,**kwargs)
-    """choices = {}
-    for tool in Tool.objects.all():
-      room = unicode(tool.room)
-      choices[room] = choices.get(room,[])
-      choices[room].append((tool.pk,unicode(tool)))
-    choices = tuple(sorted(choices.items()))"""
-    choices = [(tool.pk,tool.choice_name) for tool in Tool.objects.all()]
-    choices = sorted(choices,key=lambda i:i[1])
-    self.fields["tools"].choices = choices
-
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
   list_display = ('__unicode__','row','column','color')
   list_editable = ('row','column','color')
+
+class PermissionScheduleInline(admin.TabularInline):
+  template = "tool/_permissionschedule_inline.html"
+  model = PermissionSchedule
+  extra = 0
 
 @admin.register(Permission)
 class PermissionAdmin(admin.ModelAdmin):
   filter_horizontal = ('criteria',)
   list_editable = ('group',"order",)
   list_display = ('__unicode__','abbreviation','group','order','_criteria')
-  fields = (('name','abbreviation'),('group','room'),'tools','criteria')
+  fields = (('name','abbreviation'),('group','room'),'criteria')
   _criteria = lambda self,obj: '<br/>'.join([unicode(criteria) for criteria in obj.criteria.all()])
   _criteria.allow_tags = True
   _criteria.short_description = "Required Criteria"
-  form = GroupedToolForm
+  inlines = [PermissionScheduleInline]
 
 @admin.register(Criterion)
 class CriterionAdmin(admin.ModelAdmin):
