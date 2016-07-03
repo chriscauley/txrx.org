@@ -1,11 +1,4 @@
 body.kiosk {
-  .container {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    height: 90%;
-    justify-content: center;
-  }
   nav, footer, .navbar-collapse.collapse { display: none !important; }
   checkin-email, checkin-home, checkin-register {
     .inner {
@@ -21,5 +14,7 @@ body.kiosk {
 }
 
 checkin-home {
+  display: block;
+  width: 600px;
   .btn { margin-bottom: 20px; }
 }

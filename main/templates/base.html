@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="google-site-verification" content="5BXTZkZEubZ_azCsu7q469YXtV6tYbDOVeTQ2enG88o" />
     {% block extra_head %}{% endblock %}
+    {% if REDESIGNED %}
+    {% include "_new_styles.html" %}
+    {% else %}
     {% include "_styles.html" %}
+    {% endif %}
     <script type="text/javascript">
       var TXRX = TXRX || {};
       window.TXRX._ready = [];

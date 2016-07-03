@@ -46,6 +46,7 @@ def checkin_ajax(request):
     'messages': [{'level': 'success', 'body': '%s checked in at %s'%(user,checkin.time_in)}],
     'classtimes': [c.as_json for c in _ct],
     'sessions': {c.session_id: c.session.as_json for c in _ct},
+    'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(user)],
   }
   return HttpResponse(json.dumps(out))
 

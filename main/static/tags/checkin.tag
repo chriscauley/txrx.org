@@ -1,6 +1,6 @@
 <checkin-home>
   <div class="inner">
-    <img src="/static/logos/Logo-1_vertical_color_475x375.png" width="200" />
+    <img class="logo" src="/static/logos/Logo-1_vertical_color_475x375.png" width="200" />
     <div if={ kiosk && !email_checkin }>
       <p class="lead">Please swipe your RFID to checkin.</p>
       <button if={ TXRX.DEBUG } onclick={ toggleCheckin } class="btn btn-success">Checking Using Email</button>
@@ -17,13 +17,23 @@
     </div>
     <ul if={ messages } class="messagelist">
       <li each={ messages } class="alert alert-{ level }">{ body }</li>
-    </ul></div>
-  <div if={ classtimes }>
-    <div each={ classtimes } class="classes">
-      <h3><u>{ start_string }-{ end_string }</u></h3>
-      <div>
-        { instructor?"Teaching:":"" } { session.course_name }.<br/>
-        Meet at: { first_room.name }
+    </ul>
+    <div class="row">
+      <div class="col s6">
+        <h4>Classes Today</h4>
+        <div each={ classtimes } class="card">
+          <div class="card-content">
+            <div class="card-title">{ start_string }-{ end_string }</div>
+            <div>
+              { instructor?"Teaching:":"" } { session.course_name }.<br/>
+              Meet at: { first_room.name }
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col s6">
+        <h4>Permissions</h4>
+        <div each={ permissions } class="card"><span class="card-title">{ name }</span></div>
       </div>
     </div>
   </div>
@@ -93,6 +103,10 @@
     clearTimeout(this.timeout);
     this.messages = data.messages;
     this.timeout = setTimeout(function() { self.messages = []; self.update(); },30000);
+    self.permissions = [];
+    uR.forEach(TXRX.permissions,function(permission) {
+      if (data.permission_ids.indexOf(permission.id) != -1) { self.permissions.push(permission) }
+    });
   }
   press(e) {
     var num = e.keyCode - 48;
