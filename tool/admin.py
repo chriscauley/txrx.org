@@ -80,7 +80,6 @@ class GroupAdmin(admin.ModelAdmin):
   list_editable = ('row','column','color')
 
 class PermissionScheduleInline(admin.TabularInline):
-  template = "tool/_permissionschedule_inline.html"
   model = PermissionSchedule
   extra = 0
 
@@ -89,11 +88,17 @@ class PermissionAdmin(admin.ModelAdmin):
   filter_horizontal = ('criteria',)
   list_editable = ('group',"order",)
   list_display = ('__unicode__','abbreviation','group','order','_criteria')
-  fields = (('name','abbreviation'),('group','room'),'criteria')
+  fields = (('name','abbreviation'),('group','room'),'criteria','_schedule_helptext')
+  readonly_fields = ('_schedule_helptext',)
   _criteria = lambda self,obj: '<br/>'.join([unicode(criteria) for criteria in obj.criteria.all()])
   _criteria.allow_tags = True
   _criteria.short_description = "Required Criteria"
   inlines = [PermissionScheduleInline]
+  def _schedule_helptext(request,obj):
+    _s = 'Tool access will default to buisness hours for hackers and above and weekends only for tinkerers '\
+         ' if no schedules specified below.'
+    return '<p class="lead">%s</p>'%_s
+  _schedule_helptext.allow_tags = True
 
 @admin.register(Criterion)
 class CriterionAdmin(admin.ModelAdmin):
