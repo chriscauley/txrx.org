@@ -19,7 +19,7 @@
       <li each={ messages } class="alert alert-{ level }">{ body }</li>
     </ul>
     <div class="row">
-      <div class="col s6">
+      <div class="col s6" if={ classtimes.length }>
         <h4>Classes Today</h4>
         <div each={ classtimes } class="card">
           <div class="card-content">
@@ -31,9 +31,23 @@
           </div>
         </div>
       </div>
-      <div class="col s6">
+      <div class="col s6" if={ permissions.length }>
         <h4>Permissions</h4>
-        <div each={ permissions } class="card"><span class="card-title">{ name }</span></div>
+        <div each={ permissions } class="card"><div class="card-title">{ name }</div></div>
+        <div class="card">
+          <a href="javascript:void(0)" class="ur-tooltip">
+            <div class="card-title">Missing Anything?</div>
+            <div class="ur-tooltip-content card">
+              <div class="card-content">
+                Our record keeping on class completions does not go super far back,
+                so please check for missing permissions.
+                If you are missing any permissions please email info@txrxlabs.org so we can get it straightened out.
+              </div>
+            </div>
+          </a>
+        </div>
+        <div>
+        </div>
       </div>
     </div>
   </div>

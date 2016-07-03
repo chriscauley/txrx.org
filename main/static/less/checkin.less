@@ -1,11 +1,11 @@
 body.kiosk {
   nav, footer, .navbar-collapse.collapse { display: none !important; }
   checkin-email, checkin-home, checkin-register {
+    .logo { display: block; margin: 0 auto; }
     .inner {
       display: block;
       margin: 0 auto;
-      text-align: center;
-      max-width: 450px;
+      max-width: 500px;
     .btn { font-size:1.5em; }
     }
   }
@@ -17,4 +17,15 @@ checkin-home {
   display: block;
   width: 600px;
   .btn { margin-bottom: 20px; }
+  h4, .messagelist, .card-title { text-align: center; }
+}
+
+/*move to another file, maybe ur forms less file */
+.ur-tooltip {
+  position: relative;
+  .ur-tooltip-content {
+    color: @textColor;
+    display: none;
+  }
+  &:focus .ur-tooltip-content { display: block; }
 }

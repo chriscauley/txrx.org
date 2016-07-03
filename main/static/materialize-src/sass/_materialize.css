@@ -2634,65 +2634,29 @@ input[type=range] + .thumb {
     .row .col[class*="push-"], .row .col[class*="pull-"] {
       position: relative; }
     .row .col.xs1 {
-      width: 8.33333%;
-      margin-left: auto;
-      left: auto;
-      right: auto; }
+      width: 8.33333%; }
     .row .col.xs2 {
-      width: 16.66667%;
-      margin-left: auto;
-      left: auto;
-      right: auto; }
+      width: 16.66667%; }
     .row .col.xs3 {
-      width: 25%;
-      margin-left: auto;
-      left: auto;
-      right: auto; }
+      width: 25%; }
     .row .col.xs4 {
-      width: 33.33333%;
-      margin-left: auto;
-      left: auto;
-      right: auto; }
+      width: 33.33333%; }
     .row .col.xs5 {
-      width: 41.66667%;
-      margin-left: auto;
-      left: auto;
-      right: auto; }
+      width: 41.66667%; }
     .row .col.xs6 {
-      width: 50%;
-      margin-left: auto;
-      left: auto;
-      right: auto; }
+      width: 50%; }
     .row .col.xs7 {
-      width: 58.33333%;
-      margin-left: auto;
-      left: auto;
-      right: auto; }
+      width: 58.33333%; }
     .row .col.xs8 {
-      width: 66.66667%;
-      margin-left: auto;
-      left: auto;
-      right: auto; }
+      width: 66.66667%; }
     .row .col.xs9 {
-      width: 75%;
-      margin-left: auto;
-      left: auto;
-      right: auto; }
+      width: 75%; }
     .row .col.xs10 {
-      width: 83.33333%;
-      margin-left: auto;
-      left: auto;
-      right: auto; }
+      width: 83.33333%; }
     .row .col.xs11 {
-      width: 91.66667%;
-      margin-left: auto;
-      left: auto;
-      right: auto; }
+      width: 91.66667%; }
     .row .col.xs12 {
-      width: 100%;
-      margin-left: auto;
-      left: auto;
-      right: auto; }
+      width: 100%; }
     .row .col.offset-xs1 {
       margin-left: 8.33333%; }
     .row .col.pull-x1 {
@@ -2767,65 +2731,29 @@ input[type=range] + .thumb {
       left: 100%; }
     @media only screen and (min-width: 421px) {
       .row .col.s1 {
-        width: 8.33333%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 8.33333%; }
       .row .col.s2 {
-        width: 16.66667%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 16.66667%; }
       .row .col.s3 {
-        width: 25%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 25%; }
       .row .col.s4 {
-        width: 33.33333%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 33.33333%; }
       .row .col.s5 {
-        width: 41.66667%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 41.66667%; }
       .row .col.s6 {
-        width: 50%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 50%; }
       .row .col.s7 {
-        width: 58.33333%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 58.33333%; }
       .row .col.s8 {
-        width: 66.66667%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 66.66667%; }
       .row .col.s9 {
-        width: 75%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 75%; }
       .row .col.s10 {
-        width: 83.33333%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 83.33333%; }
       .row .col.s11 {
-        width: 91.66667%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 91.66667%; }
       .row .col.s12 {
-        width: 100%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 100%; }
       .row .col.offset-s1 {
         margin-left: 8.33333%; }
       .row .col.pull-s1 {
@@ -2900,65 +2828,29 @@ input[type=range] + .thumb {
         left: 100%; } }
     @media only screen and (min-width: 601px) {
       .row .col.m1 {
-        width: 8.33333%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 8.33333%; }
       .row .col.m2 {
-        width: 16.66667%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 16.66667%; }
       .row .col.m3 {
-        width: 25%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 25%; }
       .row .col.m4 {
-        width: 33.33333%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 33.33333%; }
       .row .col.m5 {
-        width: 41.66667%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 41.66667%; }
       .row .col.m6 {
-        width: 50%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 50%; }
       .row .col.m7 {
-        width: 58.33333%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 58.33333%; }
       .row .col.m8 {
-        width: 66.66667%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 66.66667%; }
       .row .col.m9 {
-        width: 75%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 75%; }
       .row .col.m10 {
-        width: 83.33333%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 83.33333%; }
       .row .col.m11 {
-        width: 91.66667%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 91.66667%; }
       .row .col.m12 {
-        width: 100%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 100%; }
       .row .col.offset-m1 {
         margin-left: 8.33333%; }
       .row .col.pull-m1 {
@@ -3033,65 +2925,29 @@ input[type=range] + .thumb {
         left: 100%; } }
     @media only screen and (min-width: 993px) {
       .row .col.l1 {
-        width: 8.33333%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 8.33333%; }
       .row .col.l2 {
-        width: 16.66667%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 16.66667%; }
       .row .col.l3 {
-        width: 25%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 25%; }
       .row .col.l4 {
-        width: 33.33333%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 33.33333%; }
       .row .col.l5 {
-        width: 41.66667%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 41.66667%; }
       .row .col.l6 {
-        width: 50%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 50%; }
       .row .col.l7 {
-        width: 58.33333%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 58.33333%; }
       .row .col.l8 {
-        width: 66.66667%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 66.66667%; }
       .row .col.l9 {
-        width: 75%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 75%; }
       .row .col.l10 {
-        width: 83.33333%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 83.33333%; }
       .row .col.l11 {
-        width: 91.66667%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 91.66667%; }
       .row .col.l12 {
-        width: 100%;
-        margin-left: auto;
-        left: auto;
-        right: auto; }
+        width: 100%; }
       .row .col.offset-l1 {
         margin-left: 8.33333%; }
       .row .col.pull-l1 {
