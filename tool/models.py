@@ -162,7 +162,12 @@ class CriterionModel(models.Model):
     if self.user and self.completed:
       for criterion in self.get_criteria():
         defaults = {'content_object':self}
-        u,new = UserCriterion.objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
+        try:
+          u,new = UserCriterion.objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
+        except UserCriterion.MultipleObjectsReturned:
+          print 'deleting for ',self
+          UserCriterion.objects.filter(user=self.user,criterion=criterion).delete()
+          u,new = UserCriterion.objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
         u.content_object = self
         u.save()
     else:

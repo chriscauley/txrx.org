@@ -15,5 +15,6 @@ urlpatterns = patterns(
   #url(r'^tagged/(?P<slug>[^/]+)/(?P<page_number>\d+)/$', 'index', name="tagged"),
   url(r'^detail/(\d+)/(.+)/$', 'detail', name="event_detail"),
   url(r'^rsvp/$', 'rsvp', name='rsvp'),
-  url(r'^checkin/$', 'checkin', name='rsvp')
+  url(r'^checkin/$', 'checkin', name='rsvp'),
+  url(r'^orientations/$','orientations',name='orientations'),
 )

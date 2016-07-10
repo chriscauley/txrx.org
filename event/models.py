@@ -146,6 +146,7 @@ class RSVP(UserModel):
   datetime = models.DateTimeField(auto_now_add=True)
   emailed = models.DateTimeField(null=True,blank=True)
   quantity = models.IntegerField(default=0)
+  completed = models.BooleanField(default=False)
   get_occurrences = lambda self: [self.content_object]
   __unicode__ = lambda self: "%s for %s"%(self.user,self.content_object)
 

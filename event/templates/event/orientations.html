@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Orientations{% endblock %}
+
+{% block content %}
+<div id="eventoccurrences">
+  {% for eventoccurrence in eventoccurrences %}
+  <h1>{{ eventoccurrence }}</h1>
+  <div>
+    {% for rsvp in eventoccurrence.get_rsvps %}
+    <div class="well">
+      <form method="POST">
+        {% csrf_token %}
+        <input name="user_id" value="{{ rsvp.user_id }}" type="hidden">
+        {% if rsvp.user.id in oriented_ids %}
+        <input type="hidden" name="action" value="fail"/>
+        <button class="btn btn-danger pull-right">de-Orient!</button>
+        {% else %}
+        <input type="hidden" name="action" value="pass"/>
+        <button class="btn btn-success pull-right">Orient!</button>
+        {% endif %}
+        <b>
+          {{ rsvp.user }} {{ rsvp.user.first_name }} {{ rsvp.user.last_name }}<br/>
+          {{ rsvp.user.level }}<br/>
+          {{ rsvp.user.email }}
+          {% if rsvp.user.paypal_email %}
+          <br/>Paypal: {{ rsvp.user.paypal_email }}
+          {% endif %}
+        </b>
+        {% for enrollment in rsvp.user.enrollment_set.all %}
+        <div>{{ enrollment.session }}</div>
+        {% endfor %}
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  {% empty %}
+  <h1>No Orientations at This Date</h1>
+  {% endfor %}
+</div>
+{% endblock %}

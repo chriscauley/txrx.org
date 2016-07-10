@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .utils import make_ics,ics2response
 from .models import Event, EventOccurrence, RSVP, CheckIn
+from tool.models import Criterion, UserCriterion
 from course.models import ClassTime
 
 import datetime, json, arrow
@@ -143,3 +144,31 @@ def checkin(request):
   if not CheckIn.objects.filter(datetime__gte=ten_ago,**kwargs):
     CheckIn.objects.create(**kwargs)
   return HttpResponse(json.dumps("%s has been checked in."%user))
+
+def orientations(request,m=None,d=None,y=None):
+  if not request.user.is_toolmaster:
+    return HttpResponse('not allowed!')
+  criterion_id = 15
+  criterion = Criterion.objects.get(id=criterion_id)
+  if request.POST:
+    user = get_user_model().objects.get(id=request.POST['user_id'])
+    if request.POST['action'] == 'pass':
+      defaults = {'content_object': request.user}
+      UserCriterion.objects.get_or_create(user=user,criterion=criterion,defaults=defaults)
+      messages.success(request,"%s has been oriented"%user)
+    else:
+      messages.success(request,"%s has been un-oriented"%user)
+      UserCriterion.objects.filter(user=user,criterion=criterion).delete()
+    return HttpResponseRedirect(request.path)
+  start = datetime.date(y,m,d) if m and d and y else datetime.date.today()
+  end = start + datetime.timedelta(1)
+  eventoccurrences = EventOccurrence.objects.filter(
+    event_id=settings.ORIENTATION_EVENT_ID,
+    start__gte=start,
+    start__lte=end
+  )
+  values = {
+    'eventoccurrences': eventoccurrences,
+    'oriented_ids': list(criterion.usercriterion_set.all().values_list('user_id',flat=True))
+  }
+  return TemplateResponse(request,'event/orientations.html',values)

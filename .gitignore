@@ -31,3 +31,5 @@ main/settings/local.py
 *.sql
 scripts/anon.db
 scripts/backup.json
+
+todo.org

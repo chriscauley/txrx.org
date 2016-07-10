@@ -13,6 +13,14 @@ from redtape.models import Signature
 import datetime, time
 
 _needed = lambda: get_needed_sessions().filter(needed_completed__isnull=True).count()
+def _orientations():
+  start = datetime.date.today()
+  end = start + datetime.timedelta(1)
+  _os = EventOccurrence.objects.filter(start__gte=start,start__lte=end,event_id=settings.ORIENTATION_EVENT_ID)
+  count = 0
+  for _o in _os:
+    count += _o.get_rsvps().count()
+  return count
 def nav(request):
   blog_sublinks = [
     {'name': 'Blog Home', 'url': '/blog/'},
@@ -35,7 +43,8 @@ def nav(request):
   toolmaster_sublinks = [
     {'name': 'Tools','url': '/tools/'},
     {'name': 'Permissions','url': '/toolmaster'},
-    {'name': 'Materials Needed','url': '/needed-sessions/','reddot': _needed }
+    {'name': 'Materials Needed','url': '/needed-sessions/','reddot': _needed },
+    {'name': 'Orientations','url': '/event/orientations/','reddot': _orientations }
   ]
   if getattr(request.user,'is_gatekeeper',False):
     toolmaster_sublinks.append({'name': 'Set RFID','url': '/rfid/'})

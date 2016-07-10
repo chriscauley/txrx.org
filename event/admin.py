@@ -99,6 +99,7 @@ class EventOccurrenceAdmin(TaggedPhotoAdmin):
 @admin.register(RSVP)
 class RSVPAdmin(admin.ModelAdmin):
   list_display = ['__unicode__','user_link']
+  raw_id_fields = ['user']
   def user_link(self,obj):
     u = obj.user
     html = '<a href="/admin/user/user/{}/" class="fa fa-user"> {} {} ({})</a>'
