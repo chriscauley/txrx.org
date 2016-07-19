@@ -17,20 +17,21 @@ def document_detail(request,document_pk,slug=None): #ze slug does notzing!
   document = get_object_or_404(Document,pk=document_pk)
   if document.login_required and not request.user.is_authenticated():
     return login_required(document_detail)(request,document_pk)
-  instance = None
-  if request.user.is_authenticated():
-    instance = get_or_none(Signature,document_id=document_pk,user=request.user)
-  form = SignatureForm(request.POST or None,request.FILES or None,document=document,instance=instance)
+  signature = None
+  if request.user.is_authenticated() and document.editable:
+    signature = get_or_none(Signature,document_id=document_pk,user=request.user)
+  form = SignatureForm(request.POST or None,request.FILES or None,document=document,instance=signature)
   if form.is_valid():
     signature = form.save(commit=False)
     if request.user.is_authenticated():
       signature.user = request.user
     signature.save()
     messages.success(request,"%s signed by %s"%(document,signature.name_typed or signature.user))
-    return HttpResponseRedirect('')
+    return HttpResponseRedirect(request.POST.get('next',""))
   values = {
     'form': form,
     'document': document,
+    'signature': signature
   }
   return TemplateResponse(request,"redtape/document.html",values)
 
@@ -40,6 +41,7 @@ def index(request):
   documents = Document.objects.filter(id__in=d_ids)
   values = {
     'documents_signatures': [(d,get_or_none(Signature,document_id=d.id,user=request.user)) for d in documents],
+    'next': request.path,
   }
   return TemplateResponse(request,"redtape/index.html",values)
 

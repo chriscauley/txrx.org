@@ -10,7 +10,7 @@
     <h3>{{ document }}</h3>
     <div class="center">
       <a class="btn btn-{% if signature %}primary{% else %}danger{% endif %}"
-         href="{{ document.get_absolute_url }}">
+         href="{{ document.get_absolute_url }}?next={{ next }}">
         {% if signature %}Signed {{ signature.datetime|date:"m/d/Y" }}{% else %}Unsigned{% endif %}
       </a>
     </div>

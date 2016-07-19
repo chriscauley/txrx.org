@@ -15,6 +15,9 @@ class Document(models.Model):
   _ht = "If checked, user must log into site before viewing/signing document"
   login_required = models.BooleanField(default=False,help_text=_ht)
   signature_required = models.BooleanField(default=True)
+  _ht = "After submitting the document can the creator edit it?" \
+        "If false a new document will be created everytime they submit the document."
+  editable = models.BooleanField(default=True,help_text=_ht)
   __unicode__ = lambda self: self.name
   get_absolute_url = lambda self: reverse('signed_document',args=[self.id,slugify(self.name)])
   fields_json = property(lambda self: [f.as_json for f in self.documentfield_set.all()])
