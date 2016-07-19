@@ -21,6 +21,7 @@ def _orientations():
   for _o in _os:
     count += _o.get_rsvps().count()
   return count
+
 def nav(request):
   blog_sublinks = [
     {'name': 'Blog Home', 'url': '/blog/'},
@@ -70,6 +71,7 @@ def nav(request):
     {'name': "Membership", "url": "/join-us/"},
     {'name': "Contact", "url": "/map/"},
     {'name': "Shop", "url": "/shop/"},
+    {'name': "FAQ", "url": "/faq/"},
   ]
 
   for _n in _nav:
