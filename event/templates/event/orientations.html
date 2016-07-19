@@ -4,6 +4,17 @@
 
 {% block content %}
 <div id="eventoccurrences">
+  <div>
+    {% if prev_occ %}
+    <a href="/event/orientations/{{ prev_occ.start|date:"Y/m/d" }}">
+      &laquo; {{ prev_occ.start|date:"M/d/Y" }}</a>
+    {% endif %}
+    {% if next_occ %}
+    <a href="/event/orientations/{{ next_occ.start|date:"Y/m/d" }}" class="pull-right">
+      {{ next_occ.start|date:"M/d/Y" }} &raquo;</a>
+    {% endif %}
+    <div style="clear: both"></div>
+  </div>
   {% for eventoccurrence in eventoccurrences %}
   <h1>{{ eventoccurrence }}</h1>
   <div>

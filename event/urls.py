@@ -17,4 +17,5 @@ urlpatterns = patterns(
   url(r'^rsvp/$', 'rsvp', name='rsvp'),
   url(r'^checkin/$', 'checkin', name='rsvp'),
   url(r'^orientations/$','orientations',name='orientations'),
+  url(r'^orientations/(\d+)/(\d+)/(\d+)/$','orientations',name='orientations'),
 )

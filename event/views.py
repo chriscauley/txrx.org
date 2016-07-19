@@ -145,7 +145,7 @@ def checkin(request):
     CheckIn.objects.create(**kwargs)
   return HttpResponse(json.dumps("%s has been checked in."%user))
 
-def orientations(request,m=None,d=None,y=None):
+def orientations(request,y=None,m=None,d=None):
   if not request.user.is_toolmaster:
     return HttpResponse('not allowed!')
   criterion_id = 15
@@ -160,15 +160,13 @@ def orientations(request,m=None,d=None,y=None):
       messages.success(request,"%s has been un-oriented"%user)
       UserCriterion.objects.filter(user=user,criterion=criterion).delete()
     return HttpResponseRedirect(request.path)
-  start = datetime.date(y,m,d) if m and d and y else datetime.date.today()
+  start = datetime.date(int(y),int(m),int(d)) if m and d and y else datetime.date.today()
   end = start + datetime.timedelta(1)
-  eventoccurrences = EventOccurrence.objects.filter(
-    event_id=settings.ORIENTATION_EVENT_ID,
-    start__gte=start,
-    start__lte=end
-  )
+  eventoccurrences = EventOccurrence.objects.filter(event_id=settings.ORIENTATION_EVENT_ID)
   values = {
-    'eventoccurrences': eventoccurrences,
-    'oriented_ids': list(criterion.usercriterion_set.all().values_list('user_id',flat=True))
+    'eventoccurrences': eventoccurrences.filter(start__gte=start,start__lte=end),
+    'oriented_ids': list(criterion.usercriterion_set.all().values_list('user_id',flat=True)),
+    'next_occ': (eventoccurrences.filter(start__gte=end) or [None])[0],
+    'prev_occ': (eventoccurrences.filter(start__lte=start).order_by('-start') or [None])[0],
   }
   return TemplateResponse(request,'event/orientations.html',values)
