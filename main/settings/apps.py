@@ -26,6 +26,7 @@ INSTALLED_APPS = [
   'social.apps.django_app.default',
   'rest_framework',
   'jsignature',
+  'mailer',
 
   #store
   'shop',
