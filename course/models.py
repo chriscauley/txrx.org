@@ -306,10 +306,6 @@ class Session(UserModel,PhotosMixin,models.Model):
   @cached_method
   def get_photos(self):
     return self._get_photos() or self.course.get_photos()
-  # course can have files or session can override them
-  @cached_method
-  def get_files(self):
-    return self._get_files() or self.course.get_files()
 
   #calendar crap
   name = property(lambda self: self.course.name)

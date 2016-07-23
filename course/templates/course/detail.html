@@ -60,8 +60,16 @@
     {% endif %}
     {% if course.get_files %}
     <div>
-      <h2>Relevant files</h2>
+      <h2>Relevant Files</h2>
       {% for f in course.get_files %}
+      <a href="{{ f.file.url }}" target="_blank">{{ f.name }}</a><br/>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if course.get_private_files and enrollment.session.past %}
+    <div>
+      <h2>Course Completion Files</h2>
+      {% for f in course.get_private_files %}
       <a href="{{ f.file.url }}" target="_blank">{{ f.name }}</a><br/>
       {% endfor %}
     </div>

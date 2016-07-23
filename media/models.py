@@ -154,8 +154,20 @@ class FilesMixin(object):
   def get_files(self):
     return self._get_files()
   def _get_files(self):
-    return list(MiscFile.objects.filter(taggedfile__content_type_id=self._ct_id,
-                                        taggedfile__object_id=self.id).order_by("taggedfile__order"))
+    return list(MiscFile.objects.filter(
+      taggedfile__content_type_id=self._ct_id,
+      taggedfile__object_id=self.id,
+      taggedfile__private=False
+    ).order_by("taggedfile__order"))
+  @cached_method
+  def get_private_files(self):
+    return self._get_private_files()
+  def _get_private_files(self):
+    return list(MiscFile.objects.filter(
+      taggedfile__content_type_id=self._ct_id,
+      taggedfile__object_id=self.id,
+      taggedfile__private=True
+    ).order_by("taggedfile__order"))
   class Meta:
     abstract = True
 
@@ -166,3 +178,5 @@ class TaggedFile(models.Model):
   object_id = models.IntegerField()
   content_object = GenericForeignKey('content_type', 'object_id')
   order = models.IntegerField(default=9999)
+  _ht = "Files will not appear until after the user has completed a class."
+  private = models.BooleanField(default=False,help_text=_ht)
