@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django import forms
 
 from models import (Group, Level, Feature, MembershipFeature, UserMembership, Product, Flag,
-                    Subscription, Status, MeetingMinutes, Proposal, Officer, Area, Container)
+                    Subscription, Status, MeetingMinutes, Proposal, Officer, Container)
 
 from lablackey.db.admin import RawMixin
 from lablackey.db.forms import StaffMemberForm
@@ -57,10 +57,6 @@ class FlagInline(admin.TabularInline):
 @admin.register(Container)
 class ContainerAdmin(admin.ModelAdmin):
   pass
-
-@admin.register(Area)
-class AreaAdmin(admin.ModelAdmin):
-  inlines = [ContainerInline]
 
 class MembershipFeatureInline(RawMixin,admin.TabularInline):
   extra = 0

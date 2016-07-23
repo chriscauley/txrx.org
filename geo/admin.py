@@ -1,6 +1,7 @@
 from django.contrib import admin
 from lablackey.db.admin import RawMixin
 from .models import City, Location, Room, DXFEntity, RoomGroup
+from membership.admin import ContainerInline
 
 class LocationAdmin(admin.ModelAdmin):
   fields = ('name','short_name','parent','address','address2','city','zip_code','latlon','dxf')
@@ -8,6 +9,7 @@ class LocationAdmin(admin.ModelAdmin):
 class RoomAdmin(admin.ModelAdmin):
   list_display = ('__unicode__','roomgroup','map_key')
   list_editable = ('roomgroup','map_key')
+  inlines = [ContainerInline]
 
 class DXFEntityAdmin(admin.ModelAdmin):
   list_display = ('__unicode__','room')

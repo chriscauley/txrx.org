@@ -34,18 +34,19 @@ KIND_CHOICES = [
   ('drawer','Drawer')
 ]
 
-class Area(models.Model):
-  name = models.CharField(max_length=64)
-  kind = models.CharField(max_length=64,choices=KIND_CHOICES)
-  __unicode__ = lambda self: self.name
-  class Meta:
-    ordering = ('name',)
+CONTAINER_STATUS_CHOICES = [
+  ("open","Open"),
+  ("used","Used"),
+  ("maintenance","Maintenance"),
+]
 
 class Container(models.Model):
   number = models.IntegerField()
-  area = models.ForeignKey(Area)
-  user = models.ForeignKey(settings.AUTH_USER_MODEL)
-  __unicode__ = lambda self: "%s #%s"%(self.area,self.number)
+  room = models.ForeignKey('geo.Room')
+  user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
+  status = models.CharField(max_length=16,choices=CONTAINER_STATUS_CHOICES,default="open")
+  kind = models.CharField(max_length=64,choices=KIND_CHOICES)
+  __unicode__ = lambda self: "%s %s #%s - %s"%(self.room,self.get_kind_display(),self.number,self.user)
   class Meta:
     ordering = ('number',)
 
