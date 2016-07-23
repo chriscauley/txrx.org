@@ -4,7 +4,11 @@ You recently took a class at {{ settings.SITE_NAME }}. We would like you to eval
 {% trans "Please go to the following link to evaluate your class." %}
 {% block reset_link %}
 {{ domain }}{% url "course:evaluation_detail" evaluation.id %}?LA_KEY={{ la_key.key }}
-{% endblock %}
+{% endblock %}{% if evaluation.session.course.get_private_files %}
+
+This class has class notes and/or other private files accessible to you now that the class is over. You can access these files at the following url if you are logged in.
+
+{{ domain }}{{ evaluation.session.course.get_absolute_url }}{% endif %}
 
 {% trans "Thank you for your time and we hope to see you again soon!" %}
 
