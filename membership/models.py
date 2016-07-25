@@ -45,7 +45,7 @@ class Container(models.Model):
   room = models.ForeignKey('geo.Room')
   user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
   status = models.CharField(max_length=16,choices=CONTAINER_STATUS_CHOICES,default="open")
-  kind = models.CharField(max_length=64,choices=KIND_CHOICES)
+  kind = models.CharField(max_length=64,choices=KIND_CHOICES,default='bay')
   __unicode__ = lambda self: "%s %s #%s - %s"%(self.room,self.get_kind_display(),self.number,self.user)
   class Meta:
     ordering = ('number',)
