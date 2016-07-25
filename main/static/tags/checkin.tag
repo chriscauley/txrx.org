@@ -15,6 +15,10 @@
       <ur-form action="/checkin_ajax/" button_text="Check In" schema={ email_schema }></ur-form>
       <button if={ kiosk } onclick={ toggleCheckin } class="btn btn-success">Checkin Using RFID</button>
     </div>
+    <center if={ auth_user_checkin }>
+      <br />
+      <button class="btn btn-success">Checkin as { TXRX.user.username }</button>
+    </center>
     <ul if={ messages } class="messagelist">
       <li each={ messages } class="alert alert-{ level }">{ body }</li>
     </ul>
@@ -50,6 +54,10 @@
         </div>
       </div>
     </div>
+    <center>
+      <button if={ classtimes.length || permissions.length || messages.length }
+              class="btn btn-success" onclick={ clear }>Back</button>
+    </center>
   </div>
 
   var self = this;
@@ -79,9 +87,10 @@
     TXRX.ready(function() {
       if (TXRX.user.id) {
         self.email_checkin = false;
+        self.auth_user_checkin = true;
         uR.ajax({
           url: "/checkin_ajax/",
-          data: { user_id: TXRX.user.id },
+          data: { user_id: TXRX.user.id, no_checkin: "true" },
           success: self.ajax_success,
           target: self.root,
           that: self,
@@ -116,11 +125,18 @@
     });
     clearTimeout(this.timeout);
     this.messages = data.messages;
-    this.timeout = setTimeout(function() { self.messages = []; self.update(); },30000);
+    this.timeout = setTimeout(self.clear,30000);
     self.permissions = [];
     uR.forEach(TXRX.permissions,function(permission) {
       if (data.permission_ids.indexOf(permission.id) != -1) { self.permissions.push(permission) }
     });
+  }
+  clear(e) {
+    clearTimeout(this.timeout);
+    this.messages = [];
+    this.permissions = [];
+    this.classtimes = [];
+    self.update();
   }
   press(e) {
     var num = e.keyCode - 48;

@@ -28,6 +28,7 @@
   findRoom(e) {
     var x = e.offsetX;
     var y = e.offsetY;
+    console.log("x: "+x+"  y: "+y);
     uR.forEach(that.dxfs, function(room) {
       if ((room.x < x) && (x < room.x + room.w) && (room.y < y) && (y < room.y + room.h)) {
         console.log(room.id);

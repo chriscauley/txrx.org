@@ -8,11 +8,13 @@ from tagging.models import Tag
 from blog.models import PressItem
 from course.models import ClassTime, Enrollment
 from course.views.ajax import get_needed_sessions
+from membership.models import Container
 from event.models import EventOccurrence
 from redtape.models import Signature
 import datetime, time
 
-_needed = lambda: get_needed_sessions().filter(needed_completed__isnull=True).count()
+_materials = lambda: get_needed_sessions().filter(needed_completed__isnull=True).count()
+_containers = lambda: Container.objects.filter(status="maintenance").count()
 def _orientations():
   start = datetime.date.today()
   end = start + datetime.timedelta(1)
@@ -44,8 +46,9 @@ def nav(request):
   toolmaster_sublinks = [
     {'name': 'Tools','url': '/tools/'},
     {'name': 'Permissions','url': '/toolmaster'},
-    {'name': 'Materials Needed','url': '/needed-sessions/','reddot': _needed },
-    {'name': 'Orientations','url': '/event/orientations/','reddot': _orientations }
+    {'name': 'Materials Needed','url': '/needed-sessions/','reddot': _materials },
+    {'name': 'Orientations','url': '/event/orientations/','reddot': _orientations },
+    {'name': 'Bays + Tables', 'url': '/bays-tables/', 'reddot': _containers},
   ]
   if getattr(request.user,'is_gatekeeper',False):
     toolmaster_sublinks.append({'name': 'Set RFID','url': '/rfid/'})

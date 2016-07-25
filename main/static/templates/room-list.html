@@ -1,0 +1,38 @@
+<room-list>
+  <div each={ rooms } if={ !active_room }>
+    <button class="btn btn-primary btn-block" onclick={ select }>{ name }</button>
+  </div>
+
+  <div if={ active_room }>
+    <h2>{ active_room.name }</h2>
+  </div>
+
+  var self=this;
+  this.rooms = [];
+  this.on("mount",function() {
+    console.log(this.opts);
+    uR.ajax({
+      url: "/api/geo/room/",
+      success: function(data) {
+        self.rooms = [];
+        // "TXRX Labs" (room.id == 10) has no name,so let's hide it
+        uR.forEach(data,function(room) {
+          if (room.name) { self.rooms.push(room) }
+        });
+      },
+      that: this,
+    })
+  });
+  select(e) {
+    uR.ajax({
+      url: "/api/membership/container/",
+      success: function(data) {
+        this.active_room = e.item;
+        console.log(data);
+      },
+      that: this,
+      target: this.root,
+    });
+  }
+
+</room-list>

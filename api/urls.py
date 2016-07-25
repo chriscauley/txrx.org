@@ -34,6 +34,7 @@ def auto_serializer(model, modeladmin):
 def build_urls():
   #! TODO This should be split into build_map and build_urls
   #! TODO look into how admin register goes and do it here too.
+  print 1
   app_map = {}
   out = []
   for model, modeladmin in admin.site._registry.items():
@@ -59,6 +60,7 @@ def build_urls():
     for s_name, serializer in d.items():
       kwargs = {'serializer': serializer}
       _url = u'^(%s)/(%s)/'%(app_label,s_name)
+      print _url
       out.append(url(_url+"$",'list_view',name="api_list_view",kwargs=kwargs))
       out.append(url(_url+"(\d+)/$",'detail_view',name="api_detail_view",kwargs=kwargs))
   return out

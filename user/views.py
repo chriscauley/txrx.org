@@ -23,6 +23,7 @@ def checkin_ajax(request):
   user = get_or_none(User,rfid__number=rfid or 'notavalidrfid')
   email = request.GET.get("email",None) or "notavaildemail"
   user = User.objects.get_from_anything(email)
+  messages = []
   if request.user.is_authenticated():
     user = user or get_or_none(User,id=request.GET.get("user_id",None))
   if rfid and not user:
@@ -32,10 +33,9 @@ def checkin_ajax(request):
   if not user.signature_set.filter(document_id=2):
     pass #return HttpResponse(json.dumps({'no_waiver': email}))
   defaults = {'content_object': Room.objects.get(name='')}
-  checkin, new = UserCheckin.objects.get_or_create(user=user,time_out__isnull=True,defaults=defaults)
-  #if not new:
-  #  checkin.time_out = datetime.datetime.now()
-  #  checkin.save()
+  if not request.GET.get('no_checkin',None):
+    checkin, new = UserCheckin.objects.get_or_create(user=user,time_out__isnull=True,defaults=defaults)
+    messages.append({'level': 'success', 'body': '%s checked in at %s'%(user,checkin.time_in)})
   today = datetime.date.today()
   tomorrow = today + datetime.timedelta(1)
   if settings.DEBUG:
@@ -43,7 +43,7 @@ def checkin_ajax(request):
   _q = Q(session__enrollment__user=user) | Q(session__user=user)
   _ct = ClassTime.objects.filter(_q,start__gte=today,start__lte=tomorrow)
   out = {
-    'messages': [{'level': 'success', 'body': '%s checked in at %s'%(user,checkin.time_in)}],
+    'messages': messages,
     'classtimes': [c.as_json for c in _ct],
     'sessions': {c.session_id: c.session.as_json for c in _ct},
     'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(user)],
@@ -80,6 +80,7 @@ def user_json(request):
   master_criterion_ids = list(_c.values_list('id',flat=True))
   out = {
     'id': request.user.id,
+    'username': request.user.username,
     'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(request.user)],
     'criterion_ids': list(usercriteria.values_list('criterion_id',flat=True)),
     'master_criterion_ids': master_criterion_ids,

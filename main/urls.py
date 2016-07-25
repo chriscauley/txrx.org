@@ -17,6 +17,7 @@ _pages = [
   'checkout',
   'my-permissions',
   'needed-sessions',
+  'rooms',
   'rfid',
   'toolmaster',
   'week-hours',
