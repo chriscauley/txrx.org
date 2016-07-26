@@ -20,7 +20,7 @@ class ProductAdmin(admin.ModelAdmin):
   list_display = ('name','__unicode__')
 
 class ContainerInline(admin.TabularInline):
-  raw_id_fields = ('user',)
+  raw_id_fields = ('subscription',)
   model = Container
   extra = 0
 
