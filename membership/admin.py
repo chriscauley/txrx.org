@@ -90,9 +90,24 @@ class StatusInline(admin.TabularInline):
   raw_id_fields = ('paypalipn',)
   extra = 0
 
+class CanceledBooleanFilter(admin.SimpleListFilter):
+  title = "Canceled?"
+  parameter_name = "is_canceled"
+  def lookups(self,request,model_admin):
+    return [('yes','Yes'),('no','No')]
+  def queryset(self,request,queryset):
+    if self.value() == 'yes':
+      return queryset.filter(canceled__isnull=False)
+    elif self.value() == 'no':
+      return queryset.filter(canceled__isnull=True)
+    return queryset
+
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
   inlines = [StatusInline,FlagInline]
+  search_fields = ['user__username','user__email','user__paypal_email']
+  list_display = ("__unicode__","canceled")
+  list_filter = [CanceledBooleanFilter]
   fields = (
     ('user','edit_user'),
     ('product','subscr_id'),

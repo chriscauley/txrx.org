@@ -5,15 +5,11 @@ import datetime
 from django.db import migrations, models
 
 def user_to_subscription(apps,schema_migrations):
-    #Container = apps.get_model("membership","container")
-    from membership.models import Container
+    Container = apps.get_model("membership","container")
     for container in Container.objects.filter(user__isnull=False):
         for subscription in container.user.subscription_set.all():
             if subscription.canceled and subscription.canceled < datetime.datetime.now():
-                print "skips!"
                 continue
-            if container.subscription:
-                print container," already has subscription %s %s"%(subscription, container.subscription)
             if subscription.product.level > 20:
                 container.subscription = subscription
                 container.save()
