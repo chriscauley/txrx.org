@@ -30,8 +30,10 @@ class Group(models.Model):
     ordering = ("order",)
 
 KIND_CHOICES = [
+  ('drawer','Drawer'),
+  ('table','Table'),
   ('bay','Bay'),
-  ('drawer','Drawer')
+  ('studio','Studio'),
 ]
 
 CONTAINER_STATUS_CHOICES = [
@@ -46,11 +48,11 @@ class Container(models.Model):
   subscription = models.ForeignKey("Subscription",null=True,blank=True)
   status = models.CharField(max_length=16,choices=CONTAINER_STATUS_CHOICES,default="used")
   kind = models.CharField(max_length=64,choices=KIND_CHOICES,default='bay')
-  __unicode__ = lambda self: "%s %s #%s - %s"%(self.room,self.get_kind_display(),self.number,self.get_user_display())
+  __unicode__ = lambda self: "%s %s #%s"%(self.room,self.get_kind_display(),self.number)
   def get_user_display(self):
     return "Empty" if not self.subscription else self.subscription.user
   class Meta:
-    ordering = ('number',)
+    ordering = ('room','number',)
 
 class Level(models.Model):
   name = models.CharField(max_length=64)

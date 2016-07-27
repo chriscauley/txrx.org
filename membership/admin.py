@@ -56,7 +56,8 @@ class FlagInline(admin.TabularInline):
 
 @admin.register(Container)
 class ContainerAdmin(admin.ModelAdmin):
-  pass
+  list_display = ("__unicode__","subscription")
+  raw_id_fields = ("subscription",)
 
 class MembershipFeatureInline(RawMixin,admin.TabularInline):
   extra = 0
