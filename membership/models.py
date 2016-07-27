@@ -37,17 +37,26 @@ KIND_CHOICES = [
 ]
 
 CONTAINER_STATUS_CHOICES = [
-  ("open","Open"),
   ("used","Used"),
+  ("canceled","Needs Email"),
+  ("emailed","Emailed"),
   ("maintenance","Maintenance"),
+  ("open","Open"),
 ]
 
 class Container(models.Model):
   number = models.IntegerField()
   room = models.ForeignKey('geo.Room')
-  subscription = models.ForeignKey("Subscription",null=True,blank=True)
-  status = models.CharField(max_length=16,choices=CONTAINER_STATUS_CHOICES,default="used")
+  subscription = models.OneToOneField("Subscription",null=True,blank=True)
+  _ht = "Automatically set when changes are made to subscription or container via admin."
+  status = models.CharField(max_length=16,choices=CONTAINER_STATUS_CHOICES,default="used",help_text=_ht)
   kind = models.CharField(max_length=64,choices=KIND_CHOICES,default='bay')
+
+  def get_cleanout_date(self):
+    if self.subscription:
+      return self.subscription.canceled + datetime.timedelta(settings.PAST_DUE_GRACE_PERIOD)
+    return datetime.datetime.now()
+
   __unicode__ = lambda self: "%s %s #%s"%(self.room,self.get_kind_display(),self.number)
   def get_user_display(self):
     return "Empty" if not self.subscription else self.subscription.user
@@ -137,6 +146,16 @@ class Subscription(models.Model):
   owed = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   last_status = property(lambda self: (self.status_set.all().order_by('-datetime') or [None])[0])
   __unicode__ = lambda self: "%s for %s"%(self.user,self.product)
+  def save(self,*args,**kwargs):
+    super(Subscription,self).save(*args,**kwargs)
+    container = self.container
+    if container:
+      if container.status == 'used' and self.canceled:
+        container.status = 'canceled'
+        container.save()
+      if container.status != 'used' and not self.canceled:
+        container.status == 'used'
+        container.save()
   def force_canceled(self):
     self.canceled = datetime.datetime.now()
     self.save()

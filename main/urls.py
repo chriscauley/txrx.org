@@ -120,6 +120,7 @@ urlpatterns += patterns(
   url(r'^door_access.json$','door_access',name='door_access_json'),
   url(r'^tool_access.json$','door_access',name='tool_access_json'),
   url(r'^tool_permission_table/$','tool_permission_table',name='tool_permission_table'),
+  url(r'^membership/container/(\d+)/','container',name='container'),
 )
 
 #notify urls

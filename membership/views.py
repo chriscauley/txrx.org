@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpRespons
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .models import Level, Group, MeetingMinutes, Officer, UserMembership, Subscription, Flag
+from .models import Level, Group, MeetingMinutes, Officer, UserMembership, Subscription, Flag, Container
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required, verify_unique_email
 
@@ -19,6 +19,7 @@ from thing.models import Thing
 from tool.models import Permission, Tool, APIKey
 
 from lablackey.utils import FORBIDDEN
+from lablackey.mail import send_template_email
 
 import datetime, json
 
@@ -241,3 +242,20 @@ def tool_permission_table(request):
     'levels': Level.objects.all()
   }
   return TemplateResponse(request,'tool/tool_permission_table.html',values)
+
+@staff_member_required
+def container(request,pk):
+  container = get_object_or_404(Container,pk=pk)
+  action = request.GET['action']
+  if action == "send_mail":
+    container.status = "emailed"
+    container.save()
+    values = {'container': container}
+    send_template_email("email/canceled_container",container.subscription.user.email,
+                        from_email="info@txrxlabs.org",context=values)
+    messages.success(request,"%s has been marked as emailed."%(container))
+  if action in ["emailed", "open","maintenance"]:
+    container.status = action
+    container.save()
+    messages.success(request,"%s has been marked as %s."%(container,action))
+  return HttpResponseRedirect("/admin/membership/container/%s"%container.pk)

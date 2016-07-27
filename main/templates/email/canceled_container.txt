@@ -1,0 +1,4 @@
+We regret to inform you that your membership at TXRX Labs is past due. Please renew your membership or clean out the {{ container.kind }} included with your membership by {{ container.get_cleanout_date|date:"l F jS, Y" }}. If you do not clean out your {{ container.kind }} our staff will clean it out for you and anything left in the bay will be discarded. If you have any questions please reply to this email.
+
+We are sad to see you go,
+The Staff at TXRX

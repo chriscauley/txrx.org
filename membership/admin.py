@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
+from django.template.defaultfilters import date
 from django import forms
 
 from models import (Group, Level, Feature, MembershipFeature, UserMembership, Product, Flag,
@@ -21,6 +22,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 class ContainerInline(admin.TabularInline):
   raw_id_fields = ('subscription',)
+  readonly_fields = ("status",)
   model = Container
   extra = 0
 
@@ -58,6 +60,26 @@ class FlagInline(admin.TabularInline):
 class ContainerAdmin(admin.ModelAdmin):
   list_display = ("__unicode__","subscription")
   raw_id_fields = ("subscription",)
+  readonly_fields = ("action",)
+  def action(self,obj=None):
+    link = '<a href="%s?action=%s">%s</a>'
+    if obj.status == "used":
+      return "User is paid up and no action can be taken until subscription is canceled."
+    if obj.status == "canceled":
+      email_link = link%("/membership/container/%s/"%obj.pk,"send_mail","email member about cancelation")
+      no_email_link = link%("/membership/container/%s/"%obj.pk,"emailed","mark emailed without notifying user.")
+      return "Member dues are past due. Please %s or %s."%(email_link,no_email_link)
+    if obj.status == "emailed":
+      canceled_datetime = obj.get_cleanout_date()
+      return "Member has been emailed that they are past due. "\
+        "This %s will be marked canceled on %s."%(obj.kind,date(canceled_datetime,("l F jS, Y")))
+    if obj.status == "maintenance":
+      link = link%("/membership/container/%s/"%obj.pk,"open","mark as open")
+      return "This %s needs maintenance. Please verify that it is ready and %s"%(obj.kind,link)
+    if obj.status == "open":
+      link = link%("/membership/container/%s/"%obj.pk,"maintenance","mark as needs maintentance")
+      return 'Status is open. You can %s if it needs cleaning or other work done.'%link
+  action.allow_tags = True
 
 class MembershipFeatureInline(RawMixin,admin.TabularInline):
   extra = 0
@@ -104,8 +126,8 @@ class CanceledBooleanFilter(admin.SimpleListFilter):
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
-  inlines = [StatusInline,FlagInline]
-  search_fields = ['user__username','user__email','user__paypal_email']
+  inlines = [FlagInline,ContainerInline,StatusInline]
+  search_fields = ['user__username','user__email','user__paypal_email','user__first_name','user__last_name']
   list_display = ("__unicode__","canceled")
   list_filter = [CanceledBooleanFilter]
   fields = (
