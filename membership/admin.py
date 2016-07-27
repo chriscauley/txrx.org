@@ -79,6 +79,8 @@ class ContainerAdmin(admin.ModelAdmin):
     if obj.status == "open":
       link = link%("/membership/container/%s/"%obj.pk,"maintenance","mark as needs maintentance")
       return 'Status is open. You can %s if it needs cleaning or other work done.'%link
+    if obj.status == "staff":
+      return "This drawer is marked as 'staff'. See notes."
   action.allow_tags = True
 
 class MembershipFeatureInline(RawMixin,admin.TabularInline):

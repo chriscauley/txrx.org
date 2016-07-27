@@ -38,6 +38,7 @@ KIND_CHOICES = [
 
 CONTAINER_STATUS_CHOICES = [
   ("used","Used"),
+  ("staff","Staff"),
   ("canceled","Needs Email"),
   ("emailed","Emailed"),
   ("maintenance","Maintenance"),
