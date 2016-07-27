@@ -51,6 +51,7 @@ class Container(models.Model):
   _ht = "Automatically set when changes are made to subscription or container via admin."
   status = models.CharField(max_length=16,choices=CONTAINER_STATUS_CHOICES,default="used",help_text=_ht)
   kind = models.CharField(max_length=64,choices=KIND_CHOICES,default='bay')
+  notes = models.TextField(null=True,blank=True)
 
   def get_cleanout_date(self):
     if self.subscription:

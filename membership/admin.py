@@ -22,7 +22,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 class ContainerInline(admin.TabularInline):
   raw_id_fields = ('subscription',)
-  readonly_fields = ("status",)
+  readonly_fields = ("status","notes")
   model = Container
   extra = 0
 
