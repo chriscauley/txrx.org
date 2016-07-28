@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.db import connection
+from django.db.models import Q
 
 from tagging.models import Tag
 
@@ -14,7 +15,7 @@ from redtape.models import Signature
 import datetime, time
 
 _materials = lambda: get_needed_sessions().filter(needed_completed__isnull=True).count()
-_containers = lambda: Container.objects.filter(status="maintenance").count()
+_containers = lambda: Container.objects.filter(Q(status='maintenance')|Q(status='canceled')).count()
 def _orientations():
   start = datetime.date.today()
   end = start + datetime.timedelta(1)

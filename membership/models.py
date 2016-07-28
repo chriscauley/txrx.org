@@ -150,14 +150,17 @@ class Subscription(models.Model):
   __unicode__ = lambda self: "%s for %s"%(self.user,self.product)
   def save(self,*args,**kwargs):
     super(Subscription,self).save(*args,**kwargs)
-    container = self.container
-    if container:
-      if container.status == 'used' and self.canceled:
-        container.status = 'canceled'
-        container.save()
-      if container.status != 'used' and not self.canceled:
-        container.status == 'used'
-        container.save()
+    try:
+      container = Container.objects.get(subscription=self)
+      if container:
+        if container.status == 'used' and self.canceled:
+          container.status = 'canceled'
+          container.save()
+        if container.status != 'used' and not self.canceled:
+          container.status == 'used'
+          container.save()
+    except Container.DoesNotExist:
+      pass
   def force_canceled(self):
     self.canceled = datetime.datetime.now()
     self.save()

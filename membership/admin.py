@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.template.defaultfilters import date
 from django import forms
 
@@ -56,15 +57,29 @@ class FlagInline(admin.TabularInline):
   model = Flag
   extra = 0
 
+class StaffContainerFilter(admin.SimpleListFilter):
+  title = "Needs Staff Attention?"
+  parameter_name = "needs Staff"
+  def lookups(self,request,model_admin):
+    return [('yes','Yes'),('no','No')]
+  def queryset(self,request,queryset):
+    if self.value() == 'yes':
+      return queryset.filter(Q(status='maintenance')|Q(status='canceled'))
+    return queryset
+
 @admin.register(Container)
 class ContainerAdmin(admin.ModelAdmin):
   list_display = ("__unicode__","subscription")
   raw_id_fields = ("subscription",)
-  readonly_fields = ("action",)
+  #list_filter = [StaffContainerFilter]
+  def get_readonly_fields(self,request,obj=None):
+    if obj and obj.status in ["used","canceled"]:
+      return ('action','status')
+    return ['action']
   def action(self,obj=None):
     link = '<a href="%s?action=%s">%s</a>'
     if obj.status == "used":
-      return "User is paid up and no action can be taken until subscription is canceled."
+      return "User is paid up and no action should be taken until subscription is canceled."
     if obj.status == "canceled":
       email_link = link%("/membership/container/%s/"%obj.pk,"send_mail","email member about cancelation")
       no_email_link = link%("/membership/container/%s/"%obj.pk,"emailed","mark emailed without notifying user.")
@@ -73,14 +88,8 @@ class ContainerAdmin(admin.ModelAdmin):
       canceled_datetime = obj.get_cleanout_date()
       return "Member has been emailed that they are past due. "\
         "This %s will be marked canceled on %s."%(obj.kind,date(canceled_datetime,("l F jS, Y")))
-    if obj.status == "maintenance":
-      link = link%("/membership/container/%s/"%obj.pk,"open","mark as open")
-      return "This %s needs maintenance. Please verify that it is ready and %s"%(obj.kind,link)
-    if obj.status == "open":
-      link = link%("/membership/container/%s/"%obj.pk,"maintenance","mark as needs maintentance")
-      return 'Status is open. You can %s if it needs cleaning or other work done.'%link
     if obj.status == "staff":
-      return "This drawer is marked as 'staff'. See notes."
+      return "This drawer is marked as 'staff'. See notes to see what it is used for."
   action.allow_tags = True
 
 class MembershipFeatureInline(RawMixin,admin.TabularInline):
