@@ -72,10 +72,22 @@ class ContainerAdmin(admin.ModelAdmin):
   list_display = ("__unicode__","status","subscription","notes")
   raw_id_fields = ("subscription",)
   list_filter = [StaffContainerFilter]
-  def get_readonly_fields(self,request,obj=None):
-    if obj and obj.status in ["used","canceled"]:
-      return ('action','status')
-    return ['action']
+  readonly_fields = ['action','links']
+  fields = [
+    ('number','room','kind'),
+    'subscription','status',
+    'notes',
+    'action',
+    'links'
+  ]
+  def links(self,obj=None):
+    if not obj.subscription:
+      return
+    link = '<b>%s: </b> <a href="/admin/%s/%s/">%s</a>'
+    sub = obj.subscription
+    out = link%("User",'user/user',sub.user.pk,sub.user)+"<br/>"
+    return out + link%("Subscription",'membership/subscription',sub.pk,sub)
+  links.allow_tags = True
   def action(self,obj=None):
     link = '<a href="%s?action=%s">%s</a>'
     if obj.status == "used":
@@ -137,7 +149,7 @@ class CanceledBooleanFilter(admin.SimpleListFilter):
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
-  inlines = [FlagInline,ContainerInline,StatusInline]
+  inlines = [FlagInline,StatusInline]
   search_fields = ['user__username','user__email','user__paypal_email','user__first_name','user__last_name']
   list_display = ("__unicode__","canceled")
   list_filter = [CanceledBooleanFilter]
@@ -147,9 +159,16 @@ class SubscriptionAdmin(admin.ModelAdmin):
     'created',
     ('amount','owed','paid_until'),
     ('canceled','_action'),
+    '_container',
   )
   raw_id_fields = ('user',)
-  readonly_fields = ('_action','paid_until','canceled','owed','edit_user')
+  readonly_fields = ('_container','_action','paid_until','canceled','owed','edit_user')
+  def _container(self,obj):
+    try:
+      return '<a href="/admin/membership/container/%s/">%s</a> %s'%(obj.container.pk,obj.container,obj.container.status)
+    except:
+      pass
+  _container.allow_tags = True
   def _action(self,obj):
     if not (obj and obj.pk):
       return "Save before creating actions."

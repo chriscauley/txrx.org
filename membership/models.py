@@ -68,7 +68,7 @@ class Container(models.Model):
     if self.status == 'used' and self.subscription.canceled:
       self.status = 'canceled'
     if self.status != 'used' and not self.subscription.canceled:
-      self.status == 'used'
+      self.status = 'used'
   def save(self,*args,**kwargs):
     self.update_status()
     super(Container,self).save()
