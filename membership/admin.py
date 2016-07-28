@@ -61,7 +61,7 @@ class StaffContainerFilter(admin.SimpleListFilter):
   title = "Needs Staff Attention?"
   parameter_name = "needs Staff"
   def lookups(self,request,model_admin):
-    return [('yes','Yes'),('no','No')]
+    return [('yes','Yes')]
   def queryset(self,request,queryset):
     if self.value() == 'yes':
       return queryset.filter(Q(status='maintenance')|Q(status='canceled'))
@@ -69,9 +69,9 @@ class StaffContainerFilter(admin.SimpleListFilter):
 
 @admin.register(Container)
 class ContainerAdmin(admin.ModelAdmin):
-  list_display = ("__unicode__","subscription")
+  list_display = ("__unicode__","status","subscription","notes")
   raw_id_fields = ("subscription",)
-  #list_filter = [StaffContainerFilter]
+  list_filter = [StaffContainerFilter]
   def get_readonly_fields(self,request,obj=None):
     if obj and obj.status in ["used","canceled"]:
       return ('action','status')

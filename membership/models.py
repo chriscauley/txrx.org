@@ -62,6 +62,16 @@ class Container(models.Model):
   __unicode__ = lambda self: "%s %s #%s"%(self.room,self.get_kind_display(),self.number)
   def get_user_display(self):
     return "Empty" if not self.subscription else self.subscription.user
+  def update_status(self):
+    if not self.subscription:
+      return
+    if self.status == 'used' and self.subscription.canceled:
+      self.status = 'canceled'
+    if self.status != 'used' and not self.subscription.canceled:
+      self.status == 'used'
+  def save(self,*args,**kwargs):
+    self.update_status()
+    super(Container,self).save()
   class Meta:
     ordering = ('room','number',)
 
@@ -152,13 +162,7 @@ class Subscription(models.Model):
     super(Subscription,self).save(*args,**kwargs)
     try:
       container = Container.objects.get(subscription=self)
-      if container:
-        if container.status == 'used' and self.canceled:
-          container.status = 'canceled'
-          container.save()
-        if container.status != 'used' and not self.canceled:
-          container.status == 'used'
-          container.save()
+      container.save() # Triggers update_status
     except Container.DoesNotExist:
       pass
   def force_canceled(self):

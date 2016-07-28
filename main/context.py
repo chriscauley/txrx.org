@@ -49,7 +49,7 @@ def nav(request):
     {'name': 'Permissions','url': '/toolmaster'},
     {'name': 'Materials Needed','url': '/needed-sessions/','reddot': _materials },
     {'name': 'Orientations','url': '/event/orientations/','reddot': _orientations },
-    {'name': 'Bays + Tables', 'url': '/bays-tables/', 'reddot': _containers},
+    {'name': 'Bays + Tables', 'url': '/admin/membership/container/?needs+Staff=yes&o=2', 'reddot': _containers},
   ]
   if getattr(request.user,'is_gatekeeper',False):
     toolmaster_sublinks.append({'name': 'Set RFID','url': '/rfid/'})
