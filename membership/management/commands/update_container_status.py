@@ -6,7 +6,7 @@ from lablackey.mail import print_to_mail
 import datetime
 
 class Command(BaseCommand):
-  @print_to_mail(subject='Container Statuses')
+  @print_to_mail(subject='Container Statuses',notify_empty=lambda:False)
   def handle(self, *args, **options):
     for container in Container.objects.all():
       status = container.status

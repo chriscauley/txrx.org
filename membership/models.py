@@ -45,6 +45,8 @@ CONTAINER_STATUS_CHOICES = [
   ("open","Open"),
 ]
 
+PAST_DUE_GRACE_PERIOD = datetime.timedelta(getattr(settings,"PAST_DUE_GRACE_PERIOD",0))
+
 class Container(models.Model):
   number = models.IntegerField()
   room = models.ForeignKey('geo.Room')
@@ -56,19 +58,23 @@ class Container(models.Model):
 
   def get_cleanout_date(self):
     if self.subscription:
-      return self.subscription.canceled + datetime.timedelta(settings.PAST_DUE_GRACE_PERIOD)
+      return self.subscription.canceled + PAST_DUE_GRACE_PERIOD
     return datetime.datetime.now()
 
   __unicode__ = lambda self: "%s %s #%s"%(self.room,self.get_kind_display(),self.number)
   def get_user_display(self):
     return "Empty" if not self.subscription else self.subscription.user
   def update_status(self):
-    if not self.subscription:
+    if not self.subscription and self.status in ['used','canceled','emailed']:
+      self.status = 'open'
       return
-    if self.status == 'used' and self.subscription.canceled:
+    canceled = self.subscription.canceled
+    if self.status in ['open','used'] and canceled:
       self.status = 'canceled'
-    if self.status != 'used' and not self.subscription.canceled:
+    if self.status != 'used' and not canceled:
       self.status = 'used'
+    if self.status == 'emailed' and canceled < (datetime.datetime.now()+PAST_DUE_GRACE_PERIOD):
+      self.status = "maintenance"
   def save(self,*args,**kwargs):
     self.update_status()
     super(Container,self).save()
