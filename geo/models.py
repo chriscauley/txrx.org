@@ -90,7 +90,7 @@ class RoomGroup(models.Model):
     return {
       'name': self.name,
       'color': self.color,
-      'fill': self.fill.file.url,
+      'fill': self.fill.file.url if self.fill else None,
     }
 
 class Room(models.Model):
