@@ -11,7 +11,7 @@
 <ol>
   {% for enrollment in session.enrollment_set.all %}
   <li>
-    {{ enrollment.user.email }} - {{ enrollment.user.get_full_name }}
+    {{ enrollment.user.email }} - {{ enrollment.user.get_short_name }}
   </li>
   {% endfor %}
 </ol>

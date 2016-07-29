@@ -12,7 +12,7 @@ def contact(request):
   initial = {}
   if request.user.is_authenticated():
     initial['from_email'] = request.user.email
-    initial['from_name'] = request.user.get_full_name() or request.user.username
+    initial['from_name'] = request.user.get_full_name()
   try:
     initial['contactsubject'] = Subject.objects.get(slug=request.GET.get('slug',''))
   except Subject.DoesNotExist:
