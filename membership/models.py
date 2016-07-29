@@ -67,6 +67,7 @@ class Container(models.Model):
   def update_status(self):
     if not self.subscription and self.status in ['used','canceled','emailed']:
       self.status = 'open'
+    if not self.subscription:
       return
     canceled = self.subscription.canceled
     if self.status in ['open','used'] and canceled:
