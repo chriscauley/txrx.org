@@ -91,6 +91,7 @@ TXRX.schema = {
 
 uR.config.button_class = "btn-primary";
 uR.config.cancel_class = "btn-danger";
+uR.config.mount_to = "#main";
 uR.ajax({
   url: "/user.json?"+new Date(),
   success: function(data) {
