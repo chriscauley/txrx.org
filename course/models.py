@@ -210,7 +210,7 @@ class CourseRoomTime(models.Model):
   hours_at = models.FloatField(default=0,help_text="Number of hours at location. 0 = Until class ends.")
   day = models.IntegerField(default=0,choices=DAY_CHOICES)
   order = models.IntegerField(default=999)
-  __unicode__ = lambda self: "%s at %s in %s"%(self.get_day_display(),self.time,self.room)
+  __unicode__ = lambda self: "%s in %s for %s hours"%(self.get_day_display(),self.room,self.hours_at)
   seconds_at = property(lambda self: self.hours_at * 3600)
   class Meta:
     ordering = ('day','order')
