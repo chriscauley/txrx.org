@@ -27,6 +27,15 @@
     document.body.appendChild(e);
     riot.mount("modal",opts);
   };
+  $(function() {
+    $(".vForeignKeyRawIdAdminField").each(function(i) {
+      if (!this.value) { return; }
+      var url = $(this).parent().find(".related-lookup")[0].href.split("?")[0]+this.value+"/";
+      var link = "<a href='"+url+"' class='fa fa-edit' style='text-decoration:none;margin-left: 10px;''></a>"
+      $(this).parent().find("strong").append(link);
+    });;
+    
+  });
 </script>
 <style>
   .form-row .edit {font-size: 2em; position: absolute; right: 105%; text-decoration: none !important; z-index: 1; }
