@@ -2,7 +2,7 @@
   <div class="inner">
     <img class="logo" src="/static/logos/Logo-1_vertical_color_475x375.png" width="200" />
     <div if={ kiosk && !email_checkin }>
-      <p class="lead">Please swipe your RFID to checkin.</p>
+      <p class="lead" style="text-align: center;">Please swipe your RFID to checkin.</p>
       <button if={ TXRX.DEBUG } onclick={ toggleCheckin } class="btn btn-success">Checking Using Email</button>
       <br />
       <button if={ TXRX.DEBUG } onclick={ fakeRFID } class="btn btn-warning">Fake RFID</button>
@@ -19,7 +19,7 @@
       <br />
       <button class="btn btn-success">Checkin as { TXRX.user.username }</button>
     </center>
-    <ul if={ messages } class="messagelist">
+    <ul if={ messages.length } class="messagelist">
       <li each={ messages } class="alert alert-{ level }">{ body }</li>
     </ul>
     <div class="row">
@@ -29,8 +29,9 @@
           <div class="card-content">
             <div class="card-title">{ start_string }-{ end_string }</div>
             <div>
-              { instructor?"Teaching:":"" } { session.course_name }.<br/>
-              Meet at: { first_room.name }
+              <div if={ instructor }><b>You're teaching!</b></div>
+              { session.course_name }.<br/>
+              <div if={ first_room.name }>Meet at: { first_room.name }</div>
             </div>
           </div>
         </div>
@@ -54,7 +55,7 @@
         </div>
       </div>
     </div>
-    <center>
+    <center if={ !TXRX.user.id }>
       <button if={ classtimes.length || permissions.length || messages.length }
               class="btn btn-success" onclick={ clear }>Back</button>
     </center>
@@ -122,10 +123,10 @@
       classtime.session = data.sessions[classtime.session_id];
       classtime.start_string = moment(classtime.start).format("h:mm A");
       classtime.end_string = moment(classtime.end).format("h:mm A");
+      classtime.instructor = classtime.session.instructor_pk == data.user_id;
     });
     clearTimeout(this.timeout);
-    this.messages = data.messages;
-    this.timeout = setTimeout(self.clear,30000);
+    if (!(TXRX.user && TXRX.user.id)) { this.timeout = setTimeout(self.clear,30000); }
     self.permissions = [];
     uR.forEach(TXRX.permissions,function(permission) {
       if (data.permission_ids.indexOf(permission.id) != -1) { self.permissions.push(permission) }
@@ -133,9 +134,9 @@
   }
   clear(e) {
     clearTimeout(this.timeout);
-    this.messages = [];
-    this.permissions = [];
-    this.classtimes = [];
+    self.permissions = [];
+    self.classtimes = [];
+    self.ur_form.clear();
     self.update();
   }
   press(e) {

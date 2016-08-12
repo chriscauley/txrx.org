@@ -47,6 +47,7 @@ def checkin_ajax(request):
     'classtimes': [c.as_json for c in _ct],
     'sessions': {c.session_id: c.session.as_json for c in _ct},
     'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(user)],
+    'user_id': user.id,
   }
   return HttpResponse(json.dumps(out))
 
