@@ -85,14 +85,14 @@ def get_room_conflicts(base_occurrence=None):
     end_time = start_time+datetime.timedelta(1)
     room = base_occurrence.room
     _class_times = ClassTime.objects.filter(start__gte=start_time,start__lte=end_time,
-                                           session__course__no_conflict=False)
+                                            session__course__no_conflict=False)
     occurrences = EventOccurrence.objects.filter(start__gte=start_time,start__lte=end_time,event__no_conflict=False)
   else:
     # Look accross the next 60 days in all rooms
     start_time = datetime.datetime.now()-datetime.timedelta(0,block_size)
     end_time = datetime.datetime.now()+datetime.timedelta(90)
     _class_times = ClassTime.objects.filter(start__gte=start_time,start__lte=end_time,
-                                           session__course__no_conflict=False)
+                                            session__course__no_conflict=False)
     occurrences = EventOccurrence.objects.filter(start__gte=start_time,start__lte=end_time,event__no_conflict=False)
   rooms = Room.objects.all()
   class_times = []

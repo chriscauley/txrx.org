@@ -204,6 +204,19 @@ DAY_CHOICES = [
   (5, "Day 5"),
 ]
 
+class SessionRoomTime(object):
+  get_absolute_url = lambda self: self.session.get_absolute_url()
+  get_admin_url = lambda self: self.session.get_admin_url()
+  def __init__(self,**kwargs):
+    for k,v in kwargs.items():
+      setattr(self,k,v)
+    self.end = self.start.replace(hour=self.end_time.hour,minute=self.end_time.minute)
+    self.short_name = self.session.course
+  def __hash__(self):
+    h = hash("%s__%s__%s"%(self.short_name.id,self.start,self.end))
+    print self.short_name,":","%s__%s__%s"%(self.short_name.id,self.start,self.end)
+    return h
+
 class CourseRoomTime(models.Model):
   course = models.ForeignKey(Course)
   room = models.ForeignKey(Room)
@@ -424,23 +437,25 @@ class ClassTime(OccurrenceModel):
     out = []
     current_datetime = self.start
     for roomtime in roomtimes:
-      remaining = current_datetime-self.end
-      occurrence = OccurrenceModel(
+      remaining = self.end-current_datetime
+      occurrence = SessionRoomTime(
         start=current_datetime,
-        end_time=(current_datetime + datetime.timedelta(roomtime.seconds_at) or remaining).time(),
+        end_time=(current_datetime + datetime.timedelta(0,roomtime.seconds_at) or remaining).time(),
+        name = "%s at %s for %s hours"%(course,roomtime.room,roomtime.hours_at),
+        room = roomtime.room,
+        session = self.session
       )
-      occurrence.name = "%s at %s for %s hours"%(course,roomtime.room,roomtime.hours_at)
-      occurrence.room = roomtime.room
       current_datetime = occurrence.end
       out.append(occurrence)
     if occurrence.end != self.end:
       remaining = current_datetime-self.end
-      occurrence = OccurrenceModel(
+      occurrence = SessionRoomTime(
         start=current_datetime,
-        end_time=self.end_time
+        end_time=self.end_time,
+        room = roomtime.room,
+        name = "%s at %s until end (%s)"%(course,course.room,occurrence.end_time),
+        session = self.session,
       )
-      occurrence.room = roomtime.room
-      occurrence.name = "%s at %s until end (%s)"%(course,course.room,occurrence.end_time)
       out.append(occurrence)
     return out
   class Meta:
