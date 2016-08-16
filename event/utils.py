@@ -103,7 +103,7 @@ def get_room_conflicts(base_occurrence=None):
 
   # combine events and classes because they have similar enough APIs to treat them the same 
   for class_time in class_times:
-    event_tuples.append((class_time,class_time.session.course.room))
+    event_tuples.append((class_time,class_time.room))
   for occurrence in occurrences:
     event_tuples.append((occurrence, occurrence.get_room()))
 

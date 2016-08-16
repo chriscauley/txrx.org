@@ -11,7 +11,7 @@
       </div>
     </div>
     <div if={ email_checkin }>
-      <p class="lead">Enter your email below to checkin</p>
+      <p class="lead"><center>Enter your email below to checkin</center></p>
       <ur-form action="/checkin_ajax/" button_text="Check In" schema={ email_schema }></ur-form>
       <button if={ kiosk } onclick={ toggleCheckin } class="btn btn-success">Checkin Using RFID</button>
     </div>

@@ -424,24 +424,24 @@ class ClassTime(OccurrenceModel):
     out = []
     current_datetime = self.start
     for roomtime in roomtimes:
-      remaining = current_datetime.start-self.end
+      remaining = current_datetime-self.end
       occurrence = OccurrenceModel(
         start=current_datetime,
         end_time=(current_datetime + datetime.timedelta(roomtime.seconds_at) or remaining).time(),
       )
       occurrence.name = "%s at %s for %s hours"%(course,roomtime.room,roomtime.hours_at)
       occurrence.room = roomtime.room
-      current_datetime = occurence.end
-      out.push(occurrence)
-    if occurence.end != self.end:
-      remaining = current_datetime.start-self.end
+      current_datetime = occurrence.end
+      out.append(occurrence)
+    if occurrence.end != self.end:
+      remaining = current_datetime-self.end
       occurrence = OccurrenceModel(
         start=current_datetime,
         end_time=self.end_time
       )
       occurrence.room = roomtime.room
-      occurrence.name = "%s at %s until end (%s)"%(course,course.room,occurrenc.end_time)
-      out.push(occurrence)
+      occurrence.name = "%s at %s until end (%s)"%(course,course.room,occurrence.end_time)
+      out.append(occurrence)
     return out
   class Meta:
     ordering = ("start",)
