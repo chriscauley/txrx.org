@@ -8,7 +8,12 @@
 body { width: 100%;}
 body,html { height: 100%; overflow-x: hidden; }
 
-.fa { line-height: inheirt; }
+
+.fa {
+  font-family: inherit;
+  line-height: inherit;
+  &:before { font-family: FontAwesome; }
+}
 @media (max-width: @screen-xs-max) {
   .container{
     max-width:@screen-xs-min;
