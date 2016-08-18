@@ -22,6 +22,7 @@
     "/my-permissions/": function() { mainMount('badge') },
     "/rfid/": function() { mainMount("set-rfid"); },
     "/week-hours/": function() { mainMount("week-hours"); },
+    "/todays-checkins/": function() { mainMount("todays-checkins"); },
     "/needed-sessions/": function() { fromTemplate("needed-sessions"); }
   };
   TXRX.mainMount = mainMount;

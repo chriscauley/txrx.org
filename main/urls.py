@@ -15,6 +15,7 @@ _urls = lambda *ns: [url(r'^%s/'%n, include('%s.urls'%n, namespace=n, app_name=n
 _pages = [
   'checkin',
   'checkout',
+  'todays-checkins',
   'my-permissions',
   'needed-sessions',
   'rooms',
@@ -64,6 +65,7 @@ urlpatterns = patterns(
   url(r'^checkin_ajax/$', 'user.views.checkin_ajax', name='checkin_ajax'),
   url(r'^add_rfid/$', 'user.views.add_rfid', name='add_rfid'),
   url(r'^user.json','user.views.user_json'),
+  url(r'^todays_checkins.json','user.views.todays_checkins_json'),
   url(r'^redtape/',include("redtape.urls")),
 )
 

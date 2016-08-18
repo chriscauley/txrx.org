@@ -12,6 +12,8 @@ from django.utils.translation import ugettext_lazy as _
 from membership.models import Level
 from tool.models import UserCriterion, Criterion
 
+import datetime
+
 class UserManager(BaseUserManager):
   def _create_user(self, username,  email, password, is_staff, is_superuser, **extra_fields):
     if not email:
@@ -35,7 +37,9 @@ class UserManager(BaseUserManager):
     except (self.model.DoesNotExist, self.model.MultipleObjectsReturned):
       pass
   def get_from_anything(self,value):
-    return self.get_or_none(models.Q(username=value) | models.Q(email=value) | models.Q(paypal_email=value))
+    return self.get_or_none(models.Q(username__iexact=value) |
+                            models.Q(email__iexact=value) |
+                            models.Q(paypal_email__iexact=value))
 
 ORIENTATION_STATUS_CHOICES = [
   ('new','New'),
@@ -147,6 +151,15 @@ class UserNote(models.Model):
   note = models.CharField(max_length=256)
   added = models.DateTimeField(auto_now_add=True)
 
+class UserCheckinManager(models.Manager):
+  def checkin_today(self,*args,**kwargs):
+    defaults = kwargs.pop('defaults',{})
+    try:
+      return self.get(time_in__gte=datetime.date.today(),*args,**kwargs), False
+    except self.model.DoesNotExist:
+      kwargs.update(defaults)
+      return self.create(*args,**kwargs), True
+
 class UserCheckin(models.Model):
   user = models.ForeignKey(User)
   time_in = models.DateTimeField(auto_now_add=True)
@@ -154,5 +167,6 @@ class UserCheckin(models.Model):
   content_type = models.ForeignKey("contenttypes.ContentType")
   object_id = models.IntegerField()
   content_object = GenericForeignKey('content_type', 'object_id')
+  objects = UserCheckinManager()
 
 from .listeners import *

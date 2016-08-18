@@ -1,3 +1,91 @@
+<user-checkin>
+  <div class="row">
+    <div class="col s6" if={ subscriptions }>
+      <h4>Subscriptions</h4>
+      <div class="card { card_class } white-text" each={ subscriptions }>
+        <div class="card-content">
+          <div>
+            <a href="/admin/membership/subscription/{ id }/" if={ TXRX.user.is_superuser }
+               class="fa fa-edit white-text right"></a>
+            <b>{ month_str } { level }</b>
+          </div>
+          <div>Start Date: { created_str }</div>
+          { verbose_status }
+        </div>
+      </div>
+    </div>
+    <div class="col s6" if={ classtimes.length }>
+      <h4>Classes Today</h4>
+      <div each={ classtimes } class="card">
+        <div class="card-content">
+          <div class="card-title">{ start_string }-{ end_string }</div>
+          <div>
+            <div if={ instructor }><b>You&rsquo;re teaching!</b></div>
+            { session.course_name }.<br/>
+            <div if={ first_room.name }>Meet at: { first_room.name }</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col s6" if={ permissions.length }>
+      <h4>Permissions</h4>
+      <div each={ permissions } class="card"><div class="card-title">{ name }</div></div>
+      <div class="card">
+        <a href="javascript:void(0)" class="ur-tooltip">
+          <div class="card-title">Missing Anything?</div>
+          <div class="ur-tooltip-content card">
+            <div class="card-content">
+              Our record keeping on class completions does not go far back
+              so please check for missing permissions.
+              If you are missing any permissions please email info@txrxlabs.org so we can get it straightened out.
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  var self = this
+  this.on("mount",function() {
+    var checkin = opts.checkin;
+    this.permissions = checkin.permissions;
+    this.subscriptions = checkin.subscriptions;
+    uR.forEach(this.subscriptions || [],function(subscription) {
+      subscription.created_str = moment(new Date(subscription.created)).format('l');
+    });
+    this.classtimes = checkin.classtimes;
+    uR.forEach(this.classtimes || [],function(classtime) {
+      classtime.session = checkin.sessions[classtime.session_id];
+      classtime.start_string = moment(classtime.start).format("h:mm A");
+      classtime.end_string = moment(classtime.end).format("h:mm A");
+      classtime.instructor = classtime.session.instructor_pk == checkin.user_id;
+    });
+    this.permissions = [];
+    uR.forEach(TXRX.permissions,function(permission) {
+      if (checkin.permission_ids.indexOf(permission.id) != -1) { self.permissions.push(permission) }
+    });
+    this.update()
+  })
+</user-checkin>
+
+<todays-checkins>
+  <div class="card" each={ checkin in checkins }>
+    <div class="card-content">
+      <div class="card-title">{ checkin.user_display_name }</div>
+      <user-checkin checkin={ checkin }></user-checkin>
+    </div>
+  </div>
+
+  var self = this;
+  uR.ajax({
+    url: "/todays_checkins.json",
+    success: function(data) {
+      self.checkins = data.checkins;
+    },
+    that: this
+  });
+</todays-checkins>
+
 <checkin-home>
   <div class="inner">
     <img class="logo" src="/static/logos/Logo-1_vertical_color_475x375.png" width="200" />
@@ -22,53 +110,7 @@
     <ul if={ messages.length } class="messagelist">
       <li each={ messages } class="alert alert-{ level }">{ body }</li>
     </ul>
-    <div class="row">
-      <div class="col s6" if={ subscriptions }>
-        <h4>Subscriptions</h4>
-        <div class="card { card_class } white-text" each={ subscriptions }>
-          <div class="card-content">
-            <div>
-              <a href="/admin/membership/subscription/{ id }/" if={ TXRX.user.is_superuser }
-                 class="fa fa-edit white-text right"></a>
-              <b>{ month_str } { level }</b>
-            </div>
-            <div>Start Date: { created_str }</div>
-            { verbose_status }
-          </div>
-        </div>
-      </div>
-      <div class="col s6" if={ classtimes.length }>
-        <h4>Classes Today</h4>
-        <div each={ classtimes } class="card">
-          <div class="card-content">
-            <div class="card-title">{ start_string }-{ end_string }</div>
-            <div>
-              <div if={ instructor }><b>You&rsquo;re teaching!</b></div>
-              { session.course_name }.<br/>
-              <div if={ first_room.name }>Meet at: { first_room.name }</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col s6" if={ permissions.length }>
-        <h4>Permissions</h4>
-        <div each={ permissions } class="card"><div class="card-title">{ name }</div></div>
-        <div class="card">
-          <a href="javascript:void(0)" class="ur-tooltip">
-            <div class="card-title">Missing Anything?</div>
-            <div class="ur-tooltip-content card">
-              <div class="card-content">
-                Our record keeping on class completions does not go super far back,
-                so please check for missing permissions.
-                If you are missing any permissions please email info@txrxlabs.org so we can get it straightened out.
-              </div>
-            </div>
-          </a>
-        </div>
-        <div>
-        </div>
-      </div>
-    </div>
+    <user-checkin if={ checkin } checkin={ checkin }></user-checkin>
     <center if={ !TXRX.user.id }>
       <button if={ classtimes.length || permissions.length || messages.length }
               class="btn btn-success" onclick={ clear }>Back</button>
@@ -132,23 +174,9 @@
       riot.mount(data.next,data);
       return;
     }
-    self.subscriptions = data.subscriptions;
-    uR.forEach(self.subscriptions || [],function(subscription) {
-      subscription.created_str = moment(new Date(subscription.created)).format('l');
-    });
-    self.classtimes = data.classtimes;
-    uR.forEach(self.classtimes || [],function(classtime) {
-      classtime.session = data.sessions[classtime.session_id];
-      classtime.start_string = moment(classtime.start).format("h:mm A");
-      classtime.end_string = moment(classtime.end).format("h:mm A");
-      classtime.instructor = classtime.session.instructor_pk == data.user_id;
-    });
+    self.checkin = data.checkin;
     clearTimeout(this.timeout);
     if (!(TXRX.user && TXRX.user.id)) { this.timeout = setTimeout(self.clear,30000); }
-    self.permissions = [];
-    uR.forEach(TXRX.permissions,function(permission) {
-      if (data.permission_ids.indexOf(permission.id) != -1) { self.permissions.push(permission) }
-    });
   }
   clear(e) {
     clearTimeout(this.timeout);

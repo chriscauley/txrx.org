@@ -18,6 +18,29 @@ from lablackey.utils import get_or_none
 
 import json, datetime
 
+def checkin_json(user):
+  today = datetime.date.today()
+  tomorrow = today + datetime.timedelta(1)
+  if settings.DEBUG:
+    tomorrow = tomorrow+datetime.timedelta(10)
+  _q = Q(session__enrollment__user=user) | Q(session__user=user)
+  _ct = ClassTime.objects.filter(_q,start__gte=today,start__lte=tomorrow)
+  return {
+    'classtimes': [c.as_json for c in _ct],
+    'sessions': {c.session_id: c.session.as_json for c in _ct},
+    'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(user)],
+    'user_id': user.id,
+    'user_display_name': user.get_full_name(),
+    'subscriptions': [s.as_json for s in user.subscription_set.all()],
+  }
+
+@staff_member_required
+def todays_checkins_json(request):
+  checkins = UserCheckin.objects.filter(time_in__gte=datetime.datetime.now().replace(hour=0,minute=0))
+  return JsonResponse({
+    'checkins': [checkin_json(checkin.user) for checkin in checkins],
+  })
+
 def checkin_ajax(request):
   rfid = request.GET.get('rfid',None)
   user = get_or_none(User,rfid__number=rfid or 'notavalidrfid')
@@ -34,21 +57,11 @@ def checkin_ajax(request):
     pass #return HttpResponse(json.dumps({'no_waiver': email}))
   defaults = {'content_object': Room.objects.get(name='')}
   if not request.GET.get('no_checkin',None):
-    checkin, new = UserCheckin.objects.get_or_create(user=user,time_out__isnull=True,defaults=defaults)
+    checkin, new = UserCheckin.objects.checkin_today(user=user,defaults=defaults)
     messages.append({'level': 'success', 'body': '%s checked in at %s'%(user,checkin.time_in)})
-  today = datetime.date.today()
-  tomorrow = today + datetime.timedelta(1)
-  if settings.DEBUG:
-    tomorrow = tomorrow+datetime.timedelta(10)
-  _q = Q(session__enrollment__user=user) | Q(session__user=user)
-  _ct = ClassTime.objects.filter(_q,start__gte=today,start__lte=tomorrow)
   out = {
     'messages': messages,
-    'classtimes': [c.as_json for c in _ct],
-    'sessions': {c.session_id: c.session.as_json for c in _ct},
-    'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(user)],
-    'user_id': user.id,
-    'subscriptions': [s.as_json for s in user.subscription_set.all()],
+    'checkin': checkin_json(user),
   }
   return JsonResponse(out)
 
