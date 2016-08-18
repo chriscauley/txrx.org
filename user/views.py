@@ -25,13 +25,15 @@ def checkin_json(user):
     tomorrow = tomorrow+datetime.timedelta(10)
   _q = Q(session__enrollment__user=user) | Q(session__user=user)
   _ct = ClassTime.objects.filter(_q,start__gte=today,start__lte=tomorrow)
+  _sq = Q(canceled__gte=datetime.datetime.now()-datetime.timedelta(90)) | Q(canceled__isnull=True)
+  _s = user.subscription_set.filter(_sq).order_by("-canceled")
   return {
     'classtimes': [c.as_json for c in _ct],
     'sessions': {c.session_id: c.session.as_json for c in _ct},
     'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(user)],
     'user_id': user.id,
     'user_display_name': user.get_full_name(),
-    'subscriptions': [s.as_json for s in user.subscription_set.all()],
+    'subscriptions': [s.as_json for s in _s],
   }
 
 @staff_member_required

@@ -1,6 +1,6 @@
 <user-checkin>
   <div class="row">
-    <div class="col s6" if={ subscriptions }>
+    <div class="col s6" if={ subscriptions.length }>
       <h4>Subscriptions</h4>
       <div class="card { card_class } white-text" each={ subscriptions }>
         <div class="card-content">
@@ -69,10 +69,16 @@
 </user-checkin>
 
 <todays-checkins>
-  <div class="card" each={ checkin in checkins }>
-    <div class="card-content">
-      <div class="card-title">{ checkin.user_display_name }</div>
-      <user-checkin checkin={ checkin }></user-checkin>
+  <div class="collapsible collapsible-accordion">
+    <div each={ checkin,i in checkins } onclick={ toggleIt } class={ active: active == i }>
+      <div class="collapsible-header">
+        { checkin.user_display_name } ({ checkin.sub_str })
+      </div>
+      <div class="collapsible-body">
+        <div class="collapsible-inner">
+          <user-checkin checkin={ checkin }></user-checkin>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -81,9 +87,16 @@
     url: "/todays_checkins.json",
     success: function(data) {
       self.checkins = data.checkins;
+      uR.forEach(self.checkins,function(checkin) {
+        var _s = checkin.subscriptions[0];
+        checkin.sub_str = _s?(_s.level+" "+_s.verbose_status):"Non-member";
+      });
     },
     that: this
   });
+  toggleIt(e) {
+    this.active = (e.item.i==this.active)?undefined:e.item.i;
+  }
 </todays-checkins>
 
 <checkin-home>

@@ -7,3 +7,19 @@ body, html {
 .fa { line-height: inherit; }
 
 @import "checkin.less";
+
+// materialize overrides :(
+
+.collapsible {
+  .collapsible-body {
+    display: block;
+    max-height: 0;
+    overflow: auto;
+    transition: max-height 0.25s;
+    p { margin: 0; }
+    .collapsible-inner { padding: 1rem; }
+  }
+  > .active > {
+    .collapsible-body { max-height: 500px; }
+  }
+}
