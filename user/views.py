@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
@@ -14,7 +14,7 @@ from geo.models import Room
 from redtape.models import Signature
 from tool.models import Criterion, UserCriterion, Permission
 
-from lablackey.utils import get_or_none, JsonResponse
+from lablackey.utils import get_or_none
 
 import json, datetime
 
@@ -48,8 +48,9 @@ def checkin_ajax(request):
     'sessions': {c.session_id: c.session.as_json for c in _ct},
     'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(user)],
     'user_id': user.id,
+    'subscriptions': [s.as_json for s in user.subscription_set.all()],
   }
-  return HttpResponse(json.dumps(out))
+  return JsonResponse(out)
 
 def add_rfid(request):
   rfid = request.POST['rfid']
@@ -103,7 +104,7 @@ def set_rfid(request):
   response = {
     'rfids': list(RFID.objects.filter(user=user).values_list("number",flat=True)),
   }
-  return HttpResponse(json.dumps(response))
+  return JsonResponse(response)
 
 @staff_member_required
 def remove_rfid(request):
@@ -112,4 +113,4 @@ def remove_rfid(request):
   response = {
     'rfids': list(RFID.objects.filter(user=user).values_list("number",flat=True)),
   }
-  return HttpResponse(json.dumps(response))
+  return JsonResponse(response)

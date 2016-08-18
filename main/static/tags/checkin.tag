@@ -23,13 +23,27 @@
       <li each={ messages } class="alert alert-{ level }">{ body }</li>
     </ul>
     <div class="row">
+      <div class="col s6" if={ subscriptions }>
+        <h4>Subscriptions</h4>
+        <div class="card { card_class } white-text" each={ subscriptions }>
+          <div class="card-content">
+            <div>
+              <a href="/admin/membership/subscription/{ id }/" if={ TXRX.user.is_superuser }
+                 class="fa fa-edit white-text right"></a>
+              <b>{ month_str } { level }</b>
+            </div>
+            <div>Start Date: { created_str }</div>
+            { verbose_status }
+          </div>
+        </div>
+      </div>
       <div class="col s6" if={ classtimes.length }>
         <h4>Classes Today</h4>
         <div each={ classtimes } class="card">
           <div class="card-content">
             <div class="card-title">{ start_string }-{ end_string }</div>
             <div>
-              <div if={ instructor }><b>You're teaching!</b></div>
+              <div if={ instructor }><b>You&rsquo;re teaching!</b></div>
               { session.course_name }.<br/>
               <div if={ first_room.name }>Meet at: { first_room.name }</div>
             </div>
@@ -118,6 +132,10 @@
       riot.mount(data.next,data);
       return;
     }
+    self.subscriptions = data.subscriptions;
+    uR.forEach(self.subscriptions || [],function(subscription) {
+      subscription.created_str = moment(new Date(subscription.created)).format('l');
+    });
     self.classtimes = data.classtimes;
     uR.forEach(self.classtimes || [],function(classtime) {
       classtime.session = data.sessions[classtime.session_id];

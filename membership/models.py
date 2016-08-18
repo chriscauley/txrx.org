@@ -145,7 +145,7 @@ class Product(Product):
   level = models.ForeignKey(Level)
   months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
   order = models.IntegerField(default=0)
-  __unicode__ = lambda self: "%s months of %s"%(self.months,self.level)
+  __unicode__ = lambda self: "%s %s"%(self.get_months_display(),self.level)
   def save(self,*args,**kwargs):
     self.slug = "__membershipproduct__%s"%(self.pk or random.randint(0,10000))
     super(Product,self).save(*args,**kwargs)
@@ -165,6 +165,10 @@ class Subscription(models.Model):
   owed = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   last_status = property(lambda self: (self.status_set.all().order_by('-datetime') or [None])[0])
   __unicode__ = lambda self: "%s for %s"%(self.user,self.product)
+  json_fields = ['id','user_id','created','canceled','verbose_status','month_str','level','card_class']
+  @property
+  def as_json(self):
+    return {k: getattr(self,k) for k in self.json_fields}
   def save(self,*args,**kwargs):
     super(Subscription,self).save(*args,**kwargs)
     try:
@@ -177,6 +181,18 @@ class Subscription(models.Model):
     self.save()
     self.recalculate()
     self.flag_set.exclude(status__in=['final_warning','resolved','paid']).update(status='canceled')
+  @property
+  def card_class(self):
+    if Flag.objects.filter_pastdue(subscription=self):
+      return "yellow"
+    if self.canceled:
+      return "blue"
+    if self.owed > 0:
+      return "yellow"
+    if not self.status_set.count():
+      return "blue"
+    return "green"
+  #! TODO depracated
   def bs_class(self):
     if Flag.objects.filter_pastdue(subscription=self):
       return "warning"
@@ -187,6 +203,13 @@ class Subscription(models.Model):
     if self.owed > 0:
       return "danger"
     return "success"
+  @property
+  def month_str(self):
+    return str(self.product.get_months_display())
+  @property
+  def level(self):
+    return str(self.product.level)
+  @property
   def verbose_status(self):
     if self.owed > 0:
       return "Overdue by %s"%self.owed
