@@ -44,6 +44,7 @@ $(function() {
   // course lists and search
   var current_search = '', scheduled_courses = [], unscheduled_courses = [];
   function filterSubjects(value) {
+    active_subject = value || active_subject;
     current_search = current_search.toLowerCase();
     uR.forEach(ALL_CLASSES, function(c) {
       c.visible = true;
