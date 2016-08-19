@@ -40,6 +40,7 @@
         Cancellations and rescheduling requests must be made at least two weeks prior to the class.
         Cancellations submitted less than one week before the class will only be refunded if we can fill your slot.
         Refunds are subject to a $10 administrative fee.
+        Requests for cancellation the day of class are ineligible for a refund.
       </div>
       <div class="alert alert-danger" style="margin:10px 0 0" each={ n,i in errors }>{ n }</div>
     </div>
