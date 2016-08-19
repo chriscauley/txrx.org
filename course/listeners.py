@@ -134,9 +134,10 @@ def handle_successful_payment(sender, **kwargs):
     'new_user': new_user,
     'settings': settings
   }
-  body = render_to_string("email/course_enrollment.html",values)
-  subject = "Course enrollment confirmation"
-  send_mail(subject,body,settings.DEFAULT_FROM_EMAIL,[user.email])
+  if enrollments:
+    body = render_to_string("email/course_enrollment.html",values)
+    subject = "Course enrollment confirmation"
+    send_mail(subject,body,settings.DEFAULT_FROM_EMAIL,[user.email])
   if error_sessions:
     mail_admins("Enrollment Error","\n\n".join(error_sessions))
   reset_classes_json("classes reset during course enrollment")
