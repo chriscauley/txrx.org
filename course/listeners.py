@@ -80,6 +80,7 @@ def handle_successful_payment(sender, **kwargs):
 
   enrollments = []
   error_sessions = []
+  fails = []
   for i in range(1, item_count+1):
     pp_amount = float(params['mc_gross_%d'%i])
     quantity = int(params['quantity%s'%i])
@@ -87,15 +88,15 @@ def handle_successful_payment(sender, **kwargs):
     try:
       session = Session.objects.get(id=int(params['item_number%d' % (i, )]))
     except Session.DoesNotExist:
-      mail_admins("Session not found",traceback.format_exc())
+      fails.append(("Session not found",traceback.format_exc()))
       continue
     except ValueError:
-      mail_admins("Non-integer session number",traceback.format_exc())
+      fails.append(("Non-integer session number",traceback.format_exc()))
       continue
 
     enrollment,new = Enrollment.objects.get_or_create(user=user, session=session)
     if enrollment.transaction_ids and (sender.txn_id in enrollment.transaction_ids):
-      mail_admins("Multiple transaction ids blocked for enrollment #%s"%enrollment.id,"")
+      fails.append(("Multiple transaction ids blocked for enrollment #%s"%enrollment.id,""))
       continue
     enrollment.transaction_ids = (enrollment.transaction_ids or "") + sender.txn_id + "|"
     NotifyCourse.objects.filter(user=user,course=session.course).delete()
@@ -124,6 +125,9 @@ def handle_successful_payment(sender, **kwargs):
       s = "Session #%s overfilled. Please see https://txrxlabs.org/admin/course/session/%s/"
       mail_admins("My Course over floweth",s%(enrollment.session.pk,enrollment.session.pk))
 
+  if fails:
+    body = "=======\n\n".join(["%s\n%s\n\n"%(s,b) for s,b in fails])
+    mail_admins("%s fails in purchasing process"%len(fails),body)
   values = {
     'enrollments': enrollments,
     'user': user,
