@@ -24,6 +24,7 @@ src/*
 .project
 .idea
 node/*
+dev/*
 
 #relevant to development
 main/local.db

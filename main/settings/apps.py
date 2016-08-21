@@ -30,6 +30,7 @@ INSTALLED_APPS = [
 
   #store
   'shop',
+  'drop',
   'store',
 
   # comments
@@ -166,7 +167,7 @@ SUIT_CONFIG = {
      'models': (
        'store.category',
        'store.consumable',
-       'shop.order',
+       'drop.order',
      )
    },
     'thing',
