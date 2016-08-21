@@ -182,12 +182,16 @@ class EventOccurrence(PhotosMixin,OccurrenceModel):
     self.publish_dt = self.start - datetime.timedelta(7)
     super(EventOccurrence,self).save(*args,**kwargs)
   @property
+  def past(self):
+    now = datetime.datetime.now()
+    return (self.end < now) or (self.rsvp_cutoff < now and not self.get_rsvps().count())
+  @property
   def as_json(self):
     return {
       'room_id': self.event.room_id,
       'name': self.name,
       'start': str(self.start),
-      'end': str(self.end)
+      'end': str(self.end),
     }
   class Meta:
     ordering = ('start',)

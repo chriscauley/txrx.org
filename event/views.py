@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.template.response import TemplateResponse
@@ -105,24 +105,24 @@ def rsvp(request):
     'user': request.user,
     'object_id': request.GET['occurrence_id'],
   }
-  if request.GET['quantity'] == 0:
+  if request.GET['quantity'] == '0':
     RSVP.objects.filter(**kwargs).delete()
   else:
     rsvp,new = RSVP.objects.get_or_create(**kwargs)
     rsvp.quantity = request.GET['quantity']
     rsvp.save()
-  return HttpResponse(json.dumps(occurrence.event.get_user_rsvps(request.user)))
+  return JsonResponse(occurrence.event.get_user_rsvps(request.user),safe=False)
 
 def detail_json(request,event_pk):
   event = get_object_or_404(Event,pk=event_pk)
   fields = ['name','description','repeat','hidden','allow_rsvp']
   out = {key:getattr(event,key) for key in fields}
-  fields = ['id','name','total_rsvp','start','end','rsvp_cutoff']
+  fields = ['id','name','total_rsvp','start','end','rsvp_cutoff','past']
   if request.user.is_superuser:
     fields.append("total_rsvp")
   os = event.upcoming_occurrences[:10]
-  out['upcoming_occurrences'] = [{key: str(getattr(o,key)) for key in fields} for o in os]
-  return HttpResponse(json.dumps(out))
+  out['upcoming_occurrences'] = [{key: getattr(o,key) for key in fields} for o in os]
+  return JsonResponse(out)
 
 @csrf_exempt
 def checkin(request):

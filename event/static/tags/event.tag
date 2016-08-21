@@ -20,15 +20,20 @@
       <div>{ start_string }</div>
     </div>
     <b class="full" if={ full }>This occurrence is full</b>
-    <div if={ !full && authenticated }>
-      <button class="btn btn-success rsvp" if={ !quantity } onclick={ makeRSVP }>RSVP for this event</button>
-      <button class="btn btn-danger unrsvp" if={ quantity } onclick={ cancelRSVP }>Cancel RSVP</button>
-      <span if={ total_rsvp && admin_access } data-reddot={ total_rsvp }></span>
+    <div if={ !past }>
+      <div if={ !full && authenticated }>
+        <button class="btn btn-success rsvp" if={ !quantity } onclick={ makeRSVP }>RSVP for this event</button>
+        <button class="btn btn-danger unrsvp" if={ quantity } onclick={ cancelRSVP }>Cancel RSVP</button>
+        <span if={ total_rsvp && admin_access } data-reddot={ total_rsvp }></span>
+      </div>
+      <div if={ !full && !authenticated }>
+        You must
+        <a href="/accounts/login/?next={ session.get_absolute_url|urlencode }">Login</a>
+        to RSVP
+      </div>
     </div>
-    <div if={ !full && !authenticated }>
-      You must
-      <a href="/accounts/login/?next={ session.get_absolute_url|urlencode }">Login</a>
-      to RSVP
+    <div if={ past }>
+      <span class="btn btn-warning">You can no longer RSVP</span>
     </div>
   </div>
 
