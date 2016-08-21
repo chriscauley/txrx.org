@@ -9,7 +9,7 @@ from media.models import PhotosMixin
 
 from sorl.thumbnail import get_thumbnail
 from crop_override import get_override
-from shop.models import Product
+from drop.models import Product
 
 import os, json
 

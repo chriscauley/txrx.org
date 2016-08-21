@@ -13,7 +13,7 @@ import traceback
 
 #! TODO this needs to be moved to store.listeners
 def handle_successful_store_payment(sender, user):
-  from shop.models import Product, Order, OrderPayment, Cart
+  from drop.models import Product, Order, OrderPayment, Cart
   try:
     params = QueryDict(sender.query)
   except UnicodeEncodeError:

@@ -7,8 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import Category, reset_products_json, Consumable
 
-from shop.models import Product, CartItem, Order
-from shop.util.cart import get_or_create_cart
+from drop.models import Product, CartItem, Order
+from drop.util.cart import get_or_create_cart
 
 import json, datetime
 

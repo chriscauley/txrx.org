@@ -17,7 +17,6 @@ from tool.models import ToolsMixin, Permission, Criterion, UserCriterion, Criter
 from lablackey.db.models import UserModel
 from lablackey.utils import cached_method, cached_property, latin1_to_ascii
 
-from shop.models import Product
 from json import dumps
 import os
 
@@ -365,7 +364,6 @@ class Session(UserModel,PhotosMixin,models.Model):
 
     # now a class product needs to be made (or not)
     defaults = {'slug': "%s_%s"%(unicode(self)[:40],self.pk),'name': unicode(self)}
-    s,new = SessionProduct.objects.get_or_create(session=self,defaults=defaults)
   @cached_method
   def get_absolute_url(self):
     return self.course.get_absolute_url()
@@ -578,10 +576,5 @@ def reset_classes_json(context="no context provided"):
   dt = datetime.datetime.now()
   if dt.hour == 0 and dt.minute == 0:
     mail_admins("classes.json reset",context)
-
-class SessionProduct(Product):
-  session = models.OneToOneField(Session)
-  class Meta:
-    ordering = ('pk',)
 
 from .listeners import *

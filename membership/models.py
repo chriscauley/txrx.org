@@ -11,7 +11,7 @@ from course.models import Session, Term, Course
 from lablackey.db.models import UserModel
 from lablackey.utils import cached_method, cached_property
 from media.models import Photo
-from shop.models import Product
+from drop.models import Product
 
 from wmd.models import MarkDownField
 
