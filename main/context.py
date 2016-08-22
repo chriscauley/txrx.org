@@ -31,14 +31,22 @@ def nav(request):
     {'name': 'Add Post', 'url': '/blog/admin/add/'},
     {'name': 'My Posts', 'url': '/blog/%s/'%request.user.username},
   ]
-  about_links = [
-    {'name': 'About TXRX', 'url': '/about-us/'},
-    {'name': 'Bylaws', 'url': '/bylaws/'},
-    {'name': 'Meeting Minutes', 'url': '/minutes/'},     
-    {'name': 'Google Groups (Public)', 'url': 'https://groups.google.com/forum/#!forum/txrxlabs'},
-    {'name': 'Google Groups (Members)', 'url': 'https://groups.google.com/forum/#!forum/txrxmembership'},
-    {'name': 'Membership Handbook (PDF)', 'url': '/static/handbook.pdf'},
-  ]
+  about_links = []
+  if request.user.is_authenticated():
+    about_links = [
+      {'name': 'About TXRX', 'url': '/about-us/'},
+      {'name': 'Bylaws', 'url': '/bylaws/'},
+      {'name': 'Meeting Minutes', 'url': '/minutes/'},
+      {'name': 'Google Groups (Public)', 'url': 'https://groups.google.com/forum/#!forum/txrxlabs'},
+      {'name': 'Google Groups (Members)', 'url': 'https://groups.google.com/forum/#!forum/txrxmembership'},
+      {'name': 'Membership Handbook (PDF)', 'url': '/static/handbook.pdf'},
+    ]
+    # only oriented users get to see the orientation notes.
+    if request.user.usercriterion_set.filter(criterion_id=15).count():
+      about_links.append({
+        'name': 'Orientation Notes',
+        'url': 'https://docs.google.com/document/d/1Cb-83FJ_8n_ModIIRMGesTOTfefoeVA2V--s-5XWa_M/edit?ts=56ca03d5',
+      })
   social_nav = [
     {'name': 'facebook','url': 'https://www.facebook.com/TxRxLabs' },
     {'name': 'twitter','url': 'https://twitter.com/txrxlabs' },
