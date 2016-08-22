@@ -116,7 +116,7 @@
       <ur-form action="/checkin_ajax/" button_text="Check In" schema={ email_schema }></ur-form>
       <button if={ kiosk } onclick={ toggleCheckin } class="btn btn-success">Checkin Using RFID</button>
     </div>
-    <center if={ auth_user_checkin }>
+    <center if={ DEPRACATED && auth_user_checkin }>
       <br />
       <button class="btn btn-success">Checkin as { TXRX.user.username }</button>
     </center>

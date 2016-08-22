@@ -1,12 +1,14 @@
 from django.conf import settings
 from django.conf.urls import url, patterns, include
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import password_reset
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.sitemaps.views import sitemap
 
 from main.sitemaps import sitemaps
 from main.feeds import AllFeed
+from main import views as main_views
 
 import os
 
@@ -26,34 +28,35 @@ _pages = [
 
 urlpatterns = patterns(
   '',
-  url(r'^(%s)/$'%('|'.join(_pages)),'main.views.beta'),
-  url(r'^$','main.views.index',name="home"),
+  url(r'^(%s)/$'%('|'.join(_pages)),main_views.beta),
+  url(r'^$',main_views.index,name="home"),
   url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
   url(r'^admin/', include(admin.site.urls)),
   url(r'^blog/',include('blog.urls')),
-  url(r'arst/(?P<pk>\d+)','main.views.intentional_500',name="order_detail"),
+  url(r'arst/(?P<pk>\d+)',main_views.intentional_500,name="order_detail"),
   url(r'^(\d{4})/(\d{1,2})/(\d{1,2})/([^/]+)/','blog.views.post_redirect'),
-  url(r'^500/$','main.views.intentional_500'),
+  url(r'^500/$',main_views.intentional_500),
   url(r'^event/',include('event.urls',namespace="event",app_name="event")),
   url(r'^instagram/',include('instagram.urls',namespace="instagram",app_name="instagram")),
   url(r'^media_files/',include('media.urls')),
   url(r'^shop/',include('store.urls')),
   url(r'^products.js$','store.views.products_json'),
-  url(r'^product_is_a_fail/(.*)/$','main.views.index',name="product_detail"),
+  url(r'^product_is_a_fail/(.*)/$',main_views.index,name="product_detail"),
+  url(r'^my/$',login_required(main_views.beta)),
 
   # comments and javascript translation
   url(r'^comments/',include('mptt_comments.urls')),
   url(r'^jsi18n/(?P<packages>\S+?)/$', 'django.views.i18n.javascript_catalog'),
   url(r'^rss/$', AllFeed()),
-  url(r'^favicon.ico$','main.views.predirect',
+  url(r'^favicon.ico$',main_views.predirect,
       kwargs={'url':getattr(settings,'FAVICON','/static/favicon.ico')}),
   url(r'^thing/$','thing.views.thing_index',name='thing_index'),
   url(r'^thing/add/$','thing.views.add_thing',name='add_thing'),
   url(r'^thing/(\d+)/([\w\d\-\_]+)/$','thing.views.thing_detail',name='thing_detail'),
-  url(r'^gfycat/$','main.views.gfycat',name='gfycat'),
+  url(r'^gfycat/$',main_views.gfycat,name='gfycat'),
   url(r'^tools/',include('tool.urls')),
   url('', include('social.apps.django_app.urls', namespace='social')),
-  url(r'perfect-programming','main.views.intentional_500'),
+  url(r'perfect-programming',main_views.intentional_500),
   url(r'^classes/', include('course.urls',namespace='course',app_name='course')),
   url(r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
   url(r'^tx/rx/return/$','course.views.paypal_return',name='paypal_redirect'),
@@ -91,7 +94,7 @@ urlpatterns += patterns(
   url(r'^accounts/', include('registration.urls')),
   url(r'^auth/password_reset/$',activate_user(password_reset)),
   url(r'^auth/',include('django.contrib.auth.urls')),
-  url(r'^force_login/(\d+)/$', 'main.views.force_login'),
+  url(r'^force_login/(\d+)/$', main_views.force_login),
   url(r'^api/remove_rfid/$','user.views.remove_rfid'),
   url(r'^api/change_rfid/$','user.views.set_rfid'),
   url(r'^api/',include("api.urls")),
@@ -137,7 +140,7 @@ urlpatterns += patterns(
 # todo
 urlpatterns += patterns(
   '',
-  (r'^survey/$','main.views.survey'),
+  (r'^survey/$',main_views.survey),
 )
 
 flatpages = [page.url[1:] for page in FlatPage.objects.all()]
@@ -146,7 +149,7 @@ fps = '|'.join(flatpages)
 # flat pages
 urlpatterns += patterns(
   '',
-  url(r'^(about-us)/$','main.views.to_template'),
+  url(r'^(about-us)/$',main_views.to_template),
   url(r'(%s)'%fps,'django.contrib.flatpages.views.flatpage',name='map'),
 )
 
