@@ -1,12 +1,12 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.template.defaultfilters import slugify
 from django.db import models
+from django.forms import ValidationError
+from django.template.defaultfilters import slugify
 
 from lablackey.utils import cached_method
 from tool.models import CriterionModel
 
-from jsignature.fields import JSignatureField
 import json
 
 class Document(models.Model):
@@ -30,12 +30,18 @@ class Document(models.Model):
       'schema': self.fields_json
     }
 
+def signature_validator(value):
+  value = str(value)
+  if not value.lower().startswith("/s/"):
+    raise ValidationError("Signature must start with /s/")
+
 class Signature(CriterionModel):
   document = models.ForeignKey(Document)
   automatic = True
   date_typed = models.CharField("Type Todays Date",max_length=64,null=True,blank=True)
   name_typed = models.CharField("Type Your Name",max_length=128,null=True,blank=True)
-  signature = JSignatureField(null=True,blank=True)
+  _ht = 'You signature must start with a /s/. For example enter "/s/John Hancock" without the quotes.'
+  signature = models.CharField(max_length=128,null=True,blank=True,help_text=_ht,validators=[signature_validator])
   user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
   data = models.TextField(null=True,blank=True)
   get_criteria = lambda self: self.document.criterion_set.all()

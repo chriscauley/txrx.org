@@ -4,12 +4,10 @@ from django.template.defaultfilters import slugify
 
 from .models import Signature, Document
 
-from jsignature.forms import JSignatureField
 import json
 
 class SignatureForm(forms.ModelForm):
   document = forms.ModelChoiceField(Document.objects.all(),widget=forms.HiddenInput())
-  signature = JSignatureField(label="Sign Your Name")
   def __init__(self, *args, **kwargs):
     self.document = kwargs.pop('document')
     super(SignatureForm, self).__init__(*args, **kwargs)

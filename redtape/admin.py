@@ -2,7 +2,6 @@ from django.contrib import admin
 
 from .models import Document, Signature, DocumentField
 
-from jsignature.utils import draw_signature
 import base64
 import cStringIO
 
