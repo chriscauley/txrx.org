@@ -48,13 +48,10 @@ class Signature(CriterionModel):
   user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
   document = models.ForeignKey(Document)
   automatic = True
-  date_typed = models.CharField("Type Todays Date",max_length=64,null=True,blank=True)
-  name_typed = models.CharField("Type Your Name",max_length=128,null=True,blank=True)
   _ht = 'You signature must start with a /s/. For example enter "/s/John Hancock" without the quotes.'
-  signature = models.CharField(max_length=128,null=True,blank=True,help_text=_ht,validators=[signature_validator])
   data = models.TextField(null=True,blank=True)
   get_criteria = lambda self: self.document.criterion_set.all()
-  __unicode__ = lambda self: "%s: %s - %s"%(self.document,self.name_typed,self.date_typed)
+  __unicode__ = lambda self: "%s: %s - %s"%(self.document,self.user)
   def get_fields(self):
     fields = self.document.fields_json
     data = json.loads(self.data or '{}')
@@ -78,6 +75,10 @@ INPUT_TYPE_CHOICES = [
   ('select','Select'),
   ('signature','Sign Your Name')
 ]
+
+INPUT_HELP_TEXT = {
+  'signature': 'Signed name should start with /s/, eg /s/John Hancock'
+}
 
 class DocumentField(models.Model):
   document = models.ForeignKey(Document)
@@ -110,7 +111,8 @@ class DocumentField(models.Model):
       'slug': self.slug or slugify(self.name),
       'type': self.input_type,
       'required': self.required,
-      'choices': self.get_optgroups() or self.get_options()
+      'choices': self.get_optgroups() or self.get_options(),
+      'help_text': INPUT_HELP_TEXT.get(self.input_type,None),
     }
   class Meta:
     ordering = ('order',)

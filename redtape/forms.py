@@ -25,15 +25,6 @@ class SignatureForm(forms.ModelForm):
         self.fields[field['slug']] = forms.ChoiceField(required=field['required'],choices=choices)
       else:
         self.fields[field['slug']] = forms.CharField(required=field['required'])
-    if not self.document.signature_required:
-      self.fields.pop('date_typed')
-      self.fields.pop('name_typed')
-      self.fields.pop('signature')
-    else:
-      # put signature fields at the end
-      self.fields['date_typed'] = self.fields.pop('date_typed')
-      self.fields['name_typed'] = self.fields.pop('name_typed')
-      self.fields['signature'] = self.fields.pop('signature')
       
   def save(self,*args,**kwargs):
     commit = kwargs.pop("commit",True)
@@ -46,4 +37,4 @@ class SignatureForm(forms.ModelForm):
     return instance
   class Meta:
     model = Signature
-    fields = ('date_typed','name_typed','signature')
+    exclude = ()

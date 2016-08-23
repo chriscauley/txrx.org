@@ -26,7 +26,7 @@ class DocumentAdmin(admin.ModelAdmin):
 
 @admin.register(Signature)
 class SignatureAdmin(admin.ModelAdmin):
-  readonly_fields = ('datetime','document','date_typed','name_typed','user','_data')
+  readonly_fields = ('datetime','document','user','_data')
   exclude = ('completed','data')
   def _data(self,obj):
     fields = obj.get_fields()

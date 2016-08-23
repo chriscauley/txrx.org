@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
@@ -26,7 +26,7 @@ def document_detail(request,document_pk,slug=None): #ze slug does notzing!
     if request.user.is_authenticated():
       signature.user = request.user
     signature.save()
-    messages.success(request,"%s signed by %s"%(document,signature.name_typed or signature.user))
+    messages.success(request,"%s signed by %s"%(document,signature.user))
     return HttpResponseRedirect(request.POST.get('next',""))
   values = {
     'form': form,
@@ -34,6 +34,24 @@ def document_detail(request,document_pk,slug=None): #ze slug does notzing!
     'signature': signature
   }
   return TemplateResponse(request,"redtape/document.html",values)
+
+def document_json(request,document_pk):
+  document = get_object_or_404(Document,pk=document_pk)
+  if document.login_required and not request.user.is_authenticated():
+    return login_required(document_detail)(request,document_pk)
+  signature = None
+  if request.user.is_authenticated() and document.editable:
+    signature = get_or_none(Signature,document_id=document_pk,user=request.user)
+  form = SignatureForm(request.POST or None,request.FILES or None,document=document,instance=signature)
+  if form.is_valid():
+    signature = form.save(commit=False)
+    if request.user.is_authenticated():
+      signature.user = request.user
+    signature.save()
+    m = "%s signed by %s"%(document,signature.user)
+    document_json = "%s signed by %s"%(document,signature.user)
+    return JsonResponse({"messages":[{"level": 'success','body': m}], 'document': document_json})
+  return JsonResponse({'errors': {"non_field_errors":[form.errors]}})
 
 @login_required
 def index(request):
