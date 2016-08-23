@@ -62,7 +62,6 @@
     <div class="container">
       {% block nav %}{% include "_nav.html" with page="home" %}{% endblock %}
       {% block messages %}{% include "_messages.html" %}{% endblock %}
-
       <div class="row" id="main">
         {% block main %}
         <div class="col-sm-8">
@@ -91,6 +90,7 @@
       </div>
       {% endcomment %}
       {% endblock %}
+      <div id="alert-div"></div>
     </div>
     <script src="https://cdn.jsdelivr.net/riot/2.3.16/riot+compiler.min.js"></script>
     {% compress js %}

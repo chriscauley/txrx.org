@@ -23,3 +23,23 @@ body, html {
     .collapsible-body { max-height: 500px; }
   }
 }
+
+input:not([type]),
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=url],
+input[type=time],
+input[type=date],
+input[type=datetime],
+input[type=datetime-local],
+input[type=tel],
+input[type=number],
+input[type=search],
+textarea.materialize-textarea {
+  &.invalid:empty + label:after {
+    display: inline-block;
+    padding-left: 15px;
+    position: static;
+  }
+}

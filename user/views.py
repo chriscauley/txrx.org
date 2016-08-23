@@ -11,7 +11,7 @@ from event.models import RSVP
 from course.models import Enrollment, ClassTime
 from course.utils import get_or_create_student
 from geo.models import Room
-from redtape.models import Signature
+from redtape.models import Document
 from tool.models import Criterion, UserCriterion, Permission
 
 from lablackey.utils import get_or_none
@@ -27,6 +27,11 @@ def checkin_json(user):
   _ct = ClassTime.objects.filter(_q,start__gte=today,start__lte=tomorrow)
   _sq = Q(canceled__gte=datetime.datetime.now()-datetime.timedelta(90)) | Q(canceled__isnull=True)
   _s = user.subscription_set.filter(_sq).order_by("-canceled")
+  if user.level and user.level.order >= 10:
+    required_document_ids = [1,2,3]
+  else:
+    required_document_ids = [2]
+  documents = [d.get_json_for_user(user) for d in Document.objects.filter(id__in=required_document_ids)]
   return {
     'classtimes': [c.as_json for c in _ct],
     'sessions': {c.session_id: c.session.as_json for c in _ct},
@@ -34,6 +39,7 @@ def checkin_json(user):
     'user_id': user.id,
     'user_display_name': user.get_full_name(),
     'subscriptions': [s.as_json for s in _s],
+    'documents': documents,
   }
 
 @staff_member_required

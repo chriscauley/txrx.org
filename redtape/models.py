@@ -21,13 +21,22 @@ class Document(models.Model):
   __unicode__ = lambda self: self.name
   get_absolute_url = lambda self: reverse('signed_document',args=[self.id,slugify(self.name)])
   fields_json = property(lambda self: [f.as_json for f in self.documentfield_set.all()])
+  def get_json_for_user(self,user):
+    json = self.as_json
+    try:
+      signature = Signature.objects.get(user=user,document=self)
+    except Signature.DoesNotExist:
+      pass
+    else:
+      json['completed'] = signature.completed
+    return json
   @property
   def as_json(self):
     return {
       'id': self.id,
       'name': self.name,
       'content': self.content,
-      'schema': self.fields_json
+      'schema': self.fields_json,
     }
 
 def signature_validator(value):
@@ -36,13 +45,13 @@ def signature_validator(value):
     raise ValidationError("Signature must start with /s/")
 
 class Signature(CriterionModel):
+  user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
   document = models.ForeignKey(Document)
   automatic = True
   date_typed = models.CharField("Type Todays Date",max_length=64,null=True,blank=True)
   name_typed = models.CharField("Type Your Name",max_length=128,null=True,blank=True)
   _ht = 'You signature must start with a /s/. For example enter "/s/John Hancock" without the quotes.'
   signature = models.CharField(max_length=128,null=True,blank=True,help_text=_ht,validators=[signature_validator])
-  user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
   data = models.TextField(null=True,blank=True)
   get_criteria = lambda self: self.document.criterion_set.all()
   __unicode__ = lambda self: "%s: %s - %s"%(self.document,self.name_typed,self.date_typed)
@@ -67,6 +76,7 @@ INPUT_TYPE_CHOICES = [
   ('email','Email'),
   ('header','Design Element (non-input)'),
   ('select','Select'),
+  ('signature','Sign Your Name')
 ]
 
 class DocumentField(models.Model):

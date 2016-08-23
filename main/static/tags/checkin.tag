@@ -1,5 +1,19 @@
 <user-checkin>
   <div class="row">
+    <div class="col m8 s12">
+      <h4>Required Documents</h4>
+      <div class="card yellow">
+        <div class="card-content">
+          <p>
+            You must sign the following document{ "s": document.length != 1 }
+            before taking any classes or working in the shop.
+          </p>
+          <li each={ documents }>
+            <a onclick={ openDocument }>{ name }</a>
+          </li>
+        </div>
+      </div>
+    </div>
     <div class="col s6" if={ subscriptions.length }>
       <h4>Subscriptions</h4>
       <div class="card { card_class } white-text" each={ subscriptions }>
@@ -50,6 +64,7 @@
     var checkin = opts.checkin;
     this.permissions = checkin.permissions;
     this.subscriptions = checkin.subscriptions;
+    this.documents = checkin.documents.filter(function(document) { return !document.completed });;
     uR.forEach(this.subscriptions || [],function(subscription) {
       subscription.created_str = moment(new Date(subscription.created)).format('l');
     });
@@ -66,7 +81,19 @@
     });
     this.update()
   })
+
+  openDocument(e) {
+    uR.mountElement("user-document",{ mount_to: uR.config.mount_alerts_to, document: e.item });
+  }
 </user-checkin>
+
+<user-document>
+  <modal>
+    <markdown content={ parent.opts.document.content }></markdown>
+    <ur-form schema={ parent.opts.document.schema }></ur-form>
+  </modal>
+
+</user-document>
 
 <todays-checkins>
   <div class="collapsible collapsible-accordion">
