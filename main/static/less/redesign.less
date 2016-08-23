@@ -37,9 +37,27 @@ input[type=tel],
 input[type=number],
 input[type=search],
 textarea.materialize-textarea {
-  &.invalid:empty + label:after {
+  /* Emtpy errors aren't native to materialize! */
+  &.invalid.empty + label:after {
     display: inline-block;
     padding-left: 15px;
     position: static;
   }
+  + label:after { top: 4rem; } /* dislike the position of this too :( */
+
+  /* help_text is not native to materialize! */
+  ~ .help_text { position: relative; top: -0.75em; }
+  &.invalid:not(.empty) ~ .help_text { opacity: 0; }
 }
+
+.input-field {
+  /* materialize uses transform, not position, which fucks up for reasons I don't remember*/
+  label.active { top: -5px; transform: initial; }
+  input, text-area, label, .help_text {
+    left: 0; /* materialize sets the left spacing via position.. annoying */
+    padding-left: 15px; /* indent them all the same amount */
+  }
+}
+
+/* Chrome default is like 40px */
+ol,ul { padding-left: 1.5px; }

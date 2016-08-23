@@ -103,7 +103,6 @@ textarea.materialize-textarea {
     color: $input-error-color;
     opacity: 1;
   }
-  &.invalid:empty + label:after { display: none; }
 
   // Full width label when using validate for error messages
   &.validate + label {

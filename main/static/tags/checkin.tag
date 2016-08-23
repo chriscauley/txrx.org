@@ -5,7 +5,7 @@
       <div class="card yellow">
         <div class="card-content">
           <p>
-            You must sign the following document{ "s": document.length != 1 }
+            You must sign the following document{ "s": documents.length != 1 }
             before taking any classes or working in the shop.
           </p>
           <li each={ documents }>
@@ -83,16 +83,28 @@
   })
 
   openDocument(e) {
-    uR.mountElement("user-document",{ mount_to: uR.config.mount_alerts_to, document: e.item });
+    uR.mountElement("user-document",{ mount_to: uR.config.mount_alerts_to, document: e.item, parent: this });
   }
 </user-checkin>
 
 <user-document>
   <modal>
+    <h5>{ parent.opts.document.name }</h5>
     <markdown content={ parent.opts.document.content }></markdown>
-    <ur-form schema={ parent.opts.document.schema }></ur-form>
+    <ur-form schema={ parent.opts.document.schema } no_focus={ true } action={ parent.action } method="POST">
+    </ur-form>
   </modal>
 
+  ajax_success(data) {
+    this.unmount();
+    uR.forEach(opts.parent.documents,function(document,i) {
+      if (document.id == data.document.id) { opts.parent.documents[i] = document }
+    });
+    opts.parent.update();
+  }
+  this.on("mount", function() {
+    this.action = "/redtape/save/" + opts.document.id + "/";
+  });
 </user-document>
 
 <todays-checkins>
