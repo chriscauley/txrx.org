@@ -39,6 +39,9 @@ def document_json(request,document_pk):
   document = get_object_or_404(Document,pk=document_pk)
   if document.login_required and not request.user.is_authenticated():
     return login_required(document_detail)(request,document_pk)
+  if not request.user.is_authenticated():
+    #! TODO
+    raise NotImplementedError()
   signature = None
   if request.user.is_authenticated() and document.editable:
     signature = get_or_none(Signature,document_id=document_pk,user=request.user)
@@ -49,11 +52,10 @@ def document_json(request,document_pk):
       signature.user = request.user
     signature.save()
     m = "%s signed by %s"%(document,signature.user)
-    document_json = "%s signed by %s"%(document,signature.user)
+    document_json = document.get_json_for_user(request.user)
     return JsonResponse({"messages":[{"level": 'success','body': m}], 'document': document_json})
   out = "Please correct the following error(s):"
   for i in form.errors.items():
-    print i
     out += "<br/>%s: %s"%i
   return JsonResponse({'errors': {'non_field_error': out}})
 

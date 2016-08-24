@@ -1,6 +1,6 @@
 <user-checkin>
   <div class="row">
-    <div class="col m8 s12">
+    <div class="col m8 s12" if={ documents.length }>
       <h4>Required Documents</h4>
       <div class="card yellow">
         <div class="card-content">
@@ -64,7 +64,7 @@
     var checkin = opts.checkin;
     this.permissions = checkin.permissions;
     this.subscriptions = checkin.subscriptions;
-    this.documents = checkin.documents.filter(function(document) { return !document.completed });;
+    this.documents = checkin.documents;
     uR.forEach(this.subscriptions || [],function(subscription) {
       subscription.created_str = moment(new Date(subscription.created)).format('l');
     });
@@ -82,6 +82,12 @@
     this.update()
   })
 
+  this.on("update",function() {
+    // remove completed documents from the list.
+    if (this.documents) {
+      this.documents = this.documents.filter(function(document) { return !document.completed });
+    }
+  });
   openDocument(e) {
     uR.mountElement("user-document",{ mount_to: uR.config.mount_alerts_to, document: e.item, parent: this });
   }
@@ -91,16 +97,16 @@
   <modal>
     <h5>{ parent.opts.document.name }</h5>
     <markdown content={ parent.opts.document.content }></markdown>
-    <ur-form schema={ parent.opts.document.schema } no_focus={ true } action={ parent.action } method="POST">
-    </ur-form>
+    <ur-form schema={ parent.opts.document.schema } no_focus={ true } action={ parent.action } method="POST"
+             ajax_success= { parent.ajax_success }></ur-form>
   </modal>
 
   ajax_success(data) {
-    this.unmount();
     uR.forEach(opts.parent.documents,function(document,i) {
-      if (document.id == data.document.id) { opts.parent.documents[i] = document }
+      if (document.id == data.document.id) { opts.parent.documents[i].completed = new Date(); }
     });
     opts.parent.update();
+    this.unmount();
   }
   this.on("mount", function() {
     this.action = "/redtape/save/" + opts.document.id + "/";
