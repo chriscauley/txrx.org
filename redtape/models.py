@@ -50,7 +50,7 @@ class Signature(CriterionModel):
   _ht = 'You signature must start with a /s/. For example enter "/s/John Hancock" without the quotes.'
   data = models.TextField(null=True,blank=True)
   get_criteria = lambda self: self.document.criterion_set.all()
-  __unicode__ = lambda self: "%s: %s - %s"%(self.document,self.user)
+  __unicode__ = lambda self: "%s: %s"%(self.document,self.user)
   def get_fields(self):
     fields = self.document.fields_json
     data = json.loads(self.data or '{}')

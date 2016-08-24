@@ -81,7 +81,7 @@ def add_rfid(request):
   else:
     user = User.objects.get_from_anything(username)
     if not user or not user.check_password(request.POST['password']):
-      return JsonResponse({'errors': {'non_field_errors': ['Incorrect username/email and password combination.']}})
+      return JsonResponse({'errors': {'non_field_errors': 'Incorrect username/email and password combination.'}})
   if user.rfid_set.count():
     m = 'You already have an RFID card registered. Please see staff if you need to change cards.'
     messages = [{'level': 'danger', 'body': m}]

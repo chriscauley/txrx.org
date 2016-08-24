@@ -92,6 +92,7 @@ TXRX.schema = {
 uR.config.button_class = "btn-primary";
 uR.config.cancel_class = "btn-danger";
 uR.config.mount_to = "#main";
+uR.config.support_email = "info@txrxlabs.org";
 uR.config.text_validators['signature'] = function(value,tag) {
   if (!value.startsWith("/s/")) { tag.data_error = "Signature must start with /s/"; }
 }

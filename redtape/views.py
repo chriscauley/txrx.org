@@ -51,7 +51,11 @@ def document_json(request,document_pk):
     m = "%s signed by %s"%(document,signature.user)
     document_json = "%s signed by %s"%(document,signature.user)
     return JsonResponse({"messages":[{"level": 'success','body': m}], 'document': document_json})
-  return JsonResponse({'errors': {"non_field_errors":[form.errors]}})
+  out = "Please correct the following error(s):"
+  for i in form.errors.items():
+    print i
+    out += "<br/>%s: %s"%i
+  return JsonResponse({'errors': {'non_field_error': out}})
 
 @login_required
 def index(request):
