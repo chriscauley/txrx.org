@@ -169,3 +169,10 @@ if settings.DEBUG:
         {'document_root': settings.MEDIA_ROOT,'show_indexes': True}),
   )
 
+# Turn me on to enable "maintenance mode"
+if False:
+  urlpatterns = [
+    url(r'^(maintenance)/$',main_views.beta),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'',main_views.predirect,kwargs={'url': "/maintenance/"},name="logout"),
+  ]

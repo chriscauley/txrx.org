@@ -16,7 +16,7 @@ redirect = lambda request,url: HttpResponseRedirect(url)
 predirect = lambda request,url: HttpResponsePermanentRedirect(url)
 
 def beta(request,page_name=None):
-  is_kiosk = request.path in ["/checkin/","/todays-checkins/","/my/"]
+  is_kiosk = request.path in ["/checkin/","/todays-checkins/","/my/","/maintenance/"]
   values = {
     'BODY_CLASS': "kiosk" if is_kiosk else "",
     'REDESIGNED': is_kiosk

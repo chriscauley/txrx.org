@@ -331,3 +331,13 @@
   this.schema.push({ name: "date_typed", })
 
 </checkin-waiver>
+
+<maintenance>
+  <div class="inner">
+    <img class="logo" src="/static/logos/Logo-1_vertical_color_475x375.png" width="200" />
+    <h2><center>Under Construction</center></h2>
+    <center style="font-size: 1.4em;">
+      TXRX Labs is down for scheduled maintenance. <br/> Please check back in 15 minutes.
+    </center>
+  </div>
+</maintenance>

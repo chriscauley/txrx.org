@@ -60,7 +60,9 @@
     {# this can eventually be moved int _cart.html #}
     {% include "course/_cart.html" %}
     <div class="container">
+      {% if not BODY_CLASS == "kiosk" %}
       {% block nav %}{% include "_nav.html" with page="home" %}{% endblock %}
+      {% endif %}
       {% block messages %}{% include "_messages.html" %}{% endblock %}
       <div class="row" id="main">
         {% block main %}
