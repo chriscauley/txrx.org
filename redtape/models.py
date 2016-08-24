@@ -14,7 +14,6 @@ class Document(models.Model):
   content = models.TextField(null=True,blank=True)
   _ht = "If checked, user must log into site before viewing/signing document"
   login_required = models.BooleanField(default=False,help_text=_ht)
-  signature_required = models.BooleanField(default=True)
   _ht = "After submitting the document can the creator edit it?" \
         "If false a new document will be created everytime they submit the document."
   editable = models.BooleanField(default=True,help_text=_ht)
