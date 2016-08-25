@@ -89,8 +89,8 @@ TXRX.schema = {
   ]
 }
 
-uR.config.button_class = "green text-white";
-uR.config.cancel_class = "red text-white";
+uR.config.button_class = "green text-white btn-primary";
+uR.config.cancel_class = "red text-white btn-danger";
 uR.config.mount_to = "#main";
 uR.config.support_email = "info@txrxlabs.org";
 uR.config.text_validators['signature'] = function(value,tag) {
