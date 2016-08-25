@@ -1,5 +1,12 @@
 <user-checkin>
   <div class="row">
+    <div class="col m8 s12" if={ documents_done }>
+      <div class="card green white-text">
+        <div class="card-content">
+          <b>{ documents_done } document{ "s": documents.length != 1 } signed. Thank you!</b>
+        </div>
+      </div>
+    </div>
     <div class="col m8 s12" if={ documents.length }>
       <h4>Required Documents</h4>
       <div class="card yellow">
@@ -62,6 +69,7 @@
   var self = this
   this.on("mount",function() {
     var checkin = opts.checkin;
+    this.documents_done = 0;
     this.permissions = checkin.permissions;
     this.subscriptions = checkin.subscriptions;
     this.documents = checkin.documents;
@@ -105,6 +113,7 @@
     uR.forEach(opts.parent.documents,function(document,i) {
       if (document.id == data.document.id) { opts.parent.documents[i].completed = new Date(); }
     });
+    opts.parent.documents_done++;
     opts.parent.update();
     this.unmount();
   }
