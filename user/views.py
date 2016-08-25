@@ -28,9 +28,9 @@ def checkin_json(user):
   _sq = Q(canceled__gte=datetime.datetime.now()-datetime.timedelta(90)) | Q(canceled__isnull=True)
   _s = user.subscription_set.filter(_sq).order_by("-canceled")
   if user.level and user.level.order >= 10:
-    required_document_ids = [1,2,3]
+    required_document_ids = getattr(settings,"REQUIRED_DOCUMENT_IDS",[])
   else:
-    required_document_ids = [2]
+    required_document_ids = getattr(settings,"NONMEMBER_DOCUMENT_IDS",[])
   documents = [d.get_json_for_user(user) for d in Document.objects.filter(id__in=required_document_ids)]
   return {
     'classtimes': [c.as_json for c in _ct],

@@ -30,6 +30,7 @@ DEVSERVER_DEFAULT_PORT = 8025
 
 # Site specific settings for handling membership
 REQUIRED_DOCUMENT_IDS = [1,2,3]
+NONMEMBER_DOCUMENT_IDS = [2]
 ORIENTATION_EVENT_ID = 105
 PAST_DUE_GRACE_PERIOD = 14 # Past due members will get kicked out of their drawer after this many days
 

@@ -11,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from membership.models import Level
 from tool.models import UserCriterion, Criterion
+from redtape.models import Signature
 
 import datetime
 
@@ -139,6 +140,10 @@ class User(AbstractBaseUser, PermissionsMixin):
       criterion=criterion,
       defaults=defaults
     )
+  @property
+  def has_safety_waiver(self):
+    _ids = getattr(settings,"NONMEMBER_DOCUMENT_IDS",[])
+    return len(_ids) <= Signature.objects.filter(user=self,document_id__in=_ids).count()
 
 class RFID(models.Model):
   user = models.ForeignKey(User)

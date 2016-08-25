@@ -74,7 +74,7 @@
   </div>
 </div>
 <div class="col-sm-6">
-  <div class="well">
+  <div class="well completion_form">
     <h2>Completion Form</h2>
     <form method="POST">{% csrf_token %}
       When class is completedly over, check off the students who have completed the class and press submit.
@@ -84,6 +84,11 @@
           <input type="checkbox" name="completed"{% if enrollment.completed %}
                  checked="checked"{% endif %} value="{{ enrollment.id }}"/>
           {{ enrollment.user.first_name }} {{ enrollment.user.last_name }} - {{ enrollment.user.email }}
+          {% if enrollment.user.has_safety_waiver %}
+          <i class="text-success fa fa-check-circle"></i>
+          {% else %}
+          <i class="text-danger fa fa-times-circle"></i>
+          {% endif %}
         </label>
       </p>
       {% endfor %}
