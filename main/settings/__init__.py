@@ -185,6 +185,11 @@ for s_file in ['apps','local','txrx_labs']:
 
 if DEBUG:
   EMAIL_BACKEND = "lablackey.mail.DebugBackend"
+  TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+    'lablackey.tloader.Loader',
+  )
 else:
   TEMPLATE_LOADERS = (
     ('django.template.loaders.cached.Loader', (

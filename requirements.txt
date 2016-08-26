@@ -27,6 +27,7 @@ Pygments
 requests
 -e git://github.com/durden/frappy.git#egg=frappy
 
+django-polymorphic==django-polymorphic==0.9.2
 django-tagging==0.3.6
 django-next-please
 icalendar
