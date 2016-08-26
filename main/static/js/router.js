@@ -19,7 +19,7 @@
     "/(toolmaster)/": function(search_term) {
       mainMount("toolmaster",{search_term:search_term});
     },
-    "/my/": function() { mainMount("checkin-home") },
+    "/me/": function() { mainMount("checkin-home") },
     "/my-permissions/": function() { mainMount('badge') },
     "/rfid/": function() { mainMount("set-rfid"); },
     "/week-hours/": function() { mainMount("week-hours"); },

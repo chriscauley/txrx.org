@@ -42,7 +42,7 @@ urlpatterns = patterns(
   url(r'^shop/',include('store.urls')),
   url(r'^products.js$','store.views.products_json'),
   url(r'^product_is_a_fail/(.*)/$',main_views.index,name="product_detail"),
-  url(r'^my/$',login_required(main_views.beta)),
+  url(r'^me/$',login_required(main_views.beta)),
 
   # comments and javascript translation
   url(r'^comments/',include('mptt_comments.urls')),
