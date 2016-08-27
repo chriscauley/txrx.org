@@ -51,6 +51,10 @@ textarea.materialize-textarea {
     position: static;
   }
   + label:after { top: 4rem; } /* dislike the position of this too :( */
+  &, + label { /* see text-area, label, .help_text below */
+    left: 0;
+    padding-left: 15px;
+  }
 
   /* help_text is not native to materialize! */
   ~ .help_text { position: relative; top: -0.75em; }
@@ -58,9 +62,10 @@ textarea.materialize-textarea {
 }
 
 .input-field {
+  min-height: 61px; /* checkbox isn't tall enough */
   /* materialize uses transform, not position, which fucks up for reasons I don't remember*/
   label.active { top: -5px; transform: initial; }
-  input, text-area, label, .help_text {
+  text-area, .help_text {
     left: 0; /* materialize sets the left spacing via position.. annoying */
     padding-left: 15px; /* indent them all the same amount */
   }

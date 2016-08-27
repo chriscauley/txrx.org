@@ -72,7 +72,8 @@ INPUT_TYPE_CHOICES = [
   ('email','Email'),
   ('header','Design Element (non-input)'),
   ('select','Select'),
-  ('signature','Sign Your Name')
+  ('signature','Sign Your Name'),
+  ('checkbox','Checkbox'),
 ]
 
 INPUT_HELP_TEXT = {
@@ -81,13 +82,13 @@ INPUT_HELP_TEXT = {
 
 class DocumentField(models.Model):
   document = models.ForeignKey(Document)
-  name = models.CharField(max_length=64)
-  slug = models.CharField(max_length=64,help_text="For fields with the same name",null=True,blank=True)
+  label = models.CharField(max_length=64)
+  name = models.CharField(max_length=64,help_text="For fields with the same label",null=True,blank=True)
   order = models.IntegerField(default=999)
   input_type = models.CharField(max_length=64,choices=INPUT_TYPE_CHOICES)
   choices = models.TextField(null=True,blank=True,help_text="Javascript array object for choice fields.")
   required = models.BooleanField(default=False)
-  __unicode__ = lambda self: "%s for %s"%(self.slug or self.name,self.document)
+  __unicode__ = lambda self: "%s for %s"%(self.label,self.document)
   def get_options(self,choices=None):
     # valid choices are [[VALUE_1,VERBOSE_1],...] or [VERBOSE_1,...]
     if not self.choices:
@@ -106,8 +107,8 @@ class DocumentField(models.Model):
   @property
   def as_json(self):
     return {
-      'name': self.name,
-      'slug': self.slug or slugify(self.name),
+      'label': self.label,
+      'name': self.name or slugify(self.label),
       'type': self.input_type,
       'required': self.required,
       'choices': self.get_optgroups() or self.get_options(),
