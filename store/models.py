@@ -62,7 +62,6 @@ class Consumable(PhotosMixin,Product):
   purchase_domain = property(lambda self: self.get_domain('purchase_url'))
   purchase_domain2 = property(lambda self: self.get_domain('purchase_url2'))
   def save(self,*args,**kwargs):
-    self.slug = slugify(self.name)[:50]
     super(Consumable,self).save(*args,**kwargs)
   class Meta:
     ordering = ('name',)

@@ -53,6 +53,7 @@ def document_json(request,document_pk):
     signature.save()
     m = "%s signed by %s"%(document,signature.user)
     document_json = document.get_json_for_user(request.user)
+    #signature.delete() #! TODO this is only to help debugging!
     return JsonResponse({"messages":[{"level": 'success','body': m}], 'document': document_json})
   out = "Please correct the following error(s):"
   for i in form.errors.items():
