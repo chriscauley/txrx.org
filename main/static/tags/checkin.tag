@@ -66,9 +66,10 @@
     </div>
   </div>
 
-  var self = this
+  var self = this;
   this.on("mount",function() {
     var checkin = opts.checkin;
+    if (!checkin) { return }
     this.documents_done = 0;
     this.permissions = checkin.permissions;
     this.subscriptions = checkin.subscriptions;
@@ -165,7 +166,7 @@
         Unknown RFID card. Please go find Chris or Gaby to get it entered in the system.
       </div>
     </div>
-    <div if={ email_checkin }>
+    <div if={ email_checkin && !checkin }>
       <p class="lead"><center>Enter your email below to checkin</center></p>
       <ur-form action="/checkin_ajax/" button_text="Check In" schema={ email_schema } method="POST"></ur-form>
       <button if={ kiosk } onclick={ toggleCheckin } class="btn btn-success">Checkin Using RFID</button>
@@ -177,7 +178,7 @@
     <ul if={ messages.length } class="messagelist">
       <li each={ messages } class="alert alert-{ level }">{ body }</li>
     </ul>
-    <user-checkin if={ checkin } checkin={ checkin }></user-checkin>
+    <div id="checkin_div"></div>
     <center if={ !TXRX.user.id }>
       <button if={ classtimes.length || permissions.length || messages.length }
               class="btn btn-success" onclick={ clear }>Back</button>
@@ -244,13 +245,16 @@
       return;
     }
     self.checkin = data.checkin;
+    self.update()
+    self.checkin_div.innerHTML = "<user-checkin>";
+    riot.mount("#checkin_div user-checkin",{checkin:data.checkin})
     clearTimeout(this.timeout);
     if (!(TXRX.user && TXRX.user.id)) { this.timeout = setTimeout(self.clear,30000); }
   }
   clear(e) {
     clearTimeout(this.timeout);
-    self.permissions = [];
-    self.classtimes = [];
+    self.checkin = undefined;
+    self.checkin_div.innerHTML="";
     self.ur_form.clear();
     self.update();
   }
