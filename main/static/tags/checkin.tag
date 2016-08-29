@@ -178,11 +178,10 @@
     <ul if={ messages.length } class="messagelist">
       <li each={ messages } class="alert alert-{ level }">{ body }</li>
     </ul>
-    <div id="checkin_div"></div>
-    <center if={ !TXRX.user.id }>
-      <button if={ classtimes.length || permissions.length || messages.length }
-              class="btn btn-success" onclick={ clear }>Back</button>
+    <center if={ checkin && !TXRX.user.id }>
+      <button class="btn btn-success" onclick={ clear }>Back</button>
     </center>
+    <div id="checkin_div"></div>
   </div>
 
   var self = this;
@@ -248,13 +247,13 @@
     self.update()
     self.checkin_div.innerHTML = "<user-checkin>";
     riot.mount("#checkin_div user-checkin",{checkin:data.checkin})
-    clearTimeout(this.timeout);
-    if (!(TXRX.user && TXRX.user.id)) { this.timeout = setTimeout(self.clear,30000); }
+    //clearTimeout(this.timeout);
+    //if (!(TXRX.user && TXRX.user.id)) { this.timeout = setTimeout(self.clear,30000); }
   }
   clear(e) {
     clearTimeout(this.timeout);
     self.checkin = undefined;
-    self.checkin_div.innerHTML="";
+    self.checkin_div.innerHTML = "";
     self.ur_form.clear();
     self.update();
   }
