@@ -50,21 +50,23 @@ def todays_checkins_json(request):
   })
 
 def checkin_ajax(request):
-  rfid = request.GET.get('rfid',None)
+  rfid = request.POST.get('rfid',None)
   user = get_or_none(User,rfid__number=rfid or 'notavalidrfid')
-  email = request.GET.get("email",None) or "notavaildemail"
-  user = User.objects.get_from_anything(email)
+  email = request.POST.get("email",None) or "notavaildemail"
   messages = []
   if request.user.is_authenticated():
-    user = user or get_or_none(User,id=request.GET.get("user_id",None))
+    user = request.user
+  if not user and email and 'password' in request.POST:
+    user = User.objects.get_from_anything(email)
+    if user and not user.check_password(request.POST['password']):
+      return JsonResponse({'errors': {'non_field_error': 'Username and password do not match, please try again'}})
   if rfid and not user:
     return JsonResponse({'next': "new-rfid", 'rfid': rfid})
   if not user:
-    return JsonResponse({'errors': {'non_field_errors': 'Unable to find user. Contact the staff'}})
-  if not user.signature_set.filter(document_id=2):
-    pass #return HttpResponse(json.dumps({'no_waiver': email}))
+    return JsonResponse({'errors': {'non_field_error': 'Unable to find user. Contact the staff'}})
+  request.session['rfid__user__id'] = user.id
   defaults = {'content_object': Room.objects.get(name='')}
-  if not request.GET.get('no_checkin',None):
+  if not request.POST.get('no_checkin',None):
     checkin, new = UserCheckin.objects.checkin_today(user=user,defaults=defaults)
     messages.append({'level': 'success', 'body': '%s checked in at %s'%(user,checkin.time_in)})
   out = {
@@ -81,7 +83,7 @@ def add_rfid(request):
   else:
     user = User.objects.get_from_anything(username)
     if not user or not user.check_password(request.POST['password']):
-      return JsonResponse({'errors': {'non_field_errors': 'Incorrect username/email and password combination.'}})
+      return JsonResponse({'errors': {'non_field_error': 'Incorrect username/email and password combination.'}})
   if user.rfid_set.count():
     m = 'You already have an RFID card registered. Please see staff if you need to change cards.'
     messages = [{'level': 'danger', 'body': m}]

@@ -38,6 +38,8 @@ class UserManager(BaseUserManager):
     except (self.model.DoesNotExist, self.model.MultipleObjectsReturned):
       pass
   def get_from_anything(self,value):
+    if not value:
+      return
     return self.get_or_none(models.Q(username__iexact=value) |
                             models.Q(email__iexact=value) |
                             models.Q(paypal_email__iexact=value))

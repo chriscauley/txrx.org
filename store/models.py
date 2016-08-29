@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 
 from lablackey.db.models import NamedTreeModel

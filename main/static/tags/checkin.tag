@@ -167,7 +167,7 @@
     </div>
     <div if={ email_checkin }>
       <p class="lead"><center>Enter your email below to checkin</center></p>
-      <ur-form action="/checkin_ajax/" button_text="Check In" schema={ email_schema }></ur-form>
+      <ur-form action="/checkin_ajax/" button_text="Check In" schema={ email_schema } method="POST"></ur-form>
       <button if={ kiosk } onclick={ toggleCheckin } class="btn btn-success">Checkin Using RFID</button>
     </div>
     <center if={ DEPRACATED && auth_user_checkin }>
@@ -186,7 +186,8 @@
 
   var self = this;
   this.email_schema = [
-    { name: "email", type: "email" }
+    { name: "email", type: "email" },
+    { name: "password", type: "password" },
   ];
   this.on("mount", function() {
     this.email_checkin = true;
@@ -215,6 +216,7 @@
         uR.ajax({
           url: "/checkin_ajax/",
           data: { user_id: TXRX.user.id, no_checkin: "true" },
+          method: "POST",
           success: self.ajax_success,
           target: self.root,
           that: self,
@@ -261,6 +263,7 @@
         data: { rfid: self.current_number },
         target: this.root.querySelector("button"),
         success: this.ajax_success,
+        method: "POST",
         that: this,
       });
       return e;
