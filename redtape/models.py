@@ -55,7 +55,7 @@ class Signature(CriterionModel):
     fields = self.document.fields_json
     data = json.loads(self.data or '{}')
     for field in fields:
-      field['value'] = data.get(field['slug'],None)
+      field['value'] = data.get(field['name'],None)
     return fields
   @property
   def as_json(self):

@@ -1,6 +1,5 @@
 from django import forms
 from django.core.files import File
-from django.template.defaultfilters import slugify
 
 from .models import Signature, Document
 
@@ -17,14 +16,15 @@ class SignatureForm(forms.ModelForm):
     for field in self.document.fields_json:
       if field['type'] == 'header':
         continue
-      self.extra_fields.append(field['slug'])
+      self.extra_fields.append(field['name'])
       if field['type'] == 'select':
         choices = field['choices']
         if not field['required']:
           choices = [('',[('','No Response')])] + choices
-        self.fields[field['slug']] = forms.ChoiceField(required=field['required'],choices=choices)
+        self.fields[field['name']] = forms.ChoiceField(required=field['required'],choices=choices,
+                                                        label=field['label'])
       else:
-        self.fields[field['slug']] = forms.CharField(required=field['required'])
+        self.fields[field['name']] = forms.CharField(required=field['required'])
       
   def save(self,*args,**kwargs):
     commit = kwargs.pop("commit",True)
@@ -37,4 +37,4 @@ class SignatureForm(forms.ModelForm):
     return instance
   class Meta:
     model = Signature
-    exclude = ('datetime','completed')
+    exclude = ('datetime','completed','user','data')
