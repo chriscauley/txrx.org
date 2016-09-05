@@ -1,16 +1,53 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 
 from .models import LimitedAccessKey
 from lablackey.mail import send_template_email
+from lablackey.utils import get_or_none
 
 import datetime
 
 def send_membership_email(*args,**kwargs):
   kwargs['from_email'] = settings.MEMBERSHIP_EMAIL
   send_template_email(*args,**kwargs)
+
+def temp_user_required(function):
+  """
+  Like login required, but can store a users id in place of a login. Used for kiosks.
+  Should only be used for ajax requests.
+  Will add request.temp_user or return {'errors': {'non_field_error': message }} or {'next': url}
+  """
+  def wrap(request,*args,**kwargs):
+    if request.user.is_authenticated():
+      request.temp_user = request.user
+      return function(request,*args,**kwargs)
+
+    User = get_user_model()
+    if request.session.get('temp_user_id',None):
+      request.temp_user = User.objects.get(id=request.session['temp_user_id'])
+      request.session.set_expiry(5*60)
+      return function(request,*args,**kwargs)
+    rfid = request.POST.get('rfid',None)
+    user = get_or_none(User,rfid__number=rfid or 'notavalidrfid')
+    email = request.POST.get("email",None) or "notavaildemail"
+    if not user and email and 'password' in request.POST:
+      user = User.objects.get_from_anything(email)
+      if user and not user.check_password(request.POST['password']):
+        return JsonResponse({'errors': {'non_field_error': 'Username and password do not match, please try again'}})
+    if user:
+      request.temp_user = user
+      request.session['temp_user_id'] = user.id
+      request.session.set_expiry(5*60)
+      return function(request,*args,**kwargs)
+    if rfid:
+      return JsonResponse({'next': "new-rfid", 'rfid': rfid})
+    return JsonResponse({'errors': {'non_field_error': 'Unable to find user. Contact the staff'}})
+
+  wrap.__doc__=function.__doc__
+  wrap.__name__=function.__name__
+  return wrap
 
 def limited_login_required(function):
   """

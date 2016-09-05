@@ -11,6 +11,7 @@ from event.models import RSVP
 from course.models import Enrollment, ClassTime
 from course.utils import get_or_create_student
 from geo.models import Room
+from membership.utils import temp_user_required
 from redtape.models import Document
 from tool.models import Criterion, UserCriterion, Permission
 
@@ -49,22 +50,10 @@ def todays_checkins_json(request):
     'checkins': [checkin_json(checkin.user) for checkin in checkins],
   })
 
+@temp_user_required
 def checkin_ajax(request):
-  rfid = request.POST.get('rfid',None)
-  user = get_or_none(User,rfid__number=rfid or 'notavalidrfid')
-  email = request.POST.get("email",None) or "notavaildemail"
   messages = []
-  if request.user.is_authenticated():
-    user = request.user
-  if not user and email and 'password' in request.POST:
-    user = User.objects.get_from_anything(email)
-    if user and not user.check_password(request.POST['password']):
-      return JsonResponse({'errors': {'non_field_error': 'Username and password do not match, please try again'}})
-  if rfid and not user:
-    return JsonResponse({'next': "new-rfid", 'rfid': rfid})
-  if not user:
-    return JsonResponse({'errors': {'non_field_error': 'Unable to find user. Contact the staff'}})
-  request.session['rfid__user__id'] = user.id
+  user = request.temp_user
   defaults = {'content_object': Room.objects.get(name='')}
   if not request.POST.get('no_checkin',None):
     checkin, new = UserCheckin.objects.checkin_today(user=user,defaults=defaults)
@@ -75,15 +64,9 @@ def checkin_ajax(request):
   }
   return JsonResponse(out)
 
+@temp_user_required
 def add_rfid(request):
   rfid = request.POST['rfid']
-  username = request.POST['username']
-  if request.user.is_authenticated():
-    user = request.user
-  else:
-    user = User.objects.get_from_anything(username)
-    if not user or not user.check_password(request.POST['password']):
-      return JsonResponse({'errors': {'non_field_error': 'Incorrect username/email and password combination.'}})
   if user.rfid_set.count():
     m = 'You already have an RFID card registered. Please see staff if you need to change cards.'
     messages = [{'level': 'danger', 'body': m}]

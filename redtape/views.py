@@ -8,6 +8,7 @@ from django.template.response import TemplateResponse
 
 from .models import Document, Signature
 from .forms import SignatureForm
+from membership.utils import temp_user_required
 
 from collections import defaultdict
 from lablackey.utils import get_or_none
@@ -35,6 +36,7 @@ def document_detail(request,document_pk,slug=None): #ze slug does notzing!
   }
   return TemplateResponse(request,"redtape/document.html",values)
 
+@temp_user_required
 def document_json(request,document_pk):
   document = get_object_or_404(Document,pk=document_pk)
   if document.login_required and not request.user.is_authenticated():
