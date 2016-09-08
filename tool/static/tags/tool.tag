@@ -274,8 +274,8 @@
 
 <checkbox>
   <a class="alert alert-block alert-{ alert_class }">
-    <i class="fa fa-{ 'check-': has }square-o fa-3x" if={ !locked }></i>
-    <i class="fa fa-lock fa-3x" if={ locked }></i>
+    <i class="fa fa-{ 'check-': has }square-o fa-2x" if={ !locked }></i>
+    <i class="fa fa-lock fa-2x" if={ locked }></i>
     <yield/>
   </a>
 

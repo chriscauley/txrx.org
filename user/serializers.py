@@ -1,7 +1,6 @@
 from django.db.models import Q
 
 from .models import User
-from tool.models import UserCriterion
 from api.serializers import BaseSizzler
 
 class SearchSizzler(BaseSizzler):

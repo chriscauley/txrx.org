@@ -83,7 +83,7 @@ def user_json(request):
   if not request.user.is_authenticated():
     return JsonResponse({})
   enrollments = Enrollment.objects.filter(user=request.user,completed__isnull=False)
-  usercriteria = UserCriterion.objects.filter(user=request.user)
+  usercriteria = UserCriterion.active_objects.filter(user=request.user)
   _c = Criterion.objects.filter(courses__session__user=request.user).distinct()
   master_criterion_ids = list(_c.values_list('id',flat=True))
   out = {
@@ -100,7 +100,6 @@ def user_json(request):
     'enrollments': {e.session_id:e.quantity for e in request.user.enrollment_set.all()},
     'member_discount_percent': request.user.level.discount_percentage,
   }
-  #valuestools = Tool.objects.filter(permission__id__in=permission_ids).distinct()
   return JsonResponse(out);
 
 @staff_member_required

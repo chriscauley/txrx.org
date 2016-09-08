@@ -88,7 +88,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
   @property
   def criterion_ids(self):
-    return list(UserCriterion.objects.filter(user=self).values_list('criterion_id',flat=True))
+    return list(UserCriterion.active_objects.filter(user=self).values_list('criterion_id',flat=True))
   @property
   def signature_jsons(self):
     return [s.as_json for s in self.signature_set.all().order_by('-datetime')]
@@ -97,12 +97,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     return [e.as_json for e in self.enrollment_set.all().order_by("-session__first_date")]
   @property
   def locked_criterion_ids(self):
-    ucs = list(UserCriterion.objects.filter(
+    ucs = list(UserCriterion.active_objects.filter(
       user=self,
       content_type__model='enrollment',
       object_id__in=self.enrollment_set.filter(completed__isnull=False).values_list("id")
     ).values_list('criterion_id',flat=True))
-    ucs += list(UserCriterion.objects.filter(
+    ucs += list(UserCriterion.active_objects.filter(
       user=self,
       content_type__model='signature',
       object_id__in=self.signature_set.filter(completed__isnull=False).values_list("id")
@@ -137,7 +137,7 @@ class User(AbstractBaseUser, PermissionsMixin):
       'content_object': self.subscription_set.all()[0]
     }
     criterion = Criterion.objects.get(id=settings.SAFETY_CRITERION_ID)
-    uc, new = UserCriterion.objects.get_or_create(
+    uc, new = UserCriterion.active_objects.get_or_create(
       user=self,
       criterion=criterion,
       defaults=defaults

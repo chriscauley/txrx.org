@@ -10,7 +10,7 @@ import datetime
 class Command(BaseCommand):
   def handle(self,*args,**kwargs):
     now = datetime.datetime.now()
-    safety_criteria = UserCriterion.objects.filter(criterion_id=7)
+    safety_criteria = UserCriterion.active_objects.filter(criterion_id=settings.SAFETY_CRITERION_ID)
     permanent_criteria = safety_criteria.exclude(content_type__model="subscription")
 
     # Find any remaining safety flags that need cleaning up

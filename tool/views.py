@@ -35,13 +35,13 @@ def toggle_criterion(request):
     criterion = get_object_or_404(Criterion,pk=request.GET['criterion_id'])
     if not criterion.user_can_grant(request.user):
       return HttpResponseForbidden("You do not have permission to assign this criterion.")
-    ucs = UserCriterion.objects.filter(criterion=criterion,user=user)
+    ucs = UserCriterion.active_objects.filter(criterion=criterion,user=user)
 
     if ucs:
       ucs.delete()
     else:
       defaults = {'content_object': request.user}
-      UserCriterion.objects.get_or_create(criterion=criterion,user=user,defaults=defaults)
+      UserCriterion.active_objects.get_or_create(criterion=criterion,user=user,defaults=defaults)
   if request.GET.get('enrollment_id'):
     enrollment = get_object_or_404(Enrollment,pk=request.GET["enrollment_id"])
     if not (request.user.is_toolmaster or request.user == enrollment.session.user):

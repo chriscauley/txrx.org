@@ -141,13 +141,26 @@ class Criterion(models.Model):
   class Meta:
     ordering = ('name',)
 
+class ActiveUserCriterionManager(models.Manager):
+  def get_queryset(self):
+    _q = models.Q(expires__isnull=True)|models.Q(expires__gt=datetime.datetime.now())
+    return super(ActiveUserCriterionManager,self).get_queryset().filter(_q)
+
 class UserCriterion(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
   criterion = models.ForeignKey(Criterion)
   created = models.DateTimeField(auto_now_add=True)
+  expires = models.DateTimeField(null=True,blank=True)
   content_type = models.ForeignKey("contenttypes.ContentType")
   object_id = models.IntegerField()
   content_object = GenericForeignKey('content_type', 'object_id')
+  active_objects = ActiveUserCriterionManager()
+  objects = models.Manager()
+  def set_next_expiration(self):
+    #! TODO eventually this shoul set the experation based off the content object
+    #! eg, if the content object is a signature, the signature could have an expiration
+    #! for now this just kills expiration
+    self.expires = None
   __unicode__ = lambda self: "%s for %s"%(self.user,self.criterion)
 
 class CriterionModel(models.Model):
@@ -163,16 +176,17 @@ class CriterionModel(models.Model):
       for criterion in self.get_criteria():
         defaults = {'content_object':self}
         try:
-          u,new = UserCriterion.objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
+          u,new = UserCriterion.active_objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
         except UserCriterion.MultipleObjectsReturned:
           print 'deleting for ',self
-          UserCriterion.objects.filter(user=self.user,criterion=criterion).delete()
-          u,new = UserCriterion.objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
+          UserCriterion.active_objects.filter(user=self.user,criterion=criterion).delete()
+          u,new = UserCriterion.active_objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
         u.content_object = self
+        u.expires = u.set_next_expiration()
         u.save()
     else:
-      m = self.__class__.__name__.lower()
-      UserCriterion.objects.filter(content_type__model=m,object_id=self.id).delete()
+      ct = ContentType.objects.get_for_model(self)
+      UserCriterion.active_objects.filter(content_type=ct,object_id=self.id).delete()
   class Meta:
     abstract = True
 

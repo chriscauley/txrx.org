@@ -38,23 +38,19 @@ def document_detail(request,document_pk,slug=None): #ze slug does notzing!
 
 @temp_user_required
 def document_json(request,document_pk):
+  #! TODO do we want to allow annonymous documents?
   document = get_object_or_404(Document,pk=document_pk)
-  if document.login_required and not request.user.is_authenticated():
-    return login_required(document_detail)(request,document_pk)
-  if not request.user.is_authenticated():
-    #! TODO
-    raise NotImplementedError()
   signature = None
-  if request.user.is_authenticated() and document.editable:
-    signature = get_or_none(Signature,document_id=document_pk,user=request.user)
+  if document.editable:
+    signature = get_or_none(Signature,document_id=document_pk,user=request.temp_user)
   form = SignatureForm(request.POST or None,request.FILES or None,document=document,instance=signature)
   if form.is_valid():
     signature = form.save(commit=False)
-    if request.user.is_authenticated():
-      signature.user = request.user
+    if request.temp_user.is_authenticated():
+      signature.user = request.temp_user
     signature.save()
     m = "%s signed by %s"%(document,signature.user)
-    document_json = document.get_json_for_user(request.user)
+    document_json = document.get_json_for_user(request.temp_user)
     #signature.delete() #! TODO this is only to help debugging!
     return JsonResponse({"messages":[{"level": 'success','body': m}], 'document': document_json})
   out = "Please correct the following error(s):"

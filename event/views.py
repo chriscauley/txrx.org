@@ -154,11 +154,11 @@ def orientations(request,y=None,m=None,d=None):
     user = get_user_model().objects.get(id=request.POST['user_id'])
     if request.POST['action'] == 'pass':
       defaults = {'content_object': request.user}
-      UserCriterion.objects.get_or_create(user=user,criterion=criterion,defaults=defaults)
+      UserCriterion.active_objects.get_or_create(user=user,criterion=criterion,defaults=defaults)
       messages.success(request,"%s has been oriented."%user)
     else:
       messages.success(request,"%s has been un-oriented."%user)
-      UserCriterion.objects.filter(user=user,criterion=criterion).delete()
+      UserCriterion.active_objects.filter(user=user,criterion=criterion).delete()
     return HttpResponseRedirect(request.path)
   start = datetime.date(int(y),int(m),int(d)) if m and d and y else datetime.date.today()
   end = start + datetime.timedelta(1)

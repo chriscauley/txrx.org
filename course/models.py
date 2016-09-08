@@ -13,7 +13,7 @@ import datetime, time
 from media.models import FilesMixin, PhotosMixin
 from geo.models import Room
 from event.models import OccurrenceModel, reverse_ics
-from tool.models import ToolsMixin, Permission, Criterion, UserCriterion, CriterionModel, Tool
+from tool.models import ToolsMixin, Permission, Criterion, CriterionModel, Tool
 from lablackey.db.models import UserModel
 from lablackey.utils import cached_method, cached_property, latin1_to_ascii
 
