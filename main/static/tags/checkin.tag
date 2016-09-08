@@ -179,9 +179,13 @@
       <li each={ messages } class="alert alert-{ level }">{ body }</li>
     </ul>
     <center if={ checkin && !TXRX.user.id }>
-      <button class="btn btn-success" onclick={ clear }>Back</button>
+      <br/>
+      <button class="btn btn-error red" onclick={ clear }>Done</button>
     </center>
     <div id="checkin_div"></div>
+    <center if={ checkin && !TXRX.user.id }>
+      <button class="btn btn-error red" onclick={ clear }>Done</button>
+    </center>
   </div>
 
   var self = this;
