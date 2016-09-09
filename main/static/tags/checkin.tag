@@ -127,7 +127,10 @@
   <div class="collapsible collapsible-accordion">
     <div each={ checkin,i in checkins } onclick={ toggleIt } class={ active: active == i }>
       <div class="collapsible-header">
-        { checkin.user_display_name } ({ checkin.sub_str })
+        <center>
+          <img src={ checkin.thumbnail }/><br/>
+          { checkin.user_display_name } ({ checkin.sub_str })
+        </center>
       </div>
       <div class="collapsible-body">
         <div class="collapsible-inner">
@@ -171,9 +174,9 @@
       <ur-form action="/checkin_ajax/" button_text="Check In" schema={ email_schema } method="POST"></ur-form>
       <button if={ kiosk } onclick={ toggleCheckin } class="btn btn-success">Checkin Using RFID</button>
     </div>
-    <center if={ DEPRACATED && auth_user_checkin }>
+    <center if={ window.location.search.indexOf("cheat") != -1 && auth_user_checkin }>
       <br />
-      <button class="btn btn-success">Checkin as { TXRX.user.username }</button>
+      <button class="btn btn-success" onclick={ checkinFake }>Checkin as { TXRX.user.username }</button>
     </center>
     <ul if={ messages.length } class="messagelist">
       <li each={ messages } class="alert alert-{ level }">{ body }</li>
@@ -229,6 +232,20 @@
     });
     cheatCode(function() { window.location.reload(false) });
   });
+  checkinFake(e) {
+    TXRX.ready(function() {
+      if (TXRX.user.id) {
+        uR.ajax({
+          url: "/checkin_ajax/",
+          data: { },
+          method: "POST",
+          success: self.ajax_success,
+          target: self.root,
+          that: self,
+        });
+      }
+    });
+  }
   toggleCheckin(e) {
     this.email_checkin = !this.email_checkin;
   }

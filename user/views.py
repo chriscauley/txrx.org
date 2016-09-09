@@ -17,7 +17,7 @@ from redtape.models import Document
 from tool.models import Criterion, UserCriterion, Permission
 
 from lablackey.utils import get_or_none
-
+from sorl.thumbnail import get_thumbnail
 import json, datetime, os
 
 def checkin_json(user):
@@ -42,6 +42,7 @@ def checkin_json(user):
     'user_display_name': user.get_full_name(),
     'subscriptions': [s.as_json for s in _s],
     'documents': documents,
+    'thumbnail': get_thumbnail(user.headshot,"200x300",crop="center").url
   }
 
 @staff_member_required

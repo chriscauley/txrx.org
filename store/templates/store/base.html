@@ -13,10 +13,12 @@
     <div class="col-sm-4">
       <a href="/shop/receipts/" class="btn btn-block btn-primary">Receipts</a>
     </div>
+    {% if request.user.is_superuser %}
     <div class="col-sm-4">
       <a href="/shop/admin/" class="btn btn-block btn-warning">Admin</a>
       <br />
     </div>
+    {% endif %}
   </div>
   {% endif %}
   {% block products %}{% endblock %}
