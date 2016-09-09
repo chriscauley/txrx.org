@@ -42,7 +42,7 @@ def checkin_json(user):
     'user_display_name': user.get_full_name(),
     'subscriptions': [s.as_json for s in _s],
     'documents': documents,
-    'thumbnail': get_thumbnail(user.headshot,"200x300",crop="center").url
+    'thumbnail': get_thumbnail(user.headshot,"200x300",crop="center").url if user.headshot else None
   }
 
 @staff_member_required

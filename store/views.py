@@ -5,13 +5,12 @@ from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Category, reset_products_json, Consumable
+from user.models import is_shopkeeper
 
 from drop.models import Product, CartItem, Order
 from drop.util.cart import get_or_create_cart
 
 import json, datetime
-
-is_shopkeeper = lambda user: user.is_shopkeeper
 
 @login_required
 def index(request):

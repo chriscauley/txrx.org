@@ -128,7 +128,7 @@
     <div each={ checkin,i in checkins } onclick={ toggleIt } class={ active: active == i }>
       <div class="collapsible-header">
         <center>
-          <img src={ checkin.thumbnail }/><br/>
+          <img src={ checkin.thumbnail } if={ checkin.thumbnial }/><br/>
           { checkin.user_display_name } ({ checkin.sub_str })
         </center>
       </div>

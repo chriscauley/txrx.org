@@ -187,4 +187,10 @@ class UserCheckin(models.Model):
   content_object = GenericForeignKey('content_type', 'object_id')
   objects = UserCheckinManager()
 
+is_staff = lambda user: user.is_staff
+is_superuser = lambda user: user.is_superuser
+is_shopkeeper = lambda user: user.is_shopkeeper
+is_gatekeeper = lambda user: user.is_gatekeeper
+is_toolmaster = lambda user: user.is_toolmaster
+
 from .listeners import *
