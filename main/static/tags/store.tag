@@ -133,34 +133,40 @@
           <i class="fa fa-shopping-cart"></i> { product.purchase_domain }</a>
       </div>
     </div>
-    <div class="row bottom">
-      <div class="col-xs-6">
-        <button onclick={ add } class="btn btn-success btn-block">
-          +{ product.purchase_quantity }</button>
-      </div>
-      <div class="col-xs-6">
-        <button onclick={ subtract } class="btn btn-danger btn-block">
-          -{ product.purchase_quantity }</button>
-      </div>
+    <div class="flexy">
+      <button onclick={ add1 } class="btn btn-success" if={ product.purchase_quantity != 1 }>
+        +1</button>
+      <button onclick={ subtract1 } class="btn btn-danger" if={ product.purchase_quantity != 1 }>
+        -1</button>
+      <button onclick={ add } class="btn btn-success">
+        +{ product.purchase_quantity }</button>
+      <button onclick={ subtract } class="btn btn-danger">
+        -{ product.purchase_quantity }</button>
     </div>
   </div>
 
   var that = this;
   that.product = this.opts.product;
-  function modify(sign) {
+  function modify(quantity) {
     $.post(
       '/shop/admin/add/',
-      {quantity:that.product.purchase_quantity*sign,pk:that.product.pk},
+      {quantity:quantity,pk:that.product.pk},
       function(data) {
         that.product.in_stock = data;
         that.update();
       }
     )
   }
-  add(e) {
+  add1(e) {
     modify(1);
   }
-  subtract(e) {
+  subtract1(e) {
     modify(-1);
+  }
+  add(e) {
+    modify(e.item.product.purchase_quantity);
+  }
+  subtract(e) {
+    modify(-e.item.product.purcase_quantity);
   }
 </product-admin>

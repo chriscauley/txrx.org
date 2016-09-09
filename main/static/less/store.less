@@ -15,7 +15,11 @@ product, product-admin {
     padding: 0;
     margin-bottom: @rowSpacing;
   }
-  .bottom .btn-block { margin-bottom: 0; }
+  .flexy {
+    display: flex;
+    margin: 0 -5px;
+    .btn { flex-basis: 50%; margin: 0 5px; }
+  }
   .well { position: relative; }
   .gone { opacity: 0 }
   @media (max-width: @screen-xs-max) {

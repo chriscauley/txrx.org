@@ -101,6 +101,9 @@ urlpatterns += patterns(
   url(r'^api-token-auth/', 'rest_framework_jwt.views.obtain_jwt_token'),
 )
 
+if hasattr(settings,"STAFF_URL"):
+  urlpatterns += patterns("", url(settings.STAFF_URL[1:],'user.views.hidden_image'))
+
 #membership urls
 urlpatterns += patterns(
   'membership.views',

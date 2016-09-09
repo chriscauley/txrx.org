@@ -1,5 +1,4 @@
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
@@ -11,6 +10,8 @@ from drop.models import Product, CartItem, Order
 from drop.util.cart import get_or_create_cart
 
 import json, datetime
+
+is_shopkeeper = lambda user: user.is_shopkeeper
 
 @login_required
 def index(request):
@@ -60,7 +61,7 @@ def start_checkout(request):
       out['errors'].append(s%(item.product.in_stock,item.product))
   return HttpResponse(json.dumps(out))
 
-@staff_member_required
+@user_passes_test(is_shopkeeper)
 @csrf_exempt
 def receipts(request):
   if request.POST:
@@ -78,13 +79,13 @@ def receipts(request):
   }
   return TemplateResponse(request,'store/receipts.html',values)
 
-@staff_member_required
+@user_passes_test(is_shopkeeper)
 @csrf_exempt
 def admin_page(request):
   values = {}
   return TemplateResponse(request,'store/admin.html',values)
 
-@staff_member_required
+@user_passes_test(is_shopkeeper)
 def admin_products_json(request):
   extra_fields = ['purchase_url','purchase_domain','purchase_url2','purchase_domain2',
                   'purchase_quantity','in_stock']
@@ -92,7 +93,7 @@ def admin_products_json(request):
          for product in Consumable.objects.filter(active=True)}
   return HttpResponse("window.PRODUCTS_EXTRA = %s;"%json.dumps(out))
 
-@staff_member_required
+@user_passes_test(is_shopkeeper)
 @csrf_exempt
 def admin_add(request):
   quantity = int(request.POST['quantity'])

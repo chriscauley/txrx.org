@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.views.static import serve
 
 from .models import User, UserCheckin, RFID
 from event.models import RSVP
@@ -17,7 +18,7 @@ from tool.models import Criterion, UserCriterion, Permission
 
 from lablackey.utils import get_or_none
 
-import json, datetime
+import json, datetime, os
 
 def checkin_json(user):
   today = datetime.date.today()
@@ -95,6 +96,8 @@ def user_json(request):
     'session_ids': list(request.user.session_set.all().values_list('id',flat=True)),
     'completed_course_ids': [e.session.course_id for e in enrollments],
     'is_toolmaster': request.user.is_toolmaster,
+    'is_gatekeeper': request.user.is_gatekeeper,
+    'is_shopkeeper': request.user.is_shopkeeper,
     'is_staff': request.user.is_staff,
     'is_superuser': request.user.is_superuser,
     'enrollments': {e.session_id:e.quantity for e in request.user.enrollment_set.all()},
@@ -119,3 +122,12 @@ def remove_rfid(request):
     'rfids': list(RFID.objects.filter(user=user).values_list("number",flat=True)),
   }
   return JsonResponse(response)
+
+@staff_member_required
+def hidden_image(request):
+  path = request.path.split(settings.STAFF_URL)[-1]
+  print request.path
+  print path
+  if request.path.startswith("/superuser_images/") and not request.user.is_superuser():
+    return HttpResponse("Not Allowed",status=403)
+  return serve(request, path, settings.STAFF_ROOT)

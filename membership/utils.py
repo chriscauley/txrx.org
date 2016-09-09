@@ -20,6 +20,7 @@ def temp_user_required(function):
   Will add request.temp_user or return {'errors': {'non_field_error': message }} or {'next': url}
   """
   def wrap(request,*args,**kwargs):
+    expiration_time = 5*60
     if request.user.is_authenticated():
       request.temp_user = request.user
       return function(request,*args,**kwargs)
@@ -27,7 +28,7 @@ def temp_user_required(function):
     User = get_user_model()
     if request.session.get('temp_user_id',None):
       request.temp_user = User.objects.get(id=request.session['temp_user_id'])
-      request.session.set_expiry(5*60)
+      request.session.set_expiry(expiration_time)
       return function(request,*args,**kwargs)
     rfid = request.POST.get('rfid',None)
     user = get_or_none(User,rfid__number=rfid or 'notavalidrfid')
@@ -35,15 +36,17 @@ def temp_user_required(function):
     if not user and email and 'password' in request.POST:
       user = User.objects.get_from_anything(email)
       if user and not user.check_password(request.POST['password']):
-        return JsonResponse({'errors': {'non_field_error': 'Username and password do not match, please try again'}})
+        return JsonResponse({'errors': {'non_field_error': 'Username and password do not match, please try again'}},
+                            status=401)
     if user:
       request.temp_user = user
       request.session['temp_user_id'] = user.id
-      request.session.set_expiry(5*60)
+      request.session.set_expiry(expiration_time)
       return function(request,*args,**kwargs)
     if rfid:
       return JsonResponse({'next': "new-rfid", 'rfid': rfid})
-    return JsonResponse({'errors': {'non_field_error': 'Unable to find user. Contact the staff'}})
+    return JsonResponse({'errors': {'non_field_error': 'Unable to find user. Contact the staff'}},
+                        status=401)
 
   wrap.__doc__=function.__doc__
   wrap.__name__=function.__name__

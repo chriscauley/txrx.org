@@ -5,7 +5,7 @@
   <category-list></category-list>
 </div>
 <div class="col-sm-9 col-md-10 col-lg-10">
-  {% if request.user.is_superuser %}
+  {% if request.user.is_shopkeeper %}
   <div class="row">
     <div class="col-sm-4">
       <a href="/shop/" class="btn btn-block btn-success">Shop</a>

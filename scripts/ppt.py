@@ -1,3 +1,5 @@
+# a script for importing old paypal objects.
+
 import requests, urlparse, datetime, django, os, random
 from functools import wraps
 os.environ['DJANGO_SETTINGS_MODULE'] = 'main.settings'

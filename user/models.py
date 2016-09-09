@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core import validators
+from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
 from django.db import models
 from django.utils import timezone
@@ -13,7 +14,7 @@ from membership.models import Level
 from tool.models import UserCriterion, Criterion
 from redtape.models import Signature
 
-import datetime
+import datetime, os
 
 class UserManager(BaseUserManager):
   def _create_user(self, username,  email, password, is_staff, is_superuser, **extra_fields):
@@ -51,6 +52,11 @@ ORIENTATION_STATUS_CHOICES = [
   ('oriented','Oriented'),
 ]
 
+staff_storage = FileSystemStorage(
+  location=getattr(settings,"STAFF_ROOT",settings.MEDIA_ROOT),
+  base_url=getattr(settings,"STAFF_URL","")
+)
+
 class User(AbstractBaseUser, PermissionsMixin):
   kwargs = dict(
     help_text=_('Required. 30 characters or fewer. Letters, digits, and ./+/-/_ only.'),
@@ -73,8 +79,13 @@ class User(AbstractBaseUser, PermissionsMixin):
   is_toolmaster = models.BooleanField(default=False,help_text=_ht)
   _ht = "Gatekeepers have 24/7 building access."
   is_gatekeeper = models.BooleanField(default=False,help_text=_ht)
+  _ht = "Shopkeepers can mark receipts as received."
+  is_shopkeeper = models.BooleanField(default=False,help_text=_ht)
   date_joined = models.DateTimeField(_('date joined'),auto_now_add=True)
   paypal_email = models.EmailField(max_length=255,null=True,blank=True) #! TODO make me unique
+  _kwargs = dict(upload_to="%Y%m",max_length=200,null=True,blank=True)
+  id_photo_date = models.DateTimeField(null=True,blank=True)
+  headshot = models.FileField(verbose_name="Head Shot",storage=staff_storage,**_kwargs)
   objects = UserManager()
 
   #txrx fields
