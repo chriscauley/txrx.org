@@ -126,8 +126,7 @@ urlpatterns += patterns(
   url(r'^containers/$','containers'),
   url(r'^update_flag_status/(\d+)/$','update_flag_status',name='update_flag_status'),
   url(r'^update_flag_status/(\d+)/([\w\d\-\_]+)/$','update_flag_status',name='update_flag_status'),
-  url(r'^door_access.json$','door_access',name='door_access_json'),
-  url(r'^tool_access.json$','door_access',name='tool_access_json'),
+  url(r'^rfid_access.json$','door_access',name='door_access_json'),
   url(r'^tool_permission_table/$','tool_permission_table',name='tool_permission_table'),
   url(r'^membership/container/(\d+)/','container',name='container'),
 )

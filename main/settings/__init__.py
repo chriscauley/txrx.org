@@ -29,6 +29,7 @@ DEVSERVER_DEFAULT_ADDR = "0.0.0.0"
 DEVSERVER_DEFAULT_PORT = 8025
 
 # Site specific settings for handling membership
+ALL_HOURS_ID = 2 # which schedule is 24/7?
 REQUIRED_DOCUMENT_IDS = [1,2,3]
 NONMEMBER_DOCUMENT_IDS = [2]
 ORIENTATION_EVENT_ID = 105
