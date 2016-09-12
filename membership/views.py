@@ -17,7 +17,7 @@ from .utils import limited_login_required, verify_unique_email
 from blog.models import Post
 from course.models import Course, Session
 from thing.models import Thing
-from tool.models import Permission, Tool, APIKey, DoorGroup, Schedule
+from tool.models import Permission, Tool, APIKey, DoorGroup, Schedule, Holiday
 
 from lablackey.utils import FORBIDDEN
 from lablackey.mail import send_template_email
@@ -204,11 +204,19 @@ def update_flag_status(request,flag_pk,new_status=None):
 def door_access(request):
   fail = HttpResponseForbidden("I am Vinz Clortho keymaster of Gozer... Gozer the Traveller, he will come in one of the pre-chosen forms. During the rectification of the Vuldronaii, the Traveller came as a large and moving Torb! Then, during the third reconciliation of the last of the Meketrex Supplicants they chose a new form for him... that of a Giant Sloar! many Shubs and Zulls knew what it was to be roasted in the depths of the Sloar that day I can tell you.")
   valid = request.META['REMOTE_ADDR'] in getattr(settings,'DOOR_IPS',[])
-  valid = valid or request.user.is_superuser
   valid = valid or APIKey.objects.filter(key=request.GET.get("api_key"))
+  if not valid and not request.user.is_authenticated():
+    return fail
+  valid = valid or request.user.is_superuser
 
   base_subs = Subscription.objects.filter(canceled__isnull=True)
   base_subs = base_subs.exclude(user__rfid__isnull=True)
+
+  out = {
+    'schedule': {},
+    'rfids': {},
+    'holidays': {}
+  }
 
   if 'permission_id' in request.GET:
     obj = get_object_or_404(Permission,id=request.GET['permission_id'])
@@ -222,6 +230,8 @@ def door_access(request):
     obj = get_object_or_404(DoorGroup,id=request.GET['door_id'])
     valid = valid or request.user.is_gatekeeper
     superQ = Q(is_superuser=True)|Q(is_gatekeeper=True)
+    _hids = [99999]+list(Level.objects.filter(holiday_access=True).values_list("id",flat=True))
+    out['holidays'] = { h.date.strftime("%Y-%m-%d"):_hids for h in Holiday.objects.all()}
 
   if not valid:
     return fail
@@ -232,10 +242,6 @@ def door_access(request):
     return fail
 
   schedule_jsons = { s.id: s.as_json for s in Schedule.objects.all() }
-  out = {
-    'schedule': {},
-    'rfids': {}
-  }
   for level in Level.objects.all():
     subscriptions = base_subs.filter(product__level=level).distinct()
     out['rfids'][level.order] = list(subscriptions.values_list('user__'+fieldname,flat=True))
