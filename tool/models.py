@@ -249,8 +249,7 @@ class Permission(models.Model):
 class Schedule(models.Model):
   name = models.CharField(max_length=32)
   __unicode__ = lambda self: self.name
-  as_json = property(lambda self: {d.dow: [d.start_time.strftime("%H%M"),d.end_time.strftime("%H%M")]
-                                   for d in self.scheduleday_set.all()})
+  as_json = property(lambda self: {d.dow: [d.start,d.end] for d in self.scheduleday_set.all()})
   def save(self,*args,**kwargs):
     super(Schedule,self).save(*args,**kwargs)
     if not self.scheduleday_set.count():
@@ -262,9 +261,9 @@ DOW_CHOICES = zip(range(7),['Su','Mo','Tu','We','Th','Fr','Sa'])
 class ScheduleDay(models.Model):
   schedule = models.ForeignKey(Schedule)
   dow = models.IntegerField(choices=DOW_CHOICES)
-  start_time = models.TimeField(default="10:00")
-  end_time = models.TimeField(default="22:00")
-  __unicode__ = lambda self: "%s: %s-%s"%(self.get_dow_display(),self.start_time,self.end_time)
+  start = models.CharField(max_length=4,default="1000")
+  end = models.CharField(max_length=4,default="2200")
+  __unicode__ = lambda self: "%s: %s-%s"%(self.get_dow_display(),self.start,self.end)
   class Meta:
     ordering = ('dow',)
 
