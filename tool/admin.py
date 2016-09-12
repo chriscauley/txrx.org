@@ -5,11 +5,15 @@ from django.contrib.auth import get_user_model
 from media.admin import TaggedPhotoInline
 from lablackey.db.admin import OrderedModelAdmin
 from .models import (Lab, Tool, ToolLink, TaggedTool, Group, Permission, Criterion, UserCriterion, APIKey,
-                     Schedule, ScheduleDay, PermissionSchedule)
+                     Schedule, ScheduleDay, PermissionSchedule, DoorGroup)
 
 #@admin.register(APIKey)
 #class APIKeyAdmin(admin.ModelAdmin):
 #  readonly_fields = ['key']
+
+@admin.register(DoorGroup)
+class DoorGroupAdmin(admin.ModelAdmin):
+  pass
 
 class ScheduleDayInline(admin.TabularInline):
   model = ScheduleDay

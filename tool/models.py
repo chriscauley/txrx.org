@@ -202,6 +202,14 @@ class Group(models.Model):
   class Meta:
     ordering = ('name',)
 
+class DoorGroup(models.Model):
+  name = models.CharField(max_length=32)
+  _ht = "List all the doors this can open."
+  description = models.TextField(help_text=_ht)
+  __unicode__ = lambda self: self.name
+  class Meta:
+    ordering = ('name',)
+
 class Permission(models.Model):
   name = models.CharField(max_length=32)
   abbreviation = models.CharField(max_length=16,help_text="For badge.")
@@ -241,6 +249,8 @@ class Permission(models.Model):
 class Schedule(models.Model):
   name = models.CharField(max_length=32)
   __unicode__ = lambda self: self.name
+  as_json = property(lambda self: {d.dow: [d.start_time.strftime("%H%M"),d.end_time.strftime("%H%M")]
+                                   for d in self.scheduleday_set.all()})
   def save(self,*args,**kwargs):
     super(Schedule,self).save(*args,**kwargs)
     if not self.scheduleday_set.count():
