@@ -7,7 +7,7 @@ from django.template.defaultfilters import date
 from django import forms
 
 from models import (Group, Level, Feature, MembershipFeature, UserMembership, Product, Flag,
-                    Subscription, Status, MeetingMinutes, Proposal, Officer, Container)
+                    Subscription, Status, MeetingMinutes, Proposal, Officer, Container, LevelDoorGroupSchedule)
 
 from lablackey.db.admin import RawMixin
 from lablackey.db.forms import StaffMemberForm
@@ -114,19 +114,24 @@ class ProductInline(admin.TabularInline):
   model = Product
   exclude = ('slug',)
 
+class LevelDoorGroupScheduleInline(admin.TabularInline):
+  model = LevelDoorGroupSchedule
+  extra = 0
+
 @admin.register(Level)
 class LevelAdmin(admin.ModelAdmin):
   list_display = ("name","order")
   list_editable = ("order",)
   fieldsets = (
-    (None,{'fields': (('name','group'),('discount_percentage','order'),'permission_description')}),
-    ('For Profit Features',{
-      'classes': ('collapse',),
-      'fields': (('machine_credits','cost_per_credit'),'simultaneous_users',
-                 ('custom_training_cost','custom_training_max'))
-    }),
+    (None,{'fields': (('name','group'),('discount_percentage','order'),'permission_description',
+                      'tool_schedule','door_schedule')}),
+    # ('For Profit Features',{
+    #   'classes': ('collapse',),
+    #   'fields': (('machine_credits','cost_per_credit'),'simultaneous_users',
+    #              ('custom_training_cost','custom_training_max'))
+    #}),
   )
-  inlines = (MembershipFeatureInline, ProductInline)
+  inlines = (MembershipFeatureInline, ProductInline, LevelDoorGroupScheduleInline)
 
 class StatusInline(admin.TabularInline):
   model = Status

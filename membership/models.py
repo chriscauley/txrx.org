@@ -101,6 +101,19 @@ class Level(models.Model):
   custom_training_cost = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   custom_training_max = models.DecimalField(max_digits=30, decimal_places=2, default=0)
 
+  # access schedule defaults
+  tool_schedule = models.ForeignKey("tool.Schedule",null=True,blank=True,related_name="+")
+  door_schedule = models.ForeignKey("tool.Schedule",null=True,blank=True,related_name="+")
+
+  def get_schedule_id(self,obj):
+    if obj._meta.model_name == 'permission':
+      return self.tool_schedule_id
+    elif obj._meta.model_name == 'doorgroup':
+      try:
+        return self.leveldoorgroupschedule_set.get(doorgroup=obj).schedule_id
+      except LevelDoorGroupSchedule.DoesNotExist:
+        return self.door_schedule_id
+
   def get_features(self):
     if not self.cost_per_credit:
       return self.features
@@ -133,6 +146,15 @@ class Level(models.Model):
     verbose_name = "Membership Level"
     ordering = ("order",)
   __unicode__ = lambda self: self.name
+
+class LevelDoorGroupSchedule(models.Model):
+  level = models.ForeignKey(Level)
+  doorgroup = models.ForeignKey("tool.DoorGroup")
+  schedule = models.ForeignKey("tool.Schedule")
+  __unicode__ = lambda self: "%s can access %s during %s"%(self.level,self.doorgroup,self.schedule)
+  class Meta:
+    ordering = ('level',)
+    unique_together = ('level','doorgroup')
 
 MONTHS_CHOICES = (
   (1,"Monthly"),
