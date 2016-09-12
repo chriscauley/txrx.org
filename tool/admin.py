@@ -4,8 +4,9 @@ from django.contrib.auth import get_user_model
 
 from media.admin import TaggedPhotoInline
 from lablackey.db.admin import OrderedModelAdmin
+from event.admin import FuturePastListFilter
 from .models import (Lab, Tool, ToolLink, TaggedTool, Group, Permission, Criterion, UserCriterion, APIKey,
-                     Schedule, ScheduleDay, PermissionSchedule, DoorGroup)
+                     Schedule, ScheduleDay, PermissionSchedule, DoorGroup, Holiday)
 
 #@admin.register(APIKey)
 #class APIKeyAdmin(admin.ModelAdmin):
@@ -36,6 +37,13 @@ class ScheduleAdmin(admin.ModelAdmin):
   def instructions(self,obj=None):
     if not obj or not obj.pk:
       return "Save and continue editing and a template will be made off with every day set at 10am-10pm."
+
+class FuturePastListFilter(FuturePastListFilter):
+  filter_field = 'date'
+
+@admin.register(Holiday)
+class HolidayAdmin(admin.ModelAdmin):
+  list_filter = [FuturePastListFilter]
 
 @admin.register(Lab)
 class LabAdmin(OrderedModelAdmin):

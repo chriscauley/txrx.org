@@ -246,6 +246,13 @@ class Permission(models.Model):
   class Meta:
     ordering = ('group','order')
 
+class Holiday(models.Model):
+  name = models.CharField(blank=True,max_length=32)
+  date = models.DateField()
+  __unicode__ = lambda self: "%s (%s)"%(self.name or "unnamed",self.date)
+  class Meta:
+    ordering = ("-date",)
+
 class Schedule(models.Model):
   name = models.CharField(max_length=32)
   __unicode__ = lambda self: self.name

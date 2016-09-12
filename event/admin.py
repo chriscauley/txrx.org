@@ -51,18 +51,16 @@ class OccurrenceModelInline(admin.TabularInline):
 class FuturePastListFilter(admin.SimpleListFilter):
   title = _('Filter by Date')
   parameter_name = 'futurepast'
+  filter_field = 'start'
 
   def lookups(self, request, model_admin):
     return (
-      ('future', _('Hide Past Events')),
-      ('past', _('Past Events Only')),
+      ('__gte', _('Hide Past Events')),
+      ('__lt', _('Past Events Only')),
     )
     
   def queryset(self, request, queryset):
-    if self.value() == 'future':
-      return queryset.filter(start__gte=datetime.date.today())
-    if self.value() == 'past':
-      return queryset.filter(start__lt=datetime.date.today())
+    return queryset.filter(**{self.filter_field+(self.value() or '__gte'):datetime.date.today()})
 
 class EventOccurrenceInline(OccurrenceModelInline):
   model = EventOccurrence
