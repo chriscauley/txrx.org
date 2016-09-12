@@ -124,19 +124,22 @@
 </user-document>
 
 <todays-checkins>
-  <div class="collapsible collapsible-accordion">
-    <div each={ checkin,i in checkins } onclick={ toggleIt } class={ active: active == i }>
-      <div class="collapsible-header">
-        <center>
-          <img src={ checkin.thumbnail } if={ checkin.thumbnial }/><br/>
-          { checkin.user_display_name } ({ checkin.sub_str })
-        </center>
+  <div class="card horizontal" each={ checkin,i in checkins }>
+    <div class="card-image">
+      <img src={ checkin.thumbnail }>
+      <button onclick={ parent.changeImage }
+              class="btn btn-green btn-floating fa fa-camera card-abs btn-large fa fa-2x"></button>
+    </div>
+    <div class="card-stacked" onclick={ toggleIt } class={ active: active == i }>
+      <div class="card-title">
+        { checkin.user_display_name }
       </div>
-      <div class="collapsible-body">
-        <div class="collapsible-inner">
-          <user-checkin checkin={ checkin }></user-checkin>
-        </div>
+      <div class="card-content">
+        ({ checkin.sub_str })
       </div>
+    </div>
+    <div style="display:none">
+      <user-checkin checkin={ checkin }></user-checkin>
     </div>
   </div>
 
@@ -155,7 +158,28 @@
   toggleIt(e) {
     this.active = (e.item.i==this.active)?undefined:e.item.i;
   }
+  changeImage(e) {
+  console.log('booty')
+    uR.mountElement("change-headshot",{mount_to: "#alert-div"})
+  }
 </todays-checkins>
+
+<change-headshot>
+  <modal>
+    <label class="box">
+      
+    </label>
+    <form><input type="file" onchange={ parent.uploadImage }/></form>
+  </modal>
+
+  uploadImage() {
+    uR.ajax({
+      url: "/api/change_headshot/",
+      form: this.root.querySelector("form"),
+      method: "POST",
+    })
+  }
+</change-headshot>
 
 <checkin-home>
   <div class="inner">

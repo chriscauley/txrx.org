@@ -132,3 +132,8 @@ def hidden_image(request):
   if request.path.startswith("/superuser_images/") and not request.user.is_superuser():
     return HttpResponse("Not Allowed",status=403)
   return serve(request, path, settings.STAFF_ROOT)
+
+@staff_member_required
+def change_headshot(request):
+  print request.FILES
+  return HttpResponse("")
