@@ -104,6 +104,7 @@ class Level(models.Model):
   # access schedule defaults
   tool_schedule = models.ForeignKey("tool.Schedule",null=True,blank=True,related_name="+")
   door_schedule = models.ForeignKey("tool.Schedule",null=True,blank=True,related_name="+")
+  holiday_access = models.BooleanField(default=False)
 
   def get_schedule_id(self,obj):
     if obj._meta.model_name == 'permission':

@@ -124,7 +124,7 @@ class LevelAdmin(admin.ModelAdmin):
   list_editable = ("order",)
   fieldsets = (
     (None,{'fields': (('name','group'),('discount_percentage','order'),'permission_description',
-                      'tool_schedule','door_schedule')}),
+                      'tool_schedule','door_schedule','holiday_access')}),
     # ('For Profit Features',{
     #   'classes': ('collapse',),
     #   'fields': (('machine_credits','cost_per_credit'),'simultaneous_users',
