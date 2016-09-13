@@ -61,7 +61,7 @@ def nav(request):
   ]
   if getattr(request.user,'is_gatekeeper',False):
     toolmaster_sublinks.append({'name': 'Set RFID','url': '/rfid/'})
-    toolmaster_sublinks.append({'name': 'Tool/Permission Table','url': '/tools/tool_permission_table/'})
+    toolmaster_sublinks.append({'name': 'RFID Table','url': '/rfid_permission_table/'})
   if request.user.is_authenticated() and request.user.subscription_set.filter(canceled__isnull=True):
     _l = 'https://docs.google.com/document/d/1Cb-83FJ_8n_ModIIRMGesTOTfefoeVA2V--s-5XWa_M/edit?usp=sharing'
     about_links.append({'name': 'Orientation Notes','url': _l})

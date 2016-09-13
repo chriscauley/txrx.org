@@ -98,8 +98,9 @@ class User(AbstractBaseUser, PermissionsMixin):
   rfids = property(lambda self: self.rfid_set.all().values_list('number',flat=True))
 
   @property
-  def criterion_ids(self):
-    return list(UserCriterion.active_objects.filter(user=self).values_list('criterion_id',flat=True))
+  def usercriterion_jsons(self):
+    ucj = UserCriterion.active_objects.filter(user=self).values('criterion_id','expires','created','id')
+    return list(ucj)
   @property
   def signature_jsons(self):
     return [s.as_json for s in self.signature_set.all().order_by('-datetime')]
@@ -145,7 +146,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     self.save()
   def create_fake_safety(self):
     defaults = {
-      'content_object': self.subscription_set.all()[0]
+      'content_object': self.subscription_set.all()[0],
+      'expires': datetime.datetime.now() + datetime.timedelta(90)
     }
     criterion = Criterion.objects.get(id=settings.SAFETY_CRITERION_ID)
     uc, new = UserCriterion.active_objects.get_or_create(

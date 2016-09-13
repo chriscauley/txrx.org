@@ -27,14 +27,16 @@ badge {
 checkbox {
   display: block;
   .alert {
+    align-items: center;
     cursor: pointer;
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
     &.alert-warning { cursor: disabled; }
     .fa-2x {
       line-height: 0.8em;
       padding-right: 10px;
     }
+    b { color: @red; flex-basis: 100%; }
   }
 }
 

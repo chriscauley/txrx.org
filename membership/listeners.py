@@ -105,7 +105,7 @@ def paypal_signal(sender,**kwargs):
       status__in=Flag.PAYMENT_ACTIONS
     ).update(status="paid")
     if not user.usercriterion_set.filter(criterion_id=settings.ORIENTATION_CRITERION_ID):
-      # user has never been oriented, send welcome email
+      # user has never been oriented, send welcome email and create fake safety
       user.send_welcome_email()
 
   status = Status.objects.create(

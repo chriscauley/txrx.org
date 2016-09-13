@@ -1,7 +1,7 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
@@ -57,5 +57,5 @@ def toggle_criterion(request):
 
   # send back the new user criterion ids to replace old data
   user = User.objects.get(pk=user.pk)
-  attrs = ['signature_jsons','enrollment_jsons','locked_criterion_ids','criterion_ids']
-  return HttpResponse(json.dumps({attr: getattr(user,attr) for attr in attrs}))
+  attrs = ['signature_jsons','enrollment_jsons','locked_criterion_ids','usercriterion_jsons']
+  return JsonResponse({attr: getattr(user,attr) for attr in attrs})

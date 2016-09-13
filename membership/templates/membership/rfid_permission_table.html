@@ -43,7 +43,7 @@
     <div class="col-sm-4">
       <h2>
         {% if permission %}
-        <span>{{ permission.pk }}</span> <a {#href="{{ permission.get_absolute_url }}"#}>{{ permission }}</a>
+        <span>{{ permission.pk }}</span>{{ permission }}
         <a href="/admin/tool/permission/{{ permission.pk }}/" class="fa fa-pencil-square right superuseronly"></a>
         <a href="/rfid_access.json?permission_id={{ permission.pk }}" class="fa fa-file-code-o right superuseronly"></a>
         {% else %}

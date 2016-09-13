@@ -96,6 +96,7 @@
       <h3><u>Tool Criteria</u></h3>
       <checkbox each={ criteria } onclick={ parent.toggleCriterion } if={ can_change }>
         { name }
+        <b if={ expires }>EXPIRES: { expires }</b>
       </checkbox>
     </div>
   </div>
@@ -131,9 +132,12 @@
     that.criteria  = window.TXRX.criteria;
     if (that.active_user) {
       var user = window.TXRX.user
+      var usercriterion = {};
+      uR.forEach(that.student.usercriterion_jsons,function(ucj) { usercriterion[ucj.criterion_id] = ucj });
       that.criteria.forEach(function(c) {
-        c.has = that.student.criterion_ids.indexOf(c.id) != -1;
+        c.has = usercriterion[c.id];
         c.locked = that.student.locked_criterion_ids.indexOf(c.id) != -1;
+        c.expires = c.has && c.has.expires && moment(new Date(c.has.expires)).format("MMMM DD, YYYY");
         c.can_change = user.is_toolmaster || user.master_criterion_ids.indexOf(c.id) != -1;
       });
       that.student.enrollment_jsons.forEach(function(e){
