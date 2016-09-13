@@ -212,6 +212,7 @@ def door_access(request):
   base_subs = Subscription.objects.filter(canceled__isnull=True)
   base_subs = base_subs.exclude(user__rfid__isnull=True)
 
+  obj = None
   out = {
     'schedule': {},
     'rfids': {},
@@ -233,7 +234,7 @@ def door_access(request):
     _hids = [99999]+list(Level.objects.filter(holiday_access=True).values_list("id",flat=True))
     out['holidays'] = { h.date.strftime("%Y-%m-%d"):_hids for h in Holiday.objects.all()}
 
-  if not valid:
+  if not (valid and obj):
     return fail
 
   #fieldname is intended to be used only for testing
