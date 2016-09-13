@@ -56,7 +56,7 @@
     <script type="text/javascript">stLight.options({publisher: "56794c5c-23aa-4e30-b62c-dcc177306755", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
     {% endcomment %}
   </head>
-  <body class="{{ BODY_CLASS }}">
+  <body class="{{ BODY_CLASS }}{% if request.user.is_superuser %} is-superuser{% endif %}">
     {# this can eventually be moved int _cart.html #}
     {% include "course/_cart.html" %}
     <div class="container">
