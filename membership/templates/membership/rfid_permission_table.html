@@ -8,7 +8,7 @@
     <div class="col-sm-4">
       <h2>
         <span>{{ level.order }}</span>{{ level }}
-        <a href="/admin/membership/level/{{ level.pk }}/" class="fa fa-pencil-square right"></a>
+        <a href="/admin/membership/level/{{ level.pk }}/" class="fa fa-pencil-square right superuseronly"></a>
       </h2>
       <p>{{ level.permission_description }}</p>
     </div>
@@ -25,7 +25,8 @@
     <div class="col-sm-4">
       <h2>
         <span>{{ doorgroup.id }}</span>{{ doorgroup }}
-        <a href="/admin/tool/doorgroup/{{ doorgroup.pk }}/" class="fa fa-pencil-square right"></a>
+        <a href="/admin/tool/doorgroup/{{ doorgroup.pk }}/" class="fa fa-pencil-square right superuseronly"></a>
+        <a href="/rfid_access.json?door_id={{ doorgroup.pk }}" class="fa fa-file-code-o right superuseronly"></a>
       </h2>
       <p>{{ doorgroup.description|linebreaks }}</p>
     </div>
@@ -43,7 +44,8 @@
       <h2>
         {% if permission %}
         <span>{{ permission.pk }}</span> <a {#href="{{ permission.get_absolute_url }}"#}>{{ permission }}</a>
-        <a href="/admin/tool/permission/{{ permission.pk }}/" class="fa fa-pencil-square right"></a>
+        <a href="/admin/tool/permission/{{ permission.pk }}/" class="fa fa-pencil-square right superuseronly"></a>
+        <a href="/rfid_access.json?permission_id={{ permission.pk }}" class="fa fa-file-code-o right superuseronly"></a>
         {% else %}
         None Assigned
         {% endif %}
@@ -52,7 +54,7 @@
         {% for tool in tools %}
         <li>
           <span>{{ tool.pk }}</span> <a href="{{ tool.get_absolute_url }}">{{ tool }}</a>
-          <a href="/admin/tool/tool/{{ tool.pk }}/" class="fa fa-pencil-square right"></a>
+          <a href="/admin/tool/tool/{{ tool.pk }}/" class="fa fa-pencil-square right superuseronly"></a>
         </li>
         {% endfor %}
       </ul>

@@ -263,7 +263,7 @@ def rfid_permission_table(request):
     'levels': Level.objects.all(),
     'doorgroups': DoorGroup.objects.all()
   }
-  return TemplateResponse(request,'tool/tool_permission_table.html',values)
+  return TemplateResponse(request,'membership/rfid_permission_table.html',values)
 
 @staff_member_required
 def container(request,pk):
