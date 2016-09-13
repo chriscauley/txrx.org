@@ -85,7 +85,7 @@
     <div class="instructor">with { instructor_name }</div>
     <b class="full" if={ closed_status == 'full' }>This session is full</b>
     <b class="full" if={ closed_status == 'private' }>This session is private</b>
-    <b class="full" if={ closed_status == 'cancelled' }>This session has been canceled. If you were enrolled and have not received an email, please contact <a href="{ uR.config.support_email }">{ uR.config.support_email }</a></b>
+    <b class="full" if={ closed_status == 'cancelled' }>This session has been canceled. If you were enrolled and have not received an email, please contact <a href="mailto:{ uR.config.support_email }">{ uR.config.support_email }</a></b>
     <div if={ !closed_status && fee }>
       <button class="btn btn-primary" onclick={ parent.add } if={ !incart }>
         Add this session to cart</button>
