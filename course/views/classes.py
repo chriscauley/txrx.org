@@ -18,24 +18,15 @@ from paypal.standard.ipn.models import *
 import datetime, json
 
 def get_course_values(user):
-  term = Term.objects.all()[0]
-  user_courses = []
-  user_sessions = []
-  instructor_sessions = []
-  pending_evaluations = []
-  if user.is_authenticated():
-    instructor_sessions = Session.objects.filter(user=user).reverse()
-    user_sessions = Session.objects.filter(enrollment__user=user.id)
-    pending_evaluations = Enrollment.objects.pending_evaluation(user=user)
-    for session in user_sessions:
-      user_courses.append(session)
-  user_sessions = sorted(list(user_sessions),key=lambda s: s.first_date,reverse=True)
+  if not user.is_authenticated():
+    return { 'term': Term.objects.all()[0] }
+  user_sessions = Session.objects.filter(enrollment__user=user.id)
   return {
-    'term': term,
-    'user_sessions': user_sessions,
-    'user_courses': user_courses,
-    'instructor_sessions': instructor_sessions,
-    'pending_evaluations': pending_evaluations,
+    'user_sessions': sorted(list(user_sessions),key=lambda s: s.first_date,reverse=True),
+    'instructor_sessions': Session.objects.filter(user=user).reverse(),
+    'pending_evaluations': Enrollment.objects.pending_evaluation(user=user),
+    'future_sessions': user_sessions.filter(last_date__gte=datetime.date.today()).count(),
+    'past_sessions': user_sessions.filter(last_date__lt=datetime.date.today()).count(),
   }
 
 def index(request):

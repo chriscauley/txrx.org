@@ -5,7 +5,7 @@
     us at <a href="mailto:info@txrxlabs.org">info@txrxlabs.org</a> and we'll look into it.
   </div>
   {% if not user_sessions.0.past %}
-  <h3 class="block_title">Upcoming Classes</h3>
+  <h3 class="block_title">{{ future_sessions }} Upcoming Class{{ future_sessions|pluralize:"es" }}</h3>
   {% endif %}
   <ul class="list-unstyled">
     {% for session in user_sessions %}
@@ -15,7 +15,7 @@
   <p class="alert alert-danger">{% include "course/_return_policy.html" with format="html" %}</p>
   {% endif %}
   <ul class="list-unstyled">
-    <li><h3 class="block_title margin-top">Past Courses</h3></li>
+    <li><h3 class="block_title margin-top">{{ past_sessions }} Past Class{{ past_sessions|pluralize:"es" }}</h3></li>
     {% endif %}{% endifchanged %}
     <li>
       <a href="{{ session.get_absolute_url }}"> {{ session.course }}</a> ({{ session.get_short_dates }} - {{ session.first_date.year }})
