@@ -19,6 +19,23 @@
     {% endfor %}
   </div>
   <hr/>
+  <h1>Door Groups</h1>
+  <div class="row">
+    {% for doorgroup in doorgroups %}
+    <div class="col-sm-4">
+      <h2>
+        <span>{{ doorgroup.id }}</span>{{ doorgroup }}
+        <a href="/admin/tool/doorgroup/{{ doorgroup.pk }}/" class="fa fa-pencil-square right"></a>
+      </h2>
+      <p>{{ doorgroup.description|linebreaks }}</p>
+    </div>
+    {% if forloop.counter|divisibleby:3 %}
+  </div>
+  <div class="row">
+    {% endif %}
+    {% endfor %}
+  </div>
+  <hr/>
   <h1>Permissions and tools</h1>
   <div class="row">
     {% for permission,tools in permission_tools %}

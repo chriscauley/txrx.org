@@ -208,7 +208,7 @@ class DoorGroup(models.Model):
   description = models.TextField(help_text=_ht)
   __unicode__ = lambda self: self.name
   class Meta:
-    ordering = ('name',)
+    ordering = ('id',)
 
 class Permission(models.Model):
   name = models.CharField(max_length=32)

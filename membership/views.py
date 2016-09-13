@@ -254,13 +254,14 @@ def door_access(request):
   return HttpResponse("<pre>%s</pre>"%json.dumps(out,indent=4))
 
 @staff_member_required
-def tool_permission_table(request):
+def rfid_permission_table(request):
   permissions = Permission.objects.all().order_by("name")
   permissions_tools = [(p,p.tool_set.all().order_by('name')) for p in permissions]
   permissions_tools.append((None,Tool.objects.filter(permission=None).order_by('name')))
   values = {
     'permission_tools': permissions_tools,
-    'levels': Level.objects.all()
+    'levels': Level.objects.all(),
+    'doorgroups': DoorGroup.objects.all()
   }
   return TemplateResponse(request,'tool/tool_permission_table.html',values)
 
