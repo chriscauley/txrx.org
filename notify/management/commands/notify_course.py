@@ -13,8 +13,8 @@ import datetime
 
 class Command (BaseCommand):
   def handle(self, *args, **options):
-    dt = datetime.datetime.now()-datetime.timedelta(2)
     new_sessions = Session.objects.filter(active=True,notified__isnull=True).exclude(private=True)
+    count = new_sessions.count()
     if not new_sessions:
       mail_admins("No classes","No new classes to notify anyone about :(")
       return
@@ -35,4 +35,4 @@ class Command (BaseCommand):
         [user.email],
         )
     new_sessions.update(notified=datetime.datetime.now())
-    print "Notified %s users of %s classes"%(len(users),len(new_sessions))
+    print "Notified %s users of %s classes"%(len(users),count)
