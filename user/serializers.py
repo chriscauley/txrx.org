@@ -10,11 +10,15 @@ class SearchSizzler(BaseSizzler):
     session_id = request.REQUEST.get('session_id',None)
     qs = class_.Meta.model.objects.all()
     if q:
-      _Q = Q()
-      for f in ['username','email','paypal_email','first_name','last_name']:
-        _Q = _Q | Q(**{f+"__icontains":q})
-      qs = qs.filter(_Q).filter(is_active=True).distinct()
-    return qs
+      for word in q.split(" "):
+        if not word:
+          continue
+        _Q = Q()
+        for f in ['username','email','paypal_email','first_name','last_name']:
+          _Q = _Q | Q(**{f+"__icontains":word})
+        qs = qs.filter(_Q).filter(is_active=True).distinct()
+        print word,'  ',qs.count()
+    return qs.distinct()
   class Meta:
     model = User
     fields = ('username','id','email','paypal_email','get_full_name','rfids')
