@@ -232,6 +232,7 @@ def door_access(request):
     valid = valid or request.user.is_gatekeeper
     superQ = Q(is_superuser=True)|Q(is_gatekeeper=True)
     _hids = [99999]+list(Level.objects.filter(holiday_access=True).values_list("id",flat=True))
+    _hids = [str(h) for h in _hids]
     out['holidays'] = { h.date.strftime("%Y-%m-%d"):_hids for h in Holiday.objects.all()}
 
   if not (valid and obj):
