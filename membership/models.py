@@ -209,12 +209,12 @@ class Subscription(models.Model):
     if Flag.objects.filter_pastdue(subscription=self):
       return "yellow"
     if self.canceled:
-      return "blue"
+      return "blue white-text"
     if self.owed > 0:
       return "yellow"
     if not self.status_set.count():
-      return "blue"
-    return "green"
+      return "blue white-text"
+    return "green white-text"
   #! TODO depracated
   def bs_class(self):
     if Flag.objects.filter_pastdue(subscription=self):

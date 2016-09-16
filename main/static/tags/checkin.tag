@@ -1,14 +1,14 @@
 <user-checkin>
   <div class="row">
-    <div class="col m8 s12" if={ documents_done }>
+    <div class="col m8 s12 offset-m2" if={ documents_done }>
       <div class="card green white-text">
         <div class="card-content">
           <b>{ documents_done } document{ "s": documents.length != 1 } signed. Thank you!</b>
         </div>
       </div>
     </div>
-    <div class="col m8 s12" if={ documents.length }>
-      <h4>Required Documents</h4>
+    <div class="col m8 s12 offset-m2" if={ documents.length }>
+      <h4>Unsigned Documents</h4>
       <div class="card yellow">
         <div class="card-content">
           <p>
@@ -23,11 +23,11 @@
     </div>
     <div class="col s6" if={ subscriptions.length }>
       <h4>Subscriptions</h4>
-      <div class="card { card_class } white-text" each={ subscriptions }>
+      <div class="card { card_class }" each={ subscriptions }>
         <div class="card-content">
           <div>
             <a href="/admin/membership/subscription/{ id }/" if={ TXRX.user.is_superuser }
-               class="fa fa-edit white-text right"></a>
+               class="fa fa-edit right"></a>
             <b>{ month_str } { level }</b>
           </div>
           <div>Start Date: { created_str }</div>
