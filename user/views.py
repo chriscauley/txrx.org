@@ -6,6 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.static import serve
+from django.core.mail import EmailMessage
 
 from .models import User, UserCheckin, RFID
 from event.models import RSVP
@@ -134,6 +135,22 @@ def hidden_image(request):
   return serve(request, path, settings.STAFF_ROOT)
 
 @staff_member_required
-def change_headshot(request):
-  print request.FILES
-  return HttpResponse("")
+def change_headshot(request,attr):
+  user = get_object_or_404(get_user_model(),pk=request.POST['user_id'])
+  if attr == 'headshot':
+    user.headshot = request.FILES[attr]
+    user.save()
+  elif attr == 'id_photo':
+    admin_url = "https://txrxlabs.org/admin/user/user/%s"%user.id
+    msg = EmailMessage(
+      user.username,
+      "\n".join([str(s) for s in [user.get_full_name(),user.email,user.paypal_email,admin_url]]),
+      settings.DEFAULT_FROM_EMAIL,
+      [settings.ID_PHOTO_EMAIL]
+    )
+    msg.attach(request.FILES[attr].name,request.FILES[attr].read(),'image/jpg')
+    msg.send()
+    user.id_photo_date = datetime.date.today()
+    user.save()
+    attr = 'id_photo_date'
+  return JsonResponse({'done': str(getattr(user,attr))})

@@ -20,28 +20,36 @@
   <div>
     {% for rsvp in eventoccurrence.get_rsvps %}
     <div class="well">
-      <form method="POST">
-        {% csrf_token %}
-        <input name="user_id" value="{{ rsvp.user_id }}" type="hidden">
-        {% if rsvp.user.id in oriented_ids %}
-        <input type="hidden" name="action" value="fail"/>
-        <button class="btn btn-danger pull-right">de-Orient!</button>
-        {% else %}
-        <input type="hidden" name="action" value="pass"/>
-        <button class="btn btn-success pull-right">Orient!</button>
-        {% endif %}
-        <b>
-          {{ rsvp.user }} {{ rsvp.user.first_name }} {{ rsvp.user.last_name }}<br/>
-          {{ rsvp.user.level }}<br/>
-          {{ rsvp.user.email }}
-          {% if rsvp.user.paypal_email %}
-          <br/>Paypal: {{ rsvp.user.paypal_email }}
+      <div class="pull-right">
+        <form method="POST">
+          {% csrf_token %}
+          <input name="user_id" value="{{ rsvp.user_id }}" type="hidden">
+          {% if rsvp.user.id in oriented_ids %}
+          <input type="hidden" name="action" value="fail"/>
+          <button class="btn btn-danger">de-Orient!</button>
+          {% else %}
+          <input type="hidden" name="action" value="pass"/>
+          <button class="btn btn-success">Orient!</button>
           {% endif %}
-        </b>
-        {% for enrollment in rsvp.user.enrollment_set.all %}
-        <div>{{ enrollment.session }}</div>
-        {% endfor %}
-      </form>
+        </form>
+        <ez-file url="/api/change_headshot/" user_id="{{ rsvp.user.id }}" name="Headshot"
+                 done="{{ rsvp.user.headshot|default_if_none:"" }}"></ez-file>
+        <ez-file url="/api/change_id_photo/" user_id="{{ rsvp.user.id }}" name="ID Photo"
+                 done="{{ rsvp.user.id_photo_date|default_if_none:"" }}"></ez-file>
+      </div>
+      <b>
+        {{ rsvp.user }} {{ rsvp.user.first_name }} {{ rsvp.user.last_name }}
+        <a href="{{ rsvp.user.get_admin_url }}" class="fa fa-edit"></a><br/>
+        {{ rsvp.user.headshot }}<br/>
+        {{ rsvp.user.level }}<br/>
+        {{ rsvp.user.email }}
+        {% if rsvp.user.paypal_email %}
+        <br/>Paypal: {{ rsvp.user.paypal_email }}
+        {% endif %}
+      </b>
+      {% for enrollment in rsvp.user.enrollment_set.all %}
+      <div>{{ enrollment.session }}</div>
+      {% endfor %}
     </div>
     {% endfor %}
   </div>
@@ -49,4 +57,38 @@
   <h1>No Orientations at This Date</h1>
   {% endfor %}
 </div>
+<script type="riot/tag">
+  <ez-file>
+    <form action={ opts.url } method="POST">
+      <input type="file" id="file__{ slug }" onchange={ uploadFile } name={ slug } />
+      <input type="hidden" name="user_id" value={ opts.user_id } />
+      <label for="file__{ slug }" class="btn-{ done?'success':'danger' } btn">
+        { opts.name }
+      </label>
+    </form>
+    <style scoped>
+      :scope { display: block; margin: 10px 0; }
+      :scope input[type=file] { display: none; }
+      :scope label { cursor: pointer; text-align: center; }
+    </style>
+
+    this.on("mount", function() {
+      this.slug = this.opts.name.replace(" ","_").toLowerCase();
+      this.done = this.opts.done;
+      this.update();
+    });
+    uploadFile(e) {
+      var form = this.root.querySelector("form");
+      var that = this;
+      uR.ajax({
+        url: this.opts.url,
+        method: "POST",
+        that: this,
+        form: form,
+        success: function(data) { this.done = data.done },
+      });
+    }
+  </ez-file>
+</script>
+<script>uR.ready(function() { riot.mount("ez-file"); })</script>
 {% endblock %}

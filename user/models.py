@@ -125,6 +125,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     verbose_name_plural = _('users')
     ordering = ('username',)
 
+  def get_admin_url(self):
+    return "/admin/user/user/%s/"%self.id
   def get_absolute_url(self):
     return "/users/%s/" % urlquote(self.email)
 
