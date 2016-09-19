@@ -36,10 +36,10 @@
       </div>
     </div>
     <div class="col s6" if={ classtimes.length }>
-      <h4>Classes Today</h4>
+      <h4>Future Classes</h4>
       <div each={ classtimes } class="card">
         <div class="card-content">
-          <div class="card-title">{ start_string }-{ end_string }</div>
+          <div class="card-title">{ time_string }</div>
           <div>
             <div if={ instructor }><b>You&rsquo;re teaching!</b></div>
             { session.course_name }.<br/>
@@ -80,8 +80,11 @@
     this.classtimes = checkin.classtimes;
     uR.forEach(this.classtimes || [],function(classtime) {
       classtime.session = checkin.sessions[classtime.session_id];
-      classtime.start_string = moment(classtime.start).format("h:mm A");
-      classtime.end_string = moment(classtime.end).format("h:mm A");
+      var start = moment(classtime.start), end = moment(classtime.end);
+      var start_format = start.minute()?"h:mm":"h";
+      var end_format = end.minute()?"h:mm A":"h A";
+      if (start.hour() < 12 && end.hour() > 12) { start_format += " A"; }
+      classtime.time_string = start.format(start_format) + " - " + end.format(end_format);
       classtime.instructor = classtime.session.instructor_pk == checkin.user_id;
     });
     this.permissions = [];
@@ -221,10 +224,8 @@
     { name: "password", type: "password" },
   ];
   this.on("mount", function() {
-    this.email_checkin = true;
     if (window.location.search.indexOf("kiosk") != -1) {
       this.kiosk = true;
-      this.email_checkin = false;
     }
     this.current_number = ""
     this.last_press = new Date();
@@ -241,6 +242,7 @@
     var e = uR.getQueryParameter("e");
     if (e) { TXRX.mainMount("checkin-register",{ email: "arst@oairesnt.com" }) }
     TXRX.ready(function() {
+      self.email_checkin = !self.kiosk;
       if (TXRX.user.id) {
         self.email_checkin = false;
         self.auth_user_checkin = true;
