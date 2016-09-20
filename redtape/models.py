@@ -76,6 +76,10 @@ INPUT_TYPE_CHOICES = [
   ('checkbox','Checkbox'),
 ]
 
+INPUT_TYPE_MAP = {
+  'phone': 'text'
+}
+
 INPUT_HELP_TEXT = {
   'signature': 'Signed name should start with /s/, eg /s/John Hancock'
 }
@@ -95,6 +99,8 @@ class DocumentField(models.Model):
       return
     choices = choices or json.loads(self.choices)
     return choices if isinstance(choices[0],list) else zip(choices,choices)
+  def get_input_type(self):
+    return INPUT_TYPE_MAP.get(self.input_type,self.input_type)
   @cached_method
   def get_optgroups(self):
     # returns None if self.choices is not in the optgroup format
@@ -109,7 +115,7 @@ class DocumentField(models.Model):
     return {
       'label': self.label,
       'name': self.name or slugify(self.label),
-      'type': self.input_type,
+      'type': self.get_input_type(),
       'required': self.required,
       'choices': self.get_optgroups() or self.get_options(),
       'help_text': INPUT_HELP_TEXT.get(self.input_type,None),
