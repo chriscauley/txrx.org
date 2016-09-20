@@ -36,7 +36,7 @@
       </div>
     </div>
     <div class="col s6" if={ classtimes.length }>
-      <h4>Future Classes</h4>
+      <h4>Classes Today</h4>
       <div each={ classtimes } class="card">
         <div class="card-content">
           <div class="card-title">{ time_string }</div>
