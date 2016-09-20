@@ -89,7 +89,7 @@ class User(AbstractBaseUser, PermissionsMixin):
   objects = UserManager()
 
   #txrx fields
-  level = models.ForeignKey(Level,default=1)
+  level = models.ForeignKey(Level,default=settings.DEFAULT_MEMBERSHIP_LEVEL)
   orientation_status = models.CharField(max_length=32,choices=ORIENTATION_STATUS_CHOICES,default="new")
 
   USERNAME_FIELD = 'username'

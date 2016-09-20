@@ -240,7 +240,7 @@ class Subscription(models.Model):
       return self.canceled.strftime("Canceled %b %-d, %Y")
     if self.paid_until:
       return self.paid_until.strftime("Paid until %b %-d, %Y")
-  def recalculate(self,modify_membership=True):
+  def recalculate(self):
     now = self.canceled or datetime.datetime.now()
     for months in range(1200): # 100 years
       if add_months(self.created,months) >= now:
@@ -255,7 +255,7 @@ class Subscription(models.Model):
     last = self.last_status
     if last:
       user = self.user
-      if modify_membership:
+      if self.owed <= 0 and not self.canceled:
         user.level = self.product.level
       user.save()
     if self.owed <= 0:
