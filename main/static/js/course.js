@@ -1,3 +1,4 @@
+window.NO_DISCOUNT = [];
 $(function() {
   var active_subject;
   // set enrollment status for ALL_CLASSES, this can be moved to course.tag 
@@ -12,7 +13,6 @@ $(function() {
     }
   }
 
-  window.NO_DISCOUNT = [];
   // assign ALL_CLASSES to subjects and generate search string
   // this should be part of the mount or update section of course list
   for (var ci=0; ci<ALL_CLASSES.length; ci++) {
@@ -79,4 +79,5 @@ $(function() {
     filterSearch: filterSearch
   });
   if (unscheduled_courses) { $(".course_divider").show(); }
+  simpleCart.update();
 });

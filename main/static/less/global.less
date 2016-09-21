@@ -33,7 +33,4 @@ body,html { height: 100%; overflow-x: hidden; }
   .hidden112:nth-child(n+3) { display: none; }
 }
 
-.superuseronly {
-  display: none;
-  .is-superuser { display: block; }
-}
+body:not(.is-superuser) .superuseronly { display: none; }

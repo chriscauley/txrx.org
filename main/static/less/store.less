@@ -35,15 +35,26 @@ product, product-admin {
 }
 
 product, product-admin {
-  .img,.cart-buttons {
+  position: relative;
+  .bottom {
+    background: inherit;
+    bottom: 0;
+    padding-bottom: inherit;
+    padding-left: inherit;
+    padding-right: inherit;
+    position: absolute;
+  }
+  .cart-buttons {
     transition: height 0.25s;
     overflow: hidden;
   }
   .cart-buttons { height: 0; }
-  .img { height: 140px; }
+  .img {
+    .fixed-ratio(50%);
+    margin-bottom: 88px;
+  }
   .incart {
-    .img { height: 140px - @rowHeight*2 - @rowSpacing; }
-    .cart-buttons { height: @rowHeight*2 + @rowSpacing; }
+    .cart-buttons { height: @rowHeight; }
   }
   .out-of-stock {
     position: relative;
@@ -60,6 +71,12 @@ product, product-admin {
       z-index:1;
     }
   }
+}
+
+product.tiny {
+  .bottom { position: static; }
+  .img { display: none; }
+  .out-of-stock:before { background-size: auto 80%; }
 }
 
 category-list {
