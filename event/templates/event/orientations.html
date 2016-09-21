@@ -60,9 +60,9 @@
 <script type="riot/tag">
   <ez-file>
     <form action={ opts.url } method="POST">
-      <input type="file" id="file__{ slug }" onchange={ uploadFile } name={ slug } />
+      <input type="file" id="file__{ slug }__{ opts.user_id }" onchange={ uploadFile } name={ slug } />
       <input type="hidden" name="user_id" value={ opts.user_id } />
-      <label for="file__{ slug }" class="btn-{ done?'success':'danger' } btn">
+      <label for="file__{ slug }__{ opts.user_id }" class="btn-{ done?'success':'danger' } btn">
         { opts.name }
       </label>
     </form>
