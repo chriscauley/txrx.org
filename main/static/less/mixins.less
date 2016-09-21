@@ -1,0 +1,9 @@
+.fixed-ratio(@height) {
+  display: inline-block;
+  width: 100%;
+  &:before {
+    content: "";
+    display: block;
+    margin-top: @height;
+  } 
+} 
