@@ -5,7 +5,7 @@
   <category-list></category-list>
 </div>
 <div class="col-sm-9 col-md-10 col-lg-10">
-  {% if request.user.is_shopkeeper %}
+  {% if request.user.is_shopkeeper or request.user.is_superuser %}
   <div class="row">
     <div class="col-sm-4">
       <a href="/shop/" class="btn btn-block btn-success">Shop</a>
@@ -27,8 +27,6 @@
 
 {% block extrajs %}
 {% block pjs %}{% endblock %}
-<script src="/products.js"></script>
-<script type="riot/tag" src="{{ STATIC_URL }}tags/store.tag"></script>
-<script type="riot/tag" src="{{ STATIC_URL }}tags/cart.tag"></script>
+{% include "store/_media.html" %}
 <script>riot.mount("*");</script>
 {% endblock %}

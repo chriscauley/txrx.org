@@ -21,15 +21,18 @@
 
 <product-list>
   <div class="row">
-    <product each={ product,i in products } product={ product } class="col-sm-6 col-md-4"></product>
+    <product each={ product,i in products } product={ product } class={ parent.className }></product>
     <product-admin each={ product,i in admin_products } product={ product } class="col-sm-6 col-md-4"></product-admin>
   </div>
   <button class="btn btn-warning btn-block" onclick={ more } if={window.PRODUCTS.visible<this.max_products}>
     Load More</button>
 
+  var self = this;
   window.PRODUCTS.visible = 18;
   this.on("mount",function() {
     window.PRODUCT_LIST = this;
+    this.className = this.opts.className || "col-sm-6 col-md-4";
+    this.update();
   });
   this.on("update",function() {
     this.products = window.PRODUCTS.list;
@@ -37,6 +40,9 @@
       this.products = this.products.filter(function(p){
         return p.categories.indexOf(window.PRODUCTS.c) > -1;
       });
+    }
+    if (this.opts.ids) {
+      this.products = this.products.filter(function(p) { return self.opts.ids.indexOf(p.pk) !=-1 })
     }
     this.max_products = this.products.length
     this.products = this.products.slice(0,window.PRODUCTS.visible);
@@ -53,28 +59,26 @@
 
 <product>
   <div class="well {incart:product.quantity,out-of-stock:product.in_stock==0,hidden:data.categories.indexOf(window.PRODUCTS.c)==-1}">
-    <div class="img">
-      <img src={ product.img.url } />
-    </div>
-    <div class="name">{ product.name }</div>
-    <div class="row">
-      <div class="col-xs-{ (product.quantity!=0)?12:6 } price">
-        ${product.price}
-        <span if={ product.quantity }>x { product.quantity }</span>
+    <div class="img" style="background-image: url({ product.img.url })"></div>
+    <div class="bottom">
+      <div class="name">{ product.name }</div>
+      <div class="row">
+        <div class="col-xs-{ (product.quantity!=0)?12:6 } price">
+          ${product.price}
+          <span if={ product.quantity }>x { product.quantity }</span>
+        </div>
+        <div class="col-xs-6" if={ !product.quantity }>
+          <button class="btn btn-success btn-block" onclick={ plusOne }>Add to Cart</button>
+        </div>
       </div>
-      <div class="col-xs-6" if={ !product.quantity }>
-        <button class="btn btn-success btn-block" onclick={ plusOne }>Add to Cart</button>
-      </div>
-    </div>
-    <div class="row cart-buttons">
-      <div if={ has_buttons }>
-        <div class="col-xs-6">
+      <div class="row cart-buttons">
+        <div class="col-xs-3">
           <button class="btn btn-success btn-block" onclick={ plusOne }>+1</button>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-3">
           <button class="btn btn-danger btn-block" onclick={ minusOne }>-1</button>
         </div>
-        <div class="col-xs-12 bottom">
+        <div class="col-xs-6">
           <button class="btn btn-primary btn-block" onclick={ openCart }>Checkout</button>
         </div>
       </div>
@@ -84,9 +88,7 @@
   var update_timeout;
   var that = this;
   that.product = opts.product;
-  this.has_buttons = false;
   this.on("update",function() {
-    if (that.product.quantity) { this.has_buttons = true }
     updateCartButton();
   });
   function updateCart() {
