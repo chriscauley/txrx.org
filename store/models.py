@@ -1,9 +1,12 @@
 from django.conf import settings
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.loader import render_to_string
 
 from lablackey.db.models import NamedTreeModel
+from lablackey.utils import cached_property, cached_method
 from media.models import PhotosMixin
 
 from sorl.thumbnail import get_thumbnail
@@ -64,6 +67,32 @@ class Consumable(PhotosMixin,Product):
     super(Consumable,self).save(*args,**kwargs)
   class Meta:
     ordering = ('name',)
+
+class TaggedConsumable(models.Model):
+  consumable = models.ForeignKey(Consumable)
+  content_type = models.ForeignKey("contenttypes.ContentType")
+  object_id = models.IntegerField()
+  content_object = GenericForeignKey('content_type', 'object_id')
+  order = models.IntegerField(default=9999)
+
+class ConsumablesMixin(object):
+  def consumable_ids(self):
+    return list(self.get_consumables().values_list("id",flat=True))
+  @cached_property
+  def first_consumable(self):
+    return self.get_consumables()[0]
+  @cached_property
+  def _ct_id(self):
+    return ContentType.objects.get_for_model(self.__class__).id
+  @cached_method
+  def get_consumables(self):
+    return self._get_consumables()
+  def _get_consumables(self):
+    return Consumable.objects.filter(
+      taggedconsumable__content_type_id=self._ct_id,
+      taggedconsumable__object_id=self.id).order_by("taggedconsumable__order")
+  class Meta:
+    abstract = True
 
 def reset_products_json():
   values = {

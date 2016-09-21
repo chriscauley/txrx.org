@@ -11,6 +11,7 @@ from geo.models import Room
 from lablackey.db.models import SlugModel, OrderedModel
 from lablackey.utils import cached_property, cached_method
 from media.models import Photo, PhotosMixin
+from store.models import ConsumablesMixin
 from wmd.models import MarkDownField
 
 from colorful.fields import RGBColorField
@@ -19,18 +20,20 @@ import json, os, datetime, string, random
 class Lab(PhotosMixin,OrderedModel):
   name = models.CharField(max_length=128)
   __unicode__ = lambda self: self.name
+  get_admin_url = lambda self: "/admin/tool/lab/%s/"%self.id
   slug = property(lambda self: slugify(self.name))
   photo = models.ForeignKey(Photo,null=True,blank=True)
-  description = models.TextField(null=True,blank=True)
+  description = MarkDownField(null=True,blank=True)
   url = lambda self: reverse("lab_detail",args=[self.slug,self.id])
   class Meta:
     ordering = ("order",)
 
 _help = "Will default to %s photo if blank"
 
-class Tool(PhotosMixin,OrderedModel):
+class Tool(ConsumablesMixin,PhotosMixin,OrderedModel):
   name = models.CharField(max_length=128)
   __unicode__ = lambda self: self.name
+  get_admin_url = lambda self: "/admin/tool/tool/%s/"%self.id
   value = property(lambda self: self.pk)
   slug = property(lambda self: slugify(self.name))
   lab = models.ForeignKey(Lab)

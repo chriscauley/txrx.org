@@ -1,8 +1,14 @@
 from django.contrib import admin
+from django.contrib.contenttypes.admin import GenericTabularInline
 
-from .models import Consumable, Category
+from .models import Consumable, Category, TaggedConsumable
 from lablackey.db.admin import NamedTreeModelAdmin
 from media.admin import TaggedPhotoAdmin
+
+class TaggedConsumableInline(GenericTabularInline):
+  model = TaggedConsumable
+  raw_id_fields = ('consumable',)
+  extra = 0
 
 class CategoryAdmin(NamedTreeModelAdmin):
   pass
