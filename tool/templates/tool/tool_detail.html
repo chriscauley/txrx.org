@@ -14,7 +14,10 @@
     {% if tool.make or tool.model %}
     <h4>{{ tool.make|default:"" }} {{ tool.model|default:"" }}</h4>
     {% endif %}
-    <h2>{{ tool }}</h2>
+    <h2>
+      <a href="/admin/tool/tool/{{ tool.id }}/" class="fa fa-pencil-square superuseronly"></a>
+      {{ tool }}
+    </h2>
     {% if not tool.functional %}
     <div class="alert alert-danger">
       <h4>This tool is not functional at this time</h4>
@@ -29,6 +32,7 @@
     <a href="{{ link.url }}">{{ link.title }}</a><br />
     {% endfor %}
     {% endif %}
+    <product-list></product-list>
     {% if tool.number_required_courses and settings.DEBUG %}
     <div>
       <h3 class="block_title">Required class{{ tool.number_required_courses|pluralize:"es" }}:</h3>
@@ -84,4 +88,12 @@
 </div>
 {% endblock %}
 
-{% block extrajs %}{% include "_comment_media.html" %}{% endblock %}
+{% block extrajs %}
+{% include "_comment_media.html" %}
+{% include "store/_media.html" %}
+<script>
+  uR.ready(function() {
+     riot.mount("product-list",{ className: "tiny",ids: {{ tool.consumable_ids }} })
+  });
+</script>
+{% endblock %}

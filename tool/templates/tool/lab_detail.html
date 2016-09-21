@@ -4,20 +4,27 @@
 
 {% block title %}{{ lab }} Tools{% endblock %}
 {% block main %}
-<h1 class="page_title">{{ lab }} Tools</h1>
+<h1 class="page_title">
+  {{ lab }} Tools
+  <a href="{{lab.get_admin_url }}" class="fa fa-pencil-square superuseronly"></a>
+</h1>
 <div id="tool_{{ lab.slug }}" class="row">
-  {% for tool in lab.tool_set.all %}
-  <div class="tool_well col-lg-3 col-sm-4 col-xs-12">
-    <a href="{{ tool.get_absolute_url }}" class="well">
-      {% thumbnail tool.first_photo|get_override:"square_crop" "320x320" crop="center" as im %}
-      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
-      {% endthumbnail %}
-      <div class="content">
-        <h3>{{ tool }}</h3>
-      </div>
-    </a>
+  <div class="col-lg-3 col-sm-4 col-xs-12">
+    {{ lab.description|explosivo }}
   </div>
-  {% endfor %}
-  <div style="clear:both;"></div>
+  <div class="col-lg-9 col-sm-8 col-xs-12">
+    {% for tool in lab.tool_set.all %}
+    <div class="tool_well col-md-4 col-sm-6 col-xs-12">
+      <a href="{{ tool.get_absolute_url }}" class="well">
+        {% thumbnail tool.first_photo|get_override:"square_crop" "320x320" crop="center" as im %}
+        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+        {% endthumbnail %}
+        <div class="content">
+          <h3>{{ tool }}</h3>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}
