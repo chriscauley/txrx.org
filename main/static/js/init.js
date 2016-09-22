@@ -39,18 +39,6 @@ function openCart() {
   riot.mount("cart");
 }
 
-function updateCartButton() {
-  var total = 0,quantity=0;
-  PRODUCTS.list.forEach(function(l) {
-    total += l.price*l.quantity;
-    quantity += l.quantity;
-  });
-  var button = $(".store-button").hide();
-  button.find(".quantity").html(quantity);
-  button.find(".total").html("$"+total.toFixed(2));
-  if (total) { button.show(); }
-}
-
 function cheatCode(f,qs) {
   var HACKERKEYS = [];
   var code = [38,38,40,40,37,39,37,39,66,65];
@@ -89,11 +77,13 @@ TXRX.schema = {
   ]
 }
 
-uR.config.btn_success = "green text-white btn-primary";
-uR.config.btn_cancel = "red text-white btn-danger";
+uR.config.btn_primary = "btn blue text-white btn-primary";
+uR.config.btn_success = "btn green text-white btn-success";
+uR.config.btn_cancel = "btn red text-white btn-danger";
 uR.config.mount_to = "#main";
 uR.config.support_email = "info@txrxlabs.org";
 uR.config.do404 = function() {}
+uR.drop.prefix = "/shop";
 uR.config.text_validators['signature'] = function(value,tag) {
   if (!value.startsWith("/s/")) { tag.data_error = "Signature must start with /s/"; }
 }

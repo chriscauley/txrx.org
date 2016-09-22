@@ -10,7 +10,8 @@
     </button>
     <a class="navbar-brand" href="/">
       <img src="{{ STATIC_URL }}img/new_logo.png" height="49"
-           alt="{{ settings.SITE_NAME }} - {{ SITE_TAGLINE }}" title="{{ settings.SITE_NAME }} - {{ SITE_TAGLINE }}"/></a>
+           alt="{{ settings.SITE_NAME }} - {{ SITE_TAGLINE }}" title="{{ settings.SITE_NAME }} - {{ SITE_TAGLINE }}"/>
+    </a>
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
@@ -39,11 +40,7 @@
           <span class="simpleCart_quantity"></span> classes
           (<span class="simpleCart_total"></span>)
         </button>
-        <button class="btn btn-primary store-button" onclick="openCart();return false;">
-          <i class="fa fa-shopping-cart"></i>
-          <span class="quantity"></span> items
-          (<span class="total"></span>)
-        </button>
+        <cart-button></cart-button>
       </li>
       <li class="social">
         {% for n in social_nav %}

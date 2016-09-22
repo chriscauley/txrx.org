@@ -39,22 +39,24 @@ product, product-admin {
   .bottom {
     background: inherit;
     bottom: 0;
+    left: 0;
     padding-bottom: inherit;
     padding-left: inherit;
     padding-right: inherit;
     position: absolute;
+    right: 0;
   }
   .cart-buttons {
     transition: height 0.25s;
     overflow: hidden;
   }
-  .cart-buttons { height: 0; }
+  .cart-buttons { height: 0; opacity: 0; }
   .img {
     .fixed-ratio(50%);
     margin-bottom: 88px;
   }
   .incart {
-    .cart-buttons { height: @rowHeight; }
+    .cart-buttons { height: @rowHeight; opacity: 1; }
   }
   .out-of-stock {
     position: relative;
