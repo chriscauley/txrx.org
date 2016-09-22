@@ -42,21 +42,15 @@ class Consumable(PhotosMixin,Product):
   purchase_quantity = models.IntegerField(default=1,help_text=_ht2)
   #! TODO make this go to a filtered version of shop
   get_absolute_url = lambda self: "/shop/"
+  json_fields = Product.json_fields + ['thumbnail','category_ids']
+  category_ids = property(lambda self: list(self.categories.all().values_list('id',flat=True)))
+  @property
+  def thumbnail(self):
+    return get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center").url
   def decrease_stock(self,quantity):
     if self.in_stock is None:
       return
     self.in_stock = max(self.in_stock- quantity,0)
-  @property
-  def as_json(self):
-    image = get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center")
-    return [
-      self.pk,
-      self.name,
-      [image.width,image.height,image.url],
-      int(100*self.unit_price),
-      [c.pk for c in self.categories.all()],
-      self.in_stock
-    ]
   def get_domain(self,attr):
     if not getattr(self,attr):
       return

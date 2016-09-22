@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -11,6 +11,9 @@ from drop.models import Product, CartItem, Order
 from drop.util.cart import get_or_create_cart
 
 import json, datetime
+
+def categories_json(request):
+  return JsonResponse({'categories': [c.as_json for c in Category.objects.all()]})
 
 @login_required
 def index(request):
