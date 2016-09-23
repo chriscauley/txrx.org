@@ -7,7 +7,6 @@ urlpatterns = patterns(
   url(r'^$','index',name='product_list'),
   url(r'^categories.js$','categories_json',name='categories_json'),
   url(r'^start_checkout/$','start_checkout',name='start_checkout'),
-  url(r'^edit/$','cart_edit',name='cart_edit'),
 
   url(r'^receipts/$','receipts',name='receipts'),
   url(r'^admin/$','admin_page',name='admin_page'),

@@ -26,22 +26,6 @@ def index(request):
 def products_json(request):
   return HttpResponse(reset_products_json())
 
-@csrf_exempt
-def cart_edit(request):
-  cart = get_or_create_cart(request,save=True)
-  quantity =  int(request.POST['quantity'])
-  product = Consumable.objects.get(pk=request.POST['pk'])
-  defaults = {'quantity': 0}
-  cart_item,new = CartItem.objects.get_or_create(product=product,cart=cart,defaults=defaults)
-  if quantity:
-    cart_item.quantity = quantity
-    cart_item.save()
-  else:
-    cart_item.delete()
-
-  cart.update(request)
-  return HttpResponse('')
-
 def start_checkout(request):
   cart = get_or_create_cart(request,save=True)
   cart.update(request)

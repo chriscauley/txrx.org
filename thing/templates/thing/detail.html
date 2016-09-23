@@ -32,7 +32,7 @@
       <p>
         <b>Machine{{ thing.get_tools|pluralize:"s" }}:</b>
         {% for tool in thing.get_tools %}
-	{{ tool }}{% if not forloop.last %}, {% endif %}
+        {{ tool }}{% if not forloop.last %}, {% endif %}
         {% endfor %}
       </p>
       {% endif %}
@@ -45,7 +45,7 @@
       <p>
         <b>File{{ thing.get_files|pluralize:"s" }}:</b><br />
         {% for file in thing.get_files %}
-	<a href="{{ file.file.url }}" target="_blank">{{ file }}</a>{% if not forloop.last %}<br /> {% endif %}
+        <a href="{{ file.file.url }}" target="_blank">{{ file }}</a>{% if not forloop.last %}<br /> {% endif %}
         {% endfor %}
       </p>
       {% endif %}

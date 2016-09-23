@@ -90,10 +90,9 @@
 
 {% block extrajs %}
 {% include "_comment_media.html" %}
-{% include "store/_media.html" %}
 <script>
   uR.ready(function() {
-     riot.mount("product-list",{ className: "tiny",ids: {{ tool.consumable_ids }} })
+    riot.mount("product-list",{ className: "tiny",ids: {{ tool.consumable_ids }} })
   });
 </script>
 {% endblock %}

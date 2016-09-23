@@ -7,9 +7,9 @@
     </div>
     <div class="body">
       <div class="well">
-        <div if={ !uR.drop.cart.total }>Your cart is empty</div>
+        <div if={ !uR.drop.cart.total_price }>Your cart is empty</div>
         <div class="items">
-          <div class="item" each={ uR.drop.cart.all_items }>
+          <div class="item" each={ uR.drop.cart.all_items } if={ quantity }>
             <div class="name"><b>{ name }</b> { after }</div>
             <div class="quantity">{ quantity }</div>
             <i class="fa fa-plus-circle increment" onclick={ parent.plusOne }></i>
@@ -21,7 +21,7 @@
       </div>
       <div class="checkout-box">
         <div class="subtotals"></div>
-        Order Total: <b>${ uR.drop.cart.total.toFixed(2) }</b>
+        Order Total: <b>${ uR.drop.cart.total_price.toFixed(2) }</b>
       </div>
       <div if={ !window._USER_NUMBER }>
         <center>
@@ -82,23 +82,17 @@
     document.body.scrolling = "yes";
     document.body.style.paddingRight = "";
   }
-  function updateCart(e) {
-    $.post(
-      '/shop/edit/',
-      {pk: e.item.pk,quantity:e.item.quantity}
-    );
-  }
   plusOne(e) {
     e.item.quantity++;
-    updateCart(e);
+    uR.drop.saveCartItem(e.item);
   }
   minusOne(e) {
     e.item.quantity--;
-    updateCart(e);
+    uR.drop.saveCartItem(e.item);
   }
   remove(e) {
     e.item.quantity = 0;
-    updateCart(e);
+    uR.drop.saveCartItem(e.item);
   }
   startCheckout(e) {
     uR.ajax({

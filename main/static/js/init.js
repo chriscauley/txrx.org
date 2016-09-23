@@ -95,5 +95,6 @@ uR.ajax({
     simpleCart.update();
     for (var i=0;i<TXRX._ready.length;i++) { TXRX._ready[i]() }
     TXRX.ready = function(func) { func(); }
+    riot.mount("cart-button");
   }
 });

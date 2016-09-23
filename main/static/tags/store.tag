@@ -38,15 +38,17 @@
     this.update();
   });
   this.on("update",function() {
-    this.products = uR.drop.products_list;
-    if (!this.products) { return }
+    if (!uR.drop.products) { return }
+    if (this.opts.ids) {
+      this.products = [];
+      uR.forEach(this.opts.ids,function(id) { self.products.push(uR.drop.products[id]); });
+    } else {
+      this.products = uR.drop.products_list;
+    }
     if (uR.drop.active_category) {
       this.products = this.products.filter(function(p){
         return p.categories.indexOf(uR.drop.active_category) != -1;
       });
-    }
-    if (this.opts.ids) {
-      this.products = this.products.filter(function(p) { return self.opts.ids.indexOf(p.pk) !=-1 })
     }
     this.max_products = this.products.length;
     this.products = this.products.slice(0,uR.drop.visible);
