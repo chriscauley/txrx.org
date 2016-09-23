@@ -80,6 +80,7 @@ TXRX.schema = {
 uR.config.btn_primary = "btn blue text-white btn-primary";
 uR.config.btn_success = "btn green text-white btn-success";
 uR.config.btn_cancel = "btn red text-white btn-danger";
+uR.drop.cart_tag = "cart";
 uR.config.mount_to = "#main";
 uR.config.support_email = "info@txrxlabs.org";
 uR.config.do404 = function() {}

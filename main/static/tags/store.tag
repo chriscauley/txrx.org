@@ -34,6 +34,7 @@
   var self = this;
   this.on("mount",function() {
     this.className = this.opts.className || "col-sm-6 col-md-4";
+    uR.drop.visible = 18;
     this.update();
   });
   this.on("update",function() {
@@ -91,28 +92,13 @@
   var self = this;
   self.product = opts.product;
   this.product.quantity = this.product.quantity || 0;
-  function updateCart() {
-    clearTimeout(update_timeout);
-    update_timeout = setTimeout(_updateCart,100);
-  }
-  this.on("update",function() { console.log(1); });
-  function _updateCart() {
-    uR.forEach(uR.drop.cart.all_items,function(c) {
-      if (c.product_id = self.product.id) { c.quantity = self.product.quantity; }
-    });
-    uR.drop.ajax({
-      url: '/edit/',
-      method: "POST",
-      data: {pk: self.product.id,quantity: self.product.quantity}
-    });
-  }
   plusOne(e) {
     self.product.quantity++;
-    updateCart();
+    uR.drop.saveCartItem(self.product);
   }
   minusOne(e) {
     self.product.quantity--;
-    updateCart();
+    uR.drop.saveCartItem(self.product);
   }
 </product>
 
