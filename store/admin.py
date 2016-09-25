@@ -10,9 +10,11 @@ class TaggedConsumableInline(GenericTabularInline):
   raw_id_fields = ('consumable',)
   extra = 0
 
+@admin.register(Category)
 class CategoryAdmin(NamedTreeModelAdmin):
   pass
 
+@admin.register(Consumable)
 class ConsumableAdmin(TaggedPhotoAdmin):
   list_display = ('__unicode__','in_stock','unit_price','_status')
   list_filter = ('categories',)
@@ -27,5 +29,3 @@ class ConsumableAdmin(TaggedPhotoAdmin):
       out += "<a class='btn btn-danger'>No Photo</a>"
     return out
   _status.allow_tags = True
-admin.site.register(Consumable,ConsumableAdmin)
-admin.site.register(Category,NamedTreeModelAdmin)
