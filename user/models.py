@@ -98,6 +98,9 @@ class User(AbstractBaseUser, PermissionsMixin):
   rfids = property(lambda self: self.rfid_set.all().values_list('number',flat=True))
 
   @property
+  def done_docs(self):
+    return Signature.objects.filter(user=self,document_id__in=settings.REQUIRED_DOCUMENT_IDS).count()
+  @property
   def usercriterion_jsons(self):
     ucj = UserCriterion.active_objects.filter(user=self).values('criterion_id','expires','created','id')
     return list(ucj)

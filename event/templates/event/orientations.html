@@ -26,21 +26,22 @@
           <input name="user_id" value="{{ rsvp.user_id }}" type="hidden">
           {% if rsvp.user.id in oriented_ids %}
           <input type="hidden" name="action" value="fail"/>
-          <button class="btn btn-danger">de-Orient!</button>
+          <button class="btn btn-success">Complete!</button>
           {% else %}
           <input type="hidden" name="action" value="pass"/>
-          <button class="btn btn-success">Orient!</button>
+          <button class="btn btn-danger">Incomplete</button>
           {% endif %}
         </form>
         <ez-file url="/api/change_headshot/" user_id="{{ rsvp.user.id }}" name="Headshot"
                  done="{{ rsvp.user.headshot|default_if_none:"" }}"></ez-file>
         <ez-file url="/api/change_id_photo/" user_id="{{ rsvp.user.id }}" name="ID Photo"
                  done="{{ rsvp.user.id_photo_date|default_if_none:"" }}"></ez-file>
+        <div class="btn btn-{% if rsvp.user.done_docs == 3 %}success{% else %}danger{% endif %}">
+          {{ rsvp.user.done_docs }}/3 Docs</div>
       </div>
       <b>
         {{ rsvp.user }} {{ rsvp.user.first_name }} {{ rsvp.user.last_name }}
         <a href="{{ rsvp.user.get_admin_url }}" class="fa fa-edit"></a><br/>
-        {{ rsvp.user.headshot }}<br/>
         {{ rsvp.user.level }}<br/>
         {{ rsvp.user.email }}
         {% if rsvp.user.paypal_email %}
