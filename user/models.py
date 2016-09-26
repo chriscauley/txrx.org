@@ -38,6 +38,16 @@ class UserManager(BaseUserManager):
       return self.get(*args,**kwargs)
     except (self.model.DoesNotExist, self.model.MultipleObjectsReturned):
       pass
+  def keyword_search(self,q,*args,**kwargs):
+    qs = self.filter(*args,**kwargs)
+    for word in q.strip().split(" "):
+      if not word:
+        continue
+      _Q = models.Q()
+      for f in ['username','email','paypal_email','first_name','last_name']:
+        _Q = _Q | models.Q(**{f+"__icontains":word})
+      qs = qs.filter(_Q).filter(is_active=True).distinct()
+    return qs.distinct()
   def get_from_anything(self,value):
     if not value:
       return

@@ -6,17 +6,7 @@ from api.serializers import BaseSizzler
 class SearchSizzler(BaseSizzler):
   @classmethod
   def get_queryset(class_,request):
-    q = request.REQUEST.get('q',"").strip()
-    session_id = request.REQUEST.get('session_id',None)
-    qs = class_.Meta.model.objects.all()
-    if q:
-      for word in q.split(" "):
-        if not word:
-          continue
-        _Q = Q()
-        for f in ['username','email','paypal_email','first_name','last_name']:
-          _Q = _Q | Q(**{f+"__icontains":word})
-        qs = qs.filter(_Q).filter(is_active=True).distinct()
+    qs = class_.Meta.model.objects.keyword_search(request.REQUEST.get('q',""))
     if 'user_id' in request.GET:
       qs = qs.filter(id=request.GET['user_id'])
     return qs.distinct()
