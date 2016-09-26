@@ -165,7 +165,7 @@
 </toolmaster>
 
 <set-rfid>
-  <search-users>
+  <search-users if={ !opts.active_id }>
     <h2>Change RFID</h2>
     <p>Find a user and then select them and you will be prompted for a new rfid</p>
   </search-users>
@@ -185,6 +185,17 @@
   </modal>
 
   var that = this;
+  this.on("mount", function() {
+    // #! this is so the set-rfid tag can be included into other tags that don't do the searching.
+    if (this.opts.active_id) {
+      uR.ajax({
+        url: "/api/user/search/",
+        data: {user_id: this.opts.active_id},
+        that: this,
+        success: function(data) { that.active_user = data[0]; },
+      });
+    }
+  });
   select(e) {
     this.active_user = e.item;
     this.update();

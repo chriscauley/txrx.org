@@ -273,9 +273,26 @@ p,h1,h2,h3,h4,h5,h6{a{color: @link-color; }}
 
 
 /* events */
-#eventoccurrences {
-  .btn { width: 110px; }
-  .well { overflow: hidden; }
+#orientations {
+  .btn {
+    cursor: pointer;
+    display: block;
+    text-align: center;
+    width: 110px;
+  }
+  .well { display: flex; justify-content: space-between; }
+  .buttons {
+    display: flex;
+    flex-flow: row wrap;
+    margin-left: 20px;
+    max-height: 130px;
+    max-width: 240px;
+    > .cell { flex-basis: 110px; margin: 5px; }
+  }
+  ez-file {
+    display: block;
+    input[type=file] { display: none; }
+  }
 }
 .paginator {
   margin-bottom: 10px;

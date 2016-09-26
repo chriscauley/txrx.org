@@ -3,7 +3,7 @@
 {% block title %}Orientations{% endblock %}
 
 {% block content %}
-<div id="eventoccurrences">
+<div id="orientations">
   <div>
     {% if prev_occ %}
     <a href="/event/orientations/{{ prev_occ.start|date:"Y/m/d" }}">
@@ -17,38 +17,51 @@
   </div>
   {% for eventoccurrence in eventoccurrences %}
   <h1>{{ eventoccurrence }}</h1>
-  <div>
+  <div class="imtooflexy">
     {% for rsvp in eventoccurrence.get_rsvps %}
     <div class="well">
-      <div class="pull-right">
-        <form method="POST">
-          {% csrf_token %}
-          <input name="user_id" value="{{ rsvp.user_id }}" type="hidden">
-          {% if rsvp.user.id in oriented_ids %}
-          <input type="hidden" name="action" value="fail"/>
-          <button class="btn btn-success">Complete!</button>
-          {% else %}
-          <input type="hidden" name="action" value="pass"/>
-          <button class="btn btn-danger">Incomplete</button>
-          {% endif %}
-        </form>
-        <ez-file url="/api/change_headshot/" user_id="{{ rsvp.user.id }}" name="Headshot"
-                 done="{{ rsvp.user.headshot|default_if_none:"" }}"></ez-file>
-        <ez-file url="/api/change_id_photo/" user_id="{{ rsvp.user.id }}" name="ID Photo"
-                 done="{{ rsvp.user.id_photo_date|default_if_none:"" }}"></ez-file>
-        <div class="btn btn-{% if rsvp.user.done_docs == 3 %}success{% else %}danger{% endif %}">
-          {{ rsvp.user.done_docs }}/3 Docs</div>
+      <div>
+        <b>
+          <div>{{ rsvp.user }} {{ rsvp.user.first_name }} {{ rsvp.user.last_name }}
+            <a href="{{ rsvp.user.get_admin_url }}" class="fa fa-edit"></a></div>
+          <div>{{ rsvp.user.level }}</div>
+          <div>{{ rsvp.user.email }}</div>
+          <div>Paypal: {{ rsvp.user.paypal_email }}</div>
+        </b>
+        {% for enrollment in rsvp.user.enrollment_set.all %}
+        <div>{{ enrollment.session }}</div>
+        {% endfor %}
       </div>
-      <b>
-        <div>{{ rsvp.user }} {{ rsvp.user.first_name }} {{ rsvp.user.last_name }}
-          <a href="{{ rsvp.user.get_admin_url }}" class="fa fa-edit"></a></div>
-        <div>{{ rsvp.user.level }}</div>
-        <div>{{ rsvp.user.email }}</div>
-        <div>Paypal: {{ rsvp.user.paypal_email }}</div>
-      </b>
-      {% for enrollment in rsvp.user.enrollment_set.all %}
-      <div>{{ enrollment.session }}</div>
-      {% endfor %}
+      <div class="buttons">
+        <div class="cell">
+          <form method="POST">
+            {% csrf_token %}
+            <input name="user_id" value="{{ rsvp.user_id }}" type="hidden">
+            {% if rsvp.user.id in oriented_ids %}
+            <input type="hidden" name="action" value="fail"/>
+            <button class="btn btn-success">Complete!</button>
+            {% else %}
+            <input type="hidden" name="action" value="pass"/>
+            <button class="btn btn-danger">Incomplete</button>
+            {% endif %}
+          </form>
+        </div>
+        <div class="cell">
+          <ez-file url="/api/change_headshot/" user_id="{{ rsvp.user.id }}" name="Headshot"
+                   done="{{ rsvp.user.headshot|default_if_none:"" }}"></ez-file>
+        </div>
+        <div class="cell">
+          <ez-file url="/api/change_id_photo/" user_id="{{ rsvp.user.id }}" name="ID Photo"
+                   done="{{ rsvp.user.id_photo_date|default_if_none:"" }}"></ez-file>
+        </div>
+        <div class="cell">
+          <div class="btn btn-{% if rsvp.user.done_docs == 3 %}success{% else %}danger{% endif %}">
+            {{ rsvp.user.done_docs }}/3 Docs</div>
+        </div>
+        <div class="cell">
+          <button onclick="doRFID({{ rsvp.user.id }});" class="btn btn-warning">Set RFID</button>
+        </div>
+      </div>
     </div>
     {% endfor %}
   </div>
@@ -65,12 +78,6 @@
         { opts.name }
       </label>
     </form>
-    <style scoped>
-      :scope { display: block; margin: 10px 0; }
-      :scope input[type=file] { display: none; }
-      :scope label { cursor: pointer; text-align: center; }
-    </style>
-
     this.on("mount", function() {
       this.slug = this.opts.name.replace(" ","_").toLowerCase();
       this.done = this.opts.done;
@@ -89,5 +96,11 @@
     }
   </ez-file>
 </script>
-<script>uR.ready(function() { riot.mount("ez-file"); })</script>
+<script>
+  uR.ready(function() { riot.mount("ez-file"); });
+  function doRFID(user_id) {
+    uR.mountElement("set-rfid",{active_id:user_id,mount_to:uR.config.mount_alerts_to});
+  }
+</script>
+<script src="/static/tags/tool.tag" type="riot/tag"></script>
 {% endblock %}
