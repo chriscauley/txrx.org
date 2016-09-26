@@ -171,15 +171,15 @@
   </search-users>
   <button if={ opts.active_id } onclick={ open }
           class="btn btn-{ _user.rfids.length?'success':'danger' }">Set RFIDs</button>
-  <modal if={ active_user } cancel={ cancel }>
+  <modal if={ active_user } cancel={ cancel } rfids={ active_user.rfids }>
     <h1>Alter RFIDs</h1>
     Swipe card or enter number for { parent.active_user.username }.
     <form onsubmit={ parent.submit }>
-      <input type="text" />
+      <input type="text" onblur="this.focus()"/>
     </form>
-    <div if={ parent.active_user.rfids.length }>
+    <div if={ opts.rfids.length }>
       <h3>Delete Current RIFDs</h3>
-      <div each={ number,i in parent.active_user.rfids } class="alert alert-danger">
+      <div each={ number,i in opts.rfids } class="alert alert-danger">
         { number }
         <a class="pull-right fa fa-close" onclick={ parent.parent.remove }></a>
       </div>
@@ -203,21 +203,20 @@
   open(e) {
     this.active_user = this._user;
     this.update();
+    document.querySelector("modal input").focus();
   }
   select(e) {
     this.active_user = e.item;
     this.update();
+    document.querySelector("modal input").focus();
   }
   cancel(e) {
     this.active_user = this.old_rfid = this.new_rfid = this.username = null;
     this.update();
   }
   this.on("update",function() {
-    var i = document.querySelector("modal input");
-    if (i && i != document.activeElement) {
-      i.focus();
-    }
-  })
+    this.tags && this.tags.modal.update()
+  });
   submit(e) {
     var input = this.root.querySelector("modal input");
     var number = input.value;
@@ -226,7 +225,9 @@
       url: '/api/change_rfid/',
       data: {'user_id':this.active_user.id,'rfid':number},
       that: this,
-      success: function(data) { that.active_user.rfids = data.rfids; },
+      success: function(data) {
+        that.active_user.rfids = data.rfids;
+      },
       target: that.root.querySelector("modal .inner")
     });
     return false;
