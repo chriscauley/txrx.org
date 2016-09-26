@@ -48,6 +48,8 @@ urlpatterns = patterns(
   url(r'^rss/$', AllFeed()),
   url(r'^favicon.ico$',main_views.predirect,
       kwargs={'url':getattr(settings,'FAVICON','/static/favicon.ico')}),
+  url(r'^sculpturemonth$',main_views.predirect,
+      kwargs={'url':"/classes/221/3d-modeling-with-rhino/?rhino10"}),
   url(r'^thing/$','thing.views.thing_index',name='thing_index'),
   url(r'^thing/add/$','thing.views.add_thing',name='add_thing'),
   url(r'^thing/(\d+)/([\w\d\-\_]+)/$','thing.views.thing_detail',name='thing_detail'),
