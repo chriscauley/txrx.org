@@ -2,8 +2,15 @@
 
 {% block title %}Orientations{% endblock %}
 
-{% block content %}
+{% block main %}
 <div id="orientations">
+  {% if request.GET.q %}
+  {% for user in users %}
+  {% include "event/_orientation_box.html" %}
+  {% empty %}
+  <h1>No users found matching that criterion</h1>
+  {% endfor %}
+  {% else %}
   <div>
     {% if prev_occ %}
     <a href="/event/orientations/{{ prev_occ.start|date:"Y/m/d" }}">
@@ -19,55 +26,20 @@
   <h1>{{ eventoccurrence }}</h1>
   <div class="imtooflexy">
     {% for rsvp in eventoccurrence.get_rsvps %}
-    <div class="well">
-      <div>
-        <b>
-          <div>{{ rsvp.user }} {{ rsvp.user.first_name }} {{ rsvp.user.last_name }}
-            <a href="{{ rsvp.user.get_admin_url }}" class="fa fa-edit"></a></div>
-          <div>{{ rsvp.user.level }}</div>
-          <div>{{ rsvp.user.email }}</div>
-          <div>Paypal: {{ rsvp.user.paypal_email }}</div>
-        </b>
-        {% for enrollment in rsvp.user.enrollment_set.all %}
-        <div>{{ enrollment.session }}</div>
-        {% endfor %}
-      </div>
-      <div class="buttons">
-        <div class="cell">
-          <form method="POST">
-            {% csrf_token %}
-            <input name="user_id" value="{{ rsvp.user_id }}" type="hidden">
-            {% if rsvp.user.id in oriented_ids %}
-            <input type="hidden" name="action" value="fail"/>
-            <button class="btn btn-success">Complete!</button>
-            {% else %}
-            <input type="hidden" name="action" value="pass"/>
-            <button class="btn btn-danger">Incomplete</button>
-            {% endif %}
-          </form>
-        </div>
-        <div class="cell">
-          <ez-file url="/api/change_headshot/" user_id="{{ rsvp.user.id }}" name="Headshot"
-                   done="{{ rsvp.user.headshot|default_if_none:"" }}"></ez-file>
-        </div>
-        <div class="cell">
-          <ez-file url="/api/change_id_photo/" user_id="{{ rsvp.user.id }}" name="ID Photo"
-                   done="{{ rsvp.user.id_photo_date|default_if_none:"" }}"></ez-file>
-        </div>
-        <div class="cell">
-          <div class="btn btn-{% if rsvp.user.done_docs == 3 %}success{% else %}danger{% endif %}">
-            {{ rsvp.user.done_docs }}/3 Docs</div>
-        </div>
-        <div class="cell">
-          <set-rfid active_id="{{ rsvp.user.id }}"></set-rfid>
-        </div>
-      </div>
-    </div>
+    {% include "event/_orientation_box.html" with user=rsvp.user %}
+    {% empty %}
+    <h2>:D No one signed up for this orientation</h2>
     {% endfor %}
   </div>
   {% empty %}
   <h1>No Orientations at This Date</h1>
   {% endfor %}
+  {% endif %}
+  <h2>Search All Users</h2>
+  <form action="." method="GET">
+    <input value="{{ request.GET.q }}" name="q" />
+    <input type="submit" value="Search">
+  </form>
 </div>
 <script type="riot/tag">
   <ez-file>

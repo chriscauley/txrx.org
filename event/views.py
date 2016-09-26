@@ -159,14 +159,19 @@ def orientations(request,y=None,m=None,d=None):
     else:
       messages.success(request,"%s has been un-oriented."%user)
       UserCriterion.active_objects.filter(user=user,criterion=criterion).delete()
-    return HttpResponseRedirect(request.path)
+    return HttpResponseRedirect(request.path+"?"+request.GET.urlencode())
+  values = {
+    'oriented_ids': list(criterion.usercriterion_set.all().values_list('user_id',flat=True)),
+  }
+  if request.GET.get('q',None):
+    values['users'] = get_user_model().objects.keyword_search(request.GET['q'])
+    return TemplateResponse(request,'event/orientations.html',values)
   start = datetime.date(int(y),int(m),int(d)) if m and d and y else datetime.date.today()
   end = start + datetime.timedelta(1)
   eventoccurrences = EventOccurrence.objects.filter(event_id=settings.ORIENTATION_EVENT_ID)
-  values = {
+  values.update({
     'eventoccurrences': eventoccurrences.filter(start__gte=start,start__lte=end),
-    'oriented_ids': list(criterion.usercriterion_set.all().values_list('user_id',flat=True)),
     'next_occ': (eventoccurrences.filter(start__gte=end) or [None])[0],
     'prev_occ': (eventoccurrences.filter(start__lte=start).order_by('-start') or [None])[0],
-  }
+  })
   return TemplateResponse(request,'event/orientations.html',values)

@@ -112,10 +112,11 @@ def user_json(request):
 def set_rfid(request):
   user = get_object_or_404(get_user_model(),pk=request.GET['user_id'])
   error = None
+  number = request.GET['rfid']
   try:
-    RFID.objects.get_or_create(user=user,number=request.GET['rfid'])
+    RFID.objects.get_or_create(user=user,number=number)
   except IntegrityError:
-    error = "This rfid is already in use by %s"%(RFID.objects.get(number=request.GET['rfid']).user)
+    error = "%s is already in use by %s"%(number,RFID.objects.get(number=number).user)
   response = {
     'rfids': list(RFID.objects.filter(user=user).values_list("number",flat=True)),
     'error': error,
