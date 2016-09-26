@@ -577,7 +577,6 @@ function Cart(){
     }
     newRow.className = "cartHeaders";
     newRows[0] = newRow;
-
     var without_discount = 0; // #! TODO add explanation that some classes don't get discounts
     /* create a row for each item in the cart */
     me.each(function(item, x){
@@ -931,6 +930,9 @@ function Cart(){
     me.save();
   };
 
+  if (window.location.search.toLowerCase().indexOf("rhino10") != -1) {
+    uR.cookie.set("rhino","10");
+  }
   me.updateTotals = function() {
     me.total = 0 ;
     me.quantity = 0;
@@ -939,9 +941,15 @@ function Cart(){
     var member_discount_percent = (TXRX.user || {}).member_discount_percent || 0;
     me.each(function(item){
       item.discount_percent = 0;
+      item.discount_verbose = "";
       if (member_discount_percent && window.NO_DISCOUNT.indexOf(parseInt(item.id)) == -1) {
         item.discount_percent = member_discount_percent;
         item.discount_verbose = "TXRX Membership: <b>" + item.discount_percent + "% Off</b>";
+      }
+      //#! this and above uR.cookie is the only code for this rhino coupon
+      if (uR.cookie.get("rhino") && !member_discount_percent && item.name.indexOf("3D Modeling with Rhino") != -1) {
+        item.discount_percent = 10;
+        item.discount_verbose = "Coupon Code: <b>10% Off Rhino</b>";
       }
       if( item.quantity < 1 ){
         item.remove();
