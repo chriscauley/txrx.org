@@ -171,7 +171,7 @@
   </search-users>
   <button if={ opts.active_id } onclick={ open }
           class="btn btn-{ _user.rfids.length?'success':'danger' }">Set RFIDs</button>
-  <modal if={ active_user } cancel={ cancel } rfids={ active_user.rfids }>
+  <modal if={ active_user } cancel={ cancel } rfids={ active_user.rfids } stay_mounted={ true }>
     <h1>Alter RFIDs</h1>
     Swipe card or enter number for { parent.active_user.username }.
     <form onsubmit={ parent.submit }>
