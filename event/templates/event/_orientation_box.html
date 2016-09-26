@@ -8,7 +8,14 @@
       <div>Paypal: {{ user.paypal_email }}</div>
     </b>
     {% for enrollment in user.enrollment_set.all %}
-    <div>{{ enrollment.session }}</div>
+    <div>
+      {% if enrollment.completed %}
+      <i class="text-success fa fa-check-circle"></i>
+      {% else %}
+      <i class="text-danger fa fa-times-circle"></i>
+      {% endif %}
+      {{ enrollment.session }}
+    </div>
     {% endfor %}
   </div>
   <div class="buttons">
