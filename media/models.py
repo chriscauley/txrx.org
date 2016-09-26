@@ -3,7 +3,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 
-from instagram.models import InstagramPhoto
 from lablackey.utils import cached_method, cached_property
 
 from crop_override import CropOverride, OriginalImage
@@ -58,7 +57,6 @@ class MiscFile(FileModel):
 
 SOURCE_CHOICES = (
   ('web','Web'),
-  ('instagram','Instagram'),
   ('twittpic','TwittPic'),
   ('email','Email'),
   ('misc','Miscelaneous'),
@@ -78,7 +76,6 @@ class PhotoTag(models.Model):
 class Photo(FileModel):
   file = OriginalImage("Photo",upload_to='uploads/photos/%Y-%m', null=True,max_length=200)
   caption = models.TextField(null=True,blank=True)
-  instagramphoto = models.ForeignKey(InstagramPhoto,null=True,blank=True)
   approved = models.BooleanField(default=False)
   source = models.CharField(choices=SOURCE_CHOICES,default="web",max_length=16)
   tags = models.ManyToManyField(PhotoTag,blank=True)

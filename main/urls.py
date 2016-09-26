@@ -37,7 +37,6 @@ urlpatterns = patterns(
   url(r'^(\d{4})/(\d{1,2})/(\d{1,2})/([^/]+)/','blog.views.post_redirect'),
   url(r'^500/$',main_views.intentional_500),
   url(r'^event/',include('event.urls',namespace="event",app_name="event")),
-  url(r'^instagram/',include('instagram.urls',namespace="instagram",app_name="instagram")),
   url(r'^media_files/',include('media.urls')),
   url(r'^shop/',include('store.urls')),
   url(r'^products.js$','store.views.products_json'),

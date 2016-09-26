@@ -40,13 +40,11 @@
           {{ rsvp.user.done_docs }}/3 Docs</div>
       </div>
       <b>
-        {{ rsvp.user }} {{ rsvp.user.first_name }} {{ rsvp.user.last_name }}
-        <a href="{{ rsvp.user.get_admin_url }}" class="fa fa-edit"></a><br/>
-        {{ rsvp.user.level }}<br/>
-        {{ rsvp.user.email }}
-        {% if rsvp.user.paypal_email %}
-        <br/>Paypal: {{ rsvp.user.paypal_email }}
-        {% endif %}
+        <div>{{ rsvp.user }} {{ rsvp.user.first_name }} {{ rsvp.user.last_name }}
+          <a href="{{ rsvp.user.get_admin_url }}" class="fa fa-edit"></a></div>
+        <div>{{ rsvp.user.level }}</div>
+        <div>{{ rsvp.user.email }}</div>
+        <div>Paypal: {{ rsvp.user.paypal_email }}</div>
       </b>
       {% for enrollment in rsvp.user.enrollment_set.all %}
       <div>{{ enrollment.session }}</div>
