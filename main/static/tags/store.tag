@@ -1,8 +1,8 @@
 <category-list>
-  <button class="btn btn-default btn-block {active:!window.PRODUCTS.c}" onclick={ reset }>
+  <button class="btn btn-default btn-block {active:!uR.drop.active_category}" onclick={ click }>
     Any Category</button>
-  <button class="btn btn-default btn-block {active:window.PRODUCTS.c==category.pk}"
-          onclick={ parent.click } each={ category,i in categories }>
+  <button class="btn btn-default btn-block {active:uR.drop.active_category==category.id}"
+          onclick={ parent.click } each={ category,i in uR.drop.categories }>
     { category.name }</button>
 
   this.on("mount",function() {
@@ -17,7 +17,7 @@
   });
 
   click(e) {
-    uR.drop.active_category = e.item && e.item.category && e.item.category.pk; 
+    uR.drop.active_category = e.item && e.item.category && e.item.category.id; 
     uR.drop.visible = 18;
     uR.drop.updateTags();
   }
@@ -45,9 +45,12 @@
     } else {
       this.products = uR.drop.products_list;
     }
+    if (this.opts.model_slug) {
+      this.products = this.products.filter( function(p) { return p.model_slug == self.opts.model_slug; })
+    }
     if (uR.drop.active_category) {
       this.products = this.products.filter(function(p){
-        return p.categories.indexOf(uR.drop.active_category) != -1;
+        return p.category_ids && p.category_ids.indexOf(uR.drop.active_category) != -1;
       });
     }
     this.max_products = this.products.length;

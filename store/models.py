@@ -16,16 +16,12 @@ from drop.models import Product
 import os, json
 
 class Category(PhotosMixin,NamedTreeModel):
+  json_fields = ['id','name']
   @property
   def as_json(self):
-    image = get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center")
-    return [
-      self.pk,
-      self.name,
-      [image.width,image.height,image.url],
-      [c.as_json for c in self.category_set.all()],
-    ]
+    return {k:getattr(self,k) for k in self.json_fields}
   #! TODO make this go to store filtered by category
+  #! TODO I took out the first image from the json and the subcategories since they weren't being used
   class Meta:
     verbose_name_plural = "Categories"
     ordering = ('order',)
