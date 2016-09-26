@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Category, reset_products_json, Consumable
+from .models import Category, Consumable
 from user.models import is_shopkeeper
 
 from drop.models import Product, CartItem, Order
@@ -22,9 +22,6 @@ def index(request):
     'cart': cart
   }
   return TemplateResponse(request,'store/index.html',values)
-
-def products_json(request):
-  return HttpResponse(reset_products_json())
 
 def start_checkout(request):
   cart = get_or_create_cart(request,save=True)

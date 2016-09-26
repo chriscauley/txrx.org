@@ -39,7 +39,6 @@ urlpatterns = patterns(
   url(r'^event/',include('event.urls',namespace="event",app_name="event")),
   url(r'^media_files/',include('media.urls')),
   url(r'^shop/',include('store.urls')),
-  url(r'^products.js$','store.views.products_json'),
   url(r'^product_is_a_fail/(.*)/$',main_views.index,name="product_detail"),
   url(r'^me/$',login_required(main_views.beta)),
 

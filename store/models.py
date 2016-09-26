@@ -87,15 +87,3 @@ class ConsumablesMixin(object):
       taggedconsumable__object_id=self.id).order_by("taggedconsumable__order")
   class Meta:
     abstract = True
-
-def reset_products_json():
-  values = {
-    'categories': json.dumps([c.as_json for c in Category.objects.all()]),
-    'products': json.dumps([p.as_json for p in Consumable.objects.all()])
-  }
-  text = render_to_string('store/products.json',values)
-  f = open(os.path.join(settings.STATIC_ROOT,'_products.json'),'w')
-  f.write(text)
-  f.close()
-  os.rename(os.path.join(settings.STATIC_ROOT,'_products.json'),os.path.join(settings.STATIC_ROOT,'products.json'))
-  return text
