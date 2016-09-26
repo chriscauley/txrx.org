@@ -179,11 +179,12 @@
     </form>
     <div if={ opts.rfids.length }>
       <h3>Delete Current RIFDs</h3>
-      <div each={ number,i in opts.rfids } class="alert alert-danger">
+      <div each={ number,i in opts.rfids } class="alert alert-info">
         { number }
         <a class="pull-right fa fa-close" onclick={ parent.parent.remove }></a>
       </div>
     </div>
+    <div if={ parent.error } class="alert alert-danger">{ parent.error }</div>
   </modal>
 
   var that = this;
@@ -227,7 +228,9 @@
       that: this,
       success: function(data) {
         that.active_user.rfids = data.rfids;
+        that.error = data.error;
       },
+      error: function() { alert("An unknown error occurred. Please contact Chris.") },
       target: that.root.querySelector("modal .inner")
     });
     return false;

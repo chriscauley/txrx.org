@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
+from django.db import IntegrityError
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
@@ -110,9 +111,14 @@ def user_json(request):
 @staff_member_required
 def set_rfid(request):
   user = get_object_or_404(get_user_model(),pk=request.GET['user_id'])
-  RFID.objects.get_or_create(user=user,number=request.GET['rfid'])
+  error = None
+  try:
+    RFID.objects.get_or_create(user=user,number=request.GET['rfid'])
+  except IntegrityError:
+    error = "This rfid is already in use by %s"%(RFID.objects.get(number=request.GET['rfid']).user)
   response = {
     'rfids': list(RFID.objects.filter(user=user).values_list("number",flat=True)),
+    'error': error,
   }
   return JsonResponse(response)
 
