@@ -119,12 +119,12 @@
     <script src="{{ STATIC_URL }}classes.json?v={% now "ymd_hi" %}"></script>
     <script src="{{ STATIC_URL }}sessions.json?v={% now "ymd_his" %}"></script>
     <script src="{{ STATIC_URL }}tags/course.tag?v=1.1" type="riot/tag"></script>
-    <script src="{{ STATIC_URL }}js/course.js?v=1.2"></script>
-    <script src="{{ STATIC_URL }}js/simpleCart.js?v=1.1"></script>
     <script src="{{ STATIC_URL }}tags/store.tag?v1.0" type="riot/tag"></script>
     <script src="{{ STATIC_URL }}drop/cart.tag?v1.0" type="riot/tag"></script>
     <script src="{{ STATIC_URL }}tags/cart.tag?v1.0" type="riot/tag"></script>
     {% compress js %}
+    <script src="{{ STATIC_URL }}js/course.js?v=1.2"></script>
+    <script src="{{ STATIC_URL }}js/simpleCart.js?v=1.1"></script>
     <script src="{{ STATIC_URL }}drop/drop.js"></script>
     <script src="{{ STATIC_URL }}js/cart.js"></script>
     <script src="{{ STATIC_URL }}js/init.js"></script>
