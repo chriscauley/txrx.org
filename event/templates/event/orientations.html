@@ -59,7 +59,7 @@
             {{ rsvp.user.done_docs }}/3 Docs</div>
         </div>
         <div class="cell">
-          <button onclick="doRFID({{ rsvp.user.id }});" class="btn btn-warning">Set RFID</button>
+          <set-rfid active_id="{{ rsvp.user.id }}"></set-rfid>
         </div>
       </div>
     </div>
@@ -97,10 +97,7 @@
   </ez-file>
 </script>
 <script>
-  uR.ready(function() { riot.mount("ez-file"); });
-  function doRFID(user_id) {
-    uR.mountElement("set-rfid",{active_id:user_id,mount_to:uR.config.mount_alerts_to});
-  }
+  uR.ready(function() { riot.mount("ez-file,set-rfid"); });
 </script>
 <script src="/static/tags/tool.tag" type="riot/tag"></script>
 {% endblock %}

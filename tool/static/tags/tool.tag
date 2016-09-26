@@ -169,6 +169,8 @@
     <h2>Change RFID</h2>
     <p>Find a user and then select them and you will be prompted for a new rfid</p>
   </search-users>
+  <button if={ opts.active_id } onclick={ open }
+          class="btn btn-{ _user.rfids.length?'success':'danger' }">Set RFIDs</button>
   <modal if={ active_user } cancel={ cancel }>
     <h1>Alter RFIDs</h1>
     Swipe card or enter number for { parent.active_user.username }.
@@ -192,19 +194,30 @@
         url: "/api/user/search/",
         data: {user_id: this.opts.active_id},
         that: this,
-        success: function(data) { that.active_user = data[0]; },
+        success: function(data) {
+          that._user = data[0];
+        },
       });
     }
   });
+  open(e) {
+    this.active_user = this._user;
+    this.update();
+  }
   select(e) {
     this.active_user = e.item;
     this.update();
-    this.root.querySelector("modal input").focus();
   }
   cancel(e) {
     this.active_user = this.old_rfid = this.new_rfid = this.username = null;
     this.update();
   }
+  this.on("update",function() {
+    var i = document.querySelector("modal input");
+    if (i && i != document.activeElement) {
+      i.focus();
+    }
+  })
   submit(e) {
     var input = this.root.querySelector("modal input");
     var number = input.value;
@@ -212,7 +225,8 @@
     uR.ajax({
       url: '/api/change_rfid/',
       data: {'user_id':this.active_user.id,'rfid':number},
-      success: function(data) { that.active_user.rfids = data.rfids; that.update(); },
+      that: this,
+      success: function(data) { that.active_user.rfids = data.rfids; },
       target: that.root.querySelector("modal .inner")
     });
     return false;
@@ -221,7 +235,8 @@
     uR.ajax({
       url: '/api/remove_rfid/',
       data: {'user_id':that.active_user.id,'rfid':e.item.number},
-      success: function(data) { that.active_user.rfids = data.rfids; that.update() },
+      that: this,
+      success: function(data) { that.active_user.rfids = data.rfids; },
       target: that.root.querySelector("modal .inner")
     });
   }
