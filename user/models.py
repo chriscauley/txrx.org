@@ -194,10 +194,10 @@ class UserCheckin(models.Model):
   content_object = GenericForeignKey('content_type', 'object_id')
   objects = UserCheckinManager()
 
-is_superuser = lambda user: user.is_superuser
-is_staff = lambda user: user.is_staff or user.is_superuser
-is_shopkeeper = lambda user: user.is_shopkeeper or user.is_superuser
-is_gatekeeper = lambda user: user.is_gatekeeper or user.is_superuser
-is_toolmaster = lambda user: user.is_toolmaster or user.is_superuser
+is_superuser = lambda user: user.is_authenticated() and user.is_superuser
+is_staff = lambda user: user.is_authenticated() and (user.is_staff or user.is_superuser)
+is_shopkeeper = lambda user: user.is_authenticated() and (user.is_shopkeeper or user.is_superuser)
+is_gatekeeper = lambda user: user.is_authenticated() and (user.is_gatekeeper or user.is_superuser)
+is_toolmaster = lambda user: user.is_authenticated() and (user.is_toolmaster or user.is_superuser)
 
 from .listeners import *

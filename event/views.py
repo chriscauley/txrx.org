@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse, HttpResponseRedirect, Http404, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
@@ -14,6 +14,7 @@ from .utils import make_ics,ics2response
 from .models import Event, EventOccurrence, RSVP, CheckIn
 from tool.models import Criterion, UserCriterion
 from course.models import ClassTime
+from user.models import is_toolmaster
 
 import datetime, json, arrow
 
@@ -145,9 +146,8 @@ def checkin(request):
     CheckIn.objects.create(**kwargs)
   return HttpResponse(json.dumps("%s has been checked in."%user))
 
+@user_passes_test(is_toolmaster)
 def orientations(request,y=None,m=None,d=None):
-  if not request.user.is_toolmaster:
-    return HttpResponse('not allowed!')
   criterion_id = 15
   criterion = Criterion.objects.get(id=criterion_id)
   if request.POST:
