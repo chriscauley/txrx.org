@@ -211,7 +211,3 @@ class CheckIn(UserModel):
   __unicode__ = lambda self: "%s @ %s - %s"%(self.user,self.checkinpoint,self.datetime)
   class Meta:
     ordering = ('-datetime',)
-
-#these signals fire and mess up loaddata
-if not 'loaddata' in sys.argv:
-  from .signals import *
