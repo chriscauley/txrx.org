@@ -1,5 +1,5 @@
 <div class="well">
-  <div>
+  <div style="font-size: 1.5em;">
     <b>
       <div>{{ user }} {{ user.first_name }} {{ user.last_name }}
         <a href="{{ user.get_admin_url }}" class="fa fa-edit"></a></div>
@@ -11,9 +11,12 @@
     <div>
       {% if enrollment.completed %}
       <i class="text-success fa fa-check-circle"></i>
-      {% else %}
+      {% elif enrollment.session.past %}
       <i class="text-danger fa fa-times-circle"></i>
+      {% else %}
+      <i class="text-info fa fa-minus-circle"></i>
       {% endif %}
+      <a href="/classes/instructor_session/{{ enrollment.id }}/" class="instructor-link fa fa-edit"></a>
       {{ enrollment.session }}
     </div>
     {% endfor %}
