@@ -35,7 +35,7 @@ def handle_successful_store_payment(sender, user):
     total += int(float(params['mc_gross_%d'%i]))
     quantity = int(params['quantity%s'%i])
     try:
-      product = Product.objects.get(pk=params['item_number%d'%i])
+      product = Product.objects.get(pk=params['item_number%d'%i] or 0)
     except Product.DoesNotExist:
       mail_admins("Product fail for %s"%sender.txn_id,"")
       continue
