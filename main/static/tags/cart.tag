@@ -58,7 +58,7 @@
         <input name="notify_url" type="hidden" value="{ SHOP.base_url}/tx/rx/ipn/handler/">
         <input name="cancel_return" type="hidden" value="{ SHOP.base_url }/shop/">
         <input name="return" type="hidden" value="{ SHOP.base_url }/shop/">
-        <input name="invoice" type="hidden" value="3">
+        <input name="invoice" type="hidden" value={ invoice_id }>
         <input name="cmd" type="hidden" value="_cart">
         <input type="hidden" name="upload" value="1">
         <input type="hidden" name="tax_cart" value="0">
@@ -95,14 +95,15 @@
     uR.drop.saveCartItem(e.item);
   }
   startCheckout(e) {
+    var form = this.root.querySelector("form");
     uR.ajax({
       url: '/shop/start_checkout/',
-      form: this.target.querySelector("form"),
+      form: form,
       success: function(data) {
         if (data.errors.length) {
           self.errors = data.errors;
         } else {
-          form.find("[name=invoice]").val(data.order_pk);
+          form.querySelector("[name=invoice]").value = self.invoice_id = data.order_pk;
           form.submit();
         }
       },
