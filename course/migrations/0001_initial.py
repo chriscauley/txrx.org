@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
+from django.db import migrations, models
 import datetime
 import tool.models
 import media.models
@@ -22,9 +22,6 @@ class Migration(migrations.Migration):
                 ('image', models.ImageField(upload_to=b'course_branding/%Y-%m')),
                 ('small_image_override', models.ImageField(null=True, upload_to=b'course_branding/%Y-%m', blank=True)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='ClassTime',
@@ -33,11 +30,11 @@ class Migration(migrations.Migration):
                 ('start', models.DateTimeField()),
                 ('end_time', models.TimeField()),
                 ('created', models.DateTimeField(auto_now_add=True)),
+                ('emailed', models.DateTimeField(null=True, blank=True)),
             ],
             options={
                 'ordering': ('start',),
             },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Course',
@@ -46,11 +43,12 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=64)),
                 ('active', models.BooleanField(default=True)),
                 ('short_name', models.CharField(help_text=b'Used for the events page.', max_length=64, null=True, blank=True)),
+                ('no_discount', models.BooleanField(default=False)),
                 ('presentation', models.BooleanField(default=True, verbose_name=b'Evaluate Presentation')),
                 ('visuals', models.BooleanField(default=True, verbose_name=b'Evaluate Visuals')),
                 ('content', models.BooleanField(default=True, verbose_name=b'Evaluate Content')),
                 ('reschedule_on', models.DateField(default=datetime.date.today, help_text=b"The dashboard (/admin/) won't bug you to reschedule until after this date")),
-                ('fee', models.IntegerField(null=True, blank=True)),
+                ('fee', models.IntegerField(default=0, null=True, blank=True)),
                 ('fee_notes', models.CharField(max_length=256, null=True, blank=True)),
                 ('requirements', models.CharField(max_length=256, null=True, blank=True)),
                 ('prerequisites', models.CharField(max_length=256, null=True, blank=True)),
@@ -66,15 +64,16 @@ class Migration(migrations.Migration):
             bases=(media.models.PhotosMixin, tool.models.ToolsMixin, media.models.FilesMixin, models.Model),
         ),
         migrations.CreateModel(
-            name='CourseCompletion',
+            name='CourseRoomTime',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('created', models.DateTimeField(auto_now_add=True)),
+                ('hours_at', models.FloatField(default=0, help_text=b'Number of hours at location. 0 = Until class ends.')),
+                ('day', models.IntegerField(default=0, choices=[(0, b'All'), (1, b'Day 1'), (2, b'Day 2'), (3, b'Day 3'), (4, b'Day 4'), (5, b'Day 5')])),
+                ('order', models.IntegerField(default=999)),
             ],
             options={
-                'abstract': False,
+                'ordering': ('day', 'order'),
             },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='CourseSubscription',
@@ -84,23 +83,22 @@ class Migration(migrations.Migration):
             options={
                 'abstract': False,
             },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Enrollment',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('datetime', models.DateTimeField(default=datetime.datetime.now)),
+                ('completed', models.DateTimeField(null=True, blank=True)),
                 ('quantity', models.IntegerField(default=1)),
-                ('completed', models.BooleanField(default=False)),
                 ('evaluated', models.BooleanField(default=False)),
                 ('emailed', models.BooleanField(default=False)),
                 ('evaluation_date', models.DateTimeField(null=True, blank=True)),
+                ('transaction_ids', models.TextField(null=True, blank=True)),
             ],
             options={
                 'ordering': ('-datetime',),
             },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Evaluation',
@@ -111,7 +109,7 @@ class Migration(migrations.Migration):
                 ('presentation_comments', models.TextField(blank=True, max_length=512, null=True, verbose_name=b'Comments', validators=[django.core.validators.MaxLengthValidator(512)])),
                 ('content', models.IntegerField(default=0, help_text=b'How well did the course content cover the subject area you were interested in?', verbose_name=b'Course Content', choices=[(1, b'1 - Did not meet expectations'), (2, b'2'), (3, b'3 - Met expectations'), (4, b'4'), (5, b'5 - Exceeded expectations')])),
                 ('content_comments', models.TextField(blank=True, max_length=512, null=True, verbose_name=b'Comments', validators=[django.core.validators.MaxLengthValidator(512)])),
-                ('visuals', models.IntegerField(default=0, help_text=b'How helpful did you find the handouts and audiovisuals presented in this course?', verbose_name=b'Handouts/Audio/Visuals', choices=[(1, b'1 - Did not meet expectations'), (2, b'2'), (3, b'3 - Met expectations'), (4, b'4'), (5, b'5 - Exceeded expectations')])),
+                ('visuals', models.IntegerField(default=0, help_text=b'How helpful did you find the handouts and audio visuals presented in this course?', verbose_name=b'Handouts/Audio/Visuals', choices=[(1, b'1 - Did not meet expectations'), (2, b'2'), (3, b'3 - Met expectations'), (4, b'4'), (5, b'5 - Exceeded expectations')])),
                 ('visuals_comments', models.TextField(blank=True, max_length=512, null=True, verbose_name=b'Comments', validators=[django.core.validators.MaxLengthValidator(512)])),
                 ('question1', models.TextField(null=True, verbose_name=b'What did you like best about this class?', blank=True)),
                 ('question2', models.TextField(null=True, verbose_name=b'How could this class be improved?', blank=True)),
@@ -122,22 +120,23 @@ class Migration(migrations.Migration):
             options={
                 'ordering': ('-datetime',),
             },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Session',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('slug', models.CharField(max_length=255)),
                 ('cancelled', models.BooleanField(default=False)),
                 ('active', models.BooleanField(default=True)),
+                ('private', models.BooleanField(default=False, help_text=b'Private classes cannot be signed up for and do not appear on the session page unless the user is manually enrolled. It will appear on calendar but it will be marked in red.')),
+                ('notified', models.DateTimeField(null=True, blank=True)),
                 ('publish_dt', models.DateTimeField(null=True, blank=True)),
                 ('first_date', models.DateTimeField(default=datetime.datetime.now, help_text=b'This will be automatically updated when you save the model. Do not change')),
                 ('last_date', models.DateTimeField(default=datetime.datetime.now, help_text=b'This will be automatically updated when you save the model. Do not change')),
                 ('created', models.DateTimeField(auto_now_add=True)),
-                ('time_string', models.CharField(default=b'not implemented', help_text=b'Only used to set dates on creation.', max_length=128)),
+                ('needed', models.TextField(default=b'', verbose_name=b'What is needed?', blank=True)),
+                ('needed_completed', models.DateField(null=True, blank=True)),
                 ('branding', models.ForeignKey(blank=True, to='course.Branding', null=True)),
-                ('course', models.ForeignKey(blank=True, to='course.Course', null=True)),
+                ('course', models.ForeignKey(to='course.Course')),
             ],
             options={
                 'ordering': ('first_date',),
@@ -150,12 +149,12 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=64)),
                 ('order', models.FloatField(default=0)),
+                ('level', models.IntegerField(default=0)),
                 ('parent', models.ForeignKey(blank=True, to='course.Subject', null=True)),
             ],
             options={
                 'ordering': ('order',),
             },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Term',
@@ -168,6 +167,5 @@ class Migration(migrations.Migration):
             options={
                 'ordering': ('-start',),
             },
-            bases=(models.Model,),
         ),
     ]
