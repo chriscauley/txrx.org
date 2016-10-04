@@ -15,7 +15,7 @@
 
 <event-occurrence>
   <div class="well" name="loading-target">
-    <a if={ admin_access } href="/admin/event/eventoccurrence/{ id }" class="admin-link fa fa-pencil-square"></a>
+    <a if={ admin_access } href="/event/orientations/{ start_slug }/" class="admin-link fa fa-pencil-square"></a>
     <div class="dates">
       <div>{ start_string }</div>
     </div>
@@ -40,6 +40,7 @@
   var self = this;
   this.on('mount',function() {
     this.start_string = moment(this.start).format("ddd MMM D, YYYY h:mm a");
+    this.start_slug = moment(this.start).format("YYYY/MM/DD");
     TXRX.ready(function() {
       self.admin_access = window.TXRX.user.is_superuser;
       self.authenticated = window.TXRX.user.id;

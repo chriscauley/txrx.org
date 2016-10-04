@@ -213,6 +213,7 @@ class UserMembershipInline(admin.StackedInline):
 
 class ProposalInline(admin.StackedInline):
   model = Proposal
+  raw_id_fields = ('user',)
   fields = ('order','title','user','original','ammended')
   extra = 0
 
