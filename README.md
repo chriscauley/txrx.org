@@ -1,4 +1,3 @@
-[![Stories in Ready](https://badge.waffle.io/chriscauley/txrx.org.png?label=ready&title=Ready)](https://waffle.io/chriscauley/txrx.org)
 TXRX Labs Website
 ========
 
