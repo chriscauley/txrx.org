@@ -24,13 +24,11 @@
   </div>
   {% for eventoccurrence in eventoccurrences %}
   <h1>{{ eventoccurrence }}</h1>
-  <div class="imtooflexy">
     {% for rsvp in eventoccurrence.get_rsvps %}
     {% include "event/_orientation_box.html" with user=rsvp.user %}
     {% empty %}
     <h2>:D No one signed up for this orientation</h2>
     {% endfor %}
-  </div>
   {% empty %}
   <h1>No Orientations at This Date</h1>
   {% endfor %}
@@ -43,18 +41,34 @@
 </div>
 <script type="riot/tag">
   <ez-file>
+    <input type="file" id="file__{ slug }__{ opts.user_id }" onchange={ cropIt } name={ slug } />
+    <label for="file__{ slug }__{ opts.user_id }" class="btn-{ done?'success':'danger' } btn">
+      { opts.name }</label>
     <form action={ opts.url } method="POST">
-      <input type="file" id="file__{ slug }__{ opts.user_id }" onchange={ uploadFile } name={ slug } />
       <input type="hidden" name="user_id" value={ opts.user_id } />
-      <label for="file__{ slug }__{ opts.user_id }" class="btn-{ done?'success':'danger' } btn">
-        { opts.name }
-      </label>
+      <input type="hidden" name="blob" />
     </form>
+    var self = this;
     this.on("mount", function() {
       this.slug = this.opts.name.replace(" ","_").toLowerCase();
       this.done = this.opts.done;
       this.update();
     });
+    cropIt(e) {
+      var filesToUpload = this.root.querySelector("[type=file]").files;
+      var file = filesToUpload[0];
+
+      var img = document.createElement("img");
+      var reader = new FileReader();  
+      reader.onload = function(e) {img.src = e.target.result}
+      reader.readAsDataURL(file);
+
+      img.onload = function() { uR.mountElement("resize-image",{
+        mount_to: uR.config.mount_alerts_to,
+        img: img,
+        parent: self,
+      }); }
+    }
     uploadFile(e) {
       var form = this.root.querySelector("form");
       var that = this;
@@ -64,9 +78,60 @@
         that: this,
         form: form,
         success: function(data) { this.done = data.done },
+        error: function() { alert("an unknown error has occurred. Go bug Chris!") }
       });
     }
   </ez-file>
+  <resize-image>
+    <modal cancel={ cancel }>
+      <center>
+        <canvas></canvas>
+        <button onclick={ parent.click } class={ uR.config.btn_primary } style="display:block;margin-bottom: 5px;">
+          { parent.zoom }x zoom (click image to change)</button>
+        <button onclick={ parent.done } class={ uR.config.btn_success }>Upload File</button>
+        <button onclick={ parent.cancel } class={ uR.config.btn_cancel }>Cancel</button>
+      </center>
+    </modal>
+    this.on("mount",function() {
+      this.canvas = this.root.querySelector("canvas");
+      this.ctx = this.canvas.getContext("2d");
+      this.img = this.opts.img;
+      this.ratio = this.img.width/this.img.height;
+      if (this.ratio < 1) {
+        this.canvas.width = 500*this.ratio;
+        this.canvas.height = 500;
+      } else {
+        this.canvas.width = 500;
+        this.canvas.height = 500/this.ratio;
+      }
+      this.zoom = 1;
+      this.file = this.opts.parent.root.querySelector("[type=file]");
+      this.blob = this.opts.parent.root.querySelector("[name=blob]");
+      this.file.value = "";
+      this.blob.value = "";
+      this.update();
+    });
+    this.on("update",function() {
+      if (!this.img) { return }
+      var dx = (this.zoom-1)*this.canvas.width/2;
+      var dy = (this.zoom-1)*this.canvas.height/2;
+      this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+      this.ctx.drawImage(this.opts.img,-dx,-dy,this.canvas.width+2*dx,this.canvas.height+2*dy)
+    });
+    cancel(e) {
+      this.unmount();
+    }
+    click(e) {
+      this.zoom += 0.5;
+      if (this.zoom > 3) { this.zoom = 1; }
+      this.update();
+    }
+    done(e) {
+      this.blob.value = this.canvas.toDataURL();
+      this.opts.parent.uploadFile();
+      this.unmount();
+    }
+  </resize-image>
 </script>
 <script>
   uR.ready(function() { riot.mount("ez-file,set-rfid"); });

@@ -71,9 +71,9 @@ var resetProductList = timeit(function() {
 
 TXRX.schema = {
   new_rfid: [
-    { name: 'username', placeholder: "Username or email" },
+    { name: 'username', label: 'Username or Email'},
     { name: 'password', type: 'password' },
-    { name: 'rfid', type: 'hidden' },
+    { name: 'new_rfid', type: 'hidden' },
   ]
 }
 

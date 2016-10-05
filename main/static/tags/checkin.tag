@@ -282,13 +282,8 @@
   }
   this.ajax_success = function(data,response) {
     if (data.next) {
-      data.parent = self;
-      if (!self.root.querySelector(data.next)) {
-        var element = document.createElement(data.next);
-        self.root.appendChild(element);
-      }
-      riot.mount(data.next,data);
-      return;
+      data.mount_to = uR.config.mount_alerts_to;
+      uR.mountElement(data.next,data);
     }
     self.checkin = data.checkin;
     self.update()

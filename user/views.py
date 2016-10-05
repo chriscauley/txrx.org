@@ -1,13 +1,14 @@
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
+from django.core.files.base import ContentFile
+from django.core.mail import EmailMessage
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.static import serve
-from django.core.mail import EmailMessage
 
 from .models import User, UserCheckin, RFID
 from event.models import RSVP
@@ -20,7 +21,7 @@ from tool.models import Criterion, UserCriterion, Permission
 
 from lablackey.utils import get_or_none
 from sorl.thumbnail import get_thumbnail
-import json, datetime, os
+import json, datetime, os, binascii
 
 def checkin_json(user):
   today = datetime.date.today()
@@ -68,13 +69,15 @@ def checkin_ajax(request):
   }
   return JsonResponse(out)
 
-@temp_user_required
 def add_rfid(request):
-  rfid = request.POST['rfid']
+  rfid = request.POST['new_rfid']
+  user = get_user_model().objects.get_from_anything(request.POST.get("username",None))
+  user and user.check_password(request.POST.get('password',''))
+  if not user:
+    return JsonResponse({'errors': {'non_field_errors': "Username and password do not match"}},status=401)
   if user.rfid_set.count():
     m = 'You already have an RFID card registered. Please see staff if you need to change cards.'
-    messages = [{'level': 'danger', 'body': m}]
-    return JsonResponse({'messages': messages})
+    return JsonResponse({'errors': {'non_field_errors':m}})
   RFID.objects.get_or_create(user=user,number=rfid)
   messages = [{'level': 'success', 'body': 'RFID set. Please swipe now to checkin.'}]
   return JsonResponse({'messages': messages})
@@ -135,8 +138,6 @@ def remove_rfid(request):
 @staff_member_required
 def hidden_image(request):
   path = request.path.split(settings.STAFF_URL)[-1]
-  print request.path
-  print path
   if request.path.startswith("/superuser_images/") and not request.user.is_superuser():
     return HttpResponse("Not Allowed",status=403)
   return serve(request, path, settings.STAFF_ROOT)
@@ -144,8 +145,12 @@ def hidden_image(request):
 @staff_member_required
 def change_headshot(request,attr):
   user = get_object_or_404(get_user_model(),pk=request.POST['user_id'])
+  f = request.FILES.get(attr,None) # if somehow they upload the uncompressed image
+  fname = "%s-%s.jpg"%(attr,user.id)
+  if request.POST.get('blob',None):
+    f = ContentFile(request.POST['blob'].split(",")[1].decode('base64'))
   if attr == 'headshot':
-    user.headshot = request.FILES[attr]
+    user.headshot.save(fname,f)
     user.save()
   elif attr == 'id_photo':
     admin_url = "https://txrxlabs.org/admin/user/user/%s"%user.id
@@ -155,7 +160,7 @@ def change_headshot(request,attr):
       settings.DEFAULT_FROM_EMAIL,
       [settings.ID_PHOTO_EMAIL]
     )
-    msg.attach(request.FILES[attr].name,request.FILES[attr].read(),'image/jpg')
+    msg.attach(fname,f.read(),'image/jpg')
     msg.send()
     user.id_photo_date = datetime.date.today()
     user.save()

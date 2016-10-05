@@ -44,7 +44,7 @@ def temp_user_required(function):
       request.session.set_expiry(expiration_time)
       return function(request,*args,**kwargs)
     if rfid:
-      return JsonResponse({'next': "new-rfid", 'rfid': rfid})
+      return JsonResponse({'next': "new-rfid", 'new_rfid': rfid})
     return JsonResponse({'errors': {'non_field_error': 'Unable to find user. Contact the staff'}},
                         status=401)
 
