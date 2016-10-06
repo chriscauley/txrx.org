@@ -50,6 +50,10 @@ class Tool(PhotosMixin,OrderedModel):
   @cached_property
   def consumable_ids(self):
     return list(self.toolconsumablegroup_set.values_list("consumables__id",flat=True))
+  @cached_property
+  def checkoutitems(self):
+    ids = self.toolcheckoutitemgroup_set.values_list("checkoutitems",flat=True)
+    return CheckoutItem.objects.filter(id__in=ids)
   @property
   def choice_name(self):
     if self.room:
