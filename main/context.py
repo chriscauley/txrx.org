@@ -32,6 +32,7 @@ def nav(request):
     {'name': 'My Posts', 'url': '/blog/%s/'%request.user.username},
   ]
   about_links = []
+  is_superuser = request.user.is_superuser
   if request.user.is_authenticated():
     about_links = [
       {'name': 'About TXRX', 'url': '/about-us/'},
@@ -52,16 +53,24 @@ def nav(request):
     {'name': 'twitter','url': 'https://twitter.com/txrxlabs' },
     {'name': 'instagram','url': 'https://instagram.com/txrxlabs/' },
   ]
-  toolmaster_sublinks = [
-    {'name': 'Tools','url': '/tools/'},
-    {'name': 'Permissions','url': '/toolmaster'},
-    {'name': 'Materials Needed','url': '/needed-sessions/','reddot': _materials },
-    {'name': 'Orientations','url': '/event/orientations/','reddot': _orientations },
-    {'name': 'Bays + Tables', 'url': '/admin/membership/container/?needs+Staff=yes&o=2', 'reddot': _containers},
-  ]
-  if getattr(request.user,'is_gatekeeper',False):
-    toolmaster_sublinks.append({'name': 'Set RFID','url': '/rfid/'})
-    toolmaster_sublinks.append({'name': 'RFID Table','url': '/rfid_permission_table/'})
+  tool_sublinks = []
+  # if request.user.is_authenticated():
+  #   tool_sublinks = [
+  #     {'name': 'Tools','url': '/tools/'},
+  #     {'name': 'Checkout Items', 'url': '/tools/checkout-items/'},
+  #   ]
+
+  if getattr(request.user,'is_toolmaster',False) or is_superuser:
+    tool_sublinks += [
+      {'name': 'Checkout Items', 'url': '/tools/checkout-items/'},
+      {'name': 'Permissions','url': '/toolmaster'},
+      {'name': 'Materials Needed','url': '/needed-sessions/','reddot': _materials },
+      {'name': 'Orientations','url': '/event/orientations/','reddot': _orientations },
+      {'name': 'Bays + Tables', 'url': '/admin/membership/container/?needs+Staff=yes&o=2', 'reddot': _containers},
+    ]
+  if getattr(request.user,'is_gatekeeper',False) or is_superuser:
+    tool_sublinks.append({'name': 'Set RFID','url': '/rfid/'})
+    tool_sublinks.append({'name': 'RFID Table','url': '/rfid_permission_table/'})
   if request.user.is_authenticated() and request.user.subscription_set.filter(canceled__isnull=True):
     _l = 'https://docs.google.com/document/d/1Cb-83FJ_8n_ModIIRMGesTOTfefoeVA2V--s-5XWa_M/edit?usp=sharing'
     about_links.append({'name': 'Orientation Notes','url': _l})
@@ -75,7 +84,7 @@ def nav(request):
      },
     {'name': "Tools",
      "url": "/tools/",
-     "sublinks": toolmaster_sublinks if (request.user.is_authenticated() and request.user.is_toolmaster) else [],
+     "sublinks": tool_sublinks,
     },
     {"name": "Blog",
      "url": "/blog/",

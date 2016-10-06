@@ -100,6 +100,7 @@ class Room(models.Model):
   short_name = models.CharField(max_length=64,null=True,blank=True,help_text=_ht)
   get_short_name = lambda self: self.short_name or self.name
   in_calendar = models.BooleanField("can be scheduled for events",default=True)
+  has_checkoutitems = models.BooleanField(default=False)
   roomgroup = models.ForeignKey(RoomGroup,null=True,blank=True)
   map_key = models.CharField(max_length=1,null=True,blank=True)
   @property

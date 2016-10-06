@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from course.models import Enrollment
+from geo.models import Room
 from redtape.models import Signature
 from tool.models import Tool, Lab, Group, Permission, Criterion, UserCriterion
 
@@ -59,3 +60,8 @@ def toggle_criterion(request):
   user = User.objects.get(pk=user.pk)
   attrs = ['signature_jsons','enrollment_jsons','locked_criterion_ids','usercriterion_jsons']
   return JsonResponse({attr: getattr(user,attr) for attr in attrs})
+
+def checkout_items(request):
+  room_items = [(r,r.checkoutitem_set.all()) for r in Room.objects.all()]
+  values = {'room_items': filter(lambda i:i[1],room_items)}
+  return TemplateResponse(request,"tool/checkout_items.html",values)

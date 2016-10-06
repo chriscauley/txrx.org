@@ -303,3 +303,9 @@ class APIKey(models.Model):
   key = models.CharField(max_length=30,default=new_key)
   __unicode__ = lambda self: self.key
 
+class CheckoutItem(models.Model):
+  name = models.CharField(max_length=64)
+  room = models.ForeignKey("geo.Room",limit_choices_to={'has_checkoutitems': True})
+  __unicode__ = lambda self: self.name
+  class Meta:
+    ordering = ('name',)

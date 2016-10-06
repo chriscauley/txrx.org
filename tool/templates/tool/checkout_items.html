@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block header_content %}
+Items for Checkout
+<a href="/admin/tool/checkoutitem/" class="fa fa-pencil-square superuseronly"></a>
+{% endblock %}
+{% block full_title %}Items for Checkout{% endblock %}
+
+{% block content %}
+{% for room,items in room_items %}
+<div class="col-sm-6">
+  <h3>{{ room }}</h3>
+  <ul>
+    {% for item in items %}
+    <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endfor %}
+{% endblock %}
