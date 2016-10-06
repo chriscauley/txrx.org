@@ -6,11 +6,16 @@ from media.admin import TaggedPhotoInline
 from lablackey.db.admin import OrderedModelAdmin
 from event.admin import FuturePastListFilter
 from .models import (Lab, Tool, ToolLink, TaggedTool, Group, Permission, Criterion, UserCriterion, APIKey,
-                     Schedule, ScheduleDay, PermissionSchedule, DoorGroup, Holiday, CheckoutItem)
+                     Schedule, ScheduleDay, PermissionSchedule, DoorGroup, Holiday, CheckoutItem,
+                     ToolCheckoutItemGroup)
 
 #@admin.register(APIKey)
 #class APIKeyAdmin(admin.ModelAdmin):
 #  readonly_fields = ['key']
+
+@admin.register(ToolCheckoutItemGroup)
+class ToolCheckoutItemGroupAdmin(admin.ModelAdmin):
+  filter_horizontal = ('tools','checkoutitems')
 
 @admin.register(CheckoutItem)
 class CheckoutItemAdmin(admin.ModelAdmin):

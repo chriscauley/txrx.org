@@ -311,3 +311,11 @@ class CheckoutItem(models.Model):
   __unicode__ = lambda self: self.name
   class Meta:
     ordering = ('name',)
+
+class ToolCheckoutItemGroup(models.Model):
+  name = models.CharField(max_length=64)
+  tools = models.ManyToManyField(Tool)
+  checkoutitems = models.ManyToManyField(CheckoutItem)
+  __unicode__ = lambda self: self.name
+  class Meta:
+    ordering = ('name',)

@@ -183,6 +183,7 @@ SUIT_CONFIG = {
        'tool.permissions',
        'tool.schedules',
        'tool.tool',
+       'tool.toolcheckoutitemgroup',
        'store.toolconsumablegroup',
        'tool.usercriterion',
      )
