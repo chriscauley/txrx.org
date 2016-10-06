@@ -7,7 +7,6 @@ from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 
-from geo.models import Room
 from lablackey.db.models import SlugModel, OrderedModel
 from lablackey.utils import cached_property, cached_method
 from media.models import Photo, PhotosMixin
@@ -43,7 +42,7 @@ class Tool(ConsumablesMixin,PhotosMixin,OrderedModel):
   est_price = models.FloatField(null=True,blank=True)
   links = lambda self: self.toollink_set.all()
   materials = models.ManyToManyField("thing.Material",blank=True)
-  room = models.ForeignKey(Room,null=True,blank=True)
+  room = models.ForeignKey('geo.Room',null=True,blank=True)
   get_absolute_url = lambda self: reverse("tool_detail",args=[self.slug,self.id])
   functional = models.BooleanField(default=True)
   repair_date = models.DateField(null=True,blank=True)
@@ -216,7 +215,7 @@ class DoorGroup(models.Model):
 class Permission(models.Model):
   name = models.CharField(max_length=32)
   abbreviation = models.CharField(max_length=16,help_text="For badge.")
-  room = models.ForeignKey(Room)
+  room = models.ForeignKey('geo.Room')
   group = models.ForeignKey(Group,null=True,blank=True)
   _ht = "Requires all these criteria to access these tools."
   criteria = models.ManyToManyField(Criterion,blank=True,help_text=_ht)
@@ -305,7 +304,8 @@ class APIKey(models.Model):
 
 class CheckoutItem(models.Model):
   name = models.CharField(max_length=64)
-  room = models.ForeignKey("geo.Room",limit_choices_to={'has_checkoutitems': True})
+  _ht = 'Only rooms marked "has checkoutitems" appear here'
+  room = models.ForeignKey("geo.Room",limit_choices_to={'has_checkoutitems': True},help_text=_ht)
   __unicode__ = lambda self: self.name
   class Meta:
     ordering = ('name',)
