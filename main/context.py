@@ -62,6 +62,7 @@ def nav(request):
 
   if getattr(request.user,'is_toolmaster',False) or is_superuser:
     tool_sublinks += [
+      {'name': 'Tools','url': '/tools/'},
       {'name': 'Checkout Items', 'url': '/tools/checkout-items/'},
       {'name': 'Permissions','url': '/toolmaster'},
       {'name': 'Materials Needed','url': '/needed-sessions/','reddot': _materials },

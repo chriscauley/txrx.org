@@ -10,7 +10,6 @@ from django.template.loader import render_to_string
 from lablackey.db.models import SlugModel, OrderedModel
 from lablackey.utils import cached_property, cached_method
 from media.models import Photo, PhotosMixin
-from store.models import ConsumablesMixin
 from wmd.models import MarkDownField
 
 from colorful.fields import RGBColorField
@@ -29,7 +28,7 @@ class Lab(PhotosMixin,OrderedModel):
 
 _help = "Will default to %s photo if blank"
 
-class Tool(ConsumablesMixin,PhotosMixin,OrderedModel):
+class Tool(PhotosMixin,OrderedModel):
   name = models.CharField(max_length=128)
   __unicode__ = lambda self: self.name
   get_admin_url = lambda self: "/admin/tool/tool/%s/"%self.id
@@ -48,6 +47,9 @@ class Tool(ConsumablesMixin,PhotosMixin,OrderedModel):
   repair_date = models.DateField(null=True,blank=True)
   permission = models.ForeignKey("Permission",null=True,blank=True)
   get_status = lambda self: "Functional" if self.functional else "Non-functional"
+  @cached_property
+  def consumable_ids(self):
+    return list(self.toolconsumablegroup_set.values_list("consumables__id",flat=True))
   @property
   def choice_name(self):
     if self.room:

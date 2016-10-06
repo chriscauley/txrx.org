@@ -7,7 +7,6 @@ from lablackey.db.admin import OrderedModelAdmin
 from event.admin import FuturePastListFilter
 from .models import (Lab, Tool, ToolLink, TaggedTool, Group, Permission, Criterion, UserCriterion, APIKey,
                      Schedule, ScheduleDay, PermissionSchedule, DoorGroup, Holiday, CheckoutItem)
-from store.admin import TaggedConsumableInline
 
 #@admin.register(APIKey)
 #class APIKeyAdmin(admin.ModelAdmin):
@@ -62,7 +61,7 @@ class ToolLinkInline(admin.TabularInline):
 
 @admin.register(Tool)
 class ToolAdmin(OrderedModelAdmin):
-  inlines = (ToolLinkInline,TaggedPhotoInline,TaggedConsumableInline)
+  inlines = (ToolLinkInline,TaggedPhotoInline)
   list_display = ('__unicode__','has_links','has_description','_materials',"room","lab",'order','permission')
   list_filter = ('lab','functional')
   filter_horizontal = ('materials',)

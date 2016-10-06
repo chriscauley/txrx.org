@@ -1,14 +1,13 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 
-from .models import Consumable, Category, TaggedConsumable
+from .models import Consumable, Category, ToolConsumableGroup
 from lablackey.db.admin import NamedTreeModelAdmin
 from media.admin import TaggedPhotoAdmin
 
-class TaggedConsumableInline(GenericTabularInline):
-  model = TaggedConsumable
-  raw_id_fields = ('consumable',)
-  extra = 0
+@admin.register(ToolConsumableGroup)
+class ToolConsumableGroupAdmin(admin.ModelAdmin):
+  filter_horizontal = ('tools','consumables')
 
 @admin.register(Category)
 class CategoryAdmin(NamedTreeModelAdmin):

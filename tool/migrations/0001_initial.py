@@ -142,7 +142,7 @@ class Migration(migrations.Migration):
             options={
                 'ordering': ('lab', 'order'),
             },
-            bases=(store.models.ConsumablesMixin, media.models.PhotosMixin, models.Model),
+            bases=(media.models.PhotosMixin, models.Model),
         ),
         migrations.CreateModel(
             name='ToolLink',

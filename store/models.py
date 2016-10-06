@@ -58,28 +58,10 @@ class Consumable(PhotosMixin,Product):
   class Meta:
     ordering = ('name',)
 
-class TaggedConsumable(models.Model):
-  consumable = models.ForeignKey(Consumable)
-  content_type = models.ForeignKey("contenttypes.ContentType")
-  object_id = models.IntegerField()
-  content_object = GenericForeignKey('content_type', 'object_id')
-  order = models.IntegerField(default=9999)
-
-class ConsumablesMixin(object):
-  def consumable_ids(self):
-    return list(self.get_consumables().values_list("id",flat=True))
-  @cached_property
-  def first_consumable(self):
-    return self.get_consumables()[0]
-  @cached_property
-  def _ct_id(self):
-    return ContentType.objects.get_for_model(self.__class__).id
-  @cached_method
-  def get_consumables(self):
-    return self._get_consumables()
-  def _get_consumables(self):
-    return Consumable.objects.filter(
-      taggedconsumable__content_type_id=self._ct_id,
-      taggedconsumable__object_id=self.id).order_by("taggedconsumable__order")
+class ToolConsumableGroup(models.Model):
+  name = models.CharField(max_length=64)
+  tools = models.ManyToManyField("tool.Tool")
+  consumables = models.ManyToManyField(Consumable)
+  __unicode__ = lambda self: self.name
   class Meta:
-    abstract = True
+    ordering = ('name',)
