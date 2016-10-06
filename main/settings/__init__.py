@@ -151,7 +151,7 @@ STATICFILES_FINDERS = (
 
 COMPRESS_PRECOMPILERS = (
   ('text/less', 'lessc {infile} {outfile}'),
-  #('riot/tag', 'riot {infile} {outfile}'),
+  ('riot/tag', 'riot {infile} {outfile}'),
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
