@@ -131,6 +131,8 @@ SUIT_CONFIG = {
        'event.rsvp',
        'geo.location',
        'geo.room',
+       'tool.schedule',
+       'tool.holiday',
      )
     },
     #'feed', # not implimented
@@ -179,10 +181,8 @@ SUIT_CONFIG = {
        'tool.toolcheckoutitemgroup',
        'tool.criterion',
        'tool.doorgroup',
-       'tool.holiday',
        'tool.lab',
-       'tool.permissions',
-       'tool.schedules',
+       'tool.permission',
        'tool.tool',
        'store.toolconsumablegroup',
        'tool.usercriterion',
