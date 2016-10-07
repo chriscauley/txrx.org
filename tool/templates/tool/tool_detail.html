@@ -27,15 +27,16 @@
     {{ tool.description|explosivo }}
     <hr />
     {% if tool.toollink_set.all %}
-    <h4>Related Links</h4>
-    {% for link in tool.toollink_set.all %}
-    <a href="{{ link.url }}">{{ link.title }}</a><br />
-    {% endfor %}
+    <h3 class="block_title">Related Links</h3>
+    <div class="well">
+      {% for link in tool.toollink_set.all %}
+      <a href="{{ link.url }}">{{ link.title }}</a><br />
+      {% endfor %}
+    </div>
     {% endif %}
-    <product-list></product-list>
-    {% if tool.number_required_courses and settings.DEBUG %}
+    {% if tool.number_required_courses %}
     <div>
-      <h3 class="block_title">Required class{{ tool.number_required_courses|pluralize:"es" }}:</h3>
+      <h3 class="block_title">Required class{{ tool.number_required_courses|pluralize:"es" }}</h3>
       {% if tool.single_courses %}
       <div class="well">
         {% if tool.single_courses|length != 1%}
@@ -61,12 +62,9 @@
       </div>
       {% endfor %}
     </div>
-    {% endif %}
-    {% if tool.materials.all %}
-    <h4>Material{{ tool.materials.all|pluralize:"s" }} used</h4>
-    {{ tool.materials.all|join:", " }}
-    {% endif %}
+    {% else %}
     {% include "_generic_box.html" with items=tool.courses title="Related Courses" %}
+    {% endif %}
     {% if tool.things %}
     <div class="things">
       <h3 class="block_title">Related Projects</h3>
@@ -80,6 +78,14 @@
       {% endthumbnail %}
       {% endfor %}
     </div>
+    <hr />
+    {% endif %}
+    {% if tool.consumable_ids %}
+    <h3 class="block_title">Related Store Products</h3>
+    <product-list></product-list>
+    {% elif tool.materials.all %}
+    <h3 class="block_title">Material{{ tool.materials.all|pluralize:"s" }} used</h3>
+    {{ tool.materials.all|join:", " }}
     {% endif %}
   </div>
   <div class="col-xs-12 col-sm-8 col-md-9">
