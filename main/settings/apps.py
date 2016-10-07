@@ -175,7 +175,8 @@ SUIT_CONFIG = {
     {'app': 'tool',
      'icon': 'icon-wrench',
      'models': (
-       'tool.checkoutitems',
+       'tool.checkoutitem',
+       'tool.toolcheckoutitemgroup',
        'tool.criterion',
        'tool.doorgroup',
        'tool.holiday',
@@ -183,7 +184,6 @@ SUIT_CONFIG = {
        'tool.permissions',
        'tool.schedules',
        'tool.tool',
-       'tool.toolcheckoutitemgroup',
        'store.toolconsumablegroup',
        'tool.usercriterion',
      )
