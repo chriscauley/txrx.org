@@ -91,6 +91,8 @@ class User(AbstractBaseUser, PermissionsMixin):
   is_gatekeeper = models.BooleanField(default=False,help_text=_ht)
   _ht = "Shopkeepers can mark receipts as received."
   is_shopkeeper = models.BooleanField(default=False,help_text=_ht)
+  _ht = "Only used for filtering, currently"
+  is_volunteer = models.BooleanField(default=False,help_text=_ht)
   date_joined = models.DateTimeField(_('date joined'),auto_now_add=True)
   paypal_email = models.EmailField(max_length=255,null=True,blank=True) #! TODO make me unique
   _kwargs = dict(upload_to="%Y%m",max_length=200,null=True,blank=True)

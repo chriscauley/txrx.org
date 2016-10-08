@@ -26,7 +26,7 @@ class UserAdmin(UserAdmin):
       ('id_photo_date','headshot')
     )}),
     (_('Permissions'),
-     {'fields': ('is_active', 'is_staff', 'is_superuser',
+     {'fields': ('is_active', 'is_volunteer', 'is_staff', 'is_superuser',
                  'is_toolmaster', 'is_gatekeeper','is_shopkeeper', 'groups')}),
     (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
   )
@@ -46,4 +46,4 @@ class UserAdmin(UserAdmin):
   ordering = ('username',)
   readonly_fields = ('last_login','date_joined','level')
   inlines = [UserMembershipInline, RFIDInline, UserNoteInline, SubscriptionInline, EnrollmentInline]
-  list_filter = list(UserAdmin.list_filter) + ['usermembership__voting_rights','date_joined']
+  list_filter = list(UserAdmin.list_filter) + ['usermembership__voting_rights','date_joined','is_volunteer']
