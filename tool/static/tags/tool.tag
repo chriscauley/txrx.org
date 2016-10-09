@@ -26,14 +26,14 @@
     </div>
   </div>
 
-  var that = this;
+  var self = this;
   this.on("mount",function() {
-    that.columns = [{'rows':[]},{'rows':[]}]
+    self.columns = [{'rows':[]},{'rows':[]}]
     window.TXRX.permissions.forEach(function(p) {
       p.has = (window.TXRX.user.permission_ids.indexOf(p.id) > -1);
     });
     window.TXRX.groups.forEach(function(g) {
-      that.columns[g.column].rows.push(g);
+      self.columns[g.column].rows.push(g);
       g.permissions = window.TXRX.permissions.filter(function(p) {
         if (p.group_id == g.id) {
           if (p.has) { g.any = true }
@@ -101,7 +101,7 @@
     </div>
   </div>
 
-  var that = this;
+  var self = this;
   toggleCriterion(e) {
     toggle(e,{ criterion_id: e.item.id });
   }
@@ -116,35 +116,35 @@
 
   function toggle(e,d) {
     if (e.item.locked) { return }
-    d.user_id = that.active_user.id;
+    d.user_id = self.active_user.id;
     uR.ajax({
       url: '/tools/toggle_criterion/',
       data: d,
       success: function(data) {
-        that.student = data;
-        that.update();
+        self.student = data;
+        self.update();
       },
-      target: that.root.querySelector(".buttons")
+      target: self.root.querySelector(".buttons")
     });
   }
 
   this.on("update", function() {
-    that.criteria  = window.TXRX.criteria;
-    if (that.active_user) {
+    self.criteria  = window.TXRX.criteria;
+    if (self.active_user) {
       var user = window.TXRX.user
       var usercriterion = {};
-      uR.forEach(that.student.usercriterion_jsons,function(ucj) { usercriterion[ucj.criterion_id] = ucj });
-      that.criteria.forEach(function(c) {
+      uR.forEach(self.student.usercriterion_jsons,function(ucj) { usercriterion[ucj.criterion_id] = ucj });
+      self.criteria.forEach(function(c) {
         c.has = usercriterion[c.id];
-        c.locked = that.student.locked_criterion_ids.indexOf(c.id) != -1;
+        c.locked = self.student.locked_criterion_ids.indexOf(c.id) != -1;
         c.expires = c.has && c.has.expires && moment(new Date(c.has.expires)).format("MMMM DD, YYYY");
         c.can_change = user.is_toolmaster || user.master_criterion_ids.indexOf(c.id) != -1;
       });
-      that.student.enrollment_jsons.forEach(function(e){
+      self.student.enrollment_jsons.forEach(function(e){
         e.has = e.completed;
         e.can_change = user.is_toolmaster || user.session_ids.indexOf(e.session.id) != -1;
       });
-      that.student.signature_jsons.forEach(function(e) {
+      self.student.signature_jsons.forEach(function(e) {
         e.has = e.completed;
         e.can_change = user.is_toolmaster;
       });
@@ -156,8 +156,8 @@
     uR.ajax({
       url: "/api/user/student/"+e.item.id+"/",
       success: function(data) {
-        that.student = data;
-        that.update()
+        self.student = data;
+        self.update()
       },
       target: this.root
     })
@@ -187,16 +187,16 @@
     <div if={ parent.error } class="alert alert-danger">{ parent.error }</div>
   </modal>
 
-  var that = this;
+  var self = this;
   this.on("mount", function() {
     // #! this is so the set-rfid tag can be included into other tags that don't do the searching.
     if (this.opts.active_id) {
       uR.ajax({
         url: "/api/user/search/",
         data: {user_id: this.opts.active_id},
-        that: this,
+        self: this,
         success: function(data) {
-          that._user = data[0];
+          self._user = data[0];
         },
       });
     }
@@ -225,23 +225,23 @@
     uR.ajax({
       url: '/api/change_rfid/',
       data: {'user_id':this.active_user.id,'rfid':number},
-      that: this,
+      self: this,
       success: function(data) {
-        that.active_user.rfids = data.rfids;
-        that.error = data.error;
+        self.active_user.rfids = data.rfids;
+        self.error = data.error;
       },
       error: function() { alert("An unknown error occurred. Please contact Chris.") },
-      target: that.root.querySelector("modal .inner")
+      target: self.root.querySelector("modal .inner")
     });
     return false;
   }
   remove(e) {
     uR.ajax({
       url: '/api/remove_rfid/',
-      data: {'user_id':that.active_user.id,'rfid':e.item.number},
-      that: this,
-      success: function(data) { that.active_user.rfids = data.rfids; },
-      target: that.root.querySelector("modal .inner")
+      data: {'user_id':self.active_user.id,'rfid':e.item.number},
+      self: this,
+      success: function(data) { self.active_user.rfids = data.rfids; },
+      target: self.root.querySelector("modal .inner")
     });
   }
 </set-rfid>
@@ -255,39 +255,38 @@
       &laquo; Back to results
     </button>
     <div each={ results }>
-      <button class="btn btn-{ parent.parent.active_user?'success':'primary' } btn-block"
-              onclick={ parent.parent.select }>
-        <div class="row">
-          <div class="col-sm-4">{ username }<br />{ get_full_name }&nbsp;</div>
-          <div class="col-sm-8">{ email }<br/>{ paypal_email }</div>
+      <div class="card well" onclick={ parent.parent.select }>
+        <div class="row card-content">
+          <div class="col-sm-4 col s4">{ username }<br />{ get_full_name }&nbsp;</div>
+          <div class="col-sm-8 col s8">{ email }<br/>{ paypal_email }</div>
         </div>
-      </button>
+      </div>
     </div>
     <div if={ !results.length }>
       No results. Try changing query
     </div>
   </div>
 
-  var that = this;
-  that._results = [];
+  var self = this;
+  self._results = [];
   var old_value = '',value;
   search(e) {
-    value = that.root.querySelector("[name=q]").value;
+    value = self.root.querySelector("[name=q]").value;
     if (old_value == value) { return }
     old_value = value;
     if (!value || value.length < 3) {
-      that._results = [];
-      that.update();
+      self._results = [];
+      self.update();
       return;
     }
     uR.ajax({
       url: "/api/user/search/",
-      data: {q: value},
+      data: {q: value, empty: self.opts.empty},
       success: function(data) {
-        that._results = data;
-        that.update()
+        self._results = data;
+        self.update()
       },
-      target: that.root.querySelector(".results")
+      target: self.root.querySelector(".results")
     })
   }
   this.search = uR.debounce(this.search);
@@ -296,9 +295,9 @@
     this.parent.update()
   }
   this.on("mount",function() {
-    that.root.querySelector("[name=q]").focus();
-    that.root.querySelector("[name=q]").value = that.opts.value || "";
-    that.search();
+    self.root.querySelector("[name=q]").focus();
+    self.root.querySelector("[name=q]").value = self.opts.value || "";
+    self.search();
   });
   this.on("update",function() {
     if (this.parent.active_user) { this.results = [this.parent.active_user ] }
