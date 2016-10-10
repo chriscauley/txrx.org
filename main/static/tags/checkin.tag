@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <div class="col s6" if={ classtimes.length }>
+    <div class="col s6" if={ opts.checkin.classtimes.length }>
       <h4>Classes Today</h4>
       <div each={ classtimes } class="card">
         <div class="card-content">
@@ -48,9 +48,9 @@
         </div>
       </div>
     </div>
-    <div class="col s6" if={ permissions.length }>
+    <div class="col s6" if={ opts.permissions.length }>
       <h4>Permissions</h4>
-      <div each={ permissions } class="card"><div class="card-title">{ name }</div></div>
+      <div each={ opts.checkin.permissions } class="card"><div class="card-title">{ name }</div></div>
       <div class="card">
         <a href="javascript:void(0)" class="ur-tooltip">
           <div class="card-title">Missing Anything?</div>
@@ -67,9 +67,9 @@
   </div>
 
   var self = this;
-  this.on("mount",function() {
+  _mount() {
     var checkin = opts.checkin;
-    if (!checkin) { return }
+    if (this.mounted || !checkin) { return }
     this.documents_done = 0;
     this.permissions = checkin.permissions;
     this.subscriptions = checkin.subscriptions;
@@ -91,10 +91,15 @@
     uR.forEach(TXRX.permissions,function(permission) {
       if (checkin.permission_ids.indexOf(permission.id) != -1) { self.permissions.push(permission) }
     });
-    this.update()
+    this.mounted = true;
   })
 
+  reset() {
+    this.permissions = this.subscriptions = this.documents = this.documents_done = this.classtimes = undefined;
+  }
+
   this.on("update",function() {
+    this._mount();
     // remove completed documents from the list.
     if (this.documents) {
       this.documents = this.documents.filter(function(document) { return !document.completed });
@@ -127,42 +132,31 @@
 </user-document>
 
 <todays-checkins>
-  <div class="card horizontal" each={ checkin,i in checkins }>
-    <div class="card-image">
-      <img src={ checkin.thumbnail }>
-      <button onclick={ parent.changeImage }
-              class="btn btn-green btn-floating fa fa-camera card-abs btn-large fa fa-2x"></button>
-    </div>
-    <div class="card-stacked" onclick={ toggleIt } class={ active: active == i }>
-      <div class="card-title">
-        { checkin.user_display_name }
-      </div>
-      <div class="card-content">
-        ({ checkin.sub_str })
-      </div>
-    </div>
-    <div style="display:none">
-      <user-checkin checkin={ checkin }></user-checkin>
-    </div>
-  </div>
+  <search-users empty={ data.todays_ids }></search-users>
+  <div class="checkin-div"></div>
 
   var self = this;
-  uR.ajax({
-    url: "/todays_checkins.json",
-    success: function(data) {
-      self.checkins = data.checkins;
-      uR.forEach(self.checkins,function(checkin) {
-        var _s = checkin.subscriptions[0];
-        checkin.sub_str = _s?(_s.level+" "+_s.verbose_status):"Non-member";
-      });
-    },
-    that: this
-  });
+  select(e) {
+    uR.ajax({
+      url: "/api/user_checkin/",
+      data: {user_id: e.item.id},
+      success: function(data) {
+        self.active_user = data;
+        var e = document.createElement("user-checkin");
+        this.root.querySelector(".checkin-div").appendChild(e);
+        riot.mount(e,{checkin: self.active_user});
+      },
+      that: this,
+      target: self.root,
+    });
+  }
+  back(e) {
+    this.root.querySelector(".checkin-div").innerHTML = "";
+  }
   toggleIt(e) {
     this.active = (e.item.i==this.active)?undefined:e.item.i;
   }
   changeImage(e) {
-  console.log('booty')
     uR.mountElement("change-headshot",{mount_to: "#alert-div"})
   }
 </todays-checkins>

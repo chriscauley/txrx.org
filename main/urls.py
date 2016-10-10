@@ -97,6 +97,7 @@ urlpatterns += patterns(
   url(r'^force_login/(\d+)/$', main_views.force_login),
   url(r'^api/remove_rfid/$','user.views.remove_rfid'),
   url(r'^api/change_rfid/$','user.views.set_rfid'),
+  url(r'^api/user_checkin/$','user.views.user_checkin'),
   url(r'^api/',include("api.urls")),
   url(r'^api/change_(headshot|id_photo)/$','user.views.change_headshot'),
   url(r'^api-token-auth/', 'rest_framework_jwt.views.obtain_jwt_token'),

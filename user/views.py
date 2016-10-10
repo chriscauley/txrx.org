@@ -51,9 +51,12 @@ def checkin_json(user):
 @staff_member_required
 def todays_checkins_json(request):
   checkins = UserCheckin.objects.filter(time_in__gte=datetime.datetime.now().replace(hour=0,minute=0))
-  return JsonResponse({
-    'checkins': [checkin_json(checkin.user) for checkin in checkins],
-  })
+  return JsonResponse({'todays_ids': list(checkins.values_list("ids",flat=True))})
+
+@staff_member_required
+def user_checkin(request):
+  user = User.objects.get(id=request.GET['user_id'])
+  return JsonResponse(checkin_json(user))
 
 @temp_user_required
 def checkin_ajax(request):

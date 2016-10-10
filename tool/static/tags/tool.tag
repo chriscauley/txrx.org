@@ -254,7 +254,7 @@
     <button class="btn btn-link" onclick={ back } if={ parent.active_user }>
       &laquo; Back to results
     </button>
-    <div each={ results }>
+    <div each={ results } if={ !parent.parent.active_user }>
       <div class="card well" onclick={ parent.parent.select }>
         <div class="row card-content">
           <div class="col-sm-4 col s4">{ username }<br />{ get_full_name }&nbsp;</div>
@@ -292,7 +292,8 @@
   this.search = uR.debounce(this.search);
   back(e) {
     this.parent.active_user = undefined;
-    this.parent.update()
+    this.parent.back && this.parent.back(e);
+    this.parent.update();
   }
   this.on("mount",function() {
     self.root.querySelector("[name=q]").focus();
