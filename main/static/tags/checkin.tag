@@ -92,7 +92,7 @@
       if (checkin.permission_ids.indexOf(permission.id) != -1) { self.permissions.push(permission) }
     });
     this.mounted = true;
-  })
+  }
 
   reset() {
     this.permissions = this.subscriptions = this.documents = this.documents_done = this.classtimes = undefined;

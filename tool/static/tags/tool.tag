@@ -255,7 +255,7 @@
       &laquo; Back to results
     </button>
     <div each={ results } if={ !parent.parent.active_user }>
-      <div class="card well" onclick={ parent.parent.select }>
+      <div class="card well" onclick={ parent.parent.select } style="cursor: pointer;">
         <div class="row card-content">
           <div class="col-sm-4 col s4">{ username }<br />{ get_full_name }&nbsp;</div>
           <div class="col-sm-8 col s8">{ email }<br/>{ paypal_email }</div>
