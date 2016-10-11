@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <div class="col s6" if={ opts.checkin.classtimes.length }>
+    <div class="col s6" if={ classtimes.length }>
       <h4>Classes Today</h4>
       <div each={ classtimes } class="card">
         <div class="card-content">
@@ -48,9 +48,9 @@
         </div>
       </div>
     </div>
-    <div class="col s6" if={ opts.permissions.length }>
+    <div class="col s6" if={ permissions.length }>
       <h4>Permissions</h4>
-      <div each={ opts.checkin.permissions } class="card"><div class="card-title">{ name }</div></div>
+      <div each={ permissions } class="card"><div class="card-title">{ name }</div></div>
       <div class="card">
         <a href="javascript:void(0)" class="ur-tooltip">
           <div class="card-title">Missing Anything?</div>
