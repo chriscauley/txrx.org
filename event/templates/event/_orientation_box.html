@@ -3,7 +3,10 @@
     <b>
       <div>{{ user }} {{ user.first_name }} {{ user.last_name }}
         <a href="{{ user.get_admin_url }}" class="fa fa-edit"></a></div>
-      <div>{{ user.level }}</div>
+      <div class="text-{{ user.gaby_class }}">
+        {{ user.level }} {% if user.last_subscription %}
+        (Paid Until {{ user.last_subscription.paid_until }}) {% endif %}
+      </div>
       <div>{{ user.email }}</div>
       <div>Paypal: {{ user.paypal_email }}</div>
     </b>

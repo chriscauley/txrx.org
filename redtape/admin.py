@@ -28,6 +28,8 @@ class DocumentAdmin(admin.ModelAdmin):
 class SignatureAdmin(admin.ModelAdmin):
   readonly_fields = ('datetime','document','user','_data')
   exclude = ('completed','data')
+  list_display = ("__unicode__","_data")
+  list_filter = ("document",)
   def _data(self,obj):
     fields = obj.get_fields()
     rows = "".join(["<tr><th>{name}</th><td>{value}</td></tr>".format(**f) for f in fields])
