@@ -55,6 +55,7 @@ urlpatterns = patterns(
   url(r'^thing/(\d+)/([\w\d\-\_]+)/$','thing.views.thing_detail',name='thing_detail'),
   url(r'^gfycat/$',main_views.gfycat,name='gfycat'),
   url(r'^tools/',include('tool.urls')),
+  url(r'^borrow/$','tool.views.checkout_items',name='checkout_items'),
   url('', include('social.apps.django_app.urls', namespace='social')),
   url(r'perfect-programming',main_views.intentional_500),
   url(r'^classes/', include('course.urls',namespace='course',app_name='course')),
