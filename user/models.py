@@ -14,6 +14,7 @@ from membership.models import Level
 from tool.models import UserCriterion, Criterion
 from redtape.models import Signature
 
+from lablackey.utils import cached_property
 import datetime, os
 
 class UserManager(BaseUserManager):
@@ -108,7 +109,19 @@ class User(AbstractBaseUser, PermissionsMixin):
   REQUIRED_FIELDS = ['email']
 
   rfids = property(lambda self: self.rfid_set.all().values_list('number',flat=True))
-
+  @property
+  def gaby_class(self):
+    if not self.last_subscription or self.last_subscription.paid_until < datetime.datetime.now():
+      return "danger"
+    if self.level.name == "Tinkerer":
+      return "warning"
+    if "Hacker" in self.level.name:
+      return "info"
+  @cached_property
+  def last_subscription(self):
+    subs = self.subscription_set.order_by("-paid_until")
+    if subs:
+      return subs[0]
   @property
   def done_docs(self):
     return Signature.objects.filter(user=self,document_id__in=settings.REQUIRED_DOCUMENT_IDS).count()
