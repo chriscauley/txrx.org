@@ -115,7 +115,7 @@
     <h5>{ parent.opts.document.name }</h5>
     <markdown content={ parent.opts.document.content }></markdown>
     <ur-form schema={ parent.opts.document.schema } no_focus={ true } action={ parent.action } method="POST"
-             ajax_success= { parent.ajax_success }></ur-form>
+             ajax_success={ parent.ajax_success }></ur-form>
   </modal>
 
   ajax_success(data) {
