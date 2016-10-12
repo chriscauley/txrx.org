@@ -61,6 +61,25 @@ textarea.materialize-textarea {
   &.invalid:not(.empty) ~ .help_text { opacity: 0; }
 }
 
+ur-form button.disabled {
+  pointer-events: auto !important;
+}
+
+ur-input.checkbox .invalid + label[data-error] {
+  border-bottom: #e51c23 2px solid; /* base red from materialize */
+  margin-bottom: 25px;
+  &:after {
+    color: #e51c23;
+    content: attr(data-error);
+    display: inline-block;
+    padding-left: 15px;
+    position: absolute;
+    transform: initial;
+    width: 100%;
+    top: 100%;
+  }
+}
+
 .input-field {
   min-height: 61px; /* checkbox isn't tall enough */
   /* materialize uses transform, not position, which fucks up for reasons I don't remember*/
