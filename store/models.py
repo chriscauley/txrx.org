@@ -26,6 +26,24 @@ class Category(PhotosMixin,NamedTreeModel):
     verbose_name_plural = "Categories"
     ordering = ('order',)
 
+class BaseProduct(PhotosMixin,Product):
+  #! TODO make this go to a filtered version of shop
+  get_absolute_url = lambda self: "/shop/"
+  json_fields = Product.json_fields + ['thumbnail','category_ids']
+  class Meta:
+    abstract = True
+  @property
+  def category_ids(self):
+    return list(self.categories.all().values_list('id',flat=True)) + getattr(self,"base_categories",[])
+
+  @property
+  def thumbnail(self):
+    return get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center").url
+
+class CourseCheckout(BaseProduct):
+  course = models.ForeignKey("course.Course")
+  base_categories = [6]
+
 class Consumable(PhotosMixin,Product):
   categories = models.ManyToManyField(Category)
   part_number = models.CharField(max_length=32,null=True,blank=True)
@@ -36,13 +54,6 @@ class Consumable(PhotosMixin,Product):
   in_stock = models.IntegerField(null=True,blank=True,help_text=_ht)
   _ht2 = "Amount purchased at a time. Used to make the quick refill process."
   purchase_quantity = models.IntegerField(default=1,help_text=_ht2)
-  #! TODO make this go to a filtered version of shop
-  get_absolute_url = lambda self: "/shop/"
-  json_fields = Product.json_fields + ['thumbnail','category_ids']
-  category_ids = property(lambda self: list(self.categories.all().values_list('id',flat=True)))
-  @property
-  def thumbnail(self):
-    return get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center").url
   def decrease_stock(self,quantity):
     if self.in_stock is None:
       return
