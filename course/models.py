@@ -268,6 +268,9 @@ class Session(UserModel,PhotosMixin,models.Model):
   created = models.DateTimeField(auto_now_add=True) # for emailing new classes
   # depracated?
   branding = models.ForeignKey(Branding,null=True,blank=True)
+
+  _ht = "Date the instructor marked students in the class as completed"
+  instructor_completed = models.DateField(null=True,blank=True)
   needed = models.TextField("What is needed?",blank=True,default="")
   needed_completed = models.DateField(null=True,blank=True)
 

@@ -42,6 +42,10 @@ def session(request,session_pk):
         enrollment.completed = None
       enrollment.save()
     messages.success(request,"Course completion status saved for all students in this class.")
+    if not session.instructor_completed and session.user == request.user:
+      session.instructor_completed = datetime.datetime.now()
+      session.save()
+      messages.success(request,"Session marked as completed")
     return HttpResponseRedirect(request.path)
   values = { 'session': session, 'needed_form': needed_form }
   return TemplateResponse(request,"course/instructor_session.html",values)
