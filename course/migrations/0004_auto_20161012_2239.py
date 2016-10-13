@@ -6,8 +6,9 @@ from django.db import migrations, models
 import datetime
 
 def mark_instructor_completed(apps, schema_editor):
-  for session in Session.objects.all():
-    if not session.past or session.instructor_completed:
+  for session in apps.get_model('course','session').objects.all():
+    past = datetime.datetime.now() > session.last_date
+    if not past or session.instructor_completed:
       continue
     enrollments = session.enrollment_set.all().count()
     completed = session.enrollment_set.filter(completed__isnull=False).count()
@@ -16,7 +17,6 @@ def mark_instructor_completed(apps, schema_editor):
     if enrollments == completed:
       session.instructor_completed = datetime.date.today(); session.save()
       continue
-    t += 1
     if enrollments < completed * 2:
       session.instructor_completed = datetime.date.today(); session.save()
       continue
@@ -26,8 +26,6 @@ def mark_instructor_completed(apps, schema_editor):
     if completed > 4:
       session.instructor_completed = datetime.date.today(); session.save()
       continue
-    c += 1
-    print "%s/%s"%(enrollments,completed),'\t',session,'\t',session.course.id
 
 class Migration(migrations.Migration):
   dependencies = [
