@@ -464,8 +464,11 @@ class ClassTime(OccurrenceModel):
 
 class CourseEnrollment(CriterionModel):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
+  course = models.ForeignKey(Course)
   quantity = models.IntegerField(default=1)
   get_criteria = lambda self: self.course.criterion_set.all()
+  json_fields = ['course_id','user_id','completed']
+  as_json = property(lambda self: {a:getattr(self,a) for a in self.json_fields})
 
 class EnrollmentManager(models.Manager):
   def pending_evaluation(self,*args,**kwargs):

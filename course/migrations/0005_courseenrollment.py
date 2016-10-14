@@ -21,6 +21,7 @@ class Migration(migrations.Migration):
                 ('datetime', models.DateTimeField(default=datetime.datetime.now)),
                 ('completed', models.DateTimeField(null=True, blank=True)),
                 ('quantity', models.IntegerField(default=1)),
+                ('course', models.ForeignKey(to='course.Course')),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
