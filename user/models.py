@@ -190,12 +190,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     _ids = getattr(settings,"NONMEMBER_DOCUMENT_IDS",[])
     return len(_ids) <= Signature.objects.filter(user=self,document_id__in=_ids).count()
 
-class RFID(models.Model):
-  user = models.ForeignKey(User)
-  number = models.CharField(max_length=16,unique=True)
-  added = models.DateTimeField(auto_now_add=True)
-  __unicode__ = lambda self: "%s (%s)"%(self.user,self.number)
-
 class UserNote(models.Model):
   user = models.ForeignKey(User)
   note = models.CharField(max_length=256)

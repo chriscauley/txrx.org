@@ -2,10 +2,12 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
-from .models import User, UserNote, RFID
-from membership.admin import UserMembershipInline, SubscriptionInline
-from course.admin import EnrollmentInline
 from .forms import UserChangeForm, CustomUserCreationForm
+from .models import User, UserNote
+
+from course.admin import EnrollmentInline
+from membership.admin import UserMembershipInline, SubscriptionInline
+from rfid.models import RFID
 
 class UserNoteInline(admin.TabularInline):
   model = UserNote
