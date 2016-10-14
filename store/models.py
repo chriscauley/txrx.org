@@ -30,6 +30,7 @@ class BaseProduct(PhotosMixin,Product):
   #! TODO make this go to a filtered version of shop
   get_absolute_url = lambda self: "/shop/"
   json_fields = Product.json_fields + ['thumbnail','category_ids']
+  categories = models.ManyToManyField(Category)
   class Meta:
     abstract = True
   @property
@@ -44,8 +45,7 @@ class CourseCheckout(BaseProduct):
   course = models.ForeignKey("course.Course")
   base_categories = [6]
 
-class Consumable(PhotosMixin,Product):
-  categories = models.ManyToManyField(Category)
+class Consumable(BaseProduct):
   part_number = models.CharField(max_length=32,null=True,blank=True)
   part_style = models.CharField(max_length=32,null=True,blank=True)
   purchase_url = models.URLField(max_length=1024,null=True,blank=True)

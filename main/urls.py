@@ -135,6 +135,7 @@ urlpatterns += patterns(
   'rfid.views',
   url(r'^rfid_access.json$','door_access',name='door_access_json'),
   url(r'^rfid_permission_table/$','rfid_permission_table',name='rfid_permission_table'),
+  url(r'^api/rfid_log/$','rfid_log',name='rfid_log'),
 )
 
 #notify urls

@@ -58,7 +58,8 @@ def receipts(request):
     return HttpResponseRedirect('.')
   values = {
     'outstanding_orders': Order.objects.filter(status=Order.COMPLETED).order_by("-id"),
-    'delivered_orders': Order.objects.filter(status=Order.SHIPPED).order_by("-id")[:10]
+    'delivered_orders': Order.objects.filter(status=Order.SHIPPED).order_by("-id")[:10],
+    'course_orders': Order.objects.filter(items__product__polymorphic_ctype__model='coursecheckout').distinct(),
   }
   return TemplateResponse(request,'store/receipts.html',values)
 

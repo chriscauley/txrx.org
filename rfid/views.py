@@ -6,17 +6,35 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
+from .models import RFIDLog
 from membership.models import Level, Subscription
 from tool.models import Permission, Tool, APIKey, DoorGroup, Schedule, Holiday
 
 import datetime, json
 
-def door_access(request):
-  fail = HttpResponseForbidden("I am Vinz Clortho keymaster of Gozer... Gozer the Traveller, he will come in one of the pre-chosen forms. During the rectification of the Vuldronaii, the Traveller came as a large and moving Torb! Then, during the third reconciliation of the last of the Meketrex Supplicants they chose a new form for him... that of a Giant Sloar! many Shubs and Zulls knew what it was to be roasted in the depths of the Sloar that day I can tell you.")
+FAIL = HttpResponse('{"status": 403, "message": "I am Vinz Clortho keymaster of Gozer... Gozer the Traveller, he will come in one of the pre-chosen forms. During the rectification of the Vuldronaii, the Traveller came as a large and moving Torb! Then, during the third reconciliation of the last of the Meketrex Supplicants they chose a new form for him... that of a Giant Sloar! many Shubs and Zulls knew what it was to be roasted in the depths of the Sloar that day I can tell you."}',status=403)
+
+def valid_ip_or_api_key(request):
+  key = getattr(request,request.method.upper()).get('api_key')
   valid = request.META['REMOTE_ADDR'] in getattr(settings,'DOOR_IPS',[])
-  valid = valid or APIKey.objects.filter(key=request.GET.get("api_key"))
+  valid = valid or APIKey.objects.filter(key=key)
+  return valid or APIKey.objects.filter(key=key)
+
+def rfid_log(request):
+  if not valid_ip_or_api_key(request):
+    return FAIL
+  if not ('data' in request.POST and 'rfid' in request.POST):
+    return HttpResponse('{"message": "Need rfid and data parameters","status": 400}',status=400)
+  RFIDLog.objects.create(
+    data=request.POST['data'],
+    rfid_number=request.POST['rfid']
+  )
+  return HttpResponse('{"message": "RFIDLog for %s created.","status": 200}'%request.POST['rfid'])
+
+def door_access(request):
+  valid = valid_ip_or_api_key(request)
   if not valid and not request.user.is_authenticated():
-    return fail
+    return FAIL
   valid = valid or request.user.is_superuser
 
   _Q = Q(canceled__isnull=True) | Q(canceled__gte=datetime.datetime.now())
@@ -47,12 +65,12 @@ def door_access(request):
     out['holidays'] = { h.date.strftime("%Y-%m-%d"):_hids for h in Holiday.objects.all()}
 
   if not (valid and obj):
-    return fail
+    return FAIL
 
   #fieldname is intended to be used only for testing
   fieldname = request.GET.get('fieldname','rfid__number')
   if fieldname in ['email','paypal_email','password']:
-    return fail
+    return FAIL
 
   schedule_jsons = { s.id: s.as_json for s in Schedule.objects.all() }
   for level in Level.objects.all():

@@ -1,11 +1,12 @@
 {% extends "base.html" %}
+{% load store_tags %}
 
 {% block title %}Shop Receipts{% endblock %}
 
-{% block content %}
-<div id="receipts">
+{% block main %}
+<div id="receipts" class="col-sm-6">
   <h1>Outstanding Orders <a class="pull-right fa fa-list" href="/admin/shop/order/"></a></h1>
-  {% for order in outstanding_orders %}
+  {% for order,items in outstanding_orders|filter_order_by_model:"consumable" %}
   <div class="well">
     <form method="POST">
       <input name="status" value="{{ order.SHIPPED }}" type="hidden">
@@ -14,11 +15,11 @@
     </form>
     <b>Order #{{ order.pk }} - {{ order.user }}<br/> {{ order.created|date:"m/d@P" }}</b>
     <ul>
-      {% for item in order.items.all %}
+      {% for item in items.all %}
       <li><b>{{ item.quantity }}x</b> {{ item.product }}</li>
       {% endfor %}
-      {% if order.extra_info.all %}<br/>{% endif %}
       {% for info in order.extra_info.all %}
+      {% if forloop.first %}<br/>{% endif %}
       <li>{{ info.text }}</li>
       {% endfor %}
     </ul>
@@ -36,7 +37,24 @@
     </form>
     <b>Order #{{ order.pk }} - {{ order.user }}<br/> {{ order.created|date:"m/d@P" }}</b>
     <ul>
-      {% for item in order.items.all %}
+      {% for item in items.all %}
+      <li><b>{{ item.quantity }}x</b> {{item.product }}</li>
+      {% endfor %}
+      {% if order.extra_info.all %}<br/>{% endif %}
+      {% for info in order.extra_info.all %}
+      <li>{{ info.text }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</div>
+<div id="checkouts" class="col-sm-6">
+  <h1>Course Checkouts</h1>
+  {% for order,items in course_orders|filter_order_by_model:"coursecheckout" %}
+  <div class="well">
+    <b>Order #{{ order.pk }} - {{ order.user }}<br/> {{ order.created|date:"m/d@P" }}</b>
+    <ul>
+      {% for item in items.all %}
       <li><b>{{ item.quantity }}x</b> {{item.product }}</li>
       {% endfor %}
       {% if order.extra_info.all %}<br/>{% endif %}
