@@ -1,9 +1,13 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 
-from .models import Consumable, Category, ToolConsumableGroup
+from .models import Consumable, Category, ToolConsumableGroup, CourseCheckout
 from lablackey.db.admin import NamedTreeModelAdmin
 from media.admin import TaggedPhotoAdmin
+
+@admin.register(CourseCheckout)
+class CourseCheckoutAdmin(admin.ModelAdmin):
+  raw_id_fields = ("course",)
 
 @admin.register(ToolConsumableGroup)
 class ToolConsumableGroupAdmin(admin.ModelAdmin):
