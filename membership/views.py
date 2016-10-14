@@ -5,8 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.models import FlatPage
 from django.contrib import messages
-from django.db.models import Q
-from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpResponseForbidden
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
@@ -15,9 +14,8 @@ from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required, verify_unique_email
 
 from blog.models import Post
-from course.models import Course, Session
+from course.models import Course
 from thing.models import Thing
-from tool.models import Permission, Tool, APIKey, DoorGroup, Schedule, Holiday
 
 from lablackey.utils import FORBIDDEN
 from lablackey.mail import send_template_email
@@ -200,73 +198,6 @@ def update_flag_status(request,flag_pk,new_status=None):
     return HttpResponse("Membership status changed to %s"%flag.get_status_display())
   messages.success(request,"Membership status changed to %s"%flag.get_status_display())
   return HttpResponseRedirect('/admin/membership/flag/%s/'%flag_pk)
-
-def door_access(request):
-  fail = HttpResponseForbidden("I am Vinz Clortho keymaster of Gozer... Gozer the Traveller, he will come in one of the pre-chosen forms. During the rectification of the Vuldronaii, the Traveller came as a large and moving Torb! Then, during the third reconciliation of the last of the Meketrex Supplicants they chose a new form for him... that of a Giant Sloar! many Shubs and Zulls knew what it was to be roasted in the depths of the Sloar that day I can tell you.")
-  valid = request.META['REMOTE_ADDR'] in getattr(settings,'DOOR_IPS',[])
-  valid = valid or APIKey.objects.filter(key=request.GET.get("api_key"))
-  if not valid and not request.user.is_authenticated():
-    return fail
-  valid = valid or request.user.is_superuser
-
-  _Q = Q(canceled__isnull=True) | Q(canceled__gte=datetime.datetime.now())
-  base_subs = Subscription.objects.filter(_Q,owed__lte=0)
-  base_subs = base_subs.exclude(user__rfid__isnull=True)
-
-  obj = None
-  out = {
-    'schedule': {},
-    'rfids': {},
-    'holidays': {}
-  }
-
-  if 'permission_id' in request.GET:
-    obj = get_object_or_404(Permission,id=request.GET['permission_id'])
-    valid = valid or request.user.is_toolmaster
-    superQ = Q(is_superuser=True)|Q(is_toolmaster=True)
-
-    # only return subscriptions where the user has this permission
-    base_subs = base_subs.filter(user_id__in=obj.get_all_user_ids())
-
-  if 'door_id' in request.GET:
-    obj = get_object_or_404(DoorGroup,id=request.GET['door_id'])
-    valid = valid or request.user.is_gatekeeper
-    superQ = Q(is_superuser=True)|Q(is_gatekeeper=True)
-    _hids = [99999]+list(Level.objects.filter(holiday_access=True).values_list("id",flat=True))
-    _hids = [str(h) for h in _hids]
-    out['holidays'] = { h.date.strftime("%Y-%m-%d"):_hids for h in Holiday.objects.all()}
-
-  if not (valid and obj):
-    return fail
-
-  #fieldname is intended to be used only for testing
-  fieldname = request.GET.get('fieldname','rfid__number')
-  if fieldname in ['email','paypal_email','password']:
-    return fail
-
-  schedule_jsons = { s.id: s.as_json for s in Schedule.objects.all() }
-  for level in Level.objects.all():
-    subscriptions = base_subs.filter(product__level=level).distinct()
-    out['rfids'][level.order] = list(subscriptions.values_list('user__'+fieldname,flat=True))
-    out['schedule'][level.order] = schedule_jsons.get(level.get_schedule_id(obj),{})
-  staff = get_user_model().objects.filter(superQ).exclude(rfid__isnull=True)
-  out['rfids'][99999] = list(staff.values_list(fieldname,flat=True))
-  out['schedule'][99999] = schedule_jsons[settings.ALL_HOURS_ID]
-  if 'api_key' in request.GET:
-    return HttpResponse(json.dumps(out))
-  return HttpResponse("<pre>%s</pre>"%json.dumps(out,indent=4))
-
-@staff_member_required
-def rfid_permission_table(request):
-  permissions = Permission.objects.all().order_by("name")
-  permissions_tools = [(p,p.tool_set.all().order_by('name')) for p in permissions]
-  permissions_tools.append((None,Tool.objects.filter(permission=None).order_by('name')))
-  values = {
-    'permission_tools': permissions_tools,
-    'levels': Level.objects.all(),
-    'doorgroups': DoorGroup.objects.all()
-  }
-  return TemplateResponse(request,'membership/rfid_permission_table.html',values)
 
 @staff_member_required
 def container(request,pk):

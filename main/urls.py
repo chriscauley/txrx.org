@@ -128,9 +128,13 @@ urlpatterns += patterns(
   url(r'^containers/$','containers'),
   url(r'^update_flag_status/(\d+)/$','update_flag_status',name='update_flag_status'),
   url(r'^update_flag_status/(\d+)/([\w\d\-\_]+)/$','update_flag_status',name='update_flag_status'),
+  url(r'^membership/container/(\d+)/','container',name='container'),
+)
+
+urlpatterns += patterns(
+  'rfid.views',
   url(r'^rfid_access.json$','door_access',name='door_access_json'),
   url(r'^rfid_permission_table/$','rfid_permission_table',name='rfid_permission_table'),
-  url(r'^membership/container/(\d+)/','container',name='container'),
 )
 
 #notify urls

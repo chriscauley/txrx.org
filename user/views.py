@@ -10,7 +10,8 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.static import serve
 
-from .models import User, UserCheckin, RFID
+from .models import User, UserCheckin
+from rfid.models import RFID
 from event.models import RSVP
 from course.models import Enrollment, ClassTime
 from course.utils import get_or_create_student
