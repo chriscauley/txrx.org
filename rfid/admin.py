@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import RFIDLog
+
+@admin.register(RFIDLog)
+class RFIDLogAdmin(admin.ModelAdmin):
+  readonly_fields = ('rfid_number','data','user')
