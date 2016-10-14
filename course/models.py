@@ -462,6 +462,11 @@ class ClassTime(OccurrenceModel):
   class Meta:
     ordering = ("start",)
 
+class CourseEnrollment(CriterionModel):
+  user = models.ForeignKey(settings.AUTH_USER_MODEL)
+  quantity = models.IntegerField(default=1)
+  get_criteria = lambda self: self.course.criterion_set.all()
+
 class EnrollmentManager(models.Manager):
   def pending_evaluation(self,*args,**kwargs):
     kwargs['evaluation_date__lte'] = datetime.datetime.now()

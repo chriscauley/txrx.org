@@ -39,6 +39,8 @@ def handle_successful_store_payment(sender, user):
     except Product.DoesNotExist:
       mail_admins("Product fail for %s"%sender.txn_id,"")
       continue
+    if hasattr(product,"purchase"):
+      product.purchase(order.user or user,quantity)
     products.append(product)
     product.decrease_stock(quantity)
   order.status = Order.COMPLETED
