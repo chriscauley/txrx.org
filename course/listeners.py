@@ -14,10 +14,7 @@ import traceback
 #! TODO this needs to be moved to store.listeners
 def handle_successful_store_payment(sender, user):
   from drop.models import Product, Order, OrderPayment, Cart
-  try:
-    params = QueryDict(sender.query)
-  except UnicodeEncodeError:
-    params = QueryDict(latin1_to_ascii(sender.query))
+  params = QueryDict(latin1_to_ascii(sender.query))
   try:
     order = Order.objects.get(pk=params['invoice'])
   except Order.DoesNotExist:

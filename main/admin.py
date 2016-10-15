@@ -10,6 +10,7 @@ from django.http import QueryDict
 from media.admin import TaggedPhotoInline
 from membership.models import UserMembership
 
+from lablackey.utils import latin1_to_ascii
 from paypal.standard.ipn.models import PayPalIPN
 from paypal.standard.ipn.admin import PayPalIPNAdmin
 
@@ -48,7 +49,6 @@ class CustomIPNAdmin(PayPalIPNAdmin):
   readonly_fields = PayPalIPNAdmin.readonly_fields + ('view_redirect','view_IPN','query_list')
   list_display = ['__unicode__','_info','created_at']
   def _info(self,obj):
-    print dir(obj)
     attrs = [
       ('','txn_type'),
       ('Flag','flag_info'),
@@ -68,7 +68,7 @@ class CustomIPNAdmin(PayPalIPNAdmin):
   view_redirect.allow_tags = True
   def query_list(self,obj):
     try:
-      params = QueryDict(obj.query)
+      params = QueryDict(latin1_to_ascii(obj.query))
     except:
       return "Bad query"
     return "<table>%s</table>"%(''.join(["<tr><td>%s</td><td>%s</td></tr>"%i for i in sorted(params.items())]))
