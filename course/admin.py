@@ -3,7 +3,7 @@ from django import forms
 from lablackey.db.forms import StaffMemberForm
 from lablackey.db.admin import NamedTreeModelAdmin, RawMixin
 
-from .models import Subject, Course, CourseRoomTime, Session, Enrollment, Term, ClassTime, Branding, Evaluation
+from .models import Subject, Course, CourseRoomTime, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseEnrollment
 from event.admin import OccurrenceModelInline
 from media.admin import TaggedFileInline, TaggedPhotoAdmin
 from tool.admin import TaggedToolInline
@@ -43,6 +43,11 @@ class CourseAdmin(TaggedPhotoAdmin):
 class ClassTimeInline(OccurrenceModelInline):
   extra = 0
   model = ClassTime
+
+class CourseEnrollmentInline(admin.TabularInline):
+  model = CourseEnrollment
+  readonly_fields = ("user",)
+  extra = 0
 
 class EnrollmentInline(admin.TabularInline):
   model = Enrollment

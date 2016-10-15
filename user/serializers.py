@@ -17,4 +17,5 @@ class SearchSizzler(BaseSizzler):
 class StudentSizzler(BaseSizzler):
   class Meta:
     model = User
-    fields = ('signature_jsons','enrollment_jsons','locked_criterion_ids','usercriterion_jsons')
+    fields = ('signature_jsons','enrollment_jsons','locked_criterion_ids','usercriterion_jsons',
+              'courseenrollment_jsons')

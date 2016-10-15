@@ -11,8 +11,9 @@ from django.utils.http import urlquote
 from django.utils.translation import ugettext_lazy as _
 
 from membership.models import Level
-from tool.models import UserCriterion, Criterion
 from redtape.models import Signature
+from tool.models import UserCriterion, Criterion
+from store.models import CourseCheckout
 
 from lablackey.utils import cached_property
 import datetime, os
@@ -135,6 +136,9 @@ class User(AbstractBaseUser, PermissionsMixin):
   @property
   def enrollment_jsons(self):
     return [e.as_json for e in self.enrollment_set.all().order_by("-session__first_date")]
+  @property
+  def courseenrollment_jsons(self):
+    return [e.as_json for e in self.courseenrollment_set.all().order_by()]
   @property
   def locked_criterion_ids(self):
     ucs = list(UserCriterion.active_objects.filter(

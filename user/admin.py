@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from .forms import UserChangeForm, CustomUserCreationForm
 from .models import User, UserNote
 
-from course.admin import EnrollmentInline
+from course.admin import EnrollmentInline, CourseEnrollmentInline
 from membership.admin import UserMembershipInline, SubscriptionInline
 from rfid.models import RFID
 
@@ -47,5 +47,6 @@ class UserAdmin(UserAdmin):
   search_fields = ('username', 'email', 'first_name', 'last_name','paypal_email')
   ordering = ('username',)
   readonly_fields = ('last_login','date_joined','level')
-  inlines = [UserMembershipInline, RFIDInline, UserNoteInline, SubscriptionInline, EnrollmentInline]
+  inlines = [UserMembershipInline, RFIDInline, UserNoteInline, SubscriptionInline, EnrollmentInline,
+             CourseEnrollmentInline]
   list_filter = list(UserAdmin.list_filter) + ['usermembership__voting_rights','date_joined','is_volunteer']

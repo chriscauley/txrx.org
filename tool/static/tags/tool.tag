@@ -78,6 +78,12 @@
   </search-users>
   <div if={ active_user } class="row buttons">
     <div class="col-sm-6">
+      <div if={ student.courseenrollment_jsons.length }>
+        <h3><u>Course Checkouts</u></h3>
+        <checkbox each={ student.courseenrollment_jsons } onclick={ parent.toggleCourseEnrollment } if={ can_change }>
+          { course_name }
+        </checkbox>
+      </div>
       <div if={ student.enrollment_jsons.length }>
         <h3><u>Course Enrollments</u></h3>
         <checkbox each={ student.enrollment_jsons } onclick={ parent.toggleEnrollment } if={ can_change }>
@@ -109,7 +115,9 @@
   toggleEnrollment(e) {
     toggle(e,{ enrollment_id: e.item.id });
   }
-
+  toggleCourseEnrollment(e) {
+    toggle(e,{ courseenrollment_id: e.item.id });
+  }
   toggleSignature(e) {
     toggle(e,{ signature_id: e.item.id });
   }
@@ -143,6 +151,10 @@
       self.student.enrollment_jsons.forEach(function(e){
         e.has = e.completed;
         e.can_change = user.is_toolmaster || user.session_ids.indexOf(e.session.id) != -1;
+      });
+      self.student.courseenrollment_jsons.forEach(function(e) {
+        e.has = e.completed;
+        e.can_change = user.is_toolmaster;
       });
       self.student.signature_jsons.forEach(function(e) {
         e.has = e.completed;

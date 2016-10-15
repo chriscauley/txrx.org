@@ -5,7 +5,7 @@ from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from course.models import Enrollment
+from course.models import Enrollment, CourseEnrollment
 from geo.models import Room
 from redtape.models import Signature
 from tool.models import Tool, Lab, Group, Permission, Criterion, UserCriterion
@@ -43,22 +43,22 @@ def toggle_criterion(request):
     else:
       defaults = {'content_object': request.user}
       UserCriterion.active_objects.get_or_create(criterion=criterion,user=user,defaults=defaults)
+  obj = None
   if request.GET.get('enrollment_id'):
-    enrollment = get_object_or_404(Enrollment,pk=request.GET["enrollment_id"])
-    if not (request.user.is_toolmaster or request.user == enrollment.session.user):
-      return HttpResponseForbidden("You do not have permission to modify this enrollment")
-    enrollment.completed = None if enrollment.completed else datetime.datetime.now()
-    enrollment.save()
+    obj = get_object_or_404(Enrollment,pk=request.GET["enrollment_id"])
   if request.GET.get('signature_id'):
-    signature = get_object_or_404(Signature,pk=request.GET["signature_id"])
-    if not request.user.is_toolmaster:
-      return HttpResponseForbidden("You do not have permission to modify this document")
-    signature.completed = None if signature.completed else datetime.datetime.now()
-    signature.save()
+    obj = get_object_or_404(Signature,pk=request.GET["signature_id"])
+  if request.GET.get('courseenrollment_id'):
+    obj = get_object_or_404(CourseEnrollment,pk=request.GET["courseenrollment_id"])
 
+  if obj:
+    if not obj.has_completed_permission(request.user):
+      return HttpResponseForbidden("You do not have permission to modify this object")
+    obj.completed = None if obj.completed else datetime.datetime.now()
+    obj.save()
   # send back the new user criterion ids to replace old data
   user = User.objects.get(pk=user.pk)
-  attrs = ['signature_jsons','enrollment_jsons','locked_criterion_ids','usercriterion_jsons']
+  attrs = ['signature_jsons','enrollment_jsons','locked_criterion_ids','usercriterion_jsons','courseenrollment_jsons']
   return JsonResponse({attr: getattr(user,attr) for attr in attrs})
 
 def checkout_items(request):

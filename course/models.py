@@ -390,6 +390,8 @@ class Session(UserModel,PhotosMixin,models.Model):
   def get_evaluations(self):
     return Evaluation.objects.filter(enrollment__session=self)
 
+  def has_completed_permission(self,user):
+    return user.is_superuser or user.is_toolmaster or user.id == self.user_id
   class Meta:
     ordering = ('first_date',)
 
@@ -467,8 +469,11 @@ class CourseEnrollment(CriterionModel):
   course = models.ForeignKey(Course)
   quantity = models.IntegerField(default=1)
   get_criteria = lambda self: self.course.criterion_set.all()
-  json_fields = ['course_id','user_id','completed']
+  json_fields = ['course_id','user_id','completed', 'course_name','id']
+  course_name = property(lambda self: self.course.name)
   as_json = property(lambda self: {a:getattr(self,a) for a in self.json_fields})
+  def has_completed_permission(self,user):
+    return self.is_superuser or self.is_toolmaster or [user.id in self.course.session_set.values('user_id',flat=True)]
 
 class EnrollmentManager(models.Manager):
   def pending_evaluation(self,*args,**kwargs):
