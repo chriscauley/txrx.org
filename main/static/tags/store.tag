@@ -69,7 +69,7 @@
   <div class="well {incart:product.quantity,out-of-stock:product.in_stock==0,hidden:dat}">
     <div class="img" style="background-image: url({ product.thumbnail })"></div>
     <div class="bottom">
-      <div class="name">{ product.name }</div>
+      <div class="name">{ product.display_name }</div>
       <div class="row">
         <div class="col-xs-{ product.quantity?12:6 } price">
           ${product.unit_price}
@@ -112,7 +112,7 @@
     <div class="img {out-of-stock:product.in_stock==0}">
       <img src={ product.img.url } />
     </div>
-    <div class="name">{ product.name }</div>
+    <div class="name">{ product.display_name }</div>
     <div class="price">
       ${ product.price }
       <span class="pull-right">In Stock: { product.in_stock||"null" }</span>
