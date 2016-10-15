@@ -196,7 +196,7 @@ class CriterionModel(models.Model):
     else:
       ct = ContentType.objects.get_for_model(self)
       UserCriterion.active_objects.filter(content_type=ct,object_id=self.id).delete()
-  def has_deleted_permission(self,user):
+  def has_completed_permission(self,user):
     return user.is_superuser or user.is_toolmaster
   class Meta:
     abstract = True

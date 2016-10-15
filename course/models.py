@@ -473,7 +473,8 @@ class CourseEnrollment(CriterionModel):
   course_name = property(lambda self: self.course.name)
   as_json = property(lambda self: {a:getattr(self,a) for a in self.json_fields})
   def has_completed_permission(self,user):
-    return self.is_superuser or self.is_toolmaster or [user.id in self.course.session_set.values('user_id',flat=True)]
+    return user.is_superuser or user.is_toolmaster or [user.id in self.course.session_set.values('user_id',flat=True)]
+  __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.course)
 
 class EnrollmentManager(models.Manager):
   def pending_evaluation(self,*args,**kwargs):
