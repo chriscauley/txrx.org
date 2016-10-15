@@ -46,7 +46,7 @@ class ClassTimeInline(OccurrenceModelInline):
 
 class CourseEnrollmentInline(admin.TabularInline):
   model = CourseEnrollment
-  readonly_fields = ("user",)
+  readonly_fields = ("user","course","datetime","quantity")
   extra = 0
 
 class EnrollmentInline(admin.TabularInline):
