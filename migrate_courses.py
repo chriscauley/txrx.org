@@ -48,12 +48,14 @@ for consumable_id,course_id in consumable_course_ids:
       continue
     coursecheckout.purchase(oi.order.user,oi.quantity)
     ce = CourseEnrollment.objects.get(user=oi.order.user,course=course)
+    ce.datetime = oi.order.modified
+    ce.save()
     ucs = UserCriterion.objects.filter(user=oi.order.user,criterion=ce.get_criteria())
     if ucs:
       for uc in ucs:
         print ucs.count(),'\t',uc.content_object._meta.model_name,'\t',uc.content_object
         if uc.content_object._meta.model_name == 'user':
-          ce.completed = datetime.datetime.now()
+          ce.completed = oi.order.modified
           ce.save()
           print "converting %s"%ce
   print orderitems.count(),'\t',consumable

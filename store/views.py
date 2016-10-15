@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
@@ -56,11 +57,16 @@ def checkouts(request):
       courseenrollment.completed = datetime.datetime.now()
       status = "completed"
     courseenrollment.save()
-    messages.success("%s marked as %s."%(courseenrollment,status))
+    messages.success(request,"%s marked as %s."%(courseenrollment,status))
     return HttpResponseRedirect('.')
+  month_ago = datetime.datetime.now()-datetime.timedelta(60)
+  incomplete = CourseEnrollment.objects.filter(completed__isnull=True)
+  complete = CourseEnrollment.objects.filter(completed__isnull=False)
   values = {
-    'complete_enrollments': CourseEnrollment.objects.filter(completed__isnull=True).order_by("-completed"),
-    'incomplete_enrollment': CourseEnrollment.objects.filter(completed__isnull=True).order_by("-completed")
+    'enrollment_sets': [
+      ['Incomplete', incomplete.filter(datetime__gte=month_ago).order_by("-datetime")],
+      ['Complete ', complete.filter(datetime__gte=month_ago).order_by("-completed")],
+    ],
   }
   return TemplateResponse(request,'store/checkouts.html',values)
 
@@ -74,6 +80,7 @@ def receipts(request):
     now = datetime.datetime.now().strftime("%m/%d/%Y at %H:%M")
     status = "delivered" if o.status == Order.SHIPPED else "outstanding"
     t = "%s marked as %s on %s"%(request.user,status,now)
+    messages.success(request,"%s marked as %s"%(o,status))
     o.extra_info.create(text=t)
     return HttpResponseRedirect('.')
   values = {

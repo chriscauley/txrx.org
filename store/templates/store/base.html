@@ -7,14 +7,17 @@
 <div class="col-sm-9 col-md-10 col-lg-10">
   {% if request.user.is_shopkeeper or request.user.is_superuser %}
   <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-3">
       <a href="/shop/" class="btn btn-block btn-success">Shop</a>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
       <a href="/shop/receipts/" class="btn btn-block btn-primary">Receipts</a>
     </div>
+    <div class="col-sm-3">
+      <a href="/shop/checkouts/" class="btn btn-block btn-primary">Checkouts</a>
+    </div>
     {% if request.user.is_superuser %}
-    <div class="col-sm-4">
+    <div class="col-sm-3">
       <a href="/shop/admin/" class="btn btn-block btn-warning">Admin</a>
       <br />
     </div>

@@ -9,6 +9,7 @@ urlpatterns = patterns(
   url(r'^start_checkout/$','start_checkout',name='start_checkout'),
 
   url(r'^receipts/$','receipts',name='receipts'),
+  url(r'^checkouts/$','checkouts',name='checkouts'),
   url(r'^admin/$','admin_page',name='admin_page'),
   url(r'^admin/add/$','admin_add',name='admin_add'),
   url(r'^admin/products.json','admin_products_json',name='admin_products_json'),
