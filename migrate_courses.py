@@ -2,6 +2,7 @@ import os,django;os.environ['DJANGO_SETTINGS_MODULE']='main.settings';django.set
 
 from course.models import Course, CourseEnrollment
 from store.models import Consumable, CourseCheckout
+from drop.models import CartItem
 from tool.models import UserCriterion
 
 import datetime
@@ -58,6 +59,7 @@ for consumable_id,course_id in consumable_course_ids:
           ce.completed = oi.order.modified
           ce.save()
           print "converting %s"%ce
+  CartItem.objects.filter(product=consumable).update(product=coursecheckout)
   print orderitems.count(),'\t',consumable
 
 print "unpaid: ",unpaid
