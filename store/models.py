@@ -10,6 +10,7 @@ from lablackey.utils import cached_property, cached_method
 from media.models import PhotosMixin
 
 from sorl.thumbnail import get_thumbnail
+from course.models import CourseEnrollment
 from crop_override import get_override
 from drop.models import Product
 
@@ -42,8 +43,15 @@ class BaseProduct(PhotosMixin,Product):
     return get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center").url
 
 class CourseCheckout(BaseProduct):
+  json_fields = BaseProduct.json_fields + ['course_id']
   course = models.ForeignKey("course.Course")
   base_categories = [6]
+  def purchase(self,user,quantity):
+    CourseEnrollment.objects.get_or_create(
+      course=self.course,
+      user=user,
+      defaults={'quantity': quantity}
+    )
 
 class Consumable(BaseProduct):
   part_number = models.CharField(max_length=32,null=True,blank=True)
