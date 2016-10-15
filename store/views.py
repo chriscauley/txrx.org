@@ -5,7 +5,8 @@ from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Category, Consumable
-from user.models import is_shopkeeper
+from course.models import CourseEnrollment
+from user.models import is_shopkeeper, is_toolmaster
 
 from drop.models import Product, CartItem, Order
 from drop.util.cart import get_or_create_cart
@@ -44,6 +45,25 @@ def start_checkout(request):
       out['errors'].append(s%(item.product.in_stock,item.product))
   return HttpResponse(json.dumps(out))
 
+@user_passes_test(is_toolmaster)
+@csrf_exempt
+def checkouts(request):
+  if request.POST:
+    courseenrollment = CourseEnrollment.objects.get(pk=request.POST['pk'])
+    courseenrollment.completed = None
+    status = "incomplete"
+    if request.POST.get('action',None) == "complete":
+      courseenrollment.completed = datetime.datetime.now()
+      status = "completed"
+    courseenrollment.save()
+    messages.success("%s marked as %s."%(courseenrollment,status))
+    return HttpResponseRedirect('.')
+  values = {
+    'complete_enrollments': CourseEnrollment.objects.filter(completed__isnull=True).order_by("-completed"),
+    'incomplete_enrollment': CourseEnrollment.objects.filter(completed__isnull=True).order_by("-completed")
+  }
+  return TemplateResponse(request,'store/checkouts.html',values)
+
 @user_passes_test(is_shopkeeper)
 @csrf_exempt
 def receipts(request):
@@ -57,9 +77,10 @@ def receipts(request):
     o.extra_info.create(text=t)
     return HttpResponseRedirect('.')
   values = {
-    'outstanding_orders': Order.objects.filter(status=Order.COMPLETED).order_by("-id"),
-    'delivered_orders': Order.objects.filter(status=Order.SHIPPED).order_by("-id")[:10],
-    'course_orders': Order.objects.filter(items__product__polymorphic_ctype__model='coursecheckout').distinct(),
+    'order_sets': [
+      ["Outstanding Orders", Order.objects.filter(status=Order.COMPLETED).order_by("-id")],
+      ["Delivered Orders", Order.objects.filter(status=Order.SHIPPED).order_by("-id")[:10]],
+    ]
   }
   return TemplateResponse(request,'store/receipts.html',values)
 
