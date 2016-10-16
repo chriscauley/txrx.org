@@ -157,7 +157,7 @@
         e.can_change = user.is_toolmaster;
       });
       self.student.signature_jsons.forEach(function(e) {
-        e.has = e.completed;
+        e.locked = true;
         e.can_change = user.is_toolmaster;
       });
     }

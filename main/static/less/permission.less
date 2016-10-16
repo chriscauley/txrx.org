@@ -30,11 +30,16 @@ checkbox {
     align-items: center;
     cursor: pointer;
     display: flex;
+    padding-left: 40px;
+    position: relative;
     flex-wrap: wrap;
     &.alert-warning { cursor: disabled; }
     .fa-2x {
+      left: 0;
       line-height: 0.8em;
-      padding-right: 10px;
+      padding: 10px;
+      position: absolute;
+      top: 0;
     }
     b { color: @red; flex-basis: 100%; }
   }

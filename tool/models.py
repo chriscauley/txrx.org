@@ -178,7 +178,7 @@ class CriterionModel(models.Model):
   completed = models.DateTimeField(null=True,blank=True)
   automatic = False # If true criterion will be granted without completion
   def save(self,*args,**kwargs):
-    if not self.pk and self.automatic:
+    if self.automatic:
       self.completed = datetime.datetime.now()
     super(CriterionModel,self).save(*args,**kwargs)
     if self.user and self.completed:
