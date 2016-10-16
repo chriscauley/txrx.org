@@ -9,7 +9,7 @@ cd $PROJECT_ROOT
 
 echo -e "\n---Silently migrating, compressing, collecting static, and restarting---\n"
 
-python $PROJECT_ROOT/manage.py migrate>/dev/null
+python $PROJECT_ROOT/manage.py migrate --noinput>/dev/null
 python $PROJECT_ROOT/manage.py collectstatic --noinput>/dev/null
 python $PROJECT_ROOT/manage.py compress>/dev/null
 
