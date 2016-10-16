@@ -4,26 +4,11 @@
 {% block title %}Shop Checkouts{% endblock %}
 
 {% block main %}
-{% for title,enrollments in enrollment_sets %}
-<div id="checkouts" class="col-sm-6">
-  <h1>{{ title }} Checkouts</h1>
-  {% for enrollment in enrollments %}
-  <div class="alert alert-{% if enrollment.completed %}success{% else %}danger{% endif %}">
-    <form method="POST">
-      <input name="pk" value="{{ enrollment.pk }}" type="hidden">
-      {% if not enrollment.completed %}
-      <input name="action" value="complete" type="hidden">
-      {% endif %}
-      <button class="fa fa-3x fa-{% if enrollment.completed %}check-{% endif %}square-o pull-right btn-no"></button>
-    </form>
-    <h4>
-        <a class="fa fa-shopping-cart" href="/admin/drop/order/{{ enrollment|get_order_pk }}"></a>
-      {{ enrollment }}
-    </h4>
-    <div>Created on: {{ enrollment.datetime }}</div>
-    Completed on: {{ enrollment.completed|default_if_none:"Not completed" }}
-  </div>
-  {% endfor %}
+<div class="Checkouts col-sm-6">
+  {% include "store/_checkouts.html" with title="Incomplete" alert="warning" enrollments=incomplete_enrollments %}
+  {% include "store/_checkouts.html" with title="Failed" alert="danger" enrollments=failed_enrollments %}
 </div>
-{% endfor %}
+<div class="Checkouts col-sm-6">
+  {% include "store/_checkouts.html" with title="Completed" alert="success" enrollments=completed_enrollments %}
+</div>
 {% endblock %}

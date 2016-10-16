@@ -1,0 +1,26 @@
+{% load store_tags %}
+<h1>{{ title }} Checkouts</h1>
+{% for enrollment in enrollments %}
+<div class="alert alert-{{ alert }}">
+  <h4>
+    {# <a class="fa fa-shopping-cart" href="/admin/drop/order/{{ enrollment|get_order_pk }}"></a>#}
+    {{ enrollment }}
+  </h4>
+  <div>Created on: {{ enrollment.datetime }}</div>
+  {% if enrollment.failed %}
+  <div>Failed on: {{ enrollment.failed }}</div>
+  {% else %}
+  <div>Completed on: {{ enrollment.completed|default_if_none:"Not completed" }}</div>
+  {% endif %}
+  <form method="POST" class="bot-right">
+    <input name="pk" value="{{ enrollment.pk }}" type="hidden">
+    {% if enrollment.completed or enrollment.failed %}
+    <input type="submit" name="action" value="Undo" class="btn btn-warning" />
+    {% else %}
+    <input type="submit" name="action" value="Pass" class="btn btn-success" />
+    <input type="submit" name="action" value="Fail" class="btn btn-danger" />
+    {% endif %}
+  </form>
+</div>
+{% endfor %}
+

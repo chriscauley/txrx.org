@@ -51,22 +51,27 @@ def start_checkout(request):
 def checkouts(request):
   if request.POST:
     courseenrollment = CourseEnrollment.objects.get(pk=request.POST['pk'])
-    courseenrollment.completed = None
-    status = "incomplete"
-    if request.POST.get('action',None) == "complete":
+    courseenrollment.completed = courseenrollment.failed = None
+    action = request.POST.get('action',None).lower()
+    status = "neither"
+    if action == "pass":
       courseenrollment.completed = datetime.datetime.now()
-      status = "completed"
+      status = "passed"
+    if action == "fail":
+      courseenrollment.failed = datetime.datetime.now()
+      status = "failed"
     courseenrollment.save()
     messages.success(request,"%s marked as %s."%(courseenrollment,status))
     return HttpResponseRedirect('.')
-  month_ago = datetime.datetime.now()-datetime.timedelta(60)
-  incomplete = CourseEnrollment.objects.filter(completed__isnull=True)
-  complete = CourseEnrollment.objects.filter(completed__isnull=False)
+  cutoff = datetime.datetime.now()-datetime.timedelta(60)
+  base_enrollments = CourseEnrollment.objects.filter(datetime__gte=cutoff)
+  incomplete = base_enrollments.filter(completed=None,failed=None).order_by("-datetime")
+  failed = base_enrollments.filter(failed__isnull=False).order_by("-failed")
+  complete = base_enrollments.filter(completed__isnull=False).order_by("-completed")
   values = {
-    'enrollment_sets': [
-      ['Incomplete', incomplete.filter(datetime__gte=month_ago).order_by("-datetime")],
-      ['Complete ', complete.filter(datetime__gte=month_ago).order_by("-completed")],
-    ],
+    'incomplete_enrollments': incomplete,
+    'completed_enrollments': complete,
+    'failed_enrollments': failed,
   }
   return TemplateResponse(request,'store/checkouts.html',values)
 
