@@ -170,6 +170,7 @@ SUIT_CONFIG = {
      'models': (
        'store.category',
        'store.consumable',
+       'store.coursecheckout',
        'drop.order',
        'store.toolconsumablegroup',
      )
