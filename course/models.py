@@ -468,6 +468,7 @@ class CourseEnrollment(CriterionModel):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
   course = models.ForeignKey(Course)
   quantity = models.IntegerField(default=1)
+  failed = models.DateTimeField(null=True,blank=True)
   get_criteria = lambda self: self.course.criterion_set.all()
   json_fields = ['course_id','user_id','completed', 'course_name','id']
   course_name = property(lambda self: self.course.name)
