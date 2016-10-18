@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django import forms
 from django.http import QueryDict
 
+from main.models import FlatPagePrice, Rate
 from media.admin import TaggedPhotoInline
 from membership.models import UserMembership
 
@@ -31,10 +32,38 @@ class FlatPageForm(forms.ModelForm):
     model = FlatPage
     exclude = ()
 
+try:
+  @admin.register(Rate)
+  class RateAdmin(admin.ModelAdmin):
+    pass
+except:
+  pass
+
+class FlatPagePriceInline(admin.TabularInline):
+  model = FlatPagePrice
+  extra = 0
+
 class FlatPageAdmin(FlatPageAdmin):
   list_display = ('url','title','template_name')
   form = FlatPageForm
   inlines = [TaggedPhotoInline]
+  def get_inline_instances(self,request,obj=None):
+    # Just like the default behavior, but uses FlatPagePriceInline for object 13
+    inlines = self.inlines
+    if obj and obj.pk == 13:
+      inlines = [FlatPagePriceInline]
+    inline_instances = []
+    for inline_class in inlines:
+      inline = inline_class(self.model, self.admin_site)
+      if request:
+        if not (inline.has_add_permission(request) or
+                inline.has_change_permission(request, obj) or
+                inline.has_delete_permission(request, obj)):
+          continue
+        if not inline.has_add_permission(request):
+          inline.max_num = 0
+      inline_instances.append(inline)
+    return inline_instances
 
 class UserMembershipInline(admin.StackedInline):
   extra = 0

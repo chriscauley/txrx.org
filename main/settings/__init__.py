@@ -14,6 +14,9 @@ INTERNAL_IPS = (
   '50.194.167.97', #TXRX
 )
 
+STRIPE_PUBLIC_KEY = ''
+STRIPE_SECRET_KEY = ''
+
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.sqlite3',

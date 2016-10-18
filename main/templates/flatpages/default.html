@@ -7,6 +7,22 @@
 {% block content %}
 <div id="flatpage">
 {{ flatpage.content|explosivo }}
+{% if flatpage.flatpageprice_set.all %}
+<table class="table stripped">
+  <tr>
+    <th>Service</th>
+    <th>TXRX Member Rate</th>
+    <th>Non-member Rate</th>
+  </tr>
+  {% for price in flatpage.flatpageprice_set.all %}
+  <tr>
+    <td>{{ price.name }}</td>
+    <td>{{ price.member_rate }}</td>
+    <td>{{ price.nonmember_rate }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
 </div>
 {% endblock %}
 
