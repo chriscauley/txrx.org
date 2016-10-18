@@ -10,7 +10,7 @@
         <div if={ !uR.drop.cart.total_price }>Your cart is empty</div>
         <div class="items">
           <div class="item" each={ uR.drop.cart.all_items } if={ quantity }>
-            <div class="name"><b>{ name }</b> { after }</div>
+            <div class="name"><b>{ display_name }</b> { after }</div>
             <div class="quantity">{ quantity }</div>
             <i class="fa fa-plus-circle increment" onclick={ parent.plusOne }></i>
             <i class="fa fa-minus-circle decrement" onclick={ parent.minusOne }></i>
