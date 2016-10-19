@@ -39,7 +39,6 @@ def handle_successful_store_payment(sender, user):
     if hasattr(product,"purchase"):
       product.purchase(order.user or user,quantity)
     products.append(product)
-    product.decrease_stock(quantity)
   order.status = Order.COMPLETED
   order.user = order.user or user
   order.save()
