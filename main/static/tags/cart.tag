@@ -50,7 +50,7 @@
       <form action="https://www.paypal.com/cgi-bin/webscr" method="POST">
         <input name="business" type="hidden" value="{ SHOP.email }">
         <span each={ n,i in uR.drop.cart.all_items }>
-          <input name="item_name_{ i+1 }" type="hidden" value="{ n.name }">
+          <input name="item_name_{ i+1 }" type="hidden" value="{ n.display_name }">
           <input name="item_number_{ i+1 }" type="hidden" value="{ n.id }">
           <input name="quantity_{ i+1 }" type="hidden" value="{ n.quantity }">
           <input name="amount_{ i+1 }" type="hidden" value="{ n.unit_price }">
