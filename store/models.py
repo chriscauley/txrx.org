@@ -47,6 +47,7 @@ class CourseCheckout(BaseProduct):
   course = models.ForeignKey("course.Course")
   base_categories = [6]
   get_name = lambda self: "%s (check-out test)"%self.name
+  in_stock = property(lambda self: 9999)
   def purchase(self,user,quantity):
     CourseEnrollment.objects.get_or_create(
       course=self.course,
