@@ -250,10 +250,12 @@ class Subscription(models.Model):
     self.owed = amount_due-amount_paid
     if self.canceled:
       self.owed = 0
-      if not self.user.subscription_set.filter(canceled__isnull=True,owed__lte=0):
+      if not self.user.subscription_set.filter(canceled__isnull=True,owed__lte=0).exclude(pk=self.pk):
         user = self.user
-        user.level_id = settings.DEFAULT_MEMBERSHIP_LEVEL
-        user.save()
+        if user.level_id != settings.DEFAULT_MEMBERSHIP_LEVEL:
+          print "%s set to canceled"%self
+          user.level_id = settings.DEFAULT_MEMBERSHIP_LEVEL
+          user.save()
     self.paid_until = add_months(self.created,int(self.product.months*amount_paid/decimal.Decimal(self.amount)))
     self.save()
     last = self.last_status

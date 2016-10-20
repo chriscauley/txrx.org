@@ -197,7 +197,7 @@ class SubscriptionInline(admin.TabularInline):
   readonly_fields = ('subscr_id','created','canceled','paid_until','product','amount','owed')
   ordering = ('-canceled',)
   extra = 0
-  #has_add_permission = lambda self,obj: False
+  has_add_permission = lambda self,obj: False
 
 class UserMembershipInline(admin.StackedInline):
   list_display = ("__unicode__",'photo')

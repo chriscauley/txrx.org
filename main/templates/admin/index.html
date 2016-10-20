@@ -17,8 +17,15 @@
 {% if request.path == "/admin/" %}
 <div id="content-related">
   {% get_pastdue_subscriptions %}
-  {% for subscription in pastdue_subcription %}
-  {{ subscription }}
+  <h4 class="italic-title">{{ pastdue_subscriptions.count }} Past Due Subscription(s)</h4>
+  {% for subscription in pastdue_subscriptions %}
+  <div class="well">
+    <a href="/admin/membership/subscription/{{ subscription.pk }}/">{{ subscription }}</a>
+    <b>{{ subscription.paid_until }}- {{ subscription.user.level }}</b>
+    {% for s in subscription.user.paid_subscriptions %}
+    <div>{{ s }} {{ s.paid_until }}</div>
+    {% endfor %}
+  </div>
   {% endfor %}
   <flag-list></flag-list>
 </div>
@@ -42,5 +49,4 @@
 {% compress css %}
 <link type="text/less" rel="stylesheet" href="{{ STATIC_URL }}less/admin_index.less" />
 {% endcompress %}
-{% if settings.DEBUG %}<script>openPasswordChange();</script>{% endif %}
 {% endblock %}

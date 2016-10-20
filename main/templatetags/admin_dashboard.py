@@ -29,4 +29,7 @@ def get_courses_needed(context):
 
 @register.simple_tag(takes_context=True)
 def get_pastdue_subscriptions(context):
-  context['pastdue_subscripitons'] = Subscription.objects.filter(canceled__isnull=True,paid_until__lte=datetime.datetime.now())
+  twodays = datetime.datetime.now()-datetime.timedelta(2)
+  subscriptions = Subscription.objects.filter(canceled__isnull=True,paid_until__lte=twodays)
+  context['pastdue_subscriptions'] = subscriptions.order_by("-paid_until")
+  return ''
