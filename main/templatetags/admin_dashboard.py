@@ -27,6 +27,6 @@ def get_courses_needed(context):
   context['inactive_sessions'] = Session.objects.filter(active=False)
   return ''
 
-@register.simple_tag(takes_conext=True)
+@register.simple_tag(takes_context=True)
 def get_pastdue_subscriptions(context):
   context['pastdue_subscripitons'] = Subscription.objects.filter(canceled__isnull=True,paid_until__lte=datetime.datetime.now())
