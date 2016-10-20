@@ -29,4 +29,4 @@ def get_courses_needed(context):
 
 @register.simple_tag(takes_conext=True)
 def get_pastdue_subscriptions(context):
-  context['pastdue_subscripitons'] = Subscription.objects.filter(canceled__isnull=True,paid_until__lte=datetime.datetime.now()
+  context['pastdue_subscripitons'] = Subscription.objects.filter(canceled__isnull=True,paid_until__lte=datetime.datetime.now())
