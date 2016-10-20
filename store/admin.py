@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 
-from .models import Consumable, Category, ToolConsumableGroup, CourseCheckout
+from .models import Consumable, ToolConsumableGroup, CourseCheckout
 from lablackey.db.admin import NamedTreeModelAdmin
 from media.admin import TaggedPhotoAdmin
 
@@ -12,10 +12,6 @@ class CourseCheckoutAdmin(admin.ModelAdmin):
 @admin.register(ToolConsumableGroup)
 class ToolConsumableGroupAdmin(admin.ModelAdmin):
   filter_horizontal = ('tools','consumables')
-
-@admin.register(Category)
-class CategoryAdmin(NamedTreeModelAdmin):
-  pass
 
 @admin.register(Consumable)
 class ConsumableAdmin(TaggedPhotoAdmin):

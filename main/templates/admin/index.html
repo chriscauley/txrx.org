@@ -16,6 +16,10 @@
 {% block sidebar %}
 {% if request.path == "/admin/" %}
 <div id="content-related">
+  {% get_pastdue_subscriptions %}
+  {% for subscription in pastdue_subcription %}
+  {{ subscription }}
+  {% endfor %}
   <flag-list></flag-list>
 </div>
 {% else %}

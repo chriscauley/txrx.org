@@ -2,6 +2,7 @@ from django.template import Library
 
 from course.models import Course, Session
 from event.utils import get_room_conflicts as _get_room_conflicts
+from membership.models import Subscription
 
 import datetime
 
@@ -25,3 +26,7 @@ def get_courses_needed(context):
   context['courses_needed'] = Course.objects.courses_needed()
   context['inactive_sessions'] = Session.objects.filter(active=False)
   return ''
+
+@register.simple_tag(takes_conext=True)
+def get_pastdue_subscriptions(context):
+  context['pastdue_subscripitons'] = Subscription.objects.filter(canceled__isnull=True,paid_until__lte=datetime.datetime.now()

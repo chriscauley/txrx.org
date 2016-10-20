@@ -5,11 +5,11 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Category, Consumable
+from .models import Consumable
 from course.models import CourseEnrollment
 from user.models import is_shopkeeper, is_toolmaster
 
-from drop.models import Product, CartItem, Order
+from drop.models import Product, CartItem, Order, Category
 from drop.util.cart import get_or_create_cart
 
 import json, datetime

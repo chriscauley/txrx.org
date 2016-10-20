@@ -16,22 +16,10 @@ from drop.models import Product
 
 import os, json
 
-class Category(PhotosMixin,NamedTreeModel):
-  json_fields = ['id','name']
-  @property
-  def as_json(self):
-    return {k:getattr(self,k) for k in self.json_fields}
-  #! TODO make this go to store filtered by category
-  #! TODO I took out the first image from the json and the subcategories since they weren't being used
-  class Meta:
-    verbose_name_plural = "Categories"
-    ordering = ('order',)
-
 class BaseProduct(PhotosMixin,Product):
   #! TODO make this go to a filtered version of shop
   get_absolute_url = lambda self: "/shop/"
   json_fields = Product.json_fields + ['thumbnail','category_ids']
-  categories = models.ManyToManyField(Category)
   class Meta:
     abstract = True
   @property
