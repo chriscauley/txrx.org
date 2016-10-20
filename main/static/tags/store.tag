@@ -47,7 +47,7 @@
     }
     if (this.opts.model_slugs) {
       var model_slugs = this.opts.model_slugs.split(",");
-      this.products = this.products.filter( function(p) { return models_slugs.indexOf(p.model_slug) != -1; })
+      this.products = this.products.filter( function(p) { return model_slugs.indexOf(p.model_slug) != -1; })
     }
     if (uR.drop.active_category) {
       this.products = this.products.filter(function(p){

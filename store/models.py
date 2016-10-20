@@ -33,7 +33,7 @@ class BaseProduct(PhotosMixin,Product):
 class CourseCheckout(BaseProduct):
   json_fields = BaseProduct.json_fields + ['course_id']
   course = models.ForeignKey("course.Course")
-  base_categories = [6]
+  base_categories = [1]
   get_name = lambda self: "%s (check-out test)"%self.name
   in_stock = property(lambda self: 9999)
   def purchase(self,user,quantity):
