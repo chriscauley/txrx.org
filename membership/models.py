@@ -250,6 +250,7 @@ class Subscription(models.Model):
     self.owed = amount_due-amount_paid
     if self.canceled:
       self.owed = 0
+    if self.paid_until < datetime.datetime.now():
       if not self.user.subscription_set.filter(canceled__isnull=True,owed__lte=0).exclude(pk=self.pk):
         user = self.user
         if user.level_id != settings.DEFAULT_MEMBERSHIP_LEVEL:
@@ -263,7 +264,7 @@ class Subscription(models.Model):
       user = self.user
       if self.owed <= 0 and not self.canceled:
         user.level = self.product.level
-      user.save()
+        user.save()
     if self.owed <= 0:
       Flag.objects.filter(
         subscription=self,
