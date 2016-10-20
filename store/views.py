@@ -36,14 +36,14 @@ def start_checkout(request):
   order.save()
   out = {
     'order_pk': order.pk,
-    'errors': []
+    '_errors': []
   }
   for item in cart.items.all():
     if item.product.in_stock is None:
       continue
     if item.product.in_stock < item.quantity:
       s = "Sorry, we only have %s in stock of the following item: %s"
-      out['errors'].append(s%(item.product.in_stock,item.product))
+      out['_errors'].append(s%(item.product.in_stock,item.product))
   return HttpResponse(json.dumps(out))
 
 @user_passes_test(is_toolmaster)

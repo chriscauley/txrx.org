@@ -97,14 +97,13 @@
   var update_timeout;
   var self = this;
   self.product = opts.product;
-  this.product.quantity = this.product.quantity || 0;
   plusOne(e) {
     self.product.quantity++;
-    uR.drop.saveCartItem(self.product);
+    uR.drop.saveCartItem(self.product.id, self.product.quantity,self);
   }
   minusOne(e) {
     self.product.quantity--;
-    uR.drop.saveCartItem(self.product);
+    uR.drop.saveCartItem(self.product.id, self.product.quantity,self);
   }
 </product>
 

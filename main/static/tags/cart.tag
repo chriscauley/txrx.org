@@ -21,7 +21,7 @@
       </div>
       <div class="checkout-box">
         <div class="subtotals"></div>
-        Order Total: <b>${ uR.drop.cart.total_price.toFixed(2) }</b>
+        Order Total: <b>${ uR.drop.cart.total_price }</b>
       </div>
       <div if={ !window._USER_NUMBER }>
         <center>
@@ -42,18 +42,18 @@
         Refunds are subject to a $10 administrative fee.
         Requests for cancellation the day of class are ineligible for a refund.
       </div>
-      <div class="alert alert-danger" style="margin:10px 0 0" each={ n,i in errors }>{ n }</div>
+      <div class="alert alert-danger" style="margin:10px 0 0" each={ n in errors }>{ n }</div>
     </div>
     <div class="modal-footer">
       <button type="button" class="pull-left btn btn-default" data-dismiss="modal" onclick="toggleCourses();">
         &laquo; Keep Shopping</button>
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="POST">
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="POST" style="float:right">
         <input name="business" type="hidden" value="{ SHOP.email }">
         <span each={ n,i in uR.drop.cart.all_items }>
           <input name="item_name_{ i+1 }" type="hidden" value="{ n.display_name }">
           <input name="item_number_{ i+1 }" type="hidden" value="{ n.id }">
           <input name="quantity_{ i+1 }" type="hidden" value="{ n.quantity }">
-          <input name="amount_{ i+1 }" type="hidden" value="{ n.unit_price }">
+          <input name="amount_{ i+1 }" type="hidden" value="{ n.price }">
         </span>
         <input name="notify_url" type="hidden" value="{ SHOP.base_url}/tx/rx/ipn/handler/">
         <input name="cancel_return" type="hidden" value="{ SHOP.base_url }/shop/">
@@ -84,15 +84,15 @@
   }
   plusOne(e) {
     e.item.quantity++;
-    uR.drop.saveCartItem(e.item);
+    uR.drop.saveCartItem(e.item.product_id,e.item.quantity,self);
   }
   minusOne(e) {
     e.item.quantity--;
-    uR.drop.saveCartItem(e.item);
+    uR.drop.saveCartItem(e.item.product_id,e.item.quantity,self);
   }
   remove(e) {
     e.item.quantity = 0;
-    uR.drop.saveCartItem(e.item);
+    uR.drop.saveCartItem(e.item.product_id,e.item.quantity,self);
   }
   startCheckout(e) {
     var form = this.root.querySelector("form");
@@ -100,9 +100,10 @@
       url: '/shop/start_checkout/',
       form: form,
       success: function(data) {
-        if (data.errors.length) {
-          self.errors = data.errors;
+        if (data._errors && data._errors.length) {
+          self.errors = data._errors;
         } else {
+          this.root.querySelector("form").setAttribute("data-loading","spinner");
           form.querySelector("[name=invoice]").value = self.invoice_id = data.order_pk;
           form.submit();
         }
@@ -110,4 +111,10 @@
       that: this
     });
   }
+  this.on("update",function() {
+    uR.forEach(uR.drop.cart.all_items,function(item) {
+      item.price = uR.drop.products[item.product_id].price;
+      item.display_name = uR.drop.products[item.product_id].display_name;
+    })
+  });
 </cart>
