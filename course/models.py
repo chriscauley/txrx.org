@@ -364,9 +364,6 @@ class Session(UserModel,PhotosMixin,models.Model):
       publish_dt = datetime.datetime.now()
     profile,_ = UserMembership.objects.get_or_create(user=self.user)
     super(Session,self).save(*args,**kwargs)
-
-    # now a class product needs to be made (or not)
-    defaults = {'slug': "%s_%s"%(unicode(self)[:40],self.pk),'name': unicode(self)}
   @cached_method
   def get_absolute_url(self):
     return self.course.get_absolute_url()
