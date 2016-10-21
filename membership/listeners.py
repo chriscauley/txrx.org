@@ -53,6 +53,7 @@ def paypal_signal(sender,**kwargs):
   if sender.txn_type in ['subscr_cancel']:
     subscription.force_canceled()
     paypal_flag(sender,**kwargs)
+    mail_admins("Flagged %s and canceled"%sender.txn_type,urls)
     return
 
   elif sender.txn_type != "subscr_payment":
@@ -85,7 +86,8 @@ def paypal_signal(sender,**kwargs):
     subscription = Subscription.objects.create(
       user=user,
       subscr_id=subscr_id,
-      product=product,
+      level=product.level,
+      months=product.months,
       amount=amt
     )
     Flag.objects.filter(

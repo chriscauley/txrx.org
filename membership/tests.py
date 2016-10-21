@@ -39,10 +39,7 @@ def setUp():
 
 class SimpleTest(TestCase):
   def test_flags(self):
-    flag_transactions = [
-      'recurring_payment_skipped',"recurring_payment_failed","recurring_payment_suspended",
-      'recurring_payment_suspended_due_to_max_failed_payment',
-      "subscr_failed",'subscr_eot']
+    flag_transactions = ['subscr_cancel']
     all_transactions = flag_transactions + [
       'cart','subscr_signup','web_accept','send_money'
     ]
@@ -63,7 +60,7 @@ class SimpleTest(TestCase):
       paypal_post(self,flag_data)
       subscription = Subscription.objects.get(user__email=new_email)
       if txn_type in flag_transactions:
-        if txn_type == 'subscr_eot':
+        if txn_type == 'subscr_cancel':
           subjects = ['Flagged %s and canceled'%txn_type]
           self.assertTrue(subscription.canceled)
         else:
@@ -87,7 +84,7 @@ class SimpleTest(TestCase):
       user = get_user_model().objects.get(email=email)
       self.assertEqual(user.level,product.level)
       subscription = user.subscription_set.get()
-      self.assertEqual(subscription.paid_until.date(),add_months(now.date(),subscription.product.months))
+      self.assertEqual(subscription.paid_until.date(),add_months(now.date(),subscription.months))
       self.assertTrue(subscription.owed <= 0)
 
     level = Level.objects.get(name="Hacker")

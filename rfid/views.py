@@ -74,7 +74,7 @@ def door_access(request):
 
   schedule_jsons = { s.id: s.as_json for s in Schedule.objects.all() }
   for level in Level.objects.all():
-    subscriptions = base_subs.filter(product__level=level).distinct()
+    subscriptions = base_subs.filter(level=level).distinct()
     out['rfids'][level.order] = list(subscriptions.values_list('user__'+fieldname,flat=True))
     out['schedule'][level.order] = schedule_jsons.get(level.get_schedule_id(obj),{})
   staff = get_user_model().objects.filter(superQ).exclude(rfid__isnull=True)

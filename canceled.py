@@ -24,9 +24,9 @@ f.close()
 
 initial = Subscription.objects.filter(owed__gt=0).count()
 
-for membership in Level.objects.filter(order__gte=1):
-  for subscription in Subscription.objects.filter(product__membership=membership,owed__gt=0):
-    if membership.order in [1,2]: #amigotron/supporter
+for level in Level.objects.filter(order__gte=1):
+  for subscription in Subscription.objects.filter(level=level,owed__gt=0):
+    if level.order in [1,2]: #amigotron/supporter
       low += 1
       subscription.force_canceled()
     elif (now - subscription.last_status.datetime).days > 365:
@@ -35,7 +35,7 @@ for membership in Level.objects.filter(order__gte=1):
     elif subscription.user.subscription_set.filter(owed__lte=0).exclude(pk=subscription.pk):
       subscription.force_canceled()
       changed += 1
-  print membership,'\t',Subscription.objects.filter(product__membership=membership,owed__gt=0).count()
+  print level,'\t',Subscription.objects.filter(level=level,owed__gt=0).count()
 
 print 'pp:\t',len(subscr_ids)
 print 'init:\t',initial

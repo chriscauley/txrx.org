@@ -18,10 +18,10 @@ for year in range(2012,2017):
       break
     for level in levels:
       subscriptions = Subscription.objects.filter(created__lte=start)
-      subscriptions = subscriptions.filter(Q(canceled__gte=start) | Q(canceled=None),product__level=level).count()
+      subscriptions = subscriptions.filter(Q(canceled__gte=start) | Q(canceled=None),level=level).count()
       row.append(str(subscriptions))
       statuses = Status.objects.filter(datetime__gte=start,datetime__lte=end)
-      statuses = statuses.filter(subscription__product__level=level).distinct()
+      statuses = statuses.filter(subscription__level=level).distinct()
       cash.append(str(sum([s.amount for s in statuses])))
     statuses = Status.objects.filter(datetime__gte=start,datetime__lte=end)
     cash.append(str(sum([s.amount for s in statuses])))
