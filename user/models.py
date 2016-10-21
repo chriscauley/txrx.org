@@ -125,7 +125,8 @@ class User(AbstractBaseUser, PermissionsMixin):
       return subs[0]
   @property
   def paid_subscriptions(self):
-    return self.subscription_set.filter(canceled=None).filter(paid_until__gte=datetime.datetime.now()).order_by("-order")
+    subs = self.subscription_set.filter(canceled=None).filter(paid_until__gte=datetime.datetime.now())
+    return subs.order_by("-product__level__order")
   @property
   def done_docs(self):
     return Signature.objects.filter(user=self,document_id__in=settings.REQUIRED_DOCUMENT_IDS).count()

@@ -213,7 +213,6 @@ class SessionRoomTime(object):
     self.short_name = self.session.course
   def __hash__(self):
     h = hash("%s__%s__%s"%(self.short_name.id,self.start,self.end))
-    print self.short_name,":","%s__%s__%s"%(self.short_name.id,self.start,self.end)
     return h
 
 class CourseRoomTime(models.Model):
