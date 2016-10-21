@@ -12,7 +12,7 @@ def remove_product(apps,schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('membership', '0003_subscription_months'),
+        ('membership', '0003_auto_20161021_1505'),
     ]
 
     operations = [

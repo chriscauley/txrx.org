@@ -7,13 +7,12 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('membership', '0002_auto_20160927_2109'),
+        ('membership', '0004_auto_20161021_1111'),
     ]
 
     operations = [
-        migrations.AddField(
+        migrations.RemoveField(
             model_name='subscription',
-            name='months',
-            field=models.IntegerField(default=1, choices=[(1, b'Monthly'), (3, b'Quarterly'), (6, b'Biannually'), (12, b'Yearly')]),
+            name='product',
         ),
     ]

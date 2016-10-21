@@ -136,7 +136,7 @@ class Level(models.Model):
 
   @cached_property
   def all_users(self):
-    return get_user_model().objects.filter(subscription__product__level=self)
+    return get_user_model().objects.filter(subscrition__level=self)
   def count_all_users(self):
     return self.all_users.count()
   def count_active_users(self):
@@ -181,11 +181,11 @@ class Subscription(models.Model):
   paid_until = models.DateTimeField(null=True,blank=True)
   level = models.ForeignKey(Level,null=True,blank=True)
   months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
-  # self.amount should match self.product, but can be used as an override
+  # self.amount should match the prdouct it was generated from, but can be used as an override
   amount = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   owed = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   last_status = property(lambda self: (self.status_set.all().order_by('-datetime') or [None])[0])
-  __unicode__ = lambda self: "%s for %s"%(self.user,self.product)
+  __unicode__ = lambda self: "%s for %s %s"%(self.user,self.get_months_display(),self.level)
   json_fields = ['id','user_id','created','canceled','verbose_status','month_str','level','card_class']
   @property
   def as_json(self):
@@ -224,12 +224,7 @@ class Subscription(models.Model):
     if self.owed > 0:
       return "danger"
     return "success"
-  @property
-  def month_str(self):
-    return str(self.product.get_months_display())
-  @property
-  def level(self):
-    return str(self.product.level)
+  month_str = property(lambda self: str(self.get_months_display()))
   @property
   def verbose_status(self):
     if self.owed > 0:
@@ -243,7 +238,7 @@ class Subscription(models.Model):
     for months in range(1200): # 100 years
       if add_months(self.created,months) >= now:
         break
-    amount_due = decimal.Decimal(months * self.amount / self.product.months)
+    amount_due = decimal.Decimal(months * self.amount / self.months)
     amount_paid = sum([s.amount for s in self.status_set.all()])
     self.owed = amount_due-amount_paid
     if self.canceled:
@@ -255,13 +250,13 @@ class Subscription(models.Model):
           print "%s set to canceled"%self
           user.level_id = settings.DEFAULT_MEMBERSHIP_LEVEL
           user.save()
-    self.paid_until = add_months(self.created,int(self.product.months*amount_paid/decimal.Decimal(self.amount)))
+    self.paid_until = add_months(self.created,int(self.months*amount_paid/decimal.Decimal(self.amount)))
     self.save()
     last = self.last_status
-    if last:
+    if last and self.level:
       user = self.user
       if self.owed <= 0 and not self.canceled:
-        user.level = self.product.level
+        user.level = self.level
         user.save()
     if self.owed <= 0:
       Flag.objects.filter(
