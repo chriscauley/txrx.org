@@ -31,6 +31,7 @@ INSTALLED_APPS = [
   #store
   'shop',
   'drop',
+  'drop.address',
   'drop.discount',
   'store',
 

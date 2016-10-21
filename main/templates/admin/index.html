@@ -18,12 +18,18 @@
 <div id="content-related">
   {% get_pastdue_subscriptions %}
   <h4 class="italic-title">{{ pastdue_subscriptions.count }} Past Due Subscription(s)</h4>
+  <div class="well">
+    <a href="/admin/membership/subscription/">Description of Subscription</a> <b>Paid Until Date</b>
+    <a href="/admin/user/user/" class="fa fa-user"></a> &lt;-- link to user
+    <div>Paid membership for user <b>Paid Until Date</b> &lt;-- if exists</div>
+  </div>
   {% for subscription in pastdue_subscriptions %}
   <div class="well">
     <a href="/admin/membership/subscription/{{ subscription.pk }}/">{{ subscription }}</a>
-    <b>{{ subscription.paid_until }}- {{ subscription.user.level }}</b>
+    <b>{{ subscription.paid_until }}</b>
+    <a href="/admin/user/user/{{ subscription.user.pk }}" class="fa fa-user"></a>
     {% for s in subscription.user.paid_subscriptions %}
-    <div>{{ s }} {{ s.paid_until }}</div>
+    <div>{{ s }} <b>{{ s.paid_until }}</b></div>
     {% endfor %}
   </div>
   {% endfor %}
