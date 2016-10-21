@@ -27,7 +27,7 @@
   <div class="well">
     <a href="/admin/membership/subscription/{{ subscription.pk }}/">{{ subscription }}</a>
     <b>{{ subscription.paid_until }}</b>
-    <a href="/admin/user/user/{{ subscription.user.pk }}" class="fa fa-user"></a>
+    <a href="/admin/user/user/{{ subscription.user.pk }}/" class="fa fa-user"></a>
     {% for s in subscription.user.paid_subscriptions %}
     <div>{{ s }} <b>{{ s.paid_until }}</b></div>
     {% endfor %}

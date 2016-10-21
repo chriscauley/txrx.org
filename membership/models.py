@@ -169,9 +169,6 @@ class Product(Product):
   months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
   order = models.IntegerField(default=0)
   __unicode__ = lambda self: "%s %s"%(self.get_months_display(),self.level)
-  def save(self,*args,**kwargs):
-    self.slug = "__membershipproduct__%s"%(self.pk or random.randint(0,10000))
-    super(Product,self).save(*args,**kwargs)
   class Meta:
     ordering = ("order",)
 
@@ -250,7 +247,7 @@ class Subscription(models.Model):
     self.owed = amount_due-amount_paid
     if self.canceled:
       self.owed = 0
-    if self.paid_until < datetime.datetime.now():
+    if self.paid_until and self.paid_until < datetime.datetime.now():
       if not self.user.subscription_set.filter(canceled__isnull=True,owed__lte=0).exclude(pk=self.pk):
         user = self.user
         if user.level_id != settings.DEFAULT_MEMBERSHIP_LEVEL:
