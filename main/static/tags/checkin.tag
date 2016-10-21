@@ -28,7 +28,7 @@
           <div>
             <a href="/admin/membership/subscription/{ id }/" if={ TXRX.user.is_superuser }
                class="fa fa-edit right"></a>
-            <b>{ month_str } { level }</b>
+            <b>{ month_str } { level_str }</b>
           </div>
           <div>Start Date: { created_str }</div>
           { verbose_status }

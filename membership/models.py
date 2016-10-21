@@ -186,7 +186,8 @@ class Subscription(models.Model):
   owed = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   last_status = property(lambda self: (self.status_set.all().order_by('-datetime') or [None])[0])
   __unicode__ = lambda self: "%s for %s %s"%(self.user,self.get_months_display(),self.level)
-  json_fields = ['id','user_id','created','canceled','verbose_status','month_str','level','card_class']
+  json_fields = ['id','user_id','created','canceled','verbose_status','month_str','level_str','card_class']
+  level_str = property(lambda self: str(self.level))
   @property
   def as_json(self):
     return {k: getattr(self,k) for k in self.json_fields}
