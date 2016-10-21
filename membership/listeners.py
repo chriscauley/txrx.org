@@ -50,24 +50,12 @@ def paypal_signal(sender,**kwargs):
   if subscription:
     urls += "\n\nhttps://txrxlabs.org/admin/membership/subscription/%s/"%subscription.pk
 
-  if sender.txn_type in ['recurring_payment_skipped',"recurring_payment_failed","recurring_payment_suspended",
-                         'recurring_payment_suspended_due_to_max_failed_payment',
-                         "subscr_failed","web_accept"]:
-    paypal_flag(sender,**kwargs)
-    mail_admins("Flagged %s"%sender.txn_type,urls)
-    return
-  elif sender.txn_type == 'subscr_eot':
+  if sender.txn_type in ['subscr_cancel']:
     subscription.force_canceled()
     paypal_flag(sender,**kwargs)
-    mail_admins("Flagged %s and canceled"%sender.txn_type,urls)
-    return
-  elif sender.txn_type == 'subscr_cancel':
-    if subscription:
-      subscription.force_canceled()
     return
 
-  if sender.txn_type != "subscr_payment":
-    mail_admins('Unknown Transaction type "%s"'%sender.txn_type,urls)
+  elif sender.txn_type != "subscr_payment":
     return # rest of function handles successful membership payment
 
   if not 'mc_gross' in params:
