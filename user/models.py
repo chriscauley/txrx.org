@@ -120,13 +120,13 @@ class User(AbstractBaseUser, PermissionsMixin):
       return "info"
   @cached_property
   def last_subscription(self):
-    subs = self.subscription_set.order_by("-paid_until")
-    if subs:
-      return subs[0]
+    subscriptions = self.subscription_set.order_by("-paid_until")
+    if subscriptions:
+      return subscriptions[0]
   @property
   def paid_subscriptions(self):
-    subs = self.subscription_set.filter(canceled=None).filter(paid_until__gte=datetime.datetime.now())
-    return subs.order_by("-product__level__order")
+    subscriptions = self.subscription_set.filter(canceled=None).filter(paid_until__gte=datetime.datetime.now())
+    return subscriptions.order_by("-level__order")
   @property
   def done_docs(self):
     return Signature.objects.filter(user=self,document_id__in=settings.REQUIRED_DOCUMENT_IDS).count()
