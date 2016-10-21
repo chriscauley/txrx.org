@@ -72,9 +72,10 @@ class UserMembershipInline(admin.StackedInline):
   model = UserMembership
 
 class CustomIPNAdmin(PayPalIPNAdmin):
-  fieldsets = PayPalIPNAdmin.fieldsets
-  fieldsets[0][1]['fields'].append(('view_redirect','view_IPN'))
-  fieldsets[0][1]['fields'].append('query_list')
+  fieldsets = PayPalIPNAdmin.fieldsets[:]
+  if not 'query_list' in fieldsets[0][1]['fields']:
+    fieldsets[0][1]['fields'].append(('view_redirect','view_IPN'))
+    fieldsets[0][1]['fields'].append('query_list')
   readonly_fields = PayPalIPNAdmin.readonly_fields + ('view_redirect','view_IPN','query_list')
   list_display = ['__unicode__','_info','created_at']
   def _info(self,obj):
@@ -87,7 +88,6 @@ class CustomIPNAdmin(PayPalIPNAdmin):
     ]
     return "<br/>".join(["%s %s"%(a,getattr(obj,b)) for a,b in attrs if getattr(obj,b)])
   _info.allow_tags = True
-  list_filter = list(PayPalIPNAdmin.list_filter) + ['txn_type']
   def subscr_id(self,obj):
     data = QueryDict(obj.query)
     return data.get('subscr_id',None) or data.get('recurring_payment_id',None)
