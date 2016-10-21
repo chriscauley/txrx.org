@@ -110,9 +110,9 @@ class MembershipFeatureInline(RawMixin,admin.TabularInline):
   model = MembershipFeature
 
 class ProductInline(admin.TabularInline):
+  exclude = ("categories",)
   extra = 0
   model = Product
-  exclude = ('slug',)
 
 class LevelDoorGroupScheduleInline(admin.TabularInline):
   model = LevelDoorGroupSchedule
@@ -160,7 +160,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
   list_filter = [CanceledBooleanFilter]
   fields = (
     ('user','edit_user'),
-    ('product','subscr_id'),
+    ('months','level','subscr_id'),
     'created',
     ('amount','owed','paid_until'),
     ('canceled','_action'),
@@ -194,7 +194,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
 class SubscriptionInline(admin.TabularInline):
   model = Subscription
-  readonly_fields = ('subscr_id','created','canceled','paid_until','product','amount','owed')
+  readonly_fields = ('subscr_id','created','canceled','paid_until','amount','owed')
   ordering = ('-canceled',)
   extra = 0
   has_add_permission = lambda self,obj: False

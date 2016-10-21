@@ -179,7 +179,6 @@ class Subscription(models.Model):
   created = models.DateTimeField(default=datetime.datetime.now)
   canceled = models.DateTimeField(null=True,blank=True)
   paid_until = models.DateTimeField(null=True,blank=True)
-  product = models.ForeignKey(Product)
   level = models.ForeignKey(Level,null=True,blank=True)
   months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
   # self.amount should match self.product, but can be used as an override
