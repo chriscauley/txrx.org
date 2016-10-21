@@ -74,7 +74,7 @@ def iter_times(start,end):
   td = end - start
   block_size = 60*30 #seconds per half hour
   blocks = int(math.ceil(td.total_seconds()/(block_size))) #half hours that this runs
-  return [start+datetime.timedelta(0,block_size*i) for i in range(blocks+1)]
+  return [start+datetime.timedelta(0,block_size*i) for i in range(blocks)]
 
 def get_room_conflicts(base_occurrence=None):
   block_size = 60*30 #seconds per half hour
@@ -96,28 +96,18 @@ def get_room_conflicts(base_occurrence=None):
     occurrences = EventOccurrence.objects.filter(start__gte=start_time,start__lte=end_time,event__no_conflict=False)
   rooms = Room.objects.all()
   class_times = []
-  for ct in _class_times:
+  for ct in set(_class_times):
     class_times += ct.build_class_times()
   schedule = {room:{} for room in rooms}
-  event_tuples = []
 
   # combine events and classes because they have similar enough APIs to treat them the same 
-  for class_time in class_times:
-    event_tuples.append((class_time,class_time.room))
-  for occurrence in occurrences:
-    event_tuples.append((occurrence, occurrence.get_room()))
-
-  # iterate over 30 minute chunks and group chunks by time and room
-  for event,room in event_tuples:
-    if not room:
+  for occurrence in (list(occurrences)+class_times):
+    room = occurrence.get_room()
+    if not room in rooms:
       continue
-    for time in iter_times(event.start,event.end):
+    for time in iter_times(occurrence.start,occurrence.end):
       schedule[room][time] = schedule[room].get(time,[])
-      schedule[room][time].append(event)
-
-  #for k,v in sorted(schedule.values()[0].items()):
-  #  if len(v) > 1:
-  #    print k,'\t',v
+      schedule[room][time].append(occurrence)
 
   # remove all slots with only one for fewer events in a given room
   room_conflicts = {}

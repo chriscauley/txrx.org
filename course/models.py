@@ -204,8 +204,11 @@ DAY_CHOICES = [
 ]
 
 class SessionRoomTime(object):
+  __unicode__ = lambda self: "%s in %s from %s to %s"%(self.session.course,self.room,self.start,self.end)
+  __repr__ = lambda self: unicode(self)
   get_absolute_url = lambda self: self.session.get_absolute_url()
   get_admin_url = lambda self: self.session.get_admin_url()
+  get_room = lambda self: self.room
   def __init__(self,**kwargs):
     for k,v in kwargs.items():
       setattr(self,k,v)
@@ -451,7 +454,7 @@ class ClassTime(OccurrenceModel):
       occurrence = SessionRoomTime(
         start=current_datetime,
         end_time=self.end_time,
-        room = roomtime.room,
+        room = self.room,
         name = "%s at %s until end (%s)"%(course,course.room,occurrence.end_time),
         session = self.session,
       )
