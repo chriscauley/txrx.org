@@ -58,7 +58,7 @@
             <div class="card-content">
               Our record keeping on class completions does not go far back
               so please check for missing permissions.
-              If you are missing any permissions please email info@txrxlabs.org so we can get it straightened out.
+              If you are missing any permissions please email membership@txrxlabs.org so we can get it straightened out.
             </div>
           </div>
         </a>
