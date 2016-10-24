@@ -18,6 +18,7 @@ class CourseAdmin(TaggedPhotoAdmin):
   list_editable = ("content","visuals","presentation")
   readonly_fields = ("_notifies",)
   filter_horizontal = ("subjects",)
+  search_fields = ("name",)
   inlines = [CourseRoomTimeInline, TaggedToolInline, TaggedFileInline]
   def tool_count(self,obj):
     return len(obj.get_tools())
