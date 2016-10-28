@@ -42,6 +42,7 @@ def user_settings(request):
     messages.success(request,'Your settings have been saved.')
     return HttpResponseRedirect(request.path)
   values = {
+    'now': datetime.datetime.now(),
     'forms': [user_form, usermembership_form],
     'notify_courses': user.notifycourse_set.all(),
     }

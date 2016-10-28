@@ -50,6 +50,9 @@
   {% if subscription.status_set.count or subscription.canceled %}
   <div>Start Date: {{ subscription.created|date:"M n, Y" }}</div>
   <div>{{ subscription.verbose_status }}</div>
+  {% if subscription.canceled and subscription.paid_until > now %}
+  <div>Paid until: {{ subscription.paid_until|date:"M n, Y" }}</div>
+  {% endif %}
   {% endif %}
   {% if subscription.subscr_id and not subscription.canceled %}
   <form action="/accounts/cancel_subscription/" method="POST" onsubmit="return confirm('This will cancel the selected subscription and stop payments from PayPal. Are you sure you want to do this?');">
