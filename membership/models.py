@@ -205,8 +205,6 @@ class Subscription(models.Model):
     self.flag_set.exclude(status__in=['final_warning','resolved','paid']).update(status='canceled')
   @property
   def card_class(self):
-    if Flag.objects.filter_pastdue(subscription=self):
-      return "yellow"
     if self.canceled:
       return "blue white-text"
     if self.owed > 0:
@@ -216,8 +214,6 @@ class Subscription(models.Model):
     return "green white-text"
   #! TODO depracated
   def bs_class(self):
-    if Flag.objects.filter_pastdue(subscription=self):
-      return "warning"
     if self.canceled:
       return "info"
     if not self.status_set.count():
