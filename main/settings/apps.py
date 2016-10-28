@@ -29,10 +29,10 @@ INSTALLED_APPS = [
   'mailer',
 
   #store
-  'shop',
   'drop',
   'drop.address',
   'drop.discount',
+  'djstripe',
   'store',
 
   # comments

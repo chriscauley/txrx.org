@@ -1,7 +1,7 @@
 django==1.8.12
 -e git+https://github.com/dcramer/django-devserver.git#egg=django-devserver
 -e git+https://github.com/chriscauley/django-registration.git#egg=django-registration
-django_compressor
+django_compressor==2.1
 django-localflavor
 djangorestframework
 djangorestframework-jwt
@@ -37,5 +37,5 @@ python-social-auth
 -e git+https://github.com/chriscauley/django-wmd-editor.git#egg=django_wmd_editor
 #-e git+https://github.com/chriscauley/lablackey.git#egg=lablackey
 django_paypal==0.2.5
+dj-stripe
 django-colorful
-django-jsignature
