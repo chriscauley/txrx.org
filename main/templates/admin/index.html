@@ -16,6 +16,20 @@
 {% block sidebar %}
 {% if request.path == "/admin/" %}
 <div id="content-related">
+  {% get_overbooked_sessions %}
+  {% if overbooked_sessions %}
+  <h4 class="italic-title">{{ overbooked_sessions|length }} Overbooked Sessions</h4>
+  {% for session in overbooked_sessions %}
+  <div class="well">
+    <a href="/admin/course/session/{{ session.pk }}/">{{ session }}</a>
+    <br/>
+    <b>Enrolled:</b> {{ session.total_students }}
+    <br/>
+    <b>Max:</b> {{ session.course.max_students }}
+    {% if session.overbook %}<br/><b>Overbook:</b> {{ session.overbook }}{% endif %}
+  </div>
+  {% endfor %}
+  {% endif %}
   {% get_pastdue_subscriptions %}
   <h4 class="italic-title">{{ pastdue_subscriptions.count }} Past Due Subscription(s)</h4>
   <div class="well">

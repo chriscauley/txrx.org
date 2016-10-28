@@ -33,3 +33,10 @@ def get_pastdue_subscriptions(context):
   subscriptions = Subscription.objects.filter(canceled__isnull=True,paid_until__lte=twodays)
   context['pastdue_subscriptions'] = subscriptions.order_by("-paid_until")
   return ''
+
+@register.simple_tag(takes_context=True)
+def get_overbooked_sessions(context):
+  sessions = Session.objects.filter(last_date__gte=datetime.datetime.now())
+  sessions = [s for s in sessions if s.full and s.total_students > s.overbook + s.course.max_students]
+  context['overbooked_sessions'] = sessions
+  return ''
