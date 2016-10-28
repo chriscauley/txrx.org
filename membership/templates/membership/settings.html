@@ -57,7 +57,7 @@
     <input type="hidden" name="subscription_id" value="{{ subscription.id }}"/>
     <button class="btn btn-danger">Cancel Subscription</button>
   </form>
-  {% else %}
+  {% elif not subscription.canceled %}
   <b>
     Start subscription for
     ${{ subscription.amount}}/{% if subscription.months == 1 %}Month{% else %}Year{% endif %}
