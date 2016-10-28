@@ -259,6 +259,8 @@ class Session(UserModel,PhotosMixin,models.Model):
   course = models.ForeignKey(Course)
   cancelled = models.BooleanField(default=False)
   active = models.BooleanField(default=True)
+  _ht = "This session will not appear as overbooked if it is less than X seats overbooked."
+  overbook = models.IntegerField(default=0,help_text=_ht)
   _ht = "Private classes cannot be signed up for and do not appear on the session page unless " \
         "the user is manually enrolled. It will appear on calendar but it will be marked in red."
   private = models.BooleanField(default=False,help_text=_ht)
