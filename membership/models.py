@@ -449,6 +449,7 @@ REASON_CHOICES = [
   ("subscr_eot", "PayPal End of Term"),
   ("manually_flagged","Manually Flagged"),
   ("safety","Expiring Safety Criterion"),
+  ('subscr_cancel', 'Paypal Canceled'),
 ]
 EMAIL_REASONS = {
   "payment_overdue": [
