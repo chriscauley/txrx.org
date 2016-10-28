@@ -52,7 +52,7 @@ class Consumable(BaseProduct):
   in_stock = models.IntegerField(null=True,blank=True,help_text=_ht)
   _ht2 = "Amount purchased at a time. Used to make the quick refill process."
   purchase_quantity = models.IntegerField(default=1,help_text=_ht2)
-  def purchase(self,quantity):
+  def purchase(self,user,quantity):
     if self.in_stock is None:
       return
     self.in_stock = max(self.in_stock- quantity,0)
