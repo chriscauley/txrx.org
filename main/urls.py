@@ -110,7 +110,7 @@ if hasattr(settings,"STAFF_URL"):
 #membership urls
 urlpatterns += patterns(
   'membership.views',
-  url(r'^join-us/$','join_us'),
+  url(r'^join-us/$','join_us',name="join_us"),
   url(r'^minutes/$', 'minutes_index', name='meeting_minutes_index',),
   url(r'^minutes/(\d+-\d+-\d+)/$', 'minutes', name='meeting_minutes',),
   url(r'^roland_email/$','roland_email',name='roland_email'),

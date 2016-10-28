@@ -50,6 +50,11 @@
   {% if subscription.status_set.count or subscription.canceled %}
   <div>Start Date: {{ subscription.created|date:"M n, Y" }}</div>
   <div>{{ subscription.verbose_status }}</div>
+  {% if subscription.subscr_id and not subscription.canceled %}
+  <form action="/cancel_subscription/" method="POST">
+    {% csrf_token %}
+    <button class="btn btn-danger"></button>
+  </form>
   {% else %}
   <b>
     Start subscription for

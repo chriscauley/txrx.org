@@ -20,7 +20,7 @@ from thing.models import Thing
 from lablackey.utils import FORBIDDEN
 from lablackey.mail import send_template_email
 
-import datetime, json
+import datetime, json, requests
 
 def join_us(request):
   values = {
@@ -44,6 +44,34 @@ def user_settings(request):
     'notify_courses': user.notifycourse_set.all(),
     }
   return TemplateResponse(request,'membership/settings.html',values)
+
+@login_required
+def change_subscription(request):
+  redirect = HttpResponseRedirect(request.path)
+  try:
+    subscription = Subscription.objects.get(id=request.POST['id'],user=request.user)
+  except Subscription.DoesNotExist:
+    messages.error(request,"An unknown error has occurred. Please contact the staff at membership@txrxlabs.org")
+    return redirect
+  if True: #subscription.type == paypal or something
+    api_url = 'https://api-3t.paypal.com/nvp'
+    r = requests.post(api_url,data={
+      "METHOD": "ManageRecurringPaymentsProfileStatus",
+      "PROFILEID": suscription.subscr_id,
+      "ACTION": "cancel",
+      "USER": settings.PP_USERNAME,
+      "PWD": settings.PP_PASSWORD,
+      "SIGNATURE": settings.PAYPAL_CLASSIC_SIGNATURE,
+      "VERSION": "54.0"
+    })
+    status_code = r.status_code
+  if r.status_code != 200:
+    lines = [r.text,subscription.subscr_id,subscription.user.email]
+    mail_admins("Failed attempt at paypal cancel",'\n'.join(lines))
+    m = "We were unable to cancel this subscription. The webmaster has been notified and we will resolve this within the next 24 hours. If you do not hear from us or if you have further questions, please contact membership@txrxlabs.org"
+    messages.error(request,m)
+    return redirect
+  return HttpResponseRedirect(reverse("join_us")+"?canceled=%s"%subscripiton.id)
 
 @login_required
 def minutes(request,datestring):
