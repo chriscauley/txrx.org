@@ -11,10 +11,14 @@
     <div class="alert alert-danger">
       <h2>Important information about your cancelation</h2>
       <p class="lead">
+        {% if canceled_subscription and canceled_subscription.paid_until > now %}
+        Your subscription is paid until {{ canceled_subscription.paid_until|date:"l F j, Y" }}, and you can continue to use the lab until then. If you have a bay or drawer at TXRX Labs be sure to sign up for another membership or clean out your belongings by this date
+        {% else %}
         If you have a bay or drawer at TXRX Labs please subscribe for a new membership below or make arrangements to clean out your belongings within the next 72 hours. 
+        {% endif %}
       </p>
       <p class="lead">
-        We're sad to see you go, and hope you come back for another membership or class in the future.
+        Thank you for your time spent contributing to our community. We wish you luck moving forward and hope to see you back for a class or membership in the future.
       </p>
     </div>
   </div>

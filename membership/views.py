@@ -17,7 +17,7 @@ from blog.models import Post
 from course.models import Course
 from thing.models import Thing
 
-from lablackey.utils import FORBIDDEN
+from lablackey.utils import FORBIDDEN, get_or_none
 from lablackey.mail import send_template_email
 
 import datetime, json, requests
@@ -26,6 +26,8 @@ def join_us(request):
   values = {
     'groups': Group.objects.all(),
     'flatpage':lambda:FlatPage.objects.get(url='/join-us/'),
+    'canceled_subscription': get_or_none(Subscription,pk=request.GET.get("canceled",0)),
+    'now': datetime.datetime.now()
     }
   return TemplateResponse(request,"membership/memberships.html",values)
 
