@@ -92,6 +92,7 @@ urlpatterns += patterns(
   '',
   url(r'^accounts/settings/$','membership.views.user_settings',name='account_settings'),
   url(r'^accounts/register/$','membership.views.register'),
+  url(r'^accounts/(cancel)_subscription/','membership.views.change_subscription',name="cancel_subscription"),
   url(r'^accounts/', include('registration.urls')),
   url(r'^auth/password_reset/$',activate_user(password_reset)),
   url(r'^auth/',include('django.contrib.auth.urls')),

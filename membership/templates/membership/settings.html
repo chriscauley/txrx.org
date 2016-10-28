@@ -50,10 +50,12 @@
   {% if subscription.status_set.count or subscription.canceled %}
   <div>Start Date: {{ subscription.created|date:"M n, Y" }}</div>
   <div>{{ subscription.verbose_status }}</div>
+  {% endif %}
   {% if subscription.subscr_id and not subscription.canceled %}
-  <form action="/cancel_subscription/" method="POST">
+  <form action="/accounts/cancel_subscription/" method="POST" onsubmit="return confirm('This will cancel the selected subscription and stop payments from PayPal. Are you sure you want to do this?');">
     {% csrf_token %}
-    <button class="btn btn-danger"></button>
+    <input type="hidden" name="subscription_id" value="{{ subscription.id }}"/>
+    <button class="btn btn-danger">Cancel Subscription</button>
   </form>
   {% else %}
   <b>
