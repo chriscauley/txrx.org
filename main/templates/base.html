@@ -133,8 +133,11 @@
     <script src="{{ STATIC_URL }}js/blog.js"></script>
     <script src="{{ STATIC_URL }}js/favico.js"></script>
     {% endcompress %}
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
     {% block extrajs %}{% endblock %}
     <script>
+      {% if settings.DEBUG %}uR.DEBUG = true;{% endif %}
+      Stripe.setPublishableKey("{{ settings.STRIPE_PUBLIC_KEY }}");
       new Favico({animation : 'popFade'}).badge({{ pending_evaluations.count }});
     </script>
     <script src="{{ STATIC_URL }}cv/float.js"></script>

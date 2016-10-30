@@ -119,6 +119,9 @@ class TaggedPhoto(models.Model):
   order = models.IntegerField(default=9999)
 
 class PhotosMixin(object):
+  @property
+  def thumbnail(self):
+    return get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center").url
   @cached_property
   def first_photo(self):
     try:

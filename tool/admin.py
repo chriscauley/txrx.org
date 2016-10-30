@@ -56,7 +56,7 @@ class HolidayAdmin(admin.ModelAdmin):
 
 @admin.register(Lab)
 class LabAdmin(OrderedModelAdmin):
-  list_display = ("__unicode__","description")
+  list_display = ("__unicode__","description","order")
   inlines = (TaggedPhotoInline,)
   raw_id_fields = ('photo',)
 
