@@ -8,26 +8,12 @@ import media.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('drop', '0004_auto_20160908_1023'),
-        ('contenttypes', '0002_remove_content_type_name'),
+        ('course', '0007_session_overbook'),
+        ('drop', '0006_product_categories'),
+        ('tool', '0005_toolcheckoutitemgroup'),
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='Category',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=64)),
-                ('order', models.FloatField(default=0)),
-                ('level', models.IntegerField(default=0)),
-                ('parent', models.ForeignKey(blank=True, to='store.Category', null=True)),
-            ],
-            options={
-                'ordering': ('order',),
-                'verbose_name_plural': 'Categories',
-            },
-            bases=(media.models.PhotosMixin, models.Model),
-        ),
         migrations.CreateModel(
             name='Consumable',
             fields=[
@@ -38,7 +24,6 @@ class Migration(migrations.Migration):
                 ('purchase_url2', models.URLField(max_length=1024, null=True, blank=True)),
                 ('in_stock', models.IntegerField(help_text=b'Leave blank and this fill always show as in stock.', null=True, blank=True)),
                 ('purchase_quantity', models.IntegerField(default=1, help_text=b'Amount purchased at a time. Used to make the quick refill process.')),
-                ('categories', models.ManyToManyField(to='store.Category')),
             ],
             options={
                 'ordering': ('name',),
@@ -46,13 +31,26 @@ class Migration(migrations.Migration):
             bases=(media.models.PhotosMixin, 'drop.product'),
         ),
         migrations.CreateModel(
-            name='TaggedConsumable',
+            name='CourseCheckout',
+            fields=[
+                ('product_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='drop.Product')),
+                ('course', models.ForeignKey(to='course.Course')),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=(media.models.PhotosMixin, 'drop.product'),
+        ),
+        migrations.CreateModel(
+            name='ToolConsumableGroup',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('object_id', models.IntegerField()),
-                ('order', models.IntegerField(default=9999)),
-                ('consumable', models.ForeignKey(to='store.Consumable')),
-                ('content_type', models.ForeignKey(to='contenttypes.ContentType')),
+                ('name', models.CharField(max_length=64)),
+                ('consumables', models.ManyToManyField(to='store.Consumable')),
+                ('tools', models.ManyToManyField(to='tool.Tool')),
             ],
+            options={
+                'ordering': ('name',),
+            },
         ),
     ]

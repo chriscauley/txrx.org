@@ -50,6 +50,7 @@ class Consumable(BaseProduct):
   purchase_url2 = models.URLField(max_length=1024,null=True,blank=True)
   _ht = "Leave blank and this fill always show as in stock."
   in_stock = models.IntegerField(null=True,blank=True,help_text=_ht)
+  has_quantity = True
   _ht2 = "Amount purchased at a time. Used to make the quick refill process."
   purchase_quantity = models.IntegerField(default=1,help_text=_ht2)
   def purchase(self,user,quantity):
