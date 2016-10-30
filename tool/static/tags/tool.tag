@@ -30,7 +30,7 @@
   this.on("mount",function() {
     self.columns = [{'rows':[]},{'rows':[]}]
     window.TXRX.permissions.forEach(function(p) {
-      p.has = (window.TXRX.user.permission_ids.indexOf(p.id) > -1);
+      p.has = (uR.auth.user.permission_ids.indexOf(p.id) > -1);
     });
     window.TXRX.groups.forEach(function(g) {
       self.columns[g.column].rows.push(g);
@@ -58,13 +58,13 @@
       { name }
     </div>
   </div>
-  this.course_ids = window.TXRX.user.completed_course_ids
+  this.course_ids = uR.auth.user.completed_course_ids
   this.on("update",function() {
     if (this.opts.criteria_json) {
       this.opts.criteria_json.forEach(function(criteria) {
-        criteria.has = window.TXRX.user.criterion_ids.indexOf(criteria.id) != -1;
+        criteria.has = uR.auth.user.criterion_ids.indexOf(criteria.id) != -1;
         criteria.courses.forEach(function(course) {
-          course.has = window.TXRX.user.completed_course_ids.indexOf(course.id) != -1;
+          course.has = uR.auth.user.completed_course_ids.indexOf(course.id) != -1;
         });
       });
     }
@@ -139,7 +139,7 @@
   this.on("update", function() {
     self.criteria  = window.TXRX.criteria;
     if (self.active_user) {
-      var user = window.TXRX.user
+      var user = uR.auth.user
       var usercriterion = {};
       uR.forEach(self.student.usercriterion_jsons,function(ucj) { usercriterion[ucj.criterion_id] = ucj });
       self.criteria.forEach(function(c) {

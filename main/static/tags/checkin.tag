@@ -26,7 +26,7 @@
       <div class="card { card_class }" each={ subscriptions }>
         <div class="card-content">
           <div>
-            <a href="/admin/membership/subscription/{ id }/" if={ TXRX.user.is_superuser }
+            <a href="/admin/membership/subscription/{ id }/" if={ uR.auth.user.is_superuser }
                class="fa fa-edit right"></a>
             <b>{ month_str } { level_str }</b>
           </div>
@@ -197,17 +197,17 @@
     </div>
     <center if={ window.location.search.indexOf("cheat") != -1 && auth_user_checkin }>
       <br />
-      <button class="btn btn-success" onclick={ checkinFake }>Checkin as { TXRX.user.username }</button>
+      <button class="btn btn-success" onclick={ checkinFake }>Checkin as { uR.auth.user.username }</button>
     </center>
     <ul if={ messages.length } class="messagelist">
       <li each={ messages } class="alert alert-{ level }">{ body }</li>
     </ul>
-    <center if={ checkin && !TXRX.user.id }>
+    <center if={ checkin && !uR.auth.user.id }>
       <br/>
       <button class="btn btn-error red" onclick={ clear }>Done</button>
     </center>
     <div id="checkin_div"></div>
-    <center if={ checkin && !TXRX.user.id }>
+    <center if={ checkin && !uR.auth.user.id }>
       <button class="btn btn-error red" onclick={ clear }>Done</button>
     </center>
   </div>
@@ -237,12 +237,12 @@
     if (e) { TXRX.mainMount("checkin-register",{ email: "arst@oairesnt.com" }) }
     TXRX.ready(function() {
       self.email_checkin = !self.kiosk;
-      if (TXRX.user.id) {
+      if (uR.auth.user.id) {
         self.email_checkin = false;
         self.auth_user_checkin = true;
         uR.ajax({
           url: "/checkin_ajax/",
-          data: { user_id: TXRX.user.id, no_checkin: "true" },
+          data: { user_id: uR.auth.user.id, no_checkin: "true" },
           method: "POST",
           success: self.ajax_success,
           target: self.root,
@@ -254,7 +254,7 @@
   });
   checkinFake(e) {
     TXRX.ready(function() {
-      if (TXRX.user.id) {
+      if (uR.auth.user.id) {
         uR.ajax({
           url: "/checkin_ajax/",
           data: { },
@@ -284,7 +284,7 @@
     self.checkin_div.innerHTML = "<user-checkin>";
     riot.mount("#checkin_div user-checkin",{checkin:data.checkin})
     //clearTimeout(this.timeout);
-    //if (!(TXRX.user && TXRX.user.id)) { this.timeout = setTimeout(self.clear,30000); }
+    //if (!(uR.auth.user && uR.auth.user.id)) { this.timeout = setTimeout(self.clear,30000); }
   }
   clear(e) {
     clearTimeout(this.timeout);

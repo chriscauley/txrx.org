@@ -42,8 +42,8 @@
     this.start_string = moment(this.start).format("ddd MMM D, YYYY h:mm a");
     this.start_slug = moment(this.start).format("YYYY/MM/DD");
     TXRX.ready(function() {
-      self.admin_access = window.TXRX.user.is_superuser;
-      self.authenticated = window.TXRX.user.id;
+      self.admin_access = uR.auth.user.is_superuser;
+      self.authenticated = uR.auth.user.id;
       self.update();
     });
   });

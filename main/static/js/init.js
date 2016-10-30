@@ -92,7 +92,7 @@ uR.config.text_validators['signature'] = function(value,tag) {
 uR.ajax({
   url: "/user.json?"+new Date(),
   success: function(data) {
-    TXRX.user = data;
+    uR.auth.user = data;
     simpleCart.update();
     for (var i=0;i<TXRX._ready.length;i++) { TXRX._ready[i]() }
     TXRX.ready = function(func) { func(); }

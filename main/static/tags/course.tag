@@ -106,7 +106,7 @@
      onclick={ loadPastSessions }>
     Show { opts.past_session_count } Archived Sessions</a>
 
-  this.user = window.TXRX.user;
+  this.user = uR.auth.user;
   var that = this;
   add(e) {
     addClass(e.item);
@@ -136,7 +136,7 @@
       url,
       function(data) {
         target.removeAttribute("ur-loading","loading");
-        window.TXRX.user.enrollments[e.item.id] = data.quantity;
+        uR.auth.user.enrollments[e.item.id] = data.quantity;
         e.item.message = data.message;
         that.update();
       },
@@ -163,7 +163,7 @@
     uR.forEach(this.opts.active_sessions,function(session) {
       if (window.location.search.indexOf("overbook="+session.id) != -1) { session.closed_status = ""; }
       session.fee = that.opts.fee;
-      if (window.TXRX.user.enrollments) { session.rsvpd = window.TXRX.user.enrollments[session.id]; }
+      if (uR.auth.user.enrollments) { session.rsvpd = uR.auth.user.enrollments[session.id]; }
       session.incart = !!window.simpleCart.items[session.id];
       uR.forEach(session.classtimes,function(classtime) {
         classtime.moment = moment(classtime.start);

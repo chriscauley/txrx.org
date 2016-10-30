@@ -938,7 +938,7 @@ function Cart(){
     me.quantity = 0;
     me.total_discount = 0;
     me.sub_total = 0;
-    var member_discount_percent = (TXRX.user || {}).member_discount_percent || 0;
+    var member_discount_percent = (uR.auth.user || {}).member_discount_percent || 0;
     me.each(function(item){
       item.discount_percent = 0;
       item.discount_verbose = "";
