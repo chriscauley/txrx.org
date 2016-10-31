@@ -77,6 +77,7 @@ TXRX.schema = {
   ]
 }
 
+// #! TODO btn classes should be moved into theme
 uR.config.btn_primary = "btn blue text-white btn-primary";
 uR.config.btn_success = "btn green text-white btn-success";
 uR.config.btn_cancel = "btn red text-white btn-danger";
@@ -86,6 +87,16 @@ uR.config.mount_to = "#main";
 uR.config.support_email = "info@txrxlabs.org";
 uR.config.do404 = function() {}
 uR.drop.prefix = "/shop";
+uR.drop.stripe = true;
+uR.drop.paypal = true;
+uR.theme = {
+  input: "form-control",
+  modal_outer: "modal-content",
+  modal_header: "modal-header",
+  modal_content: "modal-body",
+  modal_footer: "modal-footer",
+  cart_items: "well cart-items",
+}
 uR.config.text_validators['signature'] = function(value,tag) {
   if (!value.startsWith("/s/")) { tag.data_error = "Signature must start with /s/"; }
 }
