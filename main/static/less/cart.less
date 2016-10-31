@@ -32,6 +32,19 @@ cart {
   }
 }
 
+shopping-cart .item {
+  border-bottom: @borderGray 1px solid;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 8px;
+  position: relative;
+  &:last-child { border-bottom: 0; }
+  .price-box {
+    padding-left: 20px;
+    text-align: right;
+  }
+}
+
 cart .items {
   padding: 3px;
   position: relative;

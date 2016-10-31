@@ -4,8 +4,20 @@ ur-input {
   .errorlist { padding: 0; }
 }
 
-ur-form .btn {
-  margin-bottom: 20px;
+ur-form {
+  ur-input {
+    position: relative;
+    padding-top: 20px;
+    label {
+      color: @blue;
+      font-size: 14px;
+      left: 0;
+      position: absolute;
+      top: 0;
+    }
+    input { width: 100%; }
+  }
+  .btn { margin-bottom: 20px; }
 }
 
 .messagelist {
