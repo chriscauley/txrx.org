@@ -28,6 +28,7 @@ class DocumentAdmin(admin.ModelAdmin):
 class SignatureAdmin(admin.ModelAdmin):
   readonly_fields = ('datetime','document','user','_data')
   exclude = ('completed','data')
+  search_fields = ("user__username",)
   list_display = ("__unicode__","_data")
   list_filter = ("document",)
   def _data(self,obj):
