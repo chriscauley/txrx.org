@@ -16,7 +16,7 @@
     <div class="col-sm-3">
       <a href="/shop/checkouts/" class="btn btn-block btn-primary">Checkouts</a>
     </div>
-    {% if request.user.is_superuser %}
+    {% if request.user.is_superuser and false %}
     <div class="col-sm-3">
       <a href="/shop/admin/" class="btn btn-block btn-warning">Admin</a>
       <br />
