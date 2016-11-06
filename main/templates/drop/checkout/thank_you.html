@@ -1,0 +1,20 @@
+{% extends "drop:drop/checkout/thank_you.html" %}
+{% load store_tags %}
+
+{% block header_content %}Purchase complete{% endblock %}
+
+{% block content %}
+<p class="lead">
+  You have purchased the items listed below.
+</p>
+{% for ptype,items in order|group_order_items_by_model %}
+<p class="lead">
+  {% if ptype == "coursecheckout" %}
+  Please email <a href="mailto:membership@txrxlabs.org">membership@txrxlabs.org</a> to schedule your course checkout{{ items|pluralize }}.
+  {% elif ptype == "consumable"%}
+  Please contact the staff to get the {{ items|length }} consumable{{ items|pluralize }} purchased.
+  {% endif %}
+</p>
+{% endfor %}
+{{ block.super }}
+{% endblock %}
