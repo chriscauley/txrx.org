@@ -125,7 +125,7 @@ try:
   if settings.DEBUG:
     @admin.register(LogEntry)
     class LogEntryAdmin(admin.ModelAdmin):
-      list_filter = ('content_type','user')
+      list_filter = ('content_type',)
       list_display = ('__unicode__','action_time','content_type','user')
       raw_id_fields = ('user',)
     ContentType._meta.ordering = ('model',)

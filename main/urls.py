@@ -61,6 +61,7 @@ urlpatterns = patterns(
   url(r'^classes/', include('course.urls',namespace='course',app_name='course')),
   url(r'^tx/rx/ipn/handler/', include('paypal.standard.ipn.urls')),
   url(r'^tx/rx/return/$','course.views.paypal_return',name='paypal_redirect'),
+  url(r'^payments/', include('djstripe.urls', namespace="djstripe")),
   url(r'^contact/$','contact.views.contact',name='contact'),
   url(r'^contact/(\w+).(\w+)_(\d+)-(.*).png$','contact.views.tracking_pixel',name="tracking_pixel"),
   url(r'^dxfviewer/$','geo.views.dxfviewer',name='dxfviewer'),

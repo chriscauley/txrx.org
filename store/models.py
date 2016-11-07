@@ -44,6 +44,7 @@ class CourseCheckout(BaseProduct):
     )
 
 class Consumable(BaseProduct):
+  json_fields = BaseProduct.json_fields + ['in_stock'] #! TODO should be a boolean... is_in_stock or something
   part_number = models.CharField(max_length=32,null=True,blank=True)
   part_style = models.CharField(max_length=32,null=True,blank=True)
   purchase_url = models.URLField(max_length=1024,null=True,blank=True)
@@ -51,12 +52,12 @@ class Consumable(BaseProduct):
   _ht = "Leave blank and this fill always show as in stock."
   in_stock = models.IntegerField(null=True,blank=True,help_text=_ht)
   has_quantity = True
-  _ht2 = "Amount purchased at a time. Used to make the quick refill process."
+  _ht2 = "Amount purchased (by us when restocking) at a time. Used to make the refill process quick."
   purchase_quantity = models.IntegerField(default=1,help_text=_ht2)
   def purchase(self,user,quantity):
     if self.in_stock is None:
       return
-    self.in_stock = max(self.in_stock- quantity,0)
+    self.in_stock = self.in_stock- quantity
     self.save()
   def get_domain(self,attr):
     if not getattr(self,attr):
