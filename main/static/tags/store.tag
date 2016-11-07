@@ -36,6 +36,14 @@
     this.className = this.opts.className || "col-sm-6 col-md-4";
     uR.drop.visible = 18;
     this.update();
+    if (window.PRODUCTS_EXTRA) {
+      uR.forEach(uR.drop.products_list,function(p) {
+        var extra  = window.PRODUCTS_EXTRA[p.id] || {};
+        for (var key in extra) {
+          p[key] = extra[key]
+        }
+      });
+    }
   });
   this.on("update",function() {
     if (!uR.drop.products) { return }
@@ -56,7 +64,7 @@
     }
     this.max_products = this.products.length;
     this.products = this.products.slice(0,uR.drop.visible);
-    if (this.products.extra) {
+    if (window.PRODUCTS_EXTRA) {
       this.admin_products = this.products;
       this.products = [];
     }
