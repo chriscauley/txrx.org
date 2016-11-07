@@ -113,7 +113,7 @@ def user_json(request):
     'enrollments': {e.session_id:e.quantity for e in request.user.enrollment_set.all()},
     'member_discount_percent': request.user.level.discount_percentage,
   }
-  return JsonResponse(out);
+  return JsonResponse({'user': out});
 
 @staff_member_required
 def set_rfid(request):

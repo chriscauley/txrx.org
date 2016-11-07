@@ -100,13 +100,3 @@ uR.theme = {
 uR.config.text_validators['signature'] = function(value,tag) {
   if (!value.startsWith("/s/")) { tag.data_error = "Signature must start with /s/"; }
 }
-uR.ajax({
-  url: "/user.json?"+new Date(),
-  success: function(data) {
-    uR.auth.user = data;
-    simpleCart.update();
-    for (var i=0;i<TXRX._ready.length;i++) { TXRX._ready[i]() }
-    TXRX.ready = function(func) { func(); }
-    riot.mount("cart-button");
-  }
-});

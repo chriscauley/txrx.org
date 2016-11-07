@@ -9,7 +9,7 @@ from .models import Consumable
 from course.models import CourseEnrollment
 from user.models import is_shopkeeper, is_toolmaster
 
-from drop.models import Product, CartItem, Order, Category
+from drop.models import Order, Category
 from drop.util.cart import get_or_create_cart
 
 import json, datetime
