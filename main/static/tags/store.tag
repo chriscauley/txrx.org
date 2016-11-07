@@ -25,8 +25,8 @@
 
 <product-list>
   <div class="row">
-    <product each={ product,i in products } product={ product } class={ parent.className }></product>
-    <product-admin each={ product,i in admin_products } product={ product } class="col-sm-6 col-md-4"></product-admin>
+    <product each={ products } class={ parent.className }></product>
+    <product-admin each={ admin_products } class="col-sm-6 col-md-4"></product-admin>
   </div>
   <button class="btn btn-warning btn-block" onclick={ more } if={uR.drop.visible<this.max_products}>
     Load More</button>
@@ -75,16 +75,20 @@
 </product-list>
 
 <product>
-  <div class="well {incart:product.quantity,out-of-stock:product.in_stock==0,hidden:dat}">
-    <div class="img" style="background-image: url({ product.thumbnail })"></div>
+  <div class="well {incart:quantity,out-of-stock:in_stock==0}">
+    <div class="img" style="background-image: url({ thumbnail })"></div>
     <div class="bottom">
-      <div class="name">{ product.display_name }</div>
+      <div class="name">
+        <a href="/admin/{ model_slug.replace('.','/') }/{ id }/" if={ uR.auth.user.is_superuser }
+           class="superuseronly fa fa-pencil-square"></a>
+        { display_name }
+      </div>
       <div class="row">
-        <div class="col-xs-{ product.quantity?12:6 } price">
-          ${product.unit_price}
-          <span if={ product.quantity }>x { product.quantity }</span>
+        <div class="col-xs-{ quantity?12:6 } price">
+          ${unit_price}
+          <span if={ quantity }>x { quantity }</span>
         </div>
-        <div class="col-xs-6" if={ !product.quantity }>
+        <div class="col-xs-6" if={ !quantity }>
           <button class="btn btn-success btn-block" onclick={ plusOne }>Add to Cart</button>
         </div>
       </div>
@@ -104,57 +108,55 @@
 
   var update_timeout;
   var self = this;
-  self.product = opts.product;
   plusOne(e) {
-    self.product.quantity++;
-    uR.drop.saveCartItem(self.product.id, self.product.quantity,self);
+    self.quantity++;
+    uR.drop.saveCartItem(self.id, self.quantity,self);
   }
   minusOne(e) {
-    self.product.quantity--;
-    uR.drop.saveCartItem(self.product.id, self.product.quantity,self);
+    self.quantity--;
+    uR.drop.saveCartItem(self.id, self.quantity,self);
   }
 </product>
 
 <product-admin>
   <div class="well">
-    <div class="img {out-of-stock:product.in_stock==0}">
-      <img src={ product.img.url } />
+    <div class="img {out-of-stock:in_stock==0}">
+      <img src={ img.url } />
     </div>
-    <div class="name">{ product.display_name }</div>
+    <div class="name">{ display_name }</div>
     <div class="price">
-      ${ product.price }
-      <span class="pull-right">In Stock: { product.in_stock||"null" }</span>
+      ${ price }
+      <span class="pull-right">In Stock: { in_stock||"null" }</span>
     </div>
     <div class="row">
       <div class="col-xs-6">
-        <a href="/admin/store/consumable/{ product.pk }/" class="fa fa-pencil-square btn btn-primary btn-block">
+        <a href="/admin/store/consumable/{ pk }/" class="fa fa-pencil-square btn btn-primary btn-block">
           Edit</a>
       </div>
       <div class="col-xs-6">
-        <a href="{ product.purchase_url }" class="btn btn-info btn-block {hidden:!product.purchase_url}">
-          <i class="fa fa-shopping-cart"></i> { product.purchase_domain }</a>
+        <a href="{ purchase_url }" class="btn btn-info btn-block {hidden:!purchase_url}">
+          <i class="fa fa-shopping-cart"></i> { purchase_domain }</a>
       </div>
     </div>
     <div class="flexy">
-      <button onclick={ add1 } class="btn btn-success" if={ product.purchase_quantity != 1 }>
+      <button onclick={ add1 } class="btn btn-success" if={ purchase_quantity != 1 }>
         +1</button>
-      <button onclick={ subtract1 } class="btn btn-danger" if={ product.purchase_quantity != 1 }>
+      <button onclick={ subtract1 } class="btn btn-danger" if={ purchase_quantity != 1 }>
         -1</button>
       <button onclick={ add } class="btn btn-success">
-        +{ product.purchase_quantity }</button>
+        +{ purchase_quantity }</button>
       <button onclick={ subtract } class="btn btn-danger">
-        -{ product.purchase_quantity }</button>
+        -{ purchase_quantity }</button>
     </div>
   </div>
 
   var self = this;
-  self.product = this.opts.product;
   function modify(quantity) {
     $.post(
       '/shop/admin/add/',
-      {quantity:quantity,pk:self.product.pk},
+      {quantity:quantity,pk:self.pk},
       function(data) {
-        self.product.in_stock = data;
+        self.in_stock = data;
         self.update();
       }
     )
@@ -166,9 +168,9 @@
     modify(-1);
   }
   add(e) {
-    modify(e.item.product.purchase_quantity);
+    modify(e.item.purchase_quantity);
   }
   subtract(e) {
-    modify(-e.item.product.purcase_quantity);
+    modify(-e.item.purcase_quantity);
   }
 </product-admin>
