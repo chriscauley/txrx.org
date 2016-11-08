@@ -18,9 +18,10 @@ def handle_successful_store_payment(sender, user):
   try:
     order = Order.objects.get(pk=params['invoice'])
   except Order.DoesNotExist:
-    mail_admins("repeat transaction for %s"%sender.txn_id,"")
+    mail_admins("missing invoice for %s"%sender.txn_id,"")
     return
-  if order.status == Order.COMPLETED:
+  if order.status == Order.PAID:
+    #order has already been paid, transaction was repeated. PayPal does this a lot
     return
   total = 0
   if not "num_cart_items" in params:
@@ -39,7 +40,7 @@ def handle_successful_store_payment(sender, user):
     if hasattr(product,"purchase"):
       product.purchase(order.user or user,quantity)
     products.append(product)
-  order.status = Order.COMPLETED
+  order.status = Order.PAID
   order.user = order.user or user
   order.save()
   payment = OrderPayment.objects.create(

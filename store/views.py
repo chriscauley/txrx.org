@@ -29,7 +29,7 @@ def start_checkout(request):
   cart = get_or_create_cart(request,save=True)
   cart.update(request)
   try:
-    order = Order.objects.filter(cart_pk=cart.pk,status__lt=Order.COMPLETED)[0]
+    order = Order.objects.filter(cart_pk=cart.pk,status__lt=Order.PAID)[0]
   except IndexError:
     order = Order.objects.create_from_cart(cart,request)
   order.status = Order.CONFIRMED
@@ -90,7 +90,7 @@ def receipts(request):
     return HttpResponseRedirect('.')
   values = {
     'order_sets': [
-      ["Outstanding Orders", Order.objects.filter(status=Order.COMPLETED).order_by("-id")],
+      ["Outstanding Orders", Order.objects.filter(status=Order.PAID).order_by("-id")],
       ["Delivered Orders", Order.objects.filter(status=Order.SHIPPED).order_by("-id")[:10]],
     ]
   }
