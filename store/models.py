@@ -33,15 +33,21 @@ class BaseProduct(PhotosMixin,Product):
 class CourseCheckout(BaseProduct):
   json_fields = BaseProduct.json_fields + ['course_id']
   course = models.ForeignKey("course.Course")
+  enrollment = models.ForeignKey("course.CourseEnrollment",null=True,blank=True)
   base_categories = [1]
   get_name = lambda self: "%s (check-out test)"%self.name
   in_stock = property(lambda self: 9999)
   def purchase(self,user,quantity):
-    CourseEnrollment.objects.get_or_create(
+    self.enrollment = CourseEnrollment.objects.get_or_create(
       course=self.course,
       user=user,
       defaults={'quantity': quantity}
-    )
+    )[0]
+    self.save()
+  def delete(self,*args,**kwargs):
+    if self.enrollment:
+      self.enrollment.delete()
+    super(CourseCheckout,self).delete(*args,**kwargs)
 
 class Consumable(BaseProduct):
   json_fields = BaseProduct.json_fields + ['in_stock'] #! TODO should be a boolean... is_in_stock or something
