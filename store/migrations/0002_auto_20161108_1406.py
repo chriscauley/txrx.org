@@ -7,16 +7,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('course', '0007_session_overbook'),
         ('store', '0001_initial'),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='coursecheckout',
-            name='enrollment',
-            field=models.ForeignKey(blank=True, to='course.CourseEnrollment', null=True),
-        ),
         migrations.AlterField(
             model_name='consumable',
             name='purchase_quantity',
