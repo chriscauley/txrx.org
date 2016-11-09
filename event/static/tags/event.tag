@@ -15,7 +15,8 @@
 
 <event-occurrence>
   <div class="well" name="loading-target">
-    <a if={ admin_access } href="/event/orientations/{ start_slug }/" class="admin-link fa fa-pencil-square"></a>
+    <a if={ uR.auth.user.is_superuser } href="/event/orientations/{ start_slug }/"
+       class="admin-link fa fa-pencil-square"></a>
     <div class="dates">
       <div>{ start_string }</div>
     </div>
@@ -24,7 +25,7 @@
       <div if={ !full && authenticated }>
         <button class="btn btn-success rsvp" if={ !quantity } onclick={ makeRSVP }>RSVP for this event</button>
         <button class="btn btn-danger unrsvp" if={ quantity } onclick={ cancelRSVP }>Cancel RSVP</button>
-        <span if={ total_rsvp && admin_access } data-reddot={ total_rsvp }></span>
+        <span if={ total_rsvp && uR.auth.user.is_superuser } data-reddot={ total_rsvp }></span>
       </div>
       <div if={ !full && !authenticated }>
         You must
@@ -41,9 +42,9 @@
   this.on('mount',function() {
     this.start_string = moment(this.start).format("ddd MMM D, YYYY h:mm a");
     this.start_slug = moment(this.start).format("YYYY/MM/DD");
-    TXRX.ready(function() {
-      self.admin_access = uR.auth.user.is_superuser;
-      self.authenticated = uR.auth.user.id;
+
+    uR.ready(function() {
+      self.authenticated = uR.auth.user;
       self.update();
     });
   });

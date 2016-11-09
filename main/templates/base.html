@@ -14,8 +14,6 @@
     {% endif %}
     <script type="text/javascript">
       var TXRX = TXRX || {};
-      window.TXRX._ready = [];
-      window.TXRX.ready = function(func) { TXRX._ready.push(func); };
       TXRX.SITE_NAME = "{{ settings.SITE_NAME }}";
       var SHOP = {
         {% if settings.DEBUG %}

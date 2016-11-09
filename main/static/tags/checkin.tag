@@ -235,7 +235,7 @@
     });
     var e = uR.getQueryParameter("e");
     if (e) { TXRX.mainMount("checkin-register",{ email: "arst@oairesnt.com" }) }
-    TXRX.ready(function() {
+    uR.ready(function() {
       self.email_checkin = !self.kiosk;
       if (uR.auth.user.id) {
         self.email_checkin = false;
@@ -253,7 +253,7 @@
     cheatCode(function() { window.location.reload(false) });
   });
   checkinFake(e) {
-    TXRX.ready(function() {
+    uR.ready(function() {
       if (uR.auth.user.id) {
         uR.ajax({
           url: "/checkin_ajax/",
