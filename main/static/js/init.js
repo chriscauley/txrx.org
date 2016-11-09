@@ -86,6 +86,7 @@ uR.drop.store_tags = "category-list,product-list,cart-button";
 uR.config.mount_to = "#main";
 uR.config.support_email = "info@txrxlabs.org";
 uR.config.do404 = function() {}
+uR.drop.paypal_email = "txrxlabs@gmail.com";
 uR.drop.prefix = "/shop";
 uR.drop.stripe = true;
 uR.drop.paypal = true;

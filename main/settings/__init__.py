@@ -14,8 +14,6 @@ INTERNAL_IPS = (
   '50.194.167.97', #TXRX
 )
 
-STRIPE_SECRET_KEY = "sk_test_K06mBojXwO4zKqPi4MSgzooz"
-STRIPE_PUBLIC_KEY = "pk_test_CClmUUOwPcW53KZF0FGDGaCG"
 DJSTRIPE_CUSTOMER_REQUIRED = False
 DROP_PAYMENT_BACKENDS = ['drop.payment.backends.stripe_backend.Stripe']
 
