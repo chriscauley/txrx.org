@@ -202,12 +202,12 @@
     <ul if={ messages.length } class="messagelist">
       <li each={ messages } class="alert alert-{ level }">{ body }</li>
     </ul>
-    <center if={ checkin && !uR.auth.user.id }>
+    <center if={ checkin && !uR.auth.user }>
       <br/>
       <button class="btn btn-error red" onclick={ clear }>Done</button>
     </center>
     <div id="checkin_div"></div>
-    <center if={ checkin && !uR.auth.user.id }>
+    <center if={ checkin && !uR.auth.user }>
       <button class="btn btn-error red" onclick={ clear }>Done</button>
     </center>
   </div>
@@ -237,12 +237,12 @@
     if (e) { TXRX.mainMount("checkin-register",{ email: "arst@oairesnt.com" }) }
     uR.ready(function() {
       self.email_checkin = !self.kiosk;
-      if (uR.auth.user.id) {
+      if (uR.auth.user) {
         self.email_checkin = false;
         self.auth_user_checkin = true;
         uR.ajax({
           url: "/checkin_ajax/",
-          data: { user_id: uR.auth.user.id, no_checkin: "true" },
+          data: { user_id: uR.auth.user, no_checkin: "true" },
           method: "POST",
           success: self.ajax_success,
           target: self.root,
@@ -254,7 +254,7 @@
   });
   checkinFake(e) {
     uR.ready(function() {
-      if (uR.auth.user.id) {
+      if (uR.auth.user) {
         uR.ajax({
           url: "/checkin_ajax/",
           data: { },
@@ -277,6 +277,8 @@
   this.ajax_success = function(data,response) {
     if (data.next) {
       data.mount_to = uR.config.mount_alerts_to;
+      data.parent = self;
+      console.log("selfie!")
       uR.mountElement(data.next,data);
     }
     self.checkin = data.checkin;
@@ -284,7 +286,7 @@
     self.checkin_div.innerHTML = "<user-checkin>";
     riot.mount("#checkin_div user-checkin",{checkin:data.checkin})
     //clearTimeout(this.timeout);
-    //if (!(uR.auth.user && uR.auth.user.id)) { this.timeout = setTimeout(self.clear,30000); }
+    //if (!uR.auth.user) { this.timeout = setTimeout(self.clear,30000); }
   }
   clear(e) {
     clearTimeout(this.timeout);
@@ -327,8 +329,8 @@
   </modal>
 
   var self = this;
-  self.parent = self.opts.parent;
   ajax_success(data) {
+    console.log('success');
     self.parent.messages = data.messages;
     self.parent.update();
     self.unmount();
