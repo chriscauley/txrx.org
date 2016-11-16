@@ -163,7 +163,7 @@
     uR.forEach(this.opts.active_sessions,function(session) {
       if (window.location.search.indexOf("overbook="+session.id) != -1) { session.closed_status = ""; }
       session.fee = that.opts.fee;
-      if (uR.auth.user.enrollments) { session.rsvpd = uR.auth.user.enrollments[session.id]; }
+      if (uR.auth.user && uR.auth.user.enrollments.enrollments) { session.rsvpd = uR.auth.user.enrollments[session.id]; }
       session.incart = !!window.simpleCart.items[session.id];
       uR.forEach(session.classtimes,function(classtime) {
         classtime.moment = moment(classtime.start);
