@@ -7,7 +7,7 @@
 <div id="receipts">
   {% for title,orders in order_sets %}
   <div id="receipts" class="col-sm-6">
-    <h1>{{ title }} <a class="pull-right fa fa-list" href="/admin/shop/order/"></a></h1>
+    <h1>{{ title }} <a class="pull-right fa fa-list" href="/admin/drop/order/"></a></h1>
     {% for order,items in orders|filter_order_by_model:"consumable" %}
     <div class="well">
       <form method="POST">

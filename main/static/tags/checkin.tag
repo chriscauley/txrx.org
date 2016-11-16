@@ -189,10 +189,6 @@
       <ur-form action="/checkin_ajax/" button_text="Check In" schema={ email_schema } method="POST"></ur-form>
       <button if={ kiosk } onclick={ toggleCheckin } class="btn btn-success">Checkin Using RFID</button>
     </div>
-    <center if={ window.location.search.indexOf('cheat') != -1 && auth_user_checkin }>
-      <br />
-      <button class="btn btn-success" onclick={ checkinFake }>Checkin as { uR.auth.user.username }</button>
-    </center>
     <ul if={ messages.length } class={ uR.theme.message_list }>
       <li each={ messages } class={ uR.theme[level+'_class'] }>{ body }</li>
     </ul>
@@ -251,18 +247,14 @@
     });
     cheatCode(function() { window.location.reload(false) });
   });
-  checkinFake(e) {
-    uR.ready(function() {
-      if (uR.auth.user) {
-        uR.ajax({
-          url: "/checkin_ajax/",
-          data: { },
-          method: "POST",
-          success: self.ajax_success,
-          target: self.root,
-          that: self,
-        });
-      }
+  window.fakeCheckin = function(rfid) {
+    uR.ajax({
+      url: "/checkin_ajax/",
+      data: { rfid: rfid },
+      method: "POST",
+      success: self.ajax_success,
+      target: self.root,
+      that: self,
     });
   }
   toggleCheckin(e) {
