@@ -302,6 +302,7 @@
         method: "POST",
         that: this,
       });
+      self.current_number = "";
       return e;
     }
     if (num > 9 || num < 0) { return e };
