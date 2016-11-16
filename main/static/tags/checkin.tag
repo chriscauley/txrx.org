@@ -7,7 +7,7 @@
         </div>
       </div>
     </div>
-    <div class="col m8 s12 offset-m2" if={ documents.length }>
+    <div class="col m8 s12 offset-m2" if={ documents.length && uR.auth.user }>
       <h4>Unsigned Documents</h4>
       <div class="card yellow">
         <div class="card-content">
@@ -106,7 +106,8 @@
     }
   });
   openDocument(e) {
-    uR.mountElement("user-document",{ mount_to: uR.config.mount_alerts_to, document: e.item, parent: this });
+    self.opts.parent && self.opts.parent.countdown(); // reset countdown timer
+    uR.alertElement("user-document",{ document: e.item, parent: this, rfid: self.opts.rfid });
   }
 </user-checkin>
 
@@ -144,7 +145,7 @@
         self.active_user = data;
         var e = document.createElement("user-checkin");
         this.root.querySelector(".checkin-div").appendChild(e);
-        riot.mount(e,{checkin: self.active_user});
+        riot.mount(e,{checkin: self.active_user,parent: self});
       },
       that: this,
       target: self.root,
@@ -273,15 +274,17 @@
     if (data.next) {
       data.mount_to = uR.config.mount_alerts_to;
       data.parent = self;
-      console.log("selfie!")
       uR.mountElement(data.next,data);
     }
     self.checkin = data.checkin;
     self.update()
     self.checkin_div.innerHTML = "<user-checkin>";
-    riot.mount("#checkin_div user-checkin",{checkin:data.checkin})
-    clearTimeout(this.timeout);
-    if (!uR.auth.user) { this.timeout = setTimeout(self.clear,30000); }
+    riot.mount("#checkin_div user-checkin",{checkin:data.checkin, parent: self, rfid: data.rfid})
+    self.countdown();
+  }
+  countdown() {
+    clearTimeout(self.timeout);
+    if (!uR.auth.user) { self.timeout = setTimeout(self.clear,240000); }
   }
   clear(e) {
     clearTimeout(this.timeout);
@@ -322,9 +325,9 @@
 
   var self = this;
   ajax_success(data) {
-    console.log('success');
-    self.parent.messages = data.messages;
-    self.parent.update();
+    parent = self.opts.parent;
+    parent.messages = data.messages;
+    parent.update();
     self.unmount();
   }
 </new-rfid>

@@ -67,10 +67,11 @@ def checkin_ajax(request):
   if not request.POST.get('no_checkin',None):
     checkin, new = UserCheckin.objects.checkin_today(user=user,defaults=defaults)
     t = "%s checked in on %s. Please take a moment to review your permissions, membership level, and upcoming classes below. If anything appears wrong please contact the staff. Click 'Done' when you are finished so that the next person can check in."
-    messages.append({'level': 'success', 'body': t%(user,checkin.time_in)})
+    messages.append({'level': 'success', 'body': t%(user,checkin.time_in.date())})
   out = {
     'messages': messages,
     'checkin': checkin_json(user),
+    'rfid': request.POST.get('rfid',None),
   }
   return JsonResponse(out)
 
