@@ -97,7 +97,9 @@ uR.theme = {
   modal_content: "modal-body",
   modal_footer: "modal-footer",
   cart_items: "well cart-items",
-  error_class: "alert alert-danger",
+  message_list: "card",
+  success_class: "alert alert-success card-content green white-text",
+  error_class: "alert alert-danger card-content red white-text",
 }
 uR.config.text_validators['signature'] = function(value,tag) {
   if (!value.startsWith("/s/")) { tag.data_error = "Signature must start with /s/"; }
