@@ -66,7 +66,8 @@ def checkin_ajax(request):
   defaults = {'content_object': Room.objects.get(name='')}
   if not request.POST.get('no_checkin',None):
     checkin, new = UserCheckin.objects.checkin_today(user=user,defaults=defaults)
-    messages.append({'level': 'success', 'body': '%s checked in at %s'%(user,checkin.time_in)})
+    t = "%s checked in on %s. Please take a moment to review your permissions, membership level, and upcoming classes below. If anything appears wrong please contact the staff. Click 'Done' when you are finished so that the next person can check in."
+    messages.append({'level': 'success', 'body': t%(user,checkin.time_in)})
   out = {
     'messages': messages,
     'checkin': checkin_json(user),
@@ -78,10 +79,10 @@ def add_rfid(request):
   user = get_user_model().objects.get_from_anything(request.POST.get("username",None))
   user and user.check_password(request.POST.get('password',''))
   if not user:
-    return JsonResponse({'errors': {'non_field_errors': "Username and password do not match"}},status=401)
+    return JsonResponse({'error': "Username and password do not match"},status=401)
   if user.rfid_set.count():
     m = 'You already have an RFID card registered. Please see staff if you need to change cards.'
-    return JsonResponse({'errors': {'non_field_errors':m}})
+    return JsonResponse({'error': m})
   RFID.objects.get_or_create(user=user,number=rfid)
   messages = [{'level': 'success', 'body': 'RFID set. Please swipe now to checkin.'}]
   return JsonResponse({'messages': messages})
