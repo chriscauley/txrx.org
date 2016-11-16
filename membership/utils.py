@@ -26,10 +26,6 @@ def temp_user_required(function):
       return function(request,*args,**kwargs)
 
     User = get_user_model()
-    if request.session.get('temp_user_id',None):
-      request.temp_user = User.objects.get(id=request.session['temp_user_id'])
-      request.session.set_expiry(expiration_time)
-      return function(request,*args,**kwargs)
     rfid = request.POST.get('rfid',None)
     user = get_or_none(User,rfid__number=rfid or 'notavalidrfid')
     email = request.POST.get("email",None) or "notavaildemail"
@@ -42,8 +38,6 @@ def temp_user_required(function):
                             status=401)
     if user:
       request.temp_user = user
-      request.session['temp_user_id'] = user.id
-      request.session.set_expiry(expiration_time)
       return function(request,*args,**kwargs)
     if rfid:
       return JsonResponse({'next': "new-rfid", 'new_rfid': rfid})
