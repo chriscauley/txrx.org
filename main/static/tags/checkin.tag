@@ -181,26 +181,20 @@
 <checkin-home>
   <div class="inner">
     <img class="logo" src="/static/logos/Logo-1_vertical_color_475x375.png" width="200" />
-    <div if={ kiosk && !email_checkin }>
+    <div if={ kiosk && !email_checkin && !checkin }>
       <p class="lead" style="text-align: center;">Please swipe your RFID to checkin.</p>
-      <button if={ TXRX.DEBUG } onclick={ toggleCheckin } class="btn btn-success">Checking Using Email</button>
-      <br />
-      <button if={ TXRX.DEBUG } onclick={ fakeRFID } class="btn btn-warning">Fake RFID</button>
-      <div if={ rfid_error } class="alert alert-danger">
-        Unknown RFID card. Please go find Chris or Gaby to get it entered in the system.
-      </div>
     </div>
     <div if={ email_checkin && !checkin }>
       <p class="lead"><center>Enter your email below to checkin</center></p>
       <ur-form action="/checkin_ajax/" button_text="Check In" schema={ email_schema } method="POST"></ur-form>
       <button if={ kiosk } onclick={ toggleCheckin } class="btn btn-success">Checkin Using RFID</button>
     </div>
-    <center if={ window.location.search.indexOf("cheat") != -1 && auth_user_checkin }>
+    <center if={ window.location.search.indexOf('cheat') != -1 && auth_user_checkin }>
       <br />
       <button class="btn btn-success" onclick={ checkinFake }>Checkin as { uR.auth.user.username }</button>
     </center>
-    <ul if={ messages.length } class="messagelist">
-      <li each={ messages } class="alert alert-{ level }">{ body }</li>
+    <ul if={ messages.length } class={ uR.theme.message_list }>
+      <li each={ messages } class={ uR.theme[level+'_class'] }>{ body }</li>
     </ul>
     <center if={ checkin && !uR.auth.user }>
       <br/>
@@ -210,6 +204,11 @@
     <center if={ checkin && !uR.auth.user }>
       <button class="btn btn-error red" onclick={ clear }>Done</button>
     </center>
+    <div if={ TXRX.DEBUG } class="debug-console">
+      <button onclick={ toggleCheckin } class="btn btn-success">Email Checkin</button>
+      <button onclick={ fakeRFID } class="btn btn-warning">Fake new RFID</button>
+      <button onclick={ fakeRFID } data-key="0" class="btn btn-warning">Fake CCC</button>
+    </div>
   </div>
 
   var self = this;
@@ -271,7 +270,11 @@
   }
   fakeRFID(e) {
     var i = 10;
-    while (i--) { this.press({keyCode: Math.floor(Math.random()*10)+48,timeStamp: new Date() }); }
+    var key = e.target.dataset['key'];
+    while (i--) {
+      var num = (key !== undefined)?key:Math.floor(Math.random()*10);
+      this.press({keyCode: num+48,timeStamp: new Date() });
+    }
     this.press({keyCode:13});
   }
   this.ajax_success = function(data,response) {
@@ -285,15 +288,12 @@
     self.update()
     self.checkin_div.innerHTML = "<user-checkin>";
     riot.mount("#checkin_div user-checkin",{checkin:data.checkin})
-    //clearTimeout(this.timeout);
-    //if (!uR.auth.user) { this.timeout = setTimeout(self.clear,30000); }
+    clearTimeout(this.timeout);
+    if (!uR.auth.user) { this.timeout = setTimeout(self.clear,30000); }
   }
   clear(e) {
     clearTimeout(this.timeout);
-    self.checkin = undefined;
-    self.checkin_div.innerHTML = "";
-    self.ur_form.clear();
-    self.update();
+    uR.route("/checkin/?kiosk")
   }
   press(e) {
     var num = e.keyCode - 48;
