@@ -16,6 +16,7 @@ class UserNoteInline(admin.TabularInline):
 
 class RFIDInline(admin.TabularInline):
   model = RFID
+  extra = 0
 
 @admin.register(User)
 class UserAdmin(UserAdmin):

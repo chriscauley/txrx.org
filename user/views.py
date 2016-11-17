@@ -30,7 +30,7 @@ def checkin_json(user):
   if settings.DEBUG:
     tomorrow = tomorrow+datetime.timedelta(10)
   _q = Q(session__enrollment__user=user) | Q(session__user=user)
-  _ct = ClassTime.objects.filter(_q,start__gte=today,start__lte=tomorrow)
+  _ct = ClassTime.objects.filter(_q,start__gte=today,start__lte=tomorrow).distinct()
   _sq = Q(canceled__gte=datetime.datetime.now()-datetime.timedelta(90)) | Q(canceled__isnull=True)
   _s = user.subscription_set.filter(_sq).order_by("-canceled")
   if True: #user.level and user.level.order >= 10:
