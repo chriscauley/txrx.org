@@ -276,6 +276,7 @@
       data.parent = self;
       uR.mountElement(data.next,data);
     }
+    self.messages = data.messages;
     self.checkin = data.checkin;
     self.update()
     self.checkin_div.innerHTML = "<user-checkin>";
