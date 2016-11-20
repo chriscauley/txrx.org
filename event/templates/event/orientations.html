@@ -85,7 +85,7 @@
   <resize-image>
     <modal cancel={ cancel }>
       <center>
-        <canvas></canvas>
+        <canvas onclick={ parent.click }></canvas>
         <button onclick={ parent.click } class={ uR.config.btn_primary } style="display:block;margin-bottom: 5px;">
           { parent.zoom }x zoom (click image to change)</button>
         <button onclick={ parent.done } class={ uR.config.btn_success }>Upload File</button>
@@ -97,13 +97,9 @@
       this.ctx = this.canvas.getContext("2d");
       this.img = this.opts.img;
       this.ratio = this.img.width/this.img.height;
-      if (this.ratio < 1) {
-        this.canvas.width = 500*this.ratio;
-        this.canvas.height = 500;
-      } else {
-        this.canvas.width = 500;
-        this.canvas.height = 500/this.ratio;
-      }
+      var max_width = this.canvas.parentElement.clientWidth;
+      this.canvas.width = max_width;
+      this.canvas.height = max_width/this.ratio;
       this.zoom = 1;
       this.file = this.opts.parent.root.querySelector("[type=file]");
       this.blob = this.opts.parent.root.querySelector("[name=blob]");
