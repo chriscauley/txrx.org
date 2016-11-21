@@ -209,6 +209,8 @@ class UserCheckinManager(models.Manager):
     except self.model.DoesNotExist:
       kwargs.update(defaults)
       return self.create(*args,**kwargs), True
+    except self.model.MultipleObjectsReturned:
+      return self.filter(time_in__gte=datetime.date.today(),*args,**kwargs)[0], False
 
 class UserCheckin(models.Model):
   user = models.ForeignKey(User)
