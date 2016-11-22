@@ -238,31 +238,27 @@ class Subscription(models.Model):
         break
     amount_due = decimal.Decimal(months * self.amount / self.months)
     amount_paid = sum([s.amount for s in self.status_set.all()])
+    old_owed = self.owed
+    old_paid_until = self.paid_until
     self.owed = amount_due-amount_paid
     if self.canceled:
       self.owed = 0
-    if self.paid_until and self.paid_until < datetime.datetime.now():
-      if not self.user.subscription_set.filter(canceled__isnull=True,owed__lte=0).exclude(pk=self.pk):
-        pass #self.user.reset_level()
     if self.amount:
       self.paid_until = add_months(self.created,int(self.months*amount_paid/decimal.Decimal(self.amount)))
     else:
       self.paid_until = datetime.datetime.now() + datetime.timedelta(30)
     self.save()
 
-    # sets subscriptionbuddy.paid_until to self.paid_until
-    [sb.save() for sb in self.subscriptionbuddy_set.all()]
-
     last = self.last_status
-    if last and self.level:
-      user = self.user
-      if self.owed <= 0 and not self.canceled:
-        pass #self.user.reset_level()
     if self.owed <= 0:
       Flag.objects.filter(
         subscription=self,
         status__in=Flag.PAYMENT_ACTIONS
       ).update(status="paid")
+    if not (self.paid_until == old_paid_until and int(self.owed) == int(old_owed)):
+      self.user.reset_level()
+      # trigger reset_level for subscriptionbuddies as well
+      [sb.save() for sb in self.subscriptionbuddy_set.all()]
 
   class Meta:
     ordering = ('-created',)
