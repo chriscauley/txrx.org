@@ -253,6 +253,10 @@ class Subscription(models.Model):
     else:
       self.paid_until = datetime.datetime.now() + datetime.timedelta(30)
     self.save()
+
+    # sets subscriptionbuddy.paid_until to self.paid_until
+    [sb.save() for sb in self.subscriptionbuddy_set.all()]
+
     last = self.last_status
     if last and self.level:
       user = self.user
@@ -267,6 +271,15 @@ class Subscription(models.Model):
 
   class Meta:
     ordering = ('-created',)
+
+class SubscriptionBuddy(models.Model):
+  subscription = models.ForeignKey(Subscription)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL)
+  paid_until = models.DateTimeField(null=True,blank=True)
+  level_override = models.ForeignKey("Level",null=True,blank=True)
+  def save(self,*args,**kwargs):
+    self.paid_until = self.subscription.paid_until
+    super(SubscriptionBuddy,self).save(*args,**kwargs)
 
 PAYMENT_METHOD_CHOICES = (
   ('paypal','PayPalIPN'),

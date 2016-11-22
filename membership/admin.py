@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.template.defaultfilters import date
 from django import forms
 
-from models import (Group, Level, Feature, MembershipFeature, UserMembership, Product, Flag,
+from models import (Group, Level, Feature, MembershipFeature, UserMembership, Product, Flag, SubscriptionBuddy,
                     Subscription, Status, MeetingMinutes, Proposal, Officer, Container, LevelDoorGroupSchedule)
 
 from lablackey.db.admin import RawMixin
@@ -152,9 +152,17 @@ class CanceledBooleanFilter(admin.SimpleListFilter):
       return queryset.filter(canceled__isnull=True)
     return queryset
 
+class SubscriptionBuddyInline(admin.TabularInline):
+  model = SubscriptionBuddy
+  raw_id_fields = ('user',)
+  readonly_fields = ("paid_until","_rfids")
+  extra = 0
+  def _rfids(self,obj):
+    return obj.user.rfid_set.all().values_list("number",flat=True)
+
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
-  inlines = [FlagInline,StatusInline]
+  inlines = [StatusInline,SubscriptionBuddyInline,FlagInline]
   search_fields = ['user__username','user__email','user__paypal_email','user__first_name','user__last_name']
   list_display = ("__unicode__","canceled")
   list_filter = [CanceledBooleanFilter]

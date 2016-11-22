@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from .models import RFIDLog
-from membership.models import Level, Subscription
+from membership.models import Level, Subscription, SubscriptionBuddy
 from tool.models import Permission, Tool, APIKey, DoorGroup, Schedule, Holiday
 
 import datetime, json
@@ -40,6 +40,7 @@ def door_access(request):
   _Q = Q(canceled__isnull=True) | Q(canceled__gte=datetime.datetime.now())
   base_subs = Subscription.objects.filter(_Q,owed__lte=0)
   base_subs = base_subs.exclude(user__rfid__isnull=True)
+  base_sub_buddies = SubscriptionBuddy.objects.filter(paid_until__gte=datetime.datetime.now())
 
   obj = None
   out = {
@@ -76,6 +77,9 @@ def door_access(request):
   for level in Level.objects.all():
     subscriptions = base_subs.filter(level=level).distinct()
     out['rfids'][level.order] = list(subscriptions.values_list('user__'+fieldname,flat=True))
+    _Q = Q(level_override__isnull=True,subscription__level=level) | Q(level_override=level)
+    sub_buddies = base_sub_buddies.filter(_Q)
+    out['rfids'][level.order] += list(sub_buddies.values_list('user__'+fieldname,flat=True))
     out['schedule'][level.order] = schedule_jsons.get(level.get_schedule_id(obj),{})
   staff = get_user_model().objects.filter(superQ).exclude(rfid__isnull=True)
   out['rfids'][99999] = list(staff.values_list(fieldname,flat=True))
