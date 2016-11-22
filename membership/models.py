@@ -182,7 +182,8 @@ class Subscription(models.Model):
   level = models.ForeignKey(Level,null=True,blank=True)
   months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
   # self.amount should match the prdouct it was generated from, but can be used as an override
-  amount = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+  _ht = "If zero, this membership will always be active until deleted."
+  amount = models.DecimalField(max_digits=30, decimal_places=2, default=0,help_text=_ht)
   owed = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   last_status = property(lambda self: (self.status_set.all().order_by('-datetime') or [None])[0])
   __unicode__ = lambda self: "%s for %s %s"%(self.user,self.get_months_display(),self.level)
@@ -247,7 +248,10 @@ class Subscription(models.Model):
           print "%s set to canceled"%self
           user.level_id = settings.DEFAULT_MEMBERSHIP_LEVEL
           user.save()
-    self.paid_until = add_months(self.created,int(self.months*amount_paid/decimal.Decimal(self.amount)))
+    if self.amount:
+      self.paid_until = add_months(self.created,int(self.months*amount_paid/decimal.Decimal(self.amount)))
+    else:
+      self.paid_until = datetime.datetime.now() + datetime.timedelta(30)
     self.save()
     last = self.last_status
     if last and self.level:
