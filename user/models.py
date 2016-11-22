@@ -106,6 +106,16 @@ class User(AbstractBaseUser, PermissionsMixin):
   level = models.ForeignKey(Level,default=settings.DEFAULT_MEMBERSHIP_LEVEL)
   orientation_status = models.CharField(max_length=32,choices=ORIENTATION_STATUS_CHOICES,default="new")
 
+  def reset_level(self):
+    levels = []
+    for manager in [self.subscription_set, self.subscriptionbuddy_set]:
+      levels += [s.level for s in manager.filter(paid_until__gte=datetime.datetime.now())]
+    if levels:
+      self.level = sorted(levels,reverse=True,key=lambda level: level.order)[0]
+    else:
+      self.level_id = settings.DEFAULT_MEMBERSHIP_LEVEL
+    self.save()
+
   USERNAME_FIELD = 'username'
   REQUIRED_FIELDS = ['email']
 

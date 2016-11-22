@@ -243,11 +243,7 @@ class Subscription(models.Model):
       self.owed = 0
     if self.paid_until and self.paid_until < datetime.datetime.now():
       if not self.user.subscription_set.filter(canceled__isnull=True,owed__lte=0).exclude(pk=self.pk):
-        user = self.user
-        if user.level_id != settings.DEFAULT_MEMBERSHIP_LEVEL:
-          print "%s set to canceled"%self
-          user.level_id = settings.DEFAULT_MEMBERSHIP_LEVEL
-          user.save()
+        pass #self.user.reset_level()
     if self.amount:
       self.paid_until = add_months(self.created,int(self.months*amount_paid/decimal.Decimal(self.amount)))
     else:
@@ -261,8 +257,7 @@ class Subscription(models.Model):
     if last and self.level:
       user = self.user
       if self.owed <= 0 and not self.canceled:
-        user.level = self.level
-        user.save()
+        pass #self.user.reset_level()
     if self.owed <= 0:
       Flag.objects.filter(
         subscription=self,
@@ -277,9 +272,12 @@ class SubscriptionBuddy(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
   paid_until = models.DateTimeField(null=True,blank=True)
   level_override = models.ForeignKey("Level",null=True,blank=True)
+  level = property(lambda self: self.level_override or self.subscription.level)
   def save(self,*args,**kwargs):
     self.paid_until = self.subscription.paid_until
     super(SubscriptionBuddy,self).save(*args,**kwargs)
+    if self.level.id != self.user.level_id:
+      self.user.reset_level()
 
 PAYMENT_METHOD_CHOICES = (
   ('paypal','PayPalIPN'),
