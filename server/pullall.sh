@@ -9,3 +9,6 @@ do
     printf "updating $d ... ... "
     git pull
 done
+
+cd $PROJECT_ROOT
+echo `date`>> _pullall.log
