@@ -28,6 +28,8 @@ kwargs = dict(widget=forms.Textarea,required=False)
 
 class RegistrationForm(RegistrationForm):
   _ht = "<b>If different than the email address above.\nThis is necessary to record when you register for a class.</b>"
+  first_name = forms.CharField(max_length=30,label="First Name")
+  last_name = forms.CharField(max_length=30,label="Last Name")
   paypal_email = forms.EmailField(required=False,label="PayPal Email - Optional",help_text=_ht)
   def __init__(self,*args,**kwargs):
     super(RegistrationForm, self).__init__(*args,**kwargs)
@@ -55,6 +57,9 @@ class RegistrationForm(RegistrationForm):
     else:
       site = RequestSite(request)
     new_user = RegistrationProfile.objects.create_inactive_user(username, email, password, site)
+    new_user.first_name = cleaned_data['first_name']
+    new_user.last_name = cleaned_data['last_name']
+    new_user.save()
     signals.user_registered.send(sender=self.__class__,user=new_user,request=request)
     return new_user
 
