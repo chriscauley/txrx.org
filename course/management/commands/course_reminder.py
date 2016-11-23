@@ -35,7 +35,7 @@ class Command(BaseCommand):
         'session': class_time.session,
         'class_time': class_time,
       }
-      send_template_email("email/teaching_reminder",instructor.email,context=_dict,experimental=False)
+      send_template_email("email/teaching_reminder",instructor.email,context=_dict)
       for enrollment in class_time.session.enrollment_set.all():
         student_count += 1
         user = enrollment.user
@@ -49,7 +49,7 @@ class Command(BaseCommand):
         if user.email in sent:
           continue
         sent.append(user.email)
-        send_template_email("email/course_reminder",user.email,context=_dict,experimental=False)
+        send_template_email("email/course_reminder",user.email,context=_dict)
       class_time.emailed = arrow.utcnow().datetime
       class_time.save()
     print "\n\n\nemailed %s instructors and %s students"%(instructor_count,student_count)

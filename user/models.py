@@ -187,7 +187,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
   def send_welcome_email(self):
     from membership.utils import send_membership_email
-    send_membership_email('email/new_member',self.email,context={'user': self},experimental=False)
+    send_membership_email('email/new_member',self.email,context={'user': self})
     self.create_fake_safety()
     self.save()
   def create_fake_safety(self):
