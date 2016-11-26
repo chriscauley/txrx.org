@@ -37,7 +37,7 @@ INSTALLED_APPS = [
 
   # comments
   'mptt',
-  'mptt_comments',
+  'unrest_comments',
 
   # blarg
   'wmd',
@@ -65,8 +65,8 @@ INSTALLED_APPS = [
 ]
 
 #mptt_comments
-COMMENTS_APP = 'mptt_comments'
-MPTT_COMMENTS_CUTOFF = 0
+COMMENTS_APP = 'unrest_comments'
+UNREST_COMMENTS_CUTOFF = 0
 
 LOGOUT_REDIRECT = 'home'
 
@@ -143,7 +143,7 @@ SUIT_CONFIG = {
     #'ipn', #paypal ipns
     {'app': 'media',
      'models': (
-       {'model': 'mptt_comments.mpttcomment', 'label':'Comments'},
+       {'model': 'unrest_comments.unrestcomment', 'label':'Comments'},
        'flatpages.flatpage',
        'media.miscfile',
        'media.photo',
@@ -163,7 +163,7 @@ SUIT_CONFIG = {
        'user.user',
      )
     },
-    'mptt_comments'
+    'unrest_comments'
     'notify',
     #'sites',
     #'tagging',
@@ -204,7 +204,7 @@ Instagram
 Ipn
 Media
 Membership
-Mptt_Comments
+Unrest_Comments
 Notify
 Registration
 Sites

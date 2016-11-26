@@ -43,7 +43,7 @@ urlpatterns = patterns(
   url(r'^me/$',login_required(main_views.beta)),
 
   # comments and javascript translation
-  url(r'^comments/',include('mptt_comments.urls')),
+  url(r'^comments/',include('unrest_comments.urls')),
   url(r'^jsi18n/(?P<packages>\S+?)/$', 'django.views.i18n.javascript_catalog'),
   url(r'^rss/$', AllFeed()),
   url(r'^favicon.ico$',main_views.predirect,

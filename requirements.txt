@@ -17,7 +17,7 @@ ezdxf
 pillow==2.1.0
 
 django-mptt==0.5.4
--e git+https://github.com/chriscauley/django-riot-comments.git#egg=django-riot-comments.git
+-e git+https://github.com/chriscauley/django-unrest-comments.git#egg=django-unrest-comments.git
 
 django-redis-cache
 Markdown

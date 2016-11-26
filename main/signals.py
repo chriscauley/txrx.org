@@ -3,7 +3,7 @@ from django.core.mail import send_mail, mail_admins
 from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
 
-from mptt_comments.models import MpttComment
+from unrest_comments.models import UnrestComment
 
 from membership.models import LimitedAccessKey
 from .var import admin_comment_email, comment_response_email
@@ -17,7 +17,7 @@ def new_comment_connection(sender, instance=None, created=False,**kwargs):
     return
   _dict = {
     'content': instance.comment,
-    'admin_url': _u(reverse('admin:mptt_comments_mpttcomment_change',args=[instance.id])),
+    'admin_url': _u(reverse('admin:unrest_comments_unrestcomment_change',args=[instance.id])),
     'object_name': instance.content_object,
     'admin_email': settings.ADMINS[0][1],
     }
@@ -51,4 +51,4 @@ def new_comment_connection(sender, instance=None, created=False,**kwargs):
     subject = 'New comment on %s'%instance.content_object
     send_mail(subject,admin_comment_email%_dict,settings.DEFAULT_FROM_EMAIL,list(set(users)))
 
-post_save.connect(new_comment_connection, sender=MpttComment)
+post_save.connect(new_comment_connection, sender=UnrestComment)
