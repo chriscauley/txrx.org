@@ -2,14 +2,17 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export PROJECT_ROOT=$DIR/../../
-
+MIGRATIONS=`find $PROJECT_ROOT -name 00*.py |wc -l`
 GIT_WORK_TREE=../ git checkout -f
 
 cd $PROJECT_ROOT
 
 echo -e "\n---Silently migrating, compressing, collecting static, and restarting---\n"
 
-python $PROJECT_ROOT/manage.py migrate --noinput>/dev/null
+if [ $MIGRATIONS != `find $PROJECT_ROOT -name 00*.py |wc -l` ];
+    then
+    python $PROJECT_ROOT/manage.py migrate --noinput>/dev/null
+done
 python $PROJECT_ROOT/manage.py collectstatic --noinput>/dev/null
 python $PROJECT_ROOT/manage.py compress>/dev/null
 
