@@ -3,8 +3,7 @@ SPATH = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0,os.path.normpath(os.path.join(SPATH,'../.dev/')))
 sys.path.insert(0,os.path.normpath(SPATH))
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+TEMPLATE_DEBUG = DEBUG = True
 
 MANAGERS = ADMINS = (
   ('chris cauley','chris@lablackey.com'),
@@ -118,30 +117,10 @@ from rest_framework_jwt.settings import DEFAULTS as JWT_AUTH
 JWT_AUTH['JWT_EXPIRATION_DELTA'] = datetime.timedelta(7)
 JWT_AUTH['JWT_REFRESH_EXPIRATION_DELTA'] = datetime.timedelta(7)
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-  "django.contrib.auth.context_processors.auth",
-  "django.core.context_processors.debug",
-  "django.core.context_processors.i18n",
-  "django.core.context_processors.media",
-  "django.core.context_processors.static",
-  "django.core.context_processors.request",
-  "django.contrib.messages.context_processors.messages",
-  'social.apps.django_app.context_processors.backends',
-  'social.apps.django_app.context_processors.login_redirect',
-  'main.context.nav',
-  'main.context.motd',
-  'blog.context.process',
-)
-
 ROOT_URLCONF = 'main.urls'
 
 from django.contrib import messages
 MESSAGE_TAGS = { messages.ERROR: 'danger' }
-
-TEMPLATE_DIRS = (
-  os.path.join(SPATH,"templates"),
-  os.path.join(SPATH,"../lablackey/templates"),
-)
 
 STATICFILES_DIRS = (os.path.join(SPATH,"static"),)
 
@@ -190,18 +169,47 @@ for s_file in ['apps','local','txrx_labs']:
 
 
 
+_TEMPLATE_LOADERS = (
+  ('django.template.loaders.cached.Loader', (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+    'lablackey.tloader.Loader',
+  )),
+)
+
 if DEBUG:
   EMAIL_BACKEND = "lablackey.mail.DebugBackend"
-  TEMPLATE_LOADERS = (
+  _TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
     'lablackey.tloader.Loader',
   )
-else:
-  TEMPLATE_LOADERS = (
-    ('django.template.loaders.cached.Loader', (
-      'django.template.loaders.filesystem.Loader',
-      'django.template.loaders.app_directories.Loader',
-      'lablackey.tloader.Loader',
-    )),
-  )
+
+TEMPLATES = [
+  {
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS': [
+      os.path.join(SPATH,"templates"),
+      os.path.join(SPATH,"../lablackey/templates"),
+    ],
+    'OPTIONS': {
+      'context_processors': [
+        'django.template.context_processors.debug',
+        'django.template.context_processors.request',
+        'django.template.context_processors.media',
+        'django.template.context_processors.static',
+        "django.core.context_processors.i18n",
+        'django.contrib.auth.context_processors.auth',
+        'django.template.context_processors.request',
+        'django.template.context_processors.tz',
+        'django.contrib.messages.context_processors.messages',
+        'social.apps.django_app.context_processors.backends',
+        'social.apps.django_app.context_processors.login_redirect',
+        'main.context.nav',
+        'main.context.motd',
+        'blog.context.process',
+      ],
+      'loaders': _TEMPLATE_LOADERS
+    },
+  },
+]
