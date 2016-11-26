@@ -1,4 +1,4 @@
-from django.conf.urls import url, patterns
+from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.test import RequestFactory
@@ -63,7 +63,4 @@ def build_urls():
       out.append(url(_url+"(\d+)/$",'detail_view',name="api_detail_view",kwargs=kwargs))
   return out
 
-urlpatterns = patterns(
-  'api.views',
-  *build_urls()
-)
+urlpatterns = build_urls()
