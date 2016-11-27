@@ -4,8 +4,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.template.defaultfilters import slugify, striptags
 
-from timezones.fields import TimeZoneField
-import tagging
+from tagging.registry import register
 
 from .templatetags.short_codes import explosivo
 from lablackey.db.models import UserModel
@@ -56,7 +55,7 @@ class Post(PhotosMixin,UserModel):
   def get_absolute_url(self):
     return ("post_detail", [self.user.username, self.slug])
 
-tagging.register(Post)
+register(Post)
 
 class PressItem(models.Model):
   title = models.CharField(max_length=64)

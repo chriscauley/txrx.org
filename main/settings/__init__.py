@@ -3,7 +3,7 @@ SPATH = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0,os.path.normpath(os.path.join(SPATH,'../.dev/')))
 sys.path.insert(0,os.path.normpath(SPATH))
 
-TEMPLATE_DEBUG = DEBUG = True
+DEBUG = True
 
 MANAGERS = ADMINS = (
   ('chris cauley','chris@lablackey.com'),
