@@ -17,6 +17,7 @@ from tool.models import ToolsMixin, Permission, Criterion, CriterionModel, Tool
 from lablackey.db.models import UserModel
 from lablackey.utils import cached_method, cached_property, latin1_to_ascii
 
+from drop.models import Product
 from json import dumps
 import os
 
@@ -284,6 +285,7 @@ class Session(UserModel,PhotosMixin,models.Model):
   in_progress = property(lambda self: self.first_date<datetime.datetime.now()<self.last_date)
   past = property(lambda self: datetime.datetime.now() > self.last_date)
   closed = property(lambda self: self.cancelled or (self.past and not self.in_progress))
+
   @property
   def as_json(self):
     short_dates = self.get_short_dates()
@@ -305,6 +307,7 @@ class Session(UserModel,PhotosMixin,models.Model):
       'course_id': self.course_id,
       'enrolled_status': enrolled_status,
       'classtimes': [c.as_json for c in self.classtime_set.all()],
+      #'product_id': self.sessionproduct.id,
       'private': True,
     }
   json = property(lambda self: dumps(self.as_json))
@@ -368,6 +371,8 @@ class Session(UserModel,PhotosMixin,models.Model):
       publish_dt = datetime.datetime.now()
     profile,_ = UserMembership.objects.get_or_create(user=self.user)
     super(Session,self).save(*args,**kwargs)
+    SessionProduct.objects.get_or_create(session=self)[0].update()
+      
   @cached_method
   def get_absolute_url(self):
     return self.course.get_absolute_url()
@@ -395,6 +400,16 @@ class Session(UserModel,PhotosMixin,models.Model):
     return user.is_superuser or user.is_toolmaster or user.id == self.user_id
   class Meta:
     ordering = ('first_date',)
+
+class SessionProduct(Product):
+  session = models.OneToOneField(Session)
+  def update(self):
+    self.unit_price = self.session.course.fee
+    self.name = self.session.title
+    self.active = self.session.active and not self.session.past
+    self.save()
+  class Meta:
+    app_label = "course"
 
 class ClassTime(OccurrenceModel):
   session = models.ForeignKey(Session)

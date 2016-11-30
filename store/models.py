@@ -30,13 +30,6 @@ class BaseProduct(PhotosMixin,Product):
   def thumbnail(self):
     return get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center").url
 
-class SessionProduct(BaseProduct):
-  session = models.ForeignKey("course.Session")
-  def purchase(self,user,quantity):
-    e,new = Enrollment.objects.get_or_create(user=user,session=self.session)
-    e.quantity += quantity
-    e.save()
-
 class CourseCheckout(BaseProduct):
   json_fields = BaseProduct.json_fields + ['course_id']
   course = models.ForeignKey("course.Course")
