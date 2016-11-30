@@ -405,6 +405,19 @@ class Session(UserModel,PhotosMixin,models.Model):
 class SessionProduct(Product):
   session = models.OneToOneField(Session)
   json_fields = Product.json_fields + ['session_id']
+  in_stock = property(lambda self: self.session.course.max_students - self.session.total_students)
+  def purchase(self,user,quantity):
+    enrollment,_new = Enrollment.objects.get_or_create(user=user,session=self.session)
+    if not _new:
+      mail_admins("Some one re-enrolled!","%s enrolled twice in session # %s"%(user,self.session_id))
+    enrollment.quantity += quantity
+    enrollment.save()
+  def get_purchase_error(self,quantity,cart):
+    # Overwrite this to check quantity or other availability
+    if self.in_stock < quantity:
+      return "Sorry, there are only %s open seats left in %s."%(self.in_stock,self)
+    if self.session.past:
+      return "Sorry, enrollment for %s is closed because the class is over."%self
   def update(self):
     self.unit_price = self.session.course.fee
     self.name = self.session.title
