@@ -83,6 +83,7 @@ uR.config.btn_success = "btn green text-white btn-success";
 uR.config.btn_cancel = "btn red text-white btn-danger";
 //uR.drop.cart_tag = "cart";
 uR.drop.store_tags = "category-list,product-list,cart-button,add-to-cart";
+uR.drop.login_required = false;
 uR.config.mount_to = "#main";
 uR.config.support_email = "info@txrxlabs.org";
 uR.config.do404 = function() {}

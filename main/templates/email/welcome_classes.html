@@ -5,7 +5,7 @@ Welcome to {{ site_name }}. You are receiving this email because an account was 
 {% block reset_link %}
 {{ protocol }}://{{ domain }}{% url "django.contrib.auth.views.password_reset_confirm" uidb64=uid token=token %}
 {% endblock %}
-{% trans "Your username has been automatically set to your email address:" %} {{ user.username }}
+{% trans "Your username has been automatically derived from your email address:" %} {{ user.username }}
 
 {% trans "After you login you can change your username or choose an alternate email to associate with this account. You can also change your email preferences (for instance, you should receive a reminder the day before your class)." %}
 

@@ -15,7 +15,7 @@ INTERNAL_IPS = (
 
 DJSTRIPE_CUSTOMER_REQUIRED = False
 DROP_PAYMENT_BACKENDS = ['drop.payment.backends.stripe_backend.Stripe']
-
+DROP_GET_OR_CREATE_CUSTOMER = 'course.utils.get_or_create_student'
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.sqlite3',
