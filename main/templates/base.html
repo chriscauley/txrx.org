@@ -52,8 +52,6 @@
     {% endcomment %}
   </head>
   <body class="{{ BODY_CLASS }}{% if request.user.is_superuser %} is-superuser{% endif %}">
-    {# this can eventually be moved int _cart.html #}
-    {% include "course/_cart.html" %}
     <div class="container">
       {% if not BODY_CLASS == "kiosk" %}
       {% block nav %}{% include "_nav.html" with page="home" %}{% endblock %}
@@ -123,7 +121,6 @@
     <script src="{{ STATIC_URL }}tags/course.tag" type="riot/tag"></script>
     <script src="{{ STATIC_URL }}tags/store.tag" type="riot/tag"></script>
     <script src="{{ STATIC_URL }}drop/cart.tag" type="riot/tag"></script>
-    <script src="{{ STATIC_URL }}tags/cart.tag" type="riot/tag"></script>
     <script src="{{ STATIC_URL }}js/course.js"></script>
     <script src="{{ STATIC_URL }}js/simpleCart.js"></script>
     <script src="{{ STATIC_URL }}drop/drop.js"></script>

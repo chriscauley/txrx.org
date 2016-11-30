@@ -403,6 +403,7 @@ class Session(UserModel,PhotosMixin,models.Model):
 
 class SessionProduct(Product):
   session = models.OneToOneField(Session)
+  json_fields = Product.json_fields + ['session_id']
   def update(self):
     self.unit_price = self.session.course.fee
     self.name = self.session.title

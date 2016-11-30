@@ -119,9 +119,11 @@ $(function() {
 });
 
 function simple_cart_ready() {
-  if (!!readCookie("checkout_initiated")) { simpleCart.empty(); eraseCookie("checkout_initiated"); }
-  toggleCourses();
+  for (id in simpleCart.items) {
+    uR.forEach(uR.drop.products_list,function(product) {
+      if (product.session_id == id) { uR.drop.saveCartItem(product.id,simpleCart.items[id].quantity); }
+    });
+  }
+  simpleCart.empty();
 };
-simpleCart.cartHeaders = ["Name", "Quantity", "Increment", "Decrement", "Total", "Remove", "Discount"];
-simpleCart.ready(simple_cart_ready)
-$(".itemRemove a").on("click",toggleCourses);
+uR.drop.ready(function() { simpleCart.ready(simple_cart_ready); })

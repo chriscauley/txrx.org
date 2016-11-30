@@ -148,10 +148,13 @@
 {% block extrajs %}
 {% include "_comment_media.html" %}
 <script>
+// #! TODO: eventually I'd like this to be part of some kind of riot require or promise like system
 uR.ready(function() {
   uR.ajax({
     url: '/classes/course_{{ course.id }}.json',
-    success: function(data) { uR.drop.mount('session-list',data); },
+    success: function(data) {
+      uR.drop.ready(function() { riot.mount('session-list',data); }
+    )},
   });
 });
 </script>
