@@ -489,7 +489,7 @@ class EnrollmentManager(models.Manager):
 class Enrollment(CriterionModel):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
   session = models.ForeignKey(Session)
-  quantity = models.IntegerField(default=1)
+  quantity = models.IntegerField(default=0)
 
   evaluated = models.BooleanField(default=False)
   emailed = models.BooleanField(default=False)
