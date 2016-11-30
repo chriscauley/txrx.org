@@ -413,9 +413,10 @@ class SessionProduct(Product):
       mail_admins("Some one re-enrolled!","%s enrolled twice in session # %s"%(user,self.session_id))
     enrollment.quantity += quantity
     enrollment.save()
-    if enrollment.session.total_students > enrollment.session.course.max_students:
+    if self.session.total_students > self.session.course.max_students:
       s = "Session #%s overfilled. Please see https://txrxlabs.org/admin/course/session/%s/"
-      mail_admins("My Course over floweth",s%(enrollment.session.pk,enrollment.session.pk))
+      mail_admins("My Course over floweth",s%(self.session.pk,self.session.pk))
+    NotifyCourse.objects.filter(user=user,course=self.session.course).delete()
   def get_purchase_error(self,quantity,cart):
     # Overwrite this to check quantity or other availability
     if self.in_stock < quantity:
