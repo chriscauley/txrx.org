@@ -1,4 +1,4 @@
-django==1.8.15
+django==1.9.11
 -e git+https://github.com/dcramer/django-devserver.git#egg=django-devserver
 -e git+https://github.com/chriscauley/django-registration.git#egg=django-registration
 django_compressor==2.1
@@ -16,7 +16,7 @@ ezdxf
 -e git+https://github.com/chriscauley/Django-Crop-Override-Field.git#egg=django-crop-override-field
 pillow==2.1.0
 
-django-mptt==0.5.4
+django-mptt==0.7.4
 -e git+https://github.com/chriscauley/django-unrest-comments.git#egg=django-unrest-comments.git
 
 django-redis-cache
@@ -28,7 +28,7 @@ requests
 -e git://github.com/durden/frappy.git#egg=frappy
 
 django-polymorphic==django-polymorphic==0.9.2
-django-tagging==0.3.6
+django-tagging==0.4.5
 django-next-please
 icalendar
 python-social-auth
