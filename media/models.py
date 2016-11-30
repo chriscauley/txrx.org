@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 
-from lablackey.utils import cached_method, cached_property
+from lablackey.decorators import cached_method, cached_property
 
 from crop_override import CropOverride, OriginalImage
 from sorl.thumbnail import get_thumbnail

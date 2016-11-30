@@ -9,7 +9,7 @@ from sorl.thumbnail import ImageField
 
 from course.models import Session, Term, Course
 from lablackey.db.models import UserModel
-from lablackey.utils import cached_method, cached_property
+from lablackey.decorators import cached_method, cached_property
 from media.models import Photo
 from drop.models import Product
 

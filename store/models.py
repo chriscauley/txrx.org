@@ -6,7 +6,7 @@ from django.db import models
 from django.template.loader import render_to_string
 
 from lablackey.db.models import NamedTreeModel
-from lablackey.utils import cached_property, cached_method
+from lablackey.decorators import cached_property, cached_method
 from media.models import PhotosMixin
 
 from sorl.thumbnail import get_thumbnail

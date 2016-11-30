@@ -32,6 +32,7 @@ INSTALLED_APPS = [
   'drop',
   'drop.address',
   'drop.discount',
+  'drop.giftcard',
   'djstripe',
   'store',
 

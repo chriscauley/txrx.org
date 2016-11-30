@@ -8,7 +8,7 @@ from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 
 from lablackey.db.models import SlugModel, OrderedModel
-from lablackey.utils import cached_property, cached_method
+from lablackey.decorators import cached_property, cached_method
 from media.models import Photo, PhotosMixin
 from wmd.models import MarkDownField
 

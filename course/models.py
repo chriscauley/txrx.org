@@ -15,7 +15,8 @@ from geo.models import Room
 from event.models import OccurrenceModel, reverse_ics
 from tool.models import ToolsMixin, Permission, Criterion, CriterionModel, Tool
 from lablackey.db.models import UserModel
-from lablackey.utils import cached_method, cached_property, latin1_to_ascii
+from lablackey.decorators import cached_method, cached_property
+from lablackey.utils import latin1_to_ascii
 
 from drop.models import Product
 from json import dumps
