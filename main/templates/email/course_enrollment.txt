@@ -2,13 +2,13 @@
 
 Thank you for registering for classes at {{ settings.SITE_NAME }}. {% if new_user %}An account was created for you at txrxlabs.org using this email address. You should receive an email along side this one with instructions on how to set your password.{% endif %}
 
-You have been enrolled in the following {% if enrollments|length > 1 %}{{ enrollments|length }} {% endif %}class{{ enrollments|pluralize:"es" }}. If you have any further questions please email classes@txrxlabs.org
+You have been enrolled in the following {% if sessions|length > 1 %}{{ sessions|length }} {% endif %}class{{ sessions|pluralize:"es" }}. If you have any further questions please email classes@txrxlabs.org
 
 -------
-{% for enrollment in enrollments %}
-{{ enrollment.session.name }}
-with {{ enrollment.session.user }}
-on {{ enrollment.session.get_short_dates }}
+{% for session in sessions %}
+{{ session.name }}
+with {{ session.user }}
+on {{ session.get_short_dates }}
 {% endfor %}
 
 {% include "course/_return_policy.html" with format="text" %}{% endautoescape %}
