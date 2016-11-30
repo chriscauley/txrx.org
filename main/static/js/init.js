@@ -92,14 +92,16 @@ uR.drop.stripe = true;
 uR.drop.paypal = true;
 uR.theme = {
   input: "form-control",
-  modal_outer: "modal-content",
-  modal_header: "modal-header",
-  modal_content: "modal-body",
-  modal_footer: "modal-footer",
   cart_items: "well cart-items",
   message_list: "card",
   success_class: "alert alert-success card-content green white-text",
   error_class: "alert alert-danger card-content red white-text",
+  modal: {
+    outer: "modal-content",
+    header: "modal-header",
+    content: "modal-body",
+    footer: "modal-footer",
+  },
 }
 uR.config.text_validators['signature'] = function(value,tag) {
   if (!value.startsWith("/s/")) { tag.data_error = "Signature must start with /s/"; }

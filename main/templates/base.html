@@ -34,12 +34,6 @@
     
     <link rel="shortcut icon" href="/favicon.ico" />
     <script src="{{ STATIC_URL }}js/jquery-1.11.2.js"></script>
-    {% compress js %}
-    <script src="{{ STATIC_URL }}bower/ur/unrest.js"></script>
-    <script src="{{ STATIC_URL }}bower/ur/router.js"></script>
-    <script src="{{ STATIC_URL }}bower/ur/storage.js"></script>
-    <script src="{{ STATIC_URL }}bower/ur/auth.js"></script>
-    {% endcompress %}
     {% block head %}{% endblock %}
     <meta property="og:title" content="{% block fb_title %}{{ settings.SITE_NAME }}: {{ SITE_TAGLINE }}{% endblock %}" />
     <meta property="og:site_name" content="{{ settings.SITE_NAME }}" />
@@ -119,6 +113,11 @@
     <script src="{{ STATIC_URL }}classes.json?v={% now "ymd_hi" %}"></script>
     <script src="{{ STATIC_URL }}sessions.json?v={% now "ymd_his" %}"></script>
     {% compress js %}
+    <script src="{{ STATIC_URL }}bower/ur/unrest.js?v=1"></script>
+    <script src="{{ STATIC_URL }}bower/ur/router.js"></script>
+    <script src="{{ STATIC_URL }}bower/ur/storage.js"></script>
+    <script src="{{ STATIC_URL }}bower/ur/auth.tag" type="riot/tag"></script>
+    <script src="{{ STATIC_URL }}bower/ur/dialog.tag" type="riot/tag"></script>
     <script src="{{ STATIC_URL }}bower/ur/form.tag" type="riot/tag"></script>
     <script src="{{ STATIC_URL }}bower/ur/modal.tag" type="riot/tag"></script>
     <script src="{{ STATIC_URL }}tags/course.tag" type="riot/tag"></script>
