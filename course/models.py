@@ -16,6 +16,7 @@ from event.models import OccurrenceModel, reverse_ics
 from tool.models import ToolsMixin, Permission, Criterion, CriterionModel, Tool
 from lablackey.db.models import UserModel
 from lablackey.decorators import cached_method, cached_property
+from lablackey.mail import send_template_email
 from lablackey.utils import latin1_to_ascii
 
 from drop.models import Product
@@ -423,6 +424,15 @@ class SessionProduct(Product):
     self.name = self.session.title
     self.active = self.session.active and not self.session.past
     self.save()
+  @classmethod
+  def send_payment_confirmation_email(cls,order,order_items):
+    context = {
+      'sessions': [i.product.session for i in order_items],
+      'order_items': order_items,
+      'new_user': (datetime.datetime.now() - order.user.date_joined) < datetime.timedelta(1),
+      'SITE_NAME': settings.SITE_NAME,
+    }
+    send_template_email("email/course_enrollment",[order.user.email],context=context)
   has_quantity = True
   class Meta:
     app_label = "course"
