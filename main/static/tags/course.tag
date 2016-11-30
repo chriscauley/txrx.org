@@ -87,10 +87,7 @@
     <b class="full" if={ closed_status == 'private' }>This session is private</b>
     <b class="full" if={ closed_status == 'cancelled' }>This session has been canceled. If you were enrolled and have not received an email, please contact <a href="mailto:{ uR.config.support_email }">{ uR.config.support_email }</a></b>
     <div if={ !closed_status && fee }>
-      <button class="btn btn-primary" onclick={ parent.add } if={ !incart }>
-        Add this session to cart</button>
-      <button class="btn btn-primary" onclick={ parent.viewCart } if={ incart }>
-        <i class="fa fa-shopping-cart"></i> View Cart</button>
+      <add-to-cart product_id={ product_id } add_text="Add this session to  cart"></add-to-cart>
     </div>
     <div if={ !closed_status && !fee }>
       <button class="btn btn-success rsvp" onclick={ parent.rsvp } if={ !rsvpd && parent.user.id }>
@@ -109,7 +106,7 @@
   this.user = uR.auth.user;
   var that = this;
   add(e) {
-    addClass(e.item);
+    uR.drop.saveCartItem(e.item.product_id,1,this);
   }
   viewCart(e) {
     $("#cartModal").modal({show:true});
@@ -161,10 +158,11 @@
   }
   this.on("update",function() {
     uR.forEach(this.opts.active_sessions,function(session) {
+      var user = uR.auth.user;
       if (window.location.search.indexOf("overbook="+session.id) != -1) { session.closed_status = ""; }
       session.fee = that.opts.fee;
-      if (uR.auth.user && uR.auth.user.enrollments.enrollments) { session.rsvpd = uR.auth.user.enrollments[session.id]; }
-      session.incart = !!window.simpleCart.items[session.id];
+      if (user && user.enrollments.enrollments) { session.rsvpd = user.enrollments[session.id]; }
+      session.incart = false;
       uR.forEach(session.classtimes,function(classtime) {
         classtime.moment = moment(classtime.start);
         classtime.start_time = showSmartTime(classtime.moment);

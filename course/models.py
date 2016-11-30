@@ -307,7 +307,7 @@ class Session(UserModel,PhotosMixin,models.Model):
       'course_id': self.course_id,
       'enrolled_status': enrolled_status,
       'classtimes': [c.as_json for c in self.classtime_set.all()],
-      #'product_id': self.sessionproduct.id,
+      'product_id': self.sessionproduct.id,
       'private': True,
     }
   json = property(lambda self: dumps(self.as_json))
@@ -408,6 +408,7 @@ class SessionProduct(Product):
     self.name = self.session.title
     self.active = self.session.active and not self.session.past
     self.save()
+  has_quantity = True
   class Meta:
     app_label = "course"
 

@@ -151,7 +151,7 @@
 uR.ready(function() {
   uR.ajax({
     url: '/classes/course_{{ course.id }}.json',
-    success: function(data) { riot.mount('session-list',data); },
+    success: function(data) { uR.drop.mount('session-list',data); },
   });
 });
 </script>
