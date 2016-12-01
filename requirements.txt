@@ -42,3 +42,5 @@ django-colorful
 -e git+https://github.com/kavdev/dj-stripe@1.0.0#egg=dj-stripe
 mock_django
 python-doc-inherit
+
+django-jsonfield

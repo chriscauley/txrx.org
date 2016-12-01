@@ -155,6 +155,7 @@ EMAIL_SUBJECT_PREFIX = "[TXRX] "
 DEFAULT_FROM_EMAIL = "noreply@txrxlabs.org"
 SERVER_EMAIL = "noreply@txrxlabs.org"
 MEMBERSHIP_EMAIL = "info@txrxlabs.org"
+PURCHASING_EMAIL = "membership@txrxlabs.org"
 EMAIL_BACKEND = "mailer.backend.DbBackend"
 
 PER_PAGE = 10

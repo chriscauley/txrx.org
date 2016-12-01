@@ -169,6 +169,7 @@
         classtime.end_moment = moment(classtime.end);
         classtime.end_time = showSmartTime(classtime.end_moment);
       });
+      if (session.product_id) { uR.drop.product_on_page = uR.drop.products[session.product_id]; }
     });
   });
 </session-list>

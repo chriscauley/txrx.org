@@ -101,6 +101,7 @@ def user_json(request):
   master_criterion_ids = list(_c.values_list('id',flat=True))
   out = {
     'id': request.user.id,
+    'email': request.user.email,
     'username': request.user.username,
     'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(request.user)],
     'criterion_ids': list(usercriteria.values_list('criterion_id',flat=True)),
