@@ -102,12 +102,6 @@
     <script src="{{ STATIC_URL }}less/bootstrap/js/tab.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/moment.js"></script> {# date formatting #}
     {% endcompress %}
-    <script>
-      var USER_SESSIONS = [
-        {% for s in user_sessions %}{{ s.json|safe }}{% if not forloop.last %},{% endif %}{% endfor %}
-      ]
-      USER_COURSE_IDS = [];
-    </script>
     <script src="{{ STATIC_URL }}classes.json?v={% now "ymd_hi" %}"></script>
     <script src="{{ STATIC_URL }}sessions.json?v={% now "ymd_his" %}"></script>
     {% compress js %}
@@ -123,13 +117,13 @@
     <script src="{{ STATIC_URL }}drop/giftcard.tag" type="riot/tag"></script>
     <script src="{{ STATIC_URL }}tags/course.tag" type="riot/tag"></script>
     <script src="{{ STATIC_URL }}tags/store.tag" type="riot/tag"></script>
-    <script src="{{ STATIC_URL }}js/course.js"></script>
     <script src="{{ STATIC_URL }}js/simpleCart.js"></script>
     <script src="{{ STATIC_URL }}js/cart.js"></script>
     <script src="{{ STATIC_URL }}js/init.js"></script>
     <script src="{{ STATIC_URL }}js/blog.js"></script>
     <script src="{{ STATIC_URL }}js/favico.js"></script>
     <script src="{{ STATIC_URL }}drop/jquery.payment.js"></script>
+    <script src="{{ STATIC_URL }}js/course.js"></script>
     {% endcompress %}
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
     {% block extrajs %}{% endblock %}

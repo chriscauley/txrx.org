@@ -114,6 +114,7 @@ def user_json(request):
     'is_staff': request.user.is_staff,
     'is_superuser': request.user.is_superuser,
     'enrollments': {e.session_id:e.quantity for e in request.user.enrollment_set.all()},
+    'enrolled_course_ids': list(request.user.enrollment_set.all().values_list("session__course_id",flat=True)),
     'member_discount_percent': request.user.level.discount_percentage,
   }
   return JsonResponse({'user': out});

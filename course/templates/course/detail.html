@@ -94,7 +94,8 @@
           Email me the next time this class is scheduled</button></a>
       {% endif %}
       <div style="text-align: center;">
-        <add-to-cart product_id="2414" hide_price="true" add_text="Buy Gift Certificate"></add-to-cart>
+        <add-to-cart product_id="{{ settings.GIFT_CERTIFICATE_ID }}" hide_price="true"
+                     add_text="Buy Gift Certificate"></add-to-cart>
       </div>
     </p>
     <div style="clear: both;"></div>
