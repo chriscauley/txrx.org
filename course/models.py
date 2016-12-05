@@ -525,6 +525,9 @@ class CourseEnrollment(CriterionModel):
 
 class EnrollmentManager(models.Manager):
   def pending_evaluation(self,*args,**kwargs):
+    if True: # turning off for now.
+      return self.none()
+
     kwargs['evaluation_date__lte'] = datetime.datetime.now()
     kwargs['evaluation_date__gte'] = datetime.datetime.now()-datetime.timedelta(60)
     kwargs['evaluated'] = False
