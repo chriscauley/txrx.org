@@ -36,11 +36,11 @@ class CourseCheckout(BaseProduct):
   base_categories = [1]
   get_name = lambda self: "%s (check-out test)"%self.name
   in_stock = property(lambda self: 9999)
-  def purchase(self,user,quantity):
+  def purchase(self,cart_item):
     CourseEnrollment.objects.get_or_create(
       course=self.course,
-      user=user,
-      defaults={'quantity': quantity}
+      user=cart_item.cart.user,
+      defaults={'quantity': cart_item.quantity}
     )
     self.save()
   def refund(self,user,quantity):
@@ -64,10 +64,10 @@ class Consumable(BaseProduct):
   has_quantity = True
   _ht2 = "Amount purchased (by us when restocking) at a time. Used to make the refill process quick."
   purchase_quantity = models.IntegerField(default=1,help_text=_ht2)
-  def purchase(self,user,quantity):
+  def purchase(self,cart_item):
     if self.in_stock is None:
       return
-    self.in_stock = self.in_stock- quantity
+    self.in_stock = self.in_stock- cart_item.quantity
     self.save()
   def get_domain(self,attr):
     if not getattr(self,attr):
