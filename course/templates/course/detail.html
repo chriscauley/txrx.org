@@ -93,10 +93,12 @@
       <a href="{% url "notify_course" course.id %}"><button class="btn btn-success">
           Email me the next time this class is scheduled</button></a>
       {% endif %}
+      {% if settings.COURSE_GIFTCARD_ID %}
       <div style="text-align: center;">
-        <add-to-cart product_id="{{ settings.GIFT_CERTIFICATE_ID }}" hide_price="true"
+        <add-to-cart product_id="{{ settings.COURSE_GIFTCARD_ID }}" hide_price="true"
                      add_text="Buy Gift Certificate"></add-to-cart>
       </div>
+      {% endif %}
     </p>
     <div style="clear: both;"></div>
   </div>
@@ -110,18 +112,6 @@
     <div class="alert alert-danger session_return_policy" style="display:none;">
       {% include "course/_return_policy.html" with format="html" %}
     </div>
-    {% comment %}
-    <center>
-      <span class="st_facebook_large" displayText="Facebook"></span>
-      <span class="st_twitter_large" displayText="Tweet" st_via="TXRXLabs"></span>
-      <span class="st_pinterest_large" displayText="Pinterest"></span>
-      <span class="st_googleplus_large" displayText="Google +"></span>
-      <span class="st_reddit_large" displayText="Reddit"></span>
-    </center>
-    {% endcomment %}
-    {% if request.user.is_staff %}
-    {# {% include "course/_instructor_panel.html" %} #}
-    {% endif %}
   </div>
   <div class="col-xs-12 col-sm-8 col-md-9">
     <comment-list data-object_pk="{{ course.pk }}" data-content_type="course.course"></comment-list>

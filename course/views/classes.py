@@ -22,7 +22,6 @@ def get_course_values(user):
     return { 'term': Term.objects.all()[0] }
   user_sessions = Session.objects.filter(enrollment__user=user.id)
   return {
-    'user_sessions': sorted(list(user_sessions),key=lambda s: s.first_date,reverse=True),
     'instructor_sessions': Session.objects.filter(user=user).reverse(),
     'pending_evaluations': Enrollment.objects.pending_evaluation(user=user),
     'future_sessions': user_sessions.filter(last_date__gte=datetime.date.today()).count(),
