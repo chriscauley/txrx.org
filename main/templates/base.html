@@ -99,8 +99,6 @@
     <script src="{{ STATIC_URL }}less/bootstrap/js/tab.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/moment.js"></script>
     {% endcompress %}
-    <script src="{{ STATIC_URL }}classes.json?v={% now "ymd_hi" %}"></script>
-    <script src="{{ STATIC_URL }}sessions.json?v={% now "ymd_his" %}"></script>
     {% compress js %}
     <script src="{{ STATIC_URL }}bower/ur/.dist/unrest-built.js"></script>
     <script src="{{ STATIC_URL }}drop/.dist/drop-built.js"></script>
@@ -113,6 +111,8 @@
     <script src="{{ STATIC_URL }}js/favico.js"></script>
     <script src="{{ STATIC_URL }}js/course.js"></script>
     {% endcompress %}
+    <script src="{{ STATIC_URL }}classes.json?v={% now "ymd_hi" %}"></script>
+    <script src="{{ STATIC_URL }}sessions.json?v={% now "ymd_his" %}"></script>
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
     {% block extrajs %}{% endblock %}
     <script>

@@ -44,6 +44,7 @@ class CourseAdmin(TaggedPhotoAdmin):
 class ClassTimeInline(OccurrenceModelInline):
   extra = 0
   model = ClassTime
+  readonly_fields = ("emailed",)
 
 class CourseEnrollmentInline(admin.TabularInline):
   model = CourseEnrollment

@@ -131,7 +131,6 @@
 }
 
 
-# django-wmd overrides to make admin interface look ok
 .wmd-panel {text-align: left;}
 .wmd-admin {
     text-align: left;
