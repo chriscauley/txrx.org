@@ -17,7 +17,7 @@ cd txrx.org
 Install the python requirements.
 
 ```bash
-pip install -r config/requirements.txt
+pip install -r requirements.txt
 ```
 
 You can create the database one of two ways. Ask chriscauley for the password to development@dev.txrxlabs.org and then run the following command:
