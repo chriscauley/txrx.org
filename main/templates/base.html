@@ -89,32 +89,21 @@
     </div>
     <script src="https://cdn.jsdelivr.net/riot/2.3.16/riot+compiler.min.js"></script>
     {% compress js %}
-    <script src="{{ STATIC_URL }}less/bootstrap/js/affix.js"></script>
-    <script src="{{ STATIC_URL }}less/bootstrap/js/button.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/collapse.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/modal.js"></script>
-    <script src="{{ STATIC_URL }}less/bootstrap/js/scrollspy.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/transition.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/alert.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/dropdown.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/tooltip.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/popover.js"></script>
     <script src="{{ STATIC_URL }}less/bootstrap/js/tab.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/moment.js"></script> {# date formatting #}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/moment.js"></script>
     {% endcompress %}
     <script src="{{ STATIC_URL }}classes.json?v={% now "ymd_hi" %}"></script>
     <script src="{{ STATIC_URL }}sessions.json?v={% now "ymd_his" %}"></script>
     {% compress js %}
-    <script src="{{ STATIC_URL }}bower/ur/unrest.js?v=1"></script>
-    <script src="{{ STATIC_URL }}bower/ur/router.js"></script>
-    <script src="{{ STATIC_URL }}bower/ur/storage.js"></script>
-    <script src="{{ STATIC_URL }}bower/ur/auth.tag" type="riot/tag"></script>
-    <script src="{{ STATIC_URL }}bower/ur/dialog.tag" type="riot/tag"></script>
-    <script src="{{ STATIC_URL }}bower/ur/form.tag" type="riot/tag"></script>
-    <script src="{{ STATIC_URL }}bower/ur/modal.tag" type="riot/tag"></script>
-    <script src="{{ STATIC_URL }}drop/drop.js"></script>
-    <script src="{{ STATIC_URL }}drop/cart.tag" type="riot/tag"></script>
-    <script src="{{ STATIC_URL }}drop/giftcard.tag" type="riot/tag"></script>
+    <script src="{{ STATIC_URL }}bower/ur/.dist/unrest-built.js"></script>
+    <script src="{{ STATIC_URL }}drop/.dist/drop-built.js"></script>
     <script src="{{ STATIC_URL }}tags/course.tag" type="riot/tag"></script>
     <script src="{{ STATIC_URL }}tags/store.tag" type="riot/tag"></script>
     <script src="{{ STATIC_URL }}js/simpleCart.js"></script>
@@ -122,7 +111,6 @@
     <script src="{{ STATIC_URL }}js/init.js"></script>
     <script src="{{ STATIC_URL }}js/blog.js"></script>
     <script src="{{ STATIC_URL }}js/favico.js"></script>
-    <script src="{{ STATIC_URL }}drop/jquery.payment.js"></script>
     <script src="{{ STATIC_URL }}js/course.js"></script>
     {% endcompress %}
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
