@@ -12,26 +12,39 @@ var _ROOT = "main/static/";
 var _DEST = ".static/"
 
 var source_files = [
-  _ROOT + "js/router.js",
-  _ROOT + "js/zepto.min.js",
-  _ROOT + "js/wow_account.js",
-  _ROOT + "js/sell_accounts.js",
-  _ROOT + "js/items.js",
+  _ROOT + "less/bootstrap/js/collapse.js",
+  _ROOT + "less/bootstrap/js/modal.js",
+  _ROOT + "less/bootstrap/js/transition.js",
+  _ROOT + "less/bootstrap/js/alert.js",
+  _ROOT + "less/bootstrap/js/dropdown.js",
+  _ROOT + "less/bootstrap/js/tooltip.js",
+  _ROOT + "less/bootstrap/js/popover.js",
+  _ROOT + "less/bootstrap/js/tab.js",
+  _ROOT + "js/moment.js",
+  _ROOT + "js/simpleCart.js",
+  _ROOT + "js/cart.js",
   _ROOT + "js/init.js",
-  _ROOT + ".dist/sell_account.js",
+  _ROOT + "js/blog.js",
+  _ROOT + "js/favico.js",
+  _ROOT + "js/course.js",
 ];
 
 gulp.task('build-js',['build-tag'], function () {
   return gulp.src(source_files)
     .pipe(sourcemaps.init())
-    .pipe(concat('out.js'))
+    .pipe(concat('txrx-built.js'))
     //.pipe(uglify({mangle: false, compress: false}))
     .pipe(sourcemaps.write("."))
-    .pipe(gulp.dest(_ROOT + ".dist/"));
+    .pipe(gulp.dest(_DEST));
 });
 
+var tag_files = [
+  _ROOT + "tags/course.tag",
+  _ROOT + "tags/store.tag"
+];
+
 gulp.task('build-tag', function() {
-  return gulp.src([_ROOT + 'tags/*.tag'])
+  return gulp.src(tag_files)
     .pipe(riot())
     .pipe(gulp.dest(_DEST));
 });
@@ -44,7 +57,7 @@ var css_files = [
 ]
 
 gulp.task('build-css', function () {
-  return gulp.src(css_files)//"static/bfish/**/*.less"])
+  return gulp.src(css_files)
     .pipe(less({}))
     .pipe(concat('txrx-built.css'))
     .pipe(gulp.dest(_DEST));
