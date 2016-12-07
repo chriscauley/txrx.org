@@ -4,7 +4,7 @@ TXRX Labs Website
 Install required system packages. This will vary from distribution to distribution.
 
 ```bash
-apt-get install python-dev git-core python-pip libpng-dev libjpeg-dev python-psycopg2
+apt-get install python-dev git-core python-pip libpng-dev libjpeg-dev python-psycopg2 libpq-dev
 ```
 
 Now get the sourcecode from github. If you forked the source code use your own url (replace chriscauley with your github username).
