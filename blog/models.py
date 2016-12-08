@@ -8,7 +8,7 @@ from tagging.registry import register
 
 from .templatetags.short_codes import explosivo
 from lablackey.db.models import UserModel
-from lablackey.utils import cached_property
+from lablackey.decorators import cached_property
 from media.models import Photo, PhotosMixin
 from lablackey.db.models import SlugModel, OrderedModel
 

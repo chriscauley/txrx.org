@@ -84,6 +84,10 @@ def door_access(request):
   staff = get_user_model().objects.filter(superQ).exclude(rfid__isnull=True)
   out['rfids'][99999] = list(staff.values_list(fieldname,flat=True))
   out['schedule'][99999] = schedule_jsons[settings.ALL_HOURS_ID]
+  if 'door_id' in request.GET:
+    volunteers = get_user_model().objects.filter(is_active=True,is_volunteer=True)
+    out['rfids'][99998] = list(volunteers.values_list(fieldname,flat=True))
+    out['schedule'][99998] = schedule_jsons[1]
   if 'api_key' in request.GET:
     return HttpResponse(json.dumps(out))
   return HttpResponse("<pre>%s</pre>"%json.dumps(out,indent=4))

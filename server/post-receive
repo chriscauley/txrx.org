@@ -16,4 +16,8 @@ done
 python $PROJECT_ROOT/manage.py collectstatic --noinput>/dev/null
 python $PROJECT_ROOT/manage.py compress>/dev/null
 
+cd $PROJECT_ROOT/.dev/unrest/; gulp
+cd $PROJECT_ROOT/.dev/drop/; gulp
+cd $PROJECT_ROOT; gulp
+
 bash $PROJECT_ROOT/server/uwsgi.sh

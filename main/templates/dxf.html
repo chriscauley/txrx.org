@@ -1,4 +1,12 @@
-{% extends "base.html" %}
+<body>
+<style>
+  body {
+  background: url("/static/Welcome_Screen2.jpg") center;
+  background-size: cover;
+}
+</style>
+</body>
+{% comment %}{% extends "base.html" %}
 
 {% block nav %}{% endblock %}
 {% block footer %}{% endblock %}
@@ -39,3 +47,5 @@ riot.mount("floorplan",{ locations: [1,2], });
 })();
 </script>
 {% endblock %}
+
+{% endcomment %}

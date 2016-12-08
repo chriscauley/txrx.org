@@ -4,7 +4,7 @@ from django.db import models
 from django.forms import ValidationError
 from django.template.defaultfilters import slugify
 
-from lablackey.utils import cached_method
+from lablackey.decorators import cached_method
 from tool.models import CriterionModel
 
 import json

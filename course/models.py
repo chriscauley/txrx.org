@@ -15,8 +15,11 @@ from geo.models import Room
 from event.models import OccurrenceModel, reverse_ics
 from tool.models import ToolsMixin, Permission, Criterion, CriterionModel, Tool
 from lablackey.db.models import UserModel
-from lablackey.utils import cached_method, cached_property, latin1_to_ascii
+from lablackey.decorators import cached_method, cached_property
+from lablackey.mail import send_template_email
+from lablackey.utils import latin1_to_ascii
 
+from drop.models import Product
 from json import dumps
 import os
 
@@ -284,6 +287,7 @@ class Session(UserModel,PhotosMixin,models.Model):
   in_progress = property(lambda self: self.first_date<datetime.datetime.now()<self.last_date)
   past = property(lambda self: datetime.datetime.now() > self.last_date)
   closed = property(lambda self: self.cancelled or (self.past and not self.in_progress))
+
   @property
   def as_json(self):
     short_dates = self.get_short_dates()
@@ -305,6 +309,7 @@ class Session(UserModel,PhotosMixin,models.Model):
       'course_id': self.course_id,
       'enrolled_status': enrolled_status,
       'classtimes': [c.as_json for c in self.classtime_set.all()],
+      'product_id': self.sessionproduct.id,
       'private': True,
     }
   json = property(lambda self: dumps(self.as_json))
@@ -368,6 +373,8 @@ class Session(UserModel,PhotosMixin,models.Model):
       publish_dt = datetime.datetime.now()
     profile,_ = UserMembership.objects.get_or_create(user=self.user)
     super(Session,self).save(*args,**kwargs)
+    SessionProduct.objects.get_or_create(session=self)[0].update()
+      
   @cached_method
   def get_absolute_url(self):
     return self.course.get_absolute_url()
@@ -395,6 +402,46 @@ class Session(UserModel,PhotosMixin,models.Model):
     return user.is_superuser or user.is_toolmaster or user.id == self.user_id
   class Meta:
     ordering = ('first_date',)
+
+class SessionProduct(Product):
+  session = models.OneToOneField(Session)
+  json_fields = Product.json_fields + ['session_id']
+  in_stock = property(lambda self: self.session.course.max_students - self.session.total_students)
+  def purchase(self,cart_item):
+    user = cart_item.cart.user
+    quantity = cart_item.quantity
+    enrollment,_new = Enrollment.objects.get_or_create(user=user,session=self.session)
+    if not _new:
+      mail_admins("Some one re-enrolled!","%s enrolled twice in session # %s"%(user,self.session_id))
+    enrollment.quantity += quantity
+    enrollment.save()
+    if self.session.total_students > self.session.course.max_students:
+      s = "Session #%s overfilled. Please see https://txrxlabs.org/admin/course/session/%s/"
+      mail_admins("My Course over floweth",s%(self.session.pk,self.session.pk))
+    NotifyCourse.objects.filter(user=user,course=self.session.course).delete()
+  def get_purchase_error(self,quantity,cart):
+    # Overwrite this to check quantity or other availability
+    if self.in_stock < quantity:
+      return "Sorry, there are only %s open seats left in %s."%(self.in_stock,self)
+    if self.session.past:
+      return "Sorry, enrollment for %s is closed because the class is over."%self
+  def update(self):
+    self.unit_price = self.session.course.fee
+    self.name = self.session.title
+    self.active = self.session.active and not self.session.past
+    self.save()
+  @classmethod
+  def send_payment_confirmation_email(cls,order,order_items):
+    context = {
+      'sessions': [i.product.session for i in order_items],
+      'order_items': order_items,
+      'new_user': (datetime.datetime.now() - order.user.date_joined) < datetime.timedelta(1),
+      'SITE_NAME': settings.SITE_NAME,
+    }
+    send_template_email("email/course_enrollment",[order.user.email],context=context)
+  has_quantity = True
+  class Meta:
+    app_label = "course"
 
 class ClassTime(OccurrenceModel):
   session = models.ForeignKey(Session)
@@ -480,6 +527,9 @@ class CourseEnrollment(CriterionModel):
 
 class EnrollmentManager(models.Manager):
   def pending_evaluation(self,*args,**kwargs):
+    if True: # turning off for now.
+      return self.none()
+
     kwargs['evaluation_date__lte'] = datetime.datetime.now()
     kwargs['evaluation_date__gte'] = datetime.datetime.now()-datetime.timedelta(60)
     kwargs['evaluated'] = False
@@ -489,7 +539,7 @@ class EnrollmentManager(models.Manager):
 class Enrollment(CriterionModel):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
   session = models.ForeignKey(Session)
-  quantity = models.IntegerField(default=1)
+  quantity = models.IntegerField(default=0)
 
   evaluated = models.BooleanField(default=False)
   emailed = models.BooleanField(default=False)

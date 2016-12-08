@@ -8,7 +8,7 @@ from django.template.defaultfilters import slugify, date, urlencode
 from geo.models import Room
 from media.models import PhotosMixin
 from lablackey.db.models import UserModel
-from lablackey.utils import cached_property, cached_method
+from lablackey.decorators import cached_property, cached_method
 from wmd import models as wmd_models
 
 import datetime, sys, math

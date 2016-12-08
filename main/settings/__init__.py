@@ -15,7 +15,7 @@ INTERNAL_IPS = (
 
 DJSTRIPE_CUSTOMER_REQUIRED = False
 DROP_PAYMENT_BACKENDS = ['drop.payment.backends.stripe_backend.Stripe']
-
+DROP_GET_OR_CREATE_CUSTOMER = 'course.utils.get_or_create_student'
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.sqlite3',
@@ -155,6 +155,7 @@ EMAIL_SUBJECT_PREFIX = "[TXRX] "
 DEFAULT_FROM_EMAIL = "noreply@txrxlabs.org"
 SERVER_EMAIL = "noreply@txrxlabs.org"
 MEMBERSHIP_EMAIL = "info@txrxlabs.org"
+PURCHASING_EMAIL = "membership@txrxlabs.org"
 EMAIL_BACKEND = "mailer.backend.DbBackend"
 
 PER_PAGE = 10

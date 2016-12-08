@@ -82,7 +82,8 @@ uR.config.btn_primary = "btn blue text-white btn-primary";
 uR.config.btn_success = "btn green text-white btn-success";
 uR.config.btn_cancel = "btn red text-white btn-danger";
 //uR.drop.cart_tag = "cart";
-uR.drop.store_tags = "category-list,product-list,cart-button";
+uR.drop.store_tags = "category-list,product-list,cart-button,add-to-cart";
+uR.drop.login_required = false;
 uR.config.mount_to = "#main";
 uR.config.support_email = "info@txrxlabs.org";
 uR.config.do404 = function() {}
@@ -92,14 +93,16 @@ uR.drop.stripe = true;
 uR.drop.paypal = true;
 uR.theme = {
   input: "form-control",
-  modal_outer: "modal-content",
-  modal_header: "modal-header",
-  modal_content: "modal-body",
-  modal_footer: "modal-footer",
   cart_items: "well cart-items",
   message_list: "card",
   success_class: "alert alert-success card-content green white-text",
   error_class: "alert alert-danger card-content red white-text",
+  modal: {
+    outer: "modal-content",
+    header: "modal-header",
+    content: "modal-body",
+    footer: "modal-footer",
+  },
 }
 uR.config.text_validators['signature'] = function(value,tag) {
   if (!value.startsWith("/s/")) { tag.data_error = "Signature must start with /s/"; }

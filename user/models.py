@@ -15,7 +15,7 @@ from redtape.models import Signature
 from tool.models import UserCriterion, Criterion
 from store.models import CourseCheckout
 
-from lablackey.utils import cached_property
+from lablackey.decorators import cached_property
 import datetime, os
 
 class UserManager(BaseUserManager):
