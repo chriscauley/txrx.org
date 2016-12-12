@@ -4,12 +4,14 @@ uR.auth.ready(function() {
   window.COURSE_MAP = {};
   uR.forEach(ALL_CLASSES,function(c) { COURSE_MAP[c.id] = c; });
   // set enrollment status for ALL_CLASSES, this can be moved to course.tag 
-  uR.forEach(uR.auth.user.enrolled_course_ids,function(c_id) {
-    var c = COURSE_MAP[c_id];
-    if (!c) { return } // Course is inactive
-    c.enrolled_status = (uR.auth.user.completed_course_ids.indexOf(c_id) == -1)?"enrolled":"completed";
-    c.well_class = "enrolled";
-  })
+  if (uR.auth.user) {
+    uR.forEach(uR.auth.user.enrolled_course_ids,function(c_id) {
+      var c = COURSE_MAP[c_id];
+      if (!c) { return } // Course is inactive
+      c.enrolled_status = (uR.auth.user.completed_course_ids.indexOf(c_id) == -1)?"enrolled":"completed";
+      c.well_class = "enrolled";
+    })
+  }
 
   // assign ALL_CLASSES to subjects and generate search string
   // this should be part of the mount or update section of course list
