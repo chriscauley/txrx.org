@@ -27,6 +27,7 @@ var source_files = [
   _ROOT + "js/blog.js",
   _ROOT + "js/favico.js",
   _ROOT + "js/course.js",
+  ".static/_tags.js",
 ];
 
 gulp.task('build-js',['build-tag'], function () {
@@ -46,6 +47,7 @@ var tag_files = [
 gulp.task('build-tag', function() {
   return gulp.src(tag_files)
     .pipe(riot())
+    .pipe(concat('_tags.js'))
     .pipe(gulp.dest(_DEST));
 });
 

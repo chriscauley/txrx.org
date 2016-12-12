@@ -214,3 +214,5 @@ TEMPLATES = [
     },
   },
 ]
+
+DEFAULT_PHOTO_ID = 144
