@@ -6,6 +6,7 @@ import base64
 import cStringIO
 
 import json
+from lablackey.utils import latin1_to_ascii
 
 class DocumentFieldInline(admin.TabularInline):
   model = DocumentField
@@ -32,7 +33,10 @@ class SignatureAdmin(admin.ModelAdmin):
   list_display = ("__unicode__","_data")
   list_filter = ("document",)
   def _data(self,obj):
-    fields = obj.get_fields()
-    rows = "".join(["<tr><th>{name}</th><td>{value}</td></tr>".format(**f) for f in fields])
-    return "<table class='table'>%s</table>"%rows
+    fields = [{k: latin1_to_ascii(v) for k,v in f.items()} for f in fields]
+    try:
+      rows = "".join(["<tr><th>{name}</th><td>{value}</td></tr>".format(**f) for f in fields])
+      return "<table class='table'>%s</table>"%rows
+    except:
+      return "unicode error"
   _data.allow_tags = True

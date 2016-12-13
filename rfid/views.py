@@ -49,6 +49,11 @@ def door_access(request):
     'holidays': {}
   }
 
+  #fieldname is intended to be used only for testing
+  fieldname = request.GET.get('fieldname','rfid__number')
+  if fieldname in ['email','paypal_email','password']:
+    return FAIL
+
   if 'permission_id' in request.GET:
     obj = get_object_or_404(Permission,id=request.GET['permission_id'])
     valid = valid or request.user.is_toolmaster
@@ -66,11 +71,6 @@ def door_access(request):
     out['holidays'] = { h.date.strftime("%Y-%m-%d"):_hids for h in Holiday.objects.all()}
 
   if not (valid and obj):
-    return FAIL
-
-  #fieldname is intended to be used only for testing
-  fieldname = request.GET.get('fieldname','rfid__number')
-  if fieldname in ['email','paypal_email','password']:
     return FAIL
 
   schedule_jsons = { s.id: s.as_json for s in Schedule.objects.all() }

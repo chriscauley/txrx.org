@@ -20,6 +20,7 @@ class Command (BaseCommand):
     for enrollment in pe:
       if not enrollment.user.email:
         continue
+        """
       _dict = {
         'evaluation': enrollment,
         'la_key': LimitedAccessKey.new(enrollment.user),
@@ -37,5 +38,5 @@ class Command (BaseCommand):
       )
       enrollment.emailed=True
       enrollment.save()
-      
-      print "Emailed %s about %s"%(enrollment.user.email,enrollment.session)
+      """
+      print "DID NOT EMAIL %s about %s"%(enrollment.user.email,enrollment.session)
