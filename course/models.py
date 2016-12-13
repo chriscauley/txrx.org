@@ -407,9 +407,9 @@ class SessionProduct(Product):
   session = models.OneToOneField(Session)
   json_fields = Product.json_fields + ['session_id']
   in_stock = property(lambda self: self.session.course.max_students - self.session.total_students)
-  def purchase(self,cart_item):
-    user = cart_item.cart.user
-    quantity = cart_item.quantity
+  def purchase(self,order_item):
+    user = order_item.order.user
+    quantity = order_item.quantity
     enrollment,_new = Enrollment.objects.get_or_create(user=user,session=self.session)
     if not _new:
       mail_admins("Some one re-enrolled!","%s enrolled twice in session # %s"%(user,self.session_id))
