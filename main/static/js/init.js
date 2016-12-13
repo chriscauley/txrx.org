@@ -87,6 +87,7 @@ uR.drop.login_required = false;
 uR.config.mount_to = "#main";
 uR.config.support_email = "info@txrxlabs.org";
 uR.config.do404 = function() {}
+uR.config.form.field_class = "form-group"; // bootstrap
 uR.drop.paypal_email = "txrxlabs@gmail.com";
 uR.drop.prefix = "/shop";
 uR.drop.stripe = true;

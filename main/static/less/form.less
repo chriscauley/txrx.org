@@ -16,6 +16,11 @@ ur-form {
       top: 0;
     }
     input { width: 100%; }
+    .error { color: @red; display: none; }
+    .invalid {
+      border-color: @red;
+      ~ .error { display: block; }
+    }
   }
   .btn { margin-bottom: 20px; }
 }

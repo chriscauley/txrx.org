@@ -252,7 +252,6 @@ table {
   box-sizing: border-box;
 }
 html {
-  font-size: 62.5%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
@@ -5158,7 +5157,6 @@ button.close {
 }
 .modal-footer .btn + .btn {
   margin-left: 5px;
-  margin-bottom: 0;
 }
 .modal-footer .btn-group .btn + .btn {
   margin-left: -1px;
