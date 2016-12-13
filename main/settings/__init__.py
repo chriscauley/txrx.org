@@ -2,7 +2,7 @@ import os, sys, datetime
 SPATH = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0,os.path.normpath(os.path.join(SPATH,'../.dev/')))
 sys.path.insert(0,os.path.normpath(SPATH))
-
+sys.path.insert(0,os.path.normpath(os.path.join(SPATH,'..'))) # this is to use txrx.org/media not .dev/media
 DEBUG = True
 
 MANAGERS = ADMINS = (
@@ -143,6 +143,8 @@ SITE_URL = "https://txrxlabs.org"
 SITE_DOMAIN = "txrxlabs.org"
 SITE_NAME = "TXRX Labs"
 WEBMASTER = "chris@lablackey.com"
+
+PUBLIC_SETTINGS = ["DEBUG","SITE_NAME"]
 
 LONG_CACHE = 60*60 # 1h
 SHORT_CACHE = 10*60 # 10 min
