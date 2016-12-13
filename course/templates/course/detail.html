@@ -93,7 +93,7 @@
       <a href="{% url "notify_course" course.id %}"><button class="btn btn-success">
           Email me the next time this class is scheduled</button></a>
       {% endif %}
-      {% if settings.COURSE_GIFTCARD_ID %}
+      {% if settings.COURSE_GIFTCARD_ID and request.user.is_superuser %}
       <div style="text-align: center;">
         <add-to-cart product_id="{{ settings.COURSE_GIFTCARD_ID }}" hide_price="true"
                      add_text="Buy Gift Certificate"></add-to-cart>
