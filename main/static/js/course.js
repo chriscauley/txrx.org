@@ -40,7 +40,6 @@ uR.auth.ready(function() {
       else { course.full_sessions.push(session); }
     }
   }
-
   // course lists and search
   var current_search = '', scheduled_courses = [], unscheduled_courses = [];
   function filterSubjects(value) {
@@ -55,7 +54,10 @@ uR.auth.ready(function() {
   }
 
   uR.forEach(ALL_CLASSES,function(c) {
-    if (c.next_time == 0) { unscheduled_courses.push(c); }
+    if (c.next_time == 0) {
+      // don't show gardening in unscheduled courses because there are a lot of them
+      if (c.subject_ids.indexOf(27) != -1) { unscheduled_courses.push(c); }
+    }
     else { scheduled_courses.push(c); }
   });
   riot.mount("#scheduled-courses",{courses: scheduled_courses});
