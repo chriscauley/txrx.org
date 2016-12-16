@@ -76,7 +76,6 @@ COMPRESS_ENABLED = True
 
 SITE_TAGLINE = "Houston's Hackerspace"
 VERSION = "0.1 Alpha"
-ANALYTICS_CODE = ''
 
 INSTAGRAM_TAG = "txrx"
 INSTAGRAM_EMAIL = ['chris@lablackey.com']
