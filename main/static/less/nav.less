@@ -1,5 +1,15 @@
 /* bootstrap overrides */
-.navbar-brand { padding: 0 10px 0 0; }
+.navbar-brand {
+  padding: 0 10px;
+  img {
+    height: 45px;
+    margin:8px;
+    @media (min-width: @screen-sm-min) {
+      height: 70px;
+      margin-top: -10px;
+    }
+  }
+}
 .navbar-collapse { max-height: none; }
 .navbar-nav > li.current a:after {
   background: @gray-lighter;
