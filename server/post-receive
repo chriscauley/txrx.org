@@ -13,11 +13,11 @@ if [ $MIGRATIONS != `find $PROJECT_ROOT -name 00*.py |wc -l` ];
     then
     python $PROJECT_ROOT/manage.py migrate --noinput>/dev/null
 done
-python $PROJECT_ROOT/manage.py collectstatic --noinput>/dev/null
-python $PROJECT_ROOT/manage.py compress>/dev/null
-
 cd $PROJECT_ROOT/.dev/unrest/; gulp
 cd $PROJECT_ROOT/.dev/drop/; gulp
 cd $PROJECT_ROOT; gulp
+
+python $PROJECT_ROOT/manage.py collectstatic --noinput>/dev/null
+python $PROJECT_ROOT/manage.py compress>/dev/null
 
 bash $PROJECT_ROOT/server/uwsgi.sh
