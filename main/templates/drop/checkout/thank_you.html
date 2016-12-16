@@ -1,12 +1,10 @@
 {% extends "drop:drop/checkout/thank_you.html" %}
 {% load store_tags %}
 
-{% block header_content %}Purchase complete{% endblock %}
+{% block header %}{% endblock %}
 
 {% block content %}
-<p class="lead">
-  You have purchased the items listed below.
-</p>
+{{ block.super }}
 {% for ptype,items in order|group_order_items_by_model %}
 <p class="lead">
   {% if ptype == "coursecheckout" %}
@@ -16,5 +14,4 @@
   {% endif %}
 </p>
 {% endfor %}
-{{ block.super }}
 {% endblock %}
