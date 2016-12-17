@@ -12,7 +12,8 @@ echo -e "\n---Silently migrating, compressing, collecting static, and restarting
 if [ $MIGRATIONS != `find $PROJECT_ROOT -name 00*.py |wc -l` ];
     then
     python $PROJECT_ROOT/manage.py migrate --noinput>/dev/null
-done
+fi
+
 cd $PROJECT_ROOT/.dev/unrest/; gulp
 cd $PROJECT_ROOT/.dev/drop/; gulp
 cd $PROJECT_ROOT; gulp
