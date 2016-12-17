@@ -81,6 +81,7 @@ def door_access(request):
     sub_buddies = base_sub_buddies.filter(_Q)
     out['rfids'][level.order] += list(sub_buddies.values_list('user__'+fieldname,flat=True))
     out['schedule'][level.order] = schedule_jsons.get(level.get_schedule_id(obj),{})
+
   staff = get_user_model().objects.filter(superQ).exclude(rfid__isnull=True)
   out['rfids'][99999] = list(staff.values_list(fieldname,flat=True))
   out['schedule'][99999] = schedule_jsons[settings.ALL_HOURS_ID]

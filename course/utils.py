@@ -49,8 +49,11 @@ def _get_or_create_student(paypal_email,u_id=None,subscr_id=None,send_mail=True)
     except User.DoesNotExist:
       pass
   if str(u_id).isdigit():
-    user = User.objects.get(id=u_id)
-    return user, new
+    try:
+      user = User.objects.get(id=u_id)
+      return user, new
+    except User.DoesNotExist:
+      mail_admin("unable to find student","%s %s"%(paypal_email,id))
   user = User.objects.get_from_anything(paypal_email)
   if user:
     return user, new
