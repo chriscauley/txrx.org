@@ -11,6 +11,7 @@ static/*
 .media/*
 .static/*
 .staff/*
+.dev/*
 log/*
 scripts/backups
 
@@ -35,3 +36,4 @@ scripts/anon.db
 scripts/backup.json
 
 todo.org
+node_modules/
