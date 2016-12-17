@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.core.management import call_command
 from django.core import mail
 
@@ -35,3 +35,17 @@ class ManagementCommands(TestCase):
     call_command("notify_course")
   def test_reset_classes(self):
     call_command("reset_classes")
+
+class TouchAllTheThings(TestCase):
+  def test_no_login(self):
+    urls = [
+      '/',
+      '/classes/',
+      '/event/',
+      '/thing/'
+    ]
+    client = Client()
+    for u in urls:
+      response = client.get(u)
+      self.assertEqual(response.status_code,200)
+    self.assertEqual(client.get('/nosuchpageexistsoreverexisted/').status_code,404)
