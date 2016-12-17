@@ -12,9 +12,10 @@
     {% else %}
     {% include "_styles.html" %}
     {% endif %}
+    <script>var uR = { _ready: [], ready: function(f) { uR._ready.push(f) } }</script>
     <script type="text/javascript">
       var TXRX = TXRX || {};
-      TXRX.SITE_NAME = "{{ settings.SITE_NAME }}";
+      // AFAIK this is only used in simplecart which will be removed 12/16
       var SHOP = {
         {% if settings.DEBUG %}
         base_url: "http://dev.txrxlabs.org:8025",
@@ -26,6 +27,7 @@
       }
       {% if settings.DEBUG %}TXRX.DEBUG = true;{% endif %}
       SHOP.notify_url = SHOP.base_url + "/tx/rx/ipn/handler/";
+      // used in mptt_comments and in simplecart
       var _USER_NUMBER = {{ request.user.pk|default_if_none:"undefined" }};
       {% if request.user.is_superuser %}
       var _418 = true;
@@ -102,6 +104,7 @@
       new Favico({animation : 'popFade'}).badge({{ pending_evaluations.count }});
     </script>
     <script src="{{ STATIC_URL }}cv/float.js"></script>
+    {% if not settings.DEBUG %}
     <script>
 
       var _gaq = _gaq || [];
@@ -116,6 +119,7 @@
       })();
 
     </script>
+    {% endif %}
     {% block extra_body %}{% endblock %}
     {% include "_sql_queries.html" %}
     {% csrf_token %}
