@@ -6,7 +6,8 @@ from api.serializers import BaseSizzler
 class SearchSizzler(BaseSizzler):
   @classmethod
   def get_queryset(class_,request):
-    qs = class_.Meta.model.objects.keyword_search(request.REQUEST.get('q',""))
+    data = request.POST or request.GET
+    qs = class_.Meta.model.objects.keyword_search(data.get('q',""))
     if 'user_id' in request.GET:
       qs = qs.filter(id=request.GET['user_id'])
     return qs.distinct()

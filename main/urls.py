@@ -87,10 +87,11 @@ urlpatterns = [
 def activate_user(target):
   def wrapper(request,*args,**kwargs):
     from django.contrib.auth import get_user_model
+    data = request.POST or request.GET
     model = get_user_model()
-    if request.REQUEST.get('email',None):
+    if data.get('email',None):
       try:
-        user = model.objects.get(email=request.REQUEST.get('email'))
+        user = model.objects.get(email=data.get('email'))
         user.is_active = True
         user.save()
       except model.DoesNotExist:

@@ -24,11 +24,12 @@ def debug_parsing(request, id):
     return TemplateResponse(request,"course/debug.html",locals())
 
 def paypal_return(request):
+  data = request.GET or request.POST
   User = get_user_model()
-  session_ids = [v for k,v in request.REQUEST.items() if k.startswith('item_number')]
-  if not ('payer_email' in request.REQUEST) or not session_ids:
+  session_ids = [v for k,v in data.items() if k.startswith('item_number')]
+  if not ('payer_email' in data) or not session_ids:
     raise Http404
-  email = request.REQUEST['payer_email']
+  email = data['payer_email']
   sessions = Session.objects.filter(pk__in=session_ids)
   matched_user = None
   if not request.user.is_authenticated():

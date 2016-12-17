@@ -134,7 +134,7 @@ def officers(request):
   return TemplateResponse(request,'membership/officers.html',values)
 
 def verify_api(request):
-  if not getattr(settings,'PORTAL_KEY','') == request.REQUEST.get('api_key',''):
+  if not getattr(settings,'PORTAL_KEY','') == (request.POST or request.GET).get('api_key',''):
     raise Http404
 
 def user_emails(request):
