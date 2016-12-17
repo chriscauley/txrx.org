@@ -645,5 +645,3 @@ def reset_classes_json(context="no context provided"):
   dt = datetime.datetime.now()
   if dt.hour == 0 and dt.minute == 0:
     mail_admins("classes.json reset",context)
-
-from .listeners import *
