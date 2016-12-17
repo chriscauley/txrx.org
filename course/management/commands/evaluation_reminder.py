@@ -36,7 +36,7 @@ class Command (BaseCommand):
         settings.DEFAULT_FROM_EMAIL,
         [enrollment.user.email]
       )
+      """
       enrollment.emailed=True
       enrollment.save()
-      """
       print "DID NOT EMAIL %s about %s"%(enrollment.user.email,enrollment.session)
