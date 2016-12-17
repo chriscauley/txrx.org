@@ -418,7 +418,7 @@ class SessionProduct(Product):
     if self.session.total_students > self.session.course.max_students:
       s = "Session #%s overfilled. Please see https://txrxlabs.org/admin/course/session/%s/"
       mail_admins("My Course over floweth",s%(self.session.pk,self.session.pk))
-    NotifyCourse.objects.filter(user=user,course=self.session.course).delete()
+    user.notifycourse_set.filter(course=self.session.course).delete()
   def get_purchase_error(self,quantity,cart):
     # Overwrite this to check quantity or other availability
     if self.in_stock < quantity:
