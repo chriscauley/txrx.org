@@ -56,7 +56,7 @@ uR.auth.ready(function() {
   uR.forEach(ALL_CLASSES,function(c) {
     if (c.next_time == 0) {
       // don't show gardening in unscheduled courses because there are a lot of them
-      if (c.subject_ids.indexOf(27) != -1) { unscheduled_courses.push(c); }
+      if (c.subject_ids.indexOf(27) == -1) { unscheduled_courses.push(c); }
     }
     else { scheduled_courses.push(c); }
   });
