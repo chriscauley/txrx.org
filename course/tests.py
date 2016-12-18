@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.core.management import call_command
+from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.test import TestCase
+from django.test import TestCase, Client
 
 from membership.paypal_utils import get_course_query, paypal_post
 from membership.models import Level
@@ -10,12 +11,21 @@ from membership.models import Level
 from course.models import Session, Course, ClassTime, Enrollment
 from .utils import get_or_create_student
 from lablackey.tests import check_subjects, check_recipients
+from drop.models import Cart
 
 import arrow
 
 #stupid requests ssl error
 import warnings
 warnings.showwarning = lambda *x: None
+
+def add_to_cart(client,product,quantity):
+  client.post(reverse('cart_edit'),{
+    'id': product.id,
+    'quantity': quantity
+  })
+  _r = client.get(reverse('start_checkout'))
+  return _r.json()['order_id']
 
 def setUp(self):
   tomorrow = arrow.now().replace(days=1,hour=13,minute=00).datetime
@@ -63,20 +73,36 @@ class ListenersTest(TestCase):
       username="preexisinguser",
       email=email
     )
-    params = get_course_query(session=self.session1,quantities=[2],payer_email=email)
+    user.set_password(email)
+    user.save()
+    client = Client()
+
+    #login user
+    client.post(reverse('login'),{'username': email,'password': email})
+
+    # create cart with cart_item
+    invoice = add_to_cart(client,self.session1.sessionproduct,2)
+
+    # fake the IPN
+    params = get_course_query(session=self.session1,quantities=[2],payer_email=email,invoice=invoice)
     paypal_post(self,params)
 
+    # Did it work?
     enrollment = self.session1.enrollment_set.get()
     self.assertEqual(enrollment.quantity,2)
     self.assertEqual(enrollment.user,user)
 
-    params = get_course_query(session=self.session1,quantities=[1],payer_email=email)
+    # Lets do it again with 1 enrollment...
+    invoice = add_to_cart(client,self.session1.sessionproduct,1)
+    params = get_course_query(session=self.session1,quantities=[1],payer_email=email,invoice=invoice)
     paypal_post(self,params)
 
+    # ...and see if the enrollment increased
     enrollment = self.session1.enrollment_set.get()
     self.assertEqual(enrollment.quantity,3)
     self.assertEqual(enrollment.user,user)
   def test_discount(self):
+    from paypal.standard.ipn.models import PayPalIPN
     email = "prexistinguser@txrxlabs.com"
     get_user_model().objects.filter(email=email).delete()
     user = get_user_model().objects.create(
@@ -85,8 +111,17 @@ class ListenersTest(TestCase):
     )
     user.level = Level.objects.filter(discount_percentage=10)[0]
     user.save()
-    params = get_course_query(session=self.session1,quantities=[1],payer_email=email)
+    client = Client()
+
+    #login user
+    client.post(reverse('login'),{'username': email,'password': email})
+
+    # create cart with cart_item
+    invoice = add_to_cart(client,self.session1.sessionproduct,2)
+
+    params = get_course_query(session=self.session1,quantities=[1],payer_email=email,invoice=invoice)
     paypal_post(self,params)
+    print PayPalIPN.objects.order_by('-created_at')[0].flag_info
 
     # The above generates an enrollment error because someone over paid
     self.assertTrue(check_subjects(["Course enrollment confirmation"]))
@@ -101,8 +136,11 @@ class UtilsTest(TestCase):
   def test_paypal_email(self):
     email = "ihasnoemail@txrxlabstest.com"
     get_user_model().objects.filter(email=email).delete()
+    client = Client()
+
+    invoice = add_to_cart(client,self.session1.sessionproduct,1)
     # test first with no account
-    params = get_course_query(session=self.session1,payer_email=email)
+    params = get_course_query(session=self.session1,payer_email=email,invoice=invoice)
     paypal_post(self,params)
 
     # make sure only these two emails were sent to only that one address
@@ -112,7 +150,8 @@ class UtilsTest(TestCase):
 
     # now test same address with another class
     mail.outbox = []
-    params = get_course_query(session=self.session2,payer_email=email)
+    invoice = add_to_cart(client,self.session2.sessionproduct,1)
+    params = get_course_query(session=self.session2,payer_email=email,invoice=invoice)
     paypal_post(self,params)
     self.assertTrue(check_subjects(["Course enrollment confirmation"]))
     for message in mail.outbox:
@@ -134,9 +173,15 @@ class UtilsTest(TestCase):
       username="preexisinguser",
       email=email
     )
+    user.set_password(user.email)
+    user.save()
+
+    client = Client()
+    client.post(reverse('login'),{'username': email,'password': email})
 
     # buy a class while logged in
-    params = get_course_query(session=self.session1,payer_email=paypal_email,custom=user.pk)
+    invoice = add_to_cart(client,self.session1.sessionproduct,1)
+    params = get_course_query(session=self.session1,payer_email=paypal_email,custom=user.pk,invoice=invoice)
     paypal_post(self,params)
 
     # no new counts should have been created and the user now has enrollments/paypal_email

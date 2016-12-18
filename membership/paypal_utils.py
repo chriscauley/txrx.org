@@ -74,6 +74,7 @@ def get_course_query(**kwargs):
   quantities = kwargs.pop('quantities',[1]*len(sessions))
   kwargs['num_cart_items'] = len(sessions)
   kwargs['txn_type'] = 'cart'
+  kwargs['mc_gross'] = 0
   for i,session in enumerate(sessions):
     n = i + 1
     quantity = quantities[i]
@@ -81,6 +82,7 @@ def get_course_query(**kwargs):
     kwargs['quantity%s'%n] = quantity
     kwargs['mc_gross_%s'%n] = quantity*session.course.fee
     kwargs['item_number%s'%n] = session.pk
+    kwargs['mc_gross'] += quantity*session.course.fee
   return get_paypal_query(**kwargs)
 
 def get_flag_query(txn_type,**kwargs):
