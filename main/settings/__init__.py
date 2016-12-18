@@ -67,7 +67,6 @@ MIDDLEWARE_CLASSES = (
   'django.contrib.sessions.middleware.SessionMiddleware',
   'django.middleware.csrf.CsrfViewMiddleware',
   'django.contrib.auth.middleware.AuthenticationMiddleware',
-  'api.middleware.JWTMiddleware', #must be somewhere after auth
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -107,15 +106,10 @@ REST_FRAMEWORK = {
     'rest_framework.permissions.IsAuthenticated',
   ),
   'DEFAULT_AUTHENTICATION_CLASSES': (
-    'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     'rest_framework.authentication.SessionAuthentication',
     'rest_framework.authentication.BasicAuthentication',
   ),
 }
-
-from rest_framework_jwt.settings import DEFAULTS as JWT_AUTH
-JWT_AUTH['JWT_EXPIRATION_DELTA'] = datetime.timedelta(7)
-JWT_AUTH['JWT_REFRESH_EXPIRATION_DELTA'] = datetime.timedelta(7)
 
 ROOT_URLCONF = 'main.urls'
 

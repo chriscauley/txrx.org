@@ -104,7 +104,7 @@ def _include(s):
 
 import membership.views
 import django.contrib.auth.urls
-
+from api.urls import build_urls
 #auth related
 urlpatterns += [
   url(r'^accounts/settings/$',membership.views.user_settings,name='account_settings'),
@@ -117,11 +117,11 @@ urlpatterns += [
   url(r'^api/remove_rfid/$',user.views.remove_rfid),
   url(r'^api/change_rfid/$',user.views.set_rfid),
   url(r'^api/user_checkin/$',user.views.user_checkin),
-  url(r'^api/',_include('api.urls')),
   url(r'^api/change_(headshot|id_photo)/$',user.views.change_headshot),
   #url(r'^api-token-auth/', 'rest_framework_jwt.views.obtain_jwt_token'),
 ]
 
+urlpatterns += build_urls()
 urlpatterns += [
   url(r'',_include('membership.urls')),
   url(r'',_include('rfid.urls')),

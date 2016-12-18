@@ -5,6 +5,7 @@ from django.test import RequestFactory
 
 request_factory = RequestFactory()
 from .serializers import BaseSizzler
+from api import views
 
 def import_serializers(app_label):
   try:
@@ -58,9 +59,7 @@ def build_urls():
   for app_label, d in app_map.items():
     for s_name, serializer in d.items():
       kwargs = {'serializer': serializer}
-      _url = u'^(%s)/(%s)/'%(app_label,s_name)
-      out.append(url(_url+"$",'list_view',name="api_list_view",kwargs=kwargs))
-      out.append(url(_url+"(\d+)/$",'detail_view',name="api_detail_view",kwargs=kwargs))
+      _url = u'^api/(%s)/(%s)/'%(app_label,s_name)
+      out.append(url(_url+"$",views.list_view,name="api_list_view",kwargs=kwargs))
+      out.append(url(_url+"(\d+)/$",views.detail_view,name="api_detail_view",kwargs=kwargs))
   return out
-
-urlpatterns = build_urls()
