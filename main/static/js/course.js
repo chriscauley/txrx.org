@@ -8,8 +8,11 @@ uR.auth.ready(function() {
     uR.forEach(uR.auth.user.enrolled_course_ids,function(c_id) {
       var c = COURSE_MAP[c_id];
       if (!c) { return } // Course is inactive
-      c.enrolled_status = (uR.auth.user.completed_course_ids.indexOf(c_id) == -1)?"enrolled":"completed";
-      c.well_class = "enrolled";
+      c.enrolled_status = "completed";
+      if (uR.auth.user.completed_course_ids.indexOf(c_id) == -1) {
+        c.enrolled_status = "enrolled";
+        c.well_class = "enrolled";
+      }
     })
   }
 
