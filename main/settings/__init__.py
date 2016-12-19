@@ -14,8 +14,12 @@ INTERNAL_IPS = (
 )
 
 DJSTRIPE_CUSTOMER_REQUIRED = False
-DROP_PAYMENT_BACKENDS = ['drop.payment.backends.stripe_backend.Stripe']
+DROP_PAYMENT_BACKENDS = [
+  'drop.payment.backends.stripe_backend.Stripe',
+  'drop.giftcard.backend.GiftCard',
+]
 DROP_GET_OR_CREATE_CUSTOMER = 'course.utils.get_or_create_student'
+DROP_GIFTCARD_LANDING = "/classes/"
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.sqlite3',
@@ -138,7 +142,7 @@ SITE_DOMAIN = "txrxlabs.org"
 SITE_NAME = "TXRX Labs"
 WEBMASTER = "chris@lablackey.com"
 
-PUBLIC_SETTINGS = ["DEBUG","SITE_NAME"]
+PUBLIC_SETTINGS = ["DEBUG","SITE_NAME","SITE_DOMAIN","SITE_URL"]
 
 LONG_CACHE = 60*60 # 1h
 SHORT_CACHE = 10*60 # 10 min
