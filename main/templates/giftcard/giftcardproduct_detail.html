@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block title %}{{ object.name }}{% endblock %}
+{% block header_content %}{{ object.name }}{% endblock %}
+{% block content %}
+<div class="ProductDetail">
+  <div class="row">
+    <div class="col-sm-6">
+      {% thumbnail object.first_photo.file "300x300" as im %}
+      <div><img src="{{ im.url }}" /></div>
+      {% endthumbnail %}
+    </div>
+    <div class="col-sm-6">
+      <p class="lead">
+        MAKE this holiday season a good one!
+      </p>
+      <p class="lead">
+        Give the gift of making at TXRX Labs! Gift Cards can be used for workshops, as well as materials in our shop!
+      </p>
+      {% include "drop/_add_to_cart.html" %}
+    </div>
+    <style>
+      add-to-cart .price { display: none; }
+      add-to-cart { display: block; text-align: center; }
+    </style>
+  </div>
+</div>
+{% endblock %}
