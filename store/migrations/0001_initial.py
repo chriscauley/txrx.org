@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('course', '0007_session_overbook'),
-        ('drop', '0006_product_categories'),
+        ('drop', '0001_initial'),
         ('tool', '0005_toolcheckoutitemgroup'),
     ]
 

@@ -10,7 +10,7 @@ import membership.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('drop', '0004_auto_20160908_1023'),
+        ('drop', '0001_initial'),
         ('media', '0001_initial'),
     ]
 

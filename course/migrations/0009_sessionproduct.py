@@ -9,7 +9,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('drop', '0008_auto_20161111_2219'),
+        ('drop', '0001_initial'),
         ('course', '0008_auto_20161129_1748'),
     ]
 
