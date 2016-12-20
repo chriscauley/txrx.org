@@ -76,6 +76,9 @@ TXRX.schema = {
     { name: 'new_rfid', type: 'hidden' },
   ]
 }
+uR.addRoutes({
+  "^/gift/$": function(path,data) { uR.alertElement("giftcard-redeem",data) }
+});
 
 // #! TODO btn classes should be moved into theme
 uR.config.btn_primary = "btn blue text-white btn-primary";

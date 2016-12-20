@@ -404,6 +404,7 @@ class Session(UserModel,PhotosMixin,models.Model):
     ordering = ('first_date',)
 
 class SessionProduct(Product):
+  is_session_product = True
   session = models.OneToOneField(Session)
   json_fields = Product.json_fields + ['session_id']
   in_stock = property(lambda self: self.session.course.max_students - self.session.total_students)

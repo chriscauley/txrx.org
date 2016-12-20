@@ -18,6 +18,11 @@ from store.models import CourseCheckout
 from lablackey.decorators import cached_property
 import datetime, os
 
+def get_item_discount(cart_item,user):
+  if user.level.discount_percentage:
+    if getattr(cart_item.product,"is_session_product",False):
+      return ("%s Membership discount"%user.level,-cart_item.line_subtotal*user.level.discount_percentage/100)
+
 class UserManager(BaseUserManager):
   def _create_user(self, username,  email, password, is_staff, is_superuser, **extra_fields):
     if not email:

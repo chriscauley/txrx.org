@@ -23,6 +23,8 @@ import user.views
 import redtape.urls
 import membership.urls
 import registration.urls
+import drop.views.product
+import course.views.classes
 
 import os
 
@@ -69,6 +71,7 @@ urlpatterns = [
   url('', include(social.apps.django_app.urls, namespace='social')),
   url(r'perfect-programming',main_views.intentional_500),
   url(r'^classes/', include(course.urls,namespace='course',app_name='course')),
+  url(r'^gift/$',course.views.classes.index),
   url(r'^tx/rx/ipn/handler/', include(paypal.standard.ipn.urls)),
   url(r'^tx/rx/return/$',course.views.paypal_return,name='paypal_redirect'),
   url(r'^payments/', include(djstripe.urls, namespace="djstripe")),
@@ -83,6 +86,11 @@ urlpatterns = [
   url(r'^todays_checkins.json',user.views.todays_checkins_json),
   url(r'^redtape/',include(redtape.urls)),
 ]
+
+if hasattr(settings,"COURSE_GIFTCARD_ID"):
+  urlpatterns += [
+    url(r'^gift/$',lambda request: drop.views.product.detail(request,settings.COURSE_GIFTCARD_ID)),
+  ]
 
 def activate_user(target):
   def wrapper(request,*args,**kwargs):
