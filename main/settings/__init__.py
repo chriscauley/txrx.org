@@ -25,7 +25,7 @@ DROP_CART_MODIFIERS = [
 ]
 DROP_GET_OR_CREATE_CUSTOMER = 'course.utils.get_or_create_student'
 DROP_GIFTCARD_LANDING = "/classes/"
-DROP_GIFTCARD_IMG = os.path.join(SPATH,"static/img/giftcard_base.jpg")
+DROP_GIFTCARD_IMG = os.path.join(SPATH,"static/img/giftcard_base.png")
 DROP_GIFTCARD_FONT = os.path.join(SPATH,"static/fonts/roboto/Roboto-Regular.ttf")
 DROP_USER_DISCOUNT_ITEM_FUNCTION = "user.models.get_item_discount"
 DATABASES = {

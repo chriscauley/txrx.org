@@ -117,11 +117,11 @@ class ListenersTest(TestCase):
     client.post(reverse('login'),{'username': email,'password': email})
 
     # create cart with cart_item
-    invoice = add_to_cart(client,self.session1.sessionproduct,2)
+    invoice = add_to_cart(client,self.session1.sessionproduct,1)
 
     params = get_course_query(session=self.session1,quantities=[1],payer_email=email,invoice=invoice)
+    print params['mc_gross']
     paypal_post(self,params)
-    print PayPalIPN.objects.order_by('-created_at')[0].flag_info
 
     # The above generates an enrollment error because someone over paid
     self.assertTrue(check_subjects(["Course enrollment confirmation"]))
