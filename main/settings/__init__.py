@@ -21,7 +21,7 @@ DROP_PAYMENT_BACKENDS = [
 ]
 DROP_CART_MODIFIERS = [
   'drop.cart.modifiers.partial_payment.PartialPaymentModifier',
-  'drop.discount.modifier.UserDiscountCartItemModifier',
+  'drop.discount.modifier.UserDiscountCartModifier',
 ]
 DROP_GET_OR_CREATE_CUSTOMER = 'course.utils.get_or_create_student'
 DROP_GIFTCARD_LANDING = "/classes/"
