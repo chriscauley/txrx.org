@@ -5,11 +5,12 @@ from django.forms import ValidationError
 from django.template.defaultfilters import slugify
 
 from lablackey.decorators import cached_method
+from lablackey.unrest import JsonMixin
 from tool.models import CriterionModel
 
 import json
 
-class Document(models.Model):
+class Document(models.Model,JsonMixin):
   name = models.CharField(max_length=512)
   content = models.TextField(null=True,blank=True)
   _ht = "If checked, user must log into site before viewing/signing document"
@@ -72,8 +73,11 @@ INPUT_TYPE_CHOICES = [
   ('email','Email'),
   ('header','Design Element (non-input)'),
   ('select','Select'),
+  ('checkbox-input','Select Multiple'),
   ('signature','Sign Your Name'),
   ('checkbox','Checkbox'),
+  ('textarea','Textarea (multi-line)'),
+  ('multi-file','Multiple File'),
 ]
 
 INPUT_TYPE_MAP = {
