@@ -30,3 +30,61 @@ ur-form {
   margin: 0 auto 20px;
   padding: 0;
 }
+
+ur-input checkbox-input {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  .choice {
+    margin: 20px 0 0;
+    flex-basis: 180px;
+  }
+  input {
+    position: absolute;
+    opacity: 0;
+    + label {
+      color: inherit;
+      padding-left: 20px;
+      position: relative;
+      &:before {
+        content: "\f096";
+        color: #888;
+        font-size: 20px;
+        font-family: FontAwesome;
+        left: 0;
+        line-height: 1;
+        position: absolute;
+        top: 0;
+        vertical-align: middle;
+      }
+    }
+    &:checked + label:before { content: "\f046"; }
+  }
+}
+
+ur-document ur-form form {
+  display: flex;
+  flex-wrap: wrap;
+  ur-input {
+    flex-basis: 100%;
+    &.start_date,&.end_date {
+      flex-basis: 50%;
+      label:before {
+        bottom: -26px;
+        left: 5px;
+        position: absolute;
+      }
+      input { padding-left: 60px; }
+    }
+    &.start_date {
+      padding-right: 20px;
+      label:before { content: "From:" }
+    }
+    &.end_date {
+      label {
+        color: transparent;
+        &:before { color: @blue; content: "To:" } 
+      }
+    }
+  }
+}
