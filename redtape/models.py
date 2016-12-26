@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import ValidationError
@@ -6,6 +7,7 @@ from django.template.defaultfilters import slugify
 
 from lablackey.decorators import cached_method
 from lablackey.unrest import JsonMixin
+from lablackey.db.models import UserOrSessionMixin
 from tool.models import CriterionModel
 
 import json
@@ -65,6 +67,19 @@ class Signature(CriterionModel):
       'document_name': unicode(self.document),
       'completed': unicode(self.completed or ''),
     }
+
+private_storage = FileSystemStorage(
+  location=getattr(settings,"PRIVATE_ROOT",settings.MEDIA_ROOT),
+  base_url=getattr(settings,"PRIVATE_URL","")
+)
+
+class UploadedFile(models.Model,UserOrSessionMixin,JsonMixin):
+  src = models.FileField(storage=private_storage,upload_to="%Y%m",max_length=200,null=True,blank=True)
+  name = models.CharField(max_length=256)
+  content_type = models.CharField(max_length=256)
+  url = property(lambda self: self.src.url)
+  __unicode__ = lambda self: self.name
+  json_fields = ['id','name','url','content_type']
 
 INPUT_TYPE_CHOICES = [
   ('text','Text'),

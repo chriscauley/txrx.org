@@ -1,9 +1,9 @@
 from django.conf.urls import url, patterns
 
-import views
+import views, lablackey.views
 
 urlpatterns = [
-  url(r'^(\d+)/(.*)$', views.document_detail,name='signed_document'),
+  url(r'^(\d+)/(.*)/$', lablackey.views.single_page_app,name='signed_document'),
   url(r'^save/(\d+)/$', views.document_json,name='document_json'),
   url(r'^required/$', views.index,name='redtape_index'),
   url(r'^documents.json$', views.documents_json),
