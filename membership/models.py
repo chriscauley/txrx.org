@@ -255,7 +255,7 @@ class Subscription(models.Model):
         subscription=self,
         status__in=Flag.PAYMENT_ACTIONS
       ).update(status="paid")
-    if not (self.paid_until == old_paid_until and int(self.owed) == int(old_owed)):
+    if self.user.level != self.level or not (self.paid_until == old_paid_until and int(self.owed) == int(old_owed)):
       self.user.reset_level()
       # trigger reset_level for subscriptionbuddies as well
       [sb.save() for sb in self.subscriptionbuddy_set.all()]
