@@ -1,0 +1,5 @@
+A new work request has been submitted:
+{{ signature }}
+
+{% for field in signature.get_fields %}{{ field.label }}: {{ field.value }}
+{% endfor %}
