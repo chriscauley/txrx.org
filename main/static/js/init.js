@@ -95,6 +95,7 @@ uR.drop.paypal_email = "txrxlabs@gmail.com";
 uR.drop.prefix = "/shop";
 uR.drop.stripe = true;
 uR.drop.paypal = true;
+uR.config.tmp_file_url = "/redtape/file/";
 uR.theme = {
   input: "form-control",
   cart_items: "well cart-items",

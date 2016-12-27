@@ -7,5 +7,8 @@ urlpatterns = [
   url(r'^save/(\d+)/$', views.document_json,name='document_json'),
   url(r'^required/$', views.index,name='redtape_index'),
   url(r'^documents.json$', views.documents_json),
-  url(r'^aggregate/(\d+)/$', views.aggregate,name='redtape')
+  url(r'^document/add/(\d+)/$', views.post_document),
+  url(r'^aggregate/(\d+)/$', views.aggregate,name='redtape'),
+  url(r'^file/$',views.post_file,name="post_file"),
+  url(r'^file/(\d+)/(.*)',views.private_file,name='private_file'),
 ]

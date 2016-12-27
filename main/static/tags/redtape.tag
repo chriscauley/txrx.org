@@ -17,7 +17,7 @@
     <div class={ theme.header }><h3>{ opts.name }</h3></div>
     <div class={ theme.inner }>
       <div class="inner-content"></div>
-      <ur-form method="POST" action="//"></ur-form>
+      <ur-form method="POST" action="/redtape/document/add/{ opts.id }/" autosave="true"></ur-form>
     </div>
   </div>
 

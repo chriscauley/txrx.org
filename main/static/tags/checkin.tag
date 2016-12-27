@@ -165,7 +165,6 @@
 <change-headshot>
   <modal>
     <label class="box">
-      
     </label>
     <form><input type="file" onchange={ parent.uploadImage }/></form>
   </modal>

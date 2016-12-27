@@ -5,13 +5,15 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.views.static import serve
 
-from .models import Document, Signature
+from .models import Document, Signature, UploadedFile
 from .forms import SignatureForm
 from membership.utils import temp_user_required
 
 from collections import defaultdict
 from lablackey.utils import get_or_none
+from lablackey.mail import send_template_email
 import json
 
 def document_detail(request,document_pk,slug=None): #ze slug does notzing!
@@ -58,6 +60,17 @@ def document_json(request,document_pk):
     out += "<br/>%s: %s"%i
   return JsonResponse({'errors': {'non_field_error': out}})
 
+def post_document(request,pk):
+  document = get_object_or_404(Document,pk=pk)
+  signature = Signature(document=document)
+  data = { f.name: request.POST.get(f.name,None) for f in document.documentfield_set.all() }
+  if request.user.is_authenticated():
+    signature.user = request.user
+  signature.save()
+  if document.pk == 5: #this will probably need to be abstracted at some point
+    send_template_email("email/work_request",['work@txrxlabs.org'],context={'signature':signature})
+  return JsonResponse({"ur_alert_success": "%s has been saved."%document.name})
+
 @login_required
 def index(request):
   d_ids = getattr(settings,"REQUIRED_DOCUMENT_IDS",[])
@@ -91,3 +104,20 @@ def aggregate(request,document_pk):
     'others': [(key,sorted(rs)) for key,rs in sorted(others.items())]
   }
   return TemplateResponse(request,"redtape/aggregate.html",values)
+
+def post_file(request):
+  f = request.FILES['file']
+  obj = UploadedFile(
+    src = f,
+    name = f.name,
+    content_type=f.content_type,
+  )
+  obj.save()
+  return JsonResponse(obj.as_json)
+
+@login_required
+def private_file(request,id,slug):
+  f = get_object_or_404(UploadedFile,id=id)
+  if not request.user.is_superuser and f.user != request.user and request.session != f.session:
+    return HttpResponse("Not Allowed",status=403)
+  return serve(request, f.path, settings.PRIVATE_ROOT)
