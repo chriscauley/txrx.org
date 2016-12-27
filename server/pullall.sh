@@ -5,7 +5,7 @@ export PROJECT_ROOT=$DIR/../
 
 for d in `ls $PROJECT_ROOT.dev`
 do
-    cd  $PROJECT_ROOT.dev/$d
+    cd  $PROJECT_ROOT.dev/$d -P
     printf "updating $(pwd) ... ... "
     git pull
 done

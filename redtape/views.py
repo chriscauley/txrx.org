@@ -16,6 +16,7 @@ from lablackey.utils import get_or_none
 from lablackey.mail import send_template_email
 import json
 
+#! TODO Possibly depracated 12/2016
 def document_detail(request,document_pk,slug=None): #ze slug does notzing!
   document = get_object_or_404(Document,pk=document_pk)
   if document.login_required and not request.user.is_authenticated():
