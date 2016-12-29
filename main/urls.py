@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import url, patterns, include
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import password_reset
@@ -25,6 +25,7 @@ import membership.urls
 import registration.urls
 import drop.views.product
 import course.views.classes
+import airbrake.urls
 
 import os
 
@@ -85,6 +86,7 @@ urlpatterns = [
   url(r'^user.json',user.views.user_json),
   url(r'^todays_checkins.json',user.views.todays_checkins_json),
   url(r'^redtape/',include(redtape.urls)),
+  url(r'',include(airbrake.urls)),
 ]
 
 if hasattr(settings,"COURSE_GIFTCARD_ID"):

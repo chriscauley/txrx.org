@@ -88,6 +88,7 @@
       {% endblock %}
       <div id="alert-div"></div>
     </div>
+    {% include "_airbreak.html" %}
     <script src="https://cdn.jsdelivr.net/riot/2.5/riot+compiler.min.js"></script>
     {% compress js %}
     <script src="{{ STATIC_URL }}bower/ur/.dist/unrest-built.js"></script>
