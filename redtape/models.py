@@ -23,6 +23,7 @@ class Document(models.Model,JsonMixin):
   __unicode__ = lambda self: self.name
   get_absolute_url = lambda self: reverse('signed_document',args=[self.id,slugify(self.name)])
   fields_json = property(lambda self: [f.as_json for f in self.documentfield_set.all()])
+  data_fields = property(lambda self: [f.get_name for f in self.documentfield_set.all()])
   def get_json_for_user(self,user):
     json = self.as_json
     try:
@@ -54,6 +55,12 @@ class Signature(CriterionModel):
   data = models.TextField(null=True,blank=True)
   get_criteria = lambda self: self.document.criterion_set.all()
   __unicode__ = lambda self: "%s: %s"%(self.document,self.user)
+  def get_files(self):
+    files = json.loads(self.data).get("files",None)
+    if not files:
+      return
+    return UploadedFile.objects.filter(id__in=files.split(","))
+
   def get_fields(self):
     fields = self.document.fields_json
     data = json.loads(self.data or '{}')
@@ -70,7 +77,7 @@ class Signature(CriterionModel):
 
 private_storage = FileSystemStorage(
   location=getattr(settings,"PRIVATE_ROOT",settings.MEDIA_ROOT),
-  base_url=getattr(settings,"PRIVATE_URL","")
+  base_url=getattr(settings,"PRIVATE_URL","/redtape/file/")
 )
 
 class UploadedFile(models.Model,UserOrSessionMixin,JsonMixin):
@@ -83,15 +90,15 @@ class UploadedFile(models.Model,UserOrSessionMixin,JsonMixin):
 
 INPUT_TYPE_CHOICES = [
   ('text','Text'),
+  ('textarea','Textarea (multi-line)'),
   ('number','Number'),
   ('phone','Phone'),
   ('email','Email'),
   ('header','Design Element (non-input)'),
+  ('checkbox','Checkbox'),
   ('select','Select'),
   ('checkbox-input','Select Multiple'),
   ('signature','Sign Your Name'),
-  ('checkbox','Checkbox'),
-  ('textarea','Textarea (multi-line)'),
   ('multi-file','Multiple File'),
 ]
 
@@ -129,11 +136,12 @@ class DocumentField(models.Model):
     choices = json.loads(self.choices)
     if isinstance(choices[0],list) and isinstance(choices[0][1],list):
       return [[label,self.get_options(options)] for label,options in choices]
+  get_name = lambda self: self.name or slugify(self.label)
   @property
   def as_json(self):
     return {
       'label': self.label,
-      'name': self.name or slugify(self.label),
+      'name': self.get_name(),
       'type': self.get_input_type(),
       'required': self.required,
       'choices': self.get_optgroups() or self.get_options(),

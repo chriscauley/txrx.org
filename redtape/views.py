@@ -64,7 +64,7 @@ def document_json(request,document_pk):
 def post_document(request,pk):
   document = get_object_or_404(Document,pk=pk)
   signature = Signature(document=document)
-  data = { f.name: request.POST.get(f.name,None) for f in document.documentfield_set.all() }
+  signature.data = json.dumps({ f.get_name(): request.POST.get(f.get_name(),None) for f in document.documentfield_set.all() })
   if request.user.is_authenticated():
     signature.user = request.user
   signature.save()
@@ -117,8 +117,8 @@ def post_file(request):
   return JsonResponse(obj.as_json)
 
 @login_required
-def private_file(request,id,slug):
-  f = get_object_or_404(UploadedFile,id=id)
-  if not request.user.is_superuser and f.user != request.user and request.session != f.session:
-    return HttpResponse("Not Allowed",status=403)
-  return serve(request, f.path, settings.PRIVATE_ROOT)
+def private_file(request,slug):
+  f = get_object_or_404(UploadedFile,src=slug)
+  if not request.user.is_staff and f.user != request.user:
+    return HttpResponse("Not Allowed - Only the staff and the person who uploaded this file can view it.",status=403)
+  return serve(request, f.src.path.split(settings.PRIVATE_ROOT)[-1], settings.PRIVATE_ROOT)

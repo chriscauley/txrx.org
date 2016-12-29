@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Document, Signature, DocumentField
+from .models import Document, Signature, DocumentField, UploadedFile
 
 import base64
 import cStringIO
@@ -33,10 +33,18 @@ class SignatureAdmin(admin.ModelAdmin):
   list_display = ("__unicode__","_data")
   list_filter = ("document",)
   def _data(self,obj):
-    fields = [{k: latin1_to_ascii(v) for k,v in f.items()} for f in fields]
+    if not obj.data:
+      return
+    fields = obj.get_fields()
+    for field in fields:
+      field['value'] = latin1_to_ascii(field['value'])
     try:
       rows = "".join(["<tr><th>{name}</th><td>{value}</td></tr>".format(**f) for f in fields])
       return "<table class='table'>%s</table>"%rows
     except:
       return "unicode error"
   _data.allow_tags = True
+
+@admin.register(UploadedFile)
+class UploadedFileAdmin(admin.ModelAdmin):
+  pass

@@ -10,5 +10,5 @@ urlpatterns = [
   url(r'^document/add/(\d+)/$', views.post_document),
   url(r'^aggregate/(\d+)/$', views.aggregate,name='redtape'),
   url(r'^file/$',views.post_file,name="post_file"),
-  url(r'^file/(\d+)/(.*)',views.private_file,name='private_file'),
+  url(r'^file/(.*)',views.private_file,name='private_file'),
 ]
