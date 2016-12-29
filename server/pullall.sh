@@ -3,9 +3,9 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export PROJECT_ROOT=$DIR/../
 
-for d in `ls $PROJECT_ROOT.dev`
+for d in django-drop django-airbrake-lite dj-stripe lablackey Django-Next-Please unrest django-unrest-comments
 do
-    cd  $PROJECT_ROOT.dev/$d -P
+    cd  ~/$d -P
     printf "updating $(pwd) ... ... "
     git pull
 done
