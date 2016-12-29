@@ -8,7 +8,12 @@ BeautifulSoup==3.2.1
 psycopg2
 django-suit
 django-contrib-comments
+django-mailer==1.2.1
+django-model-utils==2.6
 ezdxf
+arrow
+django-braces==1.9.0
+tqdm==4.10.0
 
 #image stuff
 -e git+https://github.com/chriscauley/sorl-thumbnail.git#egg=sorl-thumbnail
@@ -31,15 +36,18 @@ django-tagging==0.4.5
 django-next-please
 icalendar
 python-social-auth
+social-auth-app-django
+social-auth-core
 
 -e git+https://github.com/chriscauley/django-shop.git#egg=django-shop
 -e git+https://github.com/chriscauley/django-wmd-editor.git#egg=django_wmd_editor
 #-e git+https://github.com/chriscauley/lablackey.git#egg=lablackey
 django_paypal==0.3.2
+stripe
 django-colorful
 
--e git+https://github.com/kavdev/dj-stripe@1.0.0#egg=dj-stripe
 mock_django
 python-doc-inherit
 
 django-jsonfield
+django-jsignature
