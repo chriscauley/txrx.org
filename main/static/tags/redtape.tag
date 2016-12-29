@@ -24,5 +24,6 @@
   this.on("mount",function() {
     this.update();
     this.root.querySelector(".inner-content").innerHTML = this.opts.content;
+    document.title = this.opts.name;
   });
 </ur-document>

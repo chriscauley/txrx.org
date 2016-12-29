@@ -10,8 +10,9 @@
 static/*
 .media/*
 .static/*
+.private/*
 .staff/*
-.dev/*
+.dev
 log/*
 scripts/backups
 
