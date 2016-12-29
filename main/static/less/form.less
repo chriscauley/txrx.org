@@ -1,27 +1,25 @@
 ur-input {
   display: block;
   margin-bottom: 1em;
+  position: relative;
+  padding-top: 20px;
   .errorlist { padding: 0; }
+  label {
+    color: @blue;
+    font-size: 14px;
+    left: 0;
+    position: absolute;
+    top: 0;
+  }
+  input { width: 100%; }
+  .error { color: @red; display: none; }
+  .invalid {
+    border-color: @red;
+    ~ .error { display: block; }
+  }
 }
 
 ur-form {
-  ur-input {
-    position: relative;
-    padding-top: 20px;
-    label {
-      color: @blue;
-      font-size: 14px;
-      left: 0;
-      position: absolute;
-      top: 0;
-    }
-    input { width: 100%; }
-    .error { color: @red; display: none; }
-    .invalid {
-      border-color: @red;
-      ~ .error { display: block; }
-    }
-  }
   .btn { margin-bottom: 20px; }
 }
 
