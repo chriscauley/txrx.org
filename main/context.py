@@ -25,6 +25,13 @@ def _orientations():
     count += _o.get_rsvps().count()
   return count
 
+def get_upcoming_events():
+  now = datetime.datetime.now()
+  kwargs = dict(start__gte=now,start__lte=now+datetime.timedelta(7))
+  e = EventOccurrence.objects.filter(event__hidden=False,**kwargs)
+  c = ClassTime.objects.filter(session__active=True,**kwargs)
+  return sorted(list(c)+list(e),key=lambda o:o.start)
+
 def nav(request):
   blog_sublinks = [
     {'name': 'Blog Home', 'url': '/blog/'},
@@ -123,7 +130,6 @@ def nav(request):
   if 'auth' in request.path or 'accounts' in request.path:
     login_redirect = "/"
 
-  _e = EventOccurrence.objects.filter(start__gte=now,start__lte=now+datetime.timedelta(7),event__hidden=False)
   return dict(
     documents_needed = documents_needed,
     current = request.path.split('/')[1] or 'home',
@@ -133,7 +139,7 @@ def nav(request):
     auth_form = AuthenticationForm,
     app_path = "/admin/login/",
     settings = settings,
-    upcoming_events = _e,
+    upcoming_events = get_upcoming_events,
     #last_week = EventOccurrence.objects.filter(start__lte=now,photoset__isnull=False),
     tags = Tag.objects.all(),
     class_faqs = class_faqs,
