@@ -77,7 +77,15 @@ TXRX.schema = {
   ]
 }
 uR.addRoutes({
-  "^/gift/$": function(path,data) { uR.alertElement("giftcard-redeem",data) }
+  "^/gift/$": function(path,data) { uR.alertElement("giftcard-redeem",data) },
+  "^/work/$": function(path,data) {
+    uR.ajax({
+      url: "/durf/redtape/document/"+5+"/",
+      success: function(data) {
+        uR.mountElement("ur-document",data);
+      },
+    });
+  },
 });
 
 // #! TODO btn classes should be moved into theme
@@ -96,6 +104,7 @@ uR.drop.prefix = "/shop";
 uR.drop.stripe = true;
 uR.drop.paypal = true;
 uR.config.tmp_file_url = "/redtape/file/";
+
 uR.theme = {
   input: "form-control",
   cart_items: "well cart-items",

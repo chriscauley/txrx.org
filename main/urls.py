@@ -26,6 +26,7 @@ import registration.urls
 import drop.views.product
 import course.views.classes
 import airbrake.urls
+import txrx_urls
 
 import os
 
@@ -87,6 +88,7 @@ urlpatterns = [
   url(r'^todays_checkins.json',user.views.todays_checkins_json),
   url(r'^redtape/',include(redtape.urls)),
   url(r'',include(airbrake.urls)),
+  url(r'',include(txrx_urls)),
 ]
 
 if hasattr(settings,"COURSE_GIFTCARD_ID"):

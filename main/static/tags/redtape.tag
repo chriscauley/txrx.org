@@ -25,5 +25,10 @@
     this.update();
     this.root.querySelector(".inner-content").innerHTML = this.opts.content;
     document.title = this.opts.name;
+    window.form = this.tags['ur-form'];
   });
+  ajax_success(data,request) {
+    uR.alert(data.ur_alert_success,{cancel: function() { uR.route("/"); }});
+    this.tags['ur-form'].clear();
+  }
 </ur-document>
