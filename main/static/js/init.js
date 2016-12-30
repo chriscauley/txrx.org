@@ -98,7 +98,9 @@ uR.drop.login_required = false;
 uR.config.mount_to = "#main";
 uR.config.support_email = "info@txrxlabs.org";
 uR.config.do404 = function() {}
-uR.config.form.field_class = "form-group"; // bootstrap
+if (!document.body.classList.contains("kiosk")) {
+  uR.config.form.field_class = "form-group"; // bootstrap
+}
 uR.drop.paypal_email = "txrxlabs@gmail.com";
 uR.drop.prefix = "/shop";
 uR.drop.stripe = true;
@@ -106,7 +108,7 @@ uR.drop.paypal = true;
 uR.config.tmp_file_url = "/redtape/file/";
 
 uR.theme = {
-  input: "form-control",
+  input: document.body.classList.contains("kiosk")?"input-field":"form-control",
   cart_items: "well cart-items",
   message_list: "card",
   success_class: "alert alert-success card-content green white-text",
