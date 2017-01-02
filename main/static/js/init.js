@@ -105,7 +105,7 @@ uR.drop.paypal_email = "txrxlabs@gmail.com";
 uR.drop.prefix = "/shop";
 uR.drop.stripe = true;
 uR.drop.paypal = true;
-uR.config.tmp_file_url = "/redtape/file/";
+uR.config.tmp_file_url = "/media_files/private/";
 
 uR.theme = {
   input: document.body.classList.contains("kiosk")?"input-field":"form-control",

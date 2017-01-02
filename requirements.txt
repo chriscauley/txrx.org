@@ -35,7 +35,7 @@ django-polymorphic==0.9.2
 django-tagging==0.4.5
 django-next-please
 icalendar
-python-social-auth
+python-social-auth==0.2.21
 social-auth-app-django
 social-auth-core
 

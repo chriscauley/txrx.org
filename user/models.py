@@ -11,7 +11,6 @@ from django.utils.http import urlquote
 from django.utils.translation import ugettext_lazy as _
 
 from membership.models import Level
-from redtape.models import Signature
 from tool.models import UserCriterion, Criterion
 from store.models import CourseCheckout
 
@@ -144,7 +143,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     return subscriptions.order_by("-level__order")
   @property
   def done_docs(self):
-    return Signature.objects.filter(user=self,document_id__in=settings.REQUIRED_DOCUMENT_IDS).count()
+    return self.signature_set.filter(document_id__in=settings.REQUIRED_DOCUMENT_IDS).count()
   @property
   def usercriterion_jsons(self):
     ucj = UserCriterion.active_objects.filter(user=self).values('criterion_id','expires','created','id')
@@ -209,7 +208,7 @@ class User(AbstractBaseUser, PermissionsMixin):
   @property
   def has_safety_waiver(self):
     _ids = getattr(settings,"NONMEMBER_DOCUMENT_IDS",[])
-    return len(_ids) <= Signature.objects.filter(user=self,document_id__in=_ids).count()
+    return len(_ids) <= self.signature_set.filter(user=self,document_id__in=_ids).count()
 
 class UserNote(models.Model):
   user = models.ForeignKey(User)
