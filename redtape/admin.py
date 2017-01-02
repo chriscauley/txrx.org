@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Document, Signature, DocumentField, UploadedFile
+from .models import Document, Signature, DocumentField
 
 import base64
 import cStringIO
@@ -44,7 +44,3 @@ class SignatureAdmin(admin.ModelAdmin):
     except:
       return "unicode error"
   _data.allow_tags = True
-
-@admin.register(UploadedFile)
-class UploadedFileAdmin(admin.ModelAdmin):
-  pass

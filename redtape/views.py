@@ -5,9 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
-from django.views.static import serve
 
-from .models import Document, Signature, UploadedFile
+from .models import Document, Signature
 from .forms import SignatureForm
 from membership.utils import temp_user_required
 
@@ -105,20 +104,3 @@ def aggregate(request,document_pk):
     'others': [(key,sorted(rs)) for key,rs in sorted(others.items())]
   }
   return TemplateResponse(request,"redtape/aggregate.html",values)
-
-def post_file(request):
-  f = request.FILES['file']
-  obj = UploadedFile(
-    src = f,
-    name = f.name,
-    content_type=f.content_type,
-  )
-  obj.save()
-  return JsonResponse(obj.as_json)
-
-@login_required
-def private_file(request,slug):
-  f = get_object_or_404(UploadedFile,src=slug)
-  if not request.user.is_staff and f.user != request.user:
-    return HttpResponse("Not Allowed - Only the staff and the person who uploaded this file can view it.",status=403)
-  return serve(request, f.src.path.split(settings.PRIVATE_ROOT)[-1], settings.PRIVATE_ROOT)
