@@ -1,9 +1,13 @@
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.core.files.storage import FileSystemStorage
+from django.core.urlresolvers import reverse
 from django.db import models
 
 from lablackey.decorators import cached_method, cached_property
+from lablackey.db.models import UserOrSessionMixin
+from lablackey.unrest import JsonMixin
 
 from crop_override import CropOverride, OriginalImage
 from sorl.thumbnail import get_thumbnail
@@ -180,3 +184,17 @@ class TaggedFile(models.Model):
   order = models.IntegerField(default=9999)
   _ht = "Files will not appear until after the user has completed a class."
   private = models.BooleanField(default=False,help_text=_ht)
+
+
+private_storage = FileSystemStorage(
+  location=getattr(settings,"PRIVATE_ROOT",settings.MEDIA_ROOT),
+  base_url="/media_files/private/", #reverse("post_private_file"),
+)
+
+class UploadedFile(models.Model,UserOrSessionMixin,JsonMixin):
+  src = models.FileField(storage=private_storage,upload_to="%Y%m",max_length=200,null=True,blank=True)
+  name = models.CharField(max_length=256)
+  content_type = models.CharField(max_length=256)
+  url = property(lambda self: self.src.url)
+  __unicode__ = lambda self: self.name
+  json_fields = ['id','name','url','content_type']

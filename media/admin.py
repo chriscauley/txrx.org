@@ -10,7 +10,7 @@ from sorl.thumbnail import get_thumbnail
 
 from lablackey.db.admin import RawMixin
 from lablackey.db.forms import StaffMemberForm
-from .models import PhotoTag, Photo, MiscFile, TaggedPhoto, TaggedFile
+from .models import PhotoTag, Photo, MiscFile, TaggedPhoto, TaggedFile, UploadedFile
 
 import json
 
@@ -83,3 +83,7 @@ class MiscFileAdmin(admin.ModelAdmin):
 admin.site.register(Photo,PhotoAdmin)
 admin.site.register(MiscFile,MiscFileAdmin)
 admin.site.register(PhotoTag,PhotoTagAdmin)
+
+@admin.register(UploadedFile)
+class UploadedFileAdmin(admin.ModelAdmin):
+  pass

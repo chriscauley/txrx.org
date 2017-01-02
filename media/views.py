@@ -1,14 +1,17 @@
+from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.static import serve
 
-from .models import Photo, PhotoTag, TaggedPhoto
+from .models import Photo, PhotoTag, TaggedPhoto, UploadedFile
 from .forms import PhotoForm, PhotoFilterForm, ZipForm, PhotoTagForm
 
 from NextPlease import pagination
@@ -162,3 +165,20 @@ def edit_photo(request,pk):
   photo.name = request.POST['name'].replace('\n','').strip()
   photo.save()
   return HttpResponse('')
+
+def post_file(request):
+  f = request.FILES['file']
+  obj = UploadedFile(
+    src = f,
+    name = f.name,
+    content_type=f.content_type,
+  )
+  obj.save()
+  return JsonResponse(obj.as_json)
+
+@login_required
+def private_file(request,slug):
+  f = get_object_or_404(UploadedFile,src=slug)
+  if not request.user.is_staff and f.user != request.user:
+    return HttpResponse("Not Allowed - Only the staff and the person who uploaded this file can view it.",status=403)
+  return serve(request, f.src.path.split(settings.PRIVATE_ROOT)[-1], settings.PRIVATE_ROOT)
