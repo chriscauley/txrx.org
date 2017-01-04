@@ -19,13 +19,10 @@
     "/(toolmaster)/": function(search_term) {
       mainMount("toolmaster",{search_term:search_term});
     },
-    "/me/": function() { mainMount("checkin-home") },
-    "/my-permissions/": function() { mainMount('badge') },
+    "/me/": uR.auth.loginRequired("checkin-home"),
+    "/my-permissions/": uR.auth.loginRequired('badge'),
     "/rfid/": function() { mainMount("set-rfid"); },
-    "/week-hours/": function() { mainMount("week-hours"); },
-    "/todays-checkins/": function() { mainMount("todays-checkins"); },
-    "/needed-sessions/": function() { fromTemplate("needed-sessions"); },
-    "/(maintenance)/": mainMount,
+    "/(week-hours|todays-checkins|needed-sessions|maintenance)/": mainMount,
   };
   TXRX.mainMount = mainMount;
 })();
