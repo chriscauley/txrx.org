@@ -104,7 +104,7 @@
     Show { opts.past_session_count } Archived Sessions</a>
 
   this.user = uR.auth.user;
-  var that = this;
+  var self = this;
   add(e) {
     uR.drop.saveCartItem(e.item.product_id,1,this);
   }
@@ -115,13 +115,13 @@
     var target = e.target;
     target.setAttribute("ur-loading","loading");
     $.get(
-      '/classes/past_sessions.json?id='+that.opts.id,
+      '/classes/past_sessions.json?id='+self.opts.id,
       {},
       function(data) {
         target.removeAttribute("ur-loading","loading");
-        that.opts.active_sessions = that.opts.active_sessions.concat(data);
-        that.opts.past_session_count = 0;
-        that.update();
+        self.opts.active_sessions = self.opts.active_sessions.concat(data);
+        self.opts.past_session_count = 0;
+        self.update();
       },
       'json'
     );
@@ -135,7 +135,7 @@
         target.removeAttribute("ur-loading","loading");
         uR.auth.user.enrollments[e.item.id] = data.quantity;
         e.item.message = data.message;
-        that.update();
+        self.update();
       },
       "json"
     );
@@ -160,8 +160,8 @@
     uR.forEach(this.opts.active_sessions,function(session) {
       var user = uR.auth.user;
       if (window.location.search.indexOf("overbook="+session.id) != -1) { session.closed_status = ""; }
-      session.fee = that.opts.fee;
-      if (user && user.enrollments.enrollments) { session.rsvpd = user.enrollments[session.id]; }
+      session.fee = self.opts.fee;
+      if (user && user.enrollments) { session.rsvpd = user.enrollments[session.id]; }
       session.incart = false;
       uR.forEach(session.classtimes,function(classtime) {
         classtime.moment = moment(classtime.start);

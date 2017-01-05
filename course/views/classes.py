@@ -128,6 +128,8 @@ def rsvp(request,session_pk):
     q = enrollment.quantity
     m = "Sorry, this event is full. Visit the class page to see when it will be offered again."    
   else:
+    enrollment.quantity = 1
+    enrollment.save()
     q = 1
     m = "You have RSVP'd for this event. If you can't make it, please come back and unenroll."
   return HttpResponse(json.dumps({'quantity': q,'message': m,'full':session.full}))
