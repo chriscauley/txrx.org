@@ -238,7 +238,7 @@
       }
     });
     var e = uR.getQueryParameter("e");
-    if (e) { TXRX.mainMount("checkin-register",{ email: "arst@oairesnt.com" }) }
+    if (e) { uR.mountElement("checkin-register",{ email: "arst@oairesnt.com" }) }
     uR.ready(function() {
       self.email_checkin = !self.kiosk;
       if (uR.auth.user) {
@@ -351,9 +351,9 @@
     { name: 'email', type: 'email' },
   ]
   ajax_success(data,response) {
-    if (data.no_user) { TXRX.mainMount("checkin-register",{ email: data.no_user }) }
-    else if (data.no_waiver) { TXRX.mainMount("checkin-waiver",{ email: data.no_waiver }) }
-    else { TXRX.mainMount('checkin',{status: data}) }
+    if (data.no_user) { uR.mountElement("checkin-register",{ email: data.no_user }) }
+    else if (data.no_waiver) { uR.mountElement("checkin-waiver",{ email: data.no_waiver }) }
+    else { uR.mountElement('checkin',{status: data}) }
   }
 </checkin-email>
 
