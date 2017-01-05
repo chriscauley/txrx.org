@@ -7,6 +7,15 @@
         </div>
       </div>
     </div>
+    <div if={ uR.auth.user } class="col m8 s12 offset-m2">
+      <div class="card">
+        <div class="card-content">
+          <div class="card-title"><b>Logged in as</b></div>
+          { uR.auth.user.first_name } { uR.auth.user.last_name } ({ uR.auth.user.username })
+          { uR.auth.user.email }
+        </div>
+      </div>
+    </div>
     <div class="col m8 s12 offset-m2" if={ documents.length && uR.auth.user }>
       <h4>Unsigned Documents</h4>
       <div class="card yellow">

@@ -99,24 +99,20 @@ def user_json(request):
   usercriteria = UserCriterion.active_objects.filter(user=request.user)
   _c = Criterion.objects.filter(courses__session__user=request.user).distinct()
   master_criterion_ids = list(_c.values_list('id',flat=True))
-  out = {
-    'id': request.user.id,
-    'email': request.user.email,
-    'username': request.user.username,
+  keys = [
+    'id','email','username','first_name','last_name','is_toolmaster','is_shopkeeper','is_staff','is_superuser'
+  ]
+  out = { k: getattr(request.user,k) for k in keys }
+  out.update({
     'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(request.user)],
     'criterion_ids': list(usercriteria.values_list('criterion_id',flat=True)),
     'master_criterion_ids': master_criterion_ids,
     'session_ids': list(request.user.session_set.all().values_list('id',flat=True)),
     'completed_course_ids': [e.session.course_id for e in enrollments],
-    'is_toolmaster': request.user.is_toolmaster,
-    'is_gatekeeper': request.user.is_gatekeeper,
-    'is_shopkeeper': request.user.is_shopkeeper,
-    'is_staff': request.user.is_staff,
-    'is_superuser': request.user.is_superuser,
     'enrollments': {e.session_id:e.quantity for e in request.user.enrollment_set.all()},
     'enrolled_course_ids': list(request.user.enrollment_set.all().values_list("session__course_id",flat=True)),
     'member_discount_percent': request.user.level.discount_percentage,
-  }
+  })
   return JsonResponse({'user': out});
 
 @staff_member_required
