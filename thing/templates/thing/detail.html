@@ -58,8 +58,6 @@
   </div>
 </div>
 <div class="col-xs-12 col-sm-8 col-md-9">
-  <comment-list data-object_pk="{{ thing.pk }}" data-content_type="thing.thing"></comment-list>
+  <comment-list object_pk="{{ thing.pk }}" content_type="thing.thing"></comment-list>
 </div>
 {% endblock %}
-
-{% block extrajs %}{% include "_comment_media.html" %}{% endblock %}

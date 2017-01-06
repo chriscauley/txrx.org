@@ -165,7 +165,6 @@ DEFAULT_FROM_EMAIL = "noreply@txrxlabs.org"
 SERVER_EMAIL = "noreply@txrxlabs.org"
 MEMBERSHIP_EMAIL = "info@txrxlabs.org"
 PURCHASING_EMAIL = "membership@txrxlabs.org"
-EMAIL_BACKEND = "mailer.backend.DbBackend"
 
 PER_PAGE = 10
 NEW_STUDENT_PASSWORD = "I am a new student, reset my passwrod asap"
@@ -179,6 +178,7 @@ for s_file in ['apps','local','txrx_labs']:
 
 
 
+EMAIL_BACKEND = "mailer.backend.DbBackend"
 _TEMPLATE_LOADERS = (
   ('django.template.loaders.cached.Loader', (
     'django.template.loaders.filesystem.Loader',

@@ -17,10 +17,8 @@
   {% if post.status != "deleted" %}
   {% include "blog/_content.html" with post=post %}
   {% endif %}
-  <comment-list data-object_pk="{{ post.pk }}" data-content_type="blog.post"></comment-list>
+  <comment-list object_pk="{{ post.pk }}" content_type="blog.post"></comment-list>
 </div>
 {% endblock %}
-
-{% block extrajs %}{% include "_comment_media.html" %}{% endblock %}
 
 {% block footer %}{% endblock %}

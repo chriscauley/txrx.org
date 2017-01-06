@@ -89,13 +89,12 @@
     {% endif %}
   </div>
   <div class="col-xs-12 col-sm-8 col-md-9">
-    <comment-list data-object_pk="{{ tool.pk }}" data-content_type="tool.tool"></comment-list>
+    <comment-list object_pk="{{ tool.pk }}" content_type="tool.tool"></comment-list>
   </div>
 </div>
 {% endblock %}
 
 {% block extrajs %}
-{% include "_comment_media.html" %}
 <script>
   uR.ready(function() {
     riot.mount("product-list",{ className: "tiny",ids: {{ tool.consumable_ids }} })

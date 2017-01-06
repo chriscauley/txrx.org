@@ -114,13 +114,12 @@
     </div>
   </div>
   <div class="col-xs-12 col-sm-8 col-md-9">
-    <comment-list data-object_pk="{{ course.pk }}" data-content_type="course.course"></comment-list>
+    <comment-list object_pk="{{ course.pk }}" content_type="course.course"></comment-list>
   </div>
 </div>
 {% endblock %}
 
 {% block extrajs %}
-{% include "_comment_media.html" %}
 <script>
 // #! TODO: eventually I'd like this to be part of some kind of riot require or promise like system
 uR.ready(function() {
