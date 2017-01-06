@@ -97,6 +97,7 @@ uR.drop.store_tags = "category-list,product-list,cart-button,add-to-cart";
 uR.drop.login_required = false;
 uR.config.mount_to = "#main";
 uR.config.support_email = "info@txrxlabs.org";
+uR.config.threaded_comments = true;
 uR.config.do404 = function() {}
 if (!document.body.classList.contains("kiosk")) {
   uR.config.form.field_class = "form-group"; // bootstrap
