@@ -40,7 +40,7 @@ class Document(models.Model,JsonMixin):
       'id': self.id,
       'name': self.name,
       'content': self.content,
-      'renderedcontent': explosivo(self.content),
+      'rendered_content': explosivo(self.content),
       'schema': self.fields_json,
     }
 
