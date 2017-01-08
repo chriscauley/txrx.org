@@ -11,14 +11,14 @@ from lablackey.utils import latin1_to_ascii
 class DocumentFieldInline(admin.TabularInline):
   model = DocumentField
   extra = 0
-  exclude = ("choices","slug")
+  exclude = ("data","slug")
 
 @admin.register(DocumentField)
 class DocumentFieldAdmin(admin.ModelAdmin):
-  readonly_fields = ("_choices",)
-  def _choices(self,obj):
-    return "<pre>%s</pre>"%json.dumps(obj.get_optgroups() or obj.get_options(),indent=4)
-  _choices.allow_tags = True
+  readonly_fields = ("_data",)
+  def _data(self,obj):
+    return "<pre>%s</pre>"%json.dumps(obj.data,indent=4)
+  _data.allow_tags = True
 
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):

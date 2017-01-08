@@ -103,37 +103,19 @@ class DocumentField(models.Model):
   name = models.CharField(max_length=64,help_text="For fields with the same label",null=True,blank=True)
   order = models.IntegerField(default=999)
   input_type = models.CharField(max_length=64,choices=INPUT_TYPE_CHOICES)
-  choices = models.TextField(null=True,blank=True,help_text="Javascript array object for choice fields.")
   data = jsonfield.JSONField(default=dict)
   required = models.BooleanField(default=False)
   __unicode__ = lambda self: "%s for %s"%(self.label,self.document)
-  def get_options(self,choices=None):
-    # valid choices are [[VALUE_1,VERBOSE_1],...] or [VERBOSE_1,...]
-    if not self.choices:
-      return
-    choices = choices or json.loads(self.choices)
-    return choices if isinstance(choices[0],list) else zip(choices,choices)
-  def get_input_type(self):
-    return INPUT_TYPE_MAP.get(self.input_type,self.input_type)
-  @cached_method
-  def get_optgroups(self):
-    # returns None if self.choices is not in the optgroup format
-    # optgroup format: [[OPTGROUP_NAME,[LISTOFCHOICES]]
-    if not self.choices:
-      return
-    choices = json.loads(self.choices)
-    if isinstance(choices[0],list) and isinstance(choices[0][1],list):
-      return [[label,self.get_options(options)] for label,options in choices]
   get_name = lambda self: self.name or slugify(self.label)
   @property
   def as_json(self):
-    return {
+    data = self.data.copy()
+    data.update({
       'label': self.label,
       'name': self.get_name(),
       'type': self.get_input_type(),
       'required': self.required,
-      'choices': self.get_optgroups() or self.get_options(),
       'help_text': INPUT_HELP_TEXT.get(self.input_type,None),
-    }
+    })
   class Meta:
     ordering = ('order',)
