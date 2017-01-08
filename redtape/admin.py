@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Document, Signature, DocumentField
+from .models import Document, Signature, DocumentField, Service
 
 import base64
 import cStringIO
@@ -44,3 +44,8 @@ class SignatureAdmin(admin.ModelAdmin):
     except:
       return "unicode error"
   _data.allow_tags = True
+
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+  list_display = ("__unicode__","price","member_price")
+  list_editable = ("price","member_price")

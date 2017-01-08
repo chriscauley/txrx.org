@@ -119,3 +119,12 @@ class DocumentField(models.Model):
     })
   class Meta:
     ordering = ('order',)
+
+class Service(models.Model):
+  name = models.CharField(max_length=32)
+  price = models.IntegerField(default=0)
+  member_price = models.IntegerField(default=0)
+  order = models.IntegerField(default=0)
+  __unicode__ = lambda self: self.name
+  class Meta:
+    ordering = ('order',)
