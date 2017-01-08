@@ -7,6 +7,7 @@ from django.template.defaultfilters import slugify
 from lablackey.decorators import cached_method
 from lablackey.unrest import JsonMixin
 
+from blog.templatetags.short_codes import explosivo
 from media.models import UploadedFile
 from tool.models import CriterionModel
 
@@ -39,6 +40,7 @@ class Document(models.Model,JsonMixin):
       'id': self.id,
       'name': self.name,
       'content': self.content,
+      'renderedcontent': explosivo(self.content),
       'schema': self.fields_json,
     }
 

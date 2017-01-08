@@ -23,7 +23,7 @@
 
   this.on("mount",function() {
     this.update();
-    this.root.querySelector(".inner-content").innerHTML = this.opts.content;
+    this.root.querySelector(".inner-content").innerHTML = this.opts.rendered_content;
     document.title = this.opts.name;
     window.form = this.tags['ur-form'];
   });
