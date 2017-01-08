@@ -47,5 +47,5 @@ class SignatureAdmin(admin.ModelAdmin):
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-  list_display = ("__unicode__","price","member_price")
-  list_editable = ("price","member_price")
+  list_display = ("__unicode__","order","price","member_price")
+  list_editable = ("order","price","member_price")

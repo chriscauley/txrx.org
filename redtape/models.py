@@ -87,6 +87,7 @@ INPUT_TYPE_CHOICES = [
   ('checkbox-input','Select Multiple'),
   ('signature','Sign Your Name'),
   ('multi-file','Multiple File'),
+  ('services','"Services"'),
 ]
 
 INPUT_TYPE_MAP = {
@@ -103,20 +104,29 @@ class DocumentField(models.Model):
   name = models.CharField(max_length=64,help_text="For fields with the same label",null=True,blank=True)
   order = models.IntegerField(default=999)
   input_type = models.CharField(max_length=64,choices=INPUT_TYPE_CHOICES)
-  data = jsonfield.JSONField(default=dict)
+  _ht = "Json object for field generation. Will overwrite any other database entry (name, label, etc.)"
+  data = jsonfield.JSONField(default=dict,blank=True,help_text=_ht)
   required = models.BooleanField(default=False)
   __unicode__ = lambda self: "%s for %s"%(self.label,self.document)
   get_name = lambda self: self.name or slugify(self.label)
   @property
   def as_json(self):
-    data = self.data.copy()
-    data.update({
+    data = {
       'label': self.label,
       'name': self.get_name(),
-      'type': self.get_input_type(),
+      'type': self.input_type,
       'required': self.required,
       'help_text': INPUT_HELP_TEXT.get(self.input_type,None),
-    })
+    }
+    data.update(self.data.copy())
+    if self.input_type == "services":
+      data['choices'] = []
+      data['member_choices'] = []
+      for service in Service.objects.all():
+        data['choices'].append([slugify(service.name),service.get_display_name()])
+        data['member_choices'].append([slugify(service.name),service.get_member_display_name()])
+      data['type'] = 'checkbox-input'
+    return data
   class Meta:
     ordering = ('order',)
 
@@ -126,5 +136,13 @@ class Service(models.Model):
   member_price = models.IntegerField(default=0)
   order = models.IntegerField(default=0)
   __unicode__ = lambda self: self.name
+  def get_display_name(self):
+    if not self.price:
+      return self.name
+    return "%s ($%s/hr)"%(self.name,self.price)
+  def get_member_display_name(self):
+    if not self.member_price:
+      return self.name
+    return "%s ($%s/hr)"%(self.name,self.member_price)
   class Meta:
     ordering = ('order',)
