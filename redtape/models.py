@@ -10,7 +10,7 @@ from lablackey.unrest import JsonMixin
 from media.models import UploadedFile
 from tool.models import CriterionModel
 
-import json
+import json, jsonfield
 
 class Document(models.Model,JsonMixin):
   name = models.CharField(max_length=512)
@@ -104,6 +104,7 @@ class DocumentField(models.Model):
   order = models.IntegerField(default=999)
   input_type = models.CharField(max_length=64,choices=INPUT_TYPE_CHOICES)
   choices = models.TextField(null=True,blank=True,help_text="Javascript array object for choice fields.")
+  data = jsonfield.JSONField(default=dict)
   required = models.BooleanField(default=False)
   __unicode__ = lambda self: "%s for %s"%(self.label,self.document)
   def get_options(self,choices=None):
