@@ -45,6 +45,7 @@ class CourseCheckout(BaseProduct):
     self.save()
     order_item.extra['purchased_model'] = "course.CourseEnrollment"
     order_item.extra['purchased_pk'] = ce.pk
+    order_item.save()
 
 class Consumable(BaseProduct):
   json_fields = BaseProduct.json_fields + ['in_stock'] #! TODO should be a boolean... is_in_stock or something

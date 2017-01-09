@@ -194,6 +194,7 @@ if DEBUG:
     'django.template.loaders.app_directories.Loader',
     'lablackey.tloader.Loader',
   )
+  MIDDLEWARE_CLASSES += ('lablackey.middleware.LoggingMiddleware',)
 
 TEMPLATES = [
   {
