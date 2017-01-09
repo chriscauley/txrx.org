@@ -37,21 +37,14 @@ class CourseCheckout(BaseProduct):
   get_name = lambda self: "%s (check-out test)"%self.name
   in_stock = property(lambda self: 9999)
   def purchase(self,order_item):
-    CourseEnrollment.objects.get_or_create(
+    ce,new = CourseEnrollment.objects.get_or_create(
       course=self.course,
       user=order_item.order.user,
       defaults={'quantity': order_item.quantity}
     )
     self.save()
-  def refund(self,user,quantity):
-    course_enrollments = CourseEnrollment.objects.filter(
-      course=self.course,
-      user=user,
-      completed__isnull=True
-    )
-    m = "%s %s checkout(s) deleted for %s"%(course_enrollments.count(),self,user)
-    course_enrollments.delete()
-    return m
+    order_item.extra['purchased_model'] = "course.CourseEnrollment"
+    order_item.extra['purchased_pk'] = ce.pk
 
 class Consumable(BaseProduct):
   json_fields = BaseProduct.json_fields + ['in_stock'] #! TODO should be a boolean... is_in_stock or something

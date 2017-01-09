@@ -420,6 +420,9 @@ class SessionProduct(Product):
       s = "Session #%s overfilled. Please see https://txrxlabs.org/admin/course/session/%s/"
       mail_admins("My Course over floweth",s%(self.session.pk,self.session.pk))
     user.notifycourse_set.filter(course=self.session.course).delete()
+    order_item.extra['purchased_model'] = "course.enrollment"
+    order_item.extra['purchased_pk'] = enrollment.pk
+    order_item.save()
   def get_purchase_error(self,quantity,cart):
     # Overwrite this to check quantity or other availability
     if self.in_stock < quantity:
