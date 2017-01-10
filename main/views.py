@@ -27,16 +27,6 @@ def gfycat(request):
   return TemplateResponse(request,"gfycat.html",{'slug':request.GET.get('url').split('/')[-1]})
 
 @login_required
-def survey(request):
-  from membership.models import Survey
-  from membership.forms import SurveyForm
-  form = SurveyForm(request.POST)
-  values = {"form": form}
-  if request.method == "POST":
-    pass
-  return TemplateResponse(request,"survey.html",values)
-
-@login_required
 def force_login(request,uid):
   if not request.user.is_superuser:
     raise Http404()

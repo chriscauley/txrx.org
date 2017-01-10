@@ -141,7 +141,6 @@ urlpatterns += [
   url(r'',_include('membership.urls')),
   url(r'',_include('rfid.urls')),
   url(r'',_include('notify.urls')),
-  url(r'^survey/$',main_views.survey), #! TODO
 ]
 
 if hasattr(settings,"STAFF_URL"):
