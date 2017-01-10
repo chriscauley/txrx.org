@@ -14,6 +14,7 @@ urlpatterns = [
   url(r'^admin/preview/$', views.render_preview, name="render_preview"),
 
   url(r'^tag/(.+)/$', views.posts_by_tag,name='posts_by_tag'),
+  url(r'^(?P<username>\d+)/(?P<slug>[\w\d\-]+)/$', views.post_detail, name="post_detail"),
   url(r'^%s/(?P<slug>[\w\d\-]+)/$'%username_regex, views.post_detail, name="post_detail"),
   url(r'^%s/$'%username_regex, views.post_list, name="post_list"),
   url(r'^$', views.home,name="blog_home"),

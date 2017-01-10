@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.admin.widgets import ForeignKeyRawIdWidget, AdminSplitDateTime
+from django.contrib.admin.widgets import ForeignKeyRawIdWidget
 from django.core.exceptions import ObjectDoesNotExist
 from django import forms
 
@@ -72,10 +72,9 @@ class PostForm(TaggedModelForm):
     if 'user' in kwargs:
       self.user = kwargs.pop('user', None)
     super(PostForm, self).__init__(*args, **kwargs)
-    self.fields['publish_dt'].widget = AdminSplitDateTime()
     self.fields['slug'].help_text = "URL will be /blog/your-name/<b>slug-goes-here</b>/"
     self.fields['tags'].help_text = "Separate tags with commas. Input will be lowercased."
-    self.fields['publish_dt'].help_text = "<i>YYYY-MM-DD</i> and <i>HH:MM</i> (24-hour time)"
+    self.fields['publish_dt'].help_text = "<i>YYYY-MM-DD HH:MM</i> (24-hour time)"
     self.fields['photo'].widget=ForeignKeyRawIdWidget(Post._meta.get_field("photo").rel,admin.site)
     # add span class to charfields
     for field in self.fields.values():

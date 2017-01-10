@@ -27,9 +27,12 @@ def home(request):
   return TemplateResponse(request,"blog/home.html",values)
 
 def post_detail(request, username, slug, template_name="blog/detail.html"):
-  user = get_object_or_404(get_user_model(), username=username)
-
-  post = get_object_or_404(Post,user=user,slug=slug)
+  if username.isdigit():
+    post = get_object_or_404(Post,id=username)
+    username = post.user.username
+  else:
+    user = get_object_or_404(get_user_model(), username=username)
+    post = get_object_or_404(Post,user=user,slug=slug)
 
   if post.status == 'draft' and post.user != request.user and not request.user.is_superuser:
     raise Http404
@@ -83,5 +86,5 @@ def post_redirect(request,y,m,d,slug):
   else:
     #mail_admins('unable to find blog post',request.path)
     raise Http404("Unable to find matching blog article.")
-  kwargs = {'username': post.user.username,'slug': post.slug}
+  kwargs = {'username': post.id,'slug': post.slug}
   return HttpResponseRedirect(reverse('post_detail',kwargs=kwargs))

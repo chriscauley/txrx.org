@@ -53,7 +53,7 @@ class Post(PhotosMixin,UserModel):
 
   @models.permalink
   def get_absolute_url(self):
-    return ("post_detail", [self.user.username, self.slug])
+    return ("post_detail", [self.id, self.slug])
 
 register(Post)
 
