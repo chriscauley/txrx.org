@@ -3,7 +3,6 @@
   <pythonpath>/home/django/txrx.org/</pythonpath>
   <chdir>/home/django/txrx.org</chdir>
   <socket>127.0.0.1:3033</socket>
-  <processes>3</processes>
   <app mountpoint="/">
     <script>django_uwsgi</script>
     </app>
