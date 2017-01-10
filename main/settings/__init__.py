@@ -5,6 +5,7 @@ sys.path.insert(0,os.path.normpath(SPATH))
 sys.path.insert(0,os.path.normpath(os.path.join(SPATH,'..'))) # this is to use txrx.org/media not .dev/media
 
 DEBUG = True
+DEBUG_EMAIL = True
 
 MANAGERS = ADMINS = (
   ('chris cauley','chris@lablackey.com'),
@@ -187,8 +188,10 @@ _TEMPLATE_LOADERS = (
   )),
 )
 
-if DEBUG:
+if DEBUG_EMAIL:
   EMAIL_BACKEND = "lablackey.mail.DebugBackend"
+
+if DEBUG:
   _TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
