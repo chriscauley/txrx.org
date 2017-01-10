@@ -439,14 +439,6 @@ class Proposal(UserModel):
   class Meta: 
     ordering = ('order',)
 
-class Survey(models.Model):
-  user = models.OneToOneField(settings.AUTH_USER_MODEL)
-  reasons = models.TextField(blank=True)
-  projects = models.TextField(blank=True)
-  skills = models.TextField(blank=True)
-  expertise = models.TextField(blank=True)
-  questions = models.TextField(blank=True)
-
 REASON_CHOICES = [
   ("recurring_payment_skipped", "PayPal Skipped"),
   ("recurring_payment_failed", "PayPal Failed Recurring"),

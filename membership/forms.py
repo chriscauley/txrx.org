@@ -63,13 +63,6 @@ class RegistrationForm(RegistrationForm):
     signals.user_registered.send(sender=self.__class__,user=new_user,request=request)
     return new_user
 
-class SurveyForm(PlaceholderForm):
-  reasons = forms.CharField(label=lr,**kwargs)
-  projects = forms.CharField(label=lp,**kwargs)
-  skills = forms.CharField(label=ls,help_text=s,**kwargs)
-  expertise = forms.CharField(label=le,help_text=e,**kwargs)
-  questions = forms.CharField(label=lq,help_text=q,**kwargs)
-
 class UserMembershipForm(PlaceholderModelForm):
   #! TODO: this technically is a vulnerability (someone could try to steal in very weird circumstances)
   # I need to add a verified paypal email and set it to false when they do this.
