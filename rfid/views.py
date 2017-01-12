@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
@@ -23,13 +23,19 @@ def valid_ip_or_api_key(request):
 def rfid_log(request):
   if not valid_ip_or_api_key(request):
     return FAIL
-  if not ('data' in request.POST and 'rfid' in request.POST):
+  DATA = getattr(request,request.method.upper())
+  if not ('data' in DATA and 'rfid' in DATA):
     return HttpResponse('{"message": "Need rfid and data parameters","status": 400}',status=400)
-  RFIDLog.objects.create(
-    data=request.POST['data'],
-    rfid_number=request.POST['rfid']
+  log = RFIDLog.objects.create(
+    data=json.loads(DATA['data']),
+    rfid_number=DATA['rfid']
   )
-  return HttpResponse('{"message": "RFIDLog for %s created.","status": 200}'%request.POST['rfid'])
+  out = {
+    "rfid": log.rfid_number,
+    "data": log.data,
+    "status": 200
+  }
+  return JsonResponse(out)
 
 def door_access(request):
   valid = valid_ip_or_api_key(request)
