@@ -5,10 +5,11 @@ Thank you for registering for classes at {{ SITE_NAME }}. {% if new_user %}An ac
 You have been enrolled in the following {% if sessions|length > 1 %}{{ sessions|length }} classes{% else %}class{% endif %}. If you have any further questions please email classes@txrxlabs.org
 
 -------
-{% for session in sessions %}
-{{ session.name }}
-with {{ session.user }}
-on {{ session.get_short_dates }}
+{% for i in order_items %}{% if i.quantity != 1 %}
+{{ i.quantity }}x enrollment in:{% endif %}
+{{ i.product.session.name }}
+with {{ i.product.session.user }}
+on {{ i.product.session.get_short_dates }}
 {% endfor %}
 
 {% include "course/_return_policy.html" with format="text" %}{% endautoescape %}
