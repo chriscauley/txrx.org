@@ -6,7 +6,7 @@ from .forms import UserChangeForm, CustomUserCreationForm
 from .models import User, UserNote
 
 from course.admin import EnrollmentInline, CourseEnrollmentInline
-from membership.admin import UserMembershipInline, SubscriptionInline
+from membership.admin import UserMembershipInline, SubscriptionInline, SubscriptionBuddyInline
 from rfid.models import RFID
 
 class UserNoteInline(admin.TabularInline):
@@ -17,6 +17,10 @@ class UserNoteInline(admin.TabularInline):
 class RFIDInline(admin.TabularInline):
   model = RFID
   extra = 0
+
+class WeakSubscriptionBuddyInline(SubscriptionBuddyInline):
+  has_add_permission = lambda self, request: False
+  readonly_fields = ("subscription","level_override","paid_until")
 
 @admin.register(User)
 class UserAdmin(UserAdmin):
@@ -48,6 +52,6 @@ class UserAdmin(UserAdmin):
   search_fields = ('username', 'email', 'first_name', 'last_name','paypal_email')
   ordering = ('username',)
   readonly_fields = ('last_login','date_joined','level')
-  inlines = [UserMembershipInline, RFIDInline, UserNoteInline, SubscriptionInline, EnrollmentInline,
+  inlines = [UserMembershipInline, RFIDInline, UserNoteInline, SubscriptionInline, WeakSubscriptionBuddyInline, EnrollmentInline,
              CourseEnrollmentInline]
   list_filter = list(UserAdmin.list_filter) + ['usermembership__voting_rights','date_joined','is_volunteer']
