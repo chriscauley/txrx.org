@@ -7,9 +7,9 @@ You have been enrolled in the following {% if sessions|length > 1 %}{{ sessions|
 -------
 {% for i in order_items %}{% if i.quantity != 1 %}
 {{ i.quantity }}x enrollment in:{% endif %}
-{{ i.product.session.name }}
+{{ i.product.session.name }}{% for classtime in i.product.session.classtime_set.all %}
+{{ classtime.start|date:"D M j f A" }} - {{ classtime.end|date:"f A" }}{% endfor %}
 with {{ i.product.session.user }}
-on {{ i.product.session.get_short_dates }}
 {% endfor %}
 
 {% include "course/_return_policy.html" with format="text" %}{% endautoescape %}
