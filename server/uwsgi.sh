@@ -5,8 +5,6 @@ then
     export PROCESSES=1
 fi
 
-echo /usr/bin/uwsgi-core -M -x $DIR/../uwsgi.xml --plugin python -p $PROCESSES
-
 if cat /tmp/uwsgi.pid
 then
     kill -HUP `cat /tmp/uwsgi.pid`

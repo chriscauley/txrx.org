@@ -63,7 +63,7 @@ def document_json(request,document_pk):
 def post_document(request,pk):
   document = get_object_or_404(Document,pk=pk)
   signature = Signature(document=document)
-  signature.data = json.dumps({ f.get_name(): request.POST.get(f.get_name(),None) for f in document.documentfield_set.all() })
+  signature.data = { f.get_name(): request.POST.get(f.get_name(),None) for f in document.documentfield_set.all() }
   if request.user.is_authenticated():
     signature.user = request.user
   signature.save()
@@ -91,13 +91,12 @@ def aggregate(request,document_pk):
   others = defaultdict(lambda: [])
   results = defaultdict(lambda:0)
   for s in document.signature_set.all():
-    s_json = json.loads(s.data)
-    key = s_json['how-did-you-hear-about-us']
+    key = s.data['how-did-you-hear-about-us']
     if not key:
       continue
     results[key] += 1
-    if s_json['other']:
-      others[key].append(s_json['other'].title())
+    if s.data['other']:
+      others[key].append(s.data['other'].title())
 
   values = {
     'results': sorted(results.items(),key=lambda t:t[1],reverse=True),

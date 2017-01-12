@@ -54,20 +54,18 @@ class Signature(CriterionModel):
   document = models.ForeignKey(Document)
   automatic = True
   _ht = 'You signature must start with a /s/. For example enter "/s/John Hancock" without the quotes.'
-  data = models.TextField(null=True,blank=True)
+  data = jsonfield.JSONField(default=dict)
   get_criteria = lambda self: self.document.criterion_set.all()
   __unicode__ = lambda self: "%s: %s"%(self.document,self.user)
   def get_files(self):
-    files = json.loads(self.data).get("files",None)
+    files = self.data.get("files",None)
     if not files:
       return
     return UploadedFile.objects.filter(id__in=files.split(","))
-
   def get_fields(self):
     fields = self.document.fields_json
-    data = json.loads(self.data or '{}')
     for field in fields:
-      field['value'] = data.get(field['name'],None)
+      field['value'] = self.data.get(field['name'],None)
     return fields
   @property
   def as_json(self):
