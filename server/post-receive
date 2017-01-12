@@ -15,13 +15,4 @@ if [ $MIGRATIONS != `find $PROJECT_ROOT -name 00*.py |wc -l` ];
 fi
 
 cd $PROJECT_ROOT
-bash server/pullall.sh
-
-cd $PROJECT_ROOT/.dev/unrest/; gulp>/dev/null
-cd $PROJECT_ROOT/.dev/drop/; gulp>/dev/null
-cd $PROJECT_ROOT; gulp>/dev/null
-
-python $PROJECT_ROOT/manage.py collectstatic --noinput>/dev/null
-python $PROJECT_ROOT/manage.py compress>/dev/null
-
-bash $PROJECT_ROOT/server/uwsgi.sh
+bash server/build.sh
