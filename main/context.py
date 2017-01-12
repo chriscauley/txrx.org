@@ -104,6 +104,7 @@ def nav(request):
     {'name': "Contact", "url": "/map/"},
     {'name': "Shop", "url": "/shop/"},
     {'name': "FAQ", "url": "/faq/"},
+    {'name': "Work", "url": "/work/"},
   ]
 
   for _n in _nav:
