@@ -30,7 +30,7 @@ class SignatureForm(forms.ModelForm):
     commit = kwargs.pop("commit",True)
     kwargs['commit'] = False
     instance = super(SignatureForm,self).save(*args,**kwargs)
-    instance.data = json.dumps({f:self.cleaned_data.get(f,None) for f in self.extra_fields})
+    instance.data = {f:self.cleaned_data.get(f,None) for f in self.extra_fields}
     instance.document = self.document
     if commit:
       instance.save()
