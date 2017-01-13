@@ -75,6 +75,14 @@ def checkin_ajax(request):
   }
   return JsonResponse(out)
 
+def checkin_email(request):
+  user = User.objects.get_from_anything(request.POST["email"])
+  if not user:
+    return JsonResponse({"next": "checkin-new-user","email": request.POST["email"]})
+  defaults = { 'content_object': Room.objects.get(name='') }
+  checkin, new = UserCheckin.objects.checkin_today(user=user,defaults=defaults)
+  return JsonResponse({ "checkin": checkin_json(user), "badge": True })
+
 def add_rfid(request):
   rfid = request.POST['new_rfid']
   user = get_user_model().objects.get_from_anything(request.POST.get("username",None))

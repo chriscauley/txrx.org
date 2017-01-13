@@ -42,6 +42,7 @@ _pages = [
   'rfid',
   'toolmaster',
   'week-hours',
+  'me'
 ]
 
 urlpatterns = [
@@ -57,7 +58,6 @@ urlpatterns = [
   url(r'^media_files/',include(media.urls)),
   url(r'^shop/',include(store.urls)),
   url(r'^product_is_a_fail/(.*)/$',main_views.index,name="product_detail"),
-  url(r'^me/$',login_required(main_views.beta)),
   url(r'^comments/',include(unrest_comments.urls)),
   url(r'^rss/$', AllFeed()),
   url(r'^favicon.ico$',main_views.predirect,
@@ -83,6 +83,7 @@ urlpatterns = [
   url(r'^geo/events.json',geo.views.events_json),
   url(r'^geo/locations.json$',geo.views.locations_json),
   url(r'^checkin_ajax/$', user.views.checkin_ajax, name='checkin_ajax'),
+  url(r'^checkin_email/$', user.views.checkin_email, name='checkin_email'),
   url(r'^add_rfid/$', user.views.add_rfid, name='add_rfid'),
   url(r'^user.json',user.views.user_json),
   url(r'^todays_checkins.json',user.views.todays_checkins_json),

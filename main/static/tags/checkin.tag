@@ -187,16 +187,37 @@
   }
 </change-headshot>
 
+<checkin-new-user>
+  <div class={ theme.outer }>
+    <div class={ theme.header }><h3>Welcome visitor!</h3></div>
+    <div class={ theme.content }>
+      <p class="lead">
+        We could not find the email you entered in our database.
+        Please let us know your name so that we can print a visitor badge.
+      </p>
+      <ur-form action="/checkin_register/" button_text="Continue" schema={ schema } method="POST"
+               initial={ initial }></ur-form>
+    </div>
+  </div>
+
+  this.schema = ["email","first_name","last_name"];
+  this.initial = {email: this.opts.email};
+  console.log(this.initial);
+</checkin-new-user>
+
 <checkin-home>
   <div class="inner">
     <img class="logo" src="/static/logos/Logo-1_vertical_color_475x375.png" width="200" />
-    <div if={ kiosk && !email_checkin && !checkin }>
-      <p class="lead" style="text-align: center;">Please swipe your RFID to checkin.</p>
+    <div if={ kiosk && !email_checkin && !checkin } class="center">
+      <p class="lead">
+        Please swipe your RFID to checkin. If you do not have an RFID badge you can checkin using your email instead.
+      </p>
+      <button onclick={ toggleCheckin } class="btn btn-success">Checkin with Email</button>
     </div>
-    <div if={ email_checkin && !checkin }>
-      <p class="lead"><center>Enter your email below to checkin</center></p>
-      <ur-form action="/checkin_ajax/" button_text="Check In" schema={ email_schema } method="POST"></ur-form>
-      <button if={ kiosk } onclick={ toggleCheckin } class="btn btn-success">Checkin Using RFID</button>
+    <div if={ email_checkin && !checkin } class="center">
+      <p class="lead">Enter your email below to checkin. After you checkin you can print a name badge.</p>
+      <ur-form action="/checkin_email/" button_text="Check In" schema={ email_schema } method="POST"></ur-form>
+      <button if={ kiosk } onclick={ toggleCheckin } class="btn btn-success">Checkin with RFID</button>
     </div>
     <ul if={ messages.length } class={ uR.theme.message_list }>
       <li each={ messages } class={ uR.theme[level+'_class'] }>{ body }</li>
@@ -210,7 +231,6 @@
       <button class="btn btn-error red" onclick={ clear }>Done</button>
     </center>
     <div if={ TXRX.DEBUG } class="debug-console">
-      <button onclick={ toggleCheckin } class="btn btn-success">Email Checkin</button>
       <button onclick={ fakeRFID } class="btn btn-warning">Fake new RFID</button>
       <button onclick={ fakeRFID } data-key="0" class="btn btn-warning">Fake CCC</button>
     </div>
@@ -219,7 +239,6 @@
   var self = this;
   this.email_schema = [
     { name: "email", type: "email" },
-    { name: "password", type: "password" },
   ];
   this.on("mount", function() {
     if (window.location.search.indexOf("kiosk") != -1) {
@@ -280,9 +299,9 @@
   }
   this.ajax_success = function(data,response) {
     if (data.next) {
-      data.mount_to = uR.config.mount_alerts_to;
       data.parent = self;
-      uR.mountElement(data.next,data);
+      uR.alertElement(data.next,data);
+      return;
     }
     self.messages = data.messages;
     self.checkin = data.checkin;
@@ -290,6 +309,13 @@
     self.checkin_div.innerHTML = "<user-checkin>";
     riot.mount("#checkin_div user-checkin",{checkin:data.checkin, parent: self, rfid: data.rfid})
     self.countdown();
+    if (data.badge) {
+      var i = document.createElement("iframe");
+      i.src = "/static/badge.html?name="+data.checkin.user_display_name;
+      i.style="display:none;"
+      document.body.appendChild(i);
+      window.kill = function() { document.body.removeChild(i); }
+    }
   }
   countdown() {
     clearTimeout(self.timeout);
