@@ -99,26 +99,27 @@ uR.config.mount_to = "#main";
 uR.config.support_email = "info@txrxlabs.org";
 uR.config.threaded_comments = true;
 uR.config.do404 = function() {}
-if (!document.body.classList.contains("kiosk")) {
-  uR.config.form.field_class = "form-group"; // bootstrap
-}
 uR.drop.paypal_email = "txrxlabs@gmail.com";
 uR.drop.prefix = "/shop";
 uR.drop.stripe = true;
 uR.drop.paypal = true;
+uR.auth.auth_regexp = /^\/(auth|me)\//;
 
-uR.theme = {
-  input: document.body.classList.contains("kiosk")?"input-field":"form-control",
-  cart_items: "well cart-items",
-  message_list: "card",
-  success_class: "alert alert-success card-content green white-text",
-  error_class: "alert alert-danger card-content red white-text",
-  modal: {
-    outer: "modal-content",
-    header: "modal-header",
-    content: "modal-body",
-    footer: "modal-footer",
-  },
+if (!document.body.classList.contains("kiosk")) { // bootstrap
+  uR.config.form.field_class = "form-group";
+  uR.theme = {
+    input: "form-control",
+    cart_items: "well cart-items",
+    message_list: "card",
+    success_class: "alert alert-success card-content green white-text",
+    error_class: "alert alert-danger card-content red white-text",
+    modal: {
+      outer: "modal-content",
+      header: "modal-header",
+      content: "modal-body",
+      footer: "modal-footer",
+    },
+  }
 }
 uR.config.text_validators['signature'] = function(value,tag) {
   if (!value.startsWith("/s/")) { tag.data_error = "Signature must start with /s/"; }
