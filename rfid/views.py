@@ -24,18 +24,20 @@ def rfid_log(request):
   if not valid_ip_or_api_key(request):
     return FAIL
   DATA = getattr(request,request.method.upper())
-  if not ('data' in DATA and 'rfid' in DATA):
-    return HttpResponse('{"message": "Need rfid and data parameters","status": 400}',status=400)
-  log = RFIDLog.objects.create(
-    data=json.loads(DATA['data']),
-    rfid_number=DATA['rfid']
-  )
-  out = {
-    "rfid": log.rfid_number,
-    "data": log.data,
-    "status": 200
-  }
-  return JsonResponse(out)
+  if not ('logs' in DATA):
+    return HttpResponse('{"message": "Need logs parameter.","status": 400}',status=400)
+  out = []
+  for d in json.loads(DATA['logs']):
+    log = RFIDLog.objects.create(
+      data=d,
+      rfid_number=d['rfid'],
+    )
+    out.append({
+      "rfid": log.rfid_number,
+      "data": log.data,
+      "status": 200
+    })
+  return JsonResponse({'logs_created': out})
 
 def door_access(request):
   valid = valid_ip_or_api_key(request)
