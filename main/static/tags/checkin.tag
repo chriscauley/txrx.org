@@ -202,7 +202,6 @@
 
   this.schema = ["email","first_name","last_name"];
   this.initial = {email: this.opts.email};
-  console.log(this.initial);
 </checkin-new-user>
 
 <checkin-home>
@@ -210,9 +209,10 @@
     <img class="logo" src="/static/logos/Logo-1_vertical_color_475x375.png" width="200" />
     <div if={ kiosk && !email_checkin && !checkin } class="center">
       <p class="lead">
-        Please swipe your RFID to checkin. If you do not have an RFID badge you can checkin using your email instead.
+        Please swipe your RFID to checkin.
+        <span if={ allow_email }>If you do not have an RFID badge you can checkin using your email instead.</span>
       </p>
-      <button onclick={ toggleCheckin } class="btn btn-success">Checkin with Email</button>
+      <button onclick={ toggleCheckin } if={ allow_email } class="btn btn-success">Checkin with Email</button>
     </div>
     <div if={ email_checkin && !checkin } class="center">
       <p class="lead">Enter your email below to checkin. After you checkin you can print a name badge.</p>
@@ -241,9 +241,8 @@
     { name: "email", type: "email" },
   ];
   this.on("mount", function() {
-    if (window.location.search.indexOf("kiosk") != -1) {
-      this.kiosk = true;
-    }
+    this.kiosk = window.location.search.indexOf("kiosk") != -1;
+    this.allow_email = window.location.search.indexOf("allow_email") != -1;
     this.current_number = ""
     this.last_press = new Date();
     document.body.classList.add("kiosk");
