@@ -1,0 +1,39 @@
+<body>
+  <style>
+    html, body { margin: 0; padding: 0; }
+    #content {
+      align-items: center;
+      flex-direction: column;
+      display: flex;
+      height: 2.4in;
+      justify-content: center;
+      outline: 1px black solid;
+      text-align: center;
+      width: 2.4in;
+    }
+    #img { width: 80px; margin-bottom: 0.5em;}
+    h1 { margin: 0 0 0.5em; }
+    p { margin: 0 0 0.75em; }
+  </style>
+  <div id="content">
+    <img src="/static/logos/Logo-1_vertical_color_475x375.png" id="img" />
+    <h1>Visitor</h1>
+  </div>
+  <script src="/static/js/moment.js"></script>
+  <script src="/static/js/imagesloaded.js"></script>
+  <script>
+  imagesLoaded(document.querySelectorAll("img"),function(){
+    var content= document.getElementById("content");
+    var e = document.createElement("p");
+    e.innerHTML = unescape(window.location.search.match(/name=([^&]*)/)[1]).replace("+"," ");
+    content.appendChild(e);
+    var e = document.createElement("p");
+    e.innerHTML = moment().format("MMM D, YYYY");
+    content.appendChild(e);
+    if (window.parent && window.parent.kill) {
+      window.print();
+      window.parent.kill();
+    }
+  });
+  </script>
+</body>
