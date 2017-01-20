@@ -43,7 +43,7 @@
     this.start_string = moment(this.start).format("ddd MMM D, YYYY h:mm a");
     this.start_slug = moment(this.start).format("YYYY/MM/DD");
 
-    uR.ready(function() {
+    uR.auth.ready(function() {
       self.authenticated = uR.auth.user;
       self.update();
     });
