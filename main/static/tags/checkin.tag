@@ -121,12 +121,14 @@
 </user-checkin>
 
 <user-document>
-  <modal>
-    <h5>{ parent.opts.document.name }</h5>
-    <markdown content={ parent.opts.document.content }></markdown>
-    <ur-form schema={ parent.opts.document.schema } no_focus={ true } action={ parent.action } method="POST"
-             ajax_success={ parent.ajax_success }></ur-form>
-  </modal>
+  <div class={ theme.outer }>
+    <div class={ theme.header }><h5>{ opts.document.name }</h5></div>
+    <div class={ theme.content }>
+      <markdown content={ parent.opts.document.content }></markdown>
+      <ur-form schema={ opts.document.schema } no_focus={ true } action={ action } method="POST"
+               ajax_success={ ajax_success }></ur-form>
+    </div>
+  </div>
 
   ajax_success(data) {
     uR.forEach(opts.parent.documents,function(document,i) {
