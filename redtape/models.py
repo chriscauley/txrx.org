@@ -114,7 +114,7 @@ class DocumentField(models.Model):
     data = {
       'label': self.label,
       'name': self.get_name(),
-      'type': self.input_type,
+      'type': INPUT_TYPE_MAP.get(self.input_type,self.input_type),
       'required': self.required,
       'help_text': INPUT_HELP_TEXT.get(self.input_type,None),
     }

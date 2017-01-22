@@ -28,6 +28,8 @@
     "gulp-sourcemaps": "^1.9.1",
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
+    "mocha": "^3.2.0",
+    "mocha-phantomjs": "^4.1.0",
     "rollup-plugin-babel": "^2.6.1",
     "through2": "^2.0.3"
   }
