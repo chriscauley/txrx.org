@@ -234,7 +234,7 @@
     </center>
     <div if={ TXRX.DEBUG } class="debug-console">
       <button onclick={ fakeRFID } class="btn btn-warning">Fake new RFID</button>
-      <button onclick={ fakeRFID } data-key="0" class="btn btn-warning">Fake CCC</button>
+      <button onclick={ fakeRFID } class="btn btn-warning">Fake CCC</button>
     </div>
   </div>
 
@@ -291,10 +291,10 @@
   }
   fakeRFID(e) {
     var i = 10;
-    var key = e.target.dataset['key'];
+    var key = uR.getQueryParameter("key");
     while (i--) {
-      var num = (key !== undefined)?key:Math.floor(Math.random()*10);
-      this.press({keyCode: num+48,timeStamp: new Date() });
+      var num = (key !== undefined)?key[9-i]:Math.floor(Math.random()*10);
+      this.press({keyCode: parseInt(num)+48,timeStamp: new Date() });
     }
     this.press({keyCode:13});
   }

@@ -242,7 +242,7 @@
         self.active_user.rfids = data.rfids;
         self.error = data.error;
       },
-      error: function() { alert("An unknown error occurred. Please contact Chris.") },
+      error: function(data) { alert("An unknown error occurred. Please contact Chris:\n"+data.error) },
       target: self.root.querySelector("modal .inner")
     });
     return false;
