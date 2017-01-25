@@ -2,6 +2,7 @@
 <nav class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
+    <li class="visible-xs mobile-cart"><cart-button></cart-button></li>
     <a class="navbar-toggle" style="cursor:pointer;" onclick="$('#navbar-collapse-1').toggleClass('in')">
       <span class="sr-only">Toggle navigation</span>
       <span class="icon-bar"></span>
@@ -34,7 +35,7 @@
       {% endfor %}
     </ul>
     <ul class="nav navbar-nav navbar-right auth">
-      <li>
+      <li class="hidden-xs">
         <cart-button></cart-button>
       </li>
       <li class="social">

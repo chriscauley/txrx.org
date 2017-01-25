@@ -7,7 +7,6 @@
 <div class="form-group {% if field.errors %}has-error{% endif %}">
   {% if not field.field.widget.attrs.placeholder %}{{ field.label_tag }}{% endif %}
   {{ field }}
-  {% if field|is_checkbox %}{{ field.label_tag }}{% endif %}
   {% for error in field.errors %}
   <div class="alert alert-danger">{{ error }}</div>
   {% endfor %}
