@@ -122,6 +122,7 @@ from main.signals import *
 
 try:
   from django.contrib.contenttypes.models import ContentType
+  ContentType.__unicode__ = lambda self: "%s - %s"%(self.app_label,self.model)
   if settings.DEBUG:
     @admin.register(LogEntry)
     class LogEntryAdmin(admin.ModelAdmin):
@@ -129,5 +130,6 @@ try:
       list_display = ('__unicode__','action_time','content_type','user')
       raw_id_fields = ('user',)
     ContentType._meta.ordering = ('model',)
+    admin.site.register(ContentType)
 except:
   pass

@@ -20,10 +20,6 @@ DROP_PAYMENT_BACKENDS = [
   'drop.payment.backends.stripe_backend.Stripe',
   'drop.giftcard.backend.GiftCard',
 ]
-DROP_CART_MODIFIERS = [
-  'drop.cart.modifiers.partial_payment.PartialPaymentModifier',
-  'drop.discount.modifier.UserDiscountCartModifier',
-]
 DROP_GET_OR_CREATE_CUSTOMER = 'course.utils.get_or_create_student'
 DROP_GIFTCARD_LANDING = "/classes/"
 DROP_GIFTCARD_IMG = os.path.join(SPATH,"static/img/giftcard_base.png")
