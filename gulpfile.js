@@ -21,8 +21,6 @@ var source_files = [
   _ROOT + "less/bootstrap/js/popover.js",
   _ROOT + "less/bootstrap/js/tab.js",
   _ROOT + "js/moment.js",
-  _ROOT + "js/simpleCart.js",
-  _ROOT + "js/cart.js",
   _ROOT + "js/init.js",
   _ROOT + "js/blog.js",
   _ROOT + "js/favico.js",

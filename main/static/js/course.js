@@ -84,5 +84,20 @@ uR.auth.ready(function() {
     filterSearch: filterSearch
   });
   if (unscheduled_courses) { $(".course_divider").show(); }
-  simpleCart.update();
+});
+// #! TODO
+// Currently only used in the course tabs section. Should be replaced with ur-tabs
+$(function() {
+  $('[data-toggle="tab"]').click(function(e) {
+    var $this = $(this), loadurl = $this.data('href'), targ = $($this.attr('href'));
+    if (!loadurl) { return true; }
+
+    $this.removeData('href');
+
+    if (targ.hasClass("needs_ajax")) {
+      $.get(loadurl, function(data) {
+        targ.html(data).removeClass("needs_ajax");
+      });
+    }
+  });
 });

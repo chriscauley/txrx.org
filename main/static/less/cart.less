@@ -1,42 +1,11 @@
 .store-button { display:none; }
-
+shopping-cart .payment_buttons {
+  max-width: 400px;
+}
 .mobile-cart cart-button {
   top: 9px;
   right: 60px;
   position: absolute;
-}
-
-cart {
-  overflow-y: scroll;
-  z-index:1000;
-  &,& .mask {
-    bottom: 0;
-    left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-  }
-  .mask { background: fade(@gray-darker,25%); z-index: 999; }
-  .content {
-    background: white;
-    margin: 30px auto;
-    max-width: 100%;
-    position: relative;
-    width: 600px;
-    z-index: 1001
-  }
-  .header {
-    border-bottom: 1px solid @gray-lighter;
-    padding: 15px;
-  }
-  .footer {
-    padding: 20px;
-  }
-  .body {
-    margin: 0 auto;
-    max-width: 400px;
-    padding: 20px 0 0;
-  }
 }
 
 shopping-cart .item {
@@ -50,72 +19,4 @@ shopping-cart .item {
     padding-left: 20px;
     text-align: right;
   }
-}
-
-cart .items {
-  padding: 3px;
-  position: relative;
-  margin-bottom: 5px;
-  min-height: 20px;
-  overflow: hidden;
-  text-align: center;
-  .item {
-    position: relative;
-    &:nth-child(2n+1) { background-color: fade(@gray-darker, 5%); }
-  }
-  .name {
-    font-size: 12px;
-    padding-right: 15px;
-    text-align: left;
-    b { font-size: 1.1em; }
-  }
-
-  .quantity, .decrement, .increment {
-    display: inline-block;
-    line-height: 1em;
-    vertical-align: middle;
-  }
-  .remove, .decrement, .increment { cursor: pointer; }
-  .quantity, .decrement { padding-right: 10px; }
-  .increment { padding-right: 5px; }
-  .decrement, .increment {
-    background: transparent;
-    color: @link-color;
-    font-size: 1.2em;
-  }
-
-  .quantity {
-    font-weight: bold;
-    &:before { content: "Quantity: "; font-weight: normal; }
-  }
-  .total {
-    font-weight: bold;
-    &:before { content: "Item Total: "; font-weight: normal; }
-  }
-
-  .remove {
-    color: @brand-danger;
-    font-size: 1.1em;
-    position: absolute;
-    right: 6px;
-    top: 6px;
-  }
-}
-
-cart {
-  .subtotals {
-    border-top: 1px solid @borderGray;
-    margin: 10px auto 0;
-    padding-top: 5px;
-    width: 75%;
-  }
-
-  .subtotal, .discount {
-    font-weight: bold;
-    text-align: center;
-    &:before { font-weight: normal; }
-  }
-
-  .subtotal:before { content: "Cart Subtotal: "; }
-  .discount:before { content: "Discount: "; }
 }

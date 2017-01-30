@@ -34,11 +34,6 @@ function readCookie(name) {
 
 function eraseCookie(name) { createCookie(name,"",-1); }
 
-function openCart() {
-  $("body").append("<cart></cart>");
-  riot.mount("cart");
-}
-
 function cheatCode(f,qs) {
   var HACKERKEYS = [];
   var code = [38,38,40,40,37,39,37,39,66,65];
@@ -104,6 +99,7 @@ uR.drop.prefix = "/shop";
 uR.drop.stripe = true;
 uR.drop.paypal = true;
 uR.auth.auth_regexp = /^\/(auth|me)\//;
+uR.drop.promocode_active = true;
 
 if (!document.body.classList.contains("kiosk")) { // bootstrap
   uR.config.form.field_class = "form-group";
