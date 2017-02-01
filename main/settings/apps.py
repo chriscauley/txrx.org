@@ -169,10 +169,13 @@ SUIT_CONFIG = {
     {'app': 'store',
      'icon': 'icon-cart',
      'models': (
+       'drop.cart',
        'store.category',
        'store.consumable',
        'store.coursecheckout',
        'drop.order',
+       'discount.promocode',
+       'discount.promocodeusage',
        'store.toolconsumablegroup',
      )
    },
