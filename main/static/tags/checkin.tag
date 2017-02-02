@@ -124,7 +124,7 @@
   <div class={ theme.outer }>
     <div class={ theme.header }><h5>{ opts.document.name }</h5></div>
     <div class={ theme.content }>
-      <markdown content={ parent.opts.document.content }></markdown>
+      <markdown content={ opts.document.content }></markdown>
       <ur-form schema={ opts.document.schema } no_focus={ true } action={ action } method="POST"
                ajax_success={ ajax_success }></ur-form>
     </div>
