@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.utils import ProgrammingError
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -173,7 +174,10 @@ class EventOccurrence(PhotosMixin,OccurrenceModel):
   total_rsvp = property(lambda self: sum([r.quantity for r in self.get_rsvps()]))
   full = property(lambda self: self.total_rsvp >= self.event.max_rsvp)
   icon = property(lambda self: self.event.icon)
-  _cid = ContentType.objects.get(model="eventoccurrence").id
+  try:
+    _cid = ContentType.objects.get(model="eventoccurrence").id
+  except ProgrammingError:
+    pass # this breaks on the initial migration
   @cached_method
   def get_rsvps(self):
     return RSVP.objects.filter(object_id=self.id,content_type_id=self._cid)

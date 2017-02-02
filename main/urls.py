@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import password_reset
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.sitemaps.views import sitemap
+from django.db.utils import ProgrammingError
 
 from main.sitemaps import sitemaps
 from main.feeds import AllFeed
@@ -147,8 +148,11 @@ urlpatterns += [
 if hasattr(settings,"STAFF_URL"):
   urlpatterns += [url(settings.STAFF_URL[1:],user.views.hidden_image)]
 
-flatpages = [page.url[1:] for page in FlatPage.objects.all()]
-fps = '|'.join(flatpages)
+# this breaks on initial migration before flatpages are migrated
+try:
+  fps = '|'.join([page.url[1:] for page in FlatPage.objects.all()])
+except ProgrammingError:
+  fps = "nope!"
 
 import django.contrib.flatpages.views
 # flat pages
