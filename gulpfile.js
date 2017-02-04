@@ -7,6 +7,7 @@ var sourcemaps = require("gulp-sourcemaps");
 var through = require('through2');
 var uglify = require('gulp-uglify');
 var util = require('gulp-util');
+//const autoprefixer = require('gulp-autoprefixer');
 
 var _ROOT = "main/static/";
 var _DEST = ".static/"
@@ -60,6 +61,7 @@ var css_files = [
 gulp.task('build-css', function () {
   return gulp.src(css_files)
     .pipe(less({}))
+    //.pipe(autoprefixer())
     .pipe(concat('txrx-built.css'))
     .pipe(gulp.dest(_DEST));
 });

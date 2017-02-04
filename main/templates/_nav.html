@@ -17,23 +17,6 @@
 
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="navbar-collapse-1">
-    <ul class="nav navbar-nav main-nav">
-      {% for n in nav %}
-      {% if n.sublinks %}
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ n.name }} <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          {% for sublink in n.sublinks %}
-          <li><a href="{{ sublink.url }}"{% if sublink.reddot %} data-reddot="{{ sublink.reddot }}"{% endif %}>
-              {{ sublink.name }}</a></li>
-          {% endfor %}
-        </ul>
-      </li>
-      {% else %}
-      <li class="{{ n.class }}"><a href="{{ n.url }}">{{ n.name }}</a></li>
-      {% endif %}
-      {% endfor %}
-    </ul>
     <ul class="nav navbar-nav navbar-right auth">
       <li class="hidden-xs">
         <cart-button></cart-button>
@@ -83,6 +66,23 @@
           {% endif %}
         </ul>
       </li>
+    </ul>
+    <ul class="nav navbar-nav main-nav">
+      {% for n in nav %}
+      {% if n.sublinks %}
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ n.name }} <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          {% for sublink in n.sublinks %}
+          <li><a href="{{ sublink.url }}"{% if sublink.reddot %} data-reddot="{{ sublink.reddot }}"{% endif %}>
+              {{ sublink.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% else %}
+      <li class="{{ n.class }}"><a href="{{ n.url }}">{{ n.name }}</a></li>
+      {% endif %}
+      {% endfor %}
     </ul>
   </div><!-- /.navbar-collapse -->
 </nav>

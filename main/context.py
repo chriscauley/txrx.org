@@ -76,6 +76,8 @@ def nav(request):
       {'name': 'Orientations','url': '/event/orientations/','reddot': _orientations },
       {'name': 'Bays + Tables', 'url': '/admin/membership/container/?needs+Staff=yes&o=2', 'reddot': _containers},
     ]
+  if request.user.is_authenticated() and (request.user.is_staff or request.user.is_volunteer):
+    tool_sublinks.append({"name": "Today's Checkins",'url': '/todays-checkins'})
   if getattr(request.user,'is_gatekeeper',False) or is_superuser:
     tool_sublinks.append({'name': 'Set RFID','url': '/rfid/'})
     tool_sublinks.append({'name': 'RFID Table','url': '/rfid_permission_table/'})

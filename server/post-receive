@@ -16,3 +16,4 @@ fi
 
 cd $PROJECT_ROOT
 bash server/build.sh
+echo "PULLED!!!"
