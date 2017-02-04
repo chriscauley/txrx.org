@@ -12,13 +12,15 @@
 }
 .navbar-collapse {
   max-height: none;
-  @media (max-width: @screen-xs-max) {
-    display: flex;
-    flex-wrap: wrap;
-    .navbar-nav {
-      flex-basis: 100%;
-      order: 1;
-      &.auth { order: 0; }
+  &.in {
+    @media (max-width: @screen-xs-max) {
+      display: flex;
+      flex-wrap: wrap;
+      .navbar-nav {
+        flex-basis: 100%;
+        order: 1;
+        &.auth { order: 0; }
+      }
     }
   }
 }
