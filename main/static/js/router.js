@@ -15,6 +15,6 @@
     "^/me/": uR.auth.loginRequired("checkin-home"),
     "^/my-permissions/": uR.auth.loginRequired('badge'),
     "^/rfid/": function() { uR.mountElement("set-rfid"); },
-    "^/(week-hours|todays-checkins|needed-sessions|maintenance)/": uR.mountElement,
+    "^/(week-hours|todays-checkins|needed-sessions|maintenance)/": uR.auth.loginRequired(uR.mountElement),
   });
 })();

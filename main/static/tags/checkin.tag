@@ -144,7 +144,24 @@
 </user-document>
 
 <todays-checkins>
-  <search-users empty={ data.todays_ids }></search-users>
+  <search-users empty={ data.todays_ids }>
+    <yield to="top">
+      <h2>Checkins Today</h2>
+      <p class="lead">Students who checkin will appear here.</p>
+    </yield>
+    <yield to="result">
+      <div class="card horizontal">
+        <div class="card-image">
+          <img src={ headshot } />
+        </div>
+        <div class="card-content">
+          { get_full_name }<br />
+          { username }<br />
+          { email }<br />
+        </div>
+      </div>
+    </yield>
+  </search-users>
   <div class="checkin-div"></div>
 
   var self = this;

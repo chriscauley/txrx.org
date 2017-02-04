@@ -4,6 +4,9 @@ from .models import User
 from api.serializers import BaseSizzler
 
 class SearchSizzler(BaseSizzler):
+  """
+  Used in the staff views to look up members
+  """
   @classmethod
   def get_queryset(class_,request):
     data = request.POST or request.GET
@@ -13,7 +16,7 @@ class SearchSizzler(BaseSizzler):
     return qs.distinct()
   class Meta:
     model = User
-    fields = ('username','id','email','paypal_email','get_full_name','rfids')
+    fields = ('username','id','email','paypal_email','get_full_name','rfids','headshot')
 
 class StudentSizzler(BaseSizzler):
   class Meta:

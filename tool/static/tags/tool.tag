@@ -73,8 +73,10 @@
 
 <toolmaster>
   <search-users search_term={ opts.search_term }>
-    <h2>Manage Tool Permission</h2>
-    <p>Search for students to change their privileges and course completions.</p>
+    <yield to="top">
+      <h2>Manage Tool Permission</h2>
+      <p>Search for students to change their privileges and course completions.</p>
+    </yield>
   </search-users>
   <div if={ active_user } class="row buttons">
     <div class="col-sm-6">
@@ -178,8 +180,10 @@
 
 <set-rfid>
   <search-users if={ !opts.active_id }>
-    <h2>Change RFID</h2>
-    <p>Find a user and then select them and you will be prompted for a new rfid</p>
+    <yield to="top">
+      <h2>Change RFID</h2>
+      <p>Find a user and then select them and you will be prompted for a new rfid</p>
+    </yield>
   </search-users>
   <button if={ opts.active_id } onclick={ open }
           class="btn btn-{ _user.rfids.length?'success':'danger' }">Set RFIDs</button>
@@ -259,7 +263,7 @@
 </set-rfid>
 
 <search-users>
-  <yield/>
+  <yield from="top" />
   <input type="text" name="q" onkeyup={ search } placeholder="Search by name or email" autocomplete="off"
          if={ !parent.active_user }/>
   <div class="results">
@@ -267,12 +271,16 @@
       &laquo; Back to results
     </button>
     <div each={ results } if={ !parent.parent.active_user }>
-      <div class="card well" onclick={ parent.parent.select } style="cursor: pointer;">
-        <div class="row card-content">
-          <div class="col-sm-4 col s4">{ username }<br />{ get_full_name }&nbsp;</div>
-          <div class="col-sm-8 col s8">{ email }<br/>{ paypal_email }</div>
+      <yield from="result">
+        <div class="card well" onclick={ parent.parent.select } style="cursor: pointer;">
+          <div class="card-content">
+            <div class="row">
+              <div class="col-sm-4 col s4">{ username }<br />{ get_full_name }&nbsp;</div>
+              <div class="col-sm-8 col s8">{ email }<br/>{ paypal_email }</div>
+            </div>
+          </div>
         </div>
-      </div>
+      </yield>
     </div>
     <div if={ !results.length }>
       No results. Try changing query
