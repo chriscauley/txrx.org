@@ -1,0 +1,63 @@
+{% extends "admin/base.html" %}
+{% load compress %}
+
+{% block content %}
+<h1>Sales Dashboard</h1>
+<ur-plot></ur-plot>
+
+<script src="https://cdn.jsdelivr.net/riot/2.5/riot+compiler.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% compress js %}
+<script src="{{ STATIC_URL }}unrest/.dist/unrest-built.js"></script>
+{#<script src="{{ STATIC_URL }}drop/.dist/drop-built.js"></script>#}
+{#<script src="{{ STATIC_URL }}txrx-built.js"></script>#}
+{#<script src="{{ STATIC_URL }}unrest_comments/.dist/unrest_comments.js"></script>#}
+{% endcompress %}
+<script type="riot/tag">
+  <ur-plot>
+    <select id="id_product_types" name="product_types">
+      <option value="214">course enrollments</option>
+      <option value="215">giftcards</option>
+      <option value="121">shop consumables</option>
+      {#<option value="133">membership</option> #}
+      <option value="">All products</option>
+    </select>
+    <div id="tester" style="width:600px;height:250px;"></div>
+    this.on("mount",function() {
+      this.update_plot();
+    });
+    update_plot() {
+      uR.ajax({
+        url: "/dashboard/totals.json",
+        data: {},
+        success: function(data) {
+          self.data = data;
+          console.log(data);
+          TESTER = document.getElementById('tester');
+          Plotly.plot(
+            TESTER, [
+              { x: data.days, y: data.money, },
+              { x: data.days, y: data.quantity }
+            ],
+            {
+              margin: { l: 50, r: 20, b: 40, t: 20 },
+              xaxis: {
+                title: 'Date',
+              },
+              yaxis: {
+                title: 'Money',
+              }
+            }
+          );
+        },
+      });
+    }
+  </ur-plot>
+
+</script>
+<script>
+</script>
+<script>
+  riot.mount("ur-plot");
+</script>
+{% endblock %}
