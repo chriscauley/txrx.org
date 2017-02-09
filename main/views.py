@@ -49,5 +49,5 @@ def index(request):
 def intentional_500(request):
   arst
 
-def to_template(request,template_name):
-  return TemplateResponse(request,"flatpages/{}.html".format(template_name),{})
+def to_template(request,s):
+  return TemplateResponse(request,["flatpages/{}.html".format(s),"{}.html".format(s)],{})

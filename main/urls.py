@@ -9,7 +9,7 @@ from django.db.utils import ProgrammingError
 
 from main.sitemaps import sitemaps
 from main.feeds import AllFeed
-from main import views as main_views
+import main.views, main.dashboard
 
 import blog.urls, blog.views
 import store.urls, media.urls, event.urls, thing.views, tool.urls, tool.views
@@ -18,9 +18,7 @@ import social.apps.django_app.urls
 import unrest_comments.urls
 import course.urls, course.views
 import djstripe.urls
-import contact.views
-import geo.views
-import user.views
+import contact.views, geo.views, user.views
 import redtape.urls
 import membership.urls
 import registration.urls
@@ -43,36 +41,38 @@ _pages = [
   'rfid',
   'toolmaster',
   'week-hours',
-  'me'
+  'me',
 ]
 
 urlpatterns = [
-  url(r'^(%s)/$'%('|'.join(_pages)),main_views.beta),
-  url(r'^$',main_views.index,name="home"),
+  url(r'^(%s)/$'%('|'.join(_pages)),main.views.beta),
+  url(r'^$',main.views.index,name="home"),
   url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+  url(r'^(admin/dashboard)/',main.views.to_template),
+  url(r'^dashboard/totals.json$', main.dashboard.totals_json),
   url(r'^admin/', include(admin.site.urls)),
   url(r'^blog/',include(blog.urls)),
-  url(r'arst/(?P<pk>\d+)',main_views.intentional_500,name="order_detail"),
+  url(r'arst/(?P<pk>\d+)',main.views.intentional_500,name="order_detail"),
   url(r'^(\d{4})/(\d{1,2})/(\d{1,2})/([^/]+)/',blog.views.post_redirect),
-  url(r'^500/$',main_views.intentional_500),
+  url(r'^500/$',main.views.intentional_500),
   url(r'^event/',include(event.urls,namespace="event",app_name="event")),
   url(r'^media_files/',include(media.urls)),
   url(r'^shop/',include(store.urls)),
-  url(r'^product_is_a_fail/(.*)/$',main_views.index,name="product_detail"),
+  url(r'^product_is_a_fail/(.*)/$',main.views.index,name="product_detail"),
   url(r'^comments/',include(unrest_comments.urls)),
   url(r'^rss/$', AllFeed()),
-  url(r'^favicon.ico$',main_views.predirect,
+  url(r'^favicon.ico$',main.views.predirect,
       kwargs={'url':getattr(settings,'FAVICON','/static/favicon.ico')}),
-  url(r'^sculpturemonth$',main_views.predirect,
+  url(r'^sculpturemonth$',main.views.predirect,
       kwargs={'url':"/classes/221/3d-modeling-with-rhino/?rhino10"}),
   url(r'^thing/$',thing.views.thing_index,name='thing_index'),
   url(r'^thing/add/$',thing.views.add_thing,name='add_thing'),
   url(r'^thing/(\d+)/([\w\d\-\_]+)/$',thing.views.thing_detail,name='thing_detail'),
-  url(r'^gfycat/$',main_views.gfycat,name='gfycat'),
+  url(r'^gfycat/$',main.views.gfycat,name='gfycat'),
   url(r'^tools/',include(tool.urls)),
   url(r'^borrow/$',tool.views.checkout_items,name='checkout_items'),
   url('', include(social.apps.django_app.urls, namespace='social')),
-  url(r'perfect-programming',main_views.intentional_500),
+  url(r'perfect-programming',main.views.intentional_500),
   url(r'^classes/', include(course.urls,namespace='course',app_name='course')),
   url(r'^gift/$',course.views.classes.index),
   url(r'^tx/rx/ipn/handler/', include(paypal.standard.ipn.urls)),
@@ -129,7 +129,7 @@ urlpatterns += [
   url(r'^accounts/', include(registration.urls)),
   url(r'^auth/password_reset/$',activate_user(password_reset)),
   url(r'^auth/',include(django.contrib.auth.urls)),
-  url(r'^force_login/(\d+)/$', main_views.force_login),
+  url(r'^force_login/(\d+)/$', main.views.force_login),
   url(r'^api/remove_rfid/$',user.views.remove_rfid),
   url(r'^api/change_rfid/$',user.views.set_rfid),
   url(r'^api/user_checkin/$',user.views.user_checkin),
@@ -157,7 +157,7 @@ except ProgrammingError:
 import django.contrib.flatpages.views
 # flat pages
 urlpatterns += [
-  url(r'^(about-us)/$',main_views.to_template),
+  url(r'^(about-us)/$',main.views.to_template),
   url(r'(%s)'%fps,django.contrib.flatpages.views.flatpage,name='map'),
 ]
 
@@ -178,7 +178,7 @@ if settings.DEBUG:
 # Turn me on to enable "maintenance mode"
 if False:
   urlpatterns = [
-    url(r'^(maintenance)/$',main_views.beta),
+    url(r'^(maintenance)/$',main.views.beta),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'',main_views.predirect,kwargs={'url': "/maintenance/"},name="logout"),
+    url(r'',main.views.predirect,kwargs={'url': "/maintenance/"},name="logout"),
   ]

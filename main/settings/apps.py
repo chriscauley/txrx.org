@@ -110,90 +110,102 @@ SUIT_CONFIG = {
   'MENU': (
     'blog',
     'contact',
-    {'app': 'course',
-     'icon':'icon-pencil',
-     'models': (
-       #'course.branding', #accessible thorugh course.course
-       'course.course',
-       'course.enrollment',
-       'course.evaluation',
-       'geo.location',
-       'geo.room',
-       'course.session',
-       'course.subject',
-       #'course.term', #accessible through course.session
-     )
+    {
+      'app': 'course',
+      'icon':'fa fa-graduation-cap',
+      'models': (
+        #'course.branding', #accessible thorugh course.course
+        'course.course',
+        'course.enrollment',
+        'course.evaluation',
+        'geo.location',
+        'geo.room',
+        'course.session',
+        'course.subject',
+        #'course.term', #accessible through course.session
+      )
     },
     #'default', # social-auth
-    {'app': 'event',
-     'icon':'icon-calendar',
-     'models': (
-       'event.event',
-       'event.eventoccurrence',
-       'event.rsvp',
-       'geo.location',
-       'geo.room',
-       'tool.schedule',
-       'tool.holiday',
-     )
+    {
+      'app': 'event',
+      'icon':'icon-calendar',
+      'models': (
+        'event.event',
+        'event.eventoccurrence',
+        'event.rsvp',
+        'geo.location',
+        'geo.room',
+        'tool.schedule',
+        'tool.holiday',
+      )
     },
     #'feed', # not implimented
     #'geo', #occurs in several other places
     #'ipn', #paypal ipns
-    {'app': 'media',
-     'models': (
-       {'model': 'unrest_comments.unrestcomment', 'label':'Comments'},
-       'flatpages.flatpage',
-       'media.miscfile',
-       'media.photo',
-       'media.phototag',
-     )
+    {
+      'app': 'media',
+      'models': (
+        {'model': 'unrest_comments.unrestcomment', 'label':'Comments'},
+        'flatpages.flatpage',
+        'media.miscfile',
+        'media.photo',
+        'media.phototag',
+      )
     },
-    {'app': 'membership',
-     'icon':'icon-user',
-     'models': (
-       'membership.flag',
-       'membership.group',
-       'membership.level',
-       'membership.meetingminutes',
-       'membership.officer',
-       'registration.registrationprofile',
-       'membership.subscription',
-       'user.user',
-     )
+    {
+      'app': 'membership',
+      'icon':'icon-user',
+      'models': (
+        'membership.flag',
+        'membership.group',
+        'membership.level',
+        'membership.meetingminutes',
+        'membership.officer',
+        'registration.registrationprofile',
+        'membership.subscription',
+        'user.user',
+      )
     },
     'unrest_comments'
     'notify',
     #'sites',
     #'tagging',
-    {'app': 'store',
-     'icon': 'icon-cart',
-     'models': (
-       'drop.cart',
-       'store.category',
-       'store.consumable',
-       'store.coursecheckout',
-       'drop.order',
-       'discount.promocode',
-       'discount.promocodeusage',
-       'store.toolconsumablegroup',
-     )
-   },
+    {
+      'app': 'store',
+      'icon': 'icon-shopping-cart',
+      'models': (
+        'drop.cart',
+        'store.category',
+        'store.consumable',
+        'store.coursecheckout',
+        'drop.order',
+        'discount.promocode',
+        'discount.promocodeusage',
+        'store.toolconsumablegroup',
+      )
+    },
     'thing',
-    {'app': 'tool',
-     'icon': 'icon-wrench',
-     'models': (
-       'tool.checkoutitem',
-       'tool.toolcheckoutitemgroup',
-       'tool.criterion',
-       'tool.doorgroup',
-       'tool.lab',
-       'tool.permission',
-       'tool.tool',
-       'store.toolconsumablegroup',
-       'tool.usercriterion',
-     )
-   },
+    {
+      'app': 'tool',
+      'icon': 'icon-wrench',
+      'models': (
+        'tool.checkoutitem',
+        'tool.toolcheckoutitemgroup',
+        'tool.criterion',
+        'tool.doorgroup',
+        'tool.lab',
+        'tool.permission',
+        'tool.tool',
+        'store.toolconsumablegroup',
+        'tool.usercriterion',
+      )
+    },
+    {
+      'label': 'Dashboard',
+      'icon': 'fa fa-bar-chart',
+      'url': '/admin/dashboard/',
+    }
+    
     #{'label': 'Settings', 'icon':'icon-cog', 'models': ('auth.user', 'auth.group')},
     #{'label': 'Support', 'icon':'icon-question-sign', 'url': '/support/'},
   ),

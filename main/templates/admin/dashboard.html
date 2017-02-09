@@ -1,43 +1,51 @@
-{% extends "admin/base.html" %}
+{% extends "base.html" %}
 {% load compress %}
 
-{% block content %}
+{% block main %}
 <h1>Sales Dashboard</h1>
 <ur-plot></ur-plot>
 
-<script src="https://cdn.jsdelivr.net/riot/2.5/riot+compiler.min.js"></script>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-{% compress js %}
-<script src="{{ STATIC_URL }}unrest/.dist/unrest-built.js"></script>
-{#<script src="{{ STATIC_URL }}drop/.dist/drop-built.js"></script>#}
-{#<script src="{{ STATIC_URL }}txrx-built.js"></script>#}
-{#<script src="{{ STATIC_URL }}unrest_comments/.dist/unrest_comments.js"></script>#}
-{% endcompress %}
 <script type="riot/tag">
   <ur-plot>
-    <select id="id_product_types" name="product_types">
-      <option value="214">course enrollments</option>
-      <option value="215">giftcards</option>
-      <option value="121">shop consumables</option>
-      {#<option value="133">membership</option> #}
-      <option value="">All products</option>
-    </select>
+    <ur-form initial={ initial } submit="noop"></ur-form>
     <div id="tester" style="width:600px;height:250px;"></div>
+
+    this.schema = [
+      { name: 'product_types', type: 'select', required: false,
+        choice_tuples: [
+          ["",'All Products'],
+          ["214","Course Enrollments"],
+          ["215","Giftcards"],
+          ["121","Shop Consumables"],
+          //["133","Meberships"],
+        ]
+      },
+      { name: 'time_period', type: 'select', required: false,
+        choice_tuples: [
+          [90,'Three Months'],
+          [180,'Six Months'],
+          [365,'One Year'],
+          ['*','All of Time'],
+        ]
+      },
+    ];
+    this.initial = uR.getQueryDict();
+    this.initial.time_period = this.initial.time_period || 90;
     this.on("mount",function() {
       this.update_plot();
     });
     update_plot() {
       uR.ajax({
-        url: "/dashboard/totals.json",
-        data: {},
+        url: "/dashboard/totals.json"+window.location.search,
         success: function(data) {
           self.data = data;
           console.log(data);
           TESTER = document.getElementById('tester');
           Plotly.plot(
             TESTER, [
-              { x: data.days, y: data.money, },
-              { x: data.days, y: data.quantity }
+              { x: data.days, y: data.money, name: 'money'},
+              { x: data.days, y: data.quantity, name: "quantity" }
             ],
             {
               margin: { l: 50, r: 20, b: 40, t: 20 },
@@ -56,8 +64,6 @@
 
 </script>
 <script>
-</script>
-<script>
-  riot.mount("ur-plot");
+  uR.ready(function() { riot.mount("ur-plot"); });
 </script>
 {% endblock %}
