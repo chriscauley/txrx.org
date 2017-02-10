@@ -2,11 +2,11 @@
 {% load compress %}
 
 {% block main %}
-<h1>Sales Dashboard</h1>
 <ur-plot></ur-plot>
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script type="riot/tag">
+  <h1>Sales Dashboard</h1>
   <ur-plot>
     <ur-form initial={ initial } action="/dashboard/totals.json" ajax_success={ update_plot }
              schema={ schema }></ur-form>
@@ -14,6 +14,14 @@
 
     var self = this;
     this.schema = [
+      { name: 'metric', type: 'select', required: false,
+        choice_tuples: [
+          ['line_total','Cart Total'],
+          ['quantity','Quantity'],
+          ['new_students','New Students'],
+          ['classes_per_student','Classes Per Student'],
+        ]
+      },
       { name: 'product_types', type: 'hidden', required: false,
         choice_tuples: [
           ["",'All Products'],
@@ -30,13 +38,6 @@
           [365,'One Year'],
         ]
       },
-      { name: 'metric', type: 'select', required: false,
-        choice_tuples: [
-          ['line_total','Cart Total'],
-          ['quantity','Quantity'],
-          ['new_students','New Students']
-        ]
-      }
     ];
     this.initial = uR.getQueryDict();
     this.initial.time_period = this.initial.time_period || 90;
@@ -70,7 +71,10 @@
   </ur-plot>
 
 </script>
+{% endblock %}
+
+{% block extrajs %}
 <script>
-  uR.ready(function() { riot.mount("ur-plot"); });
+  uR.ready(uR.auth.loginRequired(function() { riot.mount("ur-plot"); }));
 </script>
 {% endblock %}
