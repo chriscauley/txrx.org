@@ -18,17 +18,15 @@ def totals_json(request):
     time_period = (timezone.now()-Order.objects.all().order_by("created")[0].created).days
   start_date = timezone.now().date() - datetime.timedelta(time_period)
 
-  money = []
-  quantity = []
+  data = []
   days = []
+  metric = request.GET.get('metric','line_total')
   for i in range(time_period):
     day = start_date + datetime.timedelta(i)
     _items = order_items.filter(order__created__gte=day,order__created__lt=day+datetime.timedelta(1))
-    money.append(sum(_items.values_list('line_total',flat=True)))
-    quantity.append(sum(_items.values_list('quantity',flat=True)))
+    data.append(sum(_items.values_list(metric,flat=True)))
     days.append(day.strftime("%Y-%m-%d"))
   return JsonResponse({
-    'money': money,
-    'quantity': quantity,
+    'data': data,
     'days': days,
   })
