@@ -1,5 +1,6 @@
 (function() {
   function fromTemplate(template_name,data) {
+    template_name = template_name.match(/[^\/].+[^\/]/)[0];
     riot.compile(
       "/static/templates/"+template_name+".html",
       function(html) { uR.mountElement(template_name,data); }
@@ -15,6 +16,7 @@
     "^/me/": uR.auth.loginRequired("checkin-home"),
     "^/my-permissions/": uR.auth.loginRequired('badge'),
     "^/rfid/": function() { uR.mountElement("set-rfid"); },
-    "^/(week-hours|todays-checkins|needed-sessions|maintenance)/": uR.auth.loginRequired(uR.mountElement),
+    "^/(week-hours|todays-checkins|maintenance)/": uR.auth.loginRequired(uR.mountElement),
+    "^/(needed-sessions)/$": uR.auth.loginRequired(fromTemplate),
   });
 })();
