@@ -42,13 +42,13 @@ _pages = [
   'toolmaster',
   'week-hours',
   'me',
+  'admin/dashboard',
 ]
 
 urlpatterns = [
   url(r'^(%s)/$'%('|'.join(_pages)),main.views.beta),
   url(r'^$',main.views.index,name="home"),
   url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-  url(r'^(admin/dashboard)/',main.views.to_template),
   url(r'^dashboard/totals.json$', main.dashboard.totals_json),
   url(r'^admin/', include(admin.site.urls)),
   url(r'^blog/',include(blog.urls)),

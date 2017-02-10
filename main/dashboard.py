@@ -37,6 +37,8 @@ def totals_json(request):
         data[d] += 1
     zip(*sorted(data.items()))
     days, data = zip(*sorted(data.items()))
+  elif metric == "classes_per_student":
+    pass
   return JsonResponse({
     'data': data,
     'days': days,
