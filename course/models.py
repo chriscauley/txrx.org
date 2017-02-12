@@ -163,6 +163,8 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
     # opposite of active_sessions
     first_date = datetime.datetime.now()-datetime.timedelta(0.5)
     last_year = first_date - datetime.timedelta(365)
+    if settings.DEBUG:
+      last_year = first_date - datetime.timedelta(365*4)
     sessions = self.session_set.filter(last_date__lt=first_date,last_date__gte=last_year)
     return list(sessions.order_by("-first_date"))
 

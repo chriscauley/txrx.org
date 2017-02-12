@@ -102,6 +102,35 @@ class Event(PhotosMixin,models.Model):
   class Meta:
     pass
 
+DOW_CHOICES = (
+  (0, 'Sunday'),
+  (1, 'Monday'),
+  (2, 'Tuesday'),
+  (3, 'Wednesday'),
+  (4, 'Thursday'),
+  (5, 'Fridayday'),
+  (6, 'Saturday'),
+)
+
+WEEK_NUMBER_CHOICES = (
+  (999,'Every Week'),
+  (0,'First week'),
+  (1,' Second week'),
+  (2,' Third week'),
+  (3,' Fourth week'),
+  (-1,'Last week of month'),
+  (-2,'Second to last week of month'),
+  (-3,'Third to last week of month'),
+)
+
+class RepeatEvent(models.Model):
+  event = models.ForeignKey(Event)
+  day_of_week = models.IntegerField(choices=DOW_CHOICES,null=True,blank=True)
+  week_number = models.IntegerField(choices=WEEK_NUMBER_CHOICES)
+  first_date = models.DateField()
+  start = models.TimeField()
+  end = models.TimeField()
+
 class OccurrenceModel(models.Model):
   """
   The goal is to eventually make this very general so that it can reach accross many models to be put into a feed.
