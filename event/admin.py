@@ -64,13 +64,18 @@ class FuturePastListFilter(admin.SimpleListFilter):
 
 class EventOccurrenceInline(OccurrenceModelInline):
   model = EventOccurrence
-  fields = ('name_override','start','end_time','url_override')
+  fields = ('name_override','start','end_time','url_override','get_repeat_verbose')
+  readonly_fields = ('get_repeat_verbose',)
+  def get_repeat_verbose(self,obj):
+    if obj.repeatevent:
+      return obj.repeatevent.verbose
   def get_queryset(self,request):
     qs = super(EventOccurrenceInline,self).get_queryset(request)
     return qs.filter(start__gte=datetime.datetime.now())
 
 class RepeatEventInline(admin.TabularInline):
   model = RepeatEvent
+  readonly_fields = ['verbose',]
   extra = 0
 
 @admin.register(Event)

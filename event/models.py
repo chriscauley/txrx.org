@@ -12,7 +12,7 @@ from lablackey.db.models import UserModel
 from lablackey.decorators import cached_property, cached_method
 from wmd import models as wmd_models
 
-import datetime, sys, math
+import datetime, sys, math, arrow
 
 def print_time(t):
   if t: return t.strftime('%I:%M %P')
@@ -102,34 +102,32 @@ class Event(PhotosMixin,models.Model):
   class Meta:
     pass
 
-DOW_CHOICES = (
-  (0, 'Sunday'),
-  (1, 'Monday'),
-  (2, 'Tuesday'),
-  (3, 'Wednesday'),
-  (4, 'Thursday'),
-  (5, 'Fridayday'),
-  (6, 'Saturday'),
+REPEAT_FLAVOR_CHOICES = (
+  ('start-month','Weekly, from start of month (eg, 1st, 2nd... Friday of month)'),
+  ('end-month','Weekly from end of month (eg, second to last friday of month'),
+  ('weekly','Every Week'),
+  #('monthly','Same day (eg 1-31) of ever month'),
 )
 
-WEEK_NUMBER_CHOICES = (
-  (999,'Every Week'),
-  (0,'First week'),
-  (1,' Second week'),
-  (2,' Third week'),
-  (3,' Fourth week'),
-  (-1,'Last week of month'),
-  (-2,'Second to last week of month'),
-  (-3,'Third to last week of month'),
-)
+REPEAT_VERBOSE = {
+  'start-month': "The {self.startweek_ordinal} {self.verbose_weekday} of every month.",
+  'end-month': "The {self.endweek_ordinal} {self.verbose_weekday} of every month.",
+  'weekly': 'Every {self.verbose_weekday}'
+}
 
 class RepeatEvent(models.Model):
   event = models.ForeignKey(Event)
-  day_of_week = models.IntegerField(choices=DOW_CHOICES,null=True,blank=True)
-  week_number = models.IntegerField(choices=WEEK_NUMBER_CHOICES)
+  repeat_flavor = models.CharField(max_length=16,choices=REPEAT_FLAVOR_CHOICES)
   first_date = models.DateField()
   start = models.TimeField()
   end = models.TimeField()
+  @property
+  def verbose_weekday(self):
+    return arrow.get(self.first_date).format("dddd")
+  @property
+  def verbose(self):
+    if self.repeat_flavor:
+      return REPEAT_VERBOSE[self.repeat_flavor].format(self=self)
 
 class OccurrenceModel(models.Model):
   """
@@ -182,6 +180,7 @@ class RSVP(UserModel):
 
 class EventOccurrence(PhotosMixin,OccurrenceModel):
   event = models.ForeignKey(Event)
+  repeatevent = models.ForeignKey("RepeatEvent",null=True,blank=True) # for when repeatevent changes
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
   get_admin_url = lambda self: "/admin/event/event/%s/"%self.event.id
   name_override = models.CharField(null=True,blank=True,max_length=128)
