@@ -117,20 +117,25 @@ REPEAT_VERBOSE = {
   'weekly': 'Every {self.verbose_weekday}'
 }
 
-class RepeatEvent(models.Model):
+class EventRepeat(models.Model):
   event = models.ForeignKey(Event)
   repeat_flavor = models.CharField(max_length=16,choices=REPEAT_FLAVOR_CHOICES)
   first_date = models.DateField()
-  start = models.TimeField()
-  end = models.TimeField()
+  start_time = models.TimeField()
+  end_time = models.TimeField()
 
   monthcalendar = property(lambda self: calendar.monthcalendar(int(self.first_date.year),int(self.first_date.month)))
+  __unicode__ = lambda self: "EventRepeat: %s - %s"%(self.event,self.verbose)
   @cached_property
   def startweek(self):
     monthcalendar = self.monthcalendar
     for i in range(len(monthcalendar)):
       if self.first_date.day in monthcalendar[i]:
-        return i
+        dow = monthcalendar[i].index(self.first_date.day)
+        if monthcalendar[0][dow]:
+          return i
+        else: # first week doesn't have that day of week (eg no sunday on first week)
+          return i-1
   @cached_property
   def endweek(self):
     monthcalendar = self.monthcalendar
@@ -147,6 +152,7 @@ class RepeatEvent(models.Model):
       return "3rd"
     if self.startweek == 3:
       return "4th"
+    return self.startweek
   @property
   def verbose_endweek(self):
     if self.endweek == -1:
@@ -193,21 +199,18 @@ class RepeatEvent(models.Model):
       if new_date < start_datetime.date():
         continue
       defaults = {
-        'end_time': self.end,
+        'end_time': self.end_time,
       }
-      start = arrow.get(new_date,tz.gettz('US/Central')).replace(hour=self.start.hour,minute=self.start.minute).datetime
+      start_dt = arrow.get(new_date,tz.gettz(settings.TIME_ZONE))
+      start_dt = start_dt.replace(hour=self.start_time.hour,minute=self.start_time.minute).datetime
       occ, new = self.eventoccurrence_set.get_or_create(
         event=self.event,
-        repeatevent=self,
-        start=start,
+        eventrepeat=self,
+        start=start_dt,
         defaults=defaults
       )
       out.append(occ)
     return out
-  @property
-  def start_datetime(self):
-    #! TODO this should be start and current start should be start_time and current end should be end_time
-    return self.start.replace(hour=self.start.hour,minute=self.start.minute)
 
 class OccurrenceModel(models.Model):
   """
@@ -260,7 +263,7 @@ class RSVP(UserModel):
 
 class EventOccurrence(PhotosMixin,OccurrenceModel):
   event = models.ForeignKey(Event)
-  repeatevent = models.ForeignKey(RepeatEvent,models.SET_NULL,null=True,blank=True) # for when repeatevent changes
+  eventrepeat = models.ForeignKey(EventRepeat,models.SET_NULL,null=True,blank=True) # for when eventrepeat changes
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
   get_admin_url = lambda self: "/admin/event/event/%s/"%self.event.id
   name_override = models.CharField(null=True,blank=True,max_length=128)

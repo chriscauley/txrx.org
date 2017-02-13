@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.forms.models import BaseInlineFormSet
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Event, RepeatEvent, EventOccurrence, RSVP, CheckIn, CheckInPoint
+from .models import Event, EventRepeat, EventOccurrence, RSVP, CheckIn, CheckInPoint
 from event.utils import get_room_conflicts
 from media.admin import TaggedPhotoAdmin
 
@@ -67,25 +67,28 @@ class EventOccurrenceInline(OccurrenceModelInline):
   fields = ('name_override','start','end_time','url_override','get_repeat_verbose')
   readonly_fields = ('get_repeat_verbose',)
   def get_repeat_verbose(self,obj):
-    if obj.repeatevent:
-      return obj.repeatevent.verbose
+    if obj.eventrepeat:
+      return obj.eventrepeat.verbose
   def get_queryset(self,request):
     qs = super(EventOccurrenceInline,self).get_queryset(request)
     return qs.filter(start__gte=datetime.datetime.now())
 
-class RepeatEventInline(admin.TabularInline):
-  model = RepeatEvent
+class EventRepeatInline(admin.TabularInline):
+  model = EventRepeat
   readonly_fields = ['verbose',]
   extra = 0
 
 @admin.register(Event)
 class EventAdmin(TaggedPhotoAdmin):
-  list_display = ("__unicode__","repeat","upcoming_count","icon")
+  list_display = ("__unicode__","repeat","upcoming_count","get_repeat_verbose","icon")
   list_editable = ("icon",)
-  inlines = [RepeatEventInline,EventOccurrenceInline]
+  inlines = [EventRepeatInline,EventOccurrenceInline]
   search_fields = ['name']
   def upcoming_count(self,obj):
     return obj.upcoming_occurrences.count()
+  def get_repeat_verbose(self,obj):
+    return "<br/>".join([er.verbose for er in obj.eventrepeat_set.all()])
+  get_repeat_verbose.allow_tags = True
 
 @admin.register(EventOccurrence)
 class EventOccurrenceAdmin(TaggedPhotoAdmin):
