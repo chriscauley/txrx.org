@@ -217,7 +217,7 @@ class EventRepeat(models.Model):
     new = not self.pk
     super(EventRepeat,self).save(*args,**kwargs)
     if new:
-      self.generate()
+      self.generate(datetime.datetime.now())
 
 class OccurrenceModel(models.Model):
   """
