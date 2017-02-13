@@ -37,6 +37,15 @@ REPEAT_CHOICES = (
   ('month-number','Monthly (by day number)'),
 )
 
+class Access(models.Model):
+  name = models.CharField(max_length=32)
+  _ht = "The CSS class that styles this. Also used for sorting."
+  icon = models.CharField(max_length=16,help_text=_ht)
+  order = models.IntegerField(default=999)
+  __unicode__ = lambda self: self.name
+  class Meta:
+    ordering = ("order",)
+
 ICON_CHOICES = (
   ("public","Open to the public"),
   ("private","Private - Invitation only"),
@@ -61,6 +70,7 @@ class Event(PhotosMixin,models.Model):
   rsvp_cutoff = models.FloatField(default=0,help_text=_ht)
   max_rsvp = models.IntegerField(default=128)
   icon = models.CharField(max_length=16,choices=ICON_CHOICES)
+  access = models.ForeignKey(Access,null=True,blank=True)
   @property
   def verbose_rsvp_cutoff(self):
     if self.rsvp_cutoff > 2:
@@ -281,7 +291,7 @@ class EventOccurrence(PhotosMixin,OccurrenceModel):
   rsvp_cutoff = property(lambda self: self.start - datetime.timedelta(self.event.rsvp_cutoff))
   total_rsvp = property(lambda self: sum([r.quantity for r in self.get_rsvps()]))
   full = property(lambda self: self.total_rsvp >= self.event.max_rsvp)
-  icon = property(lambda self: self.event.icon)
+  icon = property(lambda self: self.event.access.icon or 'public')
   try:
     _cid = ContentType.objects.get(model="eventoccurrence").id
   except ProgrammingError:

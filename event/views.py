@@ -44,8 +44,9 @@ def index(request,daystring=None):
         weeks.append(week)
       break
     kwargs = dict(start__gte=date,start__lte=datetime.timedelta(1)+date)
-    events = EventOccurrence.objects.filter(event__hidden=False,**kwargs)
+    events = EventOccurrence.objects.filter(event__hidden=False,**kwargs).select_related("event")
     classtimes = ClassTime.objects.filter(session__course__active=True,session__active=True,**kwargs)
+    classtimes = classtimes.select_related("session","session__course")
     week.append((day,sorted(list(events)+list(classtimes),key=lambda s:s.start)))
     if len(week) == 7:
       weeks.append(week)

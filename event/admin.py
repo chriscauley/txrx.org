@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.forms.models import BaseInlineFormSet
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Event, EventRepeat, EventOccurrence, RSVP, CheckIn, CheckInPoint
+from .models import Event, EventRepeat, EventOccurrence, RSVP, CheckIn, CheckInPoint, Access
 from event.utils import get_room_conflicts
 from media.admin import TaggedPhotoAdmin
 
@@ -80,8 +80,8 @@ class EventRepeatInline(admin.TabularInline):
 
 @admin.register(Event)
 class EventAdmin(TaggedPhotoAdmin):
-  list_display = ("__unicode__","upcoming_count","get_repeat_verbose","icon")
-  list_editable = ("icon",)
+  list_display = ("__unicode__","upcoming_count","get_repeat_verbose","access")
+  list_editable = ("access",)
   inlines = [EventRepeatInline,EventOccurrenceInline]
   search_fields = ['name']
   def upcoming_count(self,obj):
@@ -115,3 +115,7 @@ class RSVPAdmin(admin.ModelAdmin):
     html = '<a href="/admin/user/user/{}/" class="fa fa-user"> {} {} ({})</a>'
     return html.format(u.id,u.first_name, u.last_name, u.username)
   user_link.allow_tags = True
+
+@admin.register(Access)
+class AccessAdmin(admin.ModelAdmin):
+  pass
