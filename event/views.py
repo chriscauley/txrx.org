@@ -117,7 +117,7 @@ def rsvp(request):
 
 def detail_json(request,event_pk):
   event = get_object_or_404(Event,pk=event_pk)
-  fields = ['name','description','repeat','hidden','allow_rsvp']
+  fields = ['name','description','hidden','allow_rsvp']
   out = {key:getattr(event,key) for key in fields}
   fields = ['id','name','total_rsvp','start','end','rsvp_cutoff','past']
   if request.user.is_superuser:
