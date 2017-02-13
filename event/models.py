@@ -52,9 +52,6 @@ class Event(PhotosMixin,models.Model):
   room = models.ForeignKey(Room,null=True,blank=True) #! remove ntbt when you remove location.
   get_room = lambda self: self.room
   description = wmd_models.MarkDownField(blank=True,null=True)
-  _ht = "If your changing this, you will need to manually delete all future incorrect events."
-  _ht += "Repeating events are auto-generated every night."
-  repeat = models.CharField(max_length=32,choices=REPEAT_CHOICES,null=True,blank=True,help_text=_ht)
   _ht = "If true, this class will not raise conflict warnings for events in the same room."
   no_conflict = models.BooleanField(default=False,help_text=_ht)
   _ht = "Hidden stuff won't appear on the calendar."

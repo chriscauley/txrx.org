@@ -80,7 +80,7 @@ class EventRepeatInline(admin.TabularInline):
 
 @admin.register(Event)
 class EventAdmin(TaggedPhotoAdmin):
-  list_display = ("__unicode__","repeat","upcoming_count","get_repeat_verbose","icon")
+  list_display = ("__unicode__","upcoming_count","get_repeat_verbose","icon")
   list_editable = ("icon",)
   inlines = [EventRepeatInline,EventOccurrenceInline]
   search_fields = ['name']
