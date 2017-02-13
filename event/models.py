@@ -105,8 +105,8 @@ class Event(PhotosMixin,models.Model):
     pass
 
 REPEAT_FLAVOR_CHOICES = (
-  ('start-month','Weekly, from start of month (eg, 1st, 2nd... Friday of month)'),
-  ('end-month','Weekly from end of month (eg, second to last friday of month'),
+  ('start-month','Monthly from start of month (eg, 1st, 2nd... Friday of month)'),
+  ('end-month','Monthly from end of month (eg, second to last friday of month'),
   ('weekly','Every Week'),
   #('monthly','Same day (eg 1-31) of ever month'),
 )
@@ -126,6 +126,8 @@ class EventRepeat(models.Model):
 
   monthcalendar = property(lambda self: calendar.monthcalendar(int(self.first_date.year),int(self.first_date.month)))
   __unicode__ = lambda self: "EventRepeat: %s - %s"%(self.event,self.verbose)
+  class Meta:
+    verbose_name = "Adventure Peep"
   @cached_property
   def startweek(self):
     monthcalendar = self.monthcalendar
@@ -211,6 +213,11 @@ class EventRepeat(models.Model):
       )
       out.append(occ)
     return out
+  def save(self,*args,**kwargs):
+    new = not self.pk
+    super(EventRepeat,self).save(*args,**kwargs)
+    if new:
+      self.generate()
 
 class OccurrenceModel(models.Model):
   """
