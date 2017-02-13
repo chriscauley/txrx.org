@@ -1,4 +1,5 @@
 import os, django; os.environ['DJANGO_SETTINGS_MODULE'] = 'main.settings';django.setup()
+from django.utils import timezone
 
 from event.models import Event, RepeatEvent
 
@@ -59,6 +60,31 @@ if not orientations.repeatevent_set.all():
       occ.repeatevent = friday
       occ.end_time = '12:30'
     occ.save()
-    print occ.repeatevent
   orientations.repeat = None
   orientations.save()
+
+RepeatEvent.objects.all()[0].generate(start_datetime=timezone.now())
+
+tinkertime = Event.objects.get(id=15)
+tinkertime.repeatevent_set.all().delete()
+if not tinkertime.repeatevent_set.all():
+  tinkertime.upcoming_occurrences.delete() # we're just going to respawn these
+  friday,_new = orientations.repeatevent_set.get_or_create(
+    first_date='2017-02-17',
+    start='10:00',
+    end='22:00',
+    repeat_flavor='weekly'
+  )
+  saturday,_new = orientations.repeatevent_set.get_or_create(
+    first_date='2017-02-18',
+    start='9:00',
+    end='20:00',
+    repeat_flavor='weekly'
+  )
+  sunday,_new = orientations.repeatevent_set.get_or_create(
+    first_date='2017-02-19',
+    start='10:00',
+    end='19:00',
+    repeat_flavor='weekly'
+  )
+  [RepeatEvent.objects.get(id=d.id).generate(start_datetime=timezone.now()) for d in [friday, saturday, sunday]]

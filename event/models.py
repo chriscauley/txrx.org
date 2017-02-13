@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 from django.template.defaultfilters import slugify, date, urlencode
 
 from geo.models import Room
@@ -12,7 +13,8 @@ from lablackey.db.models import UserModel
 from lablackey.decorators import cached_property, cached_method
 from wmd import models as wmd_models
 
-import datetime, sys, math, arrow
+from dateutil import tz
+import datetime, sys, math, arrow, six, calendar
 
 def print_time(t):
   if t: return t.strftime('%I:%M %P')
@@ -110,8 +112,8 @@ REPEAT_FLAVOR_CHOICES = (
 )
 
 REPEAT_VERBOSE = {
-  'start-month': "The {self.startweek_ordinal} {self.verbose_weekday} of every month.",
-  'end-month': "The {self.endweek_ordinal} {self.verbose_weekday} of every month.",
+  'start-month': "The {self.verbose_startweek} {self.verbose_weekday} of every month.",
+  'end-month': "The {self.verbose_endweek} {self.verbose_weekday} of every month.",
   'weekly': 'Every {self.verbose_weekday}'
 }
 
@@ -121,13 +123,91 @@ class RepeatEvent(models.Model):
   first_date = models.DateField()
   start = models.TimeField()
   end = models.TimeField()
+
+  monthcalendar = property(lambda self: calendar.monthcalendar(int(self.first_date.year),int(self.first_date.month)))
+  @cached_property
+  def startweek(self):
+    monthcalendar = self.monthcalendar
+    for i in range(len(monthcalendar)):
+      if self.first_date.day in monthcalendar[i]:
+        return i
+  @cached_property
+  def endweek(self):
+    monthcalendar = self.monthcalendar
+    for i in range(1,len(monthcalendar)):
+      if self.first_date.day in monthcalendar[-i]:
+        return -i
   @property
-  def verbose_weekday(self):
-    return arrow.get(self.first_date).format("dddd")
+  def verbose_startweek(self):
+    if self.startweek == 0:
+      return "1st"
+    if self.startweek == 1:
+      return "2nd"
+    if self.startweek == 2:
+      return "3rd"
+    if self.startweek == 3:
+      return "4th"
+  @property
+  def verbose_endweek(self):
+    if self.endweek == -1:
+      return "last"
+    if self.endweek == -2:
+      return "second to last"
+    if self.endweek == -3:
+      return "third to last"
+
+  isoweekday = property(lambda self: arrow.get(self.first_date).isoweekday())
+  verbose_weekday = property(lambda self: arrow.get(self.first_date).format("dddd"))
   @property
   def verbose(self):
     if self.repeat_flavor:
       return REPEAT_VERBOSE[self.repeat_flavor].format(self=self)
+  def generate(self,start_datetime=None,end_date=None):
+    if not start_datetime:
+      # we're going to make these two months out so they can be overridden that far ahead
+      start_datetime = timezone.now() + datetime.timedelta(60)
+    if not end_date:
+      end_date = start_datetime.date() + datetime.timedelta(60)
+
+    last_date = arrow.get(start_datetime.date())
+    new_dates = []
+    out = []
+    # isoweekday means sunday is 7, monday is 1
+    week_index = self.isoweekday - 1
+    while last_date < arrow.get(end_date):
+      monthcalendar = calendar.monthcalendar(last_date.year,last_date.month)
+      if self.repeat_flavor == 'start-month':
+        week_number = self.startweek if monthcalendar[0][week_index] else self.startweek + 1
+        day = monthcalendar[week_number][week_index]
+        new_dates.append(datetime.date(last_date.year,last_date.month,day))
+      if self.repeat_flavor == 'end-month':
+        week_number = self.endweek if monthcalendar[-1][week_index] else self.endweek - 1
+        day = monthcalendar[week_number][week_index]
+        new_dates.append(datetime.date(last_date.year,last_date.month,day))
+      if self.repeat_flavor == 'weekly':
+        for week in monthcalendar:
+          if week[week_index]:
+            new_dates.append(datetime.date(last_date.year,last_date.month,week[week_index]))
+      last_date = last_date.replace(months=1)
+    for new_date in new_dates:
+      if new_date < start_datetime.date():
+        continue
+      defaults = {
+        'end_time': self.end,
+      }
+      start = arrow.get(new_date,tz.gettz('US/Central')).replace(hour=self.start.hour,minute=self.start.minute).datetime
+      occ, new = self.eventoccurrence_set.get_or_create(
+        event=self.event,
+        repeatevent=self,
+        start=start,
+        defaults=defaults
+      )
+      out.append(occ)
+    return out
+  @property
+  def start_datetime(self):
+    #! TODO this should be start and current start should be start_time and current end should be end_time
+    return self.start.replace(hour=self.start.hour,minute=self.start.minute)
 
 class OccurrenceModel(models.Model):
   """
@@ -180,7 +260,7 @@ class RSVP(UserModel):
 
 class EventOccurrence(PhotosMixin,OccurrenceModel):
   event = models.ForeignKey(Event)
-  repeatevent = models.ForeignKey("RepeatEvent",null=True,blank=True) # for when repeatevent changes
+  repeatevent = models.ForeignKey(RepeatEvent,models.SET_NULL,null=True,blank=True) # for when repeatevent changes
   publish_dt = models.DateTimeField(default=datetime.datetime.now) # for rss feed
   get_admin_url = lambda self: "/admin/event/event/%s/"%self.event.id
   name_override = models.CharField(null=True,blank=True,max_length=128)
