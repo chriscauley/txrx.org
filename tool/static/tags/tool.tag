@@ -270,9 +270,10 @@
     <button class="btn btn-link" onclick={ back } if={ parent.active_user }>
       &laquo; Back to results
     </button>
-    <div each={ results } if={ !parent.parent.active_user }>
+    <div each={ results } if={ !parent.parent.active_user } onclick={ parent.parent.select }
+         style="cursor: pointer;">
       <yield from="result">
-        <div class="card well" onclick={ parent.parent.select } style="cursor: pointer;">
+        <div class="card well">
           <div class="card-content">
             <div class="row">
               <div class="col-sm-4 col s4">{ username }<br />{ get_full_name }&nbsp;</div>
