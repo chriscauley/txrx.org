@@ -188,6 +188,15 @@
   changeImage(e) {
     uR.mountElement("change-headshot",{mount_to: "#alert-div"})
   }
+  this.on("mount",function() {
+    uR.ajax({
+      url: "/todays_checkins.json",
+      success: function(data) {
+        self.data = data;
+        self.tags['search-users'].update();
+      }
+    });
+  });
 </todays-checkins>
 
 <change-headshot>

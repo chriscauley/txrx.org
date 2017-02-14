@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
 from .forms import UserChangeForm, CustomUserCreationForm
-from .models import User, UserNote
+from .models import User, UserNote, UserCheckin
 
 from course.admin import EnrollmentInline, CourseEnrollmentInline
 from membership.admin import UserMembershipInline, SubscriptionInline, SubscriptionBuddyInline
@@ -55,3 +55,8 @@ class UserAdmin(UserAdmin):
   inlines = [UserMembershipInline, RFIDInline, UserNoteInline, SubscriptionInline, WeakSubscriptionBuddyInline, EnrollmentInline,
              CourseEnrollmentInline]
   list_filter = list(UserAdmin.list_filter) + ['usermembership__voting_rights','date_joined','is_volunteer']
+
+@admin.register(UserCheckin)
+class UserCheckinAdmin(admin.ModelAdmin):
+  readonly_fields = ("user","time_in","time_out","content_type","object_id","content_object")
+  list_display = ("user","time_in","time_out","content_object")

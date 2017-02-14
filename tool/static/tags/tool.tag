@@ -289,19 +289,20 @@
 
   var self = this;
   self._results = [];
-  var old_value = '',value;
+  self._empty_results = []
+  var old_value = '',value,old_empty;
   search(e) {
     value = self.root.querySelector("[name=q]").value;
     if (old_value == value) { return }
     old_value = value;
     if (!value || value.length < 3) {
-      self._results = [];
+      self.results = self._empty_results;
       self.update();
       return;
     }
     uR.ajax({
       url: "/api/user/search/",
-      data: {q: value, empty: self.opts.empty},
+      data: {q: value},
       success: function(data) {
         self._results = data;
         self.update()
@@ -310,6 +311,18 @@
     })
   }
   this.search = uR.debounce(this.search);
+  searchEmpty(e) {
+    if (!this.opts.empty) { return; }
+    uR.ajax({
+      url: "/api/user/search/",
+      data: { user_ids: JSON.stringify(self.opts.empty) },
+      that: this,
+      success: function(data) {
+        self._empty_results = data;
+        old_value = undefined;
+      }
+    });
+  }
   back(e) {
     this.parent.active_user = undefined;
     this.parent.back && this.parent.back(e);
@@ -321,8 +334,9 @@
     self.search();
   });
   this.on("update",function() {
+    if (old_empty != this.opts.empty) { old_empty = this.opts.empty; this.searchEmpty(); }
     if (this.parent.active_user) { this.results = [this.parent.active_user ] }
-    else { this.results = this._results }
+    else { this.results = (this._results.length && this._results) || this._empty_results }
   });
 </search-users>
 

@@ -100,6 +100,7 @@ uR.drop.stripe = true;
 uR.drop.paypal = true;
 uR.auth.auth_regexp = /^\/(auth|me)\//;
 uR.drop.promocode_active = true;
+uR.config.STATIC_URL = "/static/";
 
 if (!document.body.classList.contains("kiosk")) { // bootstrap
   uR.config.form.field_class = "form-group";

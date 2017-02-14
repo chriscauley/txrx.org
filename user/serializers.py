@@ -3,6 +3,8 @@ from django.db.models import Q
 from .models import User
 from api.serializers import BaseSizzler
 
+import json
+
 class SearchSizzler(BaseSizzler):
   """
   Used in the staff views to look up members
@@ -10,9 +12,14 @@ class SearchSizzler(BaseSizzler):
   @classmethod
   def get_queryset(class_,request):
     data = request.POST or request.GET
-    qs = class_.Meta.model.objects.keyword_search(data.get('q',""))
+    qs = class_.Meta.model.objects.all()
+    q = data.get('q',"")
+    if q:
+      qs = qs.keyword_search(q)
     if 'user_id' in request.GET:
       qs = qs.filter(id=request.GET['user_id'])
+    if 'user_ids' in request.GET:
+      qs = qs.filter(id__in=json.loads(request.GET['user_ids']))
     return qs.distinct()
   class Meta:
     model = User
