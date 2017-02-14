@@ -12,14 +12,16 @@ class SearchSizzler(BaseSizzler):
   @classmethod
   def get_queryset(class_,request):
     data = request.POST or request.GET
-    qs = class_.Meta.model.objects.all()
+    qs = class_.Meta.model.objects
     q = data.get('q',"")
     if q:
       qs = qs.keyword_search(q)
-    if 'user_id' in request.GET:
+    elif 'user_id' in request.GET:
       qs = qs.filter(id=request.GET['user_id'])
-    if 'user_ids' in request.GET:
+    elif 'user_ids' in request.GET:
       qs = qs.filter(id__in=json.loads(request.GET['user_ids']))
+    else:
+      qs = qs.none()
     return qs.distinct()
   class Meta:
     model = User
