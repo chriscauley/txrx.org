@@ -15,9 +15,9 @@
       padding-right: 30px;
       position: relative;
       .edit {
-	      position: absolute;
-	      right: 5px;
-	      top: 5px;
+        position: absolute;
+        right: 5px;
+        top: 5px;
       }
     }
     .text { padding: 10px 0px 20px; }
@@ -39,5 +39,12 @@
       padding-left: 0;
     }
     .blog_well:nth-child(n+3) { display: none; }
+  }
+}
+.Detail.post-content {
+  img {
+    &.left, &.right { margin: 0 0 1em; }
+    &.left { float: left; margin-right: 20px; }
+    &.right { float: right; margin-left: 20px; }
   }
 }
