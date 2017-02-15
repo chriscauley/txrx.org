@@ -18,6 +18,12 @@ def totals_json(request):
     time_period = (timezone.now()-Order.objects.all().order_by("created")[0].created).days
   start_date = timezone.now().date() - datetime.timedelta(time_period)
 
+  if request.GET.get('resolution',None) == 'month':
+    start_date = start_date.replace(day=1)
+    resolution = 1
+  else:
+    resolution = int(request.GET.get('resolution',None) or 1)
+
   metric = request.GET.get('metric','line_total')
   if metric in ['line_total','quantity']:
     data = []
@@ -27,6 +33,16 @@ def totals_json(request):
       _items = order_items.filter(order__created__gte=day,order__created__lt=day+datetime.timedelta(1))
       data.append(sum(_items.values_list(metric,flat=True)))
       days.append(day.strftime("%Y-%m-%d"))
+    if resolution != 1:
+      _days = []
+      _data = []
+      for i,day in enumerate(days):
+        if not i%resolution:
+          _days.append(day)
+          _data.append(0)
+        _data[-1] += data[i]
+      days = _days
+      data = _data
   elif metric == 'new_students':
     days = [start_date + datetime.timedelta(i) for i in range(time_period)]
     users = get_user_model().objects.filter(enrollment__isnull=False).distinct()

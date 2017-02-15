@@ -1,8 +1,8 @@
 <admin-dashboard>
   <h1>Sales Dashboard</h1>
   <ur-form initial={ initial } action="/dashboard/totals.json" ajax_success={ update_plot }
-           schema={ schema }></ur-form>
-  <div id="tester" style="width:600px;height:250px;"></div>
+           schema={ schema } ajax_target="#line-chart"></ur-form>
+  <div id="line-chart" style="width:600px;height:250px;"></div>
 
   var self = this;
   this.schema = [
@@ -30,11 +30,20 @@
         [365,'One Year'],
       ]
     },
+    { name: 'resolution', type: 'select', required: false,
+      choice_tuples: [
+        [1, 'One Day'],
+        [2, 'Two Day'],
+        [7, 'Week'],
+        ['month', 'Month'],
+      ]
+    }
   ];
   this.initial = uR.getQueryDict();
   this.initial.time_period = this.initial.time_period || 90;
   this.initial.product_types = this.initial.product_types || 214;
   this.initial.metric = this.initial.metric || 'line_total';
+  this.initial.resolution = this.initial.resolution || 1;
   this.on("mount",function() {
     this.update();
     setTimeout(function() { document.querySelector("ur-form button").dispatchEvent(new Event("click"))},0)
@@ -45,11 +54,14 @@
     for (key in form_data) { qs += key + "=" + encodeURIComponent(form_data[key]) + "&"; }
     window.history && window.history.replaceState({},"",window.location.pathname+qs);
     self.data = data;
-    var TESTER = document.getElementById('tester');
-    Plotly.purge(TESTER);
+    var LINE_CHART = document.getElementById('line-chart');
+    Plotly.purge(LINE_CHART);
     var metric = document.querySelector("[name=metric]");
+    var ymax = Math.max.apply(null,data.data.map(function(i) { return parseInt(i)}));
+    var pow_10 = Math.pow(10,Math.floor(Math.log10(ymax)))
+    ymax = Math.ceil(ymax/pow_10)*pow_10;
     Plotly.plot(
-      TESTER, [
+      LINE_CHART, [
         { x: data.days, y: data.data, name: metric.options[metric.selectedIndex].innerText},
       ],
       {
@@ -57,7 +69,9 @@
         xaxis: {
           title: 'Date',
         },
-      }
+        yaxis: { range: [0,ymax] },
+      },
+      {displayModeBar: false}
     );
   }
 </admin-dashboard>
