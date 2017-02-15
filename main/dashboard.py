@@ -18,9 +18,9 @@ def totals_json(request):
     time_period = (timezone.now()-Order.objects.all().order_by("created")[0].created).days
   start_date = timezone.now().date() - datetime.timedelta(time_period)
 
-  if request.GET.get('resolution',None) == 'month':
+  if request.GET.get('resolution',None) == "month":
     start_date = start_date.replace(day=1)
-    resolution = 1
+    resolution = 'month'
   else:
     resolution = int(request.GET.get('resolution',None) or 1)
 
@@ -33,16 +33,6 @@ def totals_json(request):
       _items = order_items.filter(order__created__gte=day,order__created__lt=day+datetime.timedelta(1))
       data.append(sum(_items.values_list(metric,flat=True)))
       days.append(day.strftime("%Y-%m-%d"))
-    if resolution != 1:
-      _days = []
-      _data = []
-      for i,day in enumerate(days):
-        if not i%resolution:
-          _days.append(day)
-          _data.append(0)
-        _data[-1] += data[i]
-      days = _days
-      data = _data
   elif metric == 'new_students':
     days = [start_date + datetime.timedelta(i) for i in range(time_period)]
     users = get_user_model().objects.filter(enrollment__isnull=False).distinct()
@@ -55,6 +45,27 @@ def totals_json(request):
     days, data = zip(*sorted(data.items()))
   elif metric == "classes_per_student":
     pass
+
+
+  _days = []
+  _data = []
+  if resolution == 'month':
+    month = None
+    for i,day in enumerate(days):
+      if month != day.split("-")[1]:
+        year,month,day = day.split("-")
+        _days.append("-".join([year,month]))
+        _data.append(0)
+      _data[-1] += data[i]
+  elif resolution != 1:
+    for i,day in enumerate(days):
+      if not i%resolution:
+        _days.append(day)
+        _data.append(0)
+      _data[-1] += data[i]
+
+  days = _days or days
+  data = _data or data
   return JsonResponse({
     'data': data,
     'days': days,
