@@ -3,6 +3,7 @@ from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 
 from drop.models import OrderItem, Order
+from membership.models import Status, Subscription
 
 import datetime, csv
 
@@ -31,6 +32,7 @@ def totals_json(request,format):
   end_date = start_date+datetime.timedelta(time_period)
 
   metric = request.GET.get('metric','line_total')
+  y2 = []
   if metric in ['line_total','quantity']:
     y = []
     x = []
@@ -58,8 +60,22 @@ def totals_json(request,format):
         continue
       students[user_id] = students.get(user_id,0) + quantity
     x,y = zip(*sorted(students.items()))
-
+  elif metric == 'new_members':
+    pass
+  elif metric == 'member_payments':
+    x = []
+    y2 = []
+    y = []
+    statuses = Status.objects.all()
+    for i in range(time_period):
+      day = start_date + datetime.timedelta(i)
+      next_day = day + datetime.timedelta(1)
+      _statuses = statuses.filter(datetime__gte=day,datetime__lte=next_day)
+      x.append(day.strftime("%Y-%m-%d"))
+      y.append(sum(_statuses.filter(subscription__months=1).values_list('amount',flat=True)))
+      y2.append(sum(_statuses.filter(subscription__months=12).values_list('amount',flat=True)))
   _x = []
+  _y2 = []
   _y = []
   if 'metric' != 'classes_per_student':
     if resolution == 'month':
@@ -75,19 +91,29 @@ def totals_json(request,format):
         if not i%resolution:
           _x.append(day)
           _y.append(0)
+          if y2:
+            _y2.append(0)
         _y[-1] += y[i]
+        if _y2:
+          _y[-1] += y2[i]
 
   x = _x or x
   y = _y or y
+  y2 = y2 or _y2
 
   if format == 'csv':
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="%s_%s-%s.csv"'%(metric,start_date,end_date)
     writer = csv.writer(response)
+    if y2:
+      rows = zip(x,y,y2)
+    else:
+      rows = zip(x,y)
     for row in zip(x,y):
       writer.writerow(row)
     return response
   return JsonResponse({
-    'y': y,
     'x': x,
+    'y': y,
+    'y2': y2,
   })

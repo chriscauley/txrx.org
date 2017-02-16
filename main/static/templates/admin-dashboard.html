@@ -6,6 +6,12 @@
   <a href="/dashboard/totals.csv{ qs }" target="_blank">Download CSV</a>
 
   var self = this;
+  var y1_labels = {
+    'member_payments': "Monthly",
+  };
+  var y2_labels = {
+    'member_payments': "Yearly",
+  }
   this.schema = [
     { name: 'metric', type: 'select', required: false,
       choice_tuples: [
@@ -14,7 +20,7 @@
         ['new_students','New Students'],
         ['classes_per_student','Classes Per Student'],
         ['new_members','New Members (not working!)'],
-        ['member_payments','Member Payments (not working!)'],
+        ['member_payments','Member Payments'],
       ]
     },
     { name: 'product_types', type: 'hidden', required: false,
@@ -54,7 +60,11 @@
     setTimeout(function() { document.querySelector("ur-form button").dispatchEvent(new Event("click"))},0)
   });
   updateUI(e,riot_tag) {
-    console.log(e);
+    if (document.querySelector("ur-input.metric select").value == 'classes_per_student') {
+      document.querySelector("ur-input.resolution").style.display='none';
+    } else {
+      document.querySelector("ur-input.resolution").style.display='block';
+    }
   }
   updatePlot(data) {
     this.qs = "?";
@@ -65,31 +75,33 @@
     var PLOT_CONTAINER = document.getElementById('plot_container');
     Plotly.purge(PLOT_CONTAINER);
     var metric = document.querySelector("[name=metric]");
-    var metric_verbose = metric.options[metric.selectedIndex].innerText;
+    var y1_label = y1_labels[metric.value] || metric.options[metric.selectedIndex].innerText;
+    var y2_label = y2_labels[metric.value];
 
     var ymax = Math.max.apply(null,data.y.map(function(i) { return parseInt(i)}));
     var pow_10 = Math.pow(10,Math.floor(Math.log10(ymax)))
     ymax = Math.ceil(ymax/pow_10)*pow_10;
     var plot_data = [
-      { x: data.x, y: data.y, name: metric_verbose }
+      { x: data.x, y: data.y, name: y1_label }
     ];
     var plot_options = {
       margin: { l: 50, r: 20, b: 40, t: 20 },
       xaxis: { title: 'Date', },
       yaxis: { range: [0,ymax] },
     };
+    if (data.y2 && data.y2.length) {
+      plot_data.push({ x: data.x, y: data.y2, name: y2_label });
+    }
     var other_options = { displayModeBar: false };
-    console.log(metric.value);
     if (metric.value == "classes_per_student") {
       plot_data = [{
         x: data.y,
         type: "histogram",
         xbins: { size: 1 },
-        name: metric_verbose
-      }]
+        name: y2_label
+      }];
       plot_options.yaxis = {};
     }
-    console.log(plot_data);
     Plotly.plot(PLOT_CONTAINER, plot_data, plot_options, other_options);
   }
 </admin-dashboard>
