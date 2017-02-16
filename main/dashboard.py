@@ -43,6 +43,7 @@ def totals_json(request):
         y[d] += 1
     zip(*sorted(y.items()))
     x, y = zip(*sorted(y.items()))
+    x = [d.strftime("%Y-%m-%d") for d in x]
   elif metric == "classes_per_student":
     students = {}
     end_date = start_date+datetime.timedelta(time_period)
