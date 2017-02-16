@@ -1,9 +1,9 @@
 (function() {
   function fromTemplate(template_name,data) {
-    template_name = template_name.match(/[^\/].+[^\/]/)[0];
+    template_name = template_name.match(/[^\/].+[^\/]/)[0].replace(/\//g,"-");
     riot.compile(
       "/static/templates/"+template_name+".html",
-      function(html) { uR.mountElement(template_name.replace(/\//g,"-"),data); }
+      function(html) { uR.mountElement(template_name,data); }
     );
   }
   uR.addRoutes({
