@@ -63,7 +63,7 @@ class Event(PhotosMixin,models.Model):
   _ht = "Number of days before event when RSVP is cut off (eg 0.5 means \"You must rsvp 12 hours before this event\")"
   rsvp_cutoff = models.FloatField(default=0,help_text=_ht)
   max_rsvp = models.IntegerField(default=128)
-  access = models.ForeignKey(Access,null=True,blank=True)
+  access = models.ForeignKey(Access)
   @property
   def verbose_rsvp_cutoff(self):
     if self.rsvp_cutoff > 2:
