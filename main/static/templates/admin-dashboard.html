@@ -2,7 +2,7 @@
   <h1>Sales Dashboard</h1>
   <ur-form initial={ initial } action="/dashboard/totals.json" ajax_success={ updatePlot }
            schema={ schema } ajax_target="#plot_container" onChange={ updateUI }></ur-form>
-  <div id="plot_container" style="width:600px;height:250px;"></div>
+  <div id="plot_container" style="width:750px;height:400px;"></div>
   <a href="/dashboard/totals.csv{ qs }" target="_blank">Download CSV</a>
 
   var self = this;
@@ -17,9 +17,9 @@
       choice_tuples: [
         ['line_total','Cart Total'],
         ['quantity','Quantity'],
-        ['new_students','New Students'],
+        ['new_students','New Students (slow)'],
         ['classes_per_student','Classes Per Student'],
-        ['new_members','New Members (not working!)'],
+        ['new_members','New Members (slow)'],
         ['member_payments','Member Payments'],
       ]
     },

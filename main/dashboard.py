@@ -41,15 +41,18 @@ def totals_json(request,format):
       _items = order_items.filter(order__created__gte=day,order__created__lt=day+datetime.timedelta(1))
       y.append(sum(_items.values_list(metric,flat=True)))
       x.append(day.strftime("%Y-%m-%d"))
-  elif metric == 'new_students':
+  elif metric in ['new_students','new_members']:
     x = [start_date + datetime.timedelta(i) for i in range(time_period)]
-    users = get_user_model().objects.filter(enrollment__isnull=False).distinct()
-    first_enrollments = [u.enrollment_set.all().order_by("-datetime")[0].datetime.date() for u in users]
+    if metric == 'new_students':
+      users = get_user_model().objects.filter(enrollment__isnull=False).distinct()
+      firsts = [u.enrollment_set.all().order_by("-datetime")[0].datetime.date() for u in users]
+    elif metric == "new_members":
+      users = get_user_model().objects.filter(subscription__isnull=False).distinct()
+      firsts = [u.subscription_set.all().order_by("-created")[0].created.date() for u in users]
     y = {d:0 for d in x}
-    for d in first_enrollments:
+    for d in firsts:
       if d in y:
         y[d] += 1
-    zip(*sorted(y.items()))
     x, y = zip(*sorted(y.items()))
     x = [d.strftime("%Y-%m-%d") for d in x]
   elif metric == "classes_per_student":
@@ -60,8 +63,6 @@ def totals_json(request,format):
         continue
       students[user_id] = students.get(user_id,0) + quantity
     x,y = zip(*sorted(students.items()))
-  elif metric == 'new_members':
-    pass
   elif metric == 'member_payments':
     x = []
     y2 = []
