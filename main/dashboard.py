@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 
 from drop.models import OrderItem, Order
 
-import datetime
+import datetime, csv
 
-def totals_json(request):
+def totals_json(request,format):
   order_items = OrderItem.objects.filter(order__status__gte=Order.PAID)
   if request.GET.get('product_types',"").isdigit():
     order_items = order_items.filter(product__polymorphic_ctype_id=request.GET['product_types'])
@@ -23,6 +23,12 @@ def totals_json(request):
     resolution = 'month'
   else:
     resolution = int(request.GET.get('resolution',None) or 1)
+
+    # make time period a multiple of resolution because showing half a week sucks
+    time_period = time_period-time_period%resolution
+    start_date = timezone.now().date() - datetime.timedelta(time_period)
+
+  end_date = start_date+datetime.timedelta(time_period)
 
   metric = request.GET.get('metric','line_total')
   if metric in ['line_total','quantity']:
@@ -46,37 +52,41 @@ def totals_json(request):
     x = [d.strftime("%Y-%m-%d") for d in x]
   elif metric == "classes_per_student":
     students = {}
-    end_date = start_date+datetime.timedelta(time_period)
     items = order_items.filter(order__created__gte=start_date,order__created__lte=end_date)
     for user_id,quantity in items.values_list("order__user_id","quantity"):
       if not user_id:
         continue
       students[user_id] = students.get(user_id,0) + quantity
     x,y = zip(*sorted(students.items()))
-    return JsonResponse({
-      'y': y,
-      'x': x,
-    })
 
   _x = []
   _y = []
-  if resolution == 'month':
-    month = None
-    for i,day in enumerate(x):
-      if month != day.split("-")[1]:
-        year,month,day = day.split("-")
-        _x.append("-".join([year,month]))
-        _y.append(0)
-      _y[-1] += y[i]
-  elif resolution != 1:
-    for i,day in enumerate(x):
-      if not i%resolution:
-        _x.append(day)
-        _y.append(0)
-      _y[-1] += y[i]
+  if 'metric' != 'classes_per_student':
+    if resolution == 'month':
+      month = None
+      for i,day in enumerate(x):
+        if month != day.split("-")[1]:
+          year,month,day = day.split("-")
+          _x.append("-".join([year,month]))
+          _y.append(0)
+        _y[-1] += y[i]
+    elif resolution != 1:
+      for i,day in enumerate(x):
+        if not i%resolution:
+          _x.append(day)
+          _y.append(0)
+        _y[-1] += y[i]
 
   x = _x or x
   y = _y or y
+
+  if format == 'csv':
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="%s_%s-%s.csv"'%(metric,start_date,end_date)
+    writer = csv.writer(response)
+    for row in zip(x,y):
+      writer.writerow(row)
+    return response
   return JsonResponse({
     'y': y,
     'x': x,

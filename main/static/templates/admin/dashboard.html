@@ -3,6 +3,7 @@
   <ur-form initial={ initial } action="/dashboard/totals.json" ajax_success={ updatePlot }
            schema={ schema } ajax_target="#plot_container" onChange={ updateUI }></ur-form>
   <div id="plot_container" style="width:600px;height:250px;"></div>
+  <a href="/dashboard/totals.csv{ qs }" target="_blank">Download CSV</a>
 
   var self = this;
   this.schema = [
@@ -12,6 +13,8 @@
         ['quantity','Quantity'],
         ['new_students','New Students'],
         ['classes_per_student','Classes Per Student'],
+        ['new_members','New Members'],
+        ['member_payments','Member Payments'],
       ]
     },
     { name: 'product_types', type: 'hidden', required: false,
@@ -28,6 +31,7 @@
         [90,'Three Months'],
         [180,'Six Months'],
         [365,'One Year'],
+        [730,'Two Years'],
       ]
     },
     { name: 'resolution', type: 'select', required: false,
@@ -53,10 +57,10 @@
     console.log(e);
   }
   updatePlot(data) {
-    var qs = "?";
+    this.qs = "?";
     var form_data = self.tags["ur-form"].getData();
-    for (key in form_data) { qs += key + "=" + encodeURIComponent(form_data[key]) + "&"; }
-    window.history && window.history.replaceState({},"",window.location.pathname+qs);
+    for (key in form_data) { this.qs += key + "=" + encodeURIComponent(form_data[key]) + "&"; }
+    window.history && window.history.replaceState({},"",window.location.pathname+this.qs);
     self.data = data;
     var PLOT_CONTAINER = document.getElementById('plot_container');
     Plotly.purge(PLOT_CONTAINER);
