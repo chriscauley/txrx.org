@@ -26,47 +26,57 @@ def totals_json(request):
 
   metric = request.GET.get('metric','line_total')
   if metric in ['line_total','quantity']:
-    data = []
-    days = []
+    y = []
+    x = []
     for i in range(time_period):
       day = start_date + datetime.timedelta(i)
       _items = order_items.filter(order__created__gte=day,order__created__lt=day+datetime.timedelta(1))
-      data.append(sum(_items.values_list(metric,flat=True)))
-      days.append(day.strftime("%Y-%m-%d"))
+      y.append(sum(_items.values_list(metric,flat=True)))
+      x.append(day.strftime("%Y-%m-%d"))
   elif metric == 'new_students':
-    days = [start_date + datetime.timedelta(i) for i in range(time_period)]
+    x = [start_date + datetime.timedelta(i) for i in range(time_period)]
     users = get_user_model().objects.filter(enrollment__isnull=False).distinct()
     first_enrollments = [u.enrollment_set.all().order_by("-datetime")[0].datetime.date() for u in users]
-    data = {d:0 for d in days}
+    y = {d:0 for d in x}
     for d in first_enrollments:
-      if d in data:
-        data[d] += 1
-    zip(*sorted(data.items()))
-    days, data = zip(*sorted(data.items()))
+      if d in y:
+        y[d] += 1
+    zip(*sorted(y.items()))
+    x, y = zip(*sorted(y.items()))
   elif metric == "classes_per_student":
-    pass
+    students = {}
+    end_date = start_date+datetime.timedelta(time_period)
+    items = order_items.filter(order__created__gte=start_date,order__created__lte=end_date)
+    for user_id,quantity in items.values_list("order__user_id","quantity"):
+      if not user_id:
+        continue
+      students[user_id] = students.get(user_id,0) + quantity
+    x,y = zip(*sorted(students.items()))
+    return JsonResponse({
+      'y': y,
+      'x': x,
+    })
 
-
-  _days = []
-  _data = []
+  _x = []
+  _y = []
   if resolution == 'month':
     month = None
-    for i,day in enumerate(days):
+    for i,day in enumerate(x):
       if month != day.split("-")[1]:
         year,month,day = day.split("-")
-        _days.append("-".join([year,month]))
-        _data.append(0)
-      _data[-1] += data[i]
+        _x.append("-".join([year,month]))
+        _y.append(0)
+      _y[-1] += y[i]
   elif resolution != 1:
-    for i,day in enumerate(days):
+    for i,day in enumerate(x):
       if not i%resolution:
-        _days.append(day)
-        _data.append(0)
-      _data[-1] += data[i]
+        _x.append(day)
+        _y.append(0)
+      _y[-1] += y[i]
 
-  days = _days or days
-  data = _data or data
+  x = _x or x
+  y = _y or y
   return JsonResponse({
-    'data': data,
-    'days': days,
+    'y': y,
+    'x': x,
   })

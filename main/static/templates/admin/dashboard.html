@@ -1,8 +1,8 @@
 <admin-dashboard>
   <h1>Sales Dashboard</h1>
-  <ur-form initial={ initial } action="/dashboard/totals.json" ajax_success={ update_plot }
-           schema={ schema } ajax_target="#line-chart"></ur-form>
-  <div id="line-chart" style="width:600px;height:250px;"></div>
+  <ur-form initial={ initial } action="/dashboard/totals.json" ajax_success={ updatePlot }
+           schema={ schema } ajax_target="#plot_container" onChange={ updateUI }></ur-form>
+  <div id="plot_container" style="width:600px;height:250px;"></div>
 
   var self = this;
   this.schema = [
@@ -49,30 +49,43 @@
     this.update();
     setTimeout(function() { document.querySelector("ur-form button").dispatchEvent(new Event("click"))},0)
   });
-  update_plot(data) {
+  updateUI(e,riot_tag) {
+    console.log(e);
+  }
+  updatePlot(data) {
     var qs = "?";
     var form_data = self.tags["ur-form"].getData();
     for (key in form_data) { qs += key + "=" + encodeURIComponent(form_data[key]) + "&"; }
     window.history && window.history.replaceState({},"",window.location.pathname+qs);
     self.data = data;
-    var LINE_CHART = document.getElementById('line-chart');
-    Plotly.purge(LINE_CHART);
+    var PLOT_CONTAINER = document.getElementById('plot_container');
+    Plotly.purge(PLOT_CONTAINER);
     var metric = document.querySelector("[name=metric]");
-    var ymax = Math.max.apply(null,data.data.map(function(i) { return parseInt(i)}));
+    var metric_verbose = metric.options[metric.selectedIndex].innerText;
+
+    var ymax = Math.max.apply(null,data.y.map(function(i) { return parseInt(i)}));
     var pow_10 = Math.pow(10,Math.floor(Math.log10(ymax)))
     ymax = Math.ceil(ymax/pow_10)*pow_10;
-    Plotly.plot(
-      LINE_CHART, [
-        { x: data.days, y: data.data, name: metric.options[metric.selectedIndex].innerText},
-      ],
-      {
-        margin: { l: 50, r: 20, b: 40, t: 20 },
-        xaxis: {
-          title: 'Date',
-        },
-        yaxis: { range: [0,ymax] },
-      },
-      {displayModeBar: false}
-    );
+    var plot_data = [
+      { x: data.x, y: data.y, name: metric_verbose }
+    ];
+    var plot_options = {
+      margin: { l: 50, r: 20, b: 40, t: 20 },
+      xaxis: { title: 'Date', },
+      yaxis: { range: [0,ymax] },
+    };
+    var other_options = { displayModeBar: false };
+    console.log(metric.value);
+    if (metric.value == "classes_per_student") {
+      plot_data = [{
+        x: data.y,
+        type: "histogram",
+        xbins: { size: 1 },
+        name: metric_verbose
+      }]
+      plot_options.yaxis = {};
+    }
+    console.log(plot_data);
+    Plotly.plot(PLOT_CONTAINER, plot_data, plot_options, other_options);
   }
 </admin-dashboard>
