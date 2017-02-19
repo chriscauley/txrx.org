@@ -3,14 +3,17 @@
   <ur-form initial={ initial } action="/dashboard/totals.json" ajax_success={ updatePlot }
            schema={ schema } ajax_target="#plot_container" onChange={ updateUI }></ur-form>
   <div id="plot_container" style="width:750px;height:400px;"></div>
-  <a href="/dashboard/totals.csv{ qs }" target="_blank">Download CSV</a>
+  <a href="/dashboard/totals.csv{ qs }" target="_blank">Download CSV</a><br/>
+  <a href="/dashboard/totals.table{ qs }">View as table</a><br/>
 
   var self = this;
   var y1_labels = {
-    'member_payments': "Monthly",
+    member_payments: "Monthly",
+    new_members: "Signed Up"
   };
   var y2_labels = {
-    'member_payments': "Yearly",
+    member_payments: "Yearly",
+    new_members: "Canceled"
   }
   this.schema = [
     { name: 'metric', type: 'select', required: false,

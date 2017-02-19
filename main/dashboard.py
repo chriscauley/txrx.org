@@ -46,9 +46,17 @@ def totals_json(request,format):
     if metric == 'new_students':
       users = get_user_model().objects.filter(enrollment__isnull=False).distinct()
       firsts = [u.enrollment_set.all().order_by("-datetime")[0].datetime.date() for u in users]
+      cancels = []
     elif metric == "new_members":
       users = get_user_model().objects.filter(subscription__isnull=False).distinct()
-      firsts = [u.subscription_set.all().order_by("-created")[0].created.date() for u in users]
+      firsts = [u.subscription_set.all().order_by("created")[0].created.date() for u in users]
+      cancels = [u.subscription_set.all().order_by("-created")[0].canceled for u in users]
+      cancels = [date for date in cancels if date]
+      y2 = {d:0 for d in x}
+      for d in cancels:
+        if d.date() in y2:
+          y2[d.date()] += 1
+      x, y2 = zip(*sorted(y2.items()))
     y = {d:0 for d in x}
     for d in firsts:
       if d in y:
@@ -96,11 +104,15 @@ def totals_json(request,format):
             _y2.append(0)
         _y[-1] += y[i]
         if _y2:
-          _y[-1] += y2[i]
+          _y2[-1] += y2[i]
+  if format == 'table':
+    table = "\n".join(["%s\t%s\t%s\t"%t for t in zip(x,y,y2)])
+    table2 = "\n".join(["%s\t%s\t%s\t"%t for t in zip(_x,_y,_y2)])
+    return HttpResponse("<pre>%s</pre>2<pre>%s</pre>"%(table,table2))
 
   x = _x or x
   y = _y or y
-  y2 = y2 or _y2
+  y2 = _y2 or y2
 
   if format == 'csv':
     response = HttpResponse(content_type='text/csv')
@@ -117,4 +129,5 @@ def totals_json(request,format):
     'x': x,
     'y': y,
     'y2': y2,
+    'zipt': zip(x,y,y2)
   })
