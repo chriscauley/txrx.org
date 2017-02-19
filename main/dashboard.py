@@ -50,8 +50,8 @@ def totals_json(request,format):
     elif metric == "new_members":
       users = get_user_model().objects.filter(subscription__isnull=False).distinct()
       firsts = [u.subscription_set.all().order_by("created")[0].created.date() for u in users]
-      cancels = [u.subscription_set.all().order_by("-created")[0].canceled for u in users]
-      cancels = [date for date in cancels if date]
+      _s = [u.subscription_set.all().order_by("-created")[0] for u in users]
+      cancels = [s.paid_until for s in _s if s.canceled]
       y2 = {d:0 for d in x}
       for d in cancels:
         if d.date() in y2:
@@ -94,7 +94,11 @@ def totals_json(request,format):
           year,month,day = day.split("-")
           _x.append("-".join([year,month]))
           _y.append(0)
+          if y2:
+            _y2.append(0)
         _y[-1] += y[i]
+        if _y2:
+          _y2[-1] += y2[i]
     elif resolution != 1:
       for i,day in enumerate(x):
         if not i%resolution:
