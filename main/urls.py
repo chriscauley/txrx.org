@@ -49,7 +49,7 @@ urlpatterns = [
   url(r'^(%s)/$'%('|'.join(_pages)),main.views.beta),
   url(r'^$',main.views.index,name="home"),
   url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-  url(r'^dashboard/totals.(json|csv)$', main.dashboard.totals_json),
+  url(r'^dashboard/totals.(json|csv|table)$', main.dashboard.totals_json),
   url(r'^admin/', include(admin.site.urls)),
   url(r'^blog/',include(blog.urls)),
   url(r'arst/(?P<pk>\d+)',main.views.intentional_500,name="order_detail"),

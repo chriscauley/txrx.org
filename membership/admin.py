@@ -133,6 +133,13 @@ class LevelAdmin(admin.ModelAdmin):
   )
   inlines = (MembershipFeatureInline, ProductInline, LevelDoorGroupScheduleInline)
 
+@admin.register(Status)
+class StatusAdmin(admin.ModelAdmin):
+  readonly_fields = ('subscription','paypalipn')
+  list_display = ('subscription','datetime','amount','_months')
+  def _months(self,obj):
+    return "%s months"%obj.subscription.months
+
 class StatusInline(admin.TabularInline):
   model = Status
   exclude = ('paypalipn',)
