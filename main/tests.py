@@ -5,7 +5,7 @@ from django.core import mail
 from lablackey.tests import check_subjects
 from event.models import Event, EventOccurrence
 
-import datetime, decimal
+import datetime, decimal, six
 
 class ManagementCommands(TestCase):
   def setUp(self):
@@ -64,27 +64,34 @@ def get_data(**kwargs):
     data.update(**kwargs)
     return data
 
+def get_order_total(start_date,data):
+  if isinstance(start_date,six.string_types):
+    start_date = datetime.datetime.strptime(start_date,'%Y-%m-%d').date()
+  end_date = start_date + datetime.timedelta(data['resolution'])
+  order_items = OrderItem.objects.filter(product__polymorphic_ctype_id=data['product_types'])
+  order_items = order_items.filter(order__status__gte=Order.PAID)
+  _items = order_items.filter(
+    order__created__gte=start_date,
+    order__created__lt=end_date,
+  )
+  return sum(_items.values_list(data['metric'],flat=True))
+
 class DashboardTest(ClientTestCase):
   """
   Test that the data coming out of the admin dashboard matches the database.
   This requires dummy date and a prebuilt database.
   """
-  def test_cart_totals(self):
+  def test_order_totals(self):
     self.login('chriscauley',password='dummy_password')
-    for resolution in [1,2,7,30]:
-      for time_period in [90,180,365,730]:
-        data = get_data(time_period=time_period)
-        order_items = OrderItem.objects.filter(product__polymorphic_ctype_id=data['product_types'])
-        order_items = order_items.filter(order__status__gte=Order.PAID)
-        results = self.client.get("/dashboard/totals.json?",data).json()
-        for i,day_string in enumerate(results['x']):
-          if i%5: #we're just going to skip 4/5 days to make this not take < 10s.
-            continue
-          start_date = datetime.datetime.strptime(day_string,'%Y-%m-%d').date()
-          end_date = start_date + datetime.timedelta(data['resolution'])
-          _items = order_items.filter(
-            order__created__gte=start_date,
-            order__created__lt=end_date,
-          )
-          amount = sum(_items.values_list('line_total',flat=True))
-          self.assertEqual(amount,decimal.Decimal(results['y'][i]))
+    for metric in ['quantity','line_total']:
+      for resolution in [1,2,7,30]:
+        for time_period in [90,180,365,730]:
+          data = get_data(time_period=time_period)
+          results = self.client.get("/dashboard/totals.json?",data).json()
+          for i,day_string in enumerate(results['x']):
+            if i%5: #we're just going to skip 4/5 days to make this not take < 10s.
+              continue
+            self.assertEqual(
+              get_order_total(day_string,data),
+              decimal.Decimal(results['y'][i])
+            )
