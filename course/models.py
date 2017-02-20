@@ -179,6 +179,8 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
       if subject.parent and not (subject.parent in subjects):
         self.subjects.add(subject.parent)
 
+    for session in self.active_sessions:
+      session.sessionproduct.update()
     reset_classes_json("Classes reset during course save")
 
   #! inherited from section, may not be necessary
