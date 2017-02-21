@@ -5,15 +5,19 @@ from django.core.urlresolvers import reverse
 from django.core.validators import MaxLengthValidator
 from django.template.defaultfilters import slugify, truncatewords, striptags
 from django.template.loader import render_to_string
+from django.utils import timezone
+from lablackey.contenttypes import get_contenttype
 from lablackey.db.models import UserModel, NamedTreeModel
 from sorl.thumbnail import ImageField, get_thumbnail
 from crop_override import get_override
 import datetime, time
 
-from media.models import FilesMixin, PhotosMixin
-from geo.models import Room
 from event.models import OccurrenceModel, reverse_ics
+from geo.models import Room
+from media.models import FilesMixin, PhotosMixin
+from notify.models import Follow
 from tool.models import ToolsMixin, Permission, Criterion, CriterionModel, Tool
+
 from lablackey.db.models import UserModel
 from lablackey.decorators import cached_method, cached_property
 from lablackey.mail import send_template_email
@@ -367,18 +371,26 @@ class Session(UserModel,PhotosMixin,models.Model):
       return "past"
     return "full"
   def save(self,*args,**kwargs):
-    #this may be depracated, basically the site fails hard if instructors don't have membership profiles
-    from membership.models import UserMembership
     if not self.pk and self.course:
       c = self.course
       c.active = True
       c.save()
     if self.active and not self.publish_dt:
       publish_dt = datetime.datetime.now()
-    profile,_ = UserMembership.objects.get_or_create(user=self.user)
+
     super(Session,self).save(*args,**kwargs)
     SessionProduct.objects.get_or_create(session=self)[0].update()
-      
+    if self.active and self.classtime_set.all() and not self.notified:
+      follows = Follow.objects.filter(content_type=get_contenttype("course.course"),object_id=self.course_id).distinct()
+      for follow in follows:
+        follow.notify(
+          target_type="course.session",
+          target_id=self.id,
+          message="New class: %s"%self,
+        ).id
+      self.notified = timezone.now()
+      super(Session,self).save(*args,**kwargs)
+
   @cached_method
   def get_absolute_url(self):
     return self.course.get_absolute_url()
