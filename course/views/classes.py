@@ -10,7 +10,8 @@ from django.template.response import TemplateResponse
 
 from ..models import Course, Term, Subject, Session, Enrollment, ClassTime
 from ..forms import EmailInstructorForm, EvaluationForm
-from notify.models import NotifyCourse
+from notify.models import Follow
+from lablackey.contenttypes import get_contenttype
 from lablackey.utils import get_or_none
 from event.utils import make_ics,ics2response
 
@@ -48,18 +49,18 @@ def detail_redirect(request,slug):
 def detail(request,pk,slug):
   course = get_object_or_404(Course,pk=pk)
   enrollment = None
-  notify_course = None
+  follow = None
   if request.user.is_authenticated():
     _e = Enrollment.objects.filter(session__course=course,user=request.user)
     enrollment = (_e or [None])[0]
-    notify_course = get_or_none(NotifyCourse,user=request.user,course=course)
+    follow = get_or_none(Follow,user=request.user,content_type=get_contenttype(course),object_id=course.id)
   kwargs = dict(active=True,subjects__in=course.subjects.all())
   related_courses = Course.objects.filter(**kwargs).exclude(id=course.id)
   values = {
     'course': course,
     'enrollment': enrollment,
     'related_courses': related_courses,
-    'notify_course': notify_course,
+    'follow': follow,
   }
   return TemplateResponse(request,"course/detail.html",values)
 

@@ -83,15 +83,13 @@
     </div>
     {% endif %}
     <p class="notify_course">
-      {% if notify_course %}
-      <a href="{% url "clear_notification" "notify_course" request.user.id notify_course.id %}">
-        <button class="btn btn-danger">
-          Do not send me emails when this class is scheduled
-        </button>
+      {% if follow %}
+      <a href="{% url "notify_unfollow" follow.id %}" class="btn btn-danger">
+        Do not send me emails when this class is scheduled
       </a>
       {% else %}
-      <a href="{% url "notify_course" course.id %}"><button class="btn btn-success">
-          Email me the next time this class is scheduled</button></a>
+      <a href="{% url "notify_follow" "course.Course" course.id %}" class="btn btn-success">
+        Email me the next time this class is scheduled</a>
       {% endif %}
       {% if settings.COURSE_GIFTCARD_ID %}
       <div style="text-align: center;">

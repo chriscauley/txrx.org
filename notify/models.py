@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 from lablackey.db.models import UserModel
-from lablackey.contenttypes import get_contenttype, GFKManager
+from lablackey.contenttypes import get_contenttype
 from course.models import Session, Course
 
 from jsonfield import JSONField
@@ -20,7 +20,6 @@ class Follow(UserModel):
   content_object = GenericForeignKey('content_type', 'object_id')
   datetime = models.DateTimeField(auto_now_add=True)
   __unicode__ = lambda self: "%s follows %s"%(self.user,self.content_object)
-  objects = GFKManager(generic_foreign_keys='content_object')
   class Meta:
     unique_together = ('user','content_type','object_id')
     ordering = ("-datetime",)
