@@ -4,15 +4,8 @@ from django.db import models
 
 from lablackey.db.models import UserModel
 from lablackey.contenttypes import get_contenttype
-from course.models import Session, Course
 
 from jsonfield import JSONField
-
-class NotifyCourse(UserModel):
-  course = models.ForeignKey(Course)
-  __unicode__ = lambda self: "{} -- {}".format(self.user,self.course)
-  class Meta:
-    unique_together = ('course','user')
 
 class Follow(UserModel):
   content_type = models.ForeignKey("contenttypes.ContentType")
@@ -20,6 +13,12 @@ class Follow(UserModel):
   content_object = GenericForeignKey('content_type', 'object_id')
   datetime = models.DateTimeField(auto_now_add=True)
   __unicode__ = lambda self: "%s follows %s"%(self.user,self.content_object)
+  def notify(self,**kwargs):
+    return Notification.objects.get_or_create(
+      follow=self,
+      user=self.user,
+      **kwargs
+    )[0]
   class Meta:
     unique_together = ('user','content_type','object_id')
     ordering = ("-datetime",)
@@ -32,5 +31,12 @@ class Notification(UserModel):
   data = JSONField(default=dict,blank=True)
   url = models.CharField(max_length=256,null=True,blank=True)
   __unicode__ = lambda self: "%s: %s"%(self.user,self.message)
+  target_type = models.CharField(max_length=201,null=True,blank=True)
+  target_id = models.IntegerField(null=True,blank=True)
+  _get_target = lambda self: get_model(self.target_type)
+  def _set_target(self,obj):
+    self.target_type = "%s.%s"%(obj._meta.app_label,obj._meta.model_name)
+    self.target_id = obj.id
+  target = property(_get_target,_set_target)
   class Meta:
     ordering = ("-datetime",)
