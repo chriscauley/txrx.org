@@ -44,8 +44,7 @@ def user_settings(request):
   values = {
     'now': datetime.datetime.now(),
     'forms': [user_form, usermembership_form],
-    'notify_courses': user.notifycourse_set.all(),
-    }
+  }
   return TemplateResponse(request,'membership/settings.html',values)
 
 @login_required

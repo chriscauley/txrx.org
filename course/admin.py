@@ -5,7 +5,9 @@ from lablackey.db.admin import NamedTreeModelAdmin, RawMixin
 
 from .models import Subject, Course, CourseRoomTime, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseEnrollment
 from event.admin import OccurrenceModelInline
+from lablackey.contenttypes import get_contenttype
 from media.admin import TaggedFileInline, TaggedPhotoAdmin
+from notify.models import Follow
 from tool.admin import TaggedToolInline
 
 class CourseRoomTimeInline(admin.TabularInline):
@@ -14,9 +16,9 @@ class CourseRoomTimeInline(admin.TabularInline):
 
 @admin.register(Course)
 class CourseAdmin(TaggedPhotoAdmin):
-  list_display = ("name","_notifies_count","active","tool_count","photo_count","content","visuals","presentation")
+  list_display = ("name","_follow_count","active","tool_count","photo_count","content","visuals","presentation")
   list_editable = ("content","visuals","presentation")
-  readonly_fields = ("_notifies",)
+  readonly_fields = ("_follow",)
   filter_horizontal = ("subjects",)
   search_fields = ("name",)
   inlines = [CourseRoomTimeInline, TaggedToolInline, TaggedFileInline]
@@ -24,15 +26,15 @@ class CourseAdmin(TaggedPhotoAdmin):
     return len(obj.get_tools())
   def photo_count(self,obj):
     return len(obj.get_photos())
-  def _notifies_count(self,obj):
-    return obj.notifycourse_set.count()
-  def _notifies(self,obj):
+  def _follow_count(self,obj):
+    return Follow.objects.filter(content_type=get_contenttype(obj),object_id=obj.id).count()
+  def _follow(self,obj):
     _click = "href='javascript:;' onclick='$(this).siblings().toggle();'"
-    out = "<a %s><b>%s notifies (click to toggle)</b></a>"%(_click,self._notifies_count(obj))
-    for notify in obj.notifycourse_set.all():
+    out = "<a %s><b>%s follow (click to toggle)</b></a>"%(_click,self._follow_count(obj))
+    for notify in Follow.objects.filter(content_type=get_contenttype(obj),object_id=obj.id):
       out += "<div style='display: none;'>%s</div>"%notify.user.email
     return out
-  _notifies.allow_tags = True
+  _follow.allow_tags = True
   # duplicated from models.py because of how the admin handles M2M
   def save_related(self, request, form, formsets, change):
     super(CourseAdmin, self).save_related(request, form, formsets, change)
