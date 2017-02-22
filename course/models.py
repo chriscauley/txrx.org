@@ -387,6 +387,7 @@ class Session(UserModel,PhotosMixin,models.Model):
           target_type="course.session",
           target_id=self.id,
           message="New class: %s"%self,
+          url=self.get_absolute_url()
         ).id
       self.notified = timezone.now()
       super(Session,self).save(*args,**kwargs)
@@ -581,6 +582,12 @@ class Enrollment(CriterionModel):
 
   __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.session)
   def save(self,*args,**kwargs):
+    if not self.pk:
+      Follow.objects.get(
+        user=self.user,
+        content_type=get_contenttype("course.course"),
+        object_id=self.session.course.id
+      ).delete()
     if not self.evaluation_date:
       self.evaluation_date = list(self.session.all_occurrences)[-1].start
     super(Enrollment,self).save(*args,**kwargs)
