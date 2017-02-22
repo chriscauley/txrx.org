@@ -436,7 +436,6 @@ class SessionProduct(Product):
     if self.session.total_students > self.session.course.max_students:
       s = "Session #%s overfilled. Please see https://txrxlabs.org/admin/course/session/%s/"
       mail_admins("My Course over floweth",s%(self.session.pk,self.session.pk))
-    user.notifycourse_set.filter(course=self.session.course).delete()
     order_item.extra['purchased_model'] = "course.enrollment"
     order_item.extra['purchased_pk'] = enrollment.pk
     order_item.save()
