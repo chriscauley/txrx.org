@@ -1,38 +1,36 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
-from django.core.mail import send_mail, mail_admins
+from django.core.mail import mail_admins
 from django.template.defaultfilters import striptags
 from django.template.loader import render_to_string
 
 from course.models import Session
-from lablackey.mail import mail_on_fail
+from lablackey.contenttypes import get_contenttype
+from lablackey.mail import send_template_email
 from membership.models import LimitedAccessKey
+from notify.models import Notification
 
 import datetime
 
 class Command (BaseCommand):
   def handle(self, *args, **options):
-    new_sessions = Session.objects.filter(active=True,notified__isnull=True).exclude(private=True)
-    count = new_sessions.count()
-    if not new_sessions:
+    users = get_user_model().objects.filter(notification__isnull=False)
+    users = users.filter(notification__emailed__isnull=True).distinct()
+    count = 0
+    users_count = users.count()
+    if not users_count:
       mail_admins("No classes","No new classes to notify anyone about :(")
       return
-    courses = list(set([s.course for s in new_sessions]))
-    users = get_user_model().objects.filter(notifycourse__course__in=courses).distinct()
     for user in users:
-      sessions = [s for s in new_sessions if user.notifycourse_set.filter(course=s.course)]
+      notifications = user.notification_set.filter(emailed__isnull=True)
+      count += notifications.count()
+      sessions = [n.target for n in notifications]
       _dict = {
         'user': user,
         'la_key': LimitedAccessKey.new(user),
-        'SITE_URL': settings.SITE_URL,
         'new_sessions': sessions,
-        }
-      send_mail(
-        "New classes at the hackerspace",
-        render_to_string("notify/notify_course.html",_dict),
-        settings.DEFAULT_FROM_EMAIL,
-        [user.email],
-        )
-    new_sessions.update(notified=datetime.datetime.now())
-    print "Notified %s users of %s classes"%(len(users),count)
+      }
+      send_template_email("notify/email/course",[user.email],context=_dict)
+      notifications.update(emailed=datetime.datetime.now())
+    print "Notified %s users of %s notifications"%(len(users),count)
