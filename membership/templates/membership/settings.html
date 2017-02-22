@@ -13,22 +13,19 @@
   {% for form in forms %}{% include "_form.html" %}{% endfor %}
   <input type="submit" class="btn btn-success" />
 </form>
-{% if notify_courses %}
+{% if request.user.follow_set.all %}
 <h3>Course Notifications:</h3>
-{% for notify_course in notify_courses %}
+{% for follow in request.user.follow_set.all %}
+
 <p>
-  <a href="{% url "clear_notification" "notify_course" request.user.id notify_course.id %}?next={{ request.path|urlencode }}">
-    <button class="btn btn-danger">
-      Don't email me about new "{{ notify_course.course }}" sessions
-    </button>
-  </a>
+  <a href="{% url "notify_unfollow" follow.id %}?next={{ request.path|urlencode }}" class="btn btn-danger">
+    Don't email me about new "{{ follow.content_object }}" sessions</a>
 </p>
 {% endfor %}
-{% if notify_courses|length > 1 %}
+{% if request.user.follow_set.count > 1 %}
 <p>
-  <a href="{% url "unsubscribe" "notify_course" request.user.id %}">
-    <button class="btn btn-danger">DELETE ALL COURSE NOTIFICATIONS</button>
-  </a>
+  <a href="{% url "unsubscribe" "notify_course" request.user.id %}" class="btn btn-danger">
+    DELETE ALL COURSE NOTIFICATIONS</a>
 </p>
 {% endif %}
 {% endif %}
