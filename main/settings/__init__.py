@@ -79,7 +79,6 @@ MIDDLEWARE_CLASSES = (
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
-  'notify.middleware.MarkNotificationReadMiddleware',
 )
 
 AUTH_USER_MODEL = 'user.User'
@@ -219,6 +218,7 @@ TEMPLATES = [
         'main.context.nav',
         'main.context.motd',
         'blog.context.process',
+        'notify.context.process',
       ],
       'loaders': _TEMPLATE_LOADERS
     },
