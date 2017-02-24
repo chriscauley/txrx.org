@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from .models import Level, Group, MeetingMinutes, Officer, UserMembership, Subscription, Flag, Container
-from .forms import UserForm, UserMembershipForm, RegistrationForm
+from .forms import UserForm, UserMembershipForm, RegistrationForm, NotificationForm
 from .utils import limited_login_required, verify_unique_email
 
 from blog.models import Post
@@ -30,6 +30,16 @@ def join_us(request):
     'now': datetime.datetime.now()
     }
   return TemplateResponse(request,"membership/memberships.html",values)
+
+@login_required
+def notification_settings(request):
+  form = NotificationForm(request)
+  if form.is_valid():
+    form.save()
+    messages.success(request,"Your notification settings have been saved")
+    return HttpResponseRedirect(request.path)
+  values = {'form': form}
+  return TemplateResponse(request,'membership/notification_settings.html',values)
 
 @login_required
 def user_settings(request):
