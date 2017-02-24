@@ -13,27 +13,13 @@
   {% for form in forms %}{% include "_form.html" %}{% endfor %}
   <input type="submit" class="btn btn-success" />
 </form>
-{% if request.user.follow_set.all %}
-<h3>Course Notifications:</h3>
-{% for follow in request.user.follow_set.all %}
-
-<p>
-  <a href="{% url "notify_unfollow" follow.id %}?next={{ request.path|urlencode }}" class="btn btn-danger">
-    Don't email me about new "{{ follow.content_object }}" sessions</a>
-</p>
-{% endfor %}
-{% if request.user.follow_set.count > 1 %}
-<p>
-  <a href="{% url "unsubscribe" "notify_course" request.user.id %}" class="btn btn-danger">
-    DELETE ALL COURSE NOTIFICATIONS</a>
-</p>
-{% endif %}
-{% endif %}
 {% endblock %}
 
 {% block side %}
 <h1>Other settings</h1>
-<p>If you want to change your password click <a href="{% url "auth_password_change" %}">here</a></p>
+<p><a href="{% url "auth_password_change" %}" class="btn btn-primary btn-block">Change Password</a></p>
+<p><a href="{% url "notify_settings" %}" class="btn btn-primary btn-block">Notification Settings</a></p>
+
 <p>
   Membership Status:
 </p>

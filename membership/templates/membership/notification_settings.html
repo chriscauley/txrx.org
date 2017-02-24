@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load txrx_tags %}
+
+{% block full_title %}Notification Settings - {{ settings.SITE_NAME }}{% endblock %}
+{% block header_content %}Edit your notification settings{% endblock %}
+
+{% block content %}
+<h2>Phone Number</h2>
+<p>
+  If you want to receive class reminders or other notifications via text message,
+  add a phone number and then select "Text Message" from the options below.
+</p>
+{% if request.user.smsnumber %}
+<b>Contact Number:</b> {{ request.user.smsnumber.number }}<br/>
+<button class="btn btn-primary" onclick="uR.alertElement('phone-number');">Change Phone Number</button>
+{% else %}
+<button class="btn btn-primary" onclick="uR.alertElement('phone-number');">Add Phone Number</button>
+{% endif %}
+<hr />
+<h2>Notification Settings</h2>
+<form method="POST" enctype="multipart/form-data" class="cvfloat">
+  {% csrf_token %}
+  {% for error in form.non_field_errors %}
+  <div class="alert alert-danger">{{ error }}</div>
+  {% endfor %}
+  {% include "_form.html" %}
+  <input type="submit" class="btn btn-success" />
+</form>
+<script type="riot/tag">
+  <phone-number>
+    <div class={ theme.outer }>
+      <div class={ theme.content }>
+        <h3>Phone Number</h3>
+        <div if={ !step }>
+          <ur-form schema={ ["phone_number"] } action="/sms/add_phone/" method="POST" initial={ initial }></ur-form>
+        </div>
+        <div if={ step == 'verify' }>
+          <ur-form schema={ ["verification_code"] } action="/sms/verify_phone/" method="POST"></ur-form>
+        </div>
+      </div>
+    </div>
+
+  var self = this;
+  uR.auth.ready(function() {
+    self.initial = { phone_number: uR.auth.user.phone_number }
+    self.update();
+  });
+  self.ajax_success = function(data) {
+    conosle.log('arst'); 
+  } 
+  </phone-number>
+</script>
+<script>
+  uR.ready(function() {
+    uR.auth.ready(function() { riot.mount("phone-number"); });
+  });
+</script>
+{% endblock %}
