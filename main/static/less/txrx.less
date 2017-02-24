@@ -386,7 +386,7 @@ h3.date {
 }
 
 [data-reddot] {
-  &:before {
+  &:after {
     background: red;
     border-radius: 100%;
     color: @gray-lighter;
@@ -404,6 +404,7 @@ h3.date {
     width: 16px;
   }
 }
+[data-reddot="0"]:after { content: initial; display: none; }
 
 .evaluation_form {
   textarea {
