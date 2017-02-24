@@ -20,6 +20,7 @@ from membership.utils import temp_user_required
 from redtape.models import Document
 from tool.models import Criterion, UserCriterion, Permission
 
+from sms.models import SMSNumber
 from lablackey.utils import get_or_none
 from sorl.thumbnail import get_thumbnail
 import json, datetime, os, binascii
@@ -110,6 +111,10 @@ def user_json(request):
   keys = [
     'id','email','username','first_name','last_name','is_toolmaster','is_shopkeeper','is_staff','is_superuser'
   ]
+  try:
+    number = request.user.smsnumber.number
+  except SMSNumber.DoesNotExist:
+    number = ""
   out = { k: getattr(request.user,k) for k in keys }
   out.update({
     'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(request.user)],
@@ -120,6 +125,7 @@ def user_json(request):
     'enrollments': {e.session_id:e.quantity for e in request.user.enrollment_set.all()},
     'enrolled_course_ids': list(request.user.enrollment_set.all().values_list("session__course_id",flat=True)),
     'member_discount_percent': request.user.level.discount_percentage,
+    'phone_number': number,
   })
   return JsonResponse({'user': out});
 

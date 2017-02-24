@@ -64,6 +64,7 @@ INSTALLED_APPS = [
   'redtape',
   'schedule_poll',
   'airbrake',
+  'sms',
 ]
 
 #mptt_comments

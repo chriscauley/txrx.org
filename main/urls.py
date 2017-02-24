@@ -26,6 +26,7 @@ import drop.views.product
 import course.views.classes
 import airbrake.urls
 import txrx_urls
+import sms.urls
 
 import os
 
@@ -91,6 +92,7 @@ urlpatterns = [
   url(r'^redtape/',include(redtape.urls)),
   url(r'',include(airbrake.urls)),
   url(r'',include(txrx_urls)),
+  url(r'',include(sms.urls)),
 ]
 
 if hasattr(settings,"COURSE_GIFTCARD_ID"):
@@ -124,6 +126,7 @@ import lablackey.urls
 #auth related
 urlpatterns += [
   url(r'^accounts/settings/$',membership.views.user_settings,name='account_settings'),
+  url(r'^notify/settings/$',membership.views.notification_settings,name='notify_settings'),
   url(r'^accounts/register/$',membership.views.register),
   url(r'^accounts/(cancel)_subscription/',membership.views.change_subscription,name="cancel_subscription"),
   url(r'^accounts/', include(registration.urls)),
