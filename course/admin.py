@@ -1,9 +1,10 @@
+from django.conf import settings
 from django.contrib import admin
 from django import forms
 from lablackey.db.forms import StaffMemberForm
 from lablackey.db.admin import NamedTreeModelAdmin, RawMixin
 
-from .models import Subject, Course, CourseRoomTime, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseEnrollment
+from .models import Subject, Course, CourseRoomTime, Session, Enrollment, Term, ClassTime, Branding, Evaluation, CourseEnrollment, SessionProduct
 from event.admin import OccurrenceModelInline
 from lablackey.contenttypes import get_contenttype
 from media.admin import TaggedFileInline, TaggedPhotoAdmin
@@ -59,6 +60,10 @@ class EnrollmentInline(admin.TabularInline):
   exclude = ('completed','evaluated','emailed','transaction_ids','evaluation_date')
   extra = 0
 
+class SessionProductInline(admin.TabularInline):
+  model = SessionProduct
+  extra = 0
+
 @admin.register(Session)
 class SessionAdmin(TaggedPhotoAdmin):
   form = StaffMemberForm
@@ -72,7 +77,9 @@ class SessionAdmin(TaggedPhotoAdmin):
   _last_date = lambda self,obj: getattr(obj,'last_date','Will be set on save')
   _last_date.short_description = 'last classtime'
   exclude = ('time_string','slug','publish_dt')
-  inlines = (ClassTimeInline, EnrollmentInline)
+  inlines = [ClassTimeInline, EnrollmentInline]
+  if settings.DEBUG: # I like to see this sometimes for debug purchases
+    inlines.append(SessionProductInline)
   search_fields = ("user__username","user__email","course__name")
   class Media:
     js = ("js/course_admin.js",)
