@@ -6,16 +6,7 @@
 
 {% block content %}
 <h2>Phone Number</h2>
-<p>
-  If you want to receive class reminders or other notifications via text message,
-  add a phone number and then select "Text Message" from the options below.
-</p>
-{% if request.user.smsnumber %}
-<b>Contact Number:</b> {{ request.user.smsnumber.number }}<br/>
-<button class="btn btn-primary" onclick="uR.alertElement('phone-number');">Change Phone Number</button>
-{% else %}
-<button class="btn btn-primary" onclick="uR.alertElement('phone-number');">Add Phone Number</button>
-{% endif %}
+<number-display></number-display>
 <hr />
 <h2>Notification Settings</h2>
 <form method="POST" enctype="multipart/form-data" class="cvfloat">
@@ -27,6 +18,25 @@
   <input type="submit" class="btn btn-success" />
 </form>
 <script type="riot/tag">
+  <number-display>
+    <p if={ !smsnumber }>
+      If you want to receive class reminders or other notifications via text message,
+      add a phone number and then select "Text Message" from the options below.
+      If you added a number previously and do not see it below then you most likely did not verify that number.
+    </p>
+    <div if={ smsnumber }>
+      <p>Any notification set to "Text Message" Will be sent to the following number</p>
+      <p><b>Contact Number:</b> { smsnumber }</p>
+    </div>
+    <button class="btn btn-primary" onclick="uR.alertElement('phone-number');">
+      <span if={ smsnumber }>Change Phone Number</span>
+      <span if={ !smsnumber }>Add Phone Number</span>
+    </button>
+
+    this.on("update",function() {
+      this.smsnumber = uR.auth.user.phone_number;
+    });
+  </number-display>
   <phone-number>
     <div class={ theme.outer }>
       <div class={ theme.content }>
@@ -35,6 +45,7 @@
           <ur-form schema={ ["phone_number"] } action="/sms/add_phone/" method="POST" initial={ initial }></ur-form>
         </div>
         <div if={ step == 'verify' }>
+          <p>We've sent a verification code to your phone. Please type that in below.</p>
           <ur-form schema={ ["verification_code"] } action="/sms/verify_phone/" method="POST"></ur-form>
         </div>
       </div>
@@ -46,13 +57,14 @@
     self.update();
   });
   self.ajax_success = function(data) {
-    conosle.log('arst'); 
+    self.step = 'verify';
+    self.update()
   } 
   </phone-number>
 </script>
 <script>
   uR.ready(function() {
-    uR.auth.ready(function() { riot.mount("phone-number"); });
+    uR.auth.ready(function() { riot.mount("number-display"); });
   });
 </script>
 {% endblock %}

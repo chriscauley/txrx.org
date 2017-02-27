@@ -118,6 +118,7 @@ if (!document.body.classList.contains("kiosk")) { // bootstrap
     },
   }
 }
+uR.theme.error_class = "alert alert-danger";
 uR.config.text_validators['signature'] = function(value,tag) {
   if (!value.startsWith("/s/")) { tag.data_error = "Signature must start with /s/"; }
 }

@@ -26,9 +26,8 @@ class SMSNumber(models.Model):
   code = models.IntegerField(default=random_code)
   expire = models.DateTimeField(default=expiry)
   def send_verification(self):
+    self.code = random_code()
+    self.expire = expiry()
+    self.save()
     send("Code: %s for %s"%(self.code,settings.SITE_NAME))
-  def save(self,*args,**kwargs):
-    if not self.pk:
-      self.send_verification()
-    super(SMSNumber,self).save(*args,**kwargs)
-  __unicode__ = lambda self: "%s - %s"%(number,user)
+  __unicode__ = lambda self: "%s - %s"%(self.number,self.user)

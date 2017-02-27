@@ -111,10 +111,13 @@ def user_json(request):
   keys = [
     'id','email','username','first_name','last_name','is_toolmaster','is_shopkeeper','is_staff','is_superuser'
   ]
+  number = ""
   try:
-    number = request.user.smsnumber.number
+    smsnumber = request.user.smsnumber
+    if smsnumber.verified:
+      number = smsnumber.number
   except SMSNumber.DoesNotExist:
-    number = ""
+    pass
   out = { k: getattr(request.user,k) for k in keys }
   out.update({
     'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(request.user)],
