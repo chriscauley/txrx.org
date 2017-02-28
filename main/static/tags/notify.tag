@@ -5,23 +5,37 @@ uR.ready(function() {
 });
 
 <ur-notify>
-  <p class="lead">
+  <p class="lead col-sm-12">
     Checkout <a href="/notify/settings/">notification settings</a> to control whether notifications are sent by email or text or not at all.
   </p>
-  <div if={ unread && unread.length }>
-    <h3>Unread Notifications</h3>
-    <ul>
-      <li each={ unread }><a href={ url }>{ message }</a></li>
-    </ul>
+  <div class="col-sm-6" if={ unread.length || recent.length }>
+    <div if={ unread.length }>
+      <h3>Unread Notifications</h3>
+      <ul class={ uR.theme.list }>
+        <li each={ unread } class={ uR.theme.list_item }><a href={ url }>{ message }</a></li>
+      </ul>
+    </div>
+    <div if={ recent.length }>
+      <h3>Past Notifications</h3>
+      <ul class={ uR.theme.list }>
+        <li each={ recent } class={ uR.theme.list_item }><a href={ url }>{ message }</a></li>
+      </ul>
+    </div>
+    <div if={ older }>
+      <a onclick={ loadMore }>View Older...</a>
+    </div>
   </div>
-  <div if={ recent && recent.length }>
-    <h3>Past Notifications</h3>
-    <ul>
-      <li each={ recent }><a href={ url }>{ message }</a></li>
+  <div class="col-sm-6" if={ follows }>
+    <h3>Things You Are Following</h3>
+    <ul class={ uR.theme.list }>
+      <li each={ follows } class={ uR.theme.list_item }>
+        <a href={ url }>{ name }</a>
+        <a class="{ uR.theme.list_right } fa fa-close" href={ unfollow_url } if={ !deleted }> </a>
+      </li>
+      <li if={ follows.length > 1 } class={ uR.theme.list_item_danger }>
+        <a href="/notify/unsubscribe/notify_course/{ uR.auth.user.id }">Unfollow All</a>
+      </li>
     </ul>
-  </div>
-  <div if={ older }>
-    <a onclick={ loadMore }>View Older...</a>
   </div>
 
   var self = this;
@@ -33,7 +47,14 @@ uR.ready(function() {
         self.ready = false;
       },
       that: this
-    })
+    });
+    uR.ajax({
+      url: "/api/notify/follow/",
+      success: function(data) {
+        self.follows = data;
+      },
+      that: this
+    });
   });
   this.on("update",function() {
     if (this.ready || !this.data) { return; }

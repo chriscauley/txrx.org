@@ -119,6 +119,10 @@ if (!document.body.classList.contains("kiosk")) { // bootstrap
   }
 }
 uR.theme.error_class = "alert alert-danger";
+uR.theme.list = "list-group";
+uR.theme.list_item = "list-group-item";
+uR.theme.list_item_danger = "list-group-item list-group-item-danger";
+uR.theme.list_right = "badge";
 uR.config.text_validators['signature'] = function(value,tag) {
   if (!value.startsWith("/s/")) { tag.data_error = "Signature must start with /s/"; }
 }
