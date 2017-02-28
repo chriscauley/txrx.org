@@ -36,7 +36,7 @@ def get_model(s):
   return apps.get_app_config(app_label).get_model(model_name)
 
 class Notification(UserModel,JsonMixin):
-  follow = models.ForeignKey(Follow)
+  follow = models.ForeignKey(Follow,null=True,blank=True)
   datetime = models.DateTimeField(auto_now_add=True)
   emailed = models.DateTimeField(null=True,blank=True)
   read = models.DateTimeField(null=True,blank=True)
