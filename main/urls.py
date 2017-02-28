@@ -44,6 +44,7 @@ _pages = [
   'week-hours',
   'me',
   'admin/dashboard',
+  'notify',
 ]
 
 urlpatterns = [
@@ -122,6 +123,7 @@ import membership.views
 import django.contrib.auth.urls
 from api.urls import build_urls
 import lablackey.urls
+import notify.urls
 
 #auth related
 urlpatterns += [
@@ -138,6 +140,7 @@ urlpatterns += [
   url(r'^api/user_checkin/$',user.views.user_checkin),
   url(r'^api/change_(headshot|id_photo)/$',user.views.change_headshot),
   url(r'',include(lablackey.urls)),
+  url(r'^notify/',include(notify.urls)),
   #url(r'^api-token-auth/', 'rest_framework_jwt.views.obtain_jwt_token'),
 ]
 
@@ -145,7 +148,6 @@ urlpatterns += build_urls()
 urlpatterns += [
   url(r'',_include('membership.urls')),
   url(r'',_include('rfid.urls')),
-  url(r'',_include('notify.urls')),
 ]
 
 if hasattr(settings,"STAFF_URL"):

@@ -397,6 +397,8 @@ class Officer(UserModel):
   class Meta:
     ordering = ('order','end')
 
+#! TODO DEPRACATED Unsure where this comes from
+"""
 class UnsubscribeLink(UserModel):
   key = models.CharField(max_length=32,unique=True)
   created = models.DateField(auto_now_add=True)
@@ -407,6 +409,7 @@ class UnsubscribeLink(UserModel):
     seed = string.letters+string.digits
     key = ''.join([random.choice(seed) for i in range(32)])
     return clss(key=key,user=user)
+"""
 
 class LimitedAccessKey(UserModel):
   """
