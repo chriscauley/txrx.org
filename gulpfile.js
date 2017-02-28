@@ -42,6 +42,7 @@ var tag_files = [
   _ROOT + "tags/course.tag",
   _ROOT + "tags/store.tag",
   _ROOT + "tags/redtape.tag",
+  _ROOT + "tags/notify.tag",
 ];
 
 gulp.task('build-tag', function() {
