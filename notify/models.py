@@ -1,9 +1,11 @@
 from django.apps import apps
+from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 from lablackey.db.models import UserModel
+from lablackey.unrest import JsonMixin
 from lablackey.contenttypes import get_contenttype
 
 from jsonfield import JSONField
@@ -28,7 +30,7 @@ def get_model(s):
   app_label,model_name = s.split(".")
   return apps.get_app_config(app_label).get_model(model_name)
 
-class Notification(UserModel):
+class Notification(UserModel,JsonMixin):
   follow = models.ForeignKey(Follow)
   datetime = models.DateTimeField(auto_now_add=True)
   emailed = models.DateTimeField(null=True,blank=True)
@@ -40,6 +42,10 @@ class Notification(UserModel):
   target_type = models.CharField(max_length=201,null=True,blank=True)
   target_id = models.IntegerField(null=True,blank=True)
   _get_target = lambda self: get_model(self.target_type).objects.get(pk=self.target_id)
+  objects = NotificationManager()
+  json_fields = ['follow','datetime','read','message','data','url','target_type','target_id']
+  def row_permissions(self,user):
+    return self.user == user
   def _set_target(self,obj):
     self.target_type = "%s.%s"%(obj._meta.app_label,obj._meta.model_name)
     self.target_id = obj.id
