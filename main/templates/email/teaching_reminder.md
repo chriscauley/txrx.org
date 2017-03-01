@@ -1,6 +1,11 @@
 {% load i18n %}{% autoescape off %}
 
-This is a reminder that you have a class ({{ class_time.session.course }}) tomorrow at {{ SITE_NAME }}. The class starts tomorrow ({{ class_time.start|date:"F d" }}) at {{ class_time.start|date:"h:i a" }}.
+This is a reminder that you are teaching tomorrow at {{ settings.SITE_NAME }}.
+
+{{ classtimes }}
+{% for classtime in classtimes %}
+* **{{ classtime.session.course }}**: {{ classtime.start|date:"F d @ P" }}
+{% endfor %}
 
 If you would like to not receive these notifications, please use one of the links below.
 

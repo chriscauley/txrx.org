@@ -1,1 +1,1 @@
-Class tomorrow!
+{% if notifications|length == 1 %}Class{% else %}{{ notifications|length }} classes{% endif %} tomorrow!

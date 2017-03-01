@@ -1,1 +1,1 @@
-You're teaching tomorrow at {{ class_time.start|date:"P" }}
+You're teaching tomorrow at {{ first_classtime.start|date:"P" }}
