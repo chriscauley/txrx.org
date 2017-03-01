@@ -10,7 +10,8 @@ from membership.models import Level
 
 from course.models import Session, Course, ClassTime, Enrollment
 from .utils import get_or_create_student
-from lablackey.tests import check_subjects, check_recipients
+from geo.tests import setUp as geo_setUp
+from lablackey.tests import check_subjects, check_recipients, ClientTestCase
 from drop.models import Cart
 
 import arrow
@@ -31,29 +32,42 @@ def setUp(self):
   tomorrow = arrow.now().replace(days=1,hour=13,minute=00).datetime
   next_day = arrow.now().replace(days=2,hour=13,minute=00).datetime
   end = "14:00"
+  geo_setUp(self)
 
+  self.course1 = Course.objects.create(
+    name="foo",
+    active=True,
+    fee=45,
+    room=self.room,
+    no_conflict=True,
+  )
+
+  self.course2 = Course.objects.create(
+    name="bap",
+    active=True,
+    fee=50,
+    room=self.room,
+  )
+
+  self.teacher = self.new_user()
+  self.student1 = self.new_user()
+  self.student2 = self.new_user()
   # fee = 45 because it tests that discounts are including fractional dollars
   # Session 1 has class tomorrow and the next day from 1-2pm
-  self.session1 = Session.objects.create(
-    course=Course.objects.filter(active=True,fee=45).order_by("?")[0],
-    user_id=1
-  )
+  self.session1 = Session.objects.create(course=self.course1,user=self.teacher)
   ClassTime.objects.create(session=self.session1,start=tomorrow,end_time=end)
   ClassTime.objects.create(session=self.session1,start=next_day,end_time=end)
 
   # Session 2 has class day after tomorrow at the same time as session 1
-  self.session2 = Session.objects.create(
-    course=Course.objects.filter(active=True,fee__gt=0).order_by("?")[0],
-    user_id=1
-  )
+  self.session2 = Session.objects.create(course=self.course2,user=self.teacher)
   ClassTime.objects.create(session=self.session2,start=tomorrow.replace(hour=18),end_time="19:00")
 
-  # conflict_session1 is the same time as session1. currently unused
-  self.conflict_session1 = Session.objects.create(
-    course=Course.objects.filter(active=True,fee__gt=0).order_by("?")[0],
-    user_id=1
-  )
-  ClassTime.objects.create(session=self.conflict_session1,start=next_day,end_time=end)
+  # # conflict_session1 is the same time as session1. currently unused
+  # self.conflict_session1 = Session.objects.create(
+  #   course=Course.objects.filter(active=True,fee__gt=0).order_by("?")[0],
+  #   user_id=1
+  # )
+  # ClassTime.objects.create(session=self.conflict_session1,start=next_day,end_time=end)
 
 class ListenersTest(TestCase):
   """This tests all possible purchases from paypal and to make sure prices line up.
@@ -120,7 +134,6 @@ class ListenersTest(TestCase):
     invoice = add_to_cart(client,self.session1.sessionproduct,1)
 
     params = get_course_query(session=self.session1,quantities=[1],payer_email=email,invoice=invoice)
-    print params['mc_gross']
     paypal_post(self,params)
 
     # The above generates an enrollment error because someone over paid
@@ -190,46 +203,31 @@ class UtilsTest(TestCase):
     self.assertEqual(self.session1.enrollment_set.get(user=user).quantity,1)
     self.assertEqual(user.paypal_email,paypal_email)
 
-class NotifyTest(TestCase):
+class NotifyTest(ClientTestCase):
   setUp = setUp
   def test_course(self):
-    #make sure students and instructors get an email
-    i_email = 'instructor@txrxtesting.com'
-    s_email = 'student@txrxtesting.com'
-    s2_email = 'student2@txrxtesting.com'
-    User = get_user_model()
-    User.objects.filter(email__in=[i_email,s_email,s2_email]).delete()
-    instructor, new = get_or_create_student(i_email,send_mail=False)
-    instructor.is_staff = True
-    instructor.save()
-
-    self.session1.user = instructor
-    self.session2.user = instructor
-    self.session1.save()
-    self.session2.save()
-
     # enroll student in 1 class
-    student, new = get_or_create_student(s_email,send_mail=False)
-    Enrollment.objects.create(user=student,session=self.session1)
+    Enrollment.objects.create(user=self.student1,session=self.session1)
 
     # enroll student2 in 2 classes
-    student2,new = get_or_create_student(s2_email,send_mail=False)
-    Enrollment.objects.create(user=student2,session=self.session1)
-    Enrollment.objects.create(user=student2,session=self.session2)
+    Enrollment.objects.create(user=self.student2,session=self.session1)
+    Enrollment.objects.create(user=self.student2,session=self.session2)
 
     # send out reminders and check that they went out
     call_command("course_reminder")
+    call_command("notify_course")
     subjects = [
-      u'Class tomorrow!', u'Class tomorrow!',
-      u"You're teaching tomorrow at 1 p.m.", u"You're teaching tomorrow at 6 p.m."
+      u'Class tomorrow!', # student1
+      u'2 classes tomorrow!', # student2
+      u"You're teaching tomorrow at 1 p.m." # teacher
     ]
-    recipients = [[i_email], [i_email], [s2_email], [s_email]]
+    recipients = [[u.email] for u in [self.student1, self.student2, self.teacher]]
     self.assertTrue(check_subjects(subjects))
     self.assertTrue(check_recipients(recipients))
 
     # send out reminders again. Make sure none went out
     mail.outbox = []
     call_command("course_reminder")
+    call_command("notify_course")
     self.assertTrue(check_subjects([]))
     self.assertTrue(check_recipients([]))
-    
