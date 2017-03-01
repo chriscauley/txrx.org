@@ -8,6 +8,8 @@ from lablackey.contenttypes import get_contenttype
 def move_to_follow(apps,schema_editor):
     NotifyCourse = apps.get_model("notify","NotifyCourse")
     Follow = apps.get_model("notify","Follow")
+    if not NotifyCourse.objects.all():
+        return
     course_ct_id = get_contenttype("course.course").id
     print NotifyCourse.objects.count(),' ',Follow.objects.count()
     for nc in NotifyCourse.objects.all():

@@ -43,6 +43,7 @@ class Notification(UserModel,JsonMixin):
   message = models.CharField(max_length=512)
   data = JSONField(default=dict,blank=True)
   url = models.CharField(max_length=256,null=True,blank=True)
+  relationship = models.CharField(max_length=32,null=True,blank=True)
   __unicode__ = lambda self: "%s: %s"%(self.user,self.message)
   target_type = models.CharField(max_length=201,null=True,blank=True)
   target_id = models.IntegerField(null=True,blank=True)
