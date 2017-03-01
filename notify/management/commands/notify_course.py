@@ -15,22 +15,50 @@ import datetime
 
 class Command (BaseCommand):
   def handle(self, *args, **options):
+    # First people who are following classes
     users = get_user_model().objects.filter(notification__isnull=False)
-    users = users.filter(notification__emailed__isnull=True).distinct()
+    users = users.filter(notification__emailed__isnull=True)
+    students = users.filter(notification__target_type="course.session").distinct()
     count = 0
-    users_count = users.count()
-    if not users_count:
+    users_count = students.count()
+    if not users_count and not settings.TESTING:
       mail_admins("No classes","No new classes to notify anyone about :(")
-      return
-    for user in users:
-      notifications = user.notification_set.filter(emailed__isnull=True)
+    for user in students:
+      notifications = user.notification_set.filter(emailed__isnull=True,target_type="course.session")
       count += notifications.count()
       sessions = [n.target for n in notifications]
       _dict = {
         'user': user,
         'la_key': LimitedAccessKey.new(user),
         'new_sessions': sessions,
+        'notifications': notifications,
       }
       send_template_email("notify/email/course",[user.email],context=_dict)
       notifications.update(emailed=datetime.datetime.now())
-    print "Notified %s users of %s notifications"%(len(users),count)
+
+    # Now hit up enrollments that are happening tomorrow
+    for relationship in ["teaching_reminder","course_reminder"]:
+      followers = users.filter(
+        notification__target_type="course.classtime",
+        notification__relationship=relationship).distinct()
+      users_count += followers.count()
+      for user in followers:
+        notifications = user.notification_set.filter(
+          emailed__isnull=True,
+          target_type="course.classtime",
+          relationship=relationship,
+        )
+        count += notifications.count()
+        classtimes = sorted([n.target for n in notifications],key=lambda ct: ct.start)
+        _dict = {
+          'user': user,
+          'la_key': LimitedAccessKey.new(user),
+          'SITE_URL': settings.SITE_URL,
+          'notifications': notifications,
+          'first_classtime': classtimes[0],
+          'classtimes': classtimes
+        }
+        send_template_email("email/%s"%relationship,user.email,context=_dict)
+        notifications.update(emailed=datetime.datetime.now())
+    
+    print "Notified %s users of %s notifications"%(users_count,count)
