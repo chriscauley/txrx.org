@@ -6,6 +6,7 @@ sys.path.insert(0,os.path.normpath(os.path.join(SPATH,'..'))) # this is to use t
 
 DEBUG = True
 DEBUG_EMAIL = True
+TESTING = sys.argv[1:2] == ['test']
 
 MANAGERS = ADMINS = (
   ('chris cauley','chris@lablackey.com'),
@@ -70,7 +71,7 @@ LOGIN_REDIRECT_URL = "/"
 
 SECRET_KEY = '^f_fn6)^e5^)+p-rjcrcdf(7iwz4@5z9thx92%^=e_)$jly7mc'
 MAPS_API_KEY = 'ABQIAAAAeppD1h9lB7H61ozR18SeZRS_YqHDtehKcRTrrAGjc25rDMjatxT8nvoX4-jJXcRPaT4I-RdMYv3fJA'
-TEST_RUNNER = 'main.runner.Runner'
+#TEST_RUNNER = 'main.runner.Runner'
 
 MIDDLEWARE_CLASSES = (
   'django.middleware.common.CommonMiddleware',

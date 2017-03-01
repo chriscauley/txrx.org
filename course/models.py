@@ -185,7 +185,8 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
 
     for session in self.active_sessions:
       session.sessionproduct.update()
-    reset_classes_json("Classes reset during course save")
+    if not settings.TESTING:
+      reset_classes_json("Classes reset during course save")
 
   #! inherited from section, may not be necessary
   def get_notes(self):
@@ -582,7 +583,7 @@ class Enrollment(CriterionModel):
   __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.session)
   def save(self,*args,**kwargs):
     if not self.pk:
-      Follow.objects.get(
+      Follow.objects.filter(
         user=self.user,
         content_type=get_contenttype("course.course"),
         object_id=self.session.course.id
