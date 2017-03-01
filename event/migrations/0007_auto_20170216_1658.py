@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='eventrepeat',
-            options={'verbose_name': 'Adventure Peep'},
+            options={},
         ),
         migrations.AlterField(
             model_name='event',

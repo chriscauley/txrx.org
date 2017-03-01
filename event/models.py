@@ -124,10 +124,8 @@ class EventRepeat(models.Model):
   start_time = models.TimeField()
   end_time = models.TimeField()
 
-  monthcalendar = property(lambda self: calendar.monthcalendar(int(self.first_date.year),int(self.first_date.month)))
+  monthcalendar = property(lambda s: calendar.monthcalendar(int(s.first_date.year),int(s.first_date.month)))
   __unicode__ = lambda self: "EventRepeat: %s - %s"%(self.event,self.verbose)
-  class Meta:
-    verbose_name = "Adventure Peep"
   @cached_property
   def startweek(self):
     monthcalendar = self.monthcalendar
