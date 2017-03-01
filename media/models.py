@@ -128,17 +128,14 @@ class PhotosMixin(object):
     return get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center").url
   @cached_property
   def first_photo(self):
-    try:
-      return self.get_photos()[0]
-    except IndexError:
-      return Photo.objects.get(id=144)
+    return (self.get_photos() or [None])[0]
   @cached_property
   def _ct_id(self):
     return ContentType.objects.get_for_model(self.__class__).id
   @cached_method
   def get_photos(self):
     if getattr(self,"_use_default_photo",False):
-      return self._get_photos() or [Photo.objects.get(id=144)]
+      return self._get_photos() or Photo.objects.filter(id=144)
     return self._get_photos()
   def _get_photos(self):
     return list(Photo.objects.filter(taggedphoto__content_type_id=self._ct_id,
