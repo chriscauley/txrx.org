@@ -8,7 +8,10 @@ uR.ready(function() {
   <p class="lead col-sm-12">
     Checkout <a href="/notify/settings/">notification settings</a> to control whether notifications are sent by email or text or not at all.
   </p>
-  <div class="col-sm-6" if={ unread.length || recent.length }>
+  <div class="col-sm-6">
+    <p class="lead" if={ !unread.length && !recent.length }>
+      You have no notifications
+    </p>
     <div if={ unread.length }>
       <h3>Unread Notifications</h3>
       <ul class={ uR.theme.list }>
