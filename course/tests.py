@@ -2,83 +2,21 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.core.management import call_command
-from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.test import TestCase, Client
 
 from membership.paypal_utils import get_course_query, paypal_post
-from membership.models import Level
 
-from course.models import Session, Course, ClassTime, Enrollment
-from .utils import get_or_create_student
-from geo.tests import setUp as geo_setUp
-from lablackey.tests import check_subjects, check_recipients
-from drop.test_utils import DropTestCase
+from course.models import Enrollment
+from main.test_utils import TXRXTestCase
 from drop.models import Cart
-
-import arrow
 
 #stupid requests ssl error
 import warnings
 warnings.showwarning = lambda *x: None
 
-def membership_setUp(self):
-  defaults = {
-    'name': 'foo',
-    'order': 1
-  }
-  Level.objects.get_or_create(id=settings.DEFAULT_MEMBERSHIP_LEVEL,defaults=defaults)
-  Level.objects.get_or_create(name="discounted",discount_percentage=10,order=999)
-
-def setUp(self):
-  tomorrow = arrow.now().replace(days=1,hour=13,minute=00).datetime
-  next_day = arrow.now().replace(days=2,hour=13,minute=00).datetime
-  end = "14:00"
-  geo_setUp(self)
-  membership_setUp(self)
-
-  self.course1 = Course.objects.create(
-    name="foo",
-    active=True,
-    fee=45,
-    room=self.room,
-    no_conflict=True,
-  )
-
-  self.course2 = Course.objects.create(
-    name="bap",
-    active=True,
-    fee=50,
-    room=self.room,
-  )
-
-  self.teacher = self.new_user()
-  self.student1 = self.new_user()
-  self.student2 = self.new_user()
-  # fee = 45 because it tests that discounts are including fractional dollars
-  # Session 1 has class tomorrow and the next day from 1-2pm
-  self.session1 = Session.objects.create(course=self.course1,user=self.teacher)
-  self.session1.save()
-  ClassTime.objects.create(session=self.session1,start=tomorrow,end_time=end)
-  ClassTime.objects.create(session=self.session1,start=next_day,end_time=end)
-  self.session1 = Session.objects.get(pk=self.session1.pk)
-
-  # Session 2 has class day after tomorrow at the same time as session 1
-  self.session2 = Session.objects.create(course=self.course2,user=self.teacher)
-  ClassTime.objects.create(session=self.session2,start=tomorrow.replace(hour=18),end_time="19:00")
-  self.session2.save()
-
-  # # conflict_session1 is the same time as session1. currently unused
-  # self.conflict_session1 = Session.objects.create(
-  #   course=Course.objects.filter(active=True,fee__gt=0).order_by("?")[0],
-  #   user_id=1
-  # )
-  # ClassTime.objects.create(session=self.conflict_session1,start=next_day,end_time=end)
-
-class ListenersTest(DropTestCase):
+class ListenersTest(TXRXTestCase):
   """This tests all possible purchases from paypal and to make sure prices line up.
   This uses artificial IPN data, not the actual IPN."""
-  setUp = setUp
   def test_quantity(self):
     """
     Pay for a class with more than one quantity. Make sure enrollment and session.total students is correct
@@ -118,12 +56,9 @@ class ListenersTest(DropTestCase):
       username="preexistinguser",
       email=email
     )
-    user.level = Level.objects.filter(discount_percentage=10)[0]
+    user.level = self.level10
     user.save()
-    client = Client()
-
-    #login user
-    client.post(reverse('login'),{'username': email,'password': email})
+    self.login(user)
 
     # create cart with cart_item
     invoice = self.add_to_cart(self.session1.sessionproduct)
@@ -134,17 +69,15 @@ class ListenersTest(DropTestCase):
     # The above generates an enrollment error because someone over paid
     self.check_subjects(["Course enrollment confirmation"])
 
-class UtilsTest(DropTestCase):
+class UtilsTest(TXRXTestCase):
   """ Test the following parameters of the get_or_create_student functions.
   paypal_email - should return correct student
   u_id - should return user.id = u_id or user.email = u_id
   subscr_id - tested in membership.tests
   """
-  setUp = setUp
   def test_paypal_email(self):
     email = "ihasnoemail@txrxlabstest.com"
     get_user_model().objects.filter(email=email).delete()
-    client = Client()
 
     invoice = self.add_to_cart(self.session1.sessionproduct)
     # test first with no account
@@ -168,8 +101,8 @@ class UtilsTest(DropTestCase):
     # make sure a new account is not created and that the enrollments are right
     self.assertEqual(get_user_model().objects.filter(email=email).count(),1)
     # Note these next two lines use "get" because more than one enrollment throws an error.
-    self.assertEqual(Enrollment.objects.get(session=self.session1).user.email,email)
-    self.assertEqual(Enrollment.objects.get(session=self.session2).user.email,email)
+    self.assertEqual(self.session1.enrollment_set.get().user.email,email)
+    self.assertEqual(self.session2.enrollment_set.get().user.email,email)
 
   def test_uid(self):
     username = "preexistinguser"
@@ -190,10 +123,7 @@ class UtilsTest(DropTestCase):
     self.assertEqual(self.session1.enrollment_set.get(user=user).quantity,1)
     self.assertEqual(user.paypal_email,paypal_email)
 
-from lablackey.tests import ClientTestCase
-
-class NotifyTest(ClientTestCase):
-  setUp = setUp
+class NotifyTest(TXRXTestCase):
   def test_course(self):
     # enroll student in 1 class
     Enrollment.objects.create(user=self.student1,session=self.session1)
