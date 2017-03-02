@@ -22,24 +22,20 @@ import arrow
 import warnings
 warnings.showwarning = lambda *x: None
 
-def add_to_cart(client,product,quantity):
-  client.post(reverse('cart_edit'),{
-    'id': product.id,
-    'quantity': quantity
-  })
-  _r = client.get(reverse('start_checkout'))
-  return _r.json()['order_id']
-
-def setUp(self):
+def membership_setUp(self):
   defaults = {
     'name': 'foo',
     'order': 1
   }
   Level.objects.get_or_create(id=settings.DEFAULT_MEMBERSHIP_LEVEL,defaults=defaults)
+  Level.objects.get_or_create(name="discounted",discount_percentage=10,order=999)
+
+def setUp(self):
   tomorrow = arrow.now().replace(days=1,hour=13,minute=00).datetime
   next_day = arrow.now().replace(days=2,hour=13,minute=00).datetime
   end = "14:00"
   geo_setUp(self)
+  membership_setUp(self)
 
   self.course1 = Course.objects.create(
     name="foo",
@@ -70,6 +66,7 @@ def setUp(self):
   # Session 2 has class day after tomorrow at the same time as session 1
   self.session2 = Session.objects.create(course=self.course2,user=self.teacher)
   ClassTime.objects.create(session=self.session2,start=tomorrow.replace(hour=18),end_time="19:00")
+  self.session2.save()
 
   # # conflict_session1 is the same time as session1. currently unused
   # self.conflict_session1 = Session.objects.create(
@@ -87,13 +84,13 @@ class ListenersTest(DropTestCase):
     Pay for a class with more than one quantity. Make sure enrollment and session.total students is correct
     Pay for a class that the user is already enrolled in. ibid.
     """
-    email = "preexistinguser@txrxlabstest.com"
-    paypal_email = "adifferentemail@txrxlabstest.com"
+    email = "preexisting@example.com"
+    paypal_email = "different@example.com"
     user = self.new_user(username=email)
     self.login(user)
 
     # create cart with cart_item
-    invoice = add_to_cart(client,self.session1.sessionproduct,2)
+    invoice = self.add_to_cart(self.session1.sessionproduct,2)
 
     # fake the IPN
     params = get_course_query(session=self.session1,quantities=[2],payer_email=email,invoice=invoice)
@@ -105,7 +102,7 @@ class ListenersTest(DropTestCase):
     self.assertEqual(enrollment.user,user)
 
     # Lets do it again with 1 enrollment...
-    invoice = add_to_cart(client,self.session1.sessionproduct,1)
+    invoice = self.add_to_cart(self.session1.sessionproduct)
     params = get_course_query(session=self.session1,quantities=[1],payer_email=email,invoice=invoice)
     paypal_post(self,params)
 
@@ -129,7 +126,7 @@ class ListenersTest(DropTestCase):
     client.post(reverse('login'),{'username': email,'password': email})
 
     # create cart with cart_item
-    invoice = add_to_cart(client,self.session1.sessionproduct,1)
+    invoice = self.add_to_cart(self.session1.sessionproduct)
 
     params = get_course_query(session=self.session1,quantities=[1],payer_email=email,invoice=invoice)
     paypal_post(self,params)
@@ -149,7 +146,7 @@ class UtilsTest(DropTestCase):
     get_user_model().objects.filter(email=email).delete()
     client = Client()
 
-    invoice = add_to_cart(client,self.session1.sessionproduct,1)
+    invoice = self.add_to_cart(self.session1.sessionproduct)
     # test first with no account
     params = get_course_query(session=self.session1,payer_email=email,invoice=invoice)
     paypal_post(self,params)
@@ -161,7 +158,7 @@ class UtilsTest(DropTestCase):
 
     # now test same address with another class
     mail.outbox = []
-    invoice = add_to_cart(client,self.session2.sessionproduct,1)
+    invoice = self.add_to_cart(self.session2.sessionproduct,1)
     params = get_course_query(session=self.session2,payer_email=email,invoice=invoice)
     paypal_post(self,params)
     self.check_subjects(["Course enrollment confirmation"])
