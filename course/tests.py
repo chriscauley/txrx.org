@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.core.management import call_command
@@ -11,7 +12,8 @@ from membership.models import Level
 from course.models import Session, Course, ClassTime, Enrollment
 from .utils import get_or_create_student
 from geo.tests import setUp as geo_setUp
-from lablackey.tests import check_subjects, check_recipients, ClientTestCase
+from lablackey.tests import check_subjects, check_recipients
+from drop.test_utils import DropTestCase
 from drop.models import Cart
 
 import arrow
@@ -29,6 +31,11 @@ def add_to_cart(client,product,quantity):
   return _r.json()['order_id']
 
 def setUp(self):
+  defaults = {
+    'name': 'foo',
+    'order': 1
+  }
+  Level.objects.get_or_create(id=settings.DEFAULT_MEMBERSHIP_LEVEL,defaults=defaults)
   tomorrow = arrow.now().replace(days=1,hour=13,minute=00).datetime
   next_day = arrow.now().replace(days=2,hour=13,minute=00).datetime
   end = "14:00"
@@ -55,8 +62,10 @@ def setUp(self):
   # fee = 45 because it tests that discounts are including fractional dollars
   # Session 1 has class tomorrow and the next day from 1-2pm
   self.session1 = Session.objects.create(course=self.course1,user=self.teacher)
+  self.session1.save()
   ClassTime.objects.create(session=self.session1,start=tomorrow,end_time=end)
   ClassTime.objects.create(session=self.session1,start=next_day,end_time=end)
+  self.session1 = Session.objects.get(pk=self.session1.pk)
 
   # Session 2 has class day after tomorrow at the same time as session 1
   self.session2 = Session.objects.create(course=self.course2,user=self.teacher)
@@ -69,7 +78,7 @@ def setUp(self):
   # )
   # ClassTime.objects.create(session=self.conflict_session1,start=next_day,end_time=end)
 
-class ListenersTest(TestCase):
+class ListenersTest(DropTestCase):
   """This tests all possible purchases from paypal and to make sure prices line up.
   This uses artificial IPN data, not the actual IPN."""
   setUp = setUp
@@ -80,19 +89,8 @@ class ListenersTest(TestCase):
     """
     email = "preexistinguser@txrxlabstest.com"
     paypal_email = "adifferentemail@txrxlabstest.com"
-    q1 = Q(email__in=[email,paypal_email])
-    q2 = Q(paypal_email__in=[email,paypal_email])
-    get_user_model().objects.filter(q1|q2).delete()
-    user = get_user_model().objects.create(
-      username="preexisinguser",
-      email=email
-    )
-    user.set_password(email)
-    user.save()
-    client = Client()
-
-    #login user
-    client.post(reverse('login'),{'username': email,'password': email})
+    user = self.new_user(username=email)
+    self.login(user)
 
     # create cart with cart_item
     invoice = add_to_cart(client,self.session1.sessionproduct,2)
@@ -137,9 +135,9 @@ class ListenersTest(TestCase):
     paypal_post(self,params)
 
     # The above generates an enrollment error because someone over paid
-    self.assertTrue(check_subjects(["Course enrollment confirmation"]))
+    self.check_subjects(["Course enrollment confirmation"])
 
-class UtilsTest(TestCase):
+class UtilsTest(DropTestCase):
   """ Test the following parameters of the get_or_create_student functions.
   paypal_email - should return correct student
   u_id - should return user.id = u_id or user.email = u_id
@@ -157,7 +155,7 @@ class UtilsTest(TestCase):
     paypal_post(self,params)
 
     # make sure only these two emails were sent to only that one address
-    self.assertTrue(check_subjects(["Course enrollment confirmation","New account information"]))
+    self.check_subjects(["Course enrollment confirmation","New account information"])
     for message in mail.outbox:
       self.assertEqual([email], message.recipients())
 
@@ -166,7 +164,7 @@ class UtilsTest(TestCase):
     invoice = add_to_cart(client,self.session2.sessionproduct,1)
     params = get_course_query(session=self.session2,payer_email=email,invoice=invoice)
     paypal_post(self,params)
-    self.assertTrue(check_subjects(["Course enrollment confirmation"]))
+    self.check_subjects(["Course enrollment confirmation"])
     for message in mail.outbox:
       self.assertEqual([email], message.recipients())
 
@@ -177,31 +175,25 @@ class UtilsTest(TestCase):
     self.assertEqual(Enrollment.objects.get(session=self.session2).user.email,email)
 
   def test_uid(self):
-    email = "preexistinguser@txrxlabstest.com"
-    paypal_email = "adifferentemail@txrxlabstest.com"
-    q1 = Q(email__in=[email,paypal_email])
-    q2 = Q(paypal_email__in=[email,paypal_email])
-    get_user_model().objects.filter(q1|q2).delete()
-    user = get_user_model().objects.create(
-      username="preexisinguser",
-      email=email
-    )
-    user.set_password(user.email)
-    user.save()
-
-    client = Client()
-    client.post(reverse('login'),{'username': email,'password': email})
+    username = "preexistinguser"
+    paypal_email = "different@txrxlabs.org"
+    user = self.new_user(username)
+    self.login(user)
 
     # buy a class while logged in
-    invoice = add_to_cart(client,self.session1.sessionproduct,1)
+    invoice = self.add_to_cart(self.session1.sessionproduct)
     params = get_course_query(session=self.session1,payer_email=paypal_email,custom=user.pk,invoice=invoice)
     paypal_post(self,params)
 
     # no new counts should have been created and the user now has enrollments/paypal_email
-    user = get_user_model().objects.get(email=email) # refresh instance
+    user = get_user_model().objects.get(email=user.email) # refresh instance
+    q1 = Q(email__in=[user.email,paypal_email])
+    q2 = Q(paypal_email__in=[user.email,paypal_email])
     self.assertEqual(get_user_model().objects.filter(q1|q2).count(),1)
     self.assertEqual(self.session1.enrollment_set.get(user=user).quantity,1)
     self.assertEqual(user.paypal_email,paypal_email)
+
+from lablackey.tests import ClientTestCase
 
 class NotifyTest(ClientTestCase):
   setUp = setUp
@@ -222,12 +214,12 @@ class NotifyTest(ClientTestCase):
       u"You're teaching tomorrow at 1 p.m." # teacher
     ]
     recipients = [[u.email] for u in [self.student1, self.student2, self.teacher]]
-    self.assertTrue(check_subjects(subjects))
-    self.assertTrue(check_recipients(recipients))
+    self.check_subjects(subjects)
+    self.check_recipients(recipients)
 
     # send out reminders again. Make sure none went out
     mail.outbox = []
     call_command("course_reminder")
     call_command("notify_course")
-    self.assertTrue(check_subjects([]))
-    self.assertTrue(check_recipients([]))
+    self.check_subjects([])
+    self.check_recipients([])
