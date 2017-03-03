@@ -28,14 +28,30 @@
       <p>Any notification set to "Text Message" will be sent to the following number.</p>
       <p><b>Contact Number:</b> { smsnumber }</p>
     </div>
-    <button class="btn btn-primary" onclick="uR.alertElement('phone-number');">
+    <button class="btn btn-primary" onclick={ openForm }>
       <span if={ smsnumber }>Change Phone Number</span>
       <span if={ !smsnumber }>Add Phone Number</span>
     </button>
+    <button class="btn btn-danger" if={ smsnumber } onclick={ confirmClear }>
+    Clear Phone Number</button>
 
+    var self = this;
     this.on("update",function() {
       this.smsnumber = uR.auth.user.phone_number;
     });
+    openForm(e) {
+      uR.alertElement('phone-number',{_parent:this});
+    }
+    confirmClear(e) {
+      uR.confirm('Are you sure you want to delete this number?',function(){
+        uR.ajax({
+          url: "/sms/delete_phone/",
+          target:this.root,
+          success: function() { uR.auth.user.phone_number = undefined },
+          that: self,
+        })
+      });
+    }
   </number-display>
   <phone-number>
     <div class={ theme.outer }>
@@ -45,8 +61,9 @@
           <ur-form schema={ ["phone_number"] } action="/sms/add_phone/" method="POST" initial={ initial }></ur-form>
         </div>
         <div if={ step == 'verify' }>
-          <p>We've sent a verification code to your phone. Please type that in below.</p>
-          <ur-form schema={ ["verification_code"] } action="/sms/verify_phone/" method="POST"></ur-form>
+          <p>We have sent a verification code to your phone. Please type that in below.</p>
+          <ur-form schema={ ["verification_code"] } action="/sms/verify_phone/" method="POST"
+                   ajax_success={ verified }></ur-form>
         </div>
       </div>
     </div>
@@ -59,7 +76,12 @@
   self.ajax_success = function(data) {
     self.step = 'verify';
     self.update()
-  } 
+  }
+  self.verified = function(data) {
+    uR.auth.user.phone_number = data.smsnumber;
+    self.opts._parent.update()
+    self.unmount();
+  }
   </phone-number>
 </script>
 <script>

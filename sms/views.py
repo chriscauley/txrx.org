@@ -40,3 +40,8 @@ def verify_phone(request):
   number.verified = timezone.now()
   number.save()
   return JsonResponse({"status": "ok", "smsnumber": number.number})
+
+@auth_required
+def delete_phone(request):
+  SMSNumber.objects.filter(user=request.user).delete()
+  return JsonResponse({"status": "ok"})
