@@ -9,7 +9,7 @@
 <number-display></number-display>
 <hr />
 <h2>Notification Settings</h2>
-<form method="POST" enctype="multipart/form-data" class="cvfloat">
+<form method="POST" enctype="multipart/form-data" class="notify-form">
   {% csrf_token %}
   {% for error in form.non_field_errors %}
   <div class="alert alert-danger">{{ error }}</div>

@@ -99,3 +99,11 @@ admin-dashboard ur-form form {
 }
 
 label + [type=checkbox] + .help-block { display: inline; }
+
+.notify-form .form-group {
+  display: flex;
+  flex-wrap: wrap;
+  label, .help-block { order: 0; }
+  ul { order: 1; }
+  > label { font-size: 22px; }
+}

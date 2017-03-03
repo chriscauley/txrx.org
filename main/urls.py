@@ -128,7 +128,6 @@ import notify.urls
 #auth related
 urlpatterns += [
   url(r'^accounts/settings/$',membership.views.user_settings,name='account_settings'),
-  url(r'^notify/settings/$',membership.views.notification_settings,name='notify_settings'),
   url(r'^accounts/register/$',membership.views.register),
   url(r'^accounts/(cancel)_subscription/',membership.views.change_subscription,name="cancel_subscription"),
   url(r'^accounts/', include(registration.urls)),

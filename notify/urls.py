@@ -7,4 +7,5 @@ urlpatterns = [
   url(r'^unfollow/(\d+)/',views.unfollow,name='notify_unfollow'),
   url(r'^unsubscribe/(notify_course|global|comments|classes|sessions)/(\d+)/$',
       views.unsubscribe, name='unsubscribe'),
+  url(r'^settings/$',views.settings,name='notify_settings'),
 ]
