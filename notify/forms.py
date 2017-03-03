@@ -1,7 +1,6 @@
 from django import forms
 
-from membership.models import UserMembership, METHOD_CHOICES
-
+from notify.models import UserSettings, METHOD_CHOICES
 
 class NotificationForm(forms.ModelForm):
   def __init__(self,request,*args,**kwargs):
@@ -24,7 +23,7 @@ class NotificationForm(forms.ModelForm):
       if not str(follow.id) in self.request.POST.getlist('following_courses',[]):
         follow.delete()
   class Meta:
-    model = UserMembership
+    model = UserSettings
     fields = (
       "notify_global","new_comments","my_classes","new_sessions",
     )

@@ -6,5 +6,7 @@ from .models import User
 @receiver(post_save,sender=User)
 def post_save_user_handler(sender, **kwargs):
   from membership.models import UserMembership
+  from notify.models import UserSettings
   user = kwargs['instance']
   UserMembership.objects.get_or_create(user=user)
+  UserSettings.objects.get_or_create(user=user)

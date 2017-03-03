@@ -328,12 +328,6 @@ def add_months(d,months):
   day = min(d.day,calendar.monthrange(year,month)[1])
   return d.replace(year=year,month=month,day=day)
 
-METHOD_CHOICES = [
-  ("","Do not notify me about this"),
-  ("email","Email"),
-  ("sms","Text Message (SMS, standard rates apply)"),
-]
-
 class UserMembership(models.Model):
   user = models.OneToOneField(settings.AUTH_USER_MODEL)
   voting_rights = models.BooleanField(default=False)
@@ -345,19 +339,11 @@ class UserMembership(models.Model):
   _h = "A short description of what you do for the lab."
   by_line = models.CharField(max_length=50,null=True,blank=True,help_text=_h)
   name = lambda self: "%s %s"%(self.user.first_name,self.user.last_name)
+
+  #! DERPRACATED
   _h = "Uncheck this to stop all correspondance from this website "
   _h += "(same as setting all of the following to \"Do not notify me about this\")"
   notify_global = models.BooleanField("Global Email Preference",default=True,help_text=_h)
-
-  _kwargs = dict(blank=True,default="email",max_length=8,choices=METHOD_CHOICES)
-  _h = "An email or text whenever someone replies to a comment you make on this site."
-  new_comments = models.CharField("Comment responses",help_text=_h,**_kwargs)
-  _h = "An email or text reminder 24 hours before a class (that you've signed up for or are teaching)."
-  my_classes = models.CharField("Class Reminder",help_text=_h,**_kwargs)
-  _h = "An email or text when a class you're following for has been added (only during business hours)."
-  new_sessions = models.CharField("New Classes",help_text=_h,**_kwargs)
-
-  #! DERPRACATED
   _h = "If checked, you will be emailed whenever someone replies to a comment you make on this site."
   notify_comments = models.BooleanField("Comment Response Email",default=True,help_text=_h)
   _h = "If checked, you will be emailed a reminder 24 hours before a class (that you've signed up for)."

@@ -11,6 +11,10 @@ from lablackey.contenttypes import get_contenttype
 
 from jsonfield import JSONField
 
+class NotifyCourse(UserModel):
+  course = models.ForeignKey("course.Course")
+  __unicode__ = lambda self: "{} -- {}".format(self.user,self.course)
+
 class Follow(UserModel):
   content_type = models.ForeignKey("contenttypes.ContentType")
   object_id = models.IntegerField()
@@ -57,3 +61,20 @@ class Notification(UserModel,JsonMixin):
   target = property(_get_target,_set_target)
   class Meta:
     ordering = ("-datetime",)
+
+METHOD_CHOICES = [
+  ("","Do not notify me about this"),
+  ("email","Email"),
+  ("sms","Text Message (SMS, standard rates apply)"),
+]
+
+class UserSettings(UserModel):
+  _h = "If false this wil disable all notificaitons from the site."
+  notify_global = models.BooleanField("Global Preference",default=True,help_text=_h)
+  _kwargs = dict(blank=True,default="email",max_length=8,choices=METHOD_CHOICES)
+  _h = "An email or text whenever someone replies to a comment you make on this site."
+  new_comments = models.CharField("Comment responses",help_text=_h,**_kwargs)
+  _h = "An email or text reminder 24 hours before a class (that you've signed up for or are teaching)."
+  my_classes = models.CharField("Class Reminders",help_text=_h,**_kwargs)
+  _h = "An email or text when a class you're following for has been added (only during business hours)."
+  new_sessions = models.CharField("New Classes",help_text=_h,**_kwargs)
