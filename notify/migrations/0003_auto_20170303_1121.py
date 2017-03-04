@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
             bases=(models.Model, lablackey.unrest.JsonMixin),
         ),
         migrations.CreateModel(
-            name='UserSettings',
+            name='NotifySettings',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('notify_global', models.BooleanField(default=True, help_text=b'If false this wil disable all notificaitons from the site.', verbose_name=b'Global Preference')),

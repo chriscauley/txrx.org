@@ -68,7 +68,7 @@ METHOD_CHOICES = [
   ("sms","Text Message (SMS, standard rates apply)"),
 ]
 
-class UserSettings(UserModel):
+class NotifySettings(UserModel):
   _h = "If false this wil disable all notificaitons from the site."
   notify_global = models.BooleanField("Global Preference",default=True,help_text=_h)
   _kwargs = dict(blank=True,default="email",max_length=8,choices=METHOD_CHOICES)

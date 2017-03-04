@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from membership.models import Level
 from tool.models import UserCriterion, Criterion
+from sms.models import SMSNumber
 from store.models import CourseCheckout
 
 from lablackey.decorators import cached_property
@@ -209,6 +210,11 @@ class User(AbstractBaseUser, PermissionsMixin):
   def has_safety_waiver(self):
     _ids = getattr(settings,"NONMEMBER_DOCUMENT_IDS",[])
     return len(_ids) <= self.signature_set.filter(user=self,document_id__in=_ids).count()
+  def send_sms(self,body):
+    try:
+      self.smsnumber.send(body)
+    except SMSNumber.DoesNotExist:
+      mail_admins("bad sms","cannot send %s the following message due to lack of number\n\n%s"%(self,body))
 
 class UserNote(models.Model):
   user = models.ForeignKey(User)

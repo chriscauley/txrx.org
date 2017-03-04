@@ -7,7 +7,7 @@ from django.db import migrations
 def transfer_notify(apps,schema_editor):
     for user in apps.get_model("user.user").objects.all():
         membership = apps.get_model("membership.usermembership").objects.get_or_create(user=user)[0]
-        settings = apps.get_model("notify.usersettings").objects.get_or_create(user=user)[0]
+        settings = apps.get_model("notify.notifysettings").objects.get_or_create(user=user)[0]
         settings.new_comments = "email" if membership.notify_comments else ""
         settings.my_classes = "email" if membership.notify_classes else ""
         settings.new_sessions = "email"

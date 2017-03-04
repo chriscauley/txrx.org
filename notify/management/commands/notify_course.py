@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from django.core.mail import mail_admins
-from django.template.defaultfilters import striptags
+from django.template.defaultfilters import striptags, date
 from django.template.loader import render_to_string
 
 from course.models import Session
@@ -49,16 +49,23 @@ class Command (BaseCommand):
           relationship=relationship,
         )
         count += notifications.count()
-        classtimes = sorted([n.target for n in notifications],key=lambda ct: ct.start)
-        _dict = {
-          'user': user,
-          'la_key': LimitedAccessKey.new(user),
-          'SITE_URL': settings.SITE_URL,
-          'notifications': notifications,
-          'first_classtime': classtimes[0],
-          'classtimes': classtimes
-        }
-        send_template_email("email/%s"%relationship,user.email,context=_dict)
+        if user.notifysettings.my_classes == "email":
+          classtimes = sorted([n.target for n in notifications],key=lambda ct: ct.start)
+          _dict = {
+            'user': user,
+            'la_key': LimitedAccessKey.new(user),
+            'SITE_URL': settings.SITE_URL,
+            'notifications': notifications,
+            'first_classtime': classtimes[0],
+            'classtimes': classtimes
+          }
+          send_template_email("email/%s"%relationship,user.email,context=_dict)
+        elif user.notifysettings.my_classes == "sms":
+          course_name = classtimes[0].session.course.get_short_name()
+          time_s = date(classtimes[0].start,"P")
+          body = "You have class tomorrow at %s: %s @ %s"%(settings.SITE_NAME,course_name,time_s)
+          user.send_sms(body)
+            
         notifications.update(emailed=datetime.datetime.now())
-    
+
     print "Notified %s users of %s notifications"%(users_count,count)
