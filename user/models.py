@@ -4,7 +4,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core import validators
 from django.core.files.storage import FileSystemStorage
-from django.core.mail import send_mail
+from django.core.mail import send_mail, mail_admins
 from django.db import models
 from django.utils import timezone
 from django.utils.http import urlquote

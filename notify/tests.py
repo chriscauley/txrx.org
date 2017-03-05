@@ -6,7 +6,9 @@ from django.utils import timezone
 
 from course.models import Course, Session, Room, Enrollment
 from lablackey.contenttypes import get_contenttype
-from lablackey.tests import ClientTestCase
+from main.test_utils import TXRXTestCase
+from sms.models import SMSNumber
+import sms
 
 import datetime,random
 
@@ -23,11 +25,10 @@ def new_session(course):
     session.save()
     return session
 
-class CourseNotificationTest(ClientTestCase):
+class NotificationTestCase(TXRXTestCase):
     def setUp(self):
-        self.course = Course.objects.create(name="monkey test course",room=Room.objects.all()[0])
-        self.follow_url = reverse("notify_follow",args=["course.Course",self.course.id])
-        self.course2 = Course.objects.create(name="advanced monkey course",room=Room.objects.all()[0])
+        super(NotificationTestCase,self).setUp()
+        self.follow_url = reverse("notify_follow",args=["course.Course",self.course1.id])
         self.follow_url2 = reverse("notify_follow",args=["course.Course",self.course2.id])
     def test_flow(self):
         user = self.login("chriscauley",password="badpassword") #! BAD
@@ -35,10 +36,10 @@ class CourseNotificationTest(ClientTestCase):
 
         # user follows the course
         self.client.get(self.follow_url)
-        self.assertEqual(user.follow_set.all()[0].object_id,self.course.id)
+        self.assertEqual(user.follow_set.all()[0].object_id,self.course1.id)
 
         # a new session is created
-        session = new_session(self.course)
+        session = new_session(self.course1)
 
         # user has a notification for the new session
         self.assertEqual(user.notification_set.filter(read__isnull=True).count(),1)
@@ -72,11 +73,11 @@ class CourseNotificationTest(ClientTestCase):
         self.client.get(self.follow_url2)
         self.assertEqual(
             sorted([f.object_id for f in user.follow_set.all()]),
-            sorted([self.course.id,self.course2.id])
+            sorted([self.course1.id,self.course2.id])
         )
 
         # two sessions added for one course, one session added for the other
-        session = new_session(self.course)
+        session = new_session(self.course1)
         session2 = new_session(self.course2)
         session22 = new_session(self.course2)
 
@@ -100,3 +101,33 @@ class CourseNotificationTest(ClientTestCase):
         # use the super unfollow
         self.client.get(reverse("unsubscribe",args=["notify_course",user.id]))
         self.assertEqual(user.follow_set.all().count(),0)
+
+    def test_sms_preference(self):
+        user = self.new_user()
+        user_sms = self.new_user()
+        # sign users up for class tomorrow
+        Enrollment.objects.create(user=user,session=self.session1)
+        Enrollment.objects.create(user=user_sms,session=self.session1)
+
+        # set user_sms preference to text
+        notifysettings = user_sms.notifysettings
+        notifysettings.my_classes = 'sms'
+        notifysettings.save()
+        SMSNumber.objects.create(user=user_sms,number='1234567890')
+
+        # run management command
+        call_command('course_reminder')
+        call_command('notify_course')
+
+        # verify user received text and mail outbox is empty
+        self.check_subjects(["You're teaching tomorrow at 1 p.m.","Class tomorrow!"])
+        self.assertEqual("You have class tomorrow at TXRX Labs: course45 @ 1 p.m.",sms.outbox[0].body)
+        self.assertEqual(len(sms.outbox),1)
+        sms.outbox = []
+
+        # run management command
+        call_command('course_reminder')
+        call_command('notify_course')
+
+        self.check_subjects([])
+        self.assertEqual(len(sms.outbox),0)

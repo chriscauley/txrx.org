@@ -7,8 +7,6 @@ from lablackey.db.models import UserModel
 from twilio.rest import TwilioRestClient
 import random, datetime
 
-outbox = []
-
 class Message(object):
   body = to = from_  = None
 
@@ -35,10 +33,14 @@ class SMSNumber(models.Model):
   def send(self,body,from_=settings.TWILIO_NUMBER):
     client = TwilioRestClient(settings.TWILIO_ACCOUNT_SID,settings.TWILIO_AUTH_TOKEN)
     message = client.messages.create(to=self.number,from_=from_,body=body)
-  if settings.TESTING:
-    def send(self,body,from_=settings.TWILIO_NUMBER):
-      m = Message()
-      m.body = body
-      m.to = self.number
-      m.from_ = from_
-      outbox.push(m)
+
+if settings.TESTING:
+  import sms
+  sms.outbox = []
+  def _send(self,body,from_=settings.TWILIO_NUMBER):
+    m = Message()
+    m.body = body
+    m.to = self.number
+    m.from_ = from_
+    sms.outbox.append(m)
+  SMSNumber.send = _send
