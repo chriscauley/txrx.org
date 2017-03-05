@@ -7,7 +7,7 @@ from django.db import migrations, models
 import django.db.models.deletion
 import jsonfield.fields
 import lablackey.unrest
-
+import annoying.fields
 
 class Migration(migrations.Migration):
 
@@ -60,7 +60,7 @@ class Migration(migrations.Migration):
                 ('new_comments', models.CharField(blank=True, choices=[(b'', b'Do not notify me about this'), (b'email', b'Email'), (b'sms', b'Text Message (SMS, standard rates apply)')], default=b'email', help_text=b'An email or text whenever someone replies to a comment you make on this site.', max_length=8, verbose_name=b'Comment responses')),
                 ('my_classes', models.CharField(blank=True, choices=[(b'', b'Do not notify me about this'), (b'email', b'Email'), (b'sms', b'Text Message (SMS, standard rates apply)')], default=b'email', help_text=b"An email or text reminder 24 hours before a class (that you've signed up for or are teaching).", max_length=8, verbose_name=b'Class Reminders')),
                 ('new_sessions', models.CharField(blank=True, choices=[(b'', b'Do not notify me about this'), (b'email', b'Email'), (b'sms', b'Text Message (SMS, standard rates apply)')], default=b'email', help_text=b"An email or text when a class you're following for has been added (only during business hours).", max_length=8, verbose_name=b'New Classes')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('user', annoying.fields.AutoOneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL))
             ],
             options={
                 'abstract': False,

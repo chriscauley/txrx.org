@@ -39,9 +39,10 @@ python-social-auth==0.2.21
 social-auth-app-django
 social-auth-core
 
--e git+https://github.com/chriscauley/django-shop.git#egg=django-shop
+#-e git+https://github.com/chriscauley/django-shop.git#egg=django-shop
 -e git+https://github.com/chriscauley/django-wmd-editor.git#egg=django_wmd_editor
 #-e git+https://github.com/chriscauley/lablackey.git#egg=lablackey
+django-annoying
 django_paypal==0.3.2
 stripe
 django-colorful

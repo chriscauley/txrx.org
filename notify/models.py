@@ -9,6 +9,7 @@ from lablackey.db.models import UserModel
 from lablackey.unrest import JsonMixin
 from lablackey.contenttypes import get_contenttype
 
+from annoying.fields import AutoOneToOneField
 from jsonfield import JSONField
 
 class NotifyCourse(UserModel):
@@ -68,7 +69,8 @@ METHOD_CHOICES = [
   ("sms","Text Message (SMS, standard rates apply)"),
 ]
 
-class NotifySettings(UserModel):
+class NotifySettings(models.Model):
+  user = AutoOneToOneField(settings.AUTH_USER_MODEL)
   _h = "If false this wil disable all notificaitons from the site."
   notify_global = models.BooleanField("Global Preference",default=True,help_text=_h)
   _kwargs = dict(blank=True,default="email",max_length=8,choices=METHOD_CHOICES)

@@ -13,6 +13,7 @@ from lablackey.decorators import cached_method, cached_property
 from media.models import Photo
 from drop.models import Product
 
+from annoying.fields import AutoOneToOneField
 from wmd.models import MarkDownField
 
 import datetime, random, string, calendar, decimal
@@ -329,7 +330,7 @@ def add_months(d,months):
   return d.replace(year=year,month=month,day=day)
 
 class UserMembership(models.Model):
-  user = models.OneToOneField(settings.AUTH_USER_MODEL)
+  user = AutoOneToOneField(settings.AUTH_USER_MODEL)
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
 
