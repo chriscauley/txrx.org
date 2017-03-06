@@ -43,7 +43,7 @@ def follow(request,contenttype,id):
 
 @login_required
 def settings(request):
-  form = NotificationForm(request)
+  form = NotificationForm(request.POST or None)
   if form.is_valid():
     form.save()
     messages.success(request,"Your notification settings have been saved")
