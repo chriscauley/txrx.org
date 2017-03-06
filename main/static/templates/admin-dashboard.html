@@ -9,11 +9,12 @@
   var self = this;
   var y1_labels = {
     member_payments: "Monthly",
-    new_members: "Signed Up"
+    new_members: "Signed Up",
   };
   var y2_labels = {
     member_payments: "Yearly",
-    new_members: "Canceled"
+    new_members: "Canceled",
+    all_payments: "Yearly memberships",
   }
   this.schema = [
     { name: 'metric', type: 'select', required: false,
@@ -24,6 +25,7 @@
         ['classes_per_student','Classes Per Student'],
         ['new_members','New Members (slow)'],
         ['member_payments','Member Payments'],
+        ['all_payments','All Payments']
       ]
     },
     { name: 'product_types', type: 'hidden', required: false,
