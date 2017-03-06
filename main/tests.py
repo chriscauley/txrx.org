@@ -54,6 +54,8 @@ from lablackey.tests import ClientTestCase
 from membership.models import Status
 from drop.models import OrderItem, Order
 
+import itertools
+
 def get_data(**kwargs):
     data = {
       'metric': 'line_total',
@@ -64,34 +66,58 @@ def get_data(**kwargs):
     data.update(**kwargs)
     return data
 
-def get_order_total(start_date,data):
-  if isinstance(start_date,six.string_types):
-    start_date = datetime.datetime.strptime(start_date,'%Y-%m-%d').date()
-  end_date = start_date + datetime.timedelta(data['resolution'])
+def get_order_total(start,data,metric=None):
+  if isinstance(start,six.string_types):
+    start = datetime.datetime.strptime(start,'%Y-%m-%d').date()
+  end = start + datetime.timedelta(data['resolution'])
   order_items = OrderItem.objects.filter(product__polymorphic_ctype_id=data['product_types'])
   order_items = order_items.filter(order__status__gte=Order.PAID)
   _items = order_items.filter(
-    order__created__gte=start_date,
-    order__created__lt=end_date,
+    order__created__gte=start,
+    order__created__lt=end,
   )
-  return sum(_items.values_list(data['metric'],flat=True))
+  return sum(_items.values_list(metric or data['metric'],flat=True))
+
+def get_all_payments(start,data):
+  total = get_order_total(start,data,metric="line_total")
+  if isinstance(start,six.string_types):
+    start = datetime.datetime.strptime(start,'%Y-%m-%d').date()
+  end = start + datetime.timedelta(data['resolution'])
+  total += sum(Status.objects.filter(datetime__gte=start,datetime__lt=end).values_list("amount",flat=True))
+  return total
+
+resolutions_time_periods = itertools.product([1,2,7,30],[90,180,365,730])
 
 class DashboardTest(ClientTestCase):
   """
   Test that the data coming out of the admin dashboard matches the database.
   This requires dummy date and a prebuilt database.
   """
-  def test_order_totals(self):
+  def setUp(self):
     self.login('chriscauley',password='dummy_password')
+  def get_json(self,data):
+    return self.client.get("/dashboard/totals.json?",data).json()
+  def test_order_totals(self):
     for metric in ['quantity','line_total']:
-      for resolution in [1,2,7,30]:
-        for time_period in [90,180,365,730]:
-          data = get_data(time_period=time_period)
-          results = self.client.get("/dashboard/totals.json?",data).json()
-          for i,day_string in enumerate(results['x']):
-            if i%5: #we're just going to skip 4/5 days to make this not take < 10s.
-              continue
-            self.assertEqual(
-              get_order_total(day_string,data),
-              decimal.Decimal(results['y'][i])
-            )
+      for resolution, time_period in resolutions_time_periods:
+        data = get_data(time_period=time_period,metric=metric)
+        results = self.get_json(data)
+        for i,day_string in enumerate(results['x']):
+          if i%5: #we're just going to skip 4/5 days to make this not take < 10s.
+            continue
+          print get_order_total(day_string,data), decimal.Decimal(results['y'][i])
+          self.assertEqual(
+            get_order_total(day_string,data),
+            decimal.Decimal(results['y'][i])
+          )
+  def test_all_payments(self):
+    for resolution, time_period in resolutions_time_periods:
+      data = get_data(time_period=time_period,resolution=resolution,metric="all_payments")
+      results = self.get_json(data)
+      for i,day_string in enumerate(results['x']):
+        if i%5:
+          continue
+        self.assertEqual(
+          decimal.Decimal(results['y'][i]),
+          get_all_payments(day_string,data)
+        )

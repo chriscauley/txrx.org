@@ -71,7 +71,7 @@ def totals_json(request,format):
         continue
       students[user_id] = students.get(user_id,0) + quantity
     x,y = zip(*sorted(students.items()))
-  elif metric == 'member_payments':
+  elif metric in ['member_payments','all_payments']:
     x = []
     y2 = []
     y = []
@@ -82,7 +82,11 @@ def totals_json(request,format):
       _statuses = statuses.filter(datetime__gte=day,datetime__lte=next_day)
       x.append(day.strftime("%Y-%m-%d"))
       y.append(sum(_statuses.filter(subscription__months=1).values_list('amount',flat=True)))
-      y2.append(sum(_statuses.filter(subscription__months=12).values_list('amount',flat=True)))
+      y2.append(sum(_statuses.exclude(subscription__months=1).values_list('amount',flat=True)))
+      if metric == 'all_payments':
+        y[-1] += y2[-1] # yearly
+        _items = order_items.filter(order__created__gte=day,order__created__lt=day+datetime.timedelta(1))
+        y[-1] += sum(_items.values_list('line_total',flat=True))
   _x = []
   _y2 = []
   _y = []
