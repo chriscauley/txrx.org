@@ -377,14 +377,16 @@
 </checkin-home>
 
 <new-rfid>
-  <modal>
-    <h1>Unknown RFID</h1>
-    <p class="lead">
-      The RFID card you used is not in our system. Please enter your email and password to have this RFID affiliated with your account.
-    </p>
-    <ur-form schema={ TXRX.schema.new_rfid } initial={ parent.opts } action="/add_rfid/" method="POST"
-             ajax_success={ parent.ajax_success }></ur-form>
-  </modal>
+  <div class={ theme.outer }>
+    <div class={ theme.header }><h3>Unknown RFID</h3></div>
+    <div class={ theme.content }>
+      <p class="lead">
+        The RFID card you used is not in our system. Please enter your email and password to have this RFID affiliated with your account.
+      </p>
+      <ur-form schema={ TXRX.schema.new_rfid } initial={ parent.opts } action="/add_rfid/" method="POST"
+               ajax_success={ parent.ajax_success }></ur-form>
+    </div>
+  </div>
 
   var self = this;
   ajax_success(data) {
