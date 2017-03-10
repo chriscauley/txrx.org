@@ -9,6 +9,7 @@
 <number-display></number-display>
 <hr />
 <h2>Notification Settings</h2>
+<ur-form id="notify-form"></ur-form>
 <form method="POST" enctype="multipart/form-data" class="notify-form">
   {% csrf_token %}
   {% for error in form.non_field_errors %}
@@ -87,6 +88,9 @@
 <script>
   uR.ready(function() {
     uR.auth.ready(function() { riot.mount("number-display"); });
+    riot.mount("#notify-form",{
+      schema: "/api/schema/notify.NotificationForm/",
+    });
   });
 </script>
 {% endblock %}

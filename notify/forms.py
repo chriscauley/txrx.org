@@ -7,5 +7,5 @@ class NotificationForm(forms.ModelForm):
   class Meta:
     model = NotifySettings
     fields = (
-      "notify_global","new_comments","my_classes","new_sessions",
+      "new_comments","my_classes","new_sessions",
     )

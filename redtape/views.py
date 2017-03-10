@@ -64,6 +64,8 @@ def post_document(request,pk):
   document = get_object_or_404(Document,pk=pk)
   signature = Signature(document=document)
   signature.data = { f.get_name(): request.POST.get(f.get_name(),None) for f in document.documentfield_set.all() }
+  for k,d in signature.data.items():
+    print k,d
   if request.user.is_authenticated():
     signature.user = request.user
   signature.save()

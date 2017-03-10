@@ -64,9 +64,9 @@ class Notification(UserModel,JsonMixin):
     ordering = ("-datetime",)
 
 METHOD_CHOICES = [
-  ("","Do not notify me about this"),
   ("email","Email"),
-  ("sms","Text Message (SMS, standard rates apply)"),
+  ("sms","Text Message*"),
+  ("","Do not notify"),
 ]
 
 class NotifySettings(models.Model):
