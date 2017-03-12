@@ -7,8 +7,8 @@ from django.utils import timezone
 from course.models import Course, Session, Room, Enrollment
 from lablackey.contenttypes import get_contenttype
 from main.test_utils import TXRXTestCase
-from sms.models import SMSNumber
-import sms
+from lablackey.sms.models import SMSNumber
+from lablackey import sms
 
 import datetime,random
 

@@ -26,7 +26,7 @@ import drop.views.product
 import course.views.classes
 import airbrake.urls
 import txrx_urls
-import sms.urls
+from lablackey import sms.urls
 
 import os
 

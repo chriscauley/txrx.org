@@ -20,7 +20,7 @@ from membership.utils import temp_user_required
 from redtape.models import Document
 from tool.models import Criterion, UserCriterion, Permission
 
-from sms.models import SMSNumber
+from lablackey.sms.models import SMSNumber
 from lablackey.utils import get_or_none
 from sorl.thumbnail import get_thumbnail
 import json, datetime, os, binascii

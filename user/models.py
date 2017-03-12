@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from membership.models import Level
 from tool.models import UserCriterion, Criterion
-from sms.models import SMSNumber
+from lablackey.sms.models import SMSNumber
 from store.models import CourseCheckout
 
 from lablackey.decorators import cached_property

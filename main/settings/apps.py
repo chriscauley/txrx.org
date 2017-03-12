@@ -64,7 +64,7 @@ INSTALLED_APPS = [
   'redtape',
   'schedule_poll',
   'airbrake',
-  'sms',
+  'lablackey.sms',
 ]
 
 #mptt_comments
