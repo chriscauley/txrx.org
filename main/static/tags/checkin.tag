@@ -270,7 +270,8 @@
   ];
   this.on("mount", function() {
     this.kiosk = window.location.search.indexOf("kiosk") != -1;
-    this.allow_email = window.location.search.indexOf("allow_email") != -1;
+    this.allow_email = true;
+    // this.allow_email = window.location.search.indexOf("allow_email") != -1;
     this.current_number = ""
     this.last_press = new Date();
     document.body.classList.add("kiosk");
@@ -338,7 +339,7 @@
     self.countdown();
     if (data.badge) {
       var i = document.createElement("iframe");
-      i.src = "/static/badge.html?name="+data.checkin.user_display_name;
+      i.src = "/static/badge.html?name="+data.checkin.user_display_name+"&title="+data.checkin.title;
       i.style="display:none;"
       document.body.appendChild(i);
       window.kill = function() { document.body.removeChild(i); }

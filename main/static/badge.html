@@ -23,9 +23,15 @@
   <script src="/static/js/imagesloaded.js"></script>
   <script>
   imagesLoaded(document.querySelectorAll("img"),function(){
+    function getQP(name) {
+      var regexp = new RegExp("[\?&](?:"   +name+")=([^&]+)");
+      var _sd = window.location.search.match(regexp);
+      if (_sd) { return unescape(_sd[1]); }
+    }
+    document.querySelector("h1").innerText = getQP("title") || "Visitor";
     var content= document.getElementById("content");
     var e = document.createElement("p");
-    e.innerHTML = unescape(window.location.search.match(/name=([^&]*)/)[1]).replace("+"," ");
+    e.innerHTML = getQP("name");
     content.appendChild(e);
     var e = document.createElement("p");
     e.innerHTML = moment().format("MMM D, YYYY");

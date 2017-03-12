@@ -57,9 +57,9 @@ class Event(PhotosMixin,models.Model):
   description = wmd_models.MarkDownField(blank=True,null=True)
   _ht = "If true, this class will not raise conflict warnings for events in the same room."
   no_conflict = models.BooleanField(default=False,help_text=_ht)
-  _ht = "Hidden stuff won't appear on the calendar."
-  hidden = models.BooleanField(default=False)
-  allow_rsvp = models.BooleanField(default=True)
+  _ht = "Hidden events won't appear on the calendar."
+  hidden = models.BooleanField(default=False,help_text=_ht)
+  allow_rsvp = models.BooleanField(default=False)
   _ht = "Number of days before event when RSVP is cut off (eg 0.5 means \"You must rsvp 12 hours before this event\")"
   rsvp_cutoff = models.FloatField(default=0,help_text=_ht)
   max_rsvp = models.IntegerField(default=128)
@@ -283,9 +283,10 @@ class EventOccurrence(PhotosMixin,OccurrenceModel):
   no_conflict = property(lambda self: self.event.no_conflict)
 
   url_override = models.CharField(max_length=256,null=True,blank=True)
-  _get_absolute_url = lambda self: reverse('event:occurrence_detail',args=(self.id,slugify(self.name)))
-  get_absolute_url = lambda self: self.url_override or self.event.url or self._get_absolute_url()
-  get_absolute_url = cached_method(get_absolute_url,name="get_absolute_url")
+  #_get_absolute_url = lambda self: reverse('event:occurrence_detail',args=(self.id,slugify(self.name)))
+  @cached_method
+  def get_absolute_url(self):
+    return self.url_override or self.event.url or self.event.get_absolute_url()
 
   rsvp_cutoff = property(lambda self: self.start - datetime.timedelta(self.event.rsvp_cutoff))
   total_rsvp = property(lambda self: sum([r.quantity for r in self.get_rsvps()]))

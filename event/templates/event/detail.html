@@ -27,21 +27,23 @@
     {% endif %}
   </div>
   <div class="col-xs-12 col-sm-4 col-md-3 pull-right" id="side"></div>
+  {% if event.allow_rsvp %}
+  <script>
+  uR.ready(function() {
+    var user_reservations = {{ rsvps_json|safe }};
+    $.get(
+      "/event/eventdetail_{{ event.pk }}.json",
+      function(data) {
+        data.user_reservations = user_reservations;
+        data.occurrences = data.upcoming_occurrences;
+        $("#side").prepend("<event-list>");
+        riot.mount("#side event-list",data);
+      },
+      "json"
+    )
+  });
+  </script>
+  {% endif %}
 </div>
 <script type="riot/tag" src="{{ STATIC_URL }}tags/event.tag"></script>
-<script>
-$(function() {
-  var user_reservations = {{ rsvps_json|safe }};
-  $.get(
-    "/event/eventdetail_{{ event.pk }}.json",
-    function(data) {
-      data.user_reservations = user_reservations;
-      data.occurrences = data.upcoming_occurrences;
-      $("#side").prepend("<event-list>");
-      riot.mount("#side event-list",data);
-    },
-    "json"
-  )
-});
-</script>
 {% endblock %}

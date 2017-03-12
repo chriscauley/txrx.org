@@ -38,12 +38,18 @@ def checkin_json(user):
   else:
     required_document_ids = getattr(settings,"NONMEMBER_DOCUMENT_IDS",[])
   documents = [d.get_json_for_user(user) for d in Document.objects.filter(id__in=required_document_ids)]
+  title = "Visitor"
+  if user.level.id != settings.DEFAULT_MEMBERSHIP_LEVEL:
+    title = user.level.name
+  if user.session_set.all().count():
+    title = "Teacher"
   return {
     'classtimes': [c.as_json for c in _ct],
     'sessions': {c.session_id: c.session.as_json for c in _ct},
     'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(user)],
     'user_id': user.id,
     'user_display_name': user.get_full_name(),
+    'title': title,
     'subscriptions': [s.as_json for s in _s],
     'documents': documents,
     'thumbnail': get_thumbnail(user.headshot,"200x300",crop="center").url if user.headshot else None
