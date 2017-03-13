@@ -80,8 +80,8 @@ class EventRepeatInline(admin.TabularInline):
 
 @admin.register(Event)
 class EventAdmin(TaggedPhotoAdmin):
-  list_display = ("__unicode__","upcoming_count","get_repeat_verbose","access")
-  list_editable = ("access",)
+  list_display = ("__unicode__","upcoming_count","get_repeat_verbose","access","allow_rsvp","rsvp_cutoff")
+  list_editable = ("access","allow_rsvp","rsvp_cutoff")
   inlines = [EventRepeatInline,EventOccurrenceInline]
   search_fields = ['name']
   def upcoming_count(self,obj):
@@ -95,7 +95,7 @@ class EventOccurrenceAdmin(TaggedPhotoAdmin):
   search_fields = ['event__name']
   raw_id_fields = ['event']
   list_filter = (FuturePastListFilter,)
-  readonly_fields = ['_rsvps']
+  readonly_fields = ['_rsvps','eventrepeat']
   def _rsvps(self,obj):
     rsvps = RSVP.objects.filter(
       object_id=obj.id,

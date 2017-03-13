@@ -270,7 +270,8 @@
   ];
   this.on("mount", function() {
     this.kiosk = window.location.search.indexOf("kiosk") != -1;
-    this.allow_email = window.location.search.indexOf("allow_email") != -1;
+    this.allow_email = true;
+    // this.allow_email = window.location.search.indexOf("allow_email") != -1;
     this.current_number = ""
     this.last_press = new Date();
     document.body.classList.add("kiosk");
@@ -338,7 +339,7 @@
     self.countdown();
     if (data.badge) {
       var i = document.createElement("iframe");
-      i.src = "/static/badge.html?name="+data.checkin.user_display_name;
+      i.src = "/static/badge.html?name="+data.checkin.user_display_name+"&title="+data.checkin.title;
       i.style="display:none;"
       document.body.appendChild(i);
       window.kill = function() { document.body.removeChild(i); }
@@ -377,14 +378,16 @@
 </checkin-home>
 
 <new-rfid>
-  <modal>
-    <h1>Unknown RFID</h1>
-    <p class="lead">
-      The RFID card you used is not in our system. Please enter your email and password to have this RFID affiliated with your account.
-    </p>
-    <ur-form schema={ TXRX.schema.new_rfid } initial={ parent.opts } action="/add_rfid/" method="POST"
-             ajax_success={ parent.ajax_success }></ur-form>
-  </modal>
+  <div class={ theme.outer }>
+    <div class={ theme.header }><h3>Unknown RFID</h3></div>
+    <div class={ theme.content }>
+      <p class="lead">
+        The RFID card you used is not in our system. Please enter your email and password to have this RFID affiliated with your account.
+      </p>
+      <ur-form schema={ TXRX.schema.new_rfid } initial={ parent.opts } action="/add_rfid/" method="POST"
+               ajax_success={ parent.ajax_success }></ur-form>
+    </div>
+  </div>
 
   var self = this;
   ajax_success(data) {
