@@ -6,8 +6,9 @@ from django.core.urlresolvers import reverse
 from django.forms.models import BaseInlineFormSet
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Event, EventRepeat, EventOccurrence, RSVP, CheckIn, CheckInPoint, Access
+from .models import Event, EventRepeat, EventOccurrence, RSVP, CheckIn, CheckInPoint, Access, EventOwner
 from event.utils import get_room_conflicts
+from lablackey.db.admin import RawMixin
 from media.admin import TaggedPhotoAdmin
 
 import datetime,functools
@@ -72,17 +73,23 @@ class EventOccurrenceInline(OccurrenceModelInline):
   def get_queryset(self,request):
     qs = super(EventOccurrenceInline,self).get_queryset(request)
     return qs.filter(start__gte=datetime.datetime.now())
+  extra = 0
 
 class EventRepeatInline(admin.TabularInline):
   model = EventRepeat
   readonly_fields = ['verbose',]
   extra = 0
 
+class EventOwnerInline(admin.TabularInline):
+  raw_id_fields = ['user']
+  extra = 0
+  model = EventOwner
+
 @admin.register(Event)
 class EventAdmin(TaggedPhotoAdmin):
   list_display = ("__unicode__","upcoming_count","get_repeat_verbose","access","allow_rsvp","rsvp_cutoff")
   list_editable = ("access","allow_rsvp","rsvp_cutoff")
-  inlines = [EventRepeatInline,EventOccurrenceInline]
+  inlines = [EventRepeatInline,EventOccurrenceInline,EventOwnerInline]
   search_fields = ['name']
   def upcoming_count(self,obj):
     return obj.upcoming_occurrences.count()

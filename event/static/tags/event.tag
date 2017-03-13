@@ -1,12 +1,51 @@
+<event-owner>
+  <div if={ is_owner }>
+    <h3>You are an organizer of this event</h3>
+    <button onclick={ click } action="disown" class={ uR.config.btn_cancel }>Stop Organizing</button>
+  </div>
+  <div if={ !is_owner && parent.event.owner_ids.length }>
+    <h3>This event has an organizer</h3>
+    <p>
+      If you want to become organizer, email <a href="mailto:{ uR.config.support_email }">{ uR.config.support_email }</a>
+    </p>
+  </div>
+  <div if={ !parent.event.owner_ids.length } onclick={ ownIt }>
+    <h3>This event has no organizer</h3>
+    <button onclick={ click } action="own" class={ uR.config.btn_success }>Become Organizer</button>
+  </div>
+
+this.on("mount",function() {
+  uR.auth.ready(function() {
+    this.update();
+  }.bind(this));
+});
+
+this.on("update",function() {
+  if (uR.auth.user) {
+    this.is_owner = this.parent.event.owner_ids.indexOf(uR.auth.user.id) != -1;
+  }
+})
+click(e) {
+  this.ajax({
+    url: "/event/"+ e.target.getAttribute('action')+"/"+this.parent.event.id+"/",
+    success: function (data) { this.parent.event.owner_ids = data.owner_ids; },
+    method: "POST",
+  });
+}
+</event-owner>
+    
+
 <event-list>
+  <event-owner if={ uR.auth.user.is_staff }></event-owner>
   <h2 if={ _c }>{ _c } Upcoming Event{ _s }:</h2>
   <h2 if={ !_c }>No Upcoming Events</h2>
   <event-occurrence each={ occurrences } />
 
   var that = this;
-  that.occurrences = opts.occurrences;
+  that.event = that.opts.event;
+  that.occurrences = that.event.upcoming_occurrences;
   this.on("update", function() {
-    that._c = that.occurrences.length;
+    that._c = that.event.upcoming_occurrences.length;
     that._s = (that._c > 1)?"s":"";
     var user_reservations = opts.user_reservations || [];
     uR.forEach(that.occurrences,function(o) { o.quantity = user_reservations[o.id] || 0; });

@@ -35,7 +35,7 @@
       "/event/eventdetail_{{ event.pk }}.json",
       function(data) {
         data.user_reservations = user_reservations;
-        data.occurrences = data.upcoming_occurrences;
+        data.event = data;
         $("#side").prepend("<event-list>");
         riot.mount("#side event-list",data);
       },

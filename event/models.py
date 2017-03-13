@@ -64,6 +64,7 @@ class Event(PhotosMixin,models.Model):
   rsvp_cutoff = models.FloatField(default=0,help_text=_ht)
   max_rsvp = models.IntegerField(default=128)
   access = models.ForeignKey(Access)
+  owner_ids = property(lambda self: list(self.eventowner_set.all().values_list("user_id",flat=True)))
   @property
   def verbose_rsvp_cutoff(self):
     if self.rsvp_cutoff > 2:
@@ -116,6 +117,10 @@ REPEAT_VERBOSE = {
   'end-month': "The {self.verbose_endweek} {self.verbose_weekday} of every month.",
   'weekly': 'Every {self.verbose_weekday}'
 }
+
+class EventOwner(UserModel):
+  event = models.ForeignKey(Event)
+  __unicode__ = lambda self: "%s owns %s"%(self.user,self.event)
 
 class EventRepeat(models.Model):
   event = models.ForeignKey(Event)

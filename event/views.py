@@ -18,6 +18,14 @@ from user.models import is_toolmaster
 
 import datetime, json, arrow
 
+@staff_member_required
+def owner_ajax(request,action,event_id):
+  if action == 'own':
+    Event.objects.get(id=event_id).eventowner_set.get_or_create(user=request.user)
+  elif action == 'disown':
+    Event.objects.get(id=event_id).eventowner_set.filter(user=request.user).delete()
+  return JsonResponse({'owner_ids': Event.objects.get(id=event_id).owner_ids })
+
 def index(request,daystring=None):
   start = datetime.date.today()
   if daystring:
@@ -117,7 +125,7 @@ def rsvp(request):
 
 def detail_json(request,event_pk):
   event = get_object_or_404(Event,pk=event_pk)
-  fields = ['name','description','hidden','allow_rsvp']
+  fields = ['id','name','description','hidden','allow_rsvp','owner_ids']
   out = {key:getattr(event,key) for key in fields}
   fields = ['id','name','total_rsvp','start','end','rsvp_cutoff','past']
   if request.user.is_superuser:
