@@ -9,6 +9,7 @@ from django.template.defaultfilters import slugify, date, urlencode
 
 from geo.models import Room
 from media.models import PhotosMixin
+from lablackey.contenttypes import get_contenttype
 from lablackey.db.models import UserModel
 from lablackey.decorators import cached_property, cached_method
 from wmd import models as wmd_models
@@ -93,7 +94,7 @@ class Event(PhotosMixin,models.Model):
     rsvps = RSVP.objects.filter(
       user=user,
       object_id__in=occurrence_ids,
-      content_type_id=ContentType.objects.get(model="eventoccurrence").id
+      content_type_id=get_contenttype("event.eventoccurrence").id
     )
     return {r.object_id:r.quantity for r in rsvps}
   def get_name(self):
@@ -236,6 +237,14 @@ class OccurrenceModel(models.Model):
 
   get_ics_url = lambda self: reverse_ics(self)
 
+  @property
+  def verbose_start(self):
+    today = datetime.date.today()
+    if self.start.date() == today:
+      return "Today"
+    if self.start.date() == today +datetime.timedelta(1):
+      return "Tomorrow"
+    return date(self.start,"D n/j Y")
   @property
   def end(self):
     return self.start.replace(hour=self.end_time.hour,minute=self.end_time.minute)

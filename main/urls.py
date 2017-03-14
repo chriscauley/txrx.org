@@ -129,7 +129,7 @@ urlpatterns += [
   url(r'^accounts/', include(registration.urls)),
   url(r'^auth/password_reset/$',activate_user(password_reset)),
   url(r'^auth/',include(django.contrib.auth.urls)),
-  url(r'^force_login/(\d+)/$', main.views.force_login),
+  url(r'^force_login/([\d\w]+)/$', main.views.force_login),
   url(r'^api/remove_rfid/$',user.views.remove_rfid),
   url(r'^api/change_rfid/$',user.views.set_rfid),
   url(r'^api/user_checkin/$',user.views.user_checkin),

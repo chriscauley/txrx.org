@@ -32,6 +32,20 @@ def get_upcoming_events():
   c = ClassTime.objects.filter(session__active=True,**kwargs)
   return sorted(list(c)+list(e),key=lambda o:o.start)
 
+def get_calendar_sublinks(request):
+  one_week = datetime.date.today()+datetime.timedelta(7)
+  occurrences = EventOccurrence.objects.filter(event__eventowner__user=request.user,start__lte=one_week)
+  occurrences = occurrences.filter(start__gte=datetime.datetime.today())
+  #occurrences = [o for o in occurrences if o.total_rsvp]
+  out = [{
+    'name': "%s %s"%(o.verbose_start,o.event.get_short_name()),
+    'url': o.event.get_absolute_url(),
+    'reddot': o.total_rsvp
+    } for o in occurrences]
+  if out:
+    out = [{'name': "View All",'url': '/event/'}] + out
+  return out
+
 def nav(request):
   blog_sublinks = [
     {'name': 'Blog Home', 'url': '/blog/'},
@@ -100,7 +114,10 @@ def nav(request):
      "url": "/blog/",
      "sublinks": blog_sublinks if request.user.is_staff else [],
      },
-    {'name': "Calendar", "url": "/event/"},
+    {'name': "Calendar",
+     "url": "/event/",
+     "sublinks": get_calendar_sublinks(request) if request.user.is_staff else [],
+     },
     #{'name': "Facility", "url": "/facility/"},
     {'name': "Membership", "url": "/join-us/"},
     {'name': "Contact", "url": "/map/"},

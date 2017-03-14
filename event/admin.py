@@ -87,10 +87,12 @@ class EventOwnerInline(admin.TabularInline):
 
 @admin.register(Event)
 class EventAdmin(TaggedPhotoAdmin):
-  list_display = ("__unicode__","upcoming_count","get_repeat_verbose","access","allow_rsvp","rsvp_cutoff")
+  list_display = ("__unicode__","upcoming_count","organizers","get_repeat_verbose","access","allow_rsvp","rsvp_cutoff")
   list_editable = ("access","allow_rsvp","rsvp_cutoff")
   inlines = [EventRepeatInline,EventOccurrenceInline,EventOwnerInline]
   search_fields = ['name']
+  def organizers(self,obj):
+    return "<br />".join(["%s"%eo.user for eo in obj.eventowner_set.all()])
   def upcoming_count(self,obj):
     return obj.upcoming_occurrences.count()
   def get_repeat_verbose(self,obj):
