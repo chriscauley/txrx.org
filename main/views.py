@@ -30,7 +30,10 @@ def gfycat(request):
 def force_login(request,uid):
   if not request.user.is_superuser:
     raise Http404()
-  u = get_object_or_404(get_user_model(),pk=uid)
+  if uid.isdigit():
+    u = get_object_or_404(get_user_model(),id=uid)
+  else:
+    u = get_object_or_404(get_user_model(),username=uid)
   from django.contrib.auth import login
   u.backend='django.contrib.auth.backends.ModelBackend'
   login(request,u)

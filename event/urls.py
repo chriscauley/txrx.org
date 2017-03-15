@@ -19,4 +19,5 @@ urlpatterns = [
   url(r'^checkin/$', views.checkin, name='rsvp'),
   url(r'^orientations/$', views.orientations,name='orientations'),
   url(r'^orientations/(\d+)/(\d+)/(\d+)/$', views.orientations,name='orientations'),
+  url(r'^(own|disown)/(\d+)/',views.owner_ajax),
 ]
