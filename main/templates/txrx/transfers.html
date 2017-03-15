@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block main %}
+<table class="table stripped">
+  <tr>
+    {% for l in labels %}<th>{{ l }}</th>{% endfor %}
+  </tr>
+  {% for t,totals,error in transfers %}
+  <tr>
+    <td>
+      {{ t.stripe_id }}
+      <a href="https://dashboard.stripe.com/transfers/{{ t.stripe_id }}">stripe</a>
+      <a href="/admin/djstripe/transfer/{{ t.id }}/change/">admin</a>
+      {% for charge in t.charge_set.all %}
+      <br /><a href="/admin/djstripe/charge/{{ charge.id }}/change/">{{ charge }}</a>{% endfor %}
+    </td>
+    <td>${{ t.amount }} {% if error %}(<b>{{ error|floatformat:2 }}</b>){% endif %}</td>
+    {% for n in totals %}
+    <td>{% if n %}${{ n|floatformat:2 }}{% else %}-{% endif %}</td>{% endfor %}
+  </tr>
+  {% endfor %}
+  <tfoot>
+    <td></td>
+    <td></td>
+    {% for s in sums %}<td>{{ s|floatformat:2 }}</td>{% endfor %}
+  </tfoot>
+</table>
+{% endblock %}
