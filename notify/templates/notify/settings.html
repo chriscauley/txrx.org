@@ -9,15 +9,9 @@
 <number-display></number-display>
 <hr />
 <h2>Notification Settings</h2>
-<ur-form id="notify-form"></ur-form>
-<form method="POST" enctype="multipart/form-data" class="notify-form">
-  {% csrf_token %}
-  {% for error in form.non_field_errors %}
-  <div class="alert alert-danger">{{ error }}</div>
-  {% endfor %}
-  {% include "_form.html" %}
-  <input type="submit" class="btn btn-success" />
-</form>
+<ur-form id="notify-form">
+  <yield to="button_div"><p class="blue">* SMS, standard rates apply.</p></yield>
+</ur-form>
 <script type="riot/tag">
   <number-display>
     <p if={ !smsnumber }>
@@ -89,7 +83,7 @@
   uR.ready(function() {
     uR.auth.ready(function() { riot.mount("number-display"); });
     riot.mount("#notify-form",{
-      schema: "/api/schema/notify.NotificationForm/",
+      schema: "/api/schema/notify.NotificationSettingsForm/",
     });
   });
 </script>

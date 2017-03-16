@@ -5,12 +5,16 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from course.models import Course
-from .forms import NotificationForm
 from membership.utils import limited_login_required
 from .models import Follow
 
 from lablackey.contenttypes import get_contenttype
 from lablackey.utils import FORBIDDEN
+import main.views
+
+@login_required
+def settings(request):
+  return main.views.to_template(request,'notify/settings')
 
 @limited_login_required
 def unsubscribe(request,attr,user_id):
@@ -40,13 +44,3 @@ def follow(request,contenttype,id):
   follow, new = Follow.objects.get_or_create(user=request.user,content_type=contenttype,object_id=id)
   messages.success(request,"You are now following: {follow.content_object}".format(follow=follow))
   return HttpResponseRedirect(request.GET.get("next",follow.content_object.get_absolute_url()))
-
-@login_required
-def settings(request):
-  form = NotificationForm(request.POST or None)
-  if form.is_valid():
-    form.save()
-    messages.success(request,"Your notification settings have been saved")
-    return HttpResponseRedirect(request.path)
-  values = {'form': form}
-  return TemplateResponse(request,'notify/settings.html',values)

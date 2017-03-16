@@ -18,8 +18,24 @@
   }
 }
 
+.ur-input {
+  &.radio, &.checkbox {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    padding-top: 1.6rem;
+    padding-left: 0; // holdover from bootstrap
+    checkbox-input {
+      flex-basis: 100%;
+      order: 2;
+    }
+    .fa-question-circle-o { display: none; }
+  }
+}
+
 ur-form {
   .btn { margin-bottom: 20px; }
+  p.blue { color: @blue; }
 }
 
 .messagelist {
