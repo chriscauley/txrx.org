@@ -26,7 +26,7 @@ import drop.views.product
 import course.views.classes
 import airbrake.urls
 import txrx_urls
-from lablackey import sms.urls
+from lablackey.sms import urls as sms_urls
 
 import os
 
@@ -93,7 +93,7 @@ urlpatterns = [
   url(r'^redtape/',include(redtape.urls)),
   url(r'',include(airbrake.urls)),
   url(r'',include(txrx_urls)),
-  url(r'',include(sms.urls)),
+  url(r'',include(sms_urls)),
 ]
 
 if hasattr(settings,"COURSE_GIFTCARD_ID"):

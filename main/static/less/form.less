@@ -1,4 +1,4 @@
-ur-input {
+.ur-input {
   display: block;
   margin-bottom: 1em;
   position: relative;
@@ -28,7 +28,7 @@ ur-form {
   padding: 0;
 }
 
-ur-input checkbox-input {
+.ur-input checkbox-input {
   display: flex;
   flex-wrap: wrap;
   position: relative;
@@ -68,7 +68,7 @@ ur-document {
 ur-document ur-form form {
   display: flex;
   flex-wrap: wrap;
-  ur-input {
+  .ur-input {
     flex-basis: 100%;
     &.start_date,&.end_date {
       flex-basis: 50%;
@@ -95,7 +95,7 @@ ur-document ur-form form {
 admin-dashboard ur-form form {
   display: flex;
   justify-content: flex-start;
-  ur-input { flex-basis: auto; margin-right: 30px; }
+  .ur-input { flex-basis: auto; margin-right: 30px; }
 }
 
 label + [type=checkbox] + .help-block { display: inline; }
