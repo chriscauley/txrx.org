@@ -71,7 +71,9 @@ ur-form {
         vertical-align: middle;
       }
     }
-    &:checked + label:before { content: "\f046"; }
+    &:checked + label:before { color: @blue; content: "\f046"; }
+    &[type=radio] + label:before { content:"\f10c"; }
+    &:checked[type=radio] + label:before { content: "\f192"; }
   }
 }
 
