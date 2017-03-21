@@ -2,12 +2,15 @@ from django.conf.urls import url
 from django.contrib.auth.decorators import user_passes_test
 import lablackey.views
 
+from django.http.response import JsonResponse
 from django.template.response import TemplateResponse
 from djstripe.models import Transfer
 from drop.models import Order
 from drop.giftcard.models import GiftCardProduct
 from store.models import Consumable, CourseCheckout
 from course.models import SessionProduct
+
+import json
 
 @user_passes_test(lambda u: u.is_superuser)
 def transfers(request):
@@ -32,12 +35,21 @@ def transfers(request):
       sums[i] += t
   values = {
     'transfers': transfers,
+    'transfers_completed': json.dumps({ t.stripe_id: t.metadata.get("completed",None) for t in Transfer.objects.all()}),
     'labels': ["transfer","transfer.total (error)","classes","consumables","checkouts","giftcards"],
     'sums': sums,
   }
   return TemplateResponse(request,"txrx/transfers.html",values)
 
+@user_passes_test(lambda u: u.is_superuser)
+def complete_transfer(request,stripe_id):
+  t = Transfer.objects.get(stripe_id=stripe_id)
+  t.metadata['completed'] = not t.metadata.get('completed',None)
+  t.save()
+  return JsonResponse({'completed': t.metadata['completed']})
+
 urlpatterns = [
   url(r'^work/$',lablackey.views.single_page_app),
-  url(r'^txrx/transfers/$',transfers)
+  url(r'^txrx/transfers/$',transfers),
+  url(r'^txrx/complete_transfer/([_\w\d]+)/$',complete_transfer),
 ]

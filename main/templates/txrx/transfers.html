@@ -8,11 +8,15 @@
   {% for t,totals,error in transfers %}
   <tr>
     <td>
+      <transfer-button transfer_id="{{ t.stripe_id }}"></transfer-button>
       {{ t.stripe_id }}
       <a href="https://dashboard.stripe.com/transfers/{{ t.stripe_id }}">stripe</a>
       <a href="/admin/djstripe/transfer/{{ t.id }}/change/">admin</a>
-      {% for charge in t.charge_set.all %}
-      <br /><a href="/admin/djstripe/charge/{{ charge.id }}/change/">{{ charge }}</a>{% endfor %}
+      <a onclick="$(this).next().toggle()" style="float:right" href="javascript:return false">Show charges</a>
+      <div style="display:none">
+        {% for charge in t.charge_set.all %}
+        <br /><a href="/admin/djstripe/charge/{{ charge.id }}/change/">{{ charge }}</a>{% endfor %}
+      </div>
     </td>
     <td>${{ t.amount }} {% if error %}(<b>{{ error|floatformat:2 }}</b>){% endif %}</td>
     {% for n in totals %}
@@ -25,4 +29,27 @@
     {% for s in sums %}<td>{{ s|floatformat:2 }}</td>{% endfor %}
   </tfoot>
 </table>
+<script type="riot/tag">
+  <transfer-button>
+    <button if={ completed } class="btn btn-primary" onclick={ toggle }>Completed</button>
+    <button if={ !completed } class="btn btn-danger" onclick={ toggle }>Incomplete</button>
+  this.on("update",function() {
+    this.completed = window.TRANSFERS[this.opts.transfer_id];
+  });
+  toggle(e) {
+    this.ajax({
+      url: "/txrx/complete_transfer/"+this.opts.transfer_id+"/",
+      ajax_target: this.root.querySelector("button"),
+      success: function(data) {
+        window.TRANSFERS[this.opts.transfer_id] = data.completed
+      }.bind(this),
+    })
+  }
+      
+  </transfer-button>
+</script>
+<script>
+  window.TRANSFERS = {{ transfers_completed|safe }};
+  uR.ready(function() { riot.mount("transfer-button"); });
+</script>
 {% endblock %}
