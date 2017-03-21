@@ -125,7 +125,10 @@ class TaggedPhoto(models.Model):
 class PhotosMixin(object):
   @property
   def thumbnail(self):
-    return get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center").url
+    try:
+      return get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center").url
+    except:
+      pass
   @cached_property
   def first_photo(self):
     return (self.get_photos() or [None])[0]
