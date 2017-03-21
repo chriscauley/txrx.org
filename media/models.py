@@ -123,6 +123,7 @@ class TaggedPhoto(models.Model):
   order = models.IntegerField(default=9999)
 
 class PhotosMixin(object):
+  _use_default_photo = True
   @property
   def thumbnail(self):
     try:

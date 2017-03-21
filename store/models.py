@@ -26,13 +26,6 @@ class BaseProduct(PhotosMixin,Product):
   def category_ids(self):
     return list(self.categories.all().values_list('id',flat=True)) + getattr(self,"base_categories",[])
 
-  @property
-  def thumbnail(self):
-    try:
-      return get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center").url
-    except:
-      pass
-
 class CourseCheckout(BaseProduct):
   json_fields = BaseProduct.json_fields + ['course_id']
   course = models.ForeignKey("course.Course")
