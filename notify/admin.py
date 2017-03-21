@@ -13,3 +13,4 @@ class NotificationInline(admin.TabularInline):
 class FollowAdmin(RawMixin,admin.ModelAdmin):
   list_display = ("__unicode__",)
   inlines = [NotificationInline]
+  search_fields = ("user__username","user__email","user__first_name","user__last_name","user__paypal_email")
