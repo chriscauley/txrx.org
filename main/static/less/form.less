@@ -11,10 +11,9 @@
     top: 0;
   }
   input { width: 100%; }
-  .error { color: @red; display: none; }
-  .invalid {
+  .error { color: @red; }
+  &.invalid {
     border-color: @red;
-    ~ .error { display: block; }
   }
 }
 
@@ -29,6 +28,7 @@
       flex-basis: 100%;
       order: 2;
     }
+    .error { order: 3; }
     .fa-question-circle-o { display: none; }
   }
 }

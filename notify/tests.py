@@ -12,13 +12,11 @@ from lablackey import sms
 
 import datetime,random
 
-#! TODO I know its bad to hardcode many of these variables
-# for now they are marked with bad so that they can be removed when I figure out the test runner
-
-def new_session(course):
-    session = Session.objects.create(course=course,user_id=3) #! BAD
+def new_session(course,teacher):
+    session = Session.objects.create(course=course,user=teacher)
+    start = datetime.datetime.now().replace(hour=13)
     session.classtime_set.get_or_create(
-        start=timezone.now()+datetime.timedelta(random.randint(1,40)),
+        start=start+datetime.timedelta(random.randint(1,60)),
         end_time="12:00"
     )
     session = Session.objects.get(pk=session.pk)
@@ -28,45 +26,46 @@ def new_session(course):
 class NotificationTestCase(TXRXTestCase):
     def setUp(self):
         super(NotificationTestCase,self).setUp()
+        # clear any backlog made by the above super
+        call_command("notify_course")
+        mail.outbox = []
         self.follow_url = reverse("notify_follow",args=["course.Course",self.course1.id])
         self.follow_url2 = reverse("notify_follow",args=["course.Course",self.course2.id])
     def test_flow(self):
-        user = self.login("chriscauley",password="badpassword") #! BAD
-        user.follow_set.all().delete() #! BAD
+        user = self.new_user()
+        self.login(user)
 
         # user follows the course
         self.client.get(self.follow_url)
         self.assertEqual(user.follow_set.all()[0].object_id,self.course1.id)
 
-        # a new session is created
-        session = new_session(self.course1)
+        session1 = new_session(self.course1,self.teacher)
 
         # user has a notification for the new session
         self.assertEqual(user.notification_set.filter(read__isnull=True).count(),1)
         notification = user.notification_set.all()[0]
-        self.assertEqual(notification.target,session)
+        self.assertEqual(notification.target,session1)
         call_command("notify_course")
         self.assertEqual(len(mail.outbox),1)
         self.assertEqual("New classes at %s"%settings.SITE_NAME,mail.outbox[0].subject)
-        self.assertTrue("%s%s"%(settings.SITE_URL,session.get_absolute_url()) in mail.outbox[0].body)
+        self.assertTrue("%s%s"%(settings.SITE_URL,session1.get_absolute_url()) in mail.outbox[0].body)
 
         # user will not get emailed if management command runs again
         mail.outbox = []
         call_command("notify_course")
-        self.assertEqual(len(mail.outbox),1)
-        self.assertEqual(mail.outbox[0].body,"No new classes to notify anyone about :(")
+        self.assertEqual(len(mail.outbox),0)
 
         # user visits class page from email link notification is read
-        self.client.get(session.get_absolute_url())
+        self.client.get(session1.get_absolute_url())
         self.assertEqual(user.notification_set.filter(read__isnull=True).count(),0)
 
         # user signs up for session, forcing unfollow on course
-        Enrollment.objects.create(user=user,session=session)
+        Enrollment.objects.create(user=user,session=session1)
         self.assertEqual(user.follow_set.all().count(),0)
 
     def test_edges(self):
-        user = self.login("chriscauley",password="badpassword") #! BAD
-        user.follow_set.all().delete() #! BAD
+        user = self.new_user()
+        self.login(user)
 
         # user follows two courses
         self.client.get(self.follow_url)
@@ -76,16 +75,14 @@ class NotificationTestCase(TXRXTestCase):
             sorted([self.course1.id,self.course2.id])
         )
 
-        # two sessions added for one course, one session added for the other
-        session = new_session(self.course1)
-        session2 = new_session(self.course2)
-        session22 = new_session(self.course2)
-
+        session1 = new_session(self.course1,self.teacher)
+        session2 = new_session(self.course2,self.teacher)
+        session22 = new_session(self.course2,self.teacher)
         # management command sends one email to student, containing links to all three classes
         call_command("notify_course")
         self.assertEqual(len(mail.outbox),1)
         self.assertEqual("New classes at %s"%settings.SITE_NAME,mail.outbox[0].subject)
-        for s in [session,session2,session22]:
+        for s in [session1,session2,session22]:
             self.assertTrue("<%s%s>"%(settings.SITE_URL,s.get_absolute_url()) in mail.outbox[0].body)
 
         # user unfollows course via email link

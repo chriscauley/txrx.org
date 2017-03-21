@@ -40,7 +40,8 @@ class Command (BaseCommand):
     for relationship in ["teaching_reminder","course_reminder"]:
       followers = users.filter(
         notification__target_type="course.classtime",
-        notification__relationship=relationship).distinct()
+        notification__relationship=relationship
+      ).distinct()
       users_count += followers.count()
       for user in followers:
         notifications = user.notification_set.filter(

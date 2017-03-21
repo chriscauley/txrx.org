@@ -4,6 +4,7 @@ import warnings;warnings.showwarning = lambda *x: None
 from django.conf import settings
 from django.core.management import call_command
 from django.core import mail
+from django.db import IntegrityError
 
 from course.models import Course, Session, ClassTime
 from event.models import Event, EventOccurrence
@@ -32,7 +33,7 @@ class TXRXTestCase(DropTestCase):
   
     self.course1 = Course.objects.create(name="course45",fee=45,**kwargs)
     self.course2 = Course.objects.create(name="course50",fee=50,**kwargs)
-  
+
     self.teacher = self.new_user()
     self.student1 = self.new_user()
     self.student2 = self.new_user()
@@ -49,6 +50,11 @@ class TXRXTestCase(DropTestCase):
     ClassTime.objects.create(session=self.session2,start=tomorrow.replace(hour=18),end_time="19:00")
     self.session2.save()
 
+    # A second session for course 2, the next week
+    self.session22 = Session.objects.create(course=self.course2,user=self.teacher)
+    ClassTime.objects.create(session=self.session22,start=tomorrow.replace(hour=18)+datetime.timedelta(7),end_time="19:00")
+    self.session22.save()
+
     # # conflict_session1 is the same time as session1. currently unused
     # self.conflict_session1 = Session.objects.create(
     #   course=Course.objects.filter(active=True,fee__gt=0).order_by("?")[0],
@@ -57,12 +63,11 @@ class TXRXTestCase(DropTestCase):
     # ClassTime.objects.create(session=self.conflict_session1,start=next_day,end_time=end)
 
   def _setup_membership(self):
-    defaults = {
-      'name': 'foo',
-      'order': 1
-    }
-    self.level0 = Level.objects.get_or_create(id=settings.DEFAULT_MEMBERSHIP_LEVEL,defaults=defaults)[0]
-    self.level10 = Level.objects.get_or_create(name="discounted",discount_percentage=10,order=999)[0]
+    try:
+      self.level0 = Level.objects.get(id=settings.DEFAULT_MEMBERSHIP_LEVEL)
+    except Level.DoesNotExist:
+      self.level0 = Level.objects.create(id=settings.DEFAULT_MEMBERSHIP_LEVEL,name='foo',order=1)
+    self.level10 = Level.objects.get_or_create(name="discounted",discount_percentage=10,order=999,id=10000)[0]
 
   def _setup_geo(self):
     self.city = City.objects.get_or_create(name="Houston",state="TX")[0]
