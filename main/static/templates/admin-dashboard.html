@@ -1,6 +1,6 @@
 <admin-dashboard>
   <h1>Sales Dashboard</h1>
-  <ur-form initial={ initial } action="/dashboard/totals.json" ajax_success={ updatePlot }
+  <ur-form initial={ initial } action="/dashboard/totals.json" ajax_success={ updatePlot } onload={ _onload }
            schema={ schema } ajax_target="#plot_container" onChange={ updateUI }></ur-form>
   <div id="plot_container" style="width:750px;height:400px;"></div>
   <a href="/dashboard/totals.csv{ qs }" target="_blank">Download CSV</a><br/>
@@ -18,7 +18,7 @@
   }
   this.schema = [
     { name: 'metric', type: 'select', required: false,
-      choice_tuples: [
+      choices: [
         ['line_total','Cart Total'],
         ['quantity','Quantity'],
         ['new_students','New Students (slow)'],
@@ -29,7 +29,7 @@
       ]
     },
     { name: 'product_types', type: 'hidden', required: false,
-      choice_tuples: [
+      choices: [
         ["",'All Products'],
         ["214","Course Enrollments"],
         ["215","Giftcards"],
@@ -38,7 +38,7 @@
       ]
     },
     { name: 'time_period', type: 'select', required: false,
-      choice_tuples: [
+      choices: [
         [90,'Three Months'],
         [180,'Six Months'],
         [365,'One Year'],
@@ -46,7 +46,7 @@
       ]
     },
     { name: 'resolution', type: 'select', required: false,
-      choice_tuples: [
+      choices: [
         [1, 'One Day'],
         [2, 'Two Day'],
         [7, 'Week'],
@@ -60,10 +60,10 @@
   this.initial.product_types = this.initial.product_types || 214;
   this.initial.metric = this.initial.metric || 'line_total';
   this.initial.resolution = this.initial.resolution || 1;
-  this.on("mount",function() {
-    this.update();
-    setTimeout(function() { document.querySelector("ur-form button").dispatchEvent(new Event("click"))},0)
-  });
+  _onload = function() {
+    self.update();
+    setTimeout(function() { self.root.querySelector("ur-form button").dispatchEvent(new Event("click"))},0);
+  }
   updateUI(e,riot_tag) {
     if (document.querySelector("ur-input.metric select").value == 'classes_per_student') {
       document.querySelector("ur-input.resolution").style.display='none';
