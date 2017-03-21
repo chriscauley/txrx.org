@@ -39,7 +39,6 @@ _pages = [
   'my-permissions',
   'needed-sessions',
   'rooms',
-  'rfid',
   'toolmaster',
   'week-hours',
   'me',

@@ -231,33 +231,20 @@
       <p>Find a user and then select them and you will be prompted for a new rfid</p>
     </yield>
   </search-users>
-  <button if={ opts.active_id } onclick={ open } class="btn btn-{ _user.rfids.length?'success':'danger' }">
-    Set RFIDs</button>
+  <button onclick={ open } class="btn btn-{ _user.rfids.length?'success':'danger' }">Set RFIDs</button>
 
-  var self = this;
   this.on("mount", function() {
     // #! this is so the set-rfid tag can be included into other tags that don't do the searching.
     if (this.opts.active_id) {
       this.ajax({
         url: "/api/user/search/",
         data: {user_id: this.opts.active_id},
-        success: function(data) {
-          self._user = data[0];
-        },
+        success: function(data) { this._user = data[0]; },
       });
     }
   });
   open(e) {
-    uR.alertElement("rfid-popup",{user: self._user });
-  }
-  select(e) {
-    this.active_user = e.item;
-    this.update();
-    document.querySelector("modal input").focus();
-  }
-  cancel(e) {
-    this.active_user = this.old_rfid = this.new_rfid = this.username = null;
-    this.update();
+    uR.alertElement("rfid-popup",{user: this._user });
   }
 </set-rfid>
 
