@@ -178,6 +178,52 @@
   }
 </toolmaster>
 
+<rfid-popup>
+  <div class={ theme.outer }>
+    <div class={ theme.header }><h3>Alter RFIDs</h3></div>
+    <div class={ theme.content }>
+      Swipe card or enter number for { user.username }.
+      <form onsubmit={ submit }>
+        <input type="text" onblur="this.focus()"/>
+      </form>
+      <div if={ user.rfids.length }>
+      <h3>Delete Current RIFDs</h3>
+      <div each={ number,i in user.rfids } class="alert alert-info">
+        { number }
+        <a class="pull-right fa fa-close" onclick={ parent.remove }></a>
+      </div>
+      </div>
+      <div if={ non_field_error } class="alert alert-danger">{ non_field_error }</div>
+    </div>
+  </div>
+
+
+  this.on("mount",function() {
+    this.root.querySelector("input").focus();
+    this.user = this.opts.user;
+    this.update();
+  });
+
+  this.ajax_success = function(data) { this.user.rfids = data.rfids; }
+
+  submit(e) {
+    var input = this.root.querySelector("input");
+    var number = input.value;
+    input.value = "";
+    this.ajax({
+      url: '/api/change_rfid/',
+      data: {'user_id':this.user.id,'rfid':number},
+    });
+    return false;
+  }
+
+  remove(e) {
+    this.ajax({
+      url: '/api/remove_rfid/',
+      data: {'user_id':this.user.id,'rfid':e.item.number},
+    });
+  }
+</rfid-popup>
 <set-rfid>
   <search-users if={ !opts.active_id }>
     <yield to="top">
@@ -185,32 +231,16 @@
       <p>Find a user and then select them and you will be prompted for a new rfid</p>
     </yield>
   </search-users>
-  <button if={ opts.active_id } onclick={ open }
-          class="btn btn-{ _user.rfids.length?'success':'danger' }">Set RFIDs</button>
-  <modal if={ active_user } cancel={ cancel } rfids={ active_user.rfids } stay_mounted={ true }>
-    <h1>Alter RFIDs</h1>
-    Swipe card or enter number for { parent.active_user.username }.
-    <form onsubmit={ parent.submit }>
-      <input type="text" onblur="this.focus()"/>
-    </form>
-    <div if={ opts.rfids.length }>
-      <h3>Delete Current RIFDs</h3>
-      <div each={ number,i in opts.rfids } class="alert alert-info">
-        { number }
-        <a class="pull-right fa fa-close" onclick={ parent.parent.remove }></a>
-      </div>
-    </div>
-    <div if={ parent.error } class="alert alert-danger">{ parent.error }</div>
-  </modal>
+  <button if={ opts.active_id } onclick={ open } class="btn btn-{ _user.rfids.length?'success':'danger' }">
+    Set RFIDs</button>
 
   var self = this;
   this.on("mount", function() {
     // #! this is so the set-rfid tag can be included into other tags that don't do the searching.
     if (this.opts.active_id) {
-      uR.ajax({
+      this.ajax({
         url: "/api/user/search/",
         data: {user_id: this.opts.active_id},
-        self: this,
         success: function(data) {
           self._user = data[0];
         },
@@ -218,9 +248,7 @@
     }
   });
   open(e) {
-    this.active_user = this._user;
-    this.update();
-    document.querySelector("modal input").focus();
+    uR.alertElement("rfid-popup",{user: self._user });
   }
   select(e) {
     this.active_user = e.item;
@@ -230,35 +258,6 @@
   cancel(e) {
     this.active_user = this.old_rfid = this.new_rfid = this.username = null;
     this.update();
-  }
-  this.on("update",function() {
-    this.tags && this.tags.modal.update()
-  });
-  submit(e) {
-    var input = this.root.querySelector("modal input");
-    var number = input.value;
-    input.value = "";
-    uR.ajax({
-      url: '/api/change_rfid/',
-      data: {'user_id':this.active_user.id,'rfid':number},
-      self: this,
-      success: function(data) {
-        self.active_user.rfids = data.rfids;
-        self.error = data.error;
-      },
-      error: function(data) { alert("An unknown error occurred. Please contact Chris:\n"+data.error) },
-      target: self.root.querySelector("modal .inner")
-    });
-    return false;
-  }
-  remove(e) {
-    uR.ajax({
-      url: '/api/remove_rfid/',
-      data: {'user_id':self.active_user.id,'rfid':e.item.number},
-      self: this,
-      success: function(data) { self.active_user.rfids = data.rfids; },
-      target: self.root.querySelector("modal .inner")
-    });
   }
 </set-rfid>
 

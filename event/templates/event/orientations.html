@@ -1,15 +1,18 @@
 {% extends "base.html" %}
+{% load compress %}
 
 {% block title %}Orientations{% endblock %}
 
 {% block main %}
 <div id="orientations">
   {% if request.GET.q %}
+  {% if extra_users %}<div class="alert alert-danger">{{ extra_users }}</div>{% endif %}
   {% for user in users %}
   {% include "event/_orientation_box.html" %}
   {% empty %}
   <h1>No users found matching that criterion</h1>
   {% endfor %}
+  {% if extra_users %}<div class="alert alert-danger">{{ extra_users }}</div>{% endif %}
   {% else %}
   <div>
     {% if prev_occ %}
@@ -39,6 +42,9 @@
     <input type="submit" value="Search">
   </form>
 </div>
+{% endblock %}
+
+{% block extrajs %}
 <script type="riot/tag">
   <ez-file>
     <input type="file" id="file__{ slug }__{ opts.user_id }" onchange={ cropIt } name={ slug } />
@@ -132,5 +138,7 @@
 <script>
   uR.ready(function() { riot.mount("ez-file,set-rfid"); });
 </script>
+{% compress js %}
 <script src="/static/tags/tool.tag" type="riot/tag"></script>
+{% endcompress %}
 {% endblock %}
