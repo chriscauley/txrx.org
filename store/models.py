@@ -28,7 +28,10 @@ class BaseProduct(PhotosMixin,Product):
 
   @property
   def thumbnail(self):
-    return get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center").url
+    try:
+      return get_thumbnail(get_override(self.first_photo,"landscape_crop"),"270x140",crop="center").url
+    except:
+      pass
 
 class CourseCheckout(BaseProduct):
   json_fields = BaseProduct.json_fields + ['course_id']
