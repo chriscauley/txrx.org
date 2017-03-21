@@ -65,13 +65,13 @@ class Notification(UserModel,JsonMixin):
 METHOD_CHOICES = [
   ("email","Email"),
   ("sms","Text Message*"),
-  ("","Do not notify"),
+  ("none","Do not notify"),
 ]
 
 class NotifySettings(User121Model):
   _h = "If false this wil disable all notificaitons from the site."
   notify_global = models.BooleanField("Global Preference",default=True,help_text=_h)
-  _kwargs = dict(blank=True,default="email",max_length=8,choices=METHOD_CHOICES)
+  _kwargs = dict(default="email",max_length=8,choices=METHOD_CHOICES)
   _h = "An email or text whenever someone replies to a comment you make on this site."
   new_comments = models.CharField("Comment responses",help_text=_h,**_kwargs)
   _h = "An email or text reminder 24 hours before a class (that you've signed up for or are teaching)."
