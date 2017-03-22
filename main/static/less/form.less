@@ -52,29 +52,6 @@ ur-form {
     margin: 10px 0 0;
     flex-basis: 200px;
   }
-  input {
-    position: absolute;
-    opacity: 0;
-    + label {
-      color: inherit;
-      padding-left: 20px;
-      position: relative;
-      &:before {
-        content: "\f096";
-        color: #888;
-        font-size: 20px;
-        font-family: FontAwesome;
-        left: 0;
-        line-height: 1;
-        position: absolute;
-        top: 0;
-        vertical-align: middle;
-      }
-    }
-    &:checked + label:before { color: @blue; content: "\f046"; }
-    &[type=radio] + label:before { content:"\f10c"; }
-    &:checked[type=radio] + label:before { content: "\f192"; }
-  }
 }
 
 ur-document {

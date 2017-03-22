@@ -130,6 +130,7 @@
     </div>
   </div>
 
+  this.action = "/redtape/save/" + opts.document.id + "/";
   ajax_success(data) {
     uR.forEach(opts.parent.documents,function(document,i) {
       if (document.id == data.document.id) { opts.parent.documents[i].completed = new Date(); }
@@ -138,9 +139,6 @@
     opts.parent.update();
     this.unmount();
   }
-  this.on("mount", function() {
-    this.action = "/redtape/save/" + opts.document.id + "/";
-  });
 </user-document>
 
 <todays-checkins>
