@@ -36,7 +36,7 @@ click(e) {
     
 
 <event-list>
-  <event-owner if={ uR.auth.user.is_staff }></event-owner>
+  <!--<event-owner if={ uR.auth.user.is_staff }></event-owner>-->
   <h2 if={ _c }>{ _c } Upcoming Event{ _s }:</h2>
   <h2 if={ !_c }>No Upcoming Events</h2>
   <event-occurrence each={ occurrences } />
