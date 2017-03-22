@@ -105,6 +105,7 @@ class User(AbstractBaseUser, PermissionsMixin):
   _kwargs = dict(upload_to="%Y%m",max_length=200,null=True,blank=True)
   id_photo_date = models.DateTimeField(null=True,blank=True)
   headshot = models.FileField(verbose_name="Head Shot",storage=staff_storage,**_kwargs)
+  headshot_url = property(lambda self: (self.headshot and self.headshot.url) or None)
   objects = UserManager()
 
   #txrx fields

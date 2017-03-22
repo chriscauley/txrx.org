@@ -252,14 +252,13 @@
   <yield from="top" />
   <input type="text" name="q" onkeyup={ search } placeholder="Search by name or email" autocomplete="off"
          if={ !parent.active_user }/>
-  <div class="results">
+  <div class="results" name="ajax_target">
     <button class="btn btn-link" onclick={ back } if={ parent.active_user }>
       &laquo; Back to results
     </button>
-    <div each={ results } if={ !parent.parent.active_user } onclick={ parent.parent.select }
-         style="cursor: pointer;">
+    <div each={ results } if={ !parent.parent.active_user } style="cursor: pointer;">
       <yield from="result">
-        <div class="card well">
+        <div class="card well" onclick={ select }>
           <div class="card-content">
             <div class="row">
               <div class="col-sm-4 col s4">{ username }<br />{ get_full_name }&nbsp;</div>
@@ -274,41 +273,41 @@
     </div>
   </div>
 
-  var self = this;
-  self._results = [];
-  self._empty_results = []
+  this._results = [];
+  this._empty_results = []
   var old_value = '',value,old_empty;
   search(e) {
-    value = self.root.querySelector("[name=q]").value;
+    value = this.root.querySelector("[name=q]").value;
     if (old_value == value) { return }
     old_value = value;
     if (!value || value.length < 3) {
-      self.results = self._empty_results;
-      self.update();
+      this.results = this._empty_results;
+      this.update();
       return;
     }
-    uR.ajax({
+    this.ajax({
       url: "/api/user/search/",
       data: {q: value},
       success: function(data) {
-        self._results = data;
-        self.update()
+        this._results = data;
+        this.update()
       },
-      target: self.root.querySelector(".results")
     })
   }
   this.search = uR.debounce(this.search);
   searchEmpty(e) {
     if (!this.opts.empty) { return; }
-    uR.ajax({
+    this.ajax({
       url: "/api/user/search/",
-      data: { user_ids: JSON.stringify(self.opts.empty) },
-      that: this,
+      data: { user_ids: JSON.stringify(this.opts.empty) },
       success: function(data) {
-        self._empty_results = data;
+        this._empty_results = data;
         old_value = undefined;
       }
     });
+  }
+  select(e) {
+    this.parent.select(e);
   }
   back(e) {
     this.parent.active_user = undefined;
@@ -316,9 +315,9 @@
     this.parent.update();
   }
   this.on("mount",function() {
-    self.root.querySelector("[name=q]").focus();
-    self.root.querySelector("[name=q]").value = self.opts.value || "";
-    self.search();
+    this.root.querySelector("[name=q]").focus();
+    this.root.querySelector("[name=q]").value = this.opts.value || "";
+    this.search();
   });
   this.on("update",function() {
     if (old_empty != this.opts.empty) { old_empty = this.opts.empty; this.searchEmpty(); }

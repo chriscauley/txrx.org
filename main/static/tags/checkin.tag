@@ -152,9 +152,12 @@
     <yield to="result">
       <div class="card horizontal">
         <div class="card-image">
-          <img src={ headshot } />
+          <ez-file url="/api/change_headshot/" user_id={ id } done={ headshot_url }>
+            <label if={ !done } for={ _id } class={ uR.config.btn_success }><i class="fa fa-camera"></i></label>
+            <img if={ done } src={ done } onclick={ edIt } />
+          </ez-file>
         </div>
-        <div class="card-content">
+        <div class="card-content" onclick={ select }>
           { get_full_name }<br />
           { username }<br />
           { email }<br />

@@ -179,6 +179,7 @@ def change_headshot(request,attr):
   if attr == 'headshot':
     user.headshot.save(fname,f)
     user.save()
+    attr = 'headshot_url'
   elif attr == 'id_photo':
     admin_url = "https://txrxlabs.org/admin/user/user/%s"%user.id
     msg = EmailMessage(

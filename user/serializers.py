@@ -25,7 +25,7 @@ class SearchSizzler(BaseSizzler):
     return qs.distinct()
   class Meta:
     model = User
-    fields = ('username','id','email','paypal_email','get_full_name','rfids','headshot')
+    fields = ('username','id','email','paypal_email','get_full_name','rfids','headshot_url')
 
 class StudentSizzler(BaseSizzler):
   class Meta:
