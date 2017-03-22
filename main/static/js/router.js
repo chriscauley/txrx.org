@@ -17,5 +17,6 @@
     "^/my-permissions/": uR.auth.loginRequired('badge'),
     "^/(week-hours|todays-checkins|maintenance)/": uR.auth.loginRequired(uR.mountElement),
     "^/(admin/dashboard|needed-sessions)/$": uR.auth.loginRequired(fromTemplate),
+    "^/(event/bulk)/$": uR.auth.loginRequired(fromTemplate),
   });
 })();

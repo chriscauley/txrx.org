@@ -124,5 +124,6 @@ uR.theme.list_item = "list-group-item";
 uR.theme.list_item_danger = "list-group-item list-group-item-danger";
 uR.theme.list_right = "badge";
 uR.config.text_validators['signature'] = function(value,tag) {
-  if (!value.startsWith("/s/")) { tag.data_error = "Signature must start with /s/"; }
+  if (!value.startsWith("/s/")) { tag.data_error = "Signature must start with /s/"; return false; }
+  return true
 }
