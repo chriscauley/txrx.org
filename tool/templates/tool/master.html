@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="Checkouts col-sm-6">
+  <checkouts-box model_slug="{{ model_slug }}" status="incomplete"></checkouts-box>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script type="riot/tag">
+  <checkouts-box>
+    <div each={ events }>
+      <h2>{ name }</h2>
+      <div class="alert alert-{ status }" each={ objects }>
+        <h4>{ display_name }</h4>
+        <div>Created On: { created_s }</div>
+        <div if={ completed }>Completed On: { completed_s }</div>
+        <div if={ failed }>Failed On: { failed_s }</div>
+        <div class="bot-right">
+          <button class="btn btn-success" onclick={ click } if={ !completed && !failed }>Pass</button>
+          <button class="btn btn-danger" onclick={ click } if={ !completed && !failed }>Fail</button>
+          <button class="btn btn-warning" onclick={ click } if={ completed || failed }>Undo</button>
+        </div>
+      </div>
+    </div>
+
+  this.events = uR._events;
+  click(e) {
+    this.ajax({
+      target: e.target.parentElement,
+      url: "",
+      method: "POST",
+      data: {
+        object_id: e.item.id,
+        action: e.target.innerText,
+      },
+      success: function(data) {
+        e.item.completed = data.completed;
+        e.item.failed = data.failed;
+        uR._updateRSVP(e.item);
+      },
+    })
+  }
+  </checkouts-box>
+</script>
+<script>
+uR.auth.ready(function() {
+  uR._events = {{ events|safe }};
+  var _s = "MMMM Do YYYY, h:mm:ss a"
+
+  uR._updateRSVP = function(rsvp) {
+    rsvp.created_s = moment(rsvp.created).format(_s);
+    rsvp.failed_s = rsvp.failed && moment(rsvp.failed).format(_s);
+    rsvp.completed_s = rsvp.completed && moment(rsvp.completed).format(_s);
+    if (rsvp.completed) { rsvp.status = "success"; }
+    else if (rsvp.failed) { rsvp.status = "danger"; }
+    else { rsvp.status = "warning" }
+  }
+  uR.forEach(uR._events,function(event) {
+    uR.forEach(event.objects,uR._updateRSVP);
+  });
+  riot.mount("checkouts-box");
+});
+</script>
+{% endblock %}

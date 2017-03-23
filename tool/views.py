@@ -1,6 +1,8 @@
+from django.apps import apps
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
@@ -9,6 +11,8 @@ from course.models import Enrollment, CourseEnrollment
 from geo.models import Room
 from redtape.models import Signature
 from tool.models import Tool, Lab, Group, Permission, Criterion, UserCriterion
+
+from user.models import is_toolmaster
 
 import json, datetime
 
@@ -65,3 +69,39 @@ def checkout_items(request):
   room_items = [(r,r.checkoutitem_set.all()) for r in Room.objects.all()]
   values = {'room_items': filter(lambda i:i[1],room_items)}
   return TemplateResponse(request,"tool/checkout_items.html",values)
+
+@user_passes_test(is_toolmaster)
+def master(request,app_name,model_name):
+  model = apps.get_app_config(app_name).get_model(model_name)
+  objs = model.objects.user_controls(request.user).distinct()
+  if request.POST:
+    try:
+      obj = objs.get(pk=request.POST['object_id'])
+    except model.DoesNotExist:
+      raise NotImplementedError("%s cannot edit %s with id #%s"%(request.user,model,request.POST['pk']))
+    obj.completed = obj.failed = None
+    action = request.POST.get('action',None).lower() or "incomplete"
+    if action == "pass":
+      obj.completed = datetime.datetime.now()
+    elif action == "fail":
+      obj.failed = datetime.datetime.now()
+    obj.save()
+    out = obj.as_json
+    out['message'] = '%s marked as "%s".'%(obj,action)
+    return JsonResponse(out)
+  cutoff = datetime.datetime.now()-datetime.timedelta(60)
+  objs = objs.filter(datetime__gte=cutoff)
+  events = {}
+  for obj in objs:
+    if not obj.content_object in events:
+      events[obj.content_object] = []
+    events[obj.content_object].append(obj.as_json)
+  events = [{
+    'name': unicode(event),
+    'objects': objects,
+  } for event,objects in events.items()]
+  values = {
+    'events': json.dumps(events,cls=DjangoJSONEncoder),
+    'model_slug': "%s.%s"%(app_name,model_name),
+  }
+  return TemplateResponse(request,'tool/master.html',values)

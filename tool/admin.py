@@ -124,7 +124,7 @@ class PermissionAdmin(admin.ModelAdmin):
 
 @admin.register(Criterion)
 class CriterionAdmin(admin.ModelAdmin):
-  filter_horizontal = ("courses",)
+  filter_horizontal = ("courses","events","documents")
 
 @admin.register(UserCriterion)
 class UserCriterionAdmin(admin.ModelAdmin):
