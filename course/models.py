@@ -533,15 +533,18 @@ class ClassTime(OccurrenceModel):
   class Meta:
     ordering = ("start",)
 
+class CourseEnrollmentManager(models.Manager):
+  def user_controls(self,user,*args,**kwargs):
+    return self.filter(course__session__user=user,*args,**kwargs)
+
 class CourseEnrollment(CriterionModel):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
   course = models.ForeignKey(Course)
   quantity = models.IntegerField(default=1)
-  failed = models.DateTimeField(null=True,blank=True)
   get_criteria = lambda self: self.course.criterion_set.all()
-  json_fields = ['course_id','user_id','completed', 'course_name','id']
-  course_name = property(lambda self: self.course.name)
   as_json = property(lambda self: {a:getattr(self,a) for a in self.json_fields})
+  objects = CourseEnrollmentManager()
+  content_object = property(lambda self: self.course)
   def has_completed_permission(self,user):
     return user.is_superuser or user.is_toolmaster or [user.id in self.course.session_set.values('user_id',flat=True)]
   __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.course)
@@ -571,6 +574,7 @@ class Enrollment(CriterionModel):
   objects = EnrollmentManager()
 
   get_criteria = lambda self: self.session.course.criterion_set.all()
+
   @property
   def as_json(self):
     return {
