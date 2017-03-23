@@ -12,6 +12,7 @@ from media.models import PhotosMixin
 from lablackey.contenttypes import get_contenttype
 from lablackey.db.models import UserModel
 from lablackey.decorators import cached_property, cached_method
+from tool.models import CriterionModel
 from wmd import models as wmd_models
 
 from dateutil import tz
@@ -268,15 +269,21 @@ class OccurrenceModel(models.Model):
   class Meta:
     abstract = True
 
-class RSVP(UserModel):
+class RSVPManager(models.Manager):
+  def user_controls(self,user,*args,**kwargs):
+    event_ids = Event.objects.filter(eventowner__user=user).values_list("id",flat=True)
+    qs = self.filter(content_type=get_contenttype("event.Event"),object_id__in=event_ids)
+    return qs.filter(*args,**kwargs)
+
+class RSVP(CriterionModel):
+  user = models.ForeignKey(settings.AUTH_USER_MODEL)
   content_type = models.ForeignKey("contenttypes.ContentType")
   object_id = models.IntegerField()
   content_object = GenericForeignKey('content_type', 'object_id')
-  datetime = models.DateTimeField(auto_now_add=True)
   emailed = models.DateTimeField(null=True,blank=True)
   quantity = models.IntegerField(default=0)
-  completed = models.BooleanField(default=False)
   get_occurrences = lambda self: [self.content_object]
+  objects = RSVPManager()
   __unicode__ = lambda self: "%s for %s"%(self.user,self.content_object)
 
 class EventOccurrence(PhotosMixin,OccurrenceModel):
