@@ -128,7 +128,8 @@ class Criterion(models.Model):
   name = models.CharField(max_length=32)
 
   # These fields will eventually need to be a generic many to many field but we don't have a ui for that
-  courses = models.ManyToManyField('course.Course',blank=True)
+  courses = models.ManyToManyField('course.Course',blank=True,limit_choices_to={ "active": True })
+  events = models.ManyToManyField('event.Event',blank=True,limit_choices_to={ "allow_rsvp":True })
   documents = models.ManyToManyField('redtape.Document',blank=True)
   __unicode__ = lambda self: self.name
   def user_can_grant(self,user):
@@ -176,7 +177,12 @@ class CriterionModel(models.Model):
   """A model that will generate a user criterion upon completion"""
   datetime = models.DateTimeField(default=datetime.datetime.now)
   completed = models.DateTimeField(null=True,blank=True)
+  failed = models.DateTimeField(null=True,blank=True)
   automatic = False # If true criterion will be granted without completion
+  as_json = property(lambda self: {a:getattr(self,a) for a in self.json_fields})
+  json_fields = ['course_id','user_id','username','completed','display_name','id','failed']
+  username = property(lambda self: self.user.username)
+  display_name = property(lambda self: unicode(self))
   def save(self,*args,**kwargs):
     if self.automatic:
       self.completed = datetime.datetime.now()
