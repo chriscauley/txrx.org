@@ -167,7 +167,7 @@
 
   var self = this;
   select(e) {
-    uR.ajax({
+    this.ajax({
       url: "/api/user_checkin/",
       data: {user_id: e.item.id},
       success: function(data) {
@@ -176,7 +176,6 @@
         this.root.querySelector(".checkin-div").appendChild(e);
         riot.mount(e,{checkin: self.active_user,parent: self});
       },
-      that: this,
       target: self.root,
     });
   }
@@ -190,7 +189,7 @@
     uR.mountElement("change-headshot",{mount_to: "#alert-div"})
   }
   this.on("mount",function() {
-    uR.ajax({
+    this.ajax({
       url: "/todays_checkins.json",
       success: function(data) {
         self.data = data;
@@ -208,7 +207,7 @@
   </modal>
 
   uploadImage() {
-    uR.ajax({
+    this.ajax({
       url: "/api/change_headshot/",
       form: this.root.querySelector("form"),
       method: "POST",
@@ -292,26 +291,24 @@
       if (uR.auth.user) {
         self.email_checkin = false;
         self.auth_user_checkin = true;
-        uR.ajax({
+        self.ajax({
           url: "/checkin_ajax/",
           data: { user_id: uR.auth.user, no_checkin: "true" },
           method: "POST",
           success: self.ajax_success,
           target: self.root,
-          that: self,
         });
       }
     });
     cheatCode(function() { window.location.reload(false) });
   });
   window.fakeCheckin = function(rfid) {
-    uR.ajax({
+    self.ajax({
       url: "/checkin_ajax/",
       data: { rfid: rfid },
       method: "POST",
       success: self.ajax_success,
       target: self.root,
-      that: self,
     });
   }
   toggleCheckin(e) {
@@ -358,13 +355,12 @@
     var num = e.keyCode - 48;
     if (self.current_number && self.current_number.length == 10 && e.keyCode == 13) {
       // enter pressed after 10 fast numbers
-      uR.ajax({
+      this.ajax({
         url: "/checkin_ajax/",
         data: { rfid: self.current_number },
         target: this.root.querySelector("button"),
         success: this.ajax_success,
         method: "POST",
-        that: this,
       });
       self.current_number = "";
       return e;
