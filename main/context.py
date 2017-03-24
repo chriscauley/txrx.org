@@ -122,7 +122,13 @@ def nav(request):
     {'name': "Contact", "url": "/map/"},
     {'name': "Shop", "url": "/shop/"},
     {'name': "FAQ", "url": "/faq/"},
-    {'name': "Work", "url": "/work/"},
+    {'name': "Services",
+     "url": "/work/",
+     "sublinks": [
+       { "name": "Work", "url": "/work/" },
+       { "name": "Photo Studio", "url": "/photo-studio/" },
+     ]
+    },
   ]
 
   for _n in _nav:
