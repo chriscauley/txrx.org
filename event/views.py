@@ -67,6 +67,7 @@ def index(request,daystring=None):
   }
   return TemplateResponse(request,'event/index.html',values)
 
+#! TODO DEPRACATED 3/2017
 def occurrence_detail(request,occurrence_id,slug=None):
   # NOTE: the above slug does nothing, it is only for prettier urls
   occurrence = get_object_or_404(EventOccurrence,pk=occurrence_id)
@@ -98,12 +99,10 @@ def ics(request,module,model_str,pk,fname):
     occurrences = [event]
 
   calendar_object = make_ics(occurrences,title=event.name)
-
   return ics2response(calendar_object,fname=fname)
 
 def all_ics(request,fname):
   occurrences = EventOccurrence.objects.filter(event__hidden=False)
-
   calendar_object = make_ics(occurrences,title="%s Events"%settings.SITE_NAME)
   return ics2response(calendar_object,fname=fname)
 
@@ -187,3 +186,8 @@ def orientations(request,y=None,m=None,d=None):
     'prev_occ': (eventoccurrences.filter(start__lte=start).order_by('-start') or [None])[0],
   })
   return TemplateResponse(request,'event/orientations.html',values)
+
+@staff_member_required
+def bulk_add(request,event_id):
+  event = get_object_or_404(Event,id=event_id)
+  occurrences = [eo.as_json for eo in event.upcomming_occurrences()]

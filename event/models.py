@@ -272,7 +272,8 @@ class OccurrenceModel(models.Model):
 class RSVPManager(models.Manager):
   def user_controls(self,user,*args,**kwargs):
     event_ids = Event.objects.filter(eventowner__user=user).values_list("id",flat=True)
-    qs = self.filter(content_type=get_contenttype("event.Event"),object_id__in=event_ids)
+    eventoccurrence_ids = EventOccurrence.objects.filter(event_id__in=event_ids).values_list("id",flat=True)
+    qs = self.filter(content_type=get_contenttype("event.EventOccurrence"),object_id__in=eventoccurrence_ids)
     return qs.filter(*args,**kwargs)
 
 class RSVP(CriterionModel):
@@ -285,6 +286,8 @@ class RSVP(CriterionModel):
   get_occurrences = lambda self: [self.content_object]
   objects = RSVPManager()
   __unicode__ = lambda self: "%s for %s"%(self.user,self.content_object)
+  def get_criteria(self):
+    return self.content_object.event.criterion_set.all()
 
 class EventOccurrence(PhotosMixin,OccurrenceModel):
   event = models.ForeignKey(Event)
