@@ -83,7 +83,7 @@
       <div if={ student.courseenrollment_jsons.length }>
         <h3><u>Course Checkouts</u></h3>
         <checkbox each={ student.courseenrollment_jsons } onclick={ parent.toggleCourseEnrollment } if={ can_change }>
-          { course_name }
+          { display_name }
         </checkbox>
       </div>
       <div if={ student.enrollment_jsons.length }>

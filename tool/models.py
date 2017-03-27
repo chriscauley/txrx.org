@@ -180,7 +180,7 @@ class CriterionModel(models.Model):
   failed = models.DateTimeField(null=True,blank=True)
   automatic = False # If true criterion will be granted without completion
   as_json = property(lambda self: {a:getattr(self,a) for a in self.json_fields})
-  json_fields = ['course_id','user_id','username','completed','display_name','id','failed']
+  json_fields = ['user_id','username','completed','display_name','id','failed']
   username = property(lambda self: self.user.username)
   display_name = property(lambda self: unicode(self))
   def save(self,*args,**kwargs):
@@ -204,6 +204,8 @@ class CriterionModel(models.Model):
       UserCriterion.active_objects.filter(content_type=ct,object_id=self.id).delete()
   def has_completed_permission(self,user):
     return user.is_superuser or user.is_toolmaster
+  def get_criteria(self):
+    raise NotImplementedError("%s does not define a 'get_criteria' model"%self.__class__)
   class Meta:
     abstract = True
 
