@@ -1,0 +1,13 @@
+<mass-calendar>
+  <table class="month" each={ month in months }>
+    <tr class="week" each={ week in month }>
+      <td class="day" each{ day in week }>
+        { day }
+      </td>
+    </tr>
+  </table>
+
+  this.on("mount",function() {
+
+  });
+</mass-calendar>
