@@ -1,4 +1,5 @@
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.utils import timezone
 
 from .models import Follow, Notification
 from lablackey.db.admin import RawMixin
@@ -19,8 +20,16 @@ class FollowAdmin(RawMixin,admin.ModelAdmin):
   def notification_count(self,obj):
     return obj.notification_set.count()
 
+def mark_read(model_admin,request,queryset):
+  messages.success(request,"Marked %s notifications as read an emailed"%queryset.count())
+  for obj in queryset:
+    obj.read = obj.read or timezone.now()
+    obj.emailed = obj.emailed or timezone.now()
+    obj.save()
+
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
   raw_id_fields = ('user','follow')
   list_display = ("__unicode__","target_type","emailed","read")
+  actions = [mark_read]
   list_filter = ("target_type",)
