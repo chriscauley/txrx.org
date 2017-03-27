@@ -20,10 +20,9 @@ class FollowAdmin(RawMixin,admin.ModelAdmin):
   def notification_count(self,obj):
     return obj.notification_set.count()
 
-def mark_read(model_admin,request,queryset):
-  messages.success(request,"Marked %s notifications as read an emailed"%queryset.count())
+def mark_emailed(model_admin,request,queryset):
+  messages.success(request,"Marked %s notifications as emailed"%queryset.filter(emailed__isnull=True).count())
   for obj in queryset:
-    obj.read = obj.read or timezone.now()
     obj.emailed = obj.emailed or timezone.now()
     obj.save()
 
@@ -31,5 +30,5 @@ def mark_read(model_admin,request,queryset):
 class NotificationAdmin(admin.ModelAdmin):
   raw_id_fields = ('user','follow')
   list_display = ("__unicode__","target_type","emailed","read")
-  actions = [mark_read]
+  actions = [mark_emailed]
   list_filter = ("target_type",)
