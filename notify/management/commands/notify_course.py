@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 from course.models import Session
 from lablackey.contenttypes import get_contenttype
 from lablackey.mail import send_template_email
+from main.var import admin_comment_email, comment_response_email
 from membership.models import LimitedAccessKey
 from notify.models import Notification
 
@@ -35,12 +36,13 @@ class Command (BaseCommand):
       }
       send_template_email("notify/email/course",[user.email],context=_dict)
       notifications.update(emailed=datetime.datetime.now())
-
     # Now hit up enrollments that are happening tomorrow
     for relationship in ["teaching_reminder","course_reminder"]:
+      users_count = 0
       followers = users.filter(
         notification__target_type="course.classtime",
-        notification__relationship=relationship
+        notification__relationship=relationship,
+        notification__emailed__isnull=True,
       ).distinct()
       users_count += followers.count()
       for user in followers:
@@ -68,5 +70,4 @@ class Command (BaseCommand):
           user.send_sms(body)
             
         notifications.update(emailed=datetime.datetime.now())
-
-    print "Notified %s users of %s notifications"%(users_count,count)
+      print "%s: Notified %s users of %s notifications"%(relationship,users_count,count)
