@@ -310,7 +310,6 @@ class Session(UserModel,PhotosMixin,models.Model):
     return {
       'id': self.pk,
       'name': "<b>%s</b> %s"%(self.course,short_dates),
-      'course_name': self.course.name,
       'closed_status': closed_status,
       'short_dates': short_dates,
       'instructor_name': self.get_instructor_name(),

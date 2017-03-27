@@ -120,16 +120,16 @@ admin.site.register(PayPalIPN,CustomIPNAdmin)
 
 from main.signals import *
 
+from django.contrib.contenttypes.models import ContentType
+ContentType.__unicode__ = lambda self: "%s - %s"%(self.app_label,self.model)
+ContentType._meta.ordering = ('app_label',)
 try:
-  from django.contrib.contenttypes.models import ContentType
-  ContentType.__unicode__ = lambda self: "%s - %s"%(self.app_label,self.model)
   if settings.DEBUG:
     @admin.register(LogEntry)
     class LogEntryAdmin(admin.ModelAdmin):
       list_filter = ('content_type',)
       list_display = ('__unicode__','action_time','content_type','user')
       raw_id_fields = ('user',)
-    ContentType._meta.ordering = ('model',)
     admin.site.register(ContentType)
 except:
   pass
