@@ -11,6 +11,16 @@ class NotificationInline(admin.TabularInline):
 
 @admin.register(Follow)
 class FollowAdmin(RawMixin,admin.ModelAdmin):
-  list_display = ("__unicode__",)
+  list_display = ("__unicode__",'content_type','notification_count')
+  list_filter = ("content_type",)
+  raw_id_fields = ('user','content_type')
   inlines = [NotificationInline]
   search_fields = ("user__username","user__email","user__first_name","user__last_name","user__paypal_email")
+  def notification_count(self,obj):
+    return obj.notification_set.count()
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+  raw_id_fields = ('user','follow')
+  list_display = ("__unicode__","target_type","emailed","read")
+  list_filter = ("target_type",)
