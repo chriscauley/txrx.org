@@ -26,6 +26,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='eventrepeat',
             name='repeat_flavor',
-            field=models.CharField(choices=[(b'start-month', b'Monthly from start of month (eg, 1st, 2nd... Friday of month)'), (b'end-month', b'Monthly from end of month (eg, second to last friday of month'), (b'weekly', b'Every Week')], max_length=16),
+            field=models.CharField(choices=[(b'start-month', b'Monthly from start of month (eg, 1st, 2nd... Friday of month)'), (b'end-month', b'Monthly from end of month (eg, second to last friday of month'), (b'weekly', b'Every Week'), (b'custom', b'Custom')], max_length=16),
         ),
     ]

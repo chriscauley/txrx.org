@@ -8,15 +8,16 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, JsonRespons
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.template.response import TemplateResponse
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from .utils import make_ics,ics2response
-from .models import Event, EventOccurrence, RSVP, CheckIn
+from .models import Event, EventOccurrence, RSVP, CheckIn, EventRepeat
 from tool.models import Criterion, UserCriterion
 from course.models import ClassTime
 from user.models import is_toolmaster
 
-import datetime, json, arrow
+import datetime, json, arrow, calendar
 
 @staff_member_required
 def owner_ajax(request,action,event_id):
@@ -188,6 +189,30 @@ def orientations(request,y=None,m=None,d=None):
   return TemplateResponse(request,'event/orientations.html',values)
 
 @staff_member_required
-def bulk_add(request,event_id):
-  event = get_object_or_404(Event,id=event_id)
-  occurrences = [eo.as_json for eo in event.upcomming_occurrences()]
+def bulk_ajax(request):
+  eventrepeat = get_object_or_404(EventRepeat,id=request.GET['eventrepeat_id'])
+  if 'day_string' in request.POST:
+    st = eventrepeat.start_time
+    start = timezone.datetime(*([int(s) for s in request.POST['day_string'].split('-')]+[st.hour,st.minute]))
+    if request.POST['action'] == 'remove':
+      eventrepeat.month_occurrences.filter(start=start).delete()
+    else:
+      eventrepeat.eventoccurrence_set.get_or_create(
+        start=start,
+        end_time=eventrepeat.end_time,
+        event=eventrepeat.event
+      )
+  occurrences = [arrow.get(eo.start).format("YYYY-M-D") for eo in eventrepeat.month_occurrences]
+  months = []
+  for month in range(5):
+    start = arrow.now().replace(day=1,months=month)
+    months.append({
+      'name': start.format("MMMM YYYY"),
+      'weeks': calendar.monthcalendar(start.year, start.month),
+      'number': "%s-%s"%(start.year,start.month)
+    })
+  return JsonResponse({
+    'months': months,
+    'occurrences': occurrences,
+    'eventrepeat': eventrepeat.as_json,
+  })

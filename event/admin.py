@@ -77,8 +77,13 @@ class EventOccurrenceInline(OccurrenceModelInline):
 
 class EventRepeatInline(admin.TabularInline):
   model = EventRepeat
-  readonly_fields = ['verbose',]
+  readonly_fields = ['_verbose',]
   extra = 0
+  def _verbose(self,obj):
+    if obj.repeat_flavor == "custom":
+      return "<a href='/event/bulk/?eventrepeat_id%s' class='fa fa-edit'></a>"%obj.id
+    return obj.verbose
+  _verbose.allow_tags = True
 
 class EventOwnerInline(admin.TabularInline):
   raw_id_fields = ['user']

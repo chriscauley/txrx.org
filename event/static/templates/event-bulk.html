@@ -1,13 +1,47 @@
-<mass-calendar>
-  <table class="month" each={ month in months }>
-    <tr class="week" each={ week in month }>
-      <td class="day" each{ day in week }>
-        { day }
+<event-bulk>
+  <h1>Repeat Event: { eventrepeat.event_name }</h1>
+  <p>
+    Click any box to add or remove the following event:<br/>
+    <b>Start Time:</b> { eventrepeat.start_time }<br/>
+    <b>End Time:</b> { eventrepeat.end_time }<br/>
+  </p>
+  <table class="month" each={ months } onclick={ doot }>
+    <tr><th colspan="7">{ name }</th></tr>
+    <tr class="week" each={ week in weeks }>
+      { week }
+      <td each={ day in week } class="day">
+        <div if={ day } class={ active: occurrences.indexOf(parent.parent.number+"-"+day) != -1 }
+             value={ parent.parent.number+"-"+day }>{ day }</div>
       </td>
     </tr>
   </table>
 
-  this.on("mount",function() {
+  this.ajax_success = function(data) {
+    this.months = data.months;
+    this.occurrences = data.occurrences;
+    this.eventrepeat = data.eventrepeat;
+    this.update();
+  }
 
+  this.on("mount",function() {
+    this.ajax({
+      url: "/event/bulk.json?eventrepeat_id="+uR.getQueryParameter("eventrepeat_id"),
+    });
   });
-</mass-calendar>
+  this.on("update",function() {
+    uR.forEach(this.occurrences || [],function(occurrence) {
+      (this.root.querySelector('[value="'+occurrence+'"]')||{}).checked=true;
+    }.bind(this));
+    var today = this.root.querySelector('[value="'+moment().format("YYYY-M-D")+'"]');
+    today && today.classList.add("today");
+  });
+  doot(e) {
+    if (!e.target.value) { return; }
+    var action = (this.occurrences.indexOf(e.target.value) == -1)?"add":"remove";
+    this.ajax({
+      url: "/event/bulk.json?eventrepeat_id="+uR.getQueryParameter("eventrepeat_id"),
+      method: "POST",
+      data: { day_string: e.target.value, action: action },
+    });
+  }
+</event-bulk>

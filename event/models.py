@@ -12,6 +12,7 @@ from media.models import PhotosMixin
 from lablackey.contenttypes import get_contenttype
 from lablackey.db.models import UserModel
 from lablackey.decorators import cached_property, cached_method
+from lablackey.unrest import JsonMixin
 from tool.models import CriterionModel
 from wmd import models as wmd_models
 
@@ -29,15 +30,6 @@ def reverse_ics(obj):
   model_str = clss.__name__
   f_name = '%s-%s.ics'%(slugify(obj.name),slugify(settings.SITE_NAME))
   return "%s/event/ics/%s/%s/%s/%s"%(settings.SITE_DOMAIN,module,model_str,obj.id,f_name)
-
-REPEAT_CHOICES = (
-  ('','No Repeat'),
-  ('weekly','Weekly'),
-  ('biweekly','Bi Weekly'),
-  ('triweekly','Tri Weekly'),
-  ('month-dow','Monthly (Nth weekday of every month)'),
-  ('month-number','Monthly (by day number)'),
-)
 
 class Access(models.Model):
   name = models.CharField(max_length=32)
@@ -111,20 +103,22 @@ REPEAT_FLAVOR_CHOICES = (
   ('start-month','Monthly from start of month (eg, 1st, 2nd... Friday of month)'),
   ('end-month','Monthly from end of month (eg, second to last friday of month'),
   ('weekly','Every Week'),
+  ('custom','Custom'),
   #('monthly','Same day (eg 1-31) of ever month'),
 )
 
 REPEAT_VERBOSE = {
   'start-month': "The {self.verbose_startweek} {self.verbose_weekday} of every month.",
   'end-month': "The {self.verbose_endweek} {self.verbose_weekday} of every month.",
-  'weekly': 'Every {self.verbose_weekday}'
+  'weekly': 'Every {self.verbose_weekday}',
+  'custom': 'Custom',
 }
 
 class EventOwner(UserModel):
   event = models.ForeignKey(Event)
   __unicode__ = lambda self: "%s owns %s"%(self.user,self.event)
 
-class EventRepeat(models.Model):
+class EventRepeat(JsonMixin,models.Model):
   event = models.ForeignKey(Event)
   repeat_flavor = models.CharField(max_length=16,choices=REPEAT_FLAVOR_CHOICES)
   first_date = models.DateField()
@@ -133,6 +127,11 @@ class EventRepeat(models.Model):
 
   monthcalendar = property(lambda s: calendar.monthcalendar(int(s.first_date.year),int(s.first_date.month)))
   __unicode__ = lambda self: "EventRepeat: %s - %s"%(self.event,self.verbose)
+  json_fields = ['event_id','first_date','start_time','end_time','event_name']
+  event_name = property(lambda self: unicode(self.event))
+  @property
+  def month_occurrences(self):
+    return self.eventoccurrence_set.filter(start__gte=datetime.datetime.now().replace(day=1,hour=0,minute=0))
   @cached_property
   def startweek(self):
     monthcalendar = self.monthcalendar
@@ -176,6 +175,8 @@ class EventRepeat(models.Model):
     if self.repeat_flavor:
       return REPEAT_VERBOSE[self.repeat_flavor].format(self=self)
   def generate(self,start_datetime=None,end_date=None):
+    if self.repeat_flavor == "custom":
+      return
     if not start_datetime:
       # we're going to make these two months out so they can be overridden that far ahead
       start_datetime = timezone.now() + datetime.timedelta(60)
@@ -223,6 +224,15 @@ class EventRepeat(models.Model):
     super(EventRepeat,self).save(*args,**kwargs)
     if new:
       self.generate(datetime.datetime.now())
+      if self.repeat_flavor == "custom":
+        fd = self.first_date
+        s = self.start_time
+        self.eventoccurrence_set.get_or_create(
+          event=self.event,
+          eventrepeat=self,
+          start=datetime.datetime(fd.year,fd.month,fd.day,s.hour,s.minute),
+          end_time=self.end_time,
+        )
 
 class OccurrenceModel(models.Model):
   """
