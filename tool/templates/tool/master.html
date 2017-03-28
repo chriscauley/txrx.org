@@ -2,6 +2,13 @@
 
 {% block main %}
 <div class="Checkouts col-sm-8">
+  <form style="max-width: 200px; margin-bottom: 1rem;">
+    <div class="form-group">
+      <input name="user_search" value="{{ request.GET.user_search }}" class="form-control" type="text" />
+      <input name="object_id" value="{{ request.GET.object_id }}" type="hidden" />
+    </div>
+    <button class="btn btn-primary">Search Users</button>
+  </form>
   <checkouts-box model_slug="{{ model_slug }}" status="incomplete"></checkouts-box>
 </div>
 {% endblock %}

@@ -73,7 +73,15 @@ def checkout_items(request):
 @user_passes_test(is_toolmaster)
 def master(request,app_name,model_name):
   model = apps.get_app_config(app_name).get_model(model_name)
-  objs = model.objects.user_controls(request.user).distinct()
+  objs = model.objects.user_controls(request.user)
+
+  if request.GET.get('user_search',''):
+    user_ids = get_user_model().objects.keyword_search(request.GET['user_search'])
+    objs = objs.filter(user_id__in=user_ids)
+  elif "object_id" in request.GET:
+    objs = objs.filter(object_id=request.GET['object_id'])
+  objs = objs.distinct()
+
   if request.POST:
     try:
       obj = objs.get(pk=request.POST['object_id'])
