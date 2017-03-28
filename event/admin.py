@@ -81,7 +81,7 @@ class EventRepeatInline(admin.TabularInline):
   extra = 0
   def _verbose(self,obj):
     if obj.repeat_flavor == "custom":
-      return "<a href='/event/bulk/?eventrepeat_id%s' class='fa fa-edit'></a>"%obj.id
+      return "<a href='/event/bulk/?eventrepeat_id=%s' class='fa fa-edit'></a>"%obj.id
     return obj.verbose
   _verbose.allow_tags = True
 

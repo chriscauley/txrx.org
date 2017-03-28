@@ -206,6 +206,7 @@ def bulk_ajax(request):
   months = []
   for month in range(5):
     start = arrow.now().replace(day=1,months=month)
+    calendar.setfirstweekday(calendar.SUNDAY)
     months.append({
       'name': start.format("MMMM YYYY"),
       'weeks': calendar.monthcalendar(start.year, start.month),
