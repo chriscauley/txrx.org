@@ -253,7 +253,7 @@ class OccurrenceModel(models.Model):
       return "Today"
     if self.start.date() == today +datetime.timedelta(1):
       return "Tomorrow"
-    return date(self.start,"D n/j Y")
+    return date(self.start,"D n/j")
   @property
   def end(self):
     return self.start.replace(hour=self.end_time.hour,minute=self.end_time.minute)

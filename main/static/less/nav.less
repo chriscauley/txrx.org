@@ -11,6 +11,13 @@
   }
 }
 
+.navbar-nav .calendar.dropdown {
+  li a {
+    text-transform: none;
+    b { color: @blue; text-transform: uppercase; }
+  }
+}
+
 .navbar-nav > li.current {
   a:after {
     background: @gray-lighter;
@@ -118,7 +125,8 @@
     position: relative;
   }
   .navbar-default .main-nav > li > a {
-    padding-top: 22px;
+    margin-top: 22px;
+    padding-top: 0;
     padding-bottom: 0;
     //.navFont;
   }

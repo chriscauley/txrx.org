@@ -79,12 +79,12 @@
     <ul class="nav navbar-nav main-nav">
       {% for n in nav %}
       {% if n.sublinks %}
-      <li class="dropdown">
+      <li class="dropdown {{ n.class }}">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ n.name }} <b class="caret"></b></a>
         <ul class="dropdown-menu">
           {% for sublink in n.sublinks %}
           <li><a href="{{ sublink.url }}"{% if sublink.reddot %} data-reddot="{{ sublink.reddot }}"{% endif %}>
-              {{ sublink.name }}</a></li>
+              {{ sublink.name|safe }}</a></li>
           {% endfor %}
         </ul>
       </li>
