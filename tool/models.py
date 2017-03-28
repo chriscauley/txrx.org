@@ -128,8 +128,12 @@ class Criterion(models.Model):
   name = models.CharField(max_length=32)
 
   # These fields will eventually need to be a generic many to many field but we don't have a ui for that
-  courses = models.ManyToManyField('course.Course',blank=True,limit_choices_to={ "active": True })
-  events = models.ManyToManyField('event.Event',blank=True,limit_choices_to={ "allow_rsvp":True })
+  _help_template = 'If a user %s and then is marked "complete", this criteria will be granted to that user.'
+  _ht = _help_template%"enrolls in any of these classes"
+  courses = models.ManyToManyField('course.Course',blank=True,limit_choices_to={ "active": True },help_text=_ht)
+  _ht = _help_template%"RSVPs for any of these events"
+  events = models.ManyToManyField('event.Event',blank=True,limit_choices_to={ "allow_rsvp":True },help_text=_ht)
+  _ht = "Completing any of these documents will grant this criteria to the user."
   documents = models.ManyToManyField('redtape.Document',blank=True)
   __unicode__ = lambda self: self.name
   def user_can_grant(self,user):
