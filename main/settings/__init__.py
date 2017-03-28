@@ -83,6 +83,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 AUTH_USER_MODEL = 'user.User'
+USER_SEARCH_FIELDS = ("user__username","user__email","user__paypal_email","user__first_name","user__last_name")
 REGISTRATION_IGNORE_DOTS = True
 
 AUTHENTICATION_BACKENDS = (

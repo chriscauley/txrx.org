@@ -170,7 +170,7 @@ class SubscriptionBuddyInline(admin.TabularInline):
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
   inlines = [StatusInline,SubscriptionBuddyInline,FlagInline]
-  search_fields = ['user__username','user__email','user__paypal_email','user__first_name','user__last_name']
+  search_fields = getattr(settings,"USER_SEARCH_FIELDS",[])
   list_display = ("__unicode__","canceled")
   list_filter = [CanceledBooleanFilter]
   fields = (
@@ -218,7 +218,6 @@ class UserMembershipInline(admin.StackedInline):
   list_display = ("__unicode__",'photo')
   list_editable = ('photo',)
   list_filter = ('user__is_staff',)
-  search_fields = ('user__email','user__username')
   raw_id_fields = ('photo',)
   fields = (
     'bio', 'photo',

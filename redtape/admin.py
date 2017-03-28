@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 
 from .models import Document, Signature, DocumentField, Service
@@ -29,7 +30,7 @@ class DocumentAdmin(admin.ModelAdmin):
 class SignatureAdmin(admin.ModelAdmin):
   readonly_fields = ('datetime','document','user','_data')
   exclude = ('completed','data')
-  search_fields = ("user__username",)
+  search_fields = getattr(settings,"USER_SEARCH_FIELDS",[])
   list_display = ("__unicode__","_data")
   list_filter = ("document",)
   def _data(self,obj):

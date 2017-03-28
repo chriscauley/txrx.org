@@ -80,14 +80,14 @@ class SessionAdmin(TaggedPhotoAdmin):
   inlines = [ClassTimeInline, EnrollmentInline]
   if settings.DEBUG: # I like to see this sometimes for debug purchases
     inlines.append(SessionProductInline)
-  search_fields = ("user__username","user__email","course__name")
+  search_fields = getattr(settings,"USER_SEARCH_FIELDS",[]) + ("course__name",)
   class Media:
     js = ("js/course_admin.js",)
 
 @admin.register(Enrollment)
 class EnrollmentAdmin(RawMixin,admin.ModelAdmin):
   list_display = ("id",'user', 'session','datetime')
-  search_fields = ("user__username","user__email","user__paypal_email","user__first_name","user__last_name")
+  search_fields = getattr(settings,"USER_SEARCH_FIELDS",[])
   raw_id_fields = ("user","session")
 
 @admin.register(Evaluation)

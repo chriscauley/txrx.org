@@ -168,8 +168,8 @@ class UserCriterion(models.Model):
   content_type = models.ForeignKey("contenttypes.ContentType")
   object_id = models.IntegerField()
   content_object = GenericForeignKey('content_type', 'object_id')
-  active_objects = ActiveUserCriterionManager()
   objects = models.Manager()
+  active_objects = ActiveUserCriterionManager()
   def set_next_expiration(self):
     #! TODO eventually this shoul set the experation based off the content object
     #! eg, if the content object is a signature, the signature could have an expiration
@@ -201,7 +201,7 @@ class CriterionModel(models.Model):
           UserCriterion.active_objects.filter(user=self.user,criterion=criterion).delete()
           u,new = UserCriterion.active_objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
         u.content_object = self
-        u.expires = u.set_next_expiration()
+        u.set_next_expiration()
         u.save()
     else:
       ct = ContentType.objects.get_for_model(self)

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin, messages
 from django.utils import timezone
 
@@ -16,7 +17,7 @@ class FollowAdmin(RawMixin,admin.ModelAdmin):
   list_filter = ("content_type",)
   raw_id_fields = ('user','content_type')
   inlines = [NotificationInline]
-  search_fields = ("user__username","user__email","user__first_name","user__last_name","user__paypal_email")
+  search_fields = getattr(settings,"USER_SEARCH_FIELDS",[])
   def notification_count(self,obj):
     return obj.notification_set.count()
 

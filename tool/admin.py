@@ -1,6 +1,7 @@
+from django.conf import settings
 from django.contrib import admin
-from django.contrib.contenttypes.admin import GenericTabularInline
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.admin import GenericTabularInline
 
 from media.admin import TaggedPhotoInline
 from lablackey.db.admin import OrderedModelAdmin
@@ -128,5 +129,6 @@ class CriterionAdmin(admin.ModelAdmin):
 
 @admin.register(UserCriterion)
 class UserCriterionAdmin(admin.ModelAdmin):
+  search_fields = getattr(settings,"USER_SEARCH_FIELDS",[])
   raw_id_fields = ('user',)
   readonly_fields = ("content_type","object_id",'criterion')
