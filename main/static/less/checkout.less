@@ -1,6 +1,12 @@
 checkouts-box {
-  .alert { display: flex; }
+  .alert { display: flex; flex-wrap: wrap; }
   .left {
     width: 120px;
+    @media (max-width: @screen-sm-max) {
+      flex-basis: 100%;
+      margin-bottom: 1rem;
+      text-align: center;
+      button { font-size: 1.5em; margin: 0 1rem; }
+    }
   }
 }  
