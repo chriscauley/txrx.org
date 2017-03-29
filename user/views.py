@@ -171,6 +171,11 @@ def hidden_image(request):
 
 @staff_member_required
 def change_headshot(request,attr):
+  if request.POST.get("action") == "delete":
+    user = get_object_or_404(get_user_model(),pk=request.POST['user_id'])
+    setattr(user,attr,"")
+    user.save()
+    return JsonResponse({})
   user = get_object_or_404(get_user_model(),pk=request.POST['user_id'])
   f = request.FILES.get(attr,None) # if somehow they upload the uncompressed image
   fname = "%s-%s.jpg"%(attr,user.id)

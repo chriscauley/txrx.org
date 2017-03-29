@@ -1,22 +1,24 @@
 checkouts-box {
-  .alert { display: flex; flex-wrap: wrap; }
+  .alert {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
   .buttons {
     margin-top: 10px;
     text-align: center;
   }
-  .image,.right {
-    flex-shrink: 1;
-  }
-  .image {
-    flex-basis: 33.333333333%;
+  .image,.right { flex-shrink: 1; }
+  ez-file {
+    flex-basis: 25%;
     text-align: center;
-    img { width: 230px; }
+    max-width: 230px;
   }
-  .right { flex-basis: 66.666666666%; }
+  .right { flex-basis: 75%; }
   .right { padding-left: 10px; }
   @media (max-width: @screen-sm-max) {
     .buttons button { font-size: 1.5em; margin: 0 1rem; }
-    .image,.right { flex-basis: 100%; }
-    .image { margin-bottom: 10px; }
+    ez-file,.right { flex-basis: 100%; }
+    ez-file { margin-bottom: 10px; }
   }
 }  

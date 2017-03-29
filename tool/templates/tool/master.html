@@ -29,9 +29,8 @@
     <div each={ events }>
       <h2>{ name }</h2>
       <div class="alert alert-{ status }" each={ objects }>
-        <div class="image">
-          <img src={ headshot_url }/>
-        </div>
+        <ez-file url="/api/change_headshot/" user_id={ user_id } done={ headshot_url } name="headshot"
+                 type="img"></ez-file>
         <div class="right">
           <h4>{ display_name }</h4>
           <div>Created On: { created_s }</div>
