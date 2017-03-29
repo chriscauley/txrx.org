@@ -4,11 +4,21 @@
 <div class="Checkouts col-sm-8">
   <form style="max-width: 200px; margin-bottom: 1rem;">
     <div class="form-group">
-      <input name="user_search" value="{{ request.GET.user_search }}" class="form-control" type="text" />
+      <label for="user_search">User Search</label>
+      <input name="user_search" id="user_search" value="{{ request.GET.user_search }}" class="form-control" type="text" />
       <input name="object_id" value="{{ request.GET.object_id }}" type="hidden" />
     </div>
-    <button class="btn btn-primary">Search Users</button>
+    {% if cutoff or request.GET.nocutoff %}
+    <label>
+      <input type="checkbox" name="nocutoff" value="true"{% if request.GET.nocutoff %} checked="checked"{% endif %}/>
+      Show All
+    </label>
+    {% endif %}
+    <div><button class="btn btn-primary">Update</button></div>
   </form>
+  {% if cutoff %}
+  <p class="alert alert-warning">This list excludes {{ model_name }}s older than 60 days to speed up page load. Use the checkbox above to include older {{ model_name }}s.</p>
+  {% endif %}
   <checkouts-box model_slug="{{ model_slug }}" status="incomplete"></checkouts-box>
 </div>
 {% endblock %}
@@ -62,7 +72,7 @@ uR.auth.ready(function() {
   var _s = "MMMM Do YYYY, h:mm:ss a"
 
   uR._updateRSVP = function(rsvp) {
-    rsvp.created_s = moment(rsvp.created).format(_s);
+    rsvp.created_s = moment(rsvp.datetime).format(_s);
     rsvp.failed_s = rsvp.failed && moment(rsvp.failed).format(_s);
     rsvp.completed_s = rsvp.completed && moment(rsvp.completed).format(_s);
     if (rsvp.completed) { rsvp.status = "success"; }

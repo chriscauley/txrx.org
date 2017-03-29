@@ -78,7 +78,7 @@ def master(request,app_name,model_name):
   if request.GET.get('user_search',''):
     user_ids = get_user_model().objects.keyword_search(request.GET['user_search'])
     objs = objs.filter(user_id__in=user_ids)
-  elif "object_id" in request.GET:
+  elif request.GET.get("object_id","").isdigit():
     objs = objs.filter(object_id=request.GET['object_id'])
   objs = objs.distinct()
 
@@ -97,8 +97,10 @@ def master(request,app_name,model_name):
     out = obj.as_json
     out['message'] = '%s marked as "%s".'%(obj,action)
     return JsonResponse(out)
-  cutoff = datetime.datetime.now()-datetime.timedelta(60)
-  objs = objs.filter(datetime__gte=cutoff)
+  cutoff = None
+  if objs.count() > 20 and not request.GET.get('nocutoff',None):
+    cutoff = datetime.datetime.now()-datetime.timedelta(60)
+    objs = objs.filter(datetime__gte=cutoff)
   events = {}
   for obj in objs:
     if not obj.content_object in events:
@@ -111,5 +113,7 @@ def master(request,app_name,model_name):
   values = {
     'events': json.dumps(events,cls=DjangoJSONEncoder),
     'model_slug': "%s.%s"%(app_name,model_name),
+    'cutoff': cutoff,
+    'model_name': model._meta.verbose_name
   }
   return TemplateResponse(request,'tool/master.html',values)
