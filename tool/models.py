@@ -184,7 +184,8 @@ class CriterionModel(models.Model):
   failed = models.DateTimeField(null=True,blank=True)
   automatic = False # If true criterion will be granted without completion
   as_json = property(lambda self: {a:getattr(self,a) for a in self.json_fields})
-  json_fields = ['datetime','user_id','username','completed','display_name','id','failed']
+  json_fields = ['headshot_url','datetime','user_id','username','completed','display_name','id','failed']
+  headshot_url = property(lambda self: self.user.headshot_url)
   username = property(lambda self: self.user.username)
   display_name = property(lambda self: unicode(self))
   def save(self,*args,**kwargs):

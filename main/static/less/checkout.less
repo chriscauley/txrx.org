@@ -1,12 +1,22 @@
 checkouts-box {
   .alert { display: flex; flex-wrap: wrap; }
-  .left {
-    width: 120px;
-    @media (max-width: @screen-sm-max) {
-      flex-basis: 100%;
-      margin-bottom: 1rem;
-      text-align: center;
-      button { font-size: 1.5em; margin: 0 1rem; }
-    }
+  .buttons {
+    margin-top: 10px;
+    text-align: center;
+  }
+  .image,.right {
+    flex-shrink: 1;
+  }
+  .image {
+    flex-basis: 33.333333333%;
+    text-align: center;
+    img { width: 230px; }
+  }
+  .right { flex-basis: 66.666666666%; }
+  .right { padding-left: 10px; }
+  @media (max-width: @screen-sm-max) {
+    .buttons button { font-size: 1.5em; margin: 0 1rem; }
+    .image,.right { flex-basis: 100%; }
+    .image { margin-bottom: 10px; }
   }
 }  

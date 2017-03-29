@@ -29,20 +29,23 @@
     <div each={ events }>
       <h2>{ name }</h2>
       <div class="alert alert-{ status }" each={ objects }>
-        <div class="left" if={ !completed && !failed }>
-          <button class="btn btn-success" onclick={ click }>Pass</button>
-          <button class="btn btn-danger" onclick={ click }>Fail</button>
-        </div>
-        <div class="left" if={ completed || failed }>
-          <div class="btn btn-danger fa fa-thumbs-down" if={ failed }></div>
-          <div class="btn btn-success fa fa-thumbs-up" if={ completed }></div>
-          <button class="btn btn-warning" onclick={ click }>Undo</button>
+        <div class="image">
+          <img src={ headshot_url }/>
         </div>
         <div class="right">
           <h4>{ display_name }</h4>
           <div>Created On: { created_s }</div>
           <div if={ completed }>Completed On: { completed_s }</div>
           <div if={ failed }>Failed On: { failed_s }</div>
+          <div class="buttons" if={ !completed && !failed }>
+            <button class="btn btn-success" onclick={ click }>Pass</button>
+            <button class="btn btn-danger" onclick={ click }>Fail</button>
+          </div>
+          <div class="buttons" if={ completed || failed }>
+            <div class="btn btn-danger fa fa-thumbs-down" if={ failed }></div>
+            <div class="btn btn-success fa fa-thumbs-up" if={ completed }></div>
+            <button class="btn btn-warning" onclick={ click }>Undo</button>
+          </div>
         </div>
       </div>
     </div>
