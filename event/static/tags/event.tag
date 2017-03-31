@@ -41,19 +41,18 @@ click(e) {
   <h2 if={ !_c }>No Upcoming Events</h2>
   <event-occurrence each={ occurrences } />
 
-  var that = this;
-  that.event = that.opts.event;
-  that.occurrences = that.event.upcoming_occurrences;
+  this.event = this.opts.event;
+  this.occurrences = this.event.upcoming_occurrences;
+  this.user_reservations = opts.user_reservations || [];
   this.on("update", function() {
-    that._c = that.event.upcoming_occurrences.length;
-    that._s = (that._c > 1)?"s":"";
-    var user_reservations = opts.user_reservations || [];
-    uR.forEach(that.occurrences,function(o) { o.quantity = user_reservations[o.id] || 0; });
+    this._c = this.event.upcoming_occurrences.length;
+    this._s = (this._c > 1)?"s":"";
+    uR.forEach(this.occurrences,function(o) { o.quantity = this.user_reservations[o.id] || 0; }.bind(this));
   });
 </event-list>
 
 <event-occurrence>
-  <div class="well" name="loading-target">
+  <div class="well" name="ajax_target">
     <a if={ uR.auth.user.is_superuser } href="/event/orientations/{ start_slug }/"
        class="admin-link fa fa-pencil-square"></a>
     <div class="dates">
@@ -83,32 +82,27 @@ click(e) {
     this.start_slug = moment(this.start).format("YYYY/MM/DD");
 
     uR.auth.ready(function() {
-      self.authenticated = uR.auth.user;
-      self.update();
-    });
+      this.authenticated = uR.auth.user;
+      this.update();
+    }.bind(this));
   });
-  function updateRSVP(item,quantity) {
+  updateRSVP(item,quantity) {
     item.quantity = quantity;
-    var target = self['loading-target'];
-    target.setAttribute("ur-loading","loading");
-    $.get(
-      '/event/rsvp/',
-      {occurrence_id: item.id,quantity: quantity},
-      function(data) {
-        target.removeAttribute("ur-loading");
-        self.parent.opts.user_reservations = data;
-        self.parent.update();
+    this.ajax({
+      url: '/event/rsvp/',
+      data: {occurrence_id: item.id,quantity: quantity},
+      success: function(data) {
+        this.parent.user_reservations = data;
+        this.update();
+        this.parent.update();
       },
-      "json"
-    );
+      error: function(data) { uR.alert("An error occurred: "+data.error); }
+    });
   }
   makeRSVP(e) {
-    updateRSVP(e.item,e.item.quantity+1);
+    this.updateRSVP(e.item,e.item.quantity+1);
   }
   cancelRSVP(e) {
-    updateRSVP(e.item,0);
+    this.updateRSVP(e.item,0);
   }
-  this.on("update",function() {
-
-  });
 </event-occurrence>

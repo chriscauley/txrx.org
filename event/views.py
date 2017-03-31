@@ -110,6 +110,8 @@ def all_ics(request,fname):
 @login_required
 def rsvp(request):
   occurrence = get_object_or_404(EventOccurrence,id=request.GET['occurrence_id'])
+  if occurrence.event.access.icon == "members-only" and request.user.level_id == settings.DEFAULT_MEMBERSHIP_LEVEL:
+    return JsonResponse({'error': "Only member's are allowed to RSVP for this event"})
   kwargs = {
     'content_type_id': EventOccurrence._cid,
     'user': request.user,
