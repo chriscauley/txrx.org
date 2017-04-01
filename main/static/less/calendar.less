@@ -20,15 +20,19 @@
   .mini-month { display: none; }
   .event {
     .private { .calVariant(@state-danger-bg; @state-danger-border; @state-danger-text); }
-    .rsvp { .calVariant(@state-warning-bg; @state-warning-border; @state-warning-text); }
+    .members-only, .rsvp { .calVariant(@state-warning-bg; @state-warning-border; @state-warning-text); }
     .course { .calVariant(@state-info-bg; @state-info-border; @state-info-text); }
     .public { .calVariant(@state-success-bg; @state-success-border; @state-success-text); }
     .none { .calVariant(white; @gray-light; inherit); } //depracated?
-    .private, .course, .public, .none, .course, .rsvp {
+    .members-only, .private, .course, .public, .none, .course, .rsvp {
       display: block;
       padding: 3px 5px;
       position: relative;
     }
+  }
+  &.non-member .event .members-only {
+    /* non-members see red (private), members see rsvp (yellow) */
+    .calVariant(@state-danger-bg; @state-danger-border; @state-danger-text);
   }
   td.event { line-height: 13px; }
 }

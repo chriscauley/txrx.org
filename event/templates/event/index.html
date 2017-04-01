@@ -17,7 +17,7 @@ Events at TXRX
   </strong>
   <a class="right" href="{% url "event:index" next|date:"Y-m-d" %}">Next Month &raquo;</a>
 </div>
-<div id="calendar">
+<div id="calendar" {% if non_member %}class="non-member"{% endif %}>
   <table>
     <tr style="font-size: 12px;text-align: center;">
       <td></td>
@@ -44,8 +44,8 @@ Events at TXRX
             <div class="mini-month">{{ current_date|date:"n/" }}</div>{{ day }}
           </div>
           {% for occurrence in occurrences %}
+          {% ifchanged occurrence.start %}<b>{{ occurrence.start|date:"f a" }}</b>{% endifchanged %}
           <p class="event">
-            <b>{{ occurrence.start|date:"f a" }}</b>
             <a class="{{ occurrence.class_name }}" href="{{ occurrence.get_absolute_url }}">
               {{ occurrence.short_name }}</a>
           </p>
