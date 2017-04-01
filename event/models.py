@@ -320,7 +320,7 @@ class EventOccurrence(PhotosMixin,OccurrenceModel):
   def get_absolute_url(self):
     return self.url_override or self.event.url or self.event.get_absolute_url()
 
-  rsvp_cutoff = property(lambda self: self.start - datetime.timedelta(self.event.rsvp_cutoff))
+  rsvp_cutoff = property(lambda self: self.end - datetime.timedelta(self.event.rsvp_cutoff))
   total_rsvp = property(lambda self: sum([r.quantity for r in self.get_rsvps()]))
   full = property(lambda self: self.total_rsvp >= self.event.max_rsvp)
   icon = property(lambda self: self.event.access.icon)
