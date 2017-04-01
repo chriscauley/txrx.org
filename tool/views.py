@@ -58,7 +58,7 @@ def toggle_criterion(request):
   if obj:
     if not obj.has_completed_permission(request.user):
       return HttpResponseForbidden("You do not have permission to modify this object")
-    obj.completed = None if obj.completed else datetime.datetime.now()
+    obj.change_status("completed")
     obj.save()
   # send back the new user criterion ids to replace old data
   user = User.objects.get(pk=user.pk)
@@ -87,12 +87,8 @@ def master(request,app_name,model_name):
       obj = objs.get(pk=request.POST['object_id'])
     except model.DoesNotExist:
       raise NotImplementedError("%s cannot edit %s with id #%s"%(request.user,model,request.POST['pk']))
-    obj.completed = obj.failed = None
-    action = request.POST.get('action',None).lower() or "incomplete"
-    if action == "pass":
-      obj.completed = datetime.datetime.now()
-    elif action == "fail":
-      obj.failed = datetime.datetime.now()
+    action = request.POST.get('action',None).lower() or "new"
+    obj.change_status(action)
     obj.save()
     out = obj.as_json
     out['message'] = '%s marked as "%s".'%(obj,action)

@@ -28,21 +28,22 @@
   <checkouts-box>
     <div each={ events }>
       <h2>{ name }</h2>
-      <div class="alert alert-{ status }" each={ objects }>
+      <div class="alert alert-{ status_class }" each={ objects }>
         <div class="img"><img src={ headshot_url } if={ headshot_url }></div>
         <div class="right">
           <h4>{ display_name }</h4>
           <div>Created On: { created_s }</div>
-          <div if={ completed }>Completed On: { completed_s }</div>
-          <div if={ failed }>Failed On: { failed_s }</div>
-          <div class="buttons" if={ !completed && !failed }>
-            <button class="btn btn-success" onclick={ click }>Pass</button>
-            <button class="btn btn-danger" onclick={ click }>Fail</button>
+          <div>Status: { status }</div>
+          <div class="buttons" if={ status == "new" }>
+            <button class="btn btn-success" onclick={ click } data-status="completed">Pass</button>
+            <button class="btn btn-danger" onclick={ click } data-status="failed">Fail</button>
+            <button class="btn btn-warning" onclick={ click } data-status="incomplete">Incomplete</button>
           </div>
-          <div class="buttons" if={ completed || failed }>
-            <div class="btn btn-danger fa fa-thumbs-down" if={ failed }></div>
-            <div class="btn btn-success fa fa-thumbs-up" if={ completed }></div>
-            <button class="btn btn-warning" onclick={ click }>Undo</button>
+          <div class="buttons" if={ status != "new" }>
+            <div class="btn btn-danger fa fa-thumbs-down" if={ status == "failed" }></div>
+            <div class="btn btn-success fa fa-thumbs-up" if={ status == "completed" }></div>
+            <div class="btn btn-warning" if={ status == "incomplete" }>:-/</div>
+            <button class="btn btn-info" onclick={ click } data-status="new">Undo</button>
           </div>
         </div>
       </div>
@@ -56,11 +57,10 @@
       method: "POST",
       data: {
         object_id: e.item.id,
-        action: e.target.innerText,
+        action: e.target.dataset.status
       },
       success: function(data) {
-        e.item.completed = data.completed;
-        e.item.failed = data.failed;
+        e.item.status = data.status;
         uR._updateRSVP(e.item);
       },
     })
@@ -74,11 +74,10 @@ uR.auth.ready(function() {
 
   uR._updateRSVP = function(rsvp) {
     rsvp.created_s = moment(rsvp.datetime).format(_s);
-    rsvp.failed_s = rsvp.failed && moment(rsvp.failed).format(_s);
-    rsvp.completed_s = rsvp.completed && moment(rsvp.completed).format(_s);
-    if (rsvp.completed) { rsvp.status = "success"; }
-    else if (rsvp.failed) { rsvp.status = "danger"; }
-    else { rsvp.status = "warning" }
+    if (rsvp.status == "completed") { rsvp.status_class = "success"; }
+    else if (rsvp.status == "failed") { rsvp.status_class = "danger"; }
+    else if (rsvp.status == "incomplete") { rsvp.status_class = "warning"; }
+    else { rsvp.status_class = "info" }
   }
   uR.forEach(uR._events,function(event) {
     uR.forEach(event.objects,uR._updateRSVP);

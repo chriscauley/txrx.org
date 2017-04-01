@@ -325,7 +325,7 @@ class Session(UserModel,PhotosMixin,models.Model):
 
   total_students = property(lambda self: sum([e.quantity for e in self.enrollment_set.all()]))
   evaluated_students = property(lambda self: self.get_evaluations().count())
-  completed_students = property(lambda self: self.enrollment_set.filter(completed__isnull=False).count())
+  completed_students = property(lambda self: self.enrollment_set.filter(status="completed").count())
   full = property(lambda self: self.total_students >= self.course.max_students)
   list_users = property(lambda self: [self.user])
 
@@ -580,7 +580,7 @@ class Enrollment(CriterionModel):
       'id': self.id,
       'session': self.session.as_json,
       'session_name': unicode(self.session),
-      'completed': unicode(self.completed or ''),
+      'completed': self.status == "completed",
     }
 
   __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.session)

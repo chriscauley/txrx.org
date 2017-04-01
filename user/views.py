@@ -110,7 +110,7 @@ def checkin_register(request):
 def user_json(request):
   if not request.user.is_authenticated():
     return JsonResponse({})
-  enrollments = Enrollment.objects.filter(user=request.user,completed__isnull=False)
+  completed_enrollments = Enrollment.objects.filter(user=request.user,status="completed")
   usercriteria = UserCriterion.active_objects.filter(user=request.user)
   _c = Criterion.objects.filter(courses__session__user=request.user).distinct()
   master_criterion_ids = list(_c.values_list('id',flat=True))
@@ -130,7 +130,7 @@ def user_json(request):
     'criterion_ids': list(usercriteria.values_list('criterion_id',flat=True)),
     'master_criterion_ids': master_criterion_ids,
     'session_ids': list(request.user.session_set.all().values_list('id',flat=True)),
-    'completed_course_ids': [e.session.course_id for e in enrollments],
+    'completed_course_ids': [e.session.course_id for e in completed_enrollments],
     'enrollments': {e.session_id:e.quantity for e in request.user.enrollment_set.all()},
     'enrolled_course_ids': list(request.user.enrollment_set.all().values_list("session__course_id",flat=True)),
     'member_discount_percent': request.user.level.discount_percentage,

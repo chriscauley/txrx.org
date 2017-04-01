@@ -2,7 +2,6 @@ checkouts-box {
   .alert {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
   }
   .buttons {
     margin-top: 10px;
@@ -14,9 +13,9 @@ checkouts-box {
     text-align: center;
     max-width: 230px;
   }
-  .right { flex-basis: 75%; }
   .right { padding-left: 10px; }
   @media (max-width: @screen-sm-max) {
+    .alert { justify-content: center; }
     .buttons button { font-size: 1.5em; margin: 0 1rem; }
     .img,.right { flex-basis: 100%; }
     .img { margin-bottom: 10px; }

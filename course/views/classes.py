@@ -162,15 +162,6 @@ def delay_reschedule(request,course_pk,n_months):
   return HttpResponseRedirect(reverse("admin:index"))
 
 @staff_member_required
-def toggle_enrollment(request):
-  enrollment = get_object_or_404(Enrollment,pk=request.GET["enrollment_id"])
-  if not request.user.is_toolmaster or request.user == enrollment.session.user:
-    return HttpResponseForbidden("You do not have permission to modify this enrollment")
-  enrollment.completed = not enrollment.completed
-  enrollment.save()
-  return HttpResponse(json.dumps(enrollment.as_json))
-
-@staff_member_required
 def clone_session(request,course_pk):
   session = Course.objects.get(pk=course_pk).session_set.order_by("-first_date")[0]
   clone = Session(

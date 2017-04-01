@@ -6,6 +6,7 @@ from django.core.mail import mail_admins
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
+from django.utils import timezone
 
 from lablackey.db.models import SlugModel, OrderedModel
 from lablackey.decorators import cached_property, cached_method
@@ -177,22 +178,34 @@ class UserCriterion(models.Model):
     self.expires = None
   __unicode__ = lambda self: "%s for %s"%(self.user,self.criterion)
 
+CRITERION_STATUS_CHOICES = [
+  ("new","New"),
+  ("failed","Failed"),
+  ("completed","Completed"),
+  ("incomplete","Incomplete"),
+]
+
 class CriterionModel(models.Model):
   """A model that will generate a user criterion upon completion"""
-  datetime = models.DateTimeField(default=datetime.datetime.now)
-  completed = models.DateTimeField(null=True,blank=True)
-  failed = models.DateTimeField(null=True,blank=True)
+  status = models.CharField(max_length=16,choices=CRITERION_STATUS_CHOICES,default='new')
+  datetime = models.DateTimeField(default=timezone.now)
+  status_changed = models.DateTimeField(default=timezone.now)
   automatic = False # If true criterion will be granted without completion
   as_json = property(lambda self: {a:getattr(self,a) for a in self.json_fields})
-  json_fields = ['headshot_url','datetime','user_id','username','completed','display_name','id','failed']
+  json_fields = ['headshot_url','datetime','user_id','username','display_name','id','status','status_changed']
   headshot_url = property(lambda self: self.user.headshot_url)
   username = property(lambda self: self.user.username)
   display_name = property(lambda self: unicode(self))
+  def change_status(self,new_status):
+    if new_status == self.status:
+      return # don't change the time if the status hasn't actually changed
+    self.status_changed = timezone.now()
+    self.status = new_status
   def save(self,*args,**kwargs):
     if self.automatic:
-      self.completed = datetime.datetime.now()
+      self.change_status("completed")
     super(CriterionModel,self).save(*args,**kwargs)
-    if self.user and self.completed:
+    if self.user and self.status == "completed":
       for criterion in self.get_criteria():
         defaults = {'content_object':self}
         try:

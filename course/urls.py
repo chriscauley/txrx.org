@@ -17,7 +17,6 @@ urlpatterns = [
   url(r'^needed.json$',ajax.needed_json),
 
   url(r'^clone_session/(\d+)/$',classes.clone_session,name='clone_session'),
-  url(r'^toggle_enrollment/$', classes.toggle_enrollment),
   url(r'^u?n?rsvp/(\d+)/',classes.rsvp),
   url(r'^term/(\d+)/', classes.index),
   url(r'^ics/(all_classes).ics$',classes.ics_classes_all,name='ics_classes_all'),

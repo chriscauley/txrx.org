@@ -163,11 +163,11 @@ class User(AbstractBaseUser, PermissionsMixin):
   def locked_criterion_ids(self):
     # lock criterion if user has courseenrollment, enrollment, or signature for a givent criterion
     q1 = models.Q(content_type__model='enrollment',
-           object_id__in=self.enrollment_set.filter(completed__isnull=False).values_list("id"))
+           object_id__in=self.enrollment_set.filter(status="completed").values_list("id"))
     q2 = models.Q(content_type__model='signature',
-           object_id__in=self.signature_set.filter(completed__isnull=False).values_list("id"))
+           object_id__in=self.signature_set.filter(status="completed").values_list("id"))
     q3 = models.Q(content_type__model='courseenrollment',
-           object_id__in=self.courseenrollment_set.filter(completed__isnull=False).values_list("id"))
+           object_id__in=self.courseenrollment_set.filter(status="completed").values_list("id"))
     ucs = UserCriterion.active_objects.filter(user=self).filter(q1|q2|q3)
     return list(ucs.values_list('criterion_id',flat=True))
   class Meta:

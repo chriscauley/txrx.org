@@ -3,12 +3,11 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.utils import timezone
 
 from ..models import Session
 from ..forms import EmailInstructorForm, NeededForm
 from lablackey.utils import FORBIDDEN
-
-import datetime
 
 @login_required
 def email(request,session_pk):
@@ -37,13 +36,13 @@ def session(request,session_pk):
     ids = [int(i) for i in request.POST.getlist('completed')]
     for enrollment in session.enrollment_set.all():
       if enrollment.id in ids:
-        enrollment.completed = datetime.datetime.now()
-      elif enrollment.completed:
-        enrollment.completed = None
+        enrollment.change_status("completed")
+      elif enrollment.status == "completed":
+        enrollment.change_status("new")
       enrollment.save()
     messages.success(request,"Course completion status saved for all students in this class.")
     if not session.instructor_completed and session.user == request.user:
-      session.instructor_completed = datetime.datetime.now()
+      session.instructor_completed = timezone.now()
       session.save()
       messages.success(request,"Session marked as completed")
     return HttpResponseRedirect(request.path)

@@ -37,4 +37,4 @@ class SignatureForm(forms.ModelForm):
     return instance
   class Meta:
     model = Signature
-    exclude = ('datetime','completed','user','data')
+    exclude = ('datetime','status','status_changed','user','data')

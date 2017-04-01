@@ -81,7 +81,7 @@
       {% for enrollment in session.enrollment_set.all %}
       <p>
         <label>
-          <input type="checkbox" name="completed"{% if enrollment.completed %}
+          <input type="checkbox" name="completed"{% if enrollment.status == "completed" %}
                  checked="checked"{% endif %} value="{{ enrollment.id }}"/>
           {{ enrollment.user.first_name }} {{ enrollment.user.last_name }} - {{ enrollment.user.email }}
           {% if enrollment.user.has_safety_waiver %}

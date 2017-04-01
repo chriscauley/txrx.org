@@ -32,7 +32,7 @@ class Document(models.Model,JsonMixin):
     except Signature.DoesNotExist:
       pass
     else:
-      json['completed'] = signature.completed
+      json['completed'] = signature.status == "completed"
     return json
   @property
   def as_json(self):
@@ -72,7 +72,7 @@ class Signature(CriterionModel):
     return {
       'id': self.id,
       'document_name': unicode(self.document),
-      'completed': unicode(self.completed or ''),
+      'completed': self.status == "completed",
     }
 
 INPUT_TYPE_CHOICES = [

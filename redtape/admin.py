@@ -29,7 +29,7 @@ class DocumentAdmin(admin.ModelAdmin):
 @admin.register(Signature)
 class SignatureAdmin(admin.ModelAdmin):
   readonly_fields = ('datetime','document','user','_data')
-  exclude = ('completed','data')
+  exclude = ('data',)
   search_fields = getattr(settings,"USER_SEARCH_FIELDS",[])
   list_display = ("__unicode__","_data")
   list_filter = ("document",)
