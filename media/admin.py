@@ -47,7 +47,7 @@ class TaggedPhotoAdmin(admin.ModelAdmin):
     values = {
       'content_type': self.model._meta.app_label+"."+self.model.__name__.lower(),
       'opts': self.model._meta,
-      'photos': json.dumps([p.as_json for p in obj.get_photos()]),
+      'photos': json.dumps([p.as_json for p in obj._get_photos()]),
       'obj': obj,
       'STATIC_URL':settings.STATIC_URL
     }
