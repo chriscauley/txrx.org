@@ -192,10 +192,12 @@ class CriterionModel(models.Model):
   status_changed = models.DateTimeField(default=timezone.now)
   automatic = False # If true criterion will be granted without completion
   as_json = property(lambda self: {a:getattr(self,a) for a in self.json_fields})
-  json_fields = ['headshot_url','datetime','user_id','username','display_name','id','status','status_changed']
+  json_fields = ['headshot_url','datetime','user_id','display_name','id','status','status_changed','user_info']
   headshot_url = property(lambda self: self.user.headshot_url)
   username = property(lambda self: self.user.username)
   display_name = property(lambda self: unicode(self))
+  _user_fields = ['full_name','username','email']
+  user_info = property(lambda self: {f:getattr(self.user,f) for f in self._user_fields})
   def change_status(self,new_status):
     if new_status == self.status:
       return # don't change the time if the status hasn't actually changed

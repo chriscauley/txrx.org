@@ -183,7 +183,8 @@ class User(AbstractBaseUser, PermissionsMixin):
   def get_full_name(self):
     full_name = '%s %s' % (self.first_name, self.last_name)
     return full_name.strip() or self.username
-
+  full_name = property(get_full_name)
+  
   def get_short_name(self):
     short_name = '%s %s' % (self.first_name, self.last_name[:1])
     return short_name.strip() or self.username

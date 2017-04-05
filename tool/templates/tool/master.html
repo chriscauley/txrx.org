@@ -31,7 +31,7 @@
       <div class="alert alert-{ status_class }" each={ objects }>
         <div class="img"><img src={ headshot_url } if={ headshot_url }></div>
         <div class="right">
-          <h4>{ display_name }</h4>
+          <h4>{ user_info.full_name }</h4>
           <div>Created On: { created_s }</div>
           <div>Status: { status }</div>
           <div class="buttons" if={ status == "new" }>
