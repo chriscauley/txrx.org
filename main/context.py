@@ -36,9 +36,14 @@ def get_calendar_sublinks(request):
   one_week = datetime.date.today()+datetime.timedelta(7)
   occurrences = EventOccurrence.objects.filter(event__eventowner__user=request.user,start__lte=one_week)
   occurrences = occurrences.filter(start__gte=datetime.datetime.today())
+  def _get_url(occurrence):
+    if occurrence.event.name == "New Member Orientation":
+      s = occurrence.start
+      return "/event/orientations/%s/%s/%s/"%(s.year,s.month,s.day)
+    return "/tools/master/event/rsvp/?object_id=%s"%o.id
   out = [{
     'name': "<b>%s</b> %s"%(o.verbose_start,o.event.get_short_name()),
-    'url': "/tools/master/event/rsvp/?object_id=%s"%o.id,
+    'url': _get_url(o),
     'reddot': o.total_rsvp
     } for o in occurrences]
   if out:
