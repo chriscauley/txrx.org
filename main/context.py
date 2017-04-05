@@ -133,7 +133,7 @@ def nav(request):
 
   for _n in _nav:
     if request.path.startswith(_n['url']):
-      _n['class'] = 'current'
+      _n['class'] = _n.get("class","")+' current'
   now = datetime.datetime.now()
 
   class_faqs = [
