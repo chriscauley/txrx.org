@@ -26,7 +26,8 @@
     <div style="clear: both"></div>
   </div>
   {% for eventoccurrence in eventoccurrences %}
-  <h1>{{ eventoccurrence }}</h1>
+  <h1>{{ eventoccurrence.event.name }}</h1>
+  <h2>{{ eventoccurrence.start|date:"M j, Y @ P" }}</h2>
     {% for rsvp in eventoccurrence.get_rsvps %}
     {% include "event/_orientation_box.html" with user=rsvp.user %}
     {% empty %}
