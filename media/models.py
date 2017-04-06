@@ -9,7 +9,7 @@ from lablackey.decorators import cached_method, cached_property
 from lablackey.db.models import UserOrSessionMixin
 from lablackey.unrest import JsonMixin
 
-from crop_override import CropOverride, OriginalImage
+from crop_override import CropOverride, OriginalImage, get_override
 from sorl.thumbnail import get_thumbnail
 import os
 
