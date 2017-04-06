@@ -62,7 +62,7 @@ class Command (BaseCommand):
             'first_classtime': classtimes[0],
             'classtimes': classtimes
           }
-          send_template_email("email/%s"%relationship,user.email,context=_dict)
+          send_template_email("email/%s"%relationship,[user.email,'chris@lablackey.com'],context=_dict)
         elif user.notifysettings.my_classes == "sms":
           course_name = classtimes[0].session.course.get_short_name()
           time_s = date(classtimes[0].start,"P")
