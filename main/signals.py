@@ -73,6 +73,6 @@ def new_comment_connection(sender, instance=None, created=False,**kwargs):
         **_kwargs
       )
       subject = 'New comment on %s'%instance.content_object
-      send_mail(subject,admin_comment_email%_dict,settings.DEFAULT_FROM_EMAIL,list(set(users)))
+      send_mail(subject,admin_comment_email%_dict,settings.DEFAULT_FROM_EMAIL,list(set([u.email for u in users])))
 
 post_save.connect(new_comment_connection, sender=UnrestComment)
