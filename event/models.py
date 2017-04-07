@@ -82,12 +82,13 @@ class Event(PhotosMixin,models.Model):
     if not self.upcoming_occurrences.count():
       return None
     return self.upcoming_occurrences[0]
-  def get_user_rsvps(self,user):
+  def get_user_rsvps(self,user,**kwargs):
     occurrence_ids = self.all_occurrences.values_list('id',flat=True)
     rsvps = RSVP.objects.filter(
       user=user,
       object_id__in=occurrence_ids,
-      content_type_id=get_contenttype("event.eventoccurrence").id
+      content_type_id=get_contenttype("event.eventoccurrence").id,
+      **kwargs
     )
     return {r.object_id:r.quantity for r in rsvps}
   def get_name(self):

@@ -96,7 +96,7 @@ click(e) {
         this.update();
         this.parent.update();
       },
-      error: function(data) { uR.alert("An error occurred: "+data.error); }
+      error: function(data) { uR.alert(data.error); }
     });
   }
   makeRSVP(e) {

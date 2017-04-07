@@ -116,6 +116,8 @@ def rsvp(request):
   occurrence = get_object_or_404(EventOccurrence,id=request.GET['occurrence_id'])
   if occurrence.event.access.icon == "members-only" and request.user.level_id == settings.DEFAULT_MEMBERSHIP_LEVEL:
     return JsonResponse({'error': "Only member's are allowed to RSVP for this event"})
+  if occurrence.event.get_user_rsvps(request.user,status="completed"):
+    return JsonResponse({'error': "You have been approved by the TXRX tech to work unattended in this area. There is no need to RSVP. You may come in and work during your regular membership times."})
   kwargs = {
     'content_type_id': EventOccurrence._cid,
     'user': request.user,
