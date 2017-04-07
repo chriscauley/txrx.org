@@ -9,6 +9,7 @@ from django.template.response import TemplateResponse
 
 from course.models import Enrollment, CourseEnrollment
 from geo.models import Room
+from lablackey.mail import send_template_email
 from redtape.models import Signature
 from tool.models import Tool, Lab, Group, Permission, Criterion, UserCriterion
 
@@ -90,6 +91,8 @@ def master(request,app_name,model_name):
     action = request.POST.get('action',None).lower() or "new"
     obj.change_status(action)
     obj.save()
+    if action == "completed" and model_name == "rsvp":
+      send_template_email("email/completed_rsvp",obj.user.email,context={ "rsvp": obj })
     out = obj.as_json
     out['message'] = '%s marked as "%s".'%(obj,action)
     return JsonResponse(out)
