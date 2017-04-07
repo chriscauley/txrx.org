@@ -60,6 +60,9 @@ class Event(PhotosMixin,models.Model):
   access = models.ForeignKey(Access)
   owner_ids = property(lambda self: list(self.eventowner_set.all().values_list("user_id",flat=True)))
   @property
+  def non_custom_repeats(self):
+    return self.eventrepeat_set.exclude(repeat_flavor="custom")
+  @property
   def verbose_rsvp_cutoff(self):
     if self.rsvp_cutoff > 2:
       s = "{} days".format(int(self.rsvp_cutoff))
