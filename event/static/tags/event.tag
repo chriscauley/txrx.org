@@ -59,7 +59,7 @@ click(e) {
       <div>{ start_string }</div>
     </div>
     <b class="full" if={ full }>This occurrence is full</b>
-    <div if={ !past }>
+    <div if={ !past && parent.event.allow_rsvp}>
       <div if={ !full && authenticated }>
         <button class="btn btn-success rsvp" if={ !quantity } onclick={ makeRSVP }>RSVP for this event</button>
         <button class="btn btn-danger unrsvp" if={ quantity } onclick={ cancelRSVP }>Cancel RSVP</button>

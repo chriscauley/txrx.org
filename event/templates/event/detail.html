@@ -27,7 +27,6 @@
     {% endif %}
   </div>
   <div class="col-xs-12 col-sm-4 col-md-3 pull-right" id="side"></div>
-  {% if event.allow_rsvp %}
   <script>
   uR.ready(function() {
     var user_reservations = {{ rsvps_json|safe }};
@@ -43,7 +42,6 @@
     )
   });
   </script>
-  {% endif %}
 </div>
 <script type="riot/tag" src="{{ STATIC_URL }}tags/event.tag?1"></script>
 {% endblock %}
