@@ -78,8 +78,10 @@ click(e) {
 
   var self = this;
   this.on('mount',function() {
-    this.start_string = moment(this.start).format("ddd MMM D, YYYY h:mm a");
-    this.start_slug = moment(this.start).format("YYYY/MM/DD");
+    var start = moment(this.start);
+    this.start_string = start.format("ddd MMM D, ");
+    this.start_string += uR.formatTimeRange(this.start,this.end);
+    this.start_slug = start.format("YYYY/MM/DD");
 
     uR.auth.ready(function() {
       this.authenticated = uR.auth.user;

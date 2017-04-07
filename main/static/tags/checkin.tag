@@ -89,11 +89,7 @@
     this.classtimes = checkin.classtimes;
     uR.forEach(this.classtimes || [],function(classtime) {
       classtime.session = checkin.sessions[classtime.session_id];
-      var start = moment(classtime.start), end = moment(classtime.end);
-      var start_format = start.minute()?"h:mm":"h";
-      var end_format = end.minute()?"h:mm A":"h A";
-      if (start.hour() < 12 && end.hour() > 12) { start_format += " A"; }
-      classtime.time_string = start.format(start_format) + " - " + end.format(end_format);
+      classtime.time_string = uR.formatTimeRange(classtime.start,classtime.end);
       classtime.instructor = classtime.session.instructor_pk == checkin.user_id;
     });
     this.permissions = [];
