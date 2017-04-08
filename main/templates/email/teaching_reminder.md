@@ -2,7 +2,6 @@
 
 This is a reminder that you are teaching tomorrow at {{ settings.SITE_NAME }}.
 
-{{ classtimes }}
 {% for classtime in classtimes %}
 * **{{ classtime.session.course }}**: {{ classtime.start|date:"F d @ P" }}
 {% endfor %}
