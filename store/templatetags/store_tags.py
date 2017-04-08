@@ -13,6 +13,8 @@ def filter_order_by_model(orders,model_name):
 
 @register.filter
 def group_order_items_by_model(order):
+  if not order:
+    return []
   out = defaultdict(lambda: [])
   for i in order.items.all():
     out[i.product.polymorphic_ctype.model].append(i)
