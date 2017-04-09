@@ -65,6 +65,9 @@ def new_comment_connection(sender, instance=None, created=False,**kwargs):
       users += instance.content_object.list_users
     except AttributeError:
       pass
+    users = set(users)
+    if True:
+      return
     for user in users:
       Notification.objects.create(
         message='New comment on %s from %s'%(instance.content_object,instance.user),
