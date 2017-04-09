@@ -17,11 +17,10 @@ import datetime
 class Command (BaseCommand):
   def handle(self, *args, **options):
     # First people who are following classes
-    users = get_user_model().objects.filter(notification__isnull=False)
-    users = users.filter(notification__emailed__isnull=True)
-    students = users.filter(notification__target_type="course.session").distinct()
+    notifications = Notification.objects.filter(emailed__isnull=True,target_type='course.session')
+    students = get_user_model().objects.filter(id__in=set(notifications.values_list("user",flat=True)))
     count = 0
-    users_count = students.count()
+    users_count = len(students)
     if not users_count and not settings.TESTING:
       mail_admins("No classes","No new classes to notify anyone about :(")
     for user in students:
@@ -38,13 +37,10 @@ class Command (BaseCommand):
       notifications.update(emailed=datetime.datetime.now())
     # Now hit up enrollments that are happening tomorrow
     for relationship in ["teaching_reminder","course_reminder"]:
-      users_count = 0
-      followers = users.filter(
-        notification__target_type="course.classtime",
-        notification__relationship=relationship,
-        notification__emailed__isnull=True,
-      ).distinct()
-      users_count += followers.count()
+      _notifications = Notification.objects.filter(emailed__isnull=True,target_type="course.classtime")
+      _notifications = _notifications.filter(relationship=relationship)
+      followers = get_user_model().objects.filter(id__in=set(_notifications.values_list("user",flat=True)))
+      users_count = len(followers)
       for user in followers:
         notifications = user.notification_set.filter(
           emailed__isnull=True,
@@ -68,6 +64,6 @@ class Command (BaseCommand):
           time_s = date(classtimes[0].start,"P")
           body = "You have class tomorrow at %s: %s @ %s"%(settings.SITE_NAME,course_name,time_s)
           user.send_sms(body)
-            
+
         notifications.update(emailed=datetime.datetime.now())
       print "%s: Notified %s users of %s notifications"%(relationship,users_count,count)

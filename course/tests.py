@@ -140,7 +140,7 @@ class NotifyTest(TXRXTestCase):
       u'2 classes tomorrow!', # student2
       u"You're teaching tomorrow at 1 p.m." # teacher
     ]
-    recipients = [[u.email] for u in [self.student1, self.student2, self.teacher]]
+    recipients = [[u.email,'chris@lablackey.com'] for u in [self.student1, self.student2, self.teacher]]
     self.check_subjects(subjects)
     self.check_recipients(recipients)
 
