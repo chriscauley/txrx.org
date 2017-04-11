@@ -404,7 +404,6 @@ class LimitedAccessKey(UserModel):
   A user can change email preferences and fill out evaluations with this.
   """
   key = models.CharField(max_length=32,unique=True)
-  created = models.DateField(auto_now_add=True)
   expires = models.DateField()
 
   def save(self,*args,**kwargs):
