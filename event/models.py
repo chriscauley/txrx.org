@@ -285,6 +285,8 @@ class OccurrenceModel(models.Model):
 
 class RSVPManager(models.Manager):
   def user_controls(self,user,*args,**kwargs):
+    if user.is_superuser or user.is_toolmaster:
+      return self.filter(*args,**kwargs)
     event_ids = Event.objects.filter(eventowner__user=user).values_list("id",flat=True)
     eventoccurrence_ids = EventOccurrence.objects.filter(event_id__in=event_ids).values_list("id",flat=True)
     qs = self.filter(content_type=get_contenttype("event.EventOccurrence"),object_id__in=eventoccurrence_ids)

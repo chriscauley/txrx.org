@@ -241,9 +241,6 @@ class CourseRoomTime(models.Model):
   class Meta:
     ordering = ('day','order')
 
-class CourseSubscription(UserModel):
-   course = models.ForeignKey(Course)
-
 class Branding(models.Model):
   name = models.CharField(max_length=32)
   image = models.ImageField(upload_to="course_branding/%Y-%m")
@@ -281,7 +278,6 @@ class Session(UserModel,PhotosMixin,models.Model):
   _ht = "This will be automatically updated when you save the model. Do not change"
   first_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
   last_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
-  created = models.DateTimeField(auto_now_add=True) # for emailing new classes
   # depracated?
   branding = models.ForeignKey(Branding,null=True,blank=True)
 
@@ -534,6 +530,8 @@ class ClassTime(OccurrenceModel):
 
 class CourseEnrollmentManager(models.Manager):
   def user_controls(self,user,*args,**kwargs):
+    if user.is_superuser or user.is_toolmaster:
+      return self.filter(*args,**kwargs)
     return self.filter(course__session__user=user,*args,**kwargs)
 
 class CourseEnrollment(CriterionModel):
