@@ -6,7 +6,7 @@ uR.ready(function() {
 
 <ur-notify>
   <p class="lead col-sm-12">
-    Checkout <a href="/notify/settings/">notification settings</a> to control whether notifications are sent by email or text or not at all.
+    Change your <a href="/notify/settings/">notification settings</a> to choose to be notified by text, email, or none.
   </p>
   <div class="col-sm-6">
     <p class="lead" if={ !unread.length && !recent.length }>
