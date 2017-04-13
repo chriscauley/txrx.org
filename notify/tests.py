@@ -63,6 +63,27 @@ class NotificationTestCase(TXRXTestCase):
         Enrollment.objects.create(user=user,session=session1)
         self.assertEqual(user.follow_set.all().count(),0)
 
+        # follow again but this time with sms
+        self.client.get(self.follow_url)
+        self.assertEqual(user.follow_set.all()[0].object_id,self.course1.id)
+
+        notifysettings = user.notifysettings
+        notifysettings.new_sessions = "sms"
+        notifysettings.save()
+        SMSNumber.objects.get_or_create(user=user,number='1234567890',verified=datetime.datetime.now())
+
+        session1a = new_session(self.course1,self.teacher)
+        # user has a notification for the new session
+        self.assertEqual(user.notification_set.filter(read__isnull=True).count(),1)
+        notification = user.notification_set.all()[0]
+        self.assertEqual(notification.target,session1a)
+        mail.outbox = []
+        sms.outbox = []
+        call_command("notify_course")
+        self.assertEqual(len(mail.outbox),0)
+        m = 'There a new session of course45 at TXRX Labs. Visit %s to find out more'
+        self.assertEqual(sms.outbox[0].body,m%settings.NOTIFY_URL)
+
     def test_edges(self):
         user = self.new_user()
         self.login(user)
@@ -113,6 +134,7 @@ class NotificationTestCase(TXRXTestCase):
         SMSNumber.objects.create(user=user_sms,number='1234567890')
 
         # run management command
+        sms.outbox = []
         call_command('course_reminder')
         call_command('notify_course')
 

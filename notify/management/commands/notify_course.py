@@ -33,7 +33,16 @@ class Command (BaseCommand):
         'new_sessions': sessions,
         'notifications': notifications,
       }
-      send_template_email("notify/email/course",[user.email],context=_dict)
+      if user.notifysettings.new_sessions == "email":
+        send_template_email("notify/email/course",[user.email],context=_dict)
+      elif user.notifysettings.new_sessions == "sms":
+        c = sessions[0].course.get_short_name()
+        p = ""
+        if len(sessions) > 1:
+          p = " and %s other classes you are interested in"%(len(sessions) - 1)
+        m = "There a new session of %s%s at %s. Visit %s to find out more"
+
+        user.send_sms(m%(c,p,settings.SITE_NAME,settings.NOTIFY_URL))
       notifications.update(emailed=datetime.datetime.now())
     # Now hit up enrollments that are happening tomorrow
     for relationship in ["teaching_reminder","course_reminder"]:
@@ -62,7 +71,10 @@ class Command (BaseCommand):
         elif user.notifysettings.my_classes == "sms":
           course_name = classtimes[0].session.course.get_short_name()
           time_s = date(classtimes[0].start,"P")
-          body = "You have class tomorrow at %s: %s @ %s"%(settings.SITE_NAME,course_name,time_s)
+          if len(classtimes) == 1:
+            body = "You have class tomorrow at %s: %s @ %s"%(settings.SITE_NAME,course_name,time_s)
+          else:
+            body = "You have %s classes tomorrow at %s. The first is: %s @ %s"%(len(classtimes),settings.SITE_NAME,course_name,time_s)
           user.send_sms(body)
 
         notifications.update(emailed=datetime.datetime.now())
