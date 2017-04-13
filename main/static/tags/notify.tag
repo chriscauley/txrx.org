@@ -1,6 +1,6 @@
 uR.ready(function() {
   uR.addRoutes({
-    "^/notify/$":function(path,data) { uR.mountElement("ur-notify",data); }
+    "^/notify/$":uR.auth.loginRequired(function(path,data) { uR.mountElement("ur-notify",data); }),
   });
 });
 
