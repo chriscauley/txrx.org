@@ -3,23 +3,9 @@ from django.core.mail import send_mail
 
 from .models import Evaluation, FIVE_CHOICES, Session
 from lablackey.db.forms import PlaceholderModelForm
+from lablackey.forms import RequestModelForm
 
-class RequestForm(forms.Form):
-  """
-  Just like a normal form but requires a request as the first argument rather than data.
-  Takes GET/POST and FILES from request, so you should NOT pass these in.
-  Attaches request to form for later use.
-
-  example_form = RequestForm(request,initial={'city':'Houston'})
-  user = example_form.request.user
-  """
-  def __init__(self,request,*args,**kwargs):
-    data = request.POST or request.GET or None
-    files = request.FILES or None
-    super(RequestForm,self).__init__(data,files,*args,**kwargs)
-    self.request = request
-
-class EmailInstructorForm(RequestForm):
+class EmailInstructorForm(RequestModelForm):
   from_address = forms.EmailField()
   subject = forms.TextInput()
   body = forms.Textarea()
