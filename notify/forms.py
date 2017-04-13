@@ -2,13 +2,25 @@ from django import forms
 
 from notify.models import NotifySettings, METHOD_CHOICES
 
-class NotificationSettingsForm(forms.ModelForm):
+from lablackey.forms import RequestModelForm
+from lablackey.sms.models import SMSNumber
+
+class NotificationSettingsForm(RequestModelForm):
   new_comments = forms.ChoiceField(choices=METHOD_CHOICES,widget=forms.widgets.RadioSelect)
   my_classes = forms.ChoiceField(choices=METHOD_CHOICES,widget=forms.widgets.RadioSelect)
   new_sessions = forms.ChoiceField(choices=METHOD_CHOICES,widget=forms.widgets.RadioSelect)
+  def clean(self):
+    try:
+      has_number = self.request.user.smsnumber.verified
+    except SMSNumber.DoesNotExist:
+      has_number = None
+    for key,value in self.cleaned_data.items():
+      if value == "sms" and not has_number:
+        raise forms.ValidationError({key: "You must have a validated phone number to be notified by SMS"})
   @classmethod
   def get_instance(clss,request):
-    return clss.Meta.model.objects.get_or_create(user=request.user)[0]
+    if request.user.is_authenticated():
+      return clss.Meta.model.objects.get_or_create(user=request.user)[0]
   class Meta:
     model = NotifySettings
     fields = (

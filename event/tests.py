@@ -1,13 +1,14 @@
 from django.test import TestCase
 from django.utils import timezone
 
-from event.models import EventRepeat, Event
+from event.models import EventRepeat, Event, Access
 
 import calendar, arrow, datetime
 
 class EventRepeatTestCase(TestCase):
   def setUp(self):
-    self.event = Event.objects.create()
+    access = Access.objects.create(name='test')
+    self.event = Event.objects.create(access=access)
   def test_eventrepeat_generate(self):
     #Every Friday in year
     year = 2017

@@ -51,13 +51,16 @@ def new_comment_connection(sender, instance=None, created=False,**kwargs):
     )
     key = LimitedAccessKey.new(user).key
     _dict['unsubscribe_url'] = _u(reverse("unsubscribe",args=['comments',user.id])+"?LA_KEY="+key)
-    subject = 'Someone responded to your comment'
-    send_mail(
-      subject,
-      comment_response_email%_dict,
-      settings.DEFAULT_FROM_EMAIL,
-      [user.email]
-    )
+    if user.notifysettings.new_comments == "sms":
+      user.send_sms("%s has replied to your comment. Visit new.txrxlabs.org for more info."%(instance.user or "Anon"))
+    elif user.notifysettings.new_comments == "email":
+      subject = 'Someone responded to your comment'
+      send_mail(
+        subject,
+        comment_response_email%_dict,
+        settings.DEFAULT_FROM_EMAIL,
+        [user.email]
+      )
   else:
     # email the course instructor or whoever is in the "users" list
     users = list(get_user_model().objects.filter(id__in=getattr(settings,'COMMENT_ADMIN_IDS',[])))
@@ -66,8 +69,6 @@ def new_comment_connection(sender, instance=None, created=False,**kwargs):
     except AttributeError:
       pass
     users = set(users)
-    if True:
-      return
     for user in users:
       Notification.objects.create(
         message='New comment on %s from %s'%(instance.content_object,instance.user),
@@ -75,7 +76,10 @@ def new_comment_connection(sender, instance=None, created=False,**kwargs):
         relationship='new_comment',
         **_kwargs
       )
-      subject = 'New comment on %s'%instance.content_object
-      send_mail(subject,admin_comment_email%_dict,settings.DEFAULT_FROM_EMAIL,[user.email])
+      if user.notifysettings.new_comments == "sms":
+        user.send_sms("There is a new comment by %s. Visit new.txrxlabs.org for more info."%(instance.user or "Anon"))
+      elif user.notifysettings.new_comments == "email":
+        subject = 'New comment on %s'%instance.content_object
+        send_mail(subject,admin_comment_email%_dict,settings.DEFAULT_FROM_EMAIL,[user.email])
 
 post_save.connect(new_comment_connection, sender=UnrestComment)
