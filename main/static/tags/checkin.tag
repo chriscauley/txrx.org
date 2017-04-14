@@ -146,7 +146,8 @@
     <yield to="result">
       <div class="card horizontal">
         <div class="card-image">
-          <ez-file url="/api/change_headshot/" user_id={ id } done={ headshot_url }>
+          <ez-file url="/api/change_headshot/" user_id={ id } done={ headshot_url }
+                   can_edit={ uR.auth.user.id == 1273 }>
             <label if={ !done } for={ _id } class={ uR.config.btn_success }><i class="fa fa-camera"></i></label>
             <img if={ done } src={ done } onclick={ edIt } />
           </ez-file>

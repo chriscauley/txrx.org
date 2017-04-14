@@ -42,11 +42,11 @@
     </div>
     <div class="cell">
       <ez-file url="/api/change_headshot/" user_id="{{ user.id }}" name="Headshot" success_text="photo"
-               done="{{ user.headshot_url|default_if_none:"" }}"></ez-file>
+               done="{{ user.headshot_url|default_if_none:"" }}" type="img" no_preview="true"></ez-file>
     </div>
     <div class="cell">
       <ez-file url="/api/change_id_photo/" user_id="{{ user.id }}" name="ID Photo" success_text="ID"
-               done="{{ user.id_photo_date|default_if_none:"" }}"></ez-file>
+               done="{{ user.id_photo_date|default_if_none:"" }}" type="img" no_preview="true"></ez-file>
     </div>
     <div class="cell">
       <div class="btn btn-{% if user.done_docs == 3 %}success{% else %}danger{% endif %}">
