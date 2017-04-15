@@ -6,8 +6,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 from lablackey.decorators import cached_method, cached_property
-from lablackey.db.models import UserOrSessionMixin
-from lablackey.unrest import JsonMixin
+from lablackey.db.models import UserOrSessionMixin, JsonMixin
 
 from crop_override import CropOverride, OriginalImage, get_override
 from sorl.thumbnail import get_thumbnail

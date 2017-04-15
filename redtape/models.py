@@ -4,8 +4,8 @@ from django.db import models
 from django.forms import ValidationError
 from django.template.defaultfilters import slugify
 
+from lablackey.db.models import JsonMixin
 from lablackey.decorators import cached_method
-from lablackey.unrest import JsonMixin
 
 from blog.templatetags.short_codes import explosivo
 from media.models import UploadedFile

@@ -5,8 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db import models
 
-from lablackey.db.models import UserModel,User121Model
-from lablackey.unrest import JsonMixin
+from lablackey.db.models import UserModel,User121Model, JsonMixin
 from lablackey.contenttypes import get_contenttype
 
 from jsonfield import JSONField
