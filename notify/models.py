@@ -52,8 +52,6 @@ class Notification(UserModel,JsonMixin):
   target_id = models.IntegerField(null=True,blank=True)
   _get_target = lambda self: get_model(self.target_type).objects.get(pk=self.target_id)
   json_fields = ['follow','datetime','read','message','data','url','target_type','target_id']
-  def row_permissions(self,user):
-    return self.user == user
   def _set_target(self,obj):
     self.target_type = "%s.%s"%(obj._meta.app_label,obj._meta.model_name)
     self.target_id = obj.id
