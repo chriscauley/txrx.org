@@ -52,4 +52,5 @@ urlpatterns = [
   url(r'^work/$',lablackey.views.single_page_app),
   url(r'^txrx/transfers/$',transfers),
   url(r'^txrx/complete_transfer/([_\w\d]+)/$',complete_transfer),
+  url(r'^support/$',lablackey.views.render_template,kwargs={'template': 'flatpages/support.html'}),
 ]
