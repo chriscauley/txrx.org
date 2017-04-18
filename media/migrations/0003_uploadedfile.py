@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 import django.core.files.storage
 from django.db import migrations, models
 import lablackey.db.models
-import lablackey.unrest
 
 
 class Migration(migrations.Migration):
@@ -23,6 +22,6 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=256)),
                 ('content_type', models.CharField(max_length=256)),
             ],
-            bases=(models.Model, lablackey.db.models.UserOrSessionMixin, lablackey.unrest.JsonMixin),
+            bases=(lablackey.db.models.UserOrSessionModel,),
         ),
     ]

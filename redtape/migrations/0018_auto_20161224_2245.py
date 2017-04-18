@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=256)),
                 ('content_type', models.CharField(max_length=256)),
             ],
-            bases=(models.Model, lablackey.db.models.UserOrSessionMixin),
+            bases=(lablackey.db.models.UserOrSessionModel,),
         ),
         migrations.AlterField(
             model_name='documentfield',

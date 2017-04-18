@@ -6,7 +6,7 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 import jsonfield.fields
-import lablackey.unrest
+from lablackey.db.models import JsonMixin
 import annoying.fields
 
 class Migration(migrations.Migration):
@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
             options={
                 'ordering': ('-datetime',),
             },
-            bases=(models.Model, lablackey.unrest.JsonMixin),
+            bases=(models.Model, JsonMixin),
         ),
         migrations.CreateModel(
             name='NotifySettings',

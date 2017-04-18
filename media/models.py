@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 from lablackey.decorators import cached_method, cached_property
-from lablackey.db.models import UserOrSessionMixin, JsonMixin
+from lablackey.db.models import UserOrSessionModel
 
 from crop_override import CropOverride, OriginalImage, get_override
 from sorl.thumbnail import get_thumbnail
@@ -191,7 +191,7 @@ private_storage = FileSystemStorage(
   base_url="/media_files/private/", #reverse("post_private_file"),
 )
 
-class UploadedFile(models.Model,UserOrSessionMixin,JsonMixin):
+class UploadedFile(UserOrSessionModel):
   src = models.FileField(storage=private_storage,upload_to="%Y%m",max_length=200,null=True,blank=True)
   name = models.CharField(max_length=256)
   content_type = models.CharField(max_length=256)
