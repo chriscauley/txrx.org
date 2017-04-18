@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load short_codes %}
+
+{% block full_title %}SUPPORT CREATIVITY, INNOVATION, and CONNECTION!{% endblock %}
+{% block header %}{% endblock %}
+
+{% block main %}
+<div class="row" id="support-page">
+  <div id="flatpage" class="col-lg-8 col-lg-offset-2">
+    <h2>SUPPORT CREATIVITY, INNOVATION, and CONNECTION!</h2>
+    <p class="lead">Your support helps us sustain and grow TXRX Labs as a space for education, innovation, and connection.</p>
+    <p class="lead">Current funding is needed to support our Youth Programs and the Navigation Street Kiosk.</p>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="hover-image" style="background-image: url(//txrxlabs.org/media/uploads/photos/2017-04/unnamed_1.jpg)">
+          <div class="text">{{ settings.SITE_NAME }} provides unique hands-on STEAM education. Students unlock the potential of science and technology one project at a time, motivating them to start their own businesses or dream of careers as professional scientists. They learn how to construct the objects of their imagination and deconstruct the world around them.</div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="hover-image" style="background-image: url(//txrxlabs.org/media/uploads/photos/2017-04/Kiosk.JPG)">
+          <div class="text">{{ settings.SITE_NAME }} is opening an entrepreneurship incubator on the Navigation Street Esplanade. This location provides real world training in entrepreneurship and fabrication allowing local youth to live, work, and innovate in the East End of Houston. The kiosk will offer free demo classes in 3D fabrication, XXXX, and Xxx.</div>
+        </div>
+      </div>
+    </div>
+    <h2>MAKE A CONTRIBUTION TODAY</h2>
+
+    <money-widget></money-widget>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <h4>DONATE TOOLS &amp; EQUIPMENT</h4>
+        <p>We LOVE new and used tools and equipment.</p>
+        <p>Currently we are wishing for:</p>
+        <ul>
+          <li>pottery wheels</li>
+          <li>a Raiku kiln</li>
+          <li>Gift cards to Amazon, Home Depot, and Lowes</li>
+        </ul>
+    
+        <p>If you would like to donate a physical item, please contact us at <a href="{{ settings.MEMBERSHIP_URL }}">{{ settings.MEMBERSHIP_URL }}</a> and we will schedule a time to meet with you and evaluate the donation</p>
+      </div>
+      <div class="col-sm-6">
+        <h4>VOLUNTEER</h4>
+        <p>We are SO grateful for our team of volunteers that help us with our daily operations. If you are interested in joining our volunteer team, apply at <a href="https://airtable.com/shr6u0aDoBZjjCBBLll">https://airtable.com/shr6u0aDoBZjjCBBLll</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="riot/tag">
+  uR.ready(function() { riot.mount("money-widget") });
+
+  <money-widget>
+    <div class="btn-group">
+      <div each={ number in numbers } class="btn btn-{ number == parent.selected_value?'primary':'default' }">
+        <input value="{ number }" type="radio" id="money_button_{ number }" onchange={ setIt } name="money_button"/>
+        <label for="money_button_{ number }">${ number }</label>
+      </div>
+      <div class="btn btn-{ other?'primary':'default' }">
+        <input type="text" onkeyUp={ setOther } id="money_other" />
+        <label for="money_other">Other</label>
+      </div>
+    </div>
+
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="display: none;" id="donation-form">
+      <input type="hidden" name="cmd" value="_donations">
+
+      <input type="hidden" name="business" value="txrxlabs@gmail.com">
+      <input type="hidden" name="a3" value="{ selected_value }"><!-- price -->
+      <input type="hidden" name="p3" value="1"><!-- term delay (# months between payments -->
+      <input type="hidden" name="t3" value="M"><!-- term units (months) -->
+      <input type="hidden" name="src" value="1"><!-- recurring payments = 1 -->
+      <input type="hidden" name="sra" value="1">
+      <input type="hidden" name="amount" value="{ selected_value }">
+      <input name="notify_url" type="hidden" value="https://txrxlabs.org/tx/rx/ipn/handler/">
+      <input name="cancel_return" type="hidden" value="https://txrxlabs.org/support/">
+      <input name="return" type="hidden" value="https://txrxlabs.org/">
+
+      <input type="hidden" name="custom" value="support page donation">
+
+      <input name="on0" type="hidden" value="Donation"/>
+      <input name="os0" type="hidden" value="Monthly"/>
+      <input type="hidden" name="currency_code" value="USD">
+    </form>
+
+    <div class="btn-group second">
+      <button onclick={ pay } data-cmd="_donations" class="btn btn-primary">One-time gift</button>
+      <button onclick={ pay } data-cmd="_xclick-subscriptions" class="btn btn-primary">Monthly gift</button>
+    </div>
+    <div if={ error } class="alert alert-danger">Please select an amount</div>
+              
+
+    this.numbers = [25,50,150,500];
+    setIt(e) {
+      this.error = false;
+      this.other = false;
+      this.selected_value = e.item.number;
+    };
+    setOther(e) {
+      this.error = false;
+      this.other = true;
+      this.selected_value = e.target.value.replace(/[^\d]+/g,'');
+    }
+    pay(e) {
+      if (!this.selected_value) { this.error = true; return; }
+      var f = document.querySelector("#donation-form");
+      f.querySelector("[name=cmd]").value=e.target.dataset.cmd;
+      f.submit();
+    }
+  </money-widget>
+</script>
+
+{% endblock %}
