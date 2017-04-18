@@ -134,6 +134,7 @@ def nav(request):
        { "name": "Photo Studio", "url": "/photo-studio/" },
      ]
     },
+    {'name': "Support", 'url': "/support/"},
   ]
 
   for _n in _nav:
