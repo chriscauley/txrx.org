@@ -603,6 +603,7 @@ FIVE_CHOICES = (
 )
 
 class Evaluation(UserModel):
+  private = True
   _kwargs = dict(validators=[MaxLengthValidator(512)],max_length=512,null=True,blank=True)
 
   enrollment = models.OneToOneField(Enrollment)

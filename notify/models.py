@@ -5,16 +5,13 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db import models
 
-from lablackey.db.models import UserModel,User121Model, JsonMixin
+from lablackey.db.models import UserModel,User121Model
 from lablackey.contenttypes import get_contenttype
 
 from jsonfield import JSONField
 
-class NotifyCourse(UserModel):
-  course = models.ForeignKey("course.Course")
-  __unicode__ = lambda self: "{} -- {}".format(self.user,self.course)
-
 class Follow(UserModel):
+  user_can_edit = True
   content_type = models.ForeignKey("contenttypes.ContentType")
   object_id = models.IntegerField()
   content_object = GenericForeignKey('content_type', 'object_id')
@@ -38,7 +35,9 @@ def get_model(s):
   app_label,model_name = s.split(".")
   return apps.get_app_config(app_label).get_model(model_name)
 
-class Notification(UserModel,JsonMixin):
+class Notification(UserModel):
+  user_can_edit = True
+  private = True
   follow = models.ForeignKey(Follow,null=True,blank=True)
   datetime = models.DateTimeField(auto_now_add=True)
   emailed = models.DateTimeField(null=True,blank=True)
@@ -66,6 +65,8 @@ METHOD_CHOICES = [
 ]
 
 class NotifySettings(User121Model):
+  user_can_edit = True
+  private = True
   _h = "If false this wil disable all notificaitons from the site."
   notify_global = models.BooleanField("Global Preference",default=True,help_text=_h)
   _kwargs = dict(default="email",max_length=8,choices=METHOD_CHOICES)

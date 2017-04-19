@@ -118,6 +118,7 @@ REPEAT_VERBOSE = {
 }
 
 class EventOwner(UserModel):
+  user_can_edit = True
   event = models.ForeignKey(Event)
   __unicode__ = lambda self: "%s owns %s"%(self.user,self.event)
 
@@ -362,6 +363,7 @@ class CheckInPoint(models.Model):
     ordering = ('room__name',)
 
 class CheckIn(UserModel):
+  private = True
   datetime = models.DateTimeField(auto_now_add=True)
   object_id = models.IntegerField(null=True,blank=True)
   content_type = models.ForeignKey("contenttypes.ContentType",null=True,blank=True)

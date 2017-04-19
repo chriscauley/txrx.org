@@ -17,6 +17,7 @@ class Material(NamedTreeModel):
     ordering = ('order',)
 
 class Thing(PhotosMixin,ToolsMixin,FilesMixin,UserModel):
+  user_can_edit = True
   feed_item_type = 'thing'
   title = models.CharField(max_length=128)
   description = wmd_models.MarkDownField(blank=True,null=True)

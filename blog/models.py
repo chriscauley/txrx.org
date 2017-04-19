@@ -13,6 +13,7 @@ from media.models import Photo, PhotosMixin
 from lablackey.db.models import SlugModel, OrderedModel
 
 class Post(PhotosMixin,UserModel):
+  user_can_edit = True
   STATUS_CHOICES = (
     ('draft', 'Draft'),
     ('published', 'Published'),

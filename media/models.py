@@ -192,6 +192,8 @@ private_storage = FileSystemStorage(
 )
 
 class UploadedFile(UserOrSessionModel):
+  private = True
+  user_can_edit = True
   src = models.FileField(storage=private_storage,upload_to="%Y%m",max_length=200,null=True,blank=True)
   name = models.CharField(max_length=256)
   content_type = models.CharField(max_length=256)
