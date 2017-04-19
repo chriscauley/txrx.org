@@ -594,5 +594,10 @@ ul.errorlist { color: @brand-danger; }
     }
     [type=text]:focus + label,  .btn-primary [type=text] + label { display: none; }
     .btn-group.second { width: 50%; margin: 0 auto 40px; }
+    @media (max-width: @screen-xs-max) {
+      .btn-group.second { width: auto; }
+      .btn { min-width: 0; }
+      [type=text] { width: 50px; }
+    }
   }
 }
