@@ -10,7 +10,6 @@ from django.utils import timezone
 from django.utils.http import urlquote
 from django.utils.translation import ugettext_lazy as _
 
-from membership.models import Level
 from tool.models import UserCriterion, Criterion
 from lablackey.sms.models import SMSNumber
 from store.models import CourseCheckout
@@ -109,7 +108,7 @@ class User(AbstractBaseUser, PermissionsMixin):
   objects = UserManager()
 
   #txrx fields
-  level = models.ForeignKey(Level,default=settings.DEFAULT_MEMBERSHIP_LEVEL)
+  level = models.ForeignKey('membership.Level',default=settings.DEFAULT_MEMBERSHIP_LEVEL)
   orientation_status = models.CharField(max_length=32,choices=ORIENTATION_STATUS_CHOICES,default="new")
 
   def reset_level(self):

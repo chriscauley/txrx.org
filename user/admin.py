@@ -51,7 +51,7 @@ class UserAdmin(UserAdmin):
   _enrollments.allow_tags = True
   search_fields = ('username', 'email', 'first_name', 'last_name','paypal_email')
   ordering = ('username',)
-  readonly_fields = ('last_login','date_joined','level')
+  readonly_fields = ('last_login','date_joined', 'level')
   inlines = [UserMembershipInline, RFIDInline, UserNoteInline, SubscriptionInline, WeakSubscriptionBuddyInline, EnrollmentInline,
              CourseEnrollmentInline]
   list_filter = list(UserAdmin.list_filter) + ['usermembership__voting_rights','date_joined','is_volunteer']
