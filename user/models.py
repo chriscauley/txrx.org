@@ -45,14 +45,20 @@ class UserManager(BaseUserManager):
     except (self.model.DoesNotExist, self.model.MultipleObjectsReturned):
       pass
   def keyword_search(self,q,*args,**kwargs):
+    force_active = kwargs.pop("force_active",True)
+    fields = kwargs.pop("fields",['username','email','paypal_email'])
+    if fields == "*":
+      fields = ['username','email','paypal_email','first_name','last_name']
     qs = self.filter(*args,**kwargs)
     for word in q.strip().split(" "):
       if not word:
         continue
       _Q = models.Q()
-      for f in ['username','email','paypal_email','first_name','last_name']:
+      for f in fields:
         _Q = _Q | models.Q(**{f+"__icontains":word})
-      qs = qs.filter(_Q).filter(is_active=True).distinct()
+    qs = qs.filter(_Q)
+    if force_active:
+      qs = qs.filter(is_active=True).distinct()
     return qs.distinct()
   def get_from_anything(self,value):
     if not value:

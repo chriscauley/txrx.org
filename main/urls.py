@@ -27,6 +27,7 @@ import course.views.classes
 import airbrake.urls
 import txrx_urls
 from lablackey.sms import urls as sms_urls
+from lablackey.decorators import activate_user
 
 import os
 
@@ -101,21 +102,6 @@ if hasattr(settings,"COURSE_GIFTCARD_ID"):
     url(r'^gift/$',lambda request: drop.views.product.detail(request,settings.COURSE_GIFTCARD_ID)),
   ]
 
-def activate_user(target):
-  def wrapper(request,*args,**kwargs):
-    from django.contrib.auth import get_user_model
-    data = request.POST or request.GET
-    model = get_user_model()
-    if data.get('email',None):
-      try:
-        user = model.objects.get(email=data.get('email'))
-        user.is_active = True
-        user.save()
-      except model.DoesNotExist:
-        pass
-    return target(request,*args,**kwargs)
-  return wrapper
-
 def _include(s):
   return include(__import__(s).urls)
 
@@ -124,14 +110,15 @@ import django.contrib.auth.urls
 from api.urls import build_urls
 import lablackey.urls
 import notify.urls
+from user.forms import PasswordResetForm
 
 #auth related
 urlpatterns += [
   url(r'^accounts/settings/$',membership.views.user_settings,name='account_settings'),
-  url(r'^accounts/register/$',membership.views.register),
+  url(r'^accounts/register/$',membership.views.register,name="account_register"),
   url(r'^accounts/(cancel)_subscription/',membership.views.change_subscription,name="cancel_subscription"),
   url(r'^accounts/', include(registration.urls)),
-  url(r'^auth/password_reset/$',activate_user(password_reset)),
+  url(r'^auth/password_reset/$',activate_user(password_reset),kwargs={'password_reset_form': PasswordResetForm}),
   url(r'^auth/',include(django.contrib.auth.urls)),
   url(r'^force_login/([\d\w]+)/$', main.views.force_login),
   url(r'^api/remove_rfid/$',user.views.remove_rfid),

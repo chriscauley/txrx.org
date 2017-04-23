@@ -77,7 +77,7 @@ def master(request,app_name,model_name):
   objs = model.objects.user_controls(request.user)
 
   if request.GET.get('user_search',''):
-    user_ids = get_user_model().objects.keyword_search(request.GET['user_search'])
+    user_ids = get_user_model().objects.keyword_search(request.GET['user_search'],fields="*")
     objs = objs.filter(user_id__in=user_ids)
   elif request.GET.get("object_id","").isdigit():
     objs = objs.filter(object_id=request.GET['object_id'])

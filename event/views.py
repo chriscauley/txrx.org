@@ -181,7 +181,7 @@ def orientations(request,y=None,m=None,d=None):
     'oriented_ids': list(criterion.usercriterion_set.all().values_list('user_id',flat=True)),
   }
   if request.GET.get('q',None):
-    users = get_user_model().objects.keyword_search(request.GET['q'])
+    users = get_user_model().objects.keyword_search(request.GET['q'],fields="*")
     values['users'] = users[:10]
     if users.count() > 10:
       values['extra_users'] = "Only showing 10/%s users. Please refine your query to see more"%users.count()

@@ -59,7 +59,7 @@
           </a></li>
           {% endfor %}
           {% else %}
-          <li><a class="fa-hover txrx" href="/accounts/register/">
+          <li><a class="fa-hover txrx" href="{% url "account_register" %}">
               <i class="fa fa-user"></i> Register</a></li>
           <li><a class="fa-hover txrx" href="/accounts/login/?next={{ login_redirect }}">
               <i class="fa fa-user"></i> Log in with Username</a></li>

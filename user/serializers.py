@@ -15,7 +15,7 @@ class SearchSizzler(BaseSizzler):
     qs = class_.Meta.model.objects
     q = data.get('q',"")
     if q:
-      qs = qs.keyword_search(q)
+      qs = qs.keyword_search(q,fields="*")
     elif 'user_id' in request.GET:
       qs = qs.filter(id=request.GET['user_id'])
     elif 'user_ids' in request.GET:
