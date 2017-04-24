@@ -17,7 +17,7 @@ urlpatterns = [
   url(r'^detail/(\d+)/(.+)/$', views.detail, name="event_detail"),
   url(r'^rsvp/$', views.rsvp, name='rsvp'),
   url(r'^checkin/$', views.checkin, name='rsvp'),
-  url(r'^no_orientation/$',views.no_orientation,name='no_orientation'),
+  url(r'^no-orientation/$',views.no_orientation,name='no_orientation'),
   url(r'^orientations/$', views.orientations,name='orientations'),
   url(r'^orientations/(\d+)/(\d+)/(\d+)/$', views.orientations,name='orientations'),
   url(r'^(own|disown)/(\d+)/',views.owner_ajax),
