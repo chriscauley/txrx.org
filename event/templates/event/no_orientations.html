@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1>{{ users|length }} Members Not Oriented</h1>
+<table class="table table-striped">
+  <tr>
+    <th>Full name (Username)</th>
+    <th>Email Address</th>
+    <th>Date Joined</th>
+  </tr>
+  {% for user in users %}
+  <tr>
+    <td>{{ user.get_full_name }} ({{ user }})</td>
+    <td>{{ user.email }}
+    <td>{{ user.date_joined }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
