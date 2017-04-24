@@ -67,13 +67,6 @@ class UserManager(BaseUserManager):
                             models.Q(email__iexact=value) |
                             models.Q(paypal_email__iexact=value))
 
-ORIENTATION_STATUS_CHOICES = [
-  ('new','New'),
-  ('emailed','Emailed'),
-  ('scheduled','scheduled'),
-  ('oriented','Oriented'),
-]
-
 staff_storage = FileSystemStorage(
   location=getattr(settings,"STAFF_ROOT",settings.MEDIA_ROOT),
   base_url=getattr(settings,"STAFF_URL","")
@@ -115,7 +108,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
   #txrx fields
   level = models.ForeignKey('membership.Level',default=settings.DEFAULT_MEMBERSHIP_LEVEL)
-  orientation_status = models.CharField(max_length=32,choices=ORIENTATION_STATUS_CHOICES,default="new")
 
   def reset_level(self):
     levels = []
