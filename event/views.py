@@ -27,6 +27,15 @@ def owner_ajax(request,action,event_id):
     Event.objects.get(id=event_id).eventowner_set.filter(user=request.user).delete()
   return JsonResponse({'owner_ids': Event.objects.get(id=event_id).owner_ids })
 
+@staff_member_required
+def no_orientation(request):
+  users = get_user_model().objects.exclude(level_id=settings.DEFAULT_MEMBERSHIP_LEVEL)
+  users = users.exclude(usercriterion__criterion_id=settings.ORIENTATION_CRITERION_ID)
+  values = {
+    'users': users.distinct().order_by("-date_joined"),
+    }
+  return TemplateResponse(request,"event/no_orientations.html",values)
+
 def index(request,daystring=None):
   start = datetime.date.today()
   if daystring:
