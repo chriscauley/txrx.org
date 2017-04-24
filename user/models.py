@@ -213,6 +213,10 @@ class User(AbstractBaseUser, PermissionsMixin):
       criterion=criterion,
       defaults=defaults
     )
+  def has_criterion(self,criterion_id):
+    if isinstance(criterion_id,Criterion):
+      criterion_id = criterion_id.id
+    return self.usercriterion_set.filter(criterion_id=criterion_id)
   @property
   def has_safety_waiver(self):
     _ids = getattr(settings,"NONMEMBER_DOCUMENT_IDS",[])

@@ -57,6 +57,8 @@ class Event(PhotosMixin,models.Model):
   rsvp_cutoff = models.FloatField(default=0,help_text=_ht)
   max_rsvp = models.IntegerField(default=128)
   access = models.ForeignKey(Access)
+  _ht = "If true, members cannot RSVP unless they have been through the orientation."
+  orientation_required = models.BooleanField(default=False,help_text=_ht)
   owner_ids = property(lambda self: list(self.eventowner_set.all().values_list("user_id",flat=True)))
   @property
   def non_custom_repeats(self):

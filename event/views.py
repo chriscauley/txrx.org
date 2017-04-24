@@ -114,10 +114,15 @@ def all_ics(request,fname):
 @login_required
 def rsvp(request):
   occurrence = get_object_or_404(EventOccurrence,id=request.GET['occurrence_id'])
-  if occurrence.event.access.icon == "members-only" and request.user.level_id == settings.DEFAULT_MEMBERSHIP_LEVEL:
+  event = occurrence.event
+  if event.access.icon == "members-only" and request.user.level_id == settings.DEFAULT_MEMBERSHIP_LEVEL:
     return JsonResponse({'error': "Only member's are allowed to RSVP for this event"})
-  if occurrence.event.get_user_rsvps(request.user,status="completed"):
+  if event.get_user_rsvps(request.user,status="completed"):
     return JsonResponse({'error': "You have been approved by the TXRX tech to work unattended in this area. There is no need to RSVP. You may come in and work during your regular membership times."})
+  if event.orientation_required and not request.user.has_criterion(settings.ORIENTATION_CRITERION_ID):
+    orientation_url = Event.objects.get(id=settings.ORIENTATION_EVENT_ID).get_absolute_url()
+    a = "<a href='%s'>%s</a>"%(orientation_url,'Click here to RSVP for an orientation.')
+    return JsonResponse({'error': "You must attend an orientation before attending this event. %s"%a})
   kwargs = {
     'content_type_id': EventOccurrence._cid,
     'user': request.user,
@@ -165,7 +170,7 @@ def checkin(request):
 
 @user_passes_test(is_toolmaster)
 def orientations(request,y=None,m=None,d=None):
-  criterion_id = 15
+  criterion_id = settings.ORIENTATION_CRITERION_ID
   criterion = Criterion.objects.get(id=criterion_id)
   if request.POST:
     user = get_user_model().objects.get(id=request.POST['user_id'])

@@ -45,6 +45,7 @@ ALL_HOURS_ID = 2 # which schedule is 24/7?
 REQUIRED_DOCUMENT_IDS = [1,2,3]
 NONMEMBER_DOCUMENT_IDS = [2]
 ORIENTATION_EVENT_ID = 105
+ORIENTATION_CRITERION_ID = 15
 DEFAULT_MEMBERSHIP_LEVEL = 1
 PAST_DUE_GRACE_PERIOD = 14 # Past due members will get kicked out of their drawer after this many days
 
