@@ -23,6 +23,7 @@ var source_files = [
   _ROOT + "less/bootstrap/js/tab.js",
   _ROOT + "js/moment.js",
   _ROOT + "js/init.js",
+  _ROOT + "js/router.js",
   _ROOT + "js/blog.js",
   _ROOT + "js/favico.js",
   _ROOT + "js/course.js",

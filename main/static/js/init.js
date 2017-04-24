@@ -126,4 +126,4 @@ uR.theme.list_right = "badge";
 uR.config.text_validators['signature'] = function(value,tag) {
   if (!value.startsWith("/s/") || value.length < 5) { tag.data_error = "Signature must start with /s/"; return false; }
   return true
-}
+};

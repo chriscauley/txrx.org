@@ -94,7 +94,7 @@ def minutes_index(request):
 def register(request,*args,**kwargs):
   email = request.POST.get('email','')
   paypal_email = request.POST.get('paypal_email','')
-  form = RegistrationForm(request,request.POST or None)
+  form = RegistrationForm(request)
   if form.is_valid():
     if request.POST and not (verify_unique_email(email) and verify_unique_email(paypal_email)):
       m = "Please use the form below to reset your password. "
