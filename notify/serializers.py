@@ -12,8 +12,8 @@ class FeedSizzler(BaseSizzler):
     if not request.user.is_authenticated():
       return qs.none()
     return qs.filter(user=request.user)
-  def __delete__(self):
-    self.Meta.model.objects.filter(url=None).update(read=timezone.now())
+  #def __delete__(self):
+  #  self.Meta.model.objects.filter(url=None).update(read=timezone.now())
   class Meta:
     model = Notification
     fields = Notification.json_fields

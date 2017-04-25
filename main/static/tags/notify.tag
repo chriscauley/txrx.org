@@ -9,19 +9,19 @@ uR.ready(function() {
     Change your <a href="/notify/settings/">notification settings</a> to choose to be notified by text, email, or none.
   </p>
   <div class="col-sm-6">
-    <p class="lead" if={ !unread.length && !recent.length }>
+    <p class="lead" if={ !future.length && !past.length }>
       You have no notifications
     </p>
-    <div if={ unread.length }>
-      <h3>Unread Notifications</h3>
+    <div if={ future.length }>
+      <h3>New Notifications</h3>
       <ul class={ uR.theme.list }>
-        <li each={ unread } class={ uR.theme.list_item }><a href={ url }>{ message }</a></li>
+        <li each={ future } class={ className }><a href={ url }>{ message }</a></li>
       </ul>
     </div>
-    <div if={ recent.length }>
+    <div if={ past.length }>
       <h3>Past Notifications</h3>
       <ul class={ uR.theme.list }>
-        <li each={ recent } class={ uR.theme.list_item }><a href={ url }>{ message }</a></li>
+        <li each={ past } class={ className }><a href={ url }>{ message }</a></li>
       </ul>
     </div>
     <div if={ older }>
@@ -31,7 +31,7 @@ uR.ready(function() {
   <div class="col-sm-6" if={ follows }>
     <h3>Things You Are Following</h3>
     <ul class={ uR.theme.list }>
-      <li each={ follows } class={ uR.theme.list_item }>
+      <li each={ follows } class={ className }>
         <a href={ url }>{ name }</a>
         <a class="{ uR.theme.list_right } fa fa-close" href={ unfollow_url } if={ !deleted }> </a>
       </li>
@@ -43,31 +43,30 @@ uR.ready(function() {
 
   var self = this;
   this.on("mount",function() {
-    uR.ajax({
+    this.ajax({
       url: "/api/notify/feed/",
       success: function(data) {
         self.data = data;
-        self.ready = false;
       },
-      that: this
     });
-    uR.ajax({
+    this.ajax({
       url: "/api/notify/follow/",
       success: function(data) {
         self.follows = data;
       },
-      that: this
     });
   });
   this.on("update",function() {
-    if (this.ready || !this.data) { return; }
+    if (!this.follows || !this.data) { return; }
     this.ready = true;
-    this.unread = [];
-    this.recent = [];
+    this.future = [];
+    this.past = [];
     this.older = 0;
-    uR.forEach(self.data || [],function(notification) {
-      (notification.read?self.recent:self.unread).push(notification);
-    });
+    uR.forEach(this.data || [],function(notification) {
+      (moment(new Date(notification.expires))<moment()?this.past:this.future).push(notification);
+      notification.className = (notification.target_type || "").replace(/\./g,"")+" "+uR.theme.list_item;
+    }.bind(this));
+    uR.forEach(this.follows,function(f) { f.className = uR.theme.list_item });
   });
   loadMore(e) {
     alert('not implmented');

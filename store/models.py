@@ -65,8 +65,6 @@ class Consumable(BaseProduct):
     return getattr(self,attr).split('//')[-1].split('/')[0].split('.')[-2]
   purchase_domain = property(lambda self: self.get_domain('purchase_url'))
   purchase_domain2 = property(lambda self: self.get_domain('purchase_url2'))
-  def save(self,*args,**kwargs):
-    super(Consumable,self).save(*args,**kwargs)
   class Meta:
     ordering = ('name',)
 

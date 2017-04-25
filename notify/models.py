@@ -4,11 +4,14 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils import timezone
 
 from lablackey.db.models import UserModel,User121Model
 from lablackey.contenttypes import get_contenttype
 
 from jsonfield import JSONField
+
+import datetime
 
 class Follow(UserModel):
   user_can_edit = True
@@ -35,6 +38,9 @@ def get_model(s):
   app_label,model_name = s.split(".")
   return apps.get_app_config(app_label).get_model(model_name)
 
+def default_expires():
+  return timezone.now() + datetime.timedelta(getattr(settings,"NOTIFY_DEFAULT_EXPIRES",7))
+
 class Notification(UserModel):
   user_can_edit = True
   private = True
@@ -42,6 +48,7 @@ class Notification(UserModel):
   datetime = models.DateTimeField(auto_now_add=True)
   emailed = models.DateTimeField(null=True,blank=True)
   read = models.DateTimeField(null=True,blank=True)
+  expires = models.DateTimeField(default=default_expires)
   message = models.CharField(max_length=512)
   data = JSONField(default=dict,blank=True)
   url = models.CharField(max_length=256,null=True,blank=True)
@@ -50,7 +57,7 @@ class Notification(UserModel):
   target_type = models.CharField(max_length=201,null=True,blank=True)
   target_id = models.IntegerField(null=True,blank=True)
   _get_target = lambda self: get_model(self.target_type).objects.get(pk=self.target_id)
-  json_fields = ['follow','datetime','read','message','data','url','target_type','target_id']
+  json_fields = ['follow','datetime','expires','read','message','data','url','target_type','target_id']
   def _set_target(self,obj):
     self.target_type = "%s.%s"%(obj._meta.app_label,obj._meta.model_name)
     self.target_id = obj.id

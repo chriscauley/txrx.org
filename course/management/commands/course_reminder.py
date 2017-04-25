@@ -35,11 +35,13 @@ class Command(BaseCommand):
         'url': classtime.session.get_absolute_url(),
         'target_type': "course.classtime",
         'target_id':classtime.id,
+        'expires': classtime.end
       }
 
+      _s = "%s at %s"%(classtime.session.course.get_short_name(),day_s)
       Notification.objects.create(
         user=instructor,
-        message="You're teaching %s at %s"%(classtime.session.course,day_s),
+        message="You're teaching %s"%_s,
         relationship="teaching_reminder",
         **kwargs
       )
@@ -47,7 +49,7 @@ class Command(BaseCommand):
         student_count += 1
         Notification.objects.create(
           user=enrollment.user,
-          message="You're taking %s at %s"%(classtime.session.course,day_s),
+          message="You're taking %s"%_s,
           relationship="course_reminder",
           **kwargs
         )
