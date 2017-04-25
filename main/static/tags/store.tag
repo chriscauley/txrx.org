@@ -6,13 +6,12 @@
     { category.name }</button>
 
   this.on("mount",function() {
-    uR.ajax({
+    this.ajax({
       url: "/shop/categories.js",
       success: function(data) {
         uR.drop.categories = data.categories;
         uR.drop.active_category = undefined;
       },
-      that: this,
     });
   });
 
@@ -75,7 +74,7 @@
 </product-list>
 
 <product>
-  <div class="well {incart:quantity,out-of-stock:in_stock==0}">
+  <div class="well { out-of-stock:in_stock==0 }">
     <div class="img" style="background-image: url({ thumbnail })"></div>
     <div class="bottom">
       <div class="name">
@@ -84,37 +83,23 @@
         { display_name }
       </div>
       <div class="row">
-        <div class="col-xs-{ quantity?12:6 } price">
+        <div class="col-xs-6 price">
           ${unit_price}
           <span if={ quantity }>x { quantity }</span>
         </div>
-        <div class="col-xs-6" if={ !quantity }>
-          <button class="btn btn-success btn-block" onclick={ plusOne }>Add to Cart</button>
-        </div>
-      </div>
-      <div class="row cart-buttons">
-        <div class="col-xs-3">
-          <button class="btn btn-success btn-block" onclick={ plusOne }>+1</button>
-        </div>
-        <div class="col-xs-3">
-          <button class="btn btn-danger btn-block" onclick={ minusOne }>-1</button>
-        </div>
         <div class="col-xs-6">
-          <button class="btn btn-primary btn-block" onclick={ uR.drop.openCart }>Checkout</button>
+          <button class="btn btn-success btn-block" onclick={ addToCart } if={ !quantity }>Add to Cart</button>
+          <button class="btn btn-primary btn-block" onclick={ uR.drop.openCart } if={ quantity }>Checkout</button>
         </div>
       </div>
     </div>
   </div>
 
   var update_timeout;
-  var self = this;
-  plusOne(e) {
-    self.quantity++;
-    uR.drop.saveCartItem(self.id, self.quantity,self);
-  }
-  minusOne(e) {
-    self.quantity--;
-    uR.drop.saveCartItem(self.id, self.quantity,self);
+  addToCart(e) {
+    var widget = uR.drop._addToCart[this.id]
+    if (widget) { widget({product: uR.drop.products[this.id]}) }
+    else { uR.drop.saveCartItem(this.id, 1, self); }
   }
 </product>
 

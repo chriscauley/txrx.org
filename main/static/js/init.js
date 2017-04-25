@@ -123,6 +123,14 @@ uR.theme.list = "list-group";
 uR.theme.list_item = "list-group-item";
 uR.theme.list_item_danger = "list-group-item list-group-item-danger";
 uR.theme.list_right = "badge";
+uR.drop._addToCart[2693] = function(data) {
+  data.schema = [{
+    help_text: "Enter the number of milliliters of resin used.",
+    name: 'quantity',
+  }];
+  data.initial = { quantity: data.product.quantity };
+  uR.alertElement("cart-quantity",data);
+};
 uR.config.text_validators['signature'] = function(value,tag) {
   if (!value.startsWith("/s/") || value.length < 5) { tag.data_error = "Signature must start with /s/"; return false; }
   return true
