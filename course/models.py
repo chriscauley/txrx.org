@@ -321,7 +321,7 @@ class Session(UserModel,PhotosMixin,models.Model):
   total_students = property(lambda self: sum([e.quantity for e in self.enrollment_set.all()]))
   evaluated_students = property(lambda self: self.get_evaluations().count())
   completed_students = property(lambda self: self.enrollment_set.filter(status="completed").count())
-  full = property(lambda self: self.total_students >= self.course.max_students)
+  full = property(lambda self: self.total_students >= self.course.max_students + self.overbook)
   list_users = property(lambda self: [self.user])
 
   #! mucch of this if deprecated after course remodel
@@ -419,7 +419,7 @@ class SessionProduct(Product):
   is_session_product = True
   session = models.OneToOneField(Session)
   json_fields = Product.json_fields + ['session_id']
-  in_stock = property(lambda self: self.session.course.max_students - self.session.total_students)
+  in_stock = property(lambda self: self.session.course.max_students + self.session.overbook - self.session.total_students)
   def purchase(self,order_item):
     user = order_item.order.user
     quantity = order_item.quantity
@@ -428,7 +428,7 @@ class SessionProduct(Product):
       mail_admins("Some one re-enrolled!","%s enrolled twice in session # %s"%(user,self.session_id))
     enrollment.quantity += quantity
     enrollment.save()
-    if self.session.total_students > self.session.course.max_students:
+    if self.session.total_students > self.session.course.max_students + self.session.overbook:
       s = "Session #%s overfilled. Please see https://txrxlabs.org/admin/course/session/%s/"
       mail_admins("My Course over floweth",s%(self.session.pk,self.session.pk))
     order_item.extra['purchased_model'] = "course.enrollment"
@@ -437,6 +437,8 @@ class SessionProduct(Product):
   def get_purchase_error(self,quantity,cart):
     # Overwrite this to check quantity or other availability
     if self.in_stock < quantity:
+      if self.in_stock == 0:
+        return "Sorry there are no open seats left in %s"%self
       return "Sorry, there are only %s open seats left in %s."%(self.in_stock,self)
     if self.session.past:
       return "Sorry, enrollment for %s is closed because the class is over."%self
