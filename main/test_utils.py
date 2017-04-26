@@ -7,6 +7,7 @@ from django.core import mail
 from django.db import IntegrityError
 
 from course.models import Course, Session, ClassTime
+from tool.models import Criterion
 from event.models import Event, EventOccurrence
 from geo.models import Room, Location, City
 from lablackey.tests import check_subjects
@@ -14,13 +15,15 @@ from membership.models import Level
 
 from drop.test_utils import DropTestCase
 
-import datetime, decimal, six, arrow
+import datetime, decimal, six, arrow, random
 
 class TXRXTestCase(DropTestCase):
   def setUp(self):
     self._setup_geo()
     self._setup_membership()
     self._setup_course()
+    for app_name in ["geo","tool"]:
+      call_command("loaddata","%s/fixtures/test.json"%app_name)
   def _setup_course(self):
     tomorrow = arrow.now().replace(days=1,hour=13,minute=00).datetime
     next_day = arrow.now().replace(days=2,hour=13,minute=00).datetime
@@ -68,7 +71,10 @@ class TXRXTestCase(DropTestCase):
     except Level.DoesNotExist:
       self.level0 = Level.objects.create(id=settings.DEFAULT_MEMBERSHIP_LEVEL,name='foo',order=1)
     self.level10 = Level.objects.get_or_create(name="discounted",discount_percentage=10,order=999,id=10000)[0]
-
+    for level in Level.objects.all():
+      p = int(random.random()*100)
+      level.product_set.get_or_create(name="monthly %s"%level,unit_price=p,months=1,active=True)
+      level.product_set.get_or_create(name="yearly %s"%level,unit_price=p*11,months=12,active=True)
   def _setup_geo(self):
     self.city = City.objects.get_or_create(name="Houston",state="TX")[0]
     self.location = Location.objects.get_or_create(name="TXRX Labs",city=self.city,zip_code="77003")[0]
