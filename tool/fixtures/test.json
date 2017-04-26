@@ -1,0 +1,4 @@
+[
+  {"model": "course.course", "pk": 102, "fields": {"name": "Safety Training", "room": 1}},
+  {"model": "tool.criterion", "pk": 7, "fields": {"name": "Safety Training", "courses": [102], "events": [], "documents": []}}
+]

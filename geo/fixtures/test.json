@@ -1,0 +1,5 @@
+[
+  {"model": "geo.city", "pk": 1, "fields": { "name": "Houston", "state": "TX" } },
+  {"model": "geo.location", "pk": 1, "fields": { "name": "TXRX Labs", "city": 1, "zip_code": "77003" } },
+  {"model": "geo.room", "pk": 1, "fields": { "name": "Common Area", "location": 1 } }
+]
