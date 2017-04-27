@@ -156,8 +156,8 @@ PUBLIC_SETTINGS = ["DEBUG","SITE_NAME","SITE_DOMAIN","SITE_URL", "MEMBERSHIP_EMA
 
 CACHES = { # only using this for ics, should be enough for now
   'default': {
-    'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-    'LOCATION': '/var/tmp/django_cache',
+    'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+    'LOCATION': 'my_table_name',
   }
 }
 
