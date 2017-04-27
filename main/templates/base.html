@@ -107,7 +107,7 @@
       {% if settings.DEBUG %}uR.DEBUG = true;{% endif %}
       uR.ready(function() {
         Stripe.setPublishableKey("{{ settings.STRIPE_PUBLIC_KEY }}");
-        new Favico({animation : 'popFade'}).badge({{ pending_evaluations.count }});
+        window.Favico && new Favico({animation : 'popFade'}).badge({{ pending_evaluations.count }});
       });
     </script>
     <script src="{{ STATIC_URL }}cv/float.js"></script>
