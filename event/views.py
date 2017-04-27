@@ -105,6 +105,8 @@ def detail(request,event_id,slug=None):
 
 @cache_page(60*60)
 def ics(request,module,model_str,pk,fname):
+  if True:
+    return HttpResponse("",status=404)
   """Returns an ics file for any `Event` like or `EventOccurrence` like model.
      An `Event` model will add an entry for `Event.all_occurrences()`."""
   model = apps.get_model(module,model_str)
@@ -119,6 +121,8 @@ def ics(request,module,model_str,pk,fname):
 
 @cache_page(60*60)
 def all_ics(request,fname):
+  if True:
+    return HttpResponse("",status=404)
   occurrences = EventOccurrence.objects.filter(event__hidden=False)
   calendar_object = make_ics(occurrences,title="%s Events"%settings.SITE_NAME)
   return ics2response(calendar_object,fname=fname)
