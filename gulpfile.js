@@ -25,7 +25,7 @@ var source_files = [
   _ROOT + "js/init.js",
   _ROOT + "js/router.js",
   _ROOT + "js/blog.js",
-  _ROOT + "js/favico.js",
+  //_ROOT + "js/favico.js",
   _ROOT + "js/course.js",
   ".static/_tags.js",
 ];
