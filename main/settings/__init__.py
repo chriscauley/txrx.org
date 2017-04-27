@@ -154,6 +154,13 @@ WEBMASTER = "chris@lablackey.com"
 
 PUBLIC_SETTINGS = ["DEBUG","SITE_NAME","SITE_DOMAIN","SITE_URL", "MEMBERSHIP_EMAIL"]
 
+CACHES = { # only using this for ics, should be enough for now
+  'default': {
+    'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+    'LOCATION': '/var/tmp/django_cache',
+  }
+}
+
 LONG_CACHE = 60*60 # 1h
 SHORT_CACHE = 10*60 # 10 min
 
