@@ -28,6 +28,8 @@ INSTALLED_APPS = [
   'jsignature',
   'mailer',
 
+  'memcache_status',
+
   #store
   'drop',
   'drop.address',

@@ -23,6 +23,7 @@ pillow==2.1.0
 django-mptt==0.8.6
 -e git+https://github.com/chriscauley/django-unrest-comments.git#egg=django-unrest-comments.git
 
+django-memcache-status
 django-redis-cache
 Markdown
 django-timezones==0.2
