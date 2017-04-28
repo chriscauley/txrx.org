@@ -94,6 +94,12 @@ class MembershipTestCase(TXRXTestCase):
 
         get_user_model().objects.get(email=new_email).delete()
         PayPalIPN.objects.filter(txn_id=data['txn_id']).delete()
+
+        # should not be case sensitive
+        data = get_membership_query(product=product,payer_email=new_email.upper())
+        paypal_post(self,data)
+        validate(new_email,product)
+
 """
 class SimpleTest(TestCase):
   def test_flags(self):
