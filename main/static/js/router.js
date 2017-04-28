@@ -1,5 +1,5 @@
 (function() {
-  uR.config.form_prefix = "/form"; // triggers the form route!
+  uR.config.form_prefix = "#?/form"; // triggers the form route!
   function fromTemplate(template_name,data) {
     template_name = template_name.match(/[^\/].+[^\/]/)[0].replace(/\//g,"-");
     riot.compile(
@@ -20,4 +20,5 @@
     "^/(admin/dashboard|needed-sessions)/$": uR.auth.loginRequired(fromTemplate),
     "^/(event/bulk)/$": uR.auth.loginRequired(fromTemplate),
   });
+  uR.startRouter();
 })();

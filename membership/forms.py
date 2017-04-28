@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.sites.requests import RequestSite
 from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 from django.conf import settings
 
 from registration.models import RegistrationProfile
@@ -27,10 +28,11 @@ lq = "Questions or comments"
 kwargs = dict(widget=forms.Textarea,required=False)
 
 class RegistrationForm(RegistrationForm):
-  _ht = "<b>If different than the email address above.\nThis is necessary to record when you register for a class.</b>"
   first_name = forms.CharField(max_length=30,label="First Name")
   last_name = forms.CharField(max_length=30,label="Last Name")
+  _ht = "If different than the email above.\n This is necessary to record when you register for a class."
   paypal_email = forms.EmailField(required=False,label="PayPal Email - Optional",help_text=_ht)
+  form_title = "Create an account at %s"%settings.SITE_NAME
   def __init__(self,*args,**kwargs):
     super(RegistrationForm, self).__init__(*args,**kwargs)
     placeholder_fields(self)
@@ -49,18 +51,19 @@ class RegistrationForm(RegistrationForm):
       e = u'Another account is already using this username. Please email us if you believe this is in error.'
       raise forms.ValidationError(e)
     return self.cleaned_data
-  def save(self,request):
+  def save(self):
     cleaned_data = self.cleaned_data
-    username, email, password = cleaned_data['username'], cleaned_data['email'], cleaned_data['password1']
+    username, email, password = cleaned_data['username'], cleaned_data['email'], cleaned_data['password']
     if Site._meta.installed:
       site = Site.objects.get_current()
     else:
-      site = RequestSite(request)
+      site = RequestSite(self.request)
     new_user = RegistrationProfile.objects.create_inactive_user(username, email, password, site)
     new_user.first_name = cleaned_data['first_name']
     new_user.last_name = cleaned_data['last_name']
     new_user.save()
-    signals.user_registered.send(sender=self.__class__,user=new_user,request=request)
+    signals.user_registered.send(sender=self.__class__,user=new_user,request=self.request)
+    self.success_url = reverse('registration_complete')
     return new_user
 
 class UserMembershipForm(PlaceholderModelForm):

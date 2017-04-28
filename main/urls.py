@@ -46,6 +46,7 @@ _pages = [
   'admin/dashboard',
   'notify',
   'event/bulk',
+  'auth/login'
 ]
 
 urlpatterns = [
