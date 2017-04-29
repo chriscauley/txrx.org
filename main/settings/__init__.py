@@ -66,7 +66,7 @@ STAFF_ROOT = os.path.join(SPATH, '../.staff')
 STAFF_URL = '/staff_only/'
 PRIVATE_ROOT = os.path.normpath(os.path.join(SPATH, '../.private'))
 
-LOGIN_URL = "/accounts/login/"
+LOGIN_URL = "/#/auth/login/"
 LOGOUT_URL = "/accounts/logout/"
 LOGIN_REDIRECT_URL = "/"
 
