@@ -11,6 +11,7 @@ from django.template.response import TemplateResponse
 from ..models import Course, Term, Subject, Session, Enrollment, ClassTime
 from ..forms import EmailInstructorForm, EvaluationForm
 from notify.models import Follow
+from lablackey.decorators import auth_required
 from lablackey.contenttypes import get_contenttype
 from lablackey.utils import get_or_none
 from event.utils import make_ics,ics2response
@@ -33,6 +34,7 @@ def get_course_values(user):
 def index(request):
   return TemplateResponse(request,"course/index.html",get_course_values(request.user))
 
+@auth_required
 def user_ajax(request,template):
   return TemplateResponse(request,"course/_%s.html"%template,get_course_values(request.user))
 

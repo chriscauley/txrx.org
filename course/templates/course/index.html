@@ -36,6 +36,20 @@
     </ul>
   </div>
   {% endif %}
+  <ur-tabs>
+    <ur-tab title="All Classses">
+      <course-list id="scheduled-courses"></course-list>
+      <div class="course_divider" style="display:none">
+        <h2>Classes not Scheduled</h2>
+        <p class="alert alert-warning">
+          The classes below are not currently scheduled but are classes taught at TXRX. Click the "Email me the next time this class is scheduled" button on the class page to be notified when a new session is posted.
+        </p>
+      </div>
+      <course-list id="unscheduled-courses"></course-list>
+    </ur-tab>
+    <ur-tab title="My Classes ({{ user_sessions|length }})" href="{% url "course:user_ajax" "myclasses" %}"></ur-tab>
+  </ur-tabs>
+
   <ul class="nav nav-tabs" role="tablist">
     <li class="active" id="all_classes_tab"><a href="#all_classes" role="tab" data-toggle="tab">
         All Classes</a></li>
@@ -50,14 +64,6 @@
   </ul>
   <div class="tab-content">
     <div class="tab-pane active course_list" id="all_classes">
-      <course-list id="scheduled-courses"></course-list>
-      <div class="course_divider" style="display:none">
-        <h2>Classes not Scheduled</h2>
-        <p class="alert alert-warning">
-          The classes below are not currently scheduled but are classes taught at TXRX. Click the "Email me the next time this class is scheduled" button on the class page to be notified when a new session is posted.
-        </p>
-      </div>
-      <course-list id="unscheduled-courses"></course-list>
     </div>
     <div class="tab-pane needs_ajax" id="myclasses"></div>
     {% if instructor_sessions %}

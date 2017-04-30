@@ -1,4 +1,3 @@
-{% if request.user.is_authenticated %}
 <section class="events_box">
   <div class="alert alert-danger">
     After you pay for a class it should appear here. If it does not, please email
@@ -23,12 +22,3 @@
     {% endfor %}
   </ul>
 </section>
-{% else %}
-<p class="alert alert-danger">
-  Already signed up?
-  <a href="/accounts/login/?next={{ request.path|urlencode }}{{ "#my_classes"|urlencode }}">Log in</a>
-  to see your classes.<br />
-  If not, an account will be automatically created when you first pay for a class.
-</p>
-{% endif %}
-

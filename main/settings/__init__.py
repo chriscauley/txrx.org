@@ -69,6 +69,7 @@ PRIVATE_ROOT = os.path.normpath(os.path.join(SPATH, '../.private'))
 LOGIN_URL = "/#/auth/login/"
 LOGOUT_URL = "/accounts/logout/"
 LOGIN_REDIRECT_URL = "/"
+USER_JSON_VIEW = "user.views.user_json"
 
 SECRET_KEY = '^f_fn6)^e5^)+p-rjcrcdf(7iwz4@5z9thx92%^=e_)$jly7mc'
 MAPS_API_KEY = 'ABQIAAAAeppD1h9lB7H61ozR18SeZRS_YqHDtehKcRTrrAGjc25rDMjatxT8nvoX4-jJXcRPaT4I-RdMYv3fJA'
@@ -152,7 +153,7 @@ SITE_DOMAIN = "txrxlabs.org"
 SITE_NAME = "TXRX Labs"
 WEBMASTER = "chris@lablackey.com"
 
-PUBLIC_SETTINGS = ["DEBUG","SITE_NAME","SITE_DOMAIN","SITE_URL", "MEMBERSHIP_EMAIL"]
+PUBLIC_SETTINGS = ["DEBUG","SITE_NAME","SITE_DOMAIN","SITE_URL", "MEMBERSHIP_EMAIL","LOGIN_URL"]
 
 CACHES = { # only using this for ics, should be enough for now
   'default': {
