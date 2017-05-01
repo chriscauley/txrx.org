@@ -75,9 +75,9 @@
   </h1>
   <h3 if={ opts.active_sessions }>Upcoming Sessions:</h3>
   <div class="session well" id="s{ id }" each={ opts.active_sessions }>
-    <a if={ parent.user.is_superuser || instructor_pk == parent.user.id }
+    <a if={ uR.auth.user.is_superuser || instructor_pk == uR.auth.user.id }
        href="/classes/instructor_session/{ id }/" class="instructor-link fa fa-edit"></a>
-    <a if={ parent.user.is_superuser } href="/admin/course/session/{ id }/"
+    <a if={ uR.auth.user.is_superuser } href="/admin/course/session/{ id }/"
        class="admin-link fa fa-pencil-square"></a>
     <div class="date" each={ classtimes }>
       { moment.format("ddd MMM D") } { start_time } - { end_time } 
@@ -91,12 +91,11 @@
       <add-to-cart product_id={ product_id } add_text="Add this session to  cart"></add-to-cart>
     </div>
     <div if={ !closed_status && !fee }>
-      <button class="btn btn-success rsvp" onclick={ parent.rsvp } if={ !rsvpd && parent.user.id }>
+      <button class="btn btn-success rsvp" onclick={ parent.rsvp } if={ !rsvpd && uR.auth.user }>
         RSVP for this event</button>
-      <button class="btn btn-danger unrsvp" onclick={ parent.unrsvp } if={ rsvpd && parent.user.id }>
+      <button class="btn btn-danger unrsvp" onclick={ parent.unrsvp } if={ rsvpd && uR.auth.user }>
         Cancel RSVP</button>
-      <a if={ !parent.user.id } href="/accounts/login/?next={ window.location.href }">
-        Login to RSVP</a>
+      <a if={ !uR.auth.user } href={ uR.urls.auth.login }>Login to RSVP</a>
       <div class="alert alert-warning" if={ message }>{ message }</div>
     </div>
   </div>
