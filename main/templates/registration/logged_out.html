@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-{% load i18n %}
-
-{% block title %}{{ title }}{% endblock %}
-{% block header_content %}{{ title }}{% endblock %}
-
-{% block content %}
-<p>You have been logged out. <a href="/accounts/login/?next=/"><strong>{% trans 'Log in again' %}</strong></a></p>
-{% endblock %}
