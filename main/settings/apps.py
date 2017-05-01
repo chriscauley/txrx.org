@@ -1,6 +1,7 @@
 INSTALLED_APPS = [
   'lablackey',
   'suit',
+  'registration',
   'django.contrib.auth',
   'django.contrib.contenttypes',
   'django.contrib.sessions',
@@ -18,7 +19,6 @@ INSTALLED_APPS = [
   #'markdown_deux',
   #'bootstrapform',
   'sorl.thumbnail',
-  'registration',
   'paypal.standard.ipn',
   'compressor',
   'tagging',
