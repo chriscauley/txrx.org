@@ -66,9 +66,7 @@ click(e) {
         <span if={ total_rsvp && uR.auth.user.is_superuser } data-reddot={ total_rsvp }></span>
       </div>
       <div if={ !full && !authenticated }>
-        You must
-        <a href="/accounts/login/?next={ session.get_absolute_url|urlencode }">Login</a>
-        to RSVP
+        You must <a href={ uR.urls.auth.login }>Login</a> to RSVP
       </div>
     </div>
     <div if={ past }>

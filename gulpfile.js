@@ -72,7 +72,7 @@ gulp.task('build-css', function () {
 var build_tasks = ['build-js', 'build-css'];
 
 gulp.task('watch', build_tasks, function () {
-  gulp.watch(["main/static/js/*.js","main/static/tags/*.tag"], ['build-js']);
+  gulp.watch(["main/static/js/*.js","main/static/tags/*.tag","event/static/tags/event.tag"], ['build-js']);
   gulp.watch("main/static/less/**/*.less", ['build-css']);
 });
 
