@@ -31,10 +31,10 @@
     {% if subscription.subscr_id %}[{{ subscription.subscr_id }}]{% endif %}
   </h4>
   {% if subscription.status_set.count or subscription.canceled %}
-  <div>Start Date: {{ subscription.created|date:"M n, Y" }}</div>
+  <div>Start Date: {{ subscription.created|date:"M j, Y" }}</div>
   <div>{{ subscription.verbose_status }}</div>
   {% if subscription.canceled and subscription.paid_until > now %}
-  <div>Paid until: {{ subscription.paid_until|date:"M n, Y" }}</div>
+  <div>Paid until: {{ subscription.paid_until|date:"M j, Y" }}</div>
   {% endif %}
   {% endif %}
   {% if subscription.subscr_id and not subscription.canceled %}
