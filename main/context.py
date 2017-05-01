@@ -158,10 +158,6 @@ def nav(request):
       d_ids = getattr(settings,"REQUIRED_DOCUMENT_IDS",[])
       documents_needed = len(d_ids) - Signature.objects.filter(document_id__in=d_ids,user=request.user).count()
 
-  login_redirect = request.path
-  if 'auth' in request.path or 'accounts' in request.path:
-    login_redirect = "/"
-
   return dict(
     documents_needed = documents_needed,
     current = request.path.split('/')[1] or 'home',
@@ -180,7 +176,6 @@ def nav(request):
     calendar_protocols = ['http://www.google.com/calendar/render?cid=http://','webcal://'], #! move to event.context
     all_classes_ics = '%s/classes/ics/all_classes.ics'%settings.SITE_DOMAIN, #! move to course.context
     pressitems = PressItem.objects.all(),
-    login_redirect = login_redirect,
     SITE_DOMAIN = "https://txrxlabs.org",
     sql_time_sum = lambda: sum([float(q['time'])*1000 for q in connection.queries]),
   )
