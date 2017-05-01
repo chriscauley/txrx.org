@@ -378,7 +378,7 @@
       <p class="lead">
         The RFID card you used is not in our system. Please enter your email and password to have this RFID affiliated with your account.
       </p>
-      <ur-form schema={ TXRX.schema.new_rfid } initial={ parent.opts } action="/add_rfid/" method="POST"
+      <ur-form schema={ TXRX.schema.new_rfid } initial={ opts } action="/add_rfid/" method="POST"
                ajax_success={ parent.ajax_success }></ur-form>
     </div>
   </div>
