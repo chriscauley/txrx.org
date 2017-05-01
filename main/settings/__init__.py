@@ -66,7 +66,7 @@ STAFF_ROOT = os.path.join(SPATH, '../.staff')
 STAFF_URL = '/staff_only/'
 PRIVATE_ROOT = os.path.normpath(os.path.join(SPATH, '../.private'))
 
-LOGIN_URL = "/#/auth/login/"
+LOGIN_URL = "/auth/login/"
 LOGOUT_URL = "/accounts/logout/"
 LOGIN_REDIRECT_URL = "/"
 USER_JSON_VIEW = "user.views.user_json"
@@ -167,7 +167,7 @@ SHORT_CACHE = 10*60 # 10 min
 
 PAYPAL_RECEIVER_EMAIL = "txrxlabs@gmail.com"
 
-CONTACT_EMAIL = "webmaster@txrxlabs.org"
+CONTACT_EMAIL = "info@txrxlabs.org"
 CONTACT_LINK = "<a href='%s'>%s</a>"%(CONTACT_EMAIL,CONTACT_EMAIL)
 EMAIL_SUBJECT_PREFIX = "[TXRX] "
 DEFAULT_FROM_EMAIL = "noreply@txrxlabs.org"

@@ -1,5 +1,0 @@
-Welcome to txrx labs! Please follow the following link to complete your account activation:
-
-http://{{ site.domain }}/accounts/activate/{{ activation_key }}/
-
-This link will only be valid for {{ expiration_days }} days. We look forward to seeing you at the lab.
