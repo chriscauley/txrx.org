@@ -45,7 +45,7 @@ def door_access(request):
     return FAIL
   valid = valid or request.user.is_superuser
 
-  _Q = Q(canceled__isnull=True) | Q(canceled__gte=datetime.datetime.now())
+  _Q = Q(canceled__isnull=True) | Q(paid_until__gte=datetime.datetime.now())
   base_subs = Subscription.objects.filter(_Q,owed__lte=0)
   base_subs = base_subs.exclude(user__rfid__isnull=True)
   base_sub_buddies = SubscriptionBuddy.objects.filter(paid_until__gte=datetime.datetime.now())
