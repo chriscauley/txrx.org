@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import QueryDict, Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.views.decorators.cache import cache_page
 
 from ..models import Course, Term, Subject, Session, Enrollment, ClassTime
 from ..forms import EmailInstructorForm, EvaluationForm
@@ -66,11 +67,13 @@ def detail(request,pk,slug):
   }
   return TemplateResponse(request,"course/detail.html",values)
 
+@cache_page(12*60*60)
 def ics_classes_all(request,fname):
   occurrences = ClassTime.objects.all()
   calendar_object = make_ics(occurrences,title="%s Classes"%settings.SITE_NAME)
   return ics2response(calendar_object,fname=fname)
 
+@cache_page(12*60*60)
 def ics_classes_user(request,u_id,api_key,fname):
   user = get_object_or_404(get_user_model(),pk=u_id,usermembership__api_key=api_key)
   enrollments = user.enrollment_set.all()
