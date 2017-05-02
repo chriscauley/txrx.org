@@ -6,14 +6,14 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.conf import settings
 
-from registration.models import RegistrationProfile
 
 from .models import UserMembership
 from .utils import verify_unique_email
 from lablackey.db.forms import PlaceholderModelForm, PlaceholderForm, placeholder_fields
 
-from registration import signals
-from registration.forms import RegistrationForm
+from lablackey.registration import signals
+from lablackey.registration.forms import RegistrationForm
+from lablackey.registration.models import RegistrationProfile
 
 s = "What do you to hope accomplish at the hackerspace? What classes do you want to take? What classes are no offered that you'd like to see offered?"
 e = "List any helpful skills or areas of expertise that might be relevent to the Lab. Also note if you would be interested in teaching classes in these areas."

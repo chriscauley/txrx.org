@@ -21,7 +21,6 @@ import djstripe.urls
 import contact.views, geo.views, user.views
 import redtape.urls
 import membership.urls
-import registration.urls
 import drop.views.product
 import course.views.classes
 import airbrake.urls
@@ -118,9 +117,7 @@ urlpatterns += [
   url(r'^accounts/settings/$',membership.views.user_settings,name='account_settings'),
   url(r'^accounts/register/$',membership.views.register,name="account_register"),
   url(r'^accounts/(cancel)_subscription/',membership.views.change_subscription,name="cancel_subscription"),
-  url(r'^auth/', include(registration.urls)),
-  url(r'^accounts/', include(registration.urls)),#! Depracated in favor of auth
-  #! TODO Move the following to registration, write test, and make activate AFTER password is reset
+  #! TODO Move the following to lablackey.registration, write test, and make activate AFTER password is reset
   url(r'^auth/password_reset/$',activate_user(password_reset),kwargs={'password_reset_form': PasswordResetForm}),
   url(r'^auth/',include(django.contrib.auth.urls)),
   url(r'^force_login/([\d\w]+)/$', main.views.force_login),

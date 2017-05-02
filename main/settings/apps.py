@@ -1,7 +1,7 @@
 INSTALLED_APPS = [
   'lablackey',
   'suit',
-  'registration',
+  'lablackey.registration',
   'django.contrib.auth',
   'django.contrib.contenttypes',
   'django.contrib.sessions',
