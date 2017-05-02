@@ -25,6 +25,7 @@
     {% if event.rsvp_cutoff %}
     <div class="alert alert-warning">{{ event.verbose_rsvp_cutoff }}</div>
     {% endif %}
+    {% comment %}
     {% if event.non_custom_repeats %}
     <h3>This event repeats:</h3>
     <ul>
@@ -36,6 +37,7 @@
       This is schedule may change at any time and exceptions may be made for holliday and illness. Be sure to check back here for exact times.
     </p>
     {% endif %}
+    {% endcomment %}
   </div>
   <div class="col-xs-12 col-sm-4 col-md-3 pull-right" id="side"></div>
   <script>
