@@ -23,7 +23,7 @@ class TXRXTestCase(DropTestCase):
     self._setup_membership()
     self._setup_course()
     for app_name in ["geo","tool"]:
-      call_command("loaddata","%s/fixtures/test.json"%app_name)
+      call_command("loaddata","%s/fixtures/test.json"%app_name,"-v 0")
   def _setup_course(self):
     tomorrow = arrow.now().replace(days=1,hour=13,minute=00).datetime
     next_day = arrow.now().replace(days=2,hour=13,minute=00).datetime
