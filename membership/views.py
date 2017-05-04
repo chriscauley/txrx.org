@@ -101,9 +101,9 @@ def register(request,*args,**kwargs):
       m += "<br />If you believe this is in error, please email %s"%settings.CONTACT_LINK
       m = "An account with the email address %s already exists. %s"%(email,m)
       messages.error(request,m,extra_tags='danger')
-      return JsonResponse({'ur_route_to': reverse('pasword_reset')})
-    user = form.save(request)
-    return JsonResponse({'ur_route_to': reverse('registration_complete')})
+      return HttpResponseRedirect(reverse('pasword_reset'))
+    user = form.save()
+    return HttpResponseRedirect(reverse('registration_complete'))
   values = {
     'form': form,
   }
