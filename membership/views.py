@@ -92,22 +92,7 @@ def minutes_index(request):
   return TemplateResponse(request,'membership/minutes_index.html',values)
 
 def register(request,*args,**kwargs):
-  email = request.POST.get('email','')
-  paypal_email = request.POST.get('paypal_email','')
-  form = RegistrationForm(request)
-  if form.is_valid():
-    if request.POST and not (verify_unique_email(email) and verify_unique_email(paypal_email)):
-      m = "Please use the form below to reset your password. "
-      m += "<br />If you believe this is in error, please email %s"%settings.CONTACT_LINK
-      m = "An account with the email address %s already exists. %s"%(email,m)
-      messages.error(request,m,extra_tags='danger')
-      return HttpResponseRedirect(reverse('pasword_reset'))
-    user = form.save()
-    return HttpResponseRedirect(reverse('registration_complete'))
-  values = {
-    'form': form,
-  }
-  return TemplateResponse(request,'registration/registration_form.html',values)
+  return HttpResponseRedirect("/#/form/membership.RegistrationForm/")
 
 def roland_email(request,y=2012,m=1,d=1):
   if not request.user.is_superuser:
