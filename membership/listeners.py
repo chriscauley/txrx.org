@@ -8,6 +8,8 @@ from course.utils import get_or_create_student
 from .models import Status, Subscription, Level, Product, Flag
 from tool.models import Criterion
 
+from lablackey.mail import send_template_email
+
 from paypal.standard.ipn.signals import valid_ipn_received, invalid_ipn_received
 
 def get_subscription(params,sender):
@@ -34,9 +36,20 @@ def paypal_flag(sender,reason=None,**kwargs):
 @receiver(valid_ipn_received,dispatch_uid='paypal_signal')
 @receiver(invalid_ipn_received,dispatch_uid='paypal_signal')
 def paypal_signal(sender,**kwargs):
+  params = QueryDict(sender.query)
+  if sender.txn_type == "web_accept" and params["custom"] == "support page donation":
+    address = ""
+    if params.get("address_street",None):
+      address = "\n".join([
+        params['address_name'],
+        params['address_street'],
+        "%s, %s"%(params['address_city'],params['address_state']),
+        params['address_zip']
+      ])
+    send_template_email("email/donation_thank_you",["payer_email"],context={'params': params,'address': address})
+    return
   if sender.txn_type in ["web_accept","send_money"]:
     return # payment from front page
-  params = QueryDict(sender.query)
   subscr_id = params.get('subscr_id',None) or params.get('recurring_payment_id',None)
   if sender.txn_type in ['','cart','subscr_signup']:
     return # refunds and classes and signups
