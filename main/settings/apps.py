@@ -50,7 +50,7 @@ INSTALLED_APPS = [
   # this project
   'user',
   'rfid',
-  'geo',
+  'lablackey.geo',
   'misc',
   'instagram',
   #'project',

@@ -7,11 +7,11 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.template.defaultfilters import slugify, date, urlencode
 
-from geo.models import Room
 from media.models import PhotosMixin
 from lablackey.contenttypes import get_contenttype
 from lablackey.db.models import UserModel, JsonMixin
 from lablackey.decorators import cached_property, cached_method
+from lablackey.geo.models import Room
 from tool.models import CriterionModel
 from wmd import models as wmd_models
 

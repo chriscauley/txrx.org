@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.template.defaultfilters import slugify
 
 from course.models import ClassTime
-from geo.models import Room
+from lablackey.geo.models import Room
 from .models import EventOccurrence, OccurrenceModel # Occurrence model used to make non-db objects
 
 import icalendar, datetime, math, arrow

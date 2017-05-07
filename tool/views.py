@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from course.models import Enrollment, CourseEnrollment
-from geo.models import Room
+from lablackey.geo.models import Room
 from lablackey.mail import send_template_email
 from redtape.models import Signature
 from tool.models import Tool, Lab, Group, Permission, Criterion, UserCriterion

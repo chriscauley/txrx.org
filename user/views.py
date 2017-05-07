@@ -15,7 +15,7 @@ from rfid.models import RFID
 from event.models import RSVP
 from course.models import Enrollment, ClassTime
 from course.utils import get_or_create_student
-from geo.models import Room
+from lablackey.geo.models import Room
 from membership.utils import temp_user_required
 from redtape.models import Document
 from tool.models import Criterion, UserCriterion, Permission

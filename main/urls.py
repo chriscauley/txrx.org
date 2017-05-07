@@ -18,7 +18,7 @@ import social.apps.django_app.urls
 import unrest_comments.urls
 import course.urls, course.views
 import djstripe.urls
-import contact.views, geo.views, user.views
+import contact.views, lablackey.geo.views, user.views
 import redtape.urls
 import membership.urls
 import drop.views.product
@@ -83,9 +83,9 @@ urlpatterns = [
   url(r'^payments/', include(djstripe.urls, namespace="djstripe")),
   url(r'^contact/$',contact.views.contact,name='contact'),
   url(r'^contact/(\w+).(\w+)_(\d+)-(.*).png$',contact.views.tracking_pixel,name="tracking_pixel"),
-  url(r'^dxfviewer/$',geo.views.dxfviewer,name='dxfviewer'),
-  url(r'^geo/events.json',geo.views.events_json),
-  url(r'^geo/locations.json$',geo.views.locations_json),
+  url(r'^dxfviewer/$',lablackey.geo.views.dxfviewer,name='dxfviewer'),
+  url(r'^geo/events.json',lablackey.geo.views.events_json),
+  url(r'^geo/locations.json$',lablackey.geo.views.locations_json),
   url(r'^checkin_ajax/$', user.views.checkin_ajax, name='checkin_ajax'),
   url(r'^checkin_email/$', user.views.checkin_email, name='checkin_email'),
   url(r'^add_rfid/$', user.views.add_rfid, name='add_rfid'),

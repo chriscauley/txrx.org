@@ -9,7 +9,7 @@ from django.db import IntegrityError
 from course.models import Course, Session, ClassTime
 from tool.models import Criterion
 from event.models import Event, EventOccurrence
-from geo.models import Room, Location, City
+from lablackey.geo.models import Room, Location, City
 from lablackey.tests import check_subjects
 from membership.models import Level
 

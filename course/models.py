@@ -11,7 +11,6 @@ from crop_override import get_override
 import datetime, time
 
 from event.models import OccurrenceModel, reverse_ics
-from geo.models import Room
 from media.models import FilesMixin, PhotosMixin
 from notify.models import Follow
 from tool.models import ToolsMixin, Permission, Criterion, CriterionModel, Tool
@@ -19,6 +18,7 @@ from tool.models import ToolsMixin, Permission, Criterion, CriterionModel, Tool
 from lablackey.contenttypes import get_contenttype
 from lablackey.db.models import UserModel, NamedTreeModel
 from lablackey.decorators import cached_method, cached_property
+from lablackey.geo.models import Room
 from lablackey.mail import send_template_email
 from lablackey.utils import latin1_to_ascii
 
