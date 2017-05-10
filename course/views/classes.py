@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import QueryDict, Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.utils import timezone
 from django.views.decorators.cache import cache_page
 
 from ..models import Course, Term, Subject, Session, Enrollment, ClassTime
@@ -69,7 +70,7 @@ def detail(request,pk,slug):
 
 @cache_page(12*60*60)
 def ics_classes_all(request,fname):
-  occurrences = ClassTime.objects.all()
+  occurrences = ClassTime.objects.filter(start__gte=timezone.now()-datetime.timedelta(30))
   calendar_object = make_ics(occurrences,title="%s Classes"%settings.SITE_NAME)
   return ics2response(calendar_object,fname=fname)
 
@@ -81,7 +82,7 @@ def ics_classes_user(request,u_id,api_key,fname):
   sessions += user.session_set.all()
   occurrences = []
   for session in sessions:
-    occurrences += session.classtime_set.all()
+    occurrences += session.classtime_set.filter(start__gte=timezone.now-datetime.timedelta(30))
   calendar_object = make_ics(occurrences,title="%sMy Classes"%settings.EMAIL_SUBJECT_PREFIX)
   return ics2response(calendar_object,fname=fname)
 
