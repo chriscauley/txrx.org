@@ -19,11 +19,10 @@ import datetime, decimal, six, arrow, random
 
 class TXRXTestCase(DropTestCase):
   def setUp(self):
-    self._setup_geo()
+    for app_name in [".dev/lablackey/geo","tool"]:
+      call_command("loaddata","%s/fixtures/test.json"%app_name,"-v 0")
     self._setup_membership()
     self._setup_course()
-    for app_name in ["geo","tool"]:
-      call_command("loaddata","%s/fixtures/test.json"%app_name,"-v 0")
   def _setup_course(self):
     tomorrow = arrow.now().replace(days=1,hour=13,minute=00).datetime
     next_day = arrow.now().replace(days=2,hour=13,minute=00).datetime
@@ -31,7 +30,7 @@ class TXRXTestCase(DropTestCase):
     kwargs = dict(
       active=True,
       no_conflict=True,
-      room=self.room
+      room_id=1
     )
   
     self.course1 = Course.objects.create(name="course45",fee=45,**kwargs)
@@ -75,10 +74,6 @@ class TXRXTestCase(DropTestCase):
       p = int(random.random()*100)
       level.product_set.get_or_create(name="monthly %s"%level,unit_price=p,months=1,active=True)
       level.product_set.get_or_create(name="yearly %s"%level,unit_price=p*11,months=12,active=True)
-  def _setup_geo(self):
-    self.city = City.objects.get_or_create(name="Houston",state="TX")[0]
-    self.location = Location.objects.get_or_create(name="TXRX Labs",city=self.city,zip_code="77003")[0]
-    self.room = Room.objects.get_or_create(name="arst",location=self.location)[0]
 
 class ManagementCommands(DropTestCase):
   def setUp(self):

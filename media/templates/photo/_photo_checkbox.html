@@ -1,9 +1,0 @@
-{% load thumbnail %}
-{% thumbnail photo.file "200x200" crop="center" as im %}
-<input class="hidden_checkbox" id="id_photo_{{ photo.id }}" value="{{ photo.id }}"
-       name="untagged_photo" type="checkbox"{% if checked %} checked="checked"{% endif %} />
-<label for="id_photo_{{ photo.id }}" class="well">
-  <img src="{{ im.url }}" />
-  <h3>{{ photo }}</h3>
-</label>
-{% endthumbnail %}
