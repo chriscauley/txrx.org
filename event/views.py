@@ -104,7 +104,7 @@ def detail(request,event_id,slug=None):
   return TemplateResponse(request,'event/detail.html',values)
 
 @cache_page(12*60*60)
-def icsv(request,module,model_str,pk,fname):
+def ics(request,module,model_str,pk,fname):
   """Returns an ics file for any `Event` like or `EventOccurrence` like model.
      An `Event` model will add an entry for `Event.all_occurrences()`."""
   model = apps.get_model(module,model_str)
