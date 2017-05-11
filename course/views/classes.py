@@ -82,7 +82,7 @@ def ics_classes_user(request,u_id,api_key,fname):
   sessions += user.session_set.all()
   occurrences = []
   for session in sessions:
-    occurrences += session.classtime_set.filter(start__gte=timezone.now-datetime.timedelta(30))
+    occurrences += session.classtime_set.filter(start__gte=timezone.now()-datetime.timedelta(30))
   calendar_object = make_ics(occurrences,title="%sMy Classes"%settings.EMAIL_SUBJECT_PREFIX)
   return ics2response(calendar_object,fname=fname)
 
