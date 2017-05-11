@@ -108,7 +108,7 @@ def ics(request,module,model_str,pk,fname):
   """Returns an ics file for any `Event` like or `EventOccurrence` like model.
      An `Event` model will add an entry for `Event.all_occurrences()`."""
   model = apps.get_model(module,model_str)
-  event = get_object_or_404(model,pk=pk,hidden=False)
+  event = get_object_or_404(model,pk=pk)
   try:
     occurrences = event.all_occurrences.filter(start__gte=timezone.now()-datetime.timedelta(30))
   except AttributeError: # single occurrence
