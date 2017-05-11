@@ -254,7 +254,7 @@ class Session(UserModel,PhotosMixin,models.Model):
       # this sets self.first_date to the first ClassTime.start if they aren't equal
       # also sets self.last_date to the last ClassTime.end
       # handled in the admin by /static/js/course_admin.js
-      _a = self.all_occurrences
+      _a = list(self.all_occurrences)
       if not _a:
         return
       if not _a[0].start == self.first_date:
@@ -335,8 +335,7 @@ class Session(UserModel,PhotosMixin,models.Model):
 
   #calendar crap
   name = property(lambda self: self.course.name)
-  all_occurrences = cached_property(lambda self:list(self.classtime_set.all()),
-                                    name='all_occurrences')
+  all_occurrences = cached_property(lambda self:self.classtime_set.all(),name='all_occurrences')
   get_ics_url = lambda self: reverse_ics(self)
 
   @cached_method
