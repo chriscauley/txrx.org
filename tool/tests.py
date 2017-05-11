@@ -2,7 +2,6 @@
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.management import call_command
 from django.test import TestCase
 
 from course.models import Session
@@ -38,6 +37,5 @@ class SafetyTest(TestCase):
     criterion.save()
     self.session.first_date = now + datetime.timedelta(7.5)
     self.session.save()
-    call_command("check_permissions")
-    print Flag.objects.filter(subscription__user=user)
+    self.call_command("check_permissions")
     

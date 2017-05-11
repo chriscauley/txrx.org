@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.core import mail
-from django.core.management import call_command
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 
@@ -27,7 +26,7 @@ class NotificationTestCase(TXRXTestCase):
     def setUp(self):
         super(NotificationTestCase,self).setUp()
         # clear any backlog made by the above super
-        call_command("notify_course")
+        self.call_command("notify_course")
         mail.outbox = []
         self.follow_url = reverse("notify_follow",args=["course.Course",self.course1.id])
         self.follow_url2 = reverse("notify_follow",args=["course.Course",self.course2.id])
@@ -45,14 +44,14 @@ class NotificationTestCase(TXRXTestCase):
         self.assertEqual(user.notification_set.filter(read__isnull=True).count(),1)
         notification = user.notification_set.all()[0]
         self.assertEqual(notification.target,session1)
-        call_command("notify_course")
+        self.call_command("notify_course")
         self.assertEqual(len(mail.outbox),1)
         self.assertEqual("New classes at %s"%settings.SITE_NAME,mail.outbox[0].subject)
         self.assertTrue("%s%s"%(settings.SITE_URL,session1.get_absolute_url()) in mail.outbox[0].body)
 
         # user will not get emailed if management command runs again
         mail.outbox = []
-        call_command("notify_course")
+        self.call_command("notify_course")
         self.assertEqual(len(mail.outbox),0)
 
         # user visits class page from email link notification is read
@@ -79,7 +78,7 @@ class NotificationTestCase(TXRXTestCase):
         self.assertEqual(notification.target,session1a)
         mail.outbox = []
         sms.outbox = []
-        call_command("notify_course")
+        self.call_command("notify_course")
         self.assertEqual(len(mail.outbox),0)
         m = 'There a new session of course45 at TXRX Labs. Visit %s to find out more'
         self.assertEqual(sms.outbox[0].body,m%settings.NOTIFY_URL)
@@ -100,7 +99,7 @@ class NotificationTestCase(TXRXTestCase):
         session2 = new_session(self.course2,self.teacher)
         session22 = new_session(self.course2,self.teacher)
         # management command sends one email to student, containing links to all three classes
-        call_command("notify_course")
+        self.call_command("notify_course")
         self.assertEqual(len(mail.outbox),1)
         self.assertEqual("New classes at %s"%settings.SITE_NAME,mail.outbox[0].subject)
         for s in [session1,session2,session22]:
@@ -135,8 +134,8 @@ class NotificationTestCase(TXRXTestCase):
 
         # run management command
         sms.outbox = []
-        call_command('course_reminder')
-        call_command('notify_course')
+        self.call_command('course_reminder')
+        self.call_command('notify_course')
 
         # verify user received text and mail outbox is empty
         self.check_subjects(["You're teaching tomorrow at 1 p.m.","Class tomorrow!"])
@@ -145,8 +144,8 @@ class NotificationTestCase(TXRXTestCase):
         sms.outbox = []
 
         # run management command
-        call_command('course_reminder')
-        call_command('notify_course')
+        self.call_command('course_reminder')
+        self.call_command('notify_course')
 
         self.check_subjects([])
         self.assertEqual(len(sms.outbox),0)

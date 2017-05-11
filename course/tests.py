@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
-from django.core.management import call_command
 from django.db.models import Q
 
 from membership.paypal_utils import get_course_query, paypal_post
@@ -133,8 +132,8 @@ class NotifyTest(TXRXTestCase):
     Enrollment.objects.create(user=self.student2,session=self.session2)
 
     # send out reminders and check that they went out
-    call_command("course_reminder")
-    call_command("notify_course")
+    self.call_command("course_reminder")
+    self.call_command("notify_course")
     subjects = [
       u'Class tomorrow!', # student1
       u'2 classes tomorrow!', # student2
@@ -146,7 +145,7 @@ class NotifyTest(TXRXTestCase):
 
     # send out reminders again. Make sure none went out
     mail.outbox = []
-    call_command("course_reminder")
-    call_command("notify_course")
+    self.call_command("course_reminder")
+    self.call_command("notify_course")
     self.check_subjects([])
     self.check_recipients([])

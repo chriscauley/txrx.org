@@ -2,7 +2,6 @@
 import warnings;warnings.showwarning = lambda *x: None
 
 from django.conf import settings
-from django.core.management import call_command
 from django.core import mail
 from django.db import IntegrityError
 
@@ -18,9 +17,9 @@ from drop.test_utils import DropTestCase
 import datetime, decimal, six, arrow, random
 
 class TXRXTestCase(DropTestCase):
-  def setUp(self):
-    for app_name in [".dev/lablackey/geo","tool"]:
-      call_command("loaddata","%s/fixtures/test.json"%app_name,"-v 0")
+  fixture_apps = [".dev/lablackey/geo/","tool"]
+  def setUp(self,*args,**kwargs):
+    super(TXRXTestCase,self).setUp(*args,**kwargs)
     self._setup_membership()
     self._setup_course()
   def _setup_course(self):
@@ -85,21 +84,21 @@ class ManagementCommands(DropTestCase):
     Event.objects.filter(name="monkey").delete()
     e = Event.objects.create(name="monkey",repeat="month-number")
     eo = EventOccurrence.objects.create(start=self.tomorrow,end_time=self.in_an_hour,event=e)
-    call_command("repeat_events")
+    self.call_command("repeat_events")
     self.assertEqual(e.eventoccurrence_set.count(),5)
     subjects = [m.subject for m in mail.outbox]
     self.assertTrue(check_subjects([]))
 
   def test_evaluation_reminder(self):
-    call_command("evaluation_reminder")
+    self.call_command("evaluation_reminder")
   def test_recalculate_subscriptions(self):
-    call_command("recalculate_subscriptions")
+    self.call_command("recalculate_subscriptions")
 
   # done in course.tests
   #def test_course_reminder(self):
-  #  call_command("course_reminder")
+  #  self.call_command("course_reminder")
 
   def test_notify_course(self):
-    call_command("notify_course")
+    self.call_command("notify_course")
   def test_reset_classes(self):
-    call_command("reset_classes")
+    self.call_command("reset_classes")
