@@ -22,9 +22,10 @@ class Command(BaseCommand):
     u.username='admin'
     u.save()
     User.objects.all().update(paypal_email=None)
-    print "%s users with normal emails"%User.objects.using('anon').exclude(email__startswith="user__").count()
-    print "%s users with normal names"%User.objects.using('anon').exclude(username__startswith="user__").count()
-    print "%s users with paypal emails"%User.objects.using('anon').filter(usermembership__isnull=True).count()
+    if options.get("verbosity") > 0:
+      print "%s users with normal emails"%User.objects.using('anon').exclude(email__startswith="user__").count()
+      print "%s users with normal names"%User.objects.using('anon').exclude(username__startswith="user__").count()
+      print "%s users with paypal emails"%User.objects.using('anon').filter(usermembership__isnull=True).count()
     if user_list != [u.username for u in User.objects.order_by('id')]:
       raise NotImplementedError('print user table has been altered!')
     

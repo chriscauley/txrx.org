@@ -12,5 +12,5 @@ class Command (BaseCommand):
       old_count = er.eventoccurrence_set.all().count()
       er.generate()
       new_count = er.eventoccurrence_set.all().count()
-      if old_count != new_count:
+      if old_count != new_count and options.get("verbosity") > 0:
         print "New Events Repeated: %s of %s"%(new_count-old_count,er)

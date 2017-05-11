@@ -78,4 +78,5 @@ class Command (BaseCommand):
           user.send_sms(body)
 
         notifications.update(emailed=datetime.datetime.now())
-      print "%s: Notified %s users of %s notifications"%(relationship,users_count,count)
+      if options.get("verbosity") > 0:
+        print "%s: Notified %s users of %s notifications"%(relationship,users_count,count)

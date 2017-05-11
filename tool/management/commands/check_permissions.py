@@ -35,9 +35,11 @@ class Command(BaseCommand):
       # if they signed up before this date they must take this safety class
       needs_mail = []
       sign_up_date = add_months(next_safety.first_date,-2)
-      print sign_up_date
+      if options.get("verbosity") > 0:
+        print sign_up_date
       for criterion in temporary_criteria.filter(created__lte=sign_up_date):
-        print 'next',next_safety
+        if options.get("verbosity") > 0:
+          print 'next',next_safety
         defaults = {'status': 'new_safety'}
         flag, new = Flag.objects.get_or_create(
           subscription=criterion.content_object,

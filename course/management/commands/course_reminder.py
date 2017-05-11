@@ -20,8 +20,9 @@ class Command(BaseCommand):
     classtimes = classtimes.exclude(session__course__active=False).exclude(session__active=False).distinct()
     if not classtimes:
       return
-    print "showing classes from %s to %s"%(tomorrow,next_day)
-    print "reminding %s class times"%len(classtimes)
+    if options.get("verbosity") > 0:
+      print "showing classes from %s to %s"%(tomorrow,next_day)
+      print "reminding %s class times"%len(classtimes)
     instructor_count = 0
     student_count = 0
     sent = []
@@ -55,4 +56,5 @@ class Command(BaseCommand):
         )
       classtime.emailed = timezone.now()
       classtime.save()
-    print "\n\n\nemailed %s instructors and %s students"%(instructor_count,student_count)
+    if options.get("verbosity") > 0:
+      print "\n\n\nemailed %s instructors and %s students"%(instructor_count,student_count)

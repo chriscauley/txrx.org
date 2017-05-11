@@ -15,7 +15,7 @@ class Command (BaseCommand):
     yesterday = datetime.datetime.now()-datetime.timedelta(1)
     pe = Enrollment.objects.pending_evaluation()
     pe = pe.filter(evaluation_date__gte=yesterday)
-    if pe.count():
+    if pe.count() and options.get("verbosity") > 0:
       print "sending %s evaluation emails"%pe.count()
     for enrollment in pe:
       if not enrollment.user.email:
@@ -39,4 +39,6 @@ class Command (BaseCommand):
       """
       enrollment.emailed=True
       enrollment.save()
-      print "DID NOT EMAIL %s about %s"%(enrollment.user.email,enrollment.session)
+
+      if options.get("verbosity") > 0:
+        print "DID NOT EMAIL %s about %s"%(enrollment.user.email,enrollment.session)

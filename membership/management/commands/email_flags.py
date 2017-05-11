@@ -9,8 +9,9 @@ import datetime
 class Command(BaseCommand):
   @print_to_mail
   def handle(self, *args, **options):
-    print [f.datetime for f in flags]
-    print EMAIL_REASONS['payment_overdue']
+    if options.get("verbosity") > 0:
+      print [f.datetime for f in flags]
+      print EMAIL_REASONS['payment_overdue']
     now = datetime.datetime.now()
     day = datetime.timedelta(1)
     first_warning = 1

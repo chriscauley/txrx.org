@@ -13,10 +13,13 @@ class Command(BaseCommand):
       answer = raw_input("This will delete the current database (%s) and replace it with the most recent copy of the anonymous database. \nAre you sure you want to do this? Type yes or no."%default)
       if answer == 'yes':
         shutil.copy(anon,default)
-        print "database successfully reset. user__1 is a superuser, all passwords are now \'hackerspace\'."
+        if options.get("verbosity") > 0:
+          print "database successfully reset. user__1 is a superuser, all passwords are now \'hackerspace\'."
         break
       if answer == 'no':
-        print "no action taken"
+        if options.get("verbosity") > 0:
+          print "no action taken"
         break
-      print "Invalid entry, please try again."
+      if options.get("verbosity") > 0:
+        print "Invalid entry, please try again."
                     

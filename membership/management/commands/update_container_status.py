@@ -11,5 +11,5 @@ class Command(BaseCommand):
     for container in Container.objects.all():
       status = container.status
       container.save() # Triggers update_status
-      if status != container.status:
+      if status != container.status and options.get("verbosity") > 0:
         print "%s@%s status changed from %s to %s"%(container.subscription,container,status,container.status)
