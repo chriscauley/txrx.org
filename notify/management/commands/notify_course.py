@@ -68,7 +68,6 @@ class Command (BaseCommand):
             'classtimes': classtimes
           }
           send_template_email("email/%s"%relationship,[user.email,'chris@lablackey.com'],context=_dict)
-          print user.enrollment_set.all(),notifications
         elif user.notifysettings.my_classes == "sms":
           course_name = classtimes[0].session.course.get_short_name()
           time_s = date(classtimes[0].start,"P")

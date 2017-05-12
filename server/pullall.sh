@@ -3,7 +3,7 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export PROJECT_ROOT=$DIR/../
 
-for d in django-drop django-airbrake-lite dj-stripe lablackey unrest django-unrest-comments
+for d in django-drop django-airbrake-lite dj-stripe lablackey unrest django-unrest-comments media
 do
     cd  ~/$d -P
     unset GIT_DIR
