@@ -21,7 +21,6 @@ import djstripe.urls
 import contact.views, lablackey.geo.views, user.views
 import redtape.urls
 import membership.urls
-import drop.views.product
 import course.views.classes
 import airbrake.urls
 import txrx_urls
@@ -96,11 +95,6 @@ urlpatterns = [
   url(r'',include(txrx_urls)),
   url(r'',include(sms_urls)),
 ]
-
-if hasattr(settings,"COURSE_GIFTCARD_ID"):
-  urlpatterns += [
-    url(r'^gift/$',lambda request: drop.views.product.detail(request,settings.COURSE_GIFTCARD_ID)),
-  ]
 
 def _include(s):
   return include(__import__(s).urls)
