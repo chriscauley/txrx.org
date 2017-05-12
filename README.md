@@ -4,7 +4,8 @@ TXRX Labs Website
 Install required system packages. This will vary from distribution to distribution.
 
 ```bash
-apt-get install python-dev git-core python-pip libpng-dev libjpeg-dev python-psycopg2
+apt-get install python-dev git-core python-pip libpng-dev libjpeg-dev python-psycopg2 postgresql memcached python-memcache
+pip install pip --update
 ```
 
 Currently there are a lot of experimental packages which I am actively developing. Clone these from github by pasting this into a shell. You may want to place this in a subdirectory to store all these. They will be symbolically linked later and can be updated with a single command.
@@ -17,7 +18,6 @@ git clone http://github.com/chriscauley/django-unrest-comments
 git clone http://github.com/chriscauley/django-airbrake-lite
 git clone http://github.com/chriscauley/dj-stripe
 git clone http://github.com/chriscauley/Django-Next-Please
-git clone http://github.com/chriscauley/django-registration
 mkdir .dev
 ln -s `pwd`/lablackey/lablackey .dev
 ln -s `pwd`/unrest .dev
@@ -25,7 +25,6 @@ ln -s `pwd`/django-drop/drop .dev
 ln -s `pwd`/django-unrest-comments/unrest_comments .dev
 ln -s `pwd`/django-airbrake-lite/airbrake .dev
 ln -s `pwd`/dj-stripe/djstripe .dev
-ln -s `pwd`/django-registration/registration .dev
 ln -s `pwd`/Django-Next-Please/NextPlease .dev
 ```
 

@@ -17,7 +17,7 @@ from drop.test_utils import DropTestCase
 import datetime, decimal, six, arrow, random
 
 class TXRXTestCase(DropTestCase):
-  fixture_apps = [".dev/lablackey/geo/","tool"]
+  fixture_apps = ["geo","tool"]
   def setUp(self,*args,**kwargs):
     super(TXRXTestCase,self).setUp(*args,**kwargs)
     self._setup_membership()

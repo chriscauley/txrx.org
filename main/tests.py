@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from django.core import mail
 
+from main.tests import TXRXTestCase
 from lablackey.tests import check_subjects
 from event.models import Event, EventOccurrence
 
@@ -11,15 +12,6 @@ class ManagementCommands(TestCase):
     self.now = datetime.datetime.now()
     self.in_an_hour = (self.now + datetime.timedelta(0,60*60)).time()
     self.tomorrow = self.now + datetime.timedelta(1)
-
-  def test_repeat_events(self):
-    Event.objects.filter(name="monkey").delete()
-    e = Event.objects.create(name="monkey",repeat="month-number")
-    eo = EventOccurrence.objects.create(start=self.tomorrow,end_time=self.in_an_hour,event=e)
-    self.call_command("repeat_events")
-    self.assertEqual(e.eventoccurrence_set.count(),5)
-    subjects = [m.subject for m in mail.outbox]
-    self.assertTrue(check_subjects([]))
 
   def test_evaluation_reminder(self):
     self.call_command("evaluation_reminder")
@@ -43,13 +35,10 @@ class TouchAllTheThings(TestCase):
       '/event/',
       '/thing/'
     ]
-    client = Client()
     for u in urls:
-      response = client.get(u)
-      self.assertEqual(response.status_code,200)
+      self.assertEqual(rself.client.get(u).status_code,200)
     self.assertEqual(client.get('/nosuchpageexistsoreverexisted/').status_code,404)
 
-from lablackey.tests import ClientTestCase
 from membership.models import Status
 from drop.models import OrderItem, Order
 
