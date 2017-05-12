@@ -20,12 +20,14 @@ tqdm==4.10.0
 -e git+https://github.com/chriscauley/Django-Crop-Override-Field.git#egg=django-crop-override-field
 pillow==2.1.0
 
-django-mptt==0.8.6
+# unrest commets packages
 -e git+https://github.com/chriscauley/django-unrest-comments.git#egg=django-unrest-comments.git
+django-mptt==0.8.6
+django-emoji==2.2.0
+Markdown
 
 django-memcache-status
 django-redis-cache
-Markdown
 django-timezones==0.2
 pytz>=2011n
 Pygments
@@ -53,3 +55,5 @@ python-doc-inherit
 
 django-jsonfield
 django-jsignature
+twilio==5.7.0
+httpagentparser==1.7.8
