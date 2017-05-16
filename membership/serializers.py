@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.serializers import BaseSizzler
+from lablackey.api.serializers import BaseSizzler
 from membership.models import Flag
 
 class FlagSizzler(BaseSizzler):

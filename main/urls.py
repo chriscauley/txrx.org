@@ -101,7 +101,6 @@ def _include(s):
 
 import membership.views
 import django.contrib.auth.urls
-from api.urls import build_urls
 import lablackey.urls
 import notify.urls
 from user.forms import PasswordResetForm
@@ -124,7 +123,6 @@ urlpatterns += [
   #url(r'^api-token-auth/', 'rest_framework_jwt.views.obtain_jwt_token'),
 ]
 
-urlpatterns += build_urls()
 urlpatterns += [
   url(r'',_include('membership.urls')),
   url(r'',_include('rfid.urls')),

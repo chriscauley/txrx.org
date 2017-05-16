@@ -1,4 +1,4 @@
-from api.serializers import BaseSizzler
+from lablackey.api.serializers import BaseSizzler
 from django.utils import timezone
 
 from .models import Notification, Follow

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.serializers import BaseSizzler
+from lablackey.api.serializers import BaseSizzler
 from .models import Event,EventOccurrence
 
 # This I started but then decided to hold off on finishing it

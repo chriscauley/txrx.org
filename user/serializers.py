@@ -1,7 +1,7 @@
 from django.db.models import Q
 
 from .models import User
-from api.serializers import BaseSizzler
+from lablackey.api.serializers import BaseSizzler
 
 import json
 

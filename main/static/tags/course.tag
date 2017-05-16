@@ -88,6 +88,7 @@
     <b class="full" if={ closed_status == 'private' }>This session is private</b>
     <b class="full" if={ closed_status == 'cancelled' }>This session has been canceled. If you were enrolled and have not received an email, please contact <a href="mailto:{ uR.config.support_email }">{ uR.config.support_email }</a></b>
     <div if={ !closed_status && fee }>
+      { product_id }
       <add-to-cart product_id={ product_id } add_text="Add this session to  cart"></add-to-cart>
     </div>
     <div if={ !closed_status && !fee }>
