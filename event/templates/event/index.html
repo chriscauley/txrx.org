@@ -44,7 +44,7 @@ Events at TXRX
             <div class="mini-month">{{ current_date|date:"n/" }}</div>{{ day }}
           </div>
           {% for occurrence in occurrences %}
-          {% ifchanged occurrence.start %}<b>{{ occurrence.start|date:"f a" }}</b>{% endifchanged %}
+          <b{% ifchanged occurrence.start %} class="hidden-xs"{% endifchanged %}>{{ occurrence.start|date:"f a" }}</b>
           <p class="event">
             <a class="{{ occurrence.class_name }}" href="{{ occurrence.get_absolute_url }}">
               {{ occurrence.short_name }}</a>
