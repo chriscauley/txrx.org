@@ -324,6 +324,11 @@ class EventOccurrence(PhotosMixin,OccurrenceModel):
 
   url_override = models.CharField(max_length=256,null=True,blank=True)
   #_get_absolute_url = lambda self: reverse('event:occurrence_detail',args=(self.id,slugify(self.name)))
+  def get_checkout_url(self):
+    if self.event.name == "New Member Orientation":
+      s = self.start
+      return "/event/orientations/%s/%s/%s/"%(s.year,s.month,s.day)
+    return "/tools/master/event/rsvp/?object_id=%s"%self.id
   @cached_method
   def get_absolute_url(self):
     return self.url_override or self.event.url or self.event.get_absolute_url()

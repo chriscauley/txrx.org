@@ -11,7 +11,7 @@
 <h1 class="page_title">
   {{ event }}
   {% if request.user.is_superuser %}
-  <a href="/admin/event/event/{{ event.pk }}"><i class="fa fa-pencil-square"></i></a>
+  <a href="/admin/event/event/{{ event.pk }}" class="fa fa-pencil-square"></a>
   {% endif %}
 </h1>
 <div class="event-detail row">

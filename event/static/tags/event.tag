@@ -55,6 +55,8 @@ click(e) {
   <div class="well" name="ajax_target">
     <a if={ uR.auth.user.is_superuser } href="/event/orientations/{ start_slug }/"
        class="admin-link fa fa-pencil-square"></a>
+    <a if={ uR.auth.user.is_staff && parent.event.allow_rsvp } href="/tools/master/event/rsvp/?object_id={ id }"
+       class="admin-link fa fa-check-square-o" style="top: auto; bottom: 0;"></a>
     <div class="dates">
       <div>{ start_string }</div>
     </div>
