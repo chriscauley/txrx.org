@@ -56,6 +56,8 @@ fakes = {
   "po_1A5WeRHqBalEWa81kAlQlp8X": decimal.Decimal("-67.97"),
   "po_1AD5DoHqBalEWa81l9dZzydt": decimal.Decimal("-53.4"),
   "po_1AH3m3HqBalEWa817BmJhmSR": decimal.Decimal("-48.25"),
+  "po_1AJxvkHqBalEWa81wOkSclNp": decimal.Decimal("-116.52"),
+  "": decimal.Decimal("0"),
   "": decimal.Decimal("0"),
 }
 
