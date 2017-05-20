@@ -21,14 +21,6 @@ from user.models import is_toolmaster
 import datetime, json, arrow, calendar
 
 @staff_member_required
-def owner_ajax(request,action,event_id):
-  if action == 'own':
-    Event.objects.get(id=event_id).eventowner_set.get_or_create(user=request.user)
-  elif action == 'disown':
-    Event.objects.get(id=event_id).eventowner_set.filter(user=request.user).delete()
-  return JsonResponse({'owner_ids': Event.objects.get(id=event_id).owner_ids })
-
-@staff_member_required
 def no_orientation(request):
   users = get_user_model().objects.exclude(level_id=settings.DEFAULT_MEMBERSHIP_LEVEL)
   users = users.exclude(usercriterion__criterion_id=settings.ORIENTATION_CRITERION_ID)
