@@ -23,6 +23,7 @@ class CourseAdmin(TaggedPhotoAdmin):
   filter_horizontal = ("subjects",)
   search_fields = ("name",)
   inlines = [CourseRoomTimeInline, TaggedToolInline, TaggedFileInline]
+  list_per_page = 400
   def clone(self,obj):
     if not obj.session_set.count():
       return "No last session."
