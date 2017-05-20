@@ -4,6 +4,7 @@ import warnings;warnings.showwarning = lambda *x: None
 from django.conf import settings
 from django.core import mail
 from django.db import IntegrityError
+from django.utils import timezone
 
 from course.models import Course, Session, ClassTime
 from tool.models import Criterion
@@ -14,18 +15,24 @@ from membership.models import Level
 
 from drop.test_utils import DropTestCase
 
-import datetime, decimal, six, arrow, random
+import datetime, decimal, six, random
 
 class TXRXTestCase(DropTestCase):
   fixture_apps = ["geo","tool"]
   def setUp(self,*args,**kwargs):
+    self.tomorrow = timezone.now().replace(hour=13,minute=0,second=0,microsecond=0)+datetime.timedelta(1)
+    self.next_day = self.tomorrow+datetime.timedelta(1)
+    self.end = "14:00"
     super(TXRXTestCase,self).setUp(*args,**kwargs)
     self._setup_membership()
     self._setup_course()
+    self._setup_event()
+  def _setup_event(self):
+    self.event1 = Event.objects.create(name="event1",access_id=1)
+    self.event2 = Event.objects.create(name="event2",access_id=1)
+    self.event1_tomorrow = EventOccurrence.objects.create(start=self.tomorrow,end_time=self.end,event=self.event1)
+    self.event2_tomorrow = EventOccurrence.objects.create(start=self.tomorrow,end_time=self.end,event=self.event2)
   def _setup_course(self):
-    tomorrow = arrow.now().replace(days=1,hour=13,minute=00).datetime
-    next_day = arrow.now().replace(days=2,hour=13,minute=00).datetime
-    end = "14:00"
     kwargs = dict(
       active=True,
       no_conflict=True,
@@ -42,18 +49,18 @@ class TXRXTestCase(DropTestCase):
     # Session 1 has class tomorrow and the next day from 1-2pm
     self.session1 = Session.objects.create(course=self.course1,user=self.teacher)
     self.session1.save()
-    ClassTime.objects.create(session=self.session1,start=tomorrow,end_time=end)
-    ClassTime.objects.create(session=self.session1,start=next_day,end_time=end)
+    ClassTime.objects.create(session=self.session1,start=self.tomorrow,end_time=self.end)
+    ClassTime.objects.create(session=self.session1,start=self.next_day,end_time=self.end)
     self.session1 = Session.objects.get(pk=self.session1.pk)
 
     # Session 2 has class day after tomorrow at the same time as session 1
     self.session2 = Session.objects.create(course=self.course2,user=self.teacher)
-    ClassTime.objects.create(session=self.session2,start=tomorrow.replace(hour=18),end_time="19:00")
+    ClassTime.objects.create(session=self.session2,start=self.tomorrow.replace(hour=18),end_time="19:00")
     self.session2.save()
 
     # A second session for course 2, the next week
     self.session22 = Session.objects.create(course=self.course2,user=self.teacher)
-    ClassTime.objects.create(session=self.session22,start=tomorrow.replace(hour=18)+datetime.timedelta(7),end_time="19:00")
+    ClassTime.objects.create(session=self.session22,start=self.tomorrow.replace(hour=18)+datetime.timedelta(7),end_time="19:00")
     self.session22.save()
 
     # # conflict_session1 is the same time as session1. currently unused
@@ -61,7 +68,7 @@ class TXRXTestCase(DropTestCase):
     #   course=Course.objects.filter(active=True,fee__gt=0).order_by("?")[0],
     #   user_id=1
     # )
-    # ClassTime.objects.create(session=self.conflict_session1,start=next_day,end_time=end)
+    # ClassTime.objects.create(session=self.conflict_session1,start=self.next_day,end_time=self.end)
 
   def _setup_membership(self):
     try:

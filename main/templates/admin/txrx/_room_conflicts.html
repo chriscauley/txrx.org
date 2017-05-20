@@ -1,6 +1,6 @@
 {% load admin_dashboard i18n %}
 
-{% get_room_conflicts %}
+{% get_conflicts %}
 {% if room_conflicts %}
 <h1>Potential room conflicts</h1>
 {% for room,conflicts in room_conflicts %}
@@ -32,6 +32,34 @@
           {% if not forloop.last %}<br />{% endif %}
           {% endfor %}
         </dl>
+    </td></tr>
+  </table>
+</div>
+{% endfor %}
+{% endif %}
+{% if person_conflicts %}
+<h1>Potential person conflicts</h1>
+{% for user,start,end,occurrences in person_conflicts %}
+<div class="module" style="width: 375px;">
+  <table class="table-overview applist" summary="{% blocktrans %}Conflicting classes and events.{% endblocktrans %}"
+         style="width: 100%">
+    <caption>
+      {{ user.get_full_name }}  ({{ user }})
+      <a href="{{ user.get_admin_url }}" class="fa fa-edit"></a>
+    </caption>
+    <tr><td>
+        <dt>{{ start|date:"F j @ g:i A" }} - {{ end|date:"g:i A" }}</dt>
+        <dd>
+          <ul class="actionlist">
+            {% for occurrence in occurrences %}
+            <li>
+              <a href="{{ occurrence.get_absolute_url }}" class="icon-share" title="View on Site"></a>
+              <a href="{{ occurrence.get_admin_url }}" class="icon-edit" title="View on Site"></a>
+              {{ occurrence }}
+            </li>
+            {% endfor %}
+          </ul>
+        </dd>
     </td></tr>
   </table>
 </div>

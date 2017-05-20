@@ -324,7 +324,7 @@ class Session(UserModel,PhotosMixin,models.Model):
   full = property(lambda self: self.total_students >= self.course.max_students + self.overbook)
   list_users = property(lambda self: [self.user])
 
-  #! mucch of this if deprecated after course remodel
+  #! much of this if deprecated after course remodel
   description = property(lambda self: self.course.description)
   @cached_property
   def first_photo(self):
@@ -525,6 +525,8 @@ class ClassTime(OccurrenceModel):
       )
       out.append(occurrence)
     return out
+  def get_owner_ids(self):
+    return [self.session.user_id]
   class Meta:
     ordering = ("start",)
 

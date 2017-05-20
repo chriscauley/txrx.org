@@ -1,7 +1,7 @@
 from django.template import Library
 
 from course.models import Course, Session
-from event.utils import get_room_conflicts as _get_room_conflicts
+from event.utils import get_room_conflicts, get_person_conflicts
 from membership.models import Subscription
 
 import datetime
@@ -17,8 +17,9 @@ def is_course_manager(user):
   return user.is_superuser or user.groups.filter(name="Course Manager")
 
 @register.simple_tag(takes_context=True)
-def get_room_conflicts(context):
-  context['room_conflicts'] = _get_room_conflicts()
+def get_conflicts(context):
+  context['room_conflicts'] = get_room_conflicts()
+  context['person_conflicts'] = get_person_conflicts()
   return ''
 
 @register.simple_tag(takes_context=True)

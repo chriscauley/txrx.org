@@ -262,7 +262,13 @@ class OccurrenceModel(models.Model):
     return date(self.start,"D n/j")
   @property
   def end(self):
-    return self.start.replace(hour=self.end_time.hour,minute=self.end_time.minute)
+    if isinstance(self.end_time,str):
+      hour = int(self.end_time.split(":")[0])
+      minute = int(self.end_time.split(":")[1])
+    else:
+      hour = self.end_time.hour
+      minute = self.end_time.minute
+    return self.start.replace(hour=hour,minute=minute)
   @property
   def google_link(self):
     d = {
@@ -341,6 +347,8 @@ class EventOccurrence(PhotosMixin,OccurrenceModel):
     _cid = ContentType.objects.get(model="eventoccurrence").id
   except ProgrammingError:
     pass # this breaks on the initial migration
+  def get_owner_ids(self):
+    return self.event.owner_ids
   @cached_method
   def get_rsvps(self):
     return RSVP.objects.filter(object_id=self.id,content_type_id=self._cid)

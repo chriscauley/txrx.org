@@ -1,15 +1,17 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.template.defaultfilters import slugify
+from django.utils import timezone
 
 from course.models import ClassTime
 from lablackey.geo.models import Room
 from .models import EventOccurrence, OccurrenceModel # Occurrence model used to make non-db objects
 
-import icalendar, datetime, math, arrow
+import icalendar, datetime, math, arrow, pytz
+from collections import defaultdict
 from itertools import groupby
 from operator import itemgetter
-from pytz import timezone,utc
 
 def make_ics(occurrences=None,title=None):
   """Generate an ics file from an list of occurrences.
@@ -20,7 +22,7 @@ def make_ics(occurrences=None,title=None):
        obj.end - DatetimeField (Optional)
        obj.get_absolute_url() - a method that returns a url without a domain
      """
-  tz = timezone(settings.TIME_ZONE)
+  tz = pytz.timezone(settings.TIME_ZONE)
 
   name = "%s @ %s"%(title,settings.SITE_NAME)
   calObj = icalendar.Calendar()
@@ -34,14 +36,14 @@ def make_ics(occurrences=None,title=None):
   for occ in occurrences:
     vevent = icalendar.Event()
     start_dt = tz.localize(occ.start)
-    start_dt = start_dt.astimezone(utc)
+    start_dt = start_dt.aspytz.timezone(pytz.utc)
 
     vevent['uid'] = '%s%d'%(slugify(settings.SITE_NAME),occ.id)
     vevent.add('dtstamp', start_dt)
     vevent.add('dtstart', start_dt)
     if occ.end:
       end_dt = tz.localize(occ.end)
-      end_dt = end_dt.astimezone(utc)
+      end_dt = end_dt.aspytz.timezone(pytz.utc)
       vevent.add('dtend', end_dt)
 
     vevent.add('summary', occ.name)
@@ -75,6 +77,49 @@ def iter_times(start,end):
   block_size = 60*30 #seconds per half hour
   blocks = int(math.ceil(td.total_seconds()/(block_size))) #half hours that this runs
   return [start+datetime.timedelta(0,block_size*i) for i in range(blocks)]
+
+def get_person_conflicts(target_user_id=None):
+  """
+  Finds users who are an instructor or an "event owner" for concurrent classes/events.
+  Returns a list of conflicts of the form:
+  [user,start_datetime,end_datetime,conflicting_events]
+  """
+
+  # break events durations into "blocks" to look for overlaps
+  # a block is actually just a datetime, but it implies a range, [sometime,sometime+timedelta(block_size)
+  # so an event from 12:15 to 15:00 would yield 12:00, 12:30, 13:00... 14:30
+  block_minutes = 30
+  block_size = 60*block_minutes #seconds per half hour
+  user_timess = {}
+  start_time = timezone.now().replace(minute=0)
+  user_occurrences = defaultdict(lambda: defaultdict(list)) # { user_id: { block_datetime: [occurrences] } }
+
+  # Anything inheriting from OccurrenceModels should have the necessary API to run through this loop
+  models = [ClassTime,EventOccurrence]
+  occurrences = []
+  for model in models:
+    occurrences += list(model.objects.filter(start__gte=start_time))
+  for occ in occurrences:
+    for user_id in occ.get_owner_ids():
+      if user_id in [1,1273]:
+        continue
+      if target_user_id and user_id != target_user_id:
+        continue
+      _block = occ.start
+      if _block > occ.end:
+        mail_admins("bad times on an occurrence","checkout: %s (#%s)"%(occ,occ.id))
+      # this rounds down to the nearest block, eg 17:34:5.938475  > 17:30:00
+      _block = _block.replace(minute=_block.minute-_block.minute%block_minutes,second=0,microsecond=0)
+      while _block <= occ.end:
+        user_occurrences[user_id][_block].append(occ)
+        _block += datetime.timedelta(0,block_size) # move to next block
+  conflicts = []
+  for user_id,block_dict in user_occurrences.items():
+    block_events = sorted({ k:v for k,v in block_dict.items() if len(v) > 1 }.items())
+    for events,group in groupby(block_events,lambda k:sorted(k[1])):
+      times = [g[0] for g in group]
+      conflicts.append((get_user_model().objects.get(id=user_id),min(times),max(times),events))
+  return conflicts
 
 def get_room_conflicts(base_occurrence=None):
   block_size = 60*30 #seconds per half hour
@@ -143,16 +188,3 @@ def get_room_conflicts(base_occurrence=None):
 
 def _conflicts(a,b):
   return not (a.ends < b.starts or b.ends < a.starts)
-
-def user_conflicts(user,new_rsvps=[],ignore_old=False):
-  # Get user_occurrences - everything that the user is signed up for from now into the future
-  arrow.now()
-  user_occurrences = list(ClassTime.objects.filter(start__gte=now,session__enrollment__user=user))
-  user_rsvps = user.rsvp_set.all()
-  for rsvp in user_rsvps:
-    user_occurrences += rsvp.get_occurrences()
-  new_occurrences = []
-  for event in new_rsvps:
-    new_occurrences += event.get_occurrences
-  
-  # Check for conflict in new_occurrences and new_occurrences + old_occurrences

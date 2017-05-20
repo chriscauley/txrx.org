@@ -1,9 +1,30 @@
 from django.test import TestCase
 from django.utils import timezone
 
+from main.test_utils import TXRXTestCase
 from event.models import EventRepeat, Event, Access, EventOccurrence
+from event.utils import get_person_conflicts
 
 import calendar, arrow, datetime
+
+class EventConflictTestCase(TXRXTestCase):
+  def test_user_conflicts(self):
+    user1 = self.new_user()
+
+    # create an event with two overlapping occurrences, one starts half an hour after another
+    event = Event.objects.create(access_id=1)
+    eo1 = EventOccurrence.objects.create(event=event,start=self.tomorrow,end_time=self.end)
+    eo2 = EventOccurrence.objects.create(event=event,start=self.tomorrow+datetime.timedelta(0,30*60),end_time=self.end)
+    event.eventowner_set.create(user=user1)
+
+
+    # Event 1 and 2 both have occurrences tomorrow, so this should return a conflict for this user.
+    conflicts = get_person_conflicts()
+    self.assertEqual(len(conflicts),1)
+    user,start,end,occurrences = conflicts[0]
+    self.assertEqual(user1.id,user.id)
+    self.assertEqual(start,eo2.start)
+    self.assertEqual(end,eo2.end)
 
 class EventRepeatTestCase(TestCase):
   def setUp(self):
