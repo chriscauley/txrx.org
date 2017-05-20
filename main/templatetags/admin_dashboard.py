@@ -24,7 +24,8 @@ def get_conflicts(context):
 
 @register.simple_tag(takes_context=True)
 def get_courses_needed(context):
-  context['courses_needed'] = Course.objects.courses_needed()
+  #disabling next line because we're not using it
+  #context['courses_needed'] = Course.objects.courses_needed()
   context['inactive_sessions'] = Session.objects.filter(active=False)
   return ''
 

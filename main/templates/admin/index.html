@@ -4,6 +4,7 @@
 {% block content %}
 {% if request.path == "/admin/" %}
 <div id="content-main">
+  {% if request.user|is_course_manager %}{% include "admin/txrx/_courses_needed.html" %}{% endif %}
   {% if request.user|is_event_coordinator %}{% include "admin/txrx/_room_conflicts.html" %}{% endif %}
 </div>
 {% else %}
