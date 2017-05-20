@@ -36,14 +36,14 @@ def make_ics(occurrences=None,title=None):
   for occ in occurrences:
     vevent = icalendar.Event()
     start_dt = tz.localize(occ.start)
-    start_dt = start_dt.aspytz.timezone(pytz.utc)
+    start_dt = start_dt.astimezone(pytz.utc)
 
     vevent['uid'] = '%s%d'%(slugify(settings.SITE_NAME),occ.id)
     vevent.add('dtstamp', start_dt)
     vevent.add('dtstart', start_dt)
     if occ.end:
       end_dt = tz.localize(occ.end)
-      end_dt = end_dt.aspytz.timezone(pytz.utc)
+      end_dt = end_dt.astimezone(pytz.utc)
       vevent.add('dtend', end_dt)
 
     vevent.add('summary', occ.name)
