@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib import admin
+from django.core.urlresolvers import reverse
 from django import forms
 from lablackey.db.forms import StaffMemberForm
 from lablackey.db.admin import NamedTreeModelAdmin, RawMixin
@@ -17,12 +18,18 @@ class CourseRoomTimeInline(admin.TabularInline):
 
 @admin.register(Course)
 class CourseAdmin(TaggedPhotoAdmin):
-  list_display = ("name","_follow_count","active","tool_count","photo_count","content","visuals","presentation")
-  list_editable = ("content","visuals","presentation")
+  list_display = ("name","clone","_follow_count","active","tool_count","photo_count")
   readonly_fields = ("_follow",)
   filter_horizontal = ("subjects",)
   search_fields = ("name",)
   inlines = [CourseRoomTimeInline, TaggedToolInline, TaggedFileInline]
+  def clone(self,obj):
+    if not obj.session_set.count():
+      return "No last session."
+    url = reverse("course:clone_session",args=[obj.pk])
+    return """<a class="btn btn-success" href="%s">
+                <i class="icon-plus" title="Clone Last Session"></i> Clone</a>"""%url
+  clone.allow_tags = True
   def tool_count(self,obj):
     return len(obj.get_tools())
   def photo_count(self,obj):
