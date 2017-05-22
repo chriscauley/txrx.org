@@ -151,22 +151,6 @@ ul#post-list span.post-list-date {
 }
 
 /**
-* WMD overrides
-*/
-#wmd-button-bar {
-  width: 50%;
-  background: none;
-}
-
-#wmd-button-bar, .wmd-panel {
-  margin: 0;
-}
-
-#wmd-help-button {
-  display: none;
-}
-
-/**
 * Form styles
 */
 .form-button {
