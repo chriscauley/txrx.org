@@ -46,7 +46,6 @@ INSTALLED_APPS = [
 
   # blarg
   'wmd',
-  'blog',
   'media',
 
   # this project
@@ -67,6 +66,7 @@ INSTALLED_APPS = [
   'schedule_poll',
   'airbrake',
   'lablackey.sms',
+  'lablackey.blog',
 ]
 
 #mptt_comments

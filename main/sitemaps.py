@@ -1,5 +1,5 @@
 from django.contrib.sitemaps import Sitemap
-from blog.models import Post
+from lablackey.blog.models import Post
 from course.models import Course
 
 import datetime

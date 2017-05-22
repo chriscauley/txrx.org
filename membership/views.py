@@ -13,12 +13,12 @@ from .models import Level, Group, MeetingMinutes, Officer, UserMembership, Subsc
 from .forms import UserForm, UserMembershipForm, RegistrationForm
 from .utils import limited_login_required, verify_unique_email
 
-from blog.models import Post
 from course.models import Course
 from thing.models import Thing
 
-from lablackey.utils import FORBIDDEN, get_or_none
+from lablackey.blog.models import Post
 from lablackey.mail import send_template_email
+from lablackey.utils import FORBIDDEN, get_or_none
 
 import datetime, json, requests
 

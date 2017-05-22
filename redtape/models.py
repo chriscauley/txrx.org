@@ -4,10 +4,10 @@ from django.db import models
 from django.forms import ValidationError
 from django.template.defaultfilters import slugify
 
+from lablackey.blog.templatetags.short_codes import explosivo
 from lablackey.db.models import JsonMixin
 from lablackey.decorators import cached_method
 
-from blog.templatetags.short_codes import explosivo
 from media.models import UploadedFile
 from tool.models import CriterionModel
 

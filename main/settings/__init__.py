@@ -230,7 +230,7 @@ TEMPLATES = [
         'social.apps.django_app.context_processors.login_redirect',
         'main.context.nav',
         'main.context.motd',
-        'blog.context.process',
+        'lablackey.blog.context.process',
         'notify.context.process',
       ],
       'loaders': _TEMPLATE_LOADERS

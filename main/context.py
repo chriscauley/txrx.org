@@ -6,7 +6,7 @@ from django.db.models import Q
 
 from tagging.models import Tag
 
-from blog.models import PressItem
+from lablackey.blog.models import PressItem
 from course.models import ClassTime, Enrollment
 from course.views.ajax import get_needed_sessions
 from membership.models import Container

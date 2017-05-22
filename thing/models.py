@@ -5,7 +5,7 @@ from django.template.defaultfilters import slugify
 from lablackey.db.models import UserModel,NamedTreeModel
 from media.models import PhotosMixin, FilesMixin
 from tool.models import ToolsMixin
-from blog.templatetags.short_codes import explosivo
+from lablackey.blog.templatetags.short_codes import explosivo
 
 from wmd import models as wmd_models
 

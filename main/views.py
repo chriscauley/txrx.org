@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.http import HttpResponsePermanentRedirect, HttpResponseRedirect, HttpResponse, Http404
 
-from blog.models import Post, Banner
+from lablackey.blog.models import Post, Banner
 from thing.models import Thing
 
 from tagging.models import Tag

@@ -11,7 +11,7 @@ from main.sitemaps import sitemaps
 from main.feeds import AllFeed
 import main.views, main.dashboard
 
-import blog.urls, blog.views
+import lablackey.blog.urls, lablackey.blog.views
 import store.urls, media.urls, event.urls, thing.views, tool.urls, tool.views
 import paypal.standard.ipn.urls
 import social.apps.django_app.urls
@@ -53,9 +53,9 @@ urlpatterns = [
   url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
   url(r'^dashboard/totals.(json|csv|table)$', main.dashboard.totals_json),
   url(r'^admin/', include(admin.site.urls)),
-  url(r'^blog/',include(blog.urls)),
+  url(r'^blog/',include(lablackey.blog.urls)),
   url(r'arst/(?P<pk>\d+)',main.views.intentional_500,name="order_detail"),
-  url(r'^(\d{4})/(\d{1,2})/(\d{1,2})/([^/]+)/',blog.views.post_redirect),
+  url(r'^(\d{4})/(\d{1,2})/(\d{1,2})/([^/]+)/',lablackey.blog.views.post_redirect),
   url(r'^500/$',main.views.intentional_500),
   url(r'^event/',include(event.urls,namespace="event",app_name="event")),
   url(r'^media_files/',include(media.urls)),
