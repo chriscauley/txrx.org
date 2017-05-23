@@ -11,7 +11,7 @@ from main.sitemaps import sitemaps
 from main.feeds import AllFeed
 import main.views, main.dashboard
 
-import lablackey.blog.urls, lablackey.blog.views
+import lablackey.blog.views
 import store.urls, media.urls, event.urls, thing.views, tool.urls, tool.views
 import paypal.standard.ipn.urls
 import social.apps.django_app.urls
@@ -53,7 +53,6 @@ urlpatterns = [
   url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
   url(r'^dashboard/totals.(json|csv|table)$', main.dashboard.totals_json),
   url(r'^admin/', include(admin.site.urls)),
-  url(r'^blog/',include(lablackey.blog.urls)),
   url(r'arst/(?P<pk>\d+)',main.views.intentional_500,name="order_detail"),
   url(r'^(\d{4})/(\d{1,2})/(\d{1,2})/([^/]+)/',lablackey.blog.views.post_redirect),
   url(r'^500/$',main.views.intentional_500),
@@ -131,17 +130,8 @@ urlpatterns += [
 if hasattr(settings,"STAFF_URL"):
   urlpatterns += [url(settings.STAFF_URL[1:],user.views.hidden_image)]
 
-# this breaks on initial migration before flatpages are migrated
-try:
-  fps = '|'.join([page.url[1:] for page in FlatPage.objects.all()])
-except ProgrammingError:
-  fps = "nope!"
-
-import django.contrib.flatpages.views
-# flat pages
 urlpatterns += [
   url(r'^(about-us)/$',main.views.to_template),
-  url(r'(%s)'%fps,django.contrib.flatpages.views.flatpage,name='map'),
 ]
 
 from django.views.static import serve
