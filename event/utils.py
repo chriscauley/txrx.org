@@ -78,12 +78,14 @@ def iter_times(start,end):
   blocks = int(math.ceil(td.total_seconds()/(block_size))) #half hours that this runs
   return [start+datetime.timedelta(0,block_size*i) for i in range(blocks)]
 
-def get_person_conflicts(target_user_id=None):
+def get_person_conflicts(target_user_id=None,base_occurrence=None):
   """
   Finds users who are an instructor or an "event owner" for concurrent classes/events.
   Returns a list of conflicts of the form:
   [user,start_datetime,end_datetime,conflicting_events]
   """
+  if isinstance(target_user_id,get_user_model()):
+    target_user_id = target_user_id.id
 
   # break events durations into "blocks" to look for overlaps
   # a block is actually just a datetime, but it implies a range, [sometime,sometime+timedelta(block_size)
@@ -92,13 +94,17 @@ def get_person_conflicts(target_user_id=None):
   block_size = 60*block_minutes #seconds per half hour
   user_timess = {}
   start_time = timezone.now().replace(minute=0)
+  end_time = timezone.now() + datetime.timedelta(60)
+  if base_occurrence:
+    start_time = base_occurrence.start
+    end_time = base_occurrence.end
   user_occurrences = defaultdict(lambda: defaultdict(list)) # { user_id: { block_datetime: [occurrences] } }
 
   # Anything inheriting from OccurrenceModels should have the necessary API to run through this loop
   models = [ClassTime,EventOccurrence]
   occurrences = []
   for model in models:
-    occurrences += list(model.objects.filter(start__gte=start_time))
+    occurrences += list(model.objects.filter(start__gte=start_time,start__lte=end_time))
   for occ in occurrences:
     for user_id in occ.get_owner_ids():
       if user_id in [1,1273]:

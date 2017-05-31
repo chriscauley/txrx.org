@@ -1,3 +1,5 @@
+#! TODO: DEPRACATED 5/2017 these models are no longer needed as they were only used for the now dead work page
+
 from django.db import models
 from lablackey.db.models import OrderedModel
 

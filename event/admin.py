@@ -7,7 +7,7 @@ from django.forms.models import BaseInlineFormSet
 from django.utils.translation import ugettext_lazy as _
 
 from .models import Event, EventRepeat, EventOccurrence, RSVP, CheckIn, CheckInPoint, Access, EventOwner
-from event.utils import get_room_conflicts
+from event.utils import get_room_conflicts, get_person_conflicts
 from lablackey.db.admin import RawMixin
 from media.admin import TaggedPhotoAdmin
 
@@ -21,25 +21,43 @@ class CheckInAdmin(admin.ModelAdmin):
 class CheckInPointAdmin(admin.ModelAdmin):
   pass
 
+def message_conflicts(request,obj,room_conflicts,user_conflicts):
+  if not (room_conflicts or user_conflicts):
+    return
+  f1 = "%b %-d "
+  f2 = "%-I:%M %p"
+  messages.error(request,"%s was saved, but there are conflicts!"%obj)
+  messages.error(request,"Checkout /admin/ for an easy interface linking to all conflicts")
+  for room,conflict_tuples in room_conflicts:
+    for (start,end),events in conflict_tuples:
+      for event in events:
+        if event != obj:
+          t = (event.name,room,start.strftime(f1+f2),end.strftime(f2))
+          m = "%s is in the same room (%s) with overlapping time %s-%s"%t
+          messages.error(request,m)
+  for user,start,end,occurrences in user_conflicts:
+    for occurrence in occurrences:
+      if occurrence != obj:
+        t = (user,occurrence.name,start.strftime(f1+f2),end.strftime(f2))
+        m = "User %s is also scheduled for %s with overlapping time %s to %s"%t
+        messages.error(request,m)
+
+def check_conflicts(request,obj):
+  room_conflicts = get_room_conflicts(obj)
+  user_conflicts = []
+  for eventowner in obj.event.eventowner_set.all():
+    user = eventowner.user
+    user_conflicts += get_person_conflicts(user,obj)
+  message_conflicts(request,obj,room_conflicts,user_conflicts)
+
 class OccurrenceModelFormSet(BaseInlineFormSet):
-  def check_conflicts(self,obj):
-    conflicts = get_room_conflicts(obj)
-    if conflicts:
-      m = "%s was saved, but some of the times conflict with other events in the room: %s"
-      messages.error(self.request,m%(obj,obj.room))
-    for room,conflict_tuples in conflicts:
-      for (start,end),events in conflict_tuples:
-        for event in events:
-          if event != obj:
-            m = "%s is in the same room with overlapping time %s-%s"%(event,start,end)
-            messages.error(self.request,m)
   def save_existing(self, form, obj, commit=True):
     obj = super(OccurrenceModelFormSet,self).save_existing(form,obj,commit=commit)
     self.check_conflicts(obj)
     return obj
   def save_new(self, form, commit=True):
     obj = super(OccurrenceModelFormSet,self).save_new(form,commit=commit)
-    self.check_conflicts(obj)
+    check_conflicts(self.request,obj)
     return obj
 
 class OccurrenceModelInline(admin.TabularInline):
@@ -59,7 +77,7 @@ class FuturePastListFilter(admin.SimpleListFilter):
       ('__gte', _('Hide Past Events')),
       ('__lt', _('Past Events Only')),
     )
-    
+
   def queryset(self, request, queryset):
     return queryset.filter(**{self.filter_field+(self.value() or '__gte'):datetime.date.today()})
 
@@ -112,6 +130,9 @@ class EventOccurrenceAdmin(TaggedPhotoAdmin):
   raw_id_fields = ['event']
   list_filter = (FuturePastListFilter,)
   readonly_fields = ['_rsvps','eventrepeat']
+  def save_model(self,request,obj,form,change):
+    super(EventOccurrenceAdmin,self).save_model(request,obj,form,change)
+    check_conflicts(request,obj)
   def _rsvps(self,obj):
     rsvps = RSVP.objects.filter(
       object_id=obj.id,
