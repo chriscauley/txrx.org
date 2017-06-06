@@ -57,8 +57,8 @@ class Command (BaseCommand):
           relationship=relationship,
         )
         count += notifications.count()
+        classtimes = sorted([n.target for n in notifications],key=lambda ct: ct.start)
         if user.notifysettings.my_classes == "email":
-          classtimes = sorted([n.target for n in notifications],key=lambda ct: ct.start)
           _dict = {
             'user': user,
             'la_key': LimitedAccessKey.new(user),
