@@ -30,6 +30,8 @@ def mark_emailed(model_admin,request,queryset):
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
   raw_id_fields = ('user','follow')
-  list_display = ("__unicode__","target_type","emailed","read")
+  list_display = ("__unicode__","target_type","emailed","read","user_settings")
   actions = [mark_emailed]
   list_filter = ("target_type",)
+  def user_settings(self,obj):
+    return obj.user.notifysettings.my_classes

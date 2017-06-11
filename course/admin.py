@@ -90,6 +90,8 @@ class SessionAdmin(TaggedPhotoAdmin):
   if settings.DEBUG: # I like to see this sometimes for debug purchases
     inlines.append(SessionProductInline)
   search_fields = getattr(settings,"USER_SEARCH_FIELDS",[]) + ("course__name",)
+  def save_existing(self,form,obj,commit=True):
+    obj = super(SessionAd,self)
   class Media:
     js = ("js/course_admin.js",)
 

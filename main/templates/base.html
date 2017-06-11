@@ -148,8 +148,8 @@ var google_remarketing_only = true;
     </div>
   </noscript>
   {% if settings.DEBUG %}
-  <script src="http://uc.unrest.io/under-construction.js"></script>
-  <script src="http://uc.unrest.io/uc-test.js"></script>
+  <link href="http://uc.unrest.io/.dist/uc-built.css" rel="stylesheet"/>
+  <script src="http://uc.unrest.io/.dist/uc-built.js"></script>
   <script src="{{ STATIC_URL }}js/tests.js"></script>
   {% endif %}
 </html>
