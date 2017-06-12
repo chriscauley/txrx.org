@@ -17,7 +17,7 @@
 
   function addToCart(t) {
     t.do("Add item to cart")
-      //.setPath("/classes/225/woodworking-ii-milling-dimensioning/")
+      .setPath("/classes/225/woodworking-ii-milling-dimensioning/")
       .then(uR.drop.emptyCart)
       .click("#s1594 add-to-cart button")
       .wait("shopping-cart a.decrement")
