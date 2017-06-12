@@ -136,5 +136,7 @@ uR.config.text_validators['signature'] = function(value,tag) {
   return true
 };
 
+uR.auth_enabled = true;
+
 uR.urls.auth.register = "#/form/membership.RegistrationForm/";
 uR.urls.auth.password_reset = "/auth/password_reset/";
