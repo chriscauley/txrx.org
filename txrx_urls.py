@@ -48,9 +48,22 @@ def complete_transfer(request,stripe_id):
   t.save()
   return JsonResponse({'completed': t.metadata['completed']})
 
+@user_passes_test(lambda u: u.is_superuser)
+def user_zip(request):
+  from redtape.models import Signature
+  from collections import defaultdict
+  aggregates = defaultdict(int)
+  for s in Signature.objects.filter(document_id=3):
+    aggregates[s.data['zip']] += 1
+  values = {
+    'zip_table': sorted(aggregates.items(),key=lambda i: -i[1]),
+  }
+  return TemplateResponse(request,'txrx/user_zip.html',values)
+
 urlpatterns = [
   url(r'^work/$',lablackey.views.single_page_app),
   url(r'^txrx/transfers/$',transfers),
   url(r'^txrx/complete_transfer/([_\w\d]+)/$',complete_transfer),
   url(r'^support/$',lablackey.views.render_template,kwargs={'template': 'flatpages/support.html'}),
+  url(r'^user_zip/$',user_zip),
 ]
