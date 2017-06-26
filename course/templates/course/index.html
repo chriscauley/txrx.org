@@ -38,14 +38,14 @@
   {% endif %}
   <ur-tabs>
     <ur-tab title="All Classses">
-      <course-list id="scheduled-courses"></course-list>
+      <div id="scheduled-courses"></div>
       <div class="course_divider" style="display:none">
         <h2>Classes not Scheduled</h2>
         <p class="alert alert-warning">
           The classes below are not currently scheduled but are classes taught at TXRX. Click the "Email me the next time this class is scheduled" button on the class page to be notified when a new session is posted.
         </p>
       </div>
-      <course-list id="unscheduled-courses"></course-list>
+      <div id="unscheduled-courses"></div>
     </ur-tab>
     <ur-tab title="My Classes ({{ user_sessions|length }})" href="{% url "course:user_ajax" "myclasses" %}"></ur-tab>
     {% if instructor_sessions %}

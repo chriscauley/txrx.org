@@ -63,13 +63,16 @@ uR.auth.ready(function() {
     }
     else { scheduled_courses.push(c); }
   });
-  riot.mount("#scheduled-courses",{courses: scheduled_courses});
-  riot.mount("#unscheduled-courses",{courses: unscheduled_courses});
-
   function filterSearch(value) {
     current_search = value;
     filterSubjects(active_subject);
   }
+
+  riot.mount("ur-tabs");
+  document.getElementById("scheduled-courses").appendChild(document.createElement("course-list"))
+  riot.mount("#scheduled-courses course-list",{courses: scheduled_courses});
+  document.getElementById("unscheduled-courses").appendChild(document.createElement("course-list"))
+  riot.mount("#unscheduled-courses course-list",{courses: unscheduled_courses});
 
   if (window.location.search.indexOf('young_adults') != -1) {
     filterSubjects(22);
