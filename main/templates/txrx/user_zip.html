@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table class="table table-striped">
+<tr><th>Total</th><th>{{ zip_table|length }}</th></tr>
+{% for zip,count in zip_table %}
+<tr><td>{{ zip }}</td><td>{{ count }}</td></tr>
+{% endfor %}
+</table>
+{% endblock %}
