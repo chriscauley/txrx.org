@@ -50,14 +50,19 @@ def check_conflicts(request,obj):
     user_conflicts += get_person_conflicts(user,obj)
   message_conflicts(request,obj,room_conflicts,user_conflicts)
 
+def mark_conflicts(request,obj):
+  request.session['conflicts'] = request.session.get('conflicts', [])
+  meta = obj.__class__._meta
+  request.session['conflicts'].append([meta.app_label,meta.model_name, obj.pk])
+
 class OccurrenceModelFormSet(BaseInlineFormSet):
   def save_existing(self, form, obj, commit=True):
     obj = super(OccurrenceModelFormSet,self).save_existing(form,obj,commit=commit)
-    self.check_conflicts(obj)
+    mark_conflicts(obj)
     return obj
   def save_new(self, form, commit=True):
     obj = super(OccurrenceModelFormSet,self).save_new(form,commit=commit)
-    check_conflicts(self.request,obj)
+    mark_conflicts(self.request,obj)
     return obj
 
 class OccurrenceModelInline(admin.TabularInline):
@@ -132,7 +137,7 @@ class EventOccurrenceAdmin(TaggedPhotoAdmin):
   readonly_fields = ['_rsvps','eventrepeat']
   def save_model(self,request,obj,form,change):
     super(EventOccurrenceAdmin,self).save_model(request,obj,form,change)
-    check_conflicts(request,obj)
+    mark_conflicts(request,obj)
   def _rsvps(self,obj):
     rsvps = RSVP.objects.filter(
       object_id=obj.id,
