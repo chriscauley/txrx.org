@@ -6,7 +6,7 @@ export PROJECT_ROOT=$DIR/../
 cd $PROJECT_ROOT
 MIGRATIONS="$(bash server/pullall.sh|grep migrations/00)"
 
-if [ $MIGRATIONS ];
+if [[ ! -z $MIGRATIONS ]];
     then
     echo "migrating because of git pull output:"
     echo $MIGRATIONS
