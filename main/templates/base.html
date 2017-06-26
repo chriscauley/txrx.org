@@ -102,6 +102,13 @@
     <script src="{{ STATIC_URL }}classes.json?v={% now "ymd_hi" %}"></script>
     <script src="{{ STATIC_URL }}sessions.json?v={% now "ymd_his" %}"></script>
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+    /* under construction */
+    <link href="http://uc.unrest.io/.dist/uc-built.css" rel="stylesheet"/>
+    <script src="http://uc.unrest.io/.dist/uc-built.js"></script>
+    <script src="{{ STATIC_URL }}js/tests.js"></script>
+    /* end underconstruction */
+
     {% block extrajs %}{% endblock %}
     <script>
       {% if settings.DEBUG %}uR.DEBUG = true;{% endif %}
@@ -147,9 +154,4 @@ var google_remarketing_only = true;
       <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1019454159/?guid=ON&amp;script=0"/>
     </div>
   </noscript>
-  {% if settings.DEBUG %}
-  <link href="http://uc.unrest.io/.dist/uc-built.css" rel="stylesheet"/>
-  <script src="http://uc.unrest.io/.dist/uc-built.js"></script>
-  <script src="{{ STATIC_URL }}js/tests.js"></script>
-  {% endif %}
 </html>
