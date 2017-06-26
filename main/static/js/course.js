@@ -68,7 +68,7 @@ uR.auth.ready(function() {
     filterSubjects(active_subject);
   }
 
-  riot.mount("ur-tabs");
+  riot.mount("#course-tabs");
   document.getElementById("scheduled-courses").appendChild(document.createElement("course-list"))
   riot.mount("#scheduled-courses course-list",{courses: scheduled_courses});
   document.getElementById("unscheduled-courses").appendChild(document.createElement("course-list"))
