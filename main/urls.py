@@ -121,14 +121,11 @@ urlpatterns += [
   url(r'^api/change_rfid/$',user.views.set_rfid),
   url(r'^api/user_checkin/$',user.views.user_checkin),
   url(r'^api/change_(headshot|id_photo)/$',user.views.change_headshot),
+  url(r'',_include('membership.urls')),
+  url(r'',_include('rfid.urls')),
   url(r'',include(lablackey.urls)),
   url(r'^notify/',include(notify.urls)),
   #url(r'^api-token-auth/', 'rest_framework_jwt.views.obtain_jwt_token'),
-]
-
-urlpatterns += [
-  url(r'',_include('membership.urls')),
-  url(r'',_include('rfid.urls')),
 ]
 
 if hasattr(settings,"STAFF_URL"):

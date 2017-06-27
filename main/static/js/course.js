@@ -69,11 +69,12 @@ uR.auth.ready(function() {
   }
 
   riot.mount("#course-tabs");
-  document.getElementById("scheduled-courses").appendChild(document.createElement("course-list"))
-  riot.mount("#scheduled-courses course-list",{courses: scheduled_courses});
-  document.getElementById("unscheduled-courses").appendChild(document.createElement("course-list"))
-  riot.mount("#unscheduled-courses course-list",{courses: unscheduled_courses});
-
+  if (document.getElementById("scheduled-courses")) {
+    document.getElementById("scheduled-courses").appendChild(document.createElement("course-list"))
+    riot.mount("#scheduled-courses course-list",{courses: scheduled_courses});
+    document.getElementById("unscheduled-courses").appendChild(document.createElement("course-list"))
+    riot.mount("#unscheduled-courses course-list",{courses: unscheduled_courses});
+  }
   if (window.location.search.indexOf('young_adults') != -1) {
     filterSubjects(22);
     active_subject = 22;
