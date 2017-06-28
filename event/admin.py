@@ -58,7 +58,7 @@ def mark_conflicts(request,obj):
 class OccurrenceModelFormSet(BaseInlineFormSet):
   def save_existing(self, form, obj, commit=True):
     obj = super(OccurrenceModelFormSet,self).save_existing(form,obj,commit=commit)
-    mark_conflicts(obj)
+    mark_conflicts(self.request,obj)
     return obj
   def save_new(self, form, commit=True):
     obj = super(OccurrenceModelFormSet,self).save_new(form,commit=commit)
