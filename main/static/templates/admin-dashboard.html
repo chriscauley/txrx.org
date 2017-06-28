@@ -65,10 +65,10 @@
     setTimeout(function() { self.root.querySelector("ur-form button").dispatchEvent(new Event("click"))},0);
   }
   updateUI(e,riot_tag) {
-    if (document.querySelector("ur-input.metric select").value == 'classes_per_student') {
-      document.querySelector("ur-input.resolution").style.display='none';
+    if (document.querySelector(".ur-input.metric select").value == 'classes_per_student') {
+      document.querySelector(".ur-input.resolution").style.display='none';
     } else {
-      document.querySelector("ur-input.resolution").style.display='block';
+      document.querySelector(".ur-input.resolution").style.display='block';
     }
   }
   updatePlot(data) {
