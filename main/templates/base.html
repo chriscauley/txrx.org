@@ -35,7 +35,7 @@
     </script>
     
     <link rel="shortcut icon" href="/favicon.ico" />
-    <script src="{{ STATIC_URL }}js/jquery-1.11.2.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     {% block head %}{% endblock %}
     <meta property="og:title" content="{% block fb_title %}{{ settings.SITE_NAME }}: {{ SITE_TAGLINE }}{% endblock %}" />
     <meta property="og:site_name" content="{{ settings.SITE_NAME }}" />
@@ -98,6 +98,7 @@
     <script src="{{ STATIC_URL }}drop/.dist/drop-built.js"></script>
     <script src="{{ STATIC_URL }}txrx-built.js"></script>
     <script src="{{ STATIC_URL }}unrest_comments/.dist/unrest_comments.js"></script>
+    <script src="{{ STATIC_URL }}cv/float.js"></script>
     {% endcompress %}
     <script src="{{ STATIC_URL }}classes.json?v={% now "ymd_hi" %}"></script>
     <script src="{{ STATIC_URL }}sessions.json?v={% now "ymd_his" %}"></script>
@@ -117,7 +118,6 @@
         //window.Favico && new Favico({animation : 'popFade'}).badge({{ pending_evaluations.count }});
       });
     </script>
-    <script src="{{ STATIC_URL }}cv/float.js"></script>
     {% if not settings.DEBUG %}
     <script>
 
