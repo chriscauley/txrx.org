@@ -131,6 +131,7 @@ uR.drop._addToCart[2693] = function(data) {
   data.initial = { quantity: data.product.quantity };
   uR.alertElement("cart-quantity",data);
 };
+
 uR.config.text_validators['signature'] = function(value,tag) {
   if (!value.startsWith("/s/") || value.length < 5) { tag.data_error = "Signature must start with /s/"; return false; }
   return true
