@@ -57,7 +57,6 @@ gulp.task('build-tag', function() {
 var css_files = [
   _ROOT + "less/bootstrap.css",
   _ROOT + "wmd/wmd.css",
-  _ROOT + "less/blog.css",
   _ROOT + "less/base.less",
 ]
 
