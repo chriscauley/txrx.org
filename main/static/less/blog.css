@@ -1,15 +1,9 @@
+#blogForm label { display: block; }
+#blogForm .related-lookup:before { content: "Open Photo Picker"; }
 /*
   much has been removed from the original codrspace.css
   DO NOT PUT OVERRIDES IN HERE OR CHANGE ANYTHING!
   */
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-header {
-  font-size: 18px;
-}
 
 /**
 * Post List Styles

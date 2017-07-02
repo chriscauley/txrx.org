@@ -1,7 +1,10 @@
 function insertImage(chunk,callback) {
   window.wmd_chunk = chunk;
   window.current_modal = "#image-modal";
-  window.iframe_callback = callback;
+  window.iframe_callback = function(result) {
+    callback(result);
+    $("#image-modal").modal('hide');
+  }
   $("#image-modal iframe").attr("src","/media_files/photo/insert/");
   $("#image-modal").modal('show');
 }
