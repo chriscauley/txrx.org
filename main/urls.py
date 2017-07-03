@@ -23,7 +23,7 @@ import redtape.urls
 import membership.urls
 import course.views.classes
 import airbrake.urls
-import txrx_urls
+import txrx.urls
 from lablackey.sms import urls as sms_urls
 from lablackey.decorators import activate_user
 
@@ -95,7 +95,7 @@ urlpatterns = [
   url(r'^todays_checkins.json',user.views.todays_checkins_json),
   url(r'^redtape/',include(redtape.urls)),
   url(r'',include(airbrake.urls)),
-  url(r'',include(txrx_urls)),
+  url(r'',include(txrx.urls)),
   url(r'',include(sms_urls)),
 ]
 

@@ -1,4 +1,28 @@
+<membership-status>
+  <ul class="ur-collection">
+    <li each={ statuses } class="item { color } lighten-5">
+      <i class="circle { color } fa fa-{ icon }"></i>
+      <div class="text">{ text }</div>
+      <a class="right" if={ link } href={ link.url }>{ link.text }</a>
+    </li>
+  </ul>
+
+  this.on("mount",function() {
+    this.statuses = this.parent.opts.checkin.membership_status;
+    uR.forEach(this.statuses,function(status) {
+      status.color = status.success?"teal":"red";
+      status.icon = status.success?"check":"close";
+      if (status.pending) {
+        status.color = "orange";
+        status.icon = "clock-o";
+      }
+    });
+    this.update()
+  });
+</membership-status>
+
 <user-checkin>
+  <membership-status></membership-status>
   <div class="row">
     <div class="col m8 s12 offset-m2" if={ documents_done }>
       <div class="card green white-text">

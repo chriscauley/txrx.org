@@ -53,3 +53,29 @@ todays-checkins {
 }
 
 user-document markdown ol { margin-left: 20px; }
+
+.ur-collection {
+  .item {
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    list-style: none;
+    justify-content: space-between;
+    margin: 0;
+    padding: 10px 20px;
+    .circle {
+      color: white;
+      margin-right: 1rem;
+      &:before {
+        border-radius: 100%;
+        display: block;
+        font-size: 1.5rem;
+        height: 2.5rem;
+        line-height: 2.5rem;
+        text-align: center;
+        width: 2.5rem;
+      }
+    }
+    .text { flex-grow: 1; }
+  }
+}

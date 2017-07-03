@@ -20,6 +20,7 @@ from membership.utils import temp_user_required
 from redtape.models import Document
 from tool.models import Criterion, UserCriterion, Permission
 
+from lablackey.loader import load_class
 from lablackey.sms.models import SMSNumber
 from lablackey.utils import get_or_none
 from sorl.thumbnail import get_thumbnail
@@ -53,7 +54,8 @@ def checkin_json(user):
     'title': title,
     'subscriptions': [s.as_json for s in _s],
     'documents': documents,
-    'thumbnail': get_thumbnail(user.headshot,"200x300",crop="center").url if user.headshot else None
+    'thumbnail': get_thumbnail(user.headshot,"200x300",crop="center").url if user.headshot else None,
+    'membership_status': [load_class(s)(user) for s in settings.MEMBERSHIP_STATUS_FUNCTIONS],
   }
 
 @staff_member_required
