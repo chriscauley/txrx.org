@@ -24,7 +24,7 @@ def active_membership(user):
 def oriented(user):
   completed = user.usercriterion_set.filter(criterion_id=settings.ORIENTATION_CRITERION_ID)
   if completed:
-    return {"success": True, "text": "You completed an orientation on %s."%strftime }
+    return {"success": True, "text": "You completed an orientation on %s."%completed.completed.strftime(strftime) }
   for rsvp in user.rsvp_set.all():
     if getattr(rsvp.content_object,'event_id',0) == settings.ORIENTATION_ID:
       return {
