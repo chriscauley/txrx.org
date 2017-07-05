@@ -11,7 +11,7 @@ orientation_link = {
 
 def active_membership(user):
   if user.paid_subscriptions:
-    return { "success": True, "text": "You your %s membership is active."%user.level }
+    return { "success": True, "text": "You your %s subscription is paid."%user.level }
   last = user.last_subscription
   out = {
     "link": {"text": "Please sign up for a membership", "url": reverse("join_us") },
