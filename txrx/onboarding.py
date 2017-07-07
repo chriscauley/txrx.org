@@ -62,10 +62,10 @@ def documents(user):
   return not missing,"<div class='message'>%s</div>%s%s"%(message,missing,success)
 
 def safety_training(user):
-  user_criterion = user.usercriterion_set.filter(id=settings.SAFETY_CRITERION_ID,expires__isnull=True)
+  user_criterion = user.usercriterion_set.filter(criterion_id=settings.SAFETY_CRITERION_ID,expires__isnull=True)
   now = timezone.now()
   if user_criterion:
-    _t = user_criterion[0].completed.strftime(strftime)
+    _t = user_criterion[0].created.strftime(strftime)
     return {"success": True, "text": "You completed safety training on %s."%_t }
   user_criterion = user.usercriterion_set.filter(criterion_id=settings.SAFETY_CRITERION_ID,expires__gte=now)
   out = {
