@@ -12,6 +12,9 @@ orientation_link = {
 def active_membership(user):
   if user.paid_subscriptions:
     return { "success": True, "text": "You your %s subscription is paid."%user.level }
+  for buddy in user.subscriptionbuddy_set.all():
+    if buddy.paid_until >= timezone.now():
+      return { "success": True, "text": "You your %s subscription is paid via %s."%(user.level,buddy.subscription.user.get_full_name()) }
   last = user.last_subscription
   out = {
     "link": {"text": "Please sign up for a membership", "url": reverse("join_us") },
