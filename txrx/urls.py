@@ -21,7 +21,7 @@ def transfers(request):
     for charge in transfer.charge_set.all():
       charge_total = charge.amount - charge.fee
       if not 'order_id' in charge.metadata:
-        pass
+        continue
       order = Order.objects.get(pk=charge.metadata['order_id'])
       for item in order.items.all():
         item_ratio = item.line_total / order.order_total
