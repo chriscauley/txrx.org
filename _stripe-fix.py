@@ -57,6 +57,10 @@ fakes = {
   "po_1AD5DoHqBalEWa81l9dZzydt": decimal.Decimal("-53.4"),
   "po_1AH3m3HqBalEWa817BmJhmSR": decimal.Decimal("-48.25"),
   "po_1AJxvkHqBalEWa81wOkSclNp": decimal.Decimal("-116.52"),
+  "po_1AZC3mHqBalEWa81TbEbEiKZ": decimal.Decimal("-33.98"),
+  "po_1AOfoeHqBalEWa81wc5A4S7f": decimal.Decimal("-38.54"),
+  "po_1AU8INHqBalEWa81mcSELMn6": decimal.Decimal("-53.40"),
+  "po_1AVwVbHqBalEWa81tpNh5sFo": decimal.Decimal("-21.84"),
   "": decimal.Decimal("0"),
   "": decimal.Decimal("0"),
 }
@@ -66,7 +70,9 @@ for transfer in Transfer.objects.order_by("stripe_timestamp"):
     continue
   charges = []
   total = fakes.get(transfer.stripe_id,0)
-  #print 'tr',transfer.amount
+  #print 'tr',transfer.amoun
+  if 'order_ids' in transfer.metadata:
+    continue
   _q = models.Q(transfer__isnull=True)
   for charge in list(Charge.objects.filter(transfer=transfer))+list(Charge.objects.filter(_q).order_by("stripe_timestamp")):
     if not charge.paid:
@@ -77,7 +83,7 @@ for transfer in Transfer.objects.order_by("stripe_timestamp"):
     if total == transfer.amount:
       transfer.metadata['charges'] = [c.id for c in charges]
       transfer.metadata['stripe_charges'] = [c.stripe_id for c in charges]
-      transfer.metadata['order_ids'] = [c.metadata['order_id'] for c in charges]
+      transfer.metadata['order_ids'] = [c.metadata['order_id'] for c in charges if 'order_id' in c.metadata]
       transfer.save()
       for c in charges:
         c.transfer = transfer
