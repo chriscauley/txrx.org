@@ -46,7 +46,7 @@ def paypal_signal(sender,**kwargs):
         "%s, %s"%(params['address_city'],params['address_state']),
         params['address_zip']
       ])
-    send_template_email("email/donation_thank_you",["payer_email"],context={'params': params,'address': address})
+    send_template_email("email/donation_thank_you",[params["payer_email"]],context={'params': params,'address': address})
     return
   if sender.txn_type in ["web_accept","send_money"]:
     return # payment from front page
