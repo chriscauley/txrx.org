@@ -8,7 +8,7 @@ from course.models import Session
 class Command(BaseCommand):
   def handle(self, *args, **options):
     lines = []
-    for session in Session.objects.filter(sessionproduct__active=False,active=True,first_date__gte=timezone.now()):
+    for session in Session.objects.filter(active=True,first_date__gte=timezone.now()):
       session.save()
       lines.append("%s was bad"%session)
     if lines:
