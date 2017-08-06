@@ -90,7 +90,7 @@ def totals_json(request,format):
   _x = []
   _y2 = []
   _y = []
-  if 'metric' != 'classes_per_student':
+  if metric != 'classes_per_student':
     if resolution == 'month':
       month = None
       for i,day in enumerate(x):
