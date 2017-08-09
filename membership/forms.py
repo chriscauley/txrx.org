@@ -33,6 +33,9 @@ class RegistrationForm(RegistrationForm):
   _ht = "If different than the email above.\n This is necessary to record when you register for a class."
   paypal_email = forms.EmailField(required=False,label="PayPal Email - Optional",help_text=_ht)
   form_title = "Create an account at %s"%settings.SITE_NAME
+  @classmethod
+  def user_is_allowed(clss,request):
+    return True
   def __init__(self,*args,**kwargs):
     super(RegistrationForm, self).__init__(*args,**kwargs)
     placeholder_fields(self)
