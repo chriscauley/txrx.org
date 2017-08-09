@@ -12,4 +12,4 @@ class Command(BaseCommand):
       session.save()
       lines.append("%s was bad"%session)
     if lines:
-      mail_admins("bad sessions","\n".join(lines))
+      pass #mail_admins("bad sessions","\n".join(lines))
