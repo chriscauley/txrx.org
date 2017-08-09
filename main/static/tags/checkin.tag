@@ -238,18 +238,18 @@
 
 <checkin-new-user>
   <div class={ theme.outer }>
-    <div class={ theme.header }><h3>Welcome visitor!</h3></div>
+    <div class={ theme.header }><h3 style="text-align: center;">Welcome Visitor!</h3></div>
     <div class={ theme.content }>
       <p class="lead">
         We could not find the email you entered in our database.
         Please let us know your name so that we can print a visitor badge.
       </p>
       <ur-form action="/checkin_register/" button_text="Continue" schema={ schema } method="POST"
-               initial={ initial }></ur-form>
+               initial={ initial } ajax_success={ uR.__ajax_success }></ur-form>
     </div>
   </div>
 
-  this.schema = ["email","first_name","last_name"];
+  this.schema = ["email",{name: "first_name",maxlength: 30},{name: "last_name", maxlength: 30}];
   this.initial = {email: this.opts.email};
 </checkin-new-user>
 
@@ -345,6 +345,7 @@
     this.press({keyCode:13});
   }
   this.ajax_success = function(data,response) {
+    uR.__ajax_success = self.ajax_success;
     if (data.next) {
       data.parent = self;
       uR.alertElement(data.next,data);
