@@ -90,6 +90,7 @@ urlpatterns = [
   url(r'^geo/locations.json$',lablackey.geo.views.locations_json),
   url(r'^checkin_ajax/$', user.views.checkin_ajax, name='checkin_ajax'),
   url(r'^checkin_email/$', user.views.checkin_email, name='checkin_email'),
+  url(r'^checkin_register/$', user.views.checkin_register, name='checkin_register'),
   url(r'^add_rfid/$', user.views.add_rfid, name='add_rfid'),
   url(r'^user.json',user.views.user_json),
   url(r'^todays_checkins.json',user.views.todays_checkins_json),

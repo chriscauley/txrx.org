@@ -14,6 +14,7 @@ from tool.models import UserCriterion, Criterion
 from lablackey.sms.models import SMSNumber
 from store.models import CourseCheckout
 
+from jsonfield import JSONField
 from lablackey.decorators import cached_property
 import datetime, os
 
@@ -100,6 +101,7 @@ class User(AbstractBaseUser, PermissionsMixin):
   is_volunteer = models.BooleanField(default=False,help_text=_ht)
   date_joined = models.DateTimeField(_('date joined'),auto_now_add=True)
   paypal_email = models.EmailField(max_length=255,null=True,blank=True) #! TODO make me unique
+  extra = JSONField(default=dict,blank=True)
   _kwargs = dict(upload_to="%Y%m",max_length=200,null=True,blank=True)
   id_photo_date = models.DateTimeField(null=True,blank=True)
   headshot = models.FileField(verbose_name="Head Shot",storage=staff_storage,**_kwargs)

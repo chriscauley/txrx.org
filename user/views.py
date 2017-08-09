@@ -106,8 +106,9 @@ def add_rfid(request):
   return JsonResponse({'messages': messages})
 
 def checkin_register(request):
-  keys = ['email','first_name','last_name',"password"]
-  user,new = get_or_create_student({k: request.POST[k] for key in keys})
+  keys = ['email','first_name','last_name']
+  user,new = get_or_create_student({key: request.POST[key] for key in keys})
+  return JsonResponse({ "checkin": checkin_json(user), "badge": True })
 
 def user_json(request):
   if not request.user.is_authenticated():
