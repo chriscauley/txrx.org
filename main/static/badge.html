@@ -1,23 +1,26 @@
 <body>
   <style>
-    html, body { margin: 0; padding: 0; }
+    html, body { font-size: 10px;margin: 0 !important; padding: 0 !important; }
+    body { display: flex; align-items: center; justify-content: center; }
     #content {
       align-items: center;
-      flex-direction: column;
+      font-family: Arial;
       display: flex;
-      height: 2.4in;
+      height: 1.6in;
       justify-content: center;
-      outline: 1px black solid;
       text-align: center;
-      width: 2.4in;
+      width: 3.4in;
     }
-    #img { width: 80px; margin-bottom: 0.5em;}
-    h1 { margin: 0 0 0.5em; }
-    p { margin: 0 0 0.75em; }
+    #img { width: 100px; margin-right: 1.5em;}
+    h1,h2 { margin: 0 0 0.25em; }
+    h1 { font-size: 25px; }
+    h2 { font-size: 20px; }
+    p { font-size: 18px; margin: 0; }
   </style>
   <div id="content">
     <img src="/static/logos/Logo-1_vertical_color_475x375.png" id="img" />
-    <h1>Visitor</h1>
+    <div class="inner">
+    </div>
   </div>
   <script src="/static/js/moment.js"></script>
   <script src="/static/js/imagesloaded.js"></script>
@@ -28,14 +31,16 @@
       var _sd = window.location.search.match(regexp);
       if (_sd) { return unescape(_sd[1]); }
     }
-    document.querySelector("h1").innerText = getQP("title") || "Visitor";
-    var content= document.getElementById("content");
-    var e = document.createElement("p");
+    var inner = document.querySelector("#content .inner");
+    var e = document.createElement("h1");
     e.innerHTML = getQP("name");
-    content.appendChild(e);
+    inner.appendChild(e);
+    var e = document.createElement("h2");
+    e.innerHTML = getQP("title") || "Visitor";
+    inner.appendChild(e);
     var e = document.createElement("p");
     e.innerHTML = moment().format("MMM D, YYYY");
-    content.appendChild(e);
+    inner.appendChild(e);
     if (window.parent && window.parent.kill) {
       window.print();
       window.parent.kill();
