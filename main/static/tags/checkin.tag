@@ -354,15 +354,24 @@
     self.messages = data.messages;
     self.checkin = data.checkin;
     self.update()
-    self.checkin_div.innerHTML = "<user-checkin>";
-    riot.mount("#checkin_div user-checkin",{checkin:data.checkin, parent: self, rfid: data.rfid})
-    self.countdown();
     if (data.badge) {
       var i = document.createElement("iframe");
       i.src = "/static/badge.html?name="+data.checkin.user_display_name+"&title="+data.checkin.title;
       i.style="display:none;"
       document.body.appendChild(i);
-      window.kill = function() { document.body.removeChild(i); }
+      window.kill = function() {
+        document.body.removeChild(i);
+        if (data.checkin.title == "Visitor") {
+          self.email_checkin = false;
+          self.checkin = null;
+          self.update();
+          document.querySelector("#alert-div").innerHTML = "";
+        }
+      }
+    } else {
+      self.checkin_div.innerHTML = "<user-checkin>";
+      riot.mount("#checkin_div user-checkin",{checkin:data.checkin, parent: self, rfid: data.rfid})
+      self.countdown();
     }
   }
   countdown() {
