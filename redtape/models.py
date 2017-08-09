@@ -25,6 +25,7 @@ class Document(models.Model,JsonMixin):
   get_absolute_url = lambda self: reverse('signed_document',args=[self.id,slugify(self.name)])
   fields_json = property(lambda self: [f.as_json for f in self.documentfield_set.all()])
   data_fields = property(lambda self: [f.get_name for f in self.documentfield_set.all()])
+  rendered_content = property(lambda self: explosivo(self.content))
   def get_json_for_user(self,user):
     json = self.as_json
     try:
@@ -40,7 +41,7 @@ class Document(models.Model,JsonMixin):
       'id': self.id,
       'name': self.name,
       'content': self.content,
-      'rendered_content': explosivo(self.content),
+      'rendered_content': self.rendered_content,
       'schema': self.fields_json,
     }
 
