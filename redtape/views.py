@@ -45,7 +45,7 @@ def document_json(request,document_pk):
   signature = None
   if document.editable:
     signature = get_or_none(Signature,document_id=document_pk,user=request.temp_user)
-  form = SignatureForm(request.POST or None,request.FILES or None,document=document,instance=signature)
+  form = SignatureForm(request,document=document,instance=signature)
   if form.is_valid():
     signature = form.save(commit=False)
     if request.temp_user.is_authenticated():
