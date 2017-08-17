@@ -2,10 +2,12 @@
 
 {% block main %}
 <table class="table stripped">
+  {% for t,totals,error in transfers %}
+  {% if forloop.counter0|divisibleby:10 %}
   <tr>
     {% for l in labels %}<th>{{ l }}</th>{% endfor %}
   </tr>
-  {% for t,totals,error in transfers %}
+  {% endif %}
   <tr>
     <td>
       <transfer-button transfer_id="{{ t.stripe_id }}"></transfer-button>

@@ -61,6 +61,12 @@ fakes = {
   "po_1AOfoeHqBalEWa81wc5A4S7f": decimal.Decimal("-38.54"),
   "po_1AU8INHqBalEWa81mcSELMn6": decimal.Decimal("-53.40"),
   "po_1AVwVbHqBalEWa81tpNh5sFo": decimal.Decimal("-21.84"),
+  "po_1AlWcXHqBalEWa81vyscB449": decimal.Decimal("-193.00"),
+  "po_1Ao4OFHqBalEWa810mvQKQ9z": decimal.Decimal("-12.62"),
+  "po_1AqycIHqBalEWa81H9XIjCyJ": decimal.Decimal("-174.78"),
+  "": decimal.Decimal("0"),
+  "": decimal.Decimal("0"),
+  "": decimal.Decimal("0"),
   "": decimal.Decimal("0"),
   "": decimal.Decimal("0"),
 }
