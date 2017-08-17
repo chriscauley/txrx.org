@@ -98,7 +98,7 @@ uR.drop.paypal_email = "txrxlabs@gmail.com";
 uR.drop.prefix = "/shop";
 uR.drop.stripe = true;
 uR.drop.paypal = true;
-uR.auth.auth_regexp = /^\/(auth|me)\//;
+uR.auth.auth_regexp = /\/(auth|me)\//;
 uR.drop.promocode_active = true;
 uR.config.STATIC_URL = "/static/";
 
