@@ -83,6 +83,9 @@ class UserMembershipForm(PlaceholderModelForm):
     model = UserMembership
 
 class UserForm(PlaceholderModelForm):
+  @classmethod
+  def user_is_allowed(clss,request):
+    return True
   def __init__(self,*args,**kwargs):
     super(UserForm,self).__init__(*args,**kwargs)
     self.fields['first_name'].required = False
@@ -105,6 +108,9 @@ class UserForm(PlaceholderModelForm):
     model = get_user_model()
 
 class AuthenticationForm(AuthenticationForm):
+  @classmethod
+  def user_is_allowed(clss,request):
+    return True
   def __init__(self,*args,**kwargs):
     super(AuthenticationForm, self).__init__(*args,**kwargs)
     placeholder_fields(self)
