@@ -1,7 +1,7 @@
 (function() {
-  function badLogin(t) {
+  function badLogin() {
     if (uR.auth.user) { uR.route("/auth/logout/") }
-    return t.do("Login with a non-existant user.")
+    return this.do("Login with a non-existant user.")
       .click("[href='#/auth/login/']")
       .wait("#id_username")
       .changeValue("#id_username","monkey")
@@ -15,13 +15,13 @@
       .done("Failed at logging in.")
   }
 
-  function doLogin(t) {
+  function doLogin() {
     var context = {
       "#id_username": "tester",
       "#id_password": "password",
     };
     if (uR.auth.user && uR.auth.username == "tester") { return }
-    t.do("Login as user")
+    this.do("Login as user")
       .wait("[href='#/auth/login/']")
       .click()
       .changeValue("#id_username",'tester')
@@ -30,8 +30,8 @@
       .done("Login complete")
   }
 
-  function addToCart(t) {
-    t.do("Add item to cart")
+  function addToCart() {
+    this.do("Add item to cart")
       .setPath("/classes/225/woodworking-ii-milling-dimensioning/")
       .then(uR.drop.emptyCart)
       .click("#s1594 add-to-cart button")
@@ -40,10 +40,10 @@
       .done("Item in cart");
   }
 
-  function makeComment(t) {
+  function makeComment() {
     var rando = Math.random();
     var matched_comment_id;
-    t.do("Testing comment")
+    this.do("Testing comment")
       .setPath("/blog/192/houston-vr-and-txrx/")
       .test(doLogin)
       .wait("#f0 textarea")
