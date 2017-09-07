@@ -1,0 +1,47 @@
+money-widget {
+  display: block;
+  margin-bottom: 2rem;
+  [type=radio] { display: none; }
+  .btn-group {
+    border-radius: 10px;
+    display: flex;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .btn-group > .btn { flex-grow: 1; }
+  .btn {
+    float: none;
+    height: 39px;
+    min-width: 75px;
+  }
+  label {
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    line-height: 39px;
+    right: 0;
+    position: absolute;
+    text-align: center;
+    top: 0;
+  }
+  [type=text] {
+    background: transparent;
+    border: 0 !important;
+    color: inherit;
+    font-weight: bold;
+    height: 25px;
+    line-height: 25px;
+    outline: 0 !important;
+    padding: 0;
+    text-align: center;
+    width: 100px;
+    &:focus { color: #333; background: white; }
+  }
+  [type=text]:focus + label,  .btn-primary [type=text] + label { display: none; }
+  .btn-group.second { width: 50%; margin: 0 auto 0; }
+  @media (max-width: @screen-xs-max) {
+    .btn-group.second { width: auto; }
+    .btn { min-width: 0; }
+    [type=text] { width: 50px; }
+  }
+}

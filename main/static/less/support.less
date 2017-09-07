@@ -1,0 +1,38 @@
+#support-page {
+  .images .btn {
+    cursor: default;
+    margin-bottom: 2rem;
+    position: relative;
+    white-space: normal;
+    width: 100%;
+    @media (max-width: @screen-xs-max) {
+      padding-bottom: 100px;
+      .text { opacity: 1; }
+    }
+    &:hover .text { opacity: 1; }
+  }
+  .img {
+    .fixed-ratio(100%);
+    background-size: cover;
+    background-position: center;
+    color: white;
+    position: relative;
+  }
+  .text {
+    background: rgba(30,30,30,0.9);
+    left: 0;
+    bottom: 0;
+    opacity: 0;
+    padding: 10px;
+    position: absolute;
+    width: 100%;
+    transition: opacity 0.5s;
+  }
+  h1 {
+    margin: 0 0 20px;
+    padding: 0;
+    border-bottom: 0;
+    text-align: center;
+  }
+  .support-logo { display: block; margin: 0 auto; max-width: 400px; }
+}
