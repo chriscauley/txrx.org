@@ -7,11 +7,13 @@
     <meta name="google-site-verification" content="5BXTZkZEubZ_azCsu7q469YXtV6tYbDOVeTQ2enG88o" />
     {% block extra_head %}{% endblock %}
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" />
+    {% block head_styles %}
     {% if REDESIGNED %}
     {% include "_new_styles.html" %}
     {% else %}
     {% include "_styles.html" %}
     {% endif %}
+    {% endblock %}
     <script>var uR = { _ready: [], ready: function(f) { uR._ready.push(f) } }</script>
     <script type="text/javascript">
       var TXRX = TXRX || {};
@@ -72,10 +74,6 @@
         {% endblock %}
       </div>
       
-      {% block footer %}
-      <footer>
-        {% include "footer.html" %}
-      </footer>
       {% comment %}
       <div id="bot_right">
         {% if request.theme == "dark" %}
@@ -85,9 +83,9 @@
         {% endif %}
       </div>
       {% endcomment %}
-      {% endblock %}
       <div id="alert-div"></div>
     </div>
+    {% block footer %}{% include "footer.html" %}{% endblock %}
     {% include "_airbreak.html" %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.6.7/riot+compiler.min.js"></script>
     {% if request.path == "/admin/dashboard/" %}
@@ -145,6 +143,7 @@
   {# google adwords tracking code #}
   <script type="text/javascript">
     /* <![CDATA[ */
+var google_conversion_format = 3;
 var google_conversion_id = 1019454159;
 var google_custom_params = window.google_tag_params;
 var google_remarketing_only = true;
