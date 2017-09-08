@@ -10,7 +10,10 @@
 <section class="banner row">
   {% if banner.header %}<h3 class="block_title">{{ banner.header }}</h3>{% endif %}
   <div class="col-xs-12">
-    <center><a href="{{ banner.url }}"><img src="{{ im.url }}" /></a></center>
+    <center>
+      <a href="{{ banner.url }}"><img src="{{ im.url }}" /></a>
+      <i style="padding-top: 10px;">Click here to find out about our new initiative to assist Houstonians in rebuilding!</i>
+    </center>
   </div>
 </section>
 {% endthumbnail %}
