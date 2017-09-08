@@ -67,5 +67,8 @@ urlpatterns = [
   url(r'^txrx/transfers/$',transfers),
   url(r'^txrx/complete_transfer/([_\w\d]+)/$',complete_transfer),
   url(r'^support/$',lablackey.views.render_template,kwargs={'template': 'flatpages/support.html'}),
+  url(r'^crafters-for-good/$',lablackey.views.render_template,kwargs={'template': 'crafters/index.html'}),
+  url(r'^crafters-for-good/makeathons/$',lablackey.views.render_template,kwargs={'template': 'crafters/makeathons.html'}),
+  url(r'^crafters-for-good/seminars/$',lablackey.views.render_template,kwargs={'template': 'crafters/seminars.html'}),
   url(r'^user_zip/$',user_zip),
 ]

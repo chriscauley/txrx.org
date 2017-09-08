@@ -1,0 +1,34 @@
+{% extends "crafters/base.html" %}
+{% load short_codes static thumbnail %}
+{% block full_title %}{% endblock %}
+
+{% block main-inner %}
+<div class="row" style="color: white;">
+  <div class="col-sm-12 description">
+    <p>
+      TXRX Labs&rsquo; most important asset is its community. We&rsquo;d like to reach out to and put our resources to use in this time of great need. The Crafters for Good initiative was launched in order to both serve Houstonians affected and assemble those who are looking for a way to contribute.
+    </p>
+    <p>
+      Our current programs are the Harvey Relief Makeathons and the Harvey Relief Seminars. The Makethons will invite volunteers from the community to help by creating basic funiture needs for those starting over. Our Seminars will help our citizens get the information they need to work through the process of rebuilding.
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6">
+    <a href="/crafters-for-good/makeathons/" class="pic-link">
+      {% thumbnail "crafters/bench.jpg" "400x400" as im %}
+      <img src="{% static "crafters/bench.jpg" %}">
+      {% endthumbnail %}
+      <span class="orange-bar">Makeathons</span>
+    </a>
+  </div>
+  <div class="col-sm-6">
+    <a href="/crafters-for-good/seminars/" class="pic-link">
+      {% thumbnail "crafters/ronnie.jpg" "400x400" as im %}
+      <img src="{% static "crafters/ronnie.jpg" %}">
+      {% endthumbnail %}
+      <span class="orange-bar">Seminars</span>
+    </a>
+  </div>
+</div>
+{% endblock %}

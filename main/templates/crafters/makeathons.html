@@ -1,0 +1,75 @@
+{% extends "crafters/base.html" %}
+{% load short_codes static thumbnail %}
+{% block full_title %}{% endblock %}
+
+{% block main-inner %}
+<div class="half-flexy" style="color: white;">
+  <div class="column description border">
+    <p>
+      In an effort to support our community and assist
+      our city in rebuilding, TXRX Labs has launched a
+      Crafters for Good initiative.
+    </p>
+    <p>
+      We want to help those affected by Harvey the best
+      way we know - by MAKING!
+    </p>
+    <p>
+      Please join us for our series of Harvey Relief Makeathons
+      to produce hand crafted furniture pieces for those who
+      lost these items in the floods. Our team of experienced
+      craftspeople will lead groups of volunteers in our wood
+      shop and welding shop to build basic home furniture for
+      Houston families. We will be partnering with other local
+      organizations to distribute these items to those most in 
+      need.
+    </p>
+  </div>
+  <div class="column">
+    <div class="has-bg-right" style="background-image:url({% static "crafters/bench.jpg" %})"></div>
+  </div>
+</div>
+<div class="white-bg">
+  <div class="row">
+    <div class="col-sm-5">
+    {% thumbnail "crafters/strong.jpg" "400x400" as im %}
+    <img src="{% static "crafters/strong.jpg" %}">
+    {% endthumbnail %}
+    </div>
+    <div class="col-sm-7">
+      <p>
+        <b class="lead">We need you!</b> TXRX will supply all the tools, materials, consumables,
+        plans, and organization, but we'll need your helping hands to build these items.
+      </p>
+      <p>
+        No previous experience is needed. Our expert staff will walk you through the
+        steps and show you how to operate tools and equipment safely. Whether you're a
+        master woodworker or just curious about making, we invite you to join us and use
+        your DIY skills to help us make a difference.
+      </p>
+      <p class="bigger">
+        Our first makeathon event is scheduled for September
+        15th, 16th, and 17th.
+      </p>
+      <p>
+        If you would like to volunteer to participate, please fill out the form below and
+        choose one of the 4-6 hour scheduled shifts.
+      </p>
+    </div>
+  </div>
+  <div class="big-button">
+    <a href="https://airtable.com/shrT8xDlZ0PH51qTE" class="btn btn-primary">Click Here To Volunteer!</a>
+  </div>
+</div>
+<div>
+  <p class="lead">
+    If you can&rsquo;t make the event but want to contribute by sponsoring supplies,
+    contact us at <a href="mailto:info@txrxlabs.org">info@txrxlabs.org</a> or make a selection below to support the
+    materials needs.
+  </p>
+  <money-widget hide_monthly="true" donate_text="Donate"></money-widget>
+    {% thumbnail "crafters/helmets.jpg" "400x400" as im %}
+    <img src="{% static "crafters/helmets.jpg" %}">
+    {% endthumbnail %}
+</div>
+{% endblock %}

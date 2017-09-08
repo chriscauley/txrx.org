@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load short_codes static compress %}
+
+{% block full_title %}{% endblock %}
+{% block header %}{% endblock %}
+{% block head_styles %}
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,700,800" rel="stylesheet">
+{% compress css %}
+<link rel="stylesheet" href="{% static "less/grid12.css" %}"/>
+<link rel="stylesheet" type="text/less" href="{% static "less/crafters.less" %}"/>
+{% endcompress %}
+{% endblock %}
+{% block nav %}
+<nav>
+  <a href="/" class="logo"></a>
+  <div class="links">
+    <a href="/makeathons/">Makeathons</a>
+    <a href="/seminars/">Seminars</a>
+    <a href="/" class="hidden-xs">TXRX Labs</a>
+  </div>
+</nav>
+{% endblock %}
+
+{% block main %}
+<div class="col-xs-12 crafters-page">
+  <div class="crafters-title"><a href="/crafters-for-good/">CRAFTERS FOR GOOD</a></div>
+  {% block main-inner %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-7">
+        <div class="lead">ABOUT US</div>
+        <p>
+          <b>TXRX Labs</b> is a 501(c)3 nonprofit innovation, education, and collaboration hub serving the
+          creative community of Houston, Texas. Classes are offered in a variety of topics including
+          woodworking, welding, machining, programming, electronics, drafting & design, textile arts,
+          jewelry, ceramics, and STEAM education for young makers. The 50,000 square foot facility
+          provides an open environment where tools, knowledge, and skills are shared for hobbyists,
+          inventors, artists, entrepreneurs, students, and anyone interested in becoming a maker.
+        </p>
+      </div>
+      <div class="col-sm-4 right">
+        <div class="lead">CONTACT US</div>
+        <p>
+          To stay up to date on lab news and events, follow us
+          @txrxlabs or sign up for our email newsletter.
+        </p>
+        <a class="btn btn-primary" href="http://eepurl.com/uhcT1">Subscribe</a>
+      </div>
+      <div class="col-xs-12 bottom">
+        <b>
+          <a href="/">txrxlabs.org</a>
+          |
+          <a href="https://maps.google.com/?q=TXRX Labs, Houston, TX">205 Roberts St. Houston TX 77003</a>
+        </b>
+      </div>
+    </div>
+  </div>
+</footer>
+{% endblock %}

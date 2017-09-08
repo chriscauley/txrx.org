@@ -44,6 +44,7 @@ var tag_files = [
   _ROOT + "tags/store.tag",
   _ROOT + "tags/redtape.tag",
   _ROOT + "tags/notify.tag",
+  _ROOT + "tags/donate.tag",
   "event/static/tags/event.tag",
 ];
 

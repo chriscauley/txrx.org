@@ -1,0 +1,56 @@
+{% extends "crafters/base.html" %}
+{% load short_codes static thumbnail %}
+{% block full_title %}{% endblock %}
+
+{% block main-inner %}
+<div class="row">
+  <div class="col-sm-6 description">
+TXRX's Shop Manager Ronnie Devries is a certified jack of all trades, master of all. To further help Houstonians affected by Harvey, he will be holding workshops at TXRX in the coming days to help people understand the work that will need to be done to repair their homes, along with any associated costs, so that folks can begin working with contractors without being scammed or taken advantage of. This will be a free service by Ronnie Devries and TXRX as a way to help the community rebuild.
+  </div>
+  <div class="col-sm-6">
+    {% thumbnail "crafters/ronnie.jpg" "400x400" as im %}
+    <img src="{% static "crafters/ronnie.jpg" %}">
+    {% endthumbnail %}
+  </div>
+</div>
+<div class="white-bg">
+  <div class="row">
+    <div class="col-sm-8">
+      <b class="lead">These workshops will cover:</b>
+      <ul>
+        <li>Choosing a contractor - Discover how to find and compare contractors and services.</li>
+        <li>Vetting a contractor - Get questions to ask a contractor in order to prtect yourself.</li>
+        <li>Contracts and Payment - Navigating contracts is diffcult. Make sure you know as much as possible about payment, clauses, liability, and more.</li>
+        <li>Red Flags - Find out what to look for to spot deals that may be too good to be true.</li>
+      </ul>
+
+      <b class="lead">Numbers and links to know</b>
+      <ul>
+        <li>FEMA Disaster Fraud Hotline: <a href="tel:1-866-720-5721">1-866-720-5721</a></li>
+        <li>Texas Attorney General (for reporting fraud): <a href="1-800-252-8011">1-800-252-8011</a></li>
+        <li>File a fraud complaint with the FTC <a href="https://www.ftccomplaintassistant.gov/#crnt&panel1-1">here</a>.</li>
+        <li><a href="https://www.bbb.org/houston/">Houston Better Business Bureau</a></li>
+        <li><a href="https://www.angieslist.com/companylist/houston/contractor.htm">Angie&rsquo;s List contractors</a></li>
+        <li><a href="https://www.fema.gov/hurricane-harvey-rumor-control">Hurricane Harvey rumor control</a></li>
+        <li><a href="https://docs.google.com/document/d/1HEBcT5V2TCk3eyz25OLidQXKcPXgPydGHhWUZHez2RQ/edit?usp=sharing">Flood Damage Cleanup Tips</li>
+      </ul>
+    </div>
+    <div class="col-sm-4">
+      {% thumbnail "crafters/table.jpg" "400x400" as im %}
+      <img src="{% static "crafters/table.jpg" %}">
+      {% endthumbnail %}
+    </div>
+  </div>
+  <div class="big-button">
+    <a class="btn btn-primary" href="https://airtable.com/shrwm6uNzm3Hhkv0l">Sign up to Learn More!</a>
+  </div>
+</div>
+<div class="bottom-donate">
+  <p class="lead">
+    If you can&rsquo;t make the event but want to contribute by sponsoring supplies,
+    contact us at <a href="mailto:info@txrxlabs.org">info@txrxlabs.org</a> or make a selection below to support the
+    materials needs.
+  </p>
+  <money-widget hide_monthly="true" donate_text="Donate"></money-widget>
+</div>
+{% endblock %}
