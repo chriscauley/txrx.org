@@ -69,8 +69,17 @@
     materials needs.
   </p>
   <money-widget hide_monthly="true" donate_text="Donate"></money-widget>
-    {% thumbnail "https://txrxlabs.org/static/crafters/helmets.jpg" "600x600" as im %}
-    <img src="{{ im.url }}">
-    {% endthumbnail %}
+  {% thumbnail "https://txrxlabs.org/static/crafters/helmets.jpg" "600x600" as im %}
+  <img src="{{ im.url }}">
+  {% endthumbnail %}
+
+  <div class="sponsor">
+    <h2>Partners with Texas Environmental Justice Advisory Services</h2>
+    <a href="http://tejasbarrios.org/">
+      {% thumbnail "https://txrxlabs.org/static/crafters/true_tejas.jpg" "600x600" as im %}
+      <img src="{{ im.url }}">
+      {% endthumbnail %}
+    </a>
+  </div>
 </div>
 {% endblock %}
