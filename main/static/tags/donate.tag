@@ -28,7 +28,7 @@ uR.ready(function() { riot.mount("money-widget") });
       <input name="cancel_return" type="hidden" value="https://txrxlabs.org/support/">
       <input name="return" type="hidden" value="https://txrxlabs.org/">
 
-      <input type="hidden" name="custom" value="support page donation">
+      <input type="hidden" name="custom" value={ opts.description || 'support page donation' }>
 
       <input name="on0" type="hidden" value="Donation"/>
       <input name="os0" type="hidden" value="Monthly"/>
