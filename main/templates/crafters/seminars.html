@@ -3,13 +3,15 @@
 {% block full_title %}{% endblock %}
 
 {% block main-inner %}
-<div class="row">
-  <div class="col-sm-6 description">
-TXRX&rsquo;s Shop Manager Ronnie Devries is a certified jack of all trades, master of all. To further help Houstonians affected by Harvey, he will be holding workshops at TXRX in the coming days to help people understand the work that will need to be done to repair their homes, along with any associated costs, so that people can begin working with contractors without being scammed or taken advantage of. This will be a free service by Ronnie Devries and TXRX as a way to help the community rebuild.
+<div class="half-flexy">
+  <div class="column description">
+    <p>As a further way to help Houstonians we will be holding workshops at TXRX Labs to help people understand the work that will need to be done to their homes to repair and also the costs associated. This will be a free service by Ronnie Devries and TXRX as a way to help the community rebuild.</p>
+
+    <p>TXRX's Shop Manager Ronnie Devries is a certified jack of all trades master of all from his years of work prior to TXRX but also through his hard fought years building TXRX from the ground up.</p>
   </div>
-  <div class="col-sm-6">
+  <div class="column">
     {% thumbnail "https://txrxlabs.org/static/crafters/ronnie.jpg" "600x600" as im %}
-    <img src="{{ im.url }}">
+    <div class="has-bg-right" style="background-image:url({{ im.url }})"></div>
     {% endthumbnail %}
   </div>
 </div>
@@ -60,6 +62,11 @@ TXRX&rsquo;s Shop Manager Ronnie Devries is a certified jack of all trades, mast
       <th>3pm-6pm</th>
       <td>DIY Repairs (insulation, drywall and trim carpentry)</td>
     </tr>
+    <tr>
+      <th>Location</th>
+      <td>TXRX Labs -
+        <u><a href="https://maps.google.com/?q=TXRX Labs, Houston, TX">205 Roberts St. Houston TX 77003</a></u></td>
+    </tr>
   </table>
   <table class="table table-striped" style="max-width: 500px; margin: 0 auto;">
     <tr>
@@ -77,6 +84,12 @@ TXRX&rsquo;s Shop Manager Ronnie Devries is a certified jack of all trades, mast
     <tr>
       <th>3pm-6pm</th>
       <td>DIY Repairs (insulation, drywall and trim carpentry)</td>
+    </tr>
+    <tr>
+      <th>Location</th>
+      <td>TXRX Labs -
+        <u><a href="https://maps.google.com/?q=TXRX Labs, Houston, TX">205 Roberts St. Houston TX 77003</a></u>
+      </td>
     </tr>
   </table>
   <div class="big-button">
