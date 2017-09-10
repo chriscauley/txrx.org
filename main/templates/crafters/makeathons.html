@@ -32,8 +32,8 @@
 <div class="white-bg">
   <div class="row">
     <div class="col-sm-5">
-    {% thumbnail "crafters/strong.jpg" "400x400" as im %}
-    <img src="{% static "crafters/strong.jpg" %}">
+    {% thumbnail "https://txrxlabs.org/static/crafters/strong.jpg" "600x600" as im %}
+    <img src="{{ im.url }}">
     {% endthumbnail %}
     </div>
     <div class="col-sm-7">
@@ -69,8 +69,8 @@
     materials needs.
   </p>
   <money-widget hide_monthly="true" donate_text="Donate"></money-widget>
-    {% thumbnail "crafters/helmets.jpg" "400x400" as im %}
-    <img src="{% static "crafters/helmets.jpg" %}">
+    {% thumbnail "https://txrxlabs.org/static/crafters/helmets.jpg" "600x600" as im %}
+    <img src="{{ im.url }}">
     {% endthumbnail %}
 </div>
 {% endblock %}
