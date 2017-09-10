@@ -9,7 +9,7 @@
       .click("#submit_button")
       .wait("auth-modal .alert-danger")
       .assertEqual(
-        function() { return document.querySelector("auth-modal .alert-danger").innerText },
+        function getErrorText() { return document.querySelector("auth-modal .alert-danger").innerText },
         "Username and password do not match."
       )
       .done("Failed at logging in.")
@@ -63,5 +63,5 @@
       .wait("#"+matched_comment_id+" comment-form textarea")
   }
 
-  konsole.addCommands(badLogin,addToCart,makeComment);
+  konsole.addCommands(badLogin) //,addToCart,makeComment);
 })();
