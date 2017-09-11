@@ -141,7 +141,7 @@ STATICFILES_FINDERS = (
 )
 
 COMPRESS_PRECOMPILERS = (
-  ('text/less', 'lessc {infile} {outfile}'),
+  ('text/less', 'lessc {infile} |autoprefixer-cli > {outfile}'),
   ('riot/tag', 'riot {infile} {outfile}'),
 )
 
