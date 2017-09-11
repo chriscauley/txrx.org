@@ -99,7 +99,7 @@
   addToCart(e) {
     var widget = uR.drop._addToCart[this.id]
     if (widget) { widget({product: uR.drop.products[this.id]}) }
-    else { uR.drop.saveCartItem(this.id, 1, self); }
+    else { uR.drop.saveCartItem(this.id, 1, this); }
   }
 </product>
 
