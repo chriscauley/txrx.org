@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Consumable
+from .models import Consumable, CourseCheckout
 from course.models import CourseEnrollment
 from user.models import is_shopkeeper, is_toolmaster
 
@@ -90,3 +90,13 @@ def admin_add(request):
   product.in_stock = max(old + quantity,0)
   product.save()
   return HttpResponse(str(product.in_stock))
+
+def coursecheckout_ajax(request,id):
+  coursecheckout = CourseCheckout.objects.get(id=id)
+  choices = [(occ.id,str(occ)) for occ in coursecheckout.event.upcoming_occurrences]
+  return JsonResponse({
+    'schema': [
+      {'name': 'studio-times', 'choices': choices,'type': 'select'}
+    ],
+    'markdown': "Please select an upcoming studio time to do your checkout."
+  });

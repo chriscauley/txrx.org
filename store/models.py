@@ -29,6 +29,9 @@ class BaseProduct(PhotosMixin,Product):
 class CourseCheckout(BaseProduct):
   json_fields = BaseProduct.json_fields + ['course_id']
   course = models.ForeignKey("course.Course")
+  _ht = "Select the studio hours that can be picked for this checkout."
+  _lct = { 'access_id': 4 }
+  event = models.ForeignKey("event.Event",null=True,blank=True,limit_choices_to=_lct,help_text=_ht)
   base_categories = [1]
   get_name = lambda self: "%s (check-out test)"%self.name
   in_stock = property(lambda self: 9999)

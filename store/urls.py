@@ -6,6 +6,7 @@ import drop.urls
 urlpatterns = [
   url(r'^$',views.index,name='product_list'),
   url(r'^categories.js$',views.categories_json,name='categories_json'),
+  url(r'^coursecheckout/(\d+).json$',views.coursecheckout_ajax),
   url(r'^start_checkout/$',views.start_checkout,name='start_checkout'),
 
   url(r'^receipts/$',views.receipts,name='receipts'),
