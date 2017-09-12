@@ -39,12 +39,15 @@
     <link rel="shortcut icon" href="/favicon.ico" />
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     {% block head %}{% endblock %}
+
+    {% block meta_head %}
     <meta property="og:title" content="{% block fb_title %}{{ settings.SITE_NAME }}: {{ SITE_TAGLINE }}{% endblock %}" />
     <meta property="og:site_name" content="{{ settings.SITE_NAME }}" />
     <meta property="og:url" content="{{ request.build_absolute_uri }}" />
     <meta property="og:description" content="{% block fb_description %}{{ settings.SITE_NAME }} is Houston's nonprofit Hackerspace. Since 2008, TXRX has aimed to provide a communal space for the public to learn and create. Located in the East End and serving the greater Houston area, TXRX offers members use of 30,000 square feet of work space including a wood shop, metal shop, bike shop, rapid fabrication lab, electronics lab, art lab, computer lab, and coworking space. A diverse series of classes are taught with the goal of making seemingly complex skills attainable to anyone. By creating an open environment to share knowledge, collaborate, and build, TXRX has become the home for 250 thinkers, tinkerers, hackers, artists, crafters, coders, and makers.{% endblock %}" />
     {#! <meta property="og:image" content="https:///txrxlabs.org/" /> #}
     <meta property="fb:app_id" content="" />
+    {% endblock %}
     <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
@@ -88,6 +91,7 @@
     {% block footer %}{% include "footer.html" %}{% endblock %}
     {% include "_airbreak.html" %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.6.7/riot+compiler.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown.js/0.5.0/markdown.min.js"></script>
     {% if request.path == "/admin/dashboard/" %}
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     {% endif %}

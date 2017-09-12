@@ -1,6 +1,18 @@
 {% extends "crafters/base.html" %}
 {% load short_codes static thumbnail %}
-{% block full_title %}{% endblock %}
+
+{% block meta_head %}
+<meta name="keywords" content="Hurricane Harvey, Relief, Community, Houston">
+<meta property="og:title" content="Crafters for Good at TXRX Labs">
+<meta property="og:image" content="https://txrxlabs.org/static/crafters/bench.jpg">
+<meta property="og:description" content="Please join us for our series of Harvey Relief Makeathons to produce hand crafted furniture pieces for those who lost these items in the floods. ">
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@txrxlabs" />
+<meta name="twitter:title" content="Crafters For Good" />
+<meta name="twitter:description" content="Please join us for our series of Harvey Relief Makeathons to produce hand crafted furniture pieces for those who lost these items in the floods. "/>
+<meta name="twitter:image" content="https://txrxlabs.org/static/crafters/bench.jpg" />
+{% endblock %}
 
 {% block main-inner %}
 <div class="row" style="color: white;">

@@ -1,6 +1,18 @@
 {% extends "crafters/base.html" %}
 {% load short_codes static thumbnail %}
-{% block full_title %}{% endblock %}
+
+{% block meta_head %}
+<meta name="keywords" content="Hurricane Harvey, Relief, Community, Houston">
+<meta property="og:title" content="Crafters for Good at TXRX Labs">
+<meta property="og:image" content="https://txrxlabs.org/static/crafters/ronnie.jpg">
+<meta property="og:description" content="Please join us for our series of Harvey Relief Makeathons to produce hand crafted furniture pieces for those who lost these items in the floods. ">
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@txrxlabs" />
+<meta name="twitter:title" content="Crafters For Good" />
+<meta name="twitter:description" content="Please join us for our series of Harvey Relief Makeathons to produce hand crafted furniture pieces for those who lost these items in the floods. "/>
+<meta name="twitter:image" content="https://txrxlabs.org/static/crafters/ronnie.jpg" />
+{% endblock %}
 
 {% block main-inner %}
 <div class="half-flexy">
@@ -21,7 +33,7 @@
       craftspeople will lead groups of volunteers in our wood
       shop and welding shop to build basic home furniture for
       Houston families. We will be partnering with other local
-      organizations to distribute these items to those most in 
+      organizations to distribute these items to those most in
       need.
     </p>
   </div>
