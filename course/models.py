@@ -111,11 +111,7 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
       'subject_names': [s.name for s in self.subjects.all()],
       'subject_ids': [s.pk for s in self.subjects.all()],
       'url': self.get_absolute_url(),
-      'im': {
-        'width': image.width,
-        'height': image.height,
-        'url': image.url
-      },
+      'im': {},
       'next_time': time.mktime(self.first_date.timetuple()) if self.active_sessions else 0,
       'fee': self.fee,
       'active_sessions': [s.as_json for s in self.active_sessions],
@@ -124,6 +120,12 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
       'requirements': self.requirements,
       'no_discount': self.no_discount,
     }
+    if image and image.exists():
+      out['im'] = {
+        'width': image.width,
+        'height': image.height,
+        'url': image.url
+      },
     out['enrolled_status'] = "Enroll" if out['active_sessions'] else "Details"
     return out
 
