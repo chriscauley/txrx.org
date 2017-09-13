@@ -132,7 +132,7 @@ uR.drop._addToCart[2693] = function(data) {
   uR.alertElement("cart-quantity",data);
 };
 
-uR.drop._addToCart['store.coursecheckout'] = function(data) {
+/*uR.drop._addToCart['store.coursecheckout'] = function(data) {
   data.schema = "/shop/coursecheckout/"+data.product.id+".json";
   data.submit = function(riot_tag) {
     var extra = riot_tag.getData();
@@ -140,7 +140,7 @@ uR.drop._addToCart['store.coursecheckout'] = function(data) {
     uR.drop.saveCartItem(data.product.id,1,riot_tag,extra);
   }
   uR.alertElement("ur-form",data);
-}
+}*/
 
 uR.config.text_validators['signature'] = function(value,tag) {
   if (!value.startsWith("/s/") || value.length < 5) { tag.data_error = "Signature must start with /s/"; return false; }
