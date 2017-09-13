@@ -144,6 +144,17 @@ def nav(request):
     ('Is this class right for me? Maybe...','Most classes are for beginners, and clicking on the class title will take you to the class detail page. The right column shows <span class="has_notes">prerequisites</span> and <span class="has_notes">requirements</span>. If you mouse over them you will see what is required for that class. Some classes require a brief <span class="has_notes">safety</span> class which is taught 20 minutes before the class. Additionally, there may be <span class="has_notes">fee notes</span> which explain how much of the cost goes towards materials.'),
     ]
 
+  META = {
+    'title': "Crafters for Good - TXRX Labs",
+    'image': 'https://txrxlabs.org/media/cache/16/18/1618ce2bd75748d11f1a063930d0d945.jpg'
+  }
+  if "makeathons" in request.path:
+    META['title'] = 'Crafters for Good | Makeathons - TXRX Labs'
+    META['image'] = 'https://txrxlabs.org/media/cache/16/18/1618ce2bd75748d11f1a063930d0d945.jpg'
+  elif 'seminars' in request.path:
+    META['title'] = 'Crafters for Good | Seminars - TXRX Labs'
+    META['image'] = 'https://txrxlabs.org/media/cache/40/e1/40e1d0bae3965efc1ebed8547c61b338.jpg'
+
   my_classes_ics = None
   documents_needed = 0
   if request.user.is_authenticated():
@@ -172,6 +183,7 @@ def nav(request):
     all_classes_ics = '%s/classes/ics/all_classes.ics'%settings.SITE_DOMAIN, #! move to course.context
     pressitems = PressItem.objects.all(),
     SITE_DOMAIN = "https://txrxlabs.org",
+    META = META,
     sql_time_sum = lambda: sum([float(q['time'])*1000 for q in connection.queries]),
   )
 
