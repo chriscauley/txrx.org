@@ -97,7 +97,8 @@
 
   var update_timeout;
   addToCart(e) {
-    var widget = uR.drop._addToCart[this.id]
+    // #! TODO this is duplicated in the add-to-cart button, which this should probably be using any how.
+    var widget = uR.drop._addToCart[this.model_slug] || uR.drop._addToCart[this.id];
     if (widget) { widget({product: uR.drop.products[this.id]}) }
     else { uR.drop.saveCartItem(this.id, 1, this); }
   }
@@ -159,3 +160,4 @@
     modify(-e.item.purcase_quantity);
   }
 </product-admin>
+

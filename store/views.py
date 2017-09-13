@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.template.defaultfilters import date
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Consumable, CourseCheckout
@@ -93,10 +94,14 @@ def admin_add(request):
 
 def coursecheckout_ajax(request,id):
   coursecheckout = CourseCheckout.objects.get(id=id)
-  choices = [(occ.id,str(occ)) for occ in coursecheckout.event.upcoming_occurrences]
+  studio_hours = []
+  for event in coursecheckout.events.all():
+    studio_hours += list(event.upcoming_occurrences)
+  studio_hours.sort(key=lambda s: s.start)
+  choices = [(occ.id,date(occ.start,r"l, F jS \a\t P")) for occ in studio_hours]
   return JsonResponse({
     'schema': [
-      {'name': 'studio-times', 'choices': choices,'type': 'select'}
+      {'name': 'eventoccurrence_id', 'choices': choices,'type': 'select'}
     ],
     'markdown': "Please select an upcoming studio time to do your checkout."
   });

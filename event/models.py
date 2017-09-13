@@ -102,7 +102,7 @@ class Event(PhotosMixin,models.Model):
 
   __unicode__ = lambda self: "%s@%s"%(self.name,self.room)
   class Meta:
-    pass
+    ordering = ("name",)
 
 REPEAT_FLAVOR_CHOICES = (
   ('start-month','Monthly from start of month (eg, 1st, 2nd... Friday of month)'),

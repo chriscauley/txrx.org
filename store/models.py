@@ -31,10 +31,11 @@ class CourseCheckout(BaseProduct):
   course = models.ForeignKey("course.Course")
   _ht = "Select the studio hours that can be picked for this checkout."
   _lct = { 'access_id': 4 }
-  event = models.ForeignKey("event.Event",null=True,blank=True,limit_choices_to=_lct,help_text=_ht)
+  events = models.ManyToManyField("event.Event",limit_choices_to=_lct,help_text=_ht)
   base_categories = [1]
   get_name = lambda self: "%s (check-out test)"%self.name
   in_stock = property(lambda self: 9999)
+  extra_fields = ['eventoccurrence_id','display']
   def purchase(self,order_item):
     ce,new = CourseEnrollment.objects.get_or_create(
       course=self.course,

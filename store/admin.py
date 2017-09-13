@@ -7,8 +7,7 @@ from media.admin import TaggedPhotoAdmin
 
 @admin.register(CourseCheckout)
 class CourseCheckoutAdmin(admin.ModelAdmin):
-  list_display = ("__unicode__","course","event")
-  list_editable = ("course","event")
+  filter_horizontal = ("events",)
   raw_id_fields = ("course",)
 
 @admin.register(ToolConsumableGroup)

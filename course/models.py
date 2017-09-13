@@ -120,12 +120,12 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
       'requirements': self.requirements,
       'no_discount': self.no_discount,
     }
-    if True: #image and image.exists():
+    if image and image.exists():
       out['im'] = {
         'width': image.width,
         'height': image.height,
         'url': image.url
-      },
+      }
     out['enrolled_status'] = "Enroll" if out['active_sessions'] else "Details"
     return out
 
