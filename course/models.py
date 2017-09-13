@@ -120,7 +120,7 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
       'requirements': self.requirements,
       'no_discount': self.no_discount,
     }
-    if image and image.exists():
+    if True: #image and image.exists():
       out['im'] = {
         'width': image.width,
         'height': image.height,
