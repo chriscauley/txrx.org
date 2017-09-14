@@ -147,7 +147,7 @@ def detail_json(request,event_pk):
   fields = ['id','name','total_rsvp','start','end','rsvp_cutoff','past']
   if request.user.is_superuser:
     fields.append("total_rsvp")
-  os = event.upcoming_occurrences[:10]
+  os = event.upcoming_occurrences.filter(start__lte=timezone.now()+timezone.timedelta(14))
   out['upcoming_occurrences'] = [{key: getattr(o,key) for key in fields} for o in os]
   return JsonResponse(out)
 
