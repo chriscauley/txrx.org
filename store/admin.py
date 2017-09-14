@@ -8,6 +8,9 @@ from media.admin import TaggedPhotoAdmin
 @admin.register(CourseCheckout)
 class CourseCheckoutAdmin(admin.ModelAdmin):
   filter_horizontal = ("events",)
+  list_display = ('__unicode__','studio_hours')
+  def studio_hours(self,obj=None):
+    return ", ".join([event.name for event in obj.events.all()])
   raw_id_fields = ("course",)
 
 @admin.register(ToolConsumableGroup)

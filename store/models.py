@@ -40,7 +40,8 @@ class CourseCheckout(BaseProduct):
     ce,new = CourseEnrollment.objects.get_or_create(
       course=self.course,
       user=order_item.order.user,
-      defaults={'quantity': order_item.quantity}
+      eventoccurrence_id=order_item.extra.eventoccurrence_id,
+      defaults={'quantity': order_item.quantity},
     )
     self.save()
     order_item.extra['purchased_model'] = "course.CourseEnrollment"

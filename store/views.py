@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.template.defaultfilters import date
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Consumable, CourseCheckout
@@ -13,7 +14,7 @@ from user.models import is_shopkeeper, is_toolmaster
 from drop.models import Order, Category
 from drop.util.cart import get_or_create_cart
 
-import json, datetime
+import json
 
 def categories_json(request):
   return JsonResponse({'categories': [c.as_json for c in Category.objects.all()]})
@@ -54,7 +55,7 @@ def receipts(request):
     o = Order.objects.get(pk=request.POST['pk'])
     o.status = int(request.POST['status'])
     o.save()
-    now = datetime.datetime.now().strftime("%m/%d/%Y at %H:%M")
+    now = timezone.now().strftime("%m/%d/%Y at %H:%M")
     status = "delivered" if o.status == Order.SHIPPED else "outstanding"
     t = "%s marked as %s on %s"%(request.user,status,now)
     messages.success(request,"%s marked as %s"%(o,status))
@@ -96,7 +97,7 @@ def coursecheckout_ajax(request,id):
   coursecheckout = CourseCheckout.objects.get(id=id)
   studio_hours = []
   for event in coursecheckout.events.all():
-    studio_hours += list(event.upcoming_occurrences)
+    studio_hours += list(event.upcoming_occurrences.filter(start__lte=timezone.now()+timezone.timedelta(14)))
   studio_hours.sort(key=lambda s: s.start)
   choices = [(occ.id,date(occ.start,r"l, F jS \a\t P")) for occ in studio_hours]
   return JsonResponse({
