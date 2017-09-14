@@ -102,7 +102,7 @@ def coursecheckout_ajax(request,id):
   choices = [(occ.id,date(occ.start,r"l, F jS \a\t P")) for occ in studio_hours]
   return JsonResponse({
     'schema': [
-      {'name': 'eventoccurrence_id', 'choices': choices,'type': 'select'}
+      {'name': 'eventoccurrence_id', 'label': "Studio Hours", 'choices': choices,'type': 'select'}
     ],
     'markdown': "Please select an upcoming studio time to do your checkout."
   });

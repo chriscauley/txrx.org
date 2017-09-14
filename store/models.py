@@ -35,7 +35,7 @@ class CourseCheckout(BaseProduct):
   base_categories = [1]
   get_name = lambda self: "%s (check-out test)"%self.name
   in_stock = property(lambda self: 9999)
-  extra_fields = ['eventoccurrence_id','display']
+  extra_fields = ['eventoccurrence_id','display','no_edit']
   def purchase(self,order_item):
     ce,new = CourseEnrollment.objects.get_or_create(
       course=self.course,
