@@ -542,7 +542,7 @@ class CourseEnrollment(CriterionModel):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
   course = models.ForeignKey(Course)
   quantity = models.IntegerField(default=1)
-  #eventoccurrence = models.ForeignKey('event.EventOccurrence',null=True,blank=True);
+  eventoccurrence = models.ForeignKey('event.EventOccurrence',null=True,blank=True);
   get_criteria = lambda self: self.course.criterion_set.all()
   as_json = property(lambda self: {a:getattr(self,a) for a in self.json_fields})
   objects = CourseEnrollmentManager()
