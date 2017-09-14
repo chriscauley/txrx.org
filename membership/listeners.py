@@ -9,7 +9,6 @@ from .models import Status, Subscription, Level, Product, Flag
 from tool.models import Criterion
 
 from lablackey.mail import send_template_email
-from lablackey.utils import latin1_to_ascii
 
 from paypal.standard.ipn.signals import valid_ipn_received, invalid_ipn_received
 
@@ -37,7 +36,7 @@ def paypal_flag(sender,reason=None,**kwargs):
 @receiver(valid_ipn_received,dispatch_uid='paypal_signal')
 @receiver(invalid_ipn_received,dispatch_uid='paypal_signal')
 def paypal_signal(sender,**kwargs):
-  params = QueryDict(latin1_to_ascii(sender.query))
+  params = QueryDict(latin1_to_ascii(sender.query).replace("%FC","u"))
   if sender.txn_type == "web_accept" and params["custom"] == "support page donation":
     address = ""
     if params.get("address_street",None):
