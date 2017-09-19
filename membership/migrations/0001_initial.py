@@ -161,12 +161,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('product_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='drop.Product')),
                 ('months', models.IntegerField(choices=[(1, b'Monthly'), (3, b'Quarterly'), (6, b'Biannually'), (12, b'Yearly')], default=1)),
-                ('order', models.IntegerField(default=0)),
                 ('level', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='membership.Level')),
             ],
-            options={
-                'ordering': ('order',),
-            },
             bases=('drop.product',),
         ),
         migrations.CreateModel(

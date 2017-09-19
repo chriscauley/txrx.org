@@ -168,7 +168,6 @@ MONTHS_CHOICES = (
 class Product(Product):
   level = models.ForeignKey(Level)
   months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
-  order = models.IntegerField(default=0)
   __unicode__ = lambda self: "%s %s"%(self.get_months_display(),self.level)
   class Meta:
     ordering = ("order",)
