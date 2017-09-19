@@ -25,13 +25,12 @@ shopping-cart .item {
   padding: 5px 8px;
   position: relative;
   &:last-child { border-bottom: 0; }
-  .price-box {
-    padding-left: 20px;
-    text-align: right;
-  }
 }
 
 shopping-cart .price-box {
+  padding-left: 20px;
+  text-align: right;
+  .edit { display: block; }
   @media (max-width: @screen-xs-max) {
     align-items: center;
     display: flex;
