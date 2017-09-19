@@ -106,7 +106,8 @@ if (!document.body.classList.contains("kiosk")) { // bootstrap
   uR.config.form.field_class = "form-group";
   uR.theme = {
     input: "form-control",
-    cart_items: "well cart-items",
+    cart_items: "cart-items",
+    cart_item: "well",
     message_list: "card",
     success_class: "alert alert-success card-content green white-text",
     error_class: "alert alert-danger card-content red white-text",
@@ -132,15 +133,19 @@ uR.drop._addToCart[2693] = function(data) {
   uR.alertElement("cart-quantity",data);
 };
 
-/*uR.drop._addToCart['store.coursecheckout'] = function(data) {
+uR.drop._addToCart['store.coursecheckout'] = function(data) {
   data.schema = "/shop/coursecheckout/"+data.product.id+".json";
   data.submit = function(riot_tag) {
     var extra = riot_tag.getData();
     extra['display'] = riot_tag.form.fields.eventoccurrence_id.choices_map[extra['eventoccurrence_id']];
     uR.drop.saveCartItem(data.product.id,1,riot_tag,extra);
   }
-  uR.alertElement("ur-form",data);
-}*/
+  uR.getSchema(data.schema,function() {
+    var schema = uR.schema[data.schema];
+    if (schema[0].choices.length) { uR.alertElement("ur-form",data); }
+    else { uR.drop.saveCartItem(data.product.id,1,undefined,{ no_edit: true }); }
+  });
+}
 
 uR.config.text_validators['signature'] = function(value,tag) {
   if (!value.startsWith("/s/") || value.length < 5) { tag.data_error = "Signature must start with /s/"; return false; }

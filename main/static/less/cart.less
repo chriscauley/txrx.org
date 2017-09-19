@@ -3,6 +3,9 @@ shopping-cart .payment_buttons {
   max-width: 400px;
   margin: 0 auto;
 }
+
+shopping-cart .well { margin-bottom: 5px; }
+shopping-cart .modal-content { width: 500px; }
 .mobile-cart {
   border: none;
   cart-button {
@@ -25,5 +28,23 @@ shopping-cart .item {
   .price-box {
     padding-left: 20px;
     text-align: right;
+  }
+}
+
+shopping-cart .price-box {
+  @media (max-width: @screen-xs-max) {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0;
+    position: relative;
+    width: 100%;
+    .change {
+      order: 1;
+      font-size: 18px;
+      .fa { padding-right: 8px; }
+    }
+    .fa-times, .unit-price, .quantity { order: 2; }
+    .edit { bottom: 100%; position: absolute; right: 0; }
   }
 }

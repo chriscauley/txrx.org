@@ -8,10 +8,7 @@
       .changeValue("#id_password","butler")
       .click("#submit_button")
       .wait("auth-modal .alert-danger")
-      .assertEqual(
-        function getErrorText() { return document.querySelector("auth-modal .alert-danger").innerText },
-        "Username and password do not match."
-      )
+      .checkResult("auth-modal .alert-danger")
       .done("Failed at logging in.")
   }
 

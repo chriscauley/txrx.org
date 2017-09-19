@@ -21,6 +21,14 @@ def group_order_items_by_model(order):
   return sorted(out.items())
 
 @register.filter
+def number_of_unscheduled_checkouts(items):
+  count = 0
+  for i in items:
+    if not i.extra.get("eventoccurrence_id"):
+      count += 1
+  return count
+
+@register.filter
 def get_order_pk(enrollment):
   coursecheckout = CourseCheckout.objects.get(course=enrollment.course)
   for order in  Order.objects.filter(user=enrollment.user,items__product=coursecheckout):

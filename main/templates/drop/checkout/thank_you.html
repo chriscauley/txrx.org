@@ -8,7 +8,11 @@
 {% for ptype,items in order|group_order_items_by_model %}
 <p class="lead">
   {% if ptype == "coursecheckout" %}
-  Please email <a href="mailto:membership@txrxlabs.org">membership@txrxlabs.org</a> to schedule your course checkout{{ items|pluralize }}.
+  {% with items|number_of_unscheduled_checkouts as count %}
+  {% if count %}
+  Please email <a href="mailto:membership@txrxlabs.org">membership@txrxlabs.org</a> to schedule your course checkout{{ count|pluralize }}.
+  {% endif %}
+  {% endwith %}
   {% elif ptype == "consumable"%}
   Please contact the staff to get the {{ items|length }} consumable{{ items|pluralize }} purchased.
   {% endif %}
