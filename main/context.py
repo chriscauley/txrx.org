@@ -33,7 +33,7 @@ def get_upcoming_events():
   return sorted(list(c)+list(e),key=lambda o:o.start)
 
 def get_calendar_sublinks(request):
-  one_week = datetime.date.today()+datetime.timedelta(7)
+  one_week = datetime.date.today()+datetime.timedelta(14)
   occurrences = EventOccurrence.objects.filter(event__eventowner__user=request.user,start__lte=one_week)
   occurrences = occurrences.filter(start__gte=datetime.datetime.today())
   out = [{

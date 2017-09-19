@@ -1,3 +1,5 @@
+{% load cache %}
+{% cache 3600 sidebar %}
 <section>
   <h3 class="block_title">Stay connected!</h3>
   <p>Sign up for our monthly newsletter for updates on events, workshops, studio tips + tricks, member spotlights and more.</p>
@@ -31,20 +33,4 @@
   </ul>
   <a href="{% url "event:index" %}">View all events</a>
 </section>
-
-{% if last_week %}
-<h2>Past events</h2>
-<div class="well">
-  <ul class="unstyled">
-    {% for event in last_week %}
-    <li>
-      {{ event.start|date:"m/d" }} -
-      <a href="{{ event.get_absolute_url }}">
-        {{ event.name }}
-        ({{ event.get_photoset.get_photos|length }} photos)
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
-</div>
-{% endif %}
+{% endcache %}
