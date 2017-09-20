@@ -154,5 +154,5 @@ uR.config.text_validators['signature'] = function(value,tag) {
 
 uR.auth_enabled = true;
 
-uR.urls.auth.register = "#/form/membership.RegistrationForm/";
+uR.urls.api.register = uR.schema.auth.register = "/api/schema/membership.RegistrationForm/"
 uR.urls.auth.password_reset = "/auth/password_reset/";

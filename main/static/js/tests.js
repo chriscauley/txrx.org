@@ -8,7 +8,7 @@
       .changeValue("#id_password","butler")
       .click("#submit_button")
       .wait("auth-modal .alert-danger")
-      .checkResult("auth-modal .alert-danger")
+      //.checkResults("auth-modal .alert-danger")
       .done("Failed at logging in.")
   }
 
