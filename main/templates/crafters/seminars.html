@@ -2,22 +2,37 @@
 {% load short_codes static thumbnail %}
 
 {% block main-inner %}
-<div class="half-flexy">
-  <div class="column description">
-    <p>As a further way to help Houstonians we will be holding workshops at TXRX Labs to help people understand the work that will need to be done to their homes to repair and also the costs associated. This will be a free service by Ronnie Devries and TXRX as a way to help the community rebuild.</p>
-
-    <p>TXRX's Shop Manager Ronnie Devries is a certified jack of all trades master of all from his years of work prior to TXRX but also through his hard fought years building TXRX from the ground up.</p>
-  </div>
-  <div class="column">
-    {% thumbnail "https://txrxlabs.org/static/crafters/ronnie.jpg" "600x600" as im %}
-    <img src="{{ im.url }}"/>
-    {% endthumbnail %}
-  </div>
-</div>
 <div class="white-bg">
-  <div class="row">
-    <div class="col-sm-8">
-      <!--
+  <div class="half-flexy">
+    <div class="column fixed-image">
+      <div class="img" style="background-image: url({% static "crafters/flier_pdf.png" %}"></div>
+      <b>Seminar Flier</b>
+      <br/>
+      <a href="https://drive.google.com/file/d/0BwBXk4vJz3BzRGJSeno3eFZCQTNaMHU4c1R0QXo5LTNMdDY0/view?usp=sharing">
+        Black and White</a> |
+      <a href="https://drive.google.com/file/d/0BwBXk4vJz3BzZkYwUDVVYi1JYmsyLVo3NWlJc0R6RXJKYnFz/view?usp=sharing">
+        Color</a>
+    </div>
+    <div class="column fixed-image">
+      <div class="img" style="background-image: url({% static "crafters/harvey_seminar_curriculum.png" %})"></div>
+      <br/>
+      <b><a href="https://docs.google.com/document/d/1DB7qeLEXIPwuNhvYN0HBh87jgMpz5TTV-qpMpuWdVA0/edit?usp=sharing">
+          Flood Cleanup Cirriculum</a></b>
+    </div>
+    <div class="column fixed-image">
+      <div class="img" style="background-image: url({% static "crafters/documentacion.png" %})"></div>
+      <br/>
+      <a href="https://drive.google.com/file/d/0BwBXk4vJz3BzZGRTeXVmQWN4RVE/view?usp=sharing">
+        <b>DOCUMENTACI&Oacute;N FOTOGR&Aacute;FICA POR INUNDACI&Oacute;N</a></b>
+    </div>
+    <div class="column fixed-image">
+      <div class="img" style="background-image: url({% static "crafters/documentacion.png" %})"></div>
+      <br/>
+      <a href="https://docs.google.com/document/d/1f3aI_USzoiBMB43ERKvdkif7nR5nyRrPbjzxcMZUQws/edit?usp=sharing">
+        <b>Flood Damage Cleanup Tips</b></a>
+    </div>
+  </div>
+  <!--
       <b class="lead">These workshops will cover:</b>
       <ul>
         <li>Choosing a contractor - Discover how to find and compare contractors and services.</li>
@@ -27,25 +42,15 @@
       </ul>
       -->
 
-      <b class="lead">Numbers and Resources</b>
-      <ul>
-        <li>FEMA Disaster Fraud Hotline: <a href="tel:1-866-720-5721">1-866-720-5721</a></li>
-        <li>Texas Attorney General (for reporting fraud): <a href="1-800-252-8011">1-800-252-8011</a></li>
-        <li>File a fraud complaint with the FTC <a href="https://www.ftccomplaintassistant.gov/#crnt&panel1-1">here</a>.</li>
-        <li><a href="https://www.bbb.org/houston/">Houston Better Business Bureau</a></li>
+  <h2><center>Numbers and Resources</center></h2>
+  <ul class="note listed">
+    <li>FEMA Disaster Fraud Hotline: <a href="tel:1-866-720-5721">1-866-720-5721</a></li>
+    <li>Texas Attorney General (for reporting fraud): <a href="1-800-252-8011">1-800-252-8011</a></li>
+    <li>File a fraud complaint with the FTC <a href="https://www.ftccomplaintassistant.gov/#crnt&panel1-1">here</a>.</li>
+    <!--<li><a href="https://www.bbb.org/houston/">Houston Better Business Bureau</a></li>
         <li><a href="https://www.angieslist.com/companylist/houston/contractor.htm">Angie&rsquo;s List contractors</a></li>
-        <li><a href="https://www.fema.gov/hurricane-harvey-rumor-control">Hurricane Harvey rumor control</a></li>
-        <li><a href="https://docs.google.com/document/d/1f3aI_USzoiBMB43ERKvdkif7nR5nyRrPbjzxcMZUQws/edit?usp=sharing">Flood Damage Cleanup Tips</a></li>
-        <li><a href="https://docs.google.com/document/d/1DB7qeLEXIPwuNhvYN0HBh87jgMpz5TTV-qpMpuWdVA0/edit?usp=sharing">
-            Flood Cleanup Cirriculum</a></li>
-        <li><a href="https://drive.google.com/file/d/0BwBXk4vJz3BzRGJSeno3eFZCQTNaMHU4c1R0QXo5LTNMdDY0/view?usp=sharing">
-            Seminar Flyer (black and white)</a></li>
-        <li><a href="https://drive.google.com/file/d/0BwBXk4vJz3BzZkYwUDVVYi1JYmsyLVo3NWlJc0R6RXJKYnFz/view?usp=sharing">
-            Seminar Flyer (color)</a></li>
-        <li><a href="https://drive.google.com/file/d/0BwBXk4vJz3BzZGRTeXVmQWN4RVE/view?usp=sharing">
-            DOCUMENTACI&Oacute;N FOTOGR&Aacute;FICA POR INUNDACI&Oacute;N</a></li>
-    </div>
-  </div>
+    <li><a href="https://www.fema.gov/hurricane-harvey-rumor-control">Hurricane Harvey rumor control</a></li>-->
+  </ul>
 
   <h2><center>Harvey Relief Seminar</center></h2>
   <p class="note">
@@ -60,7 +65,7 @@
     <li>Saturday September 23, 1pm-2pm</li>
   </ul>
 
-  <h2><center>DIY Sheetrock and Trim Carpentry</center></h2>
+  <h2><center>DIY Drywall and Trim Carpentry</center></h2>
   <p class="note">This workshop will cover how to remove and replace drywall and insulation and how to finish drywall. How to  do  finish carpentry  like  trim  and molding will also be reviewed. Participants will learn tips on measuring and marking which is a necessary first step for this kind of task.</p>
   <ul class="note listed">
     <li>Sunday September 24, 10:30 am - 1:30 pm</li>
@@ -78,6 +83,11 @@
     <a class="btn btn-primary" href="https://airtable.com/shrOWgN7Y1G6IqZuH">Register Here</a>
     <div class="note"> Note: Space is very limited and signing up does not guarentee enrollment. You will be sent a confirmation letter by email if your registration is approved.</div>
   </div>
+  <hr/>
+  <div class="big-button">
+    <div class="note">Can't make it to any of these seminars? Join our newsletter to find out when we schedule more.</div>
+    <a class="btn btn-primary" href="http://eepurl.com/c4eHkL">Join our Newsletter</a>
+  </div>
 </div>
 <div class="bottom-donate">
   <p class="lead">
@@ -87,13 +97,26 @@
   </p>
   <money-widget hide_monthly="true" donate_text="Donate" description="Crafters for Good seminars donation">
   </money-widget>
-  <div class="sponsor">
-    <h2>Seminars sponsored by Gallery Furniture</h2>
-    <a href="https://www.galleryfurniture.com/">
-      {% thumbnail "https://txrxlabs.org/static/crafters/gf_logo.jpg" "600x600" as im %}
-      <img src="{{ im.url }}">
+  <div class="half-flexy">
+    <!--<div class="column description">
+        <p>As a further way to help Houstonians we will be holding workshops at TXRX Labs to help people understand the work that will need to be done to their homes to repair and also the costs associated. This will be a free service by Ronnie Devries and TXRX as a way to help the community rebuild.</p>
+        
+        <p>TXRX's Shop Manager Ronnie Devries is a certified jack of all trades master of all from his years of work prior to TXRX but also through his hard fought years building TXRX from the ground up.</p>
+    </div>-->
+    <div class="column">
+      <a href="https://www.galleryfurniture.com/">
+        {% thumbnail "https://txrxlabs.org/static/crafters/gf_logo.jpg" "600x600" as im %}
+        <img src="{{ im.url }}">
+        {% endthumbnail %}
+      </a>
+      <p>Seminars sponsored by Gallery Furniture</p>
+    </div>
+    <div class="column">
+      {% thumbnail "https://txrxlabs.org/static/crafters/ronnie.jpg" "455x290" crop="center" as im %}
+      <img src="{{ im.url }}"/>
       {% endthumbnail %}
-    </a>
+      <p>This is our shop tech, Ronnie</p>
+    </div>
   </div>
 </div>
 {% endblock %}
