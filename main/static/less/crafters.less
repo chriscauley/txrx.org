@@ -93,7 +93,8 @@ p, li {
 }
 
 .crafters-page .big-button {
-  padding: 20px 0 60px;
+  margin: 20px 0 60px;
+  &:last-child { margin-bottom: 0; }
   text-align: center;
   .btn {
     font-size: 2em;
@@ -211,7 +212,7 @@ footer {
   background: #eee;
   font-weight: @fw-normal;
   font-size: 14px;
-  padding: 3rem 1.5rem 0;
+  padding: 3rem 1.5rem 2rem;
   margin-bottom: 30px;
   .airtable-embed {
     display: block;
@@ -224,12 +225,33 @@ footer {
     img { margin: 0 0 20px; }
   }
   .btn { margin-bottom: 20px; }
-  .note {
+  .note, .list {
     margin: 0 auto 2rem;
     font-size: 1.2em;
     font-weight: bold;
     text-align: center;
     max-width: 600px;
+  }
+}
+
+h2 { font-size: 1.8rem; margin-bottom: 1rem; text-align: center; }
+
+.white-bg .list {
+  margin: 0 auto 2rem;
+  list-style: square;
+  max-width: 400px;
+  text-align: left;
+  li { margin-bottom: 0.5em; }
+  a { display: inline-block; } /* stops numbers from line-wrapping */
+  [href^="tel:"] {
+    color: blue;
+    font-family: monospace;
+    font-weight: bold;
+    text-decoration: none;
+    &:before {
+      content: "\f095 ";
+      font-family: FontAwesome;
+    }
   }
 }
 
@@ -256,9 +278,10 @@ footer {
 }
 
 .half-flexy .fixed-image {
+  flex-basis: 20%;
+  padding-top: 0;
   text-align: center;
   width: 200px;
-  flex-basis: 200px;
   .img {
     .fixed-ratio(130%);
     background-size: cover;
@@ -269,7 +292,14 @@ footer {
     width: 100%;
   }
   b { display: block; }
-  a { text-decoration: underline; }
+  a { display: block; font-weight: bold; text-decoration: underline; }
+  @media (max-width: @screen-sm-max) {
+    flex-basis: 33%;
+  }
+  @media (max-width: @screen-xs-max) {
+    flex-basis: 100%;
+    .img { display: none; }
+  }
 }
 
 .pic-link {
@@ -346,9 +376,4 @@ money-widget .btn-group > .btn {
 
 .white-bg .listed {
   font-weight: normal;
-  list-style: square;
-  max-width: 400px;
-  text-align: left;
-  li { margin-bottom: 0.5em; }
-  a { display: inline-block; } /* stops numbers from line-wrapping */
 }
