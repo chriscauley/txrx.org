@@ -6,9 +6,9 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.conf import settings
 
-
 from .models import UserMembership
 from .utils import verify_unique_email
+from lablackey.forms import RequestModelForm
 from lablackey.db.forms import PlaceholderModelForm, PlaceholderForm, placeholder_fields
 
 from lablackey.registration import signals
@@ -26,6 +26,36 @@ le = "Skills and area of expertise"
 lq = "Questions or comments"
 
 kwargs = dict(widget=forms.Textarea,required=False)
+
+class SignUpForm(RequestModelForm):
+  form_title = "Create an account at %s"%settings.SITE_NAME
+  password = forms.CharField(label="Password",strip=False,widget=forms.PasswordInput)
+  @classmethod
+  def user_is_allowed(clss,request):
+    if request.user.is_authenticated():
+      raise NotImplementedError()
+    return True
+  @classmethod
+  def get_page_json(clss,page=0):
+    return dict(
+      page=page,
+      results=[],
+    )
+  def clean_username(self,*args,**kwargs):
+    username = self.cleaned_data.get("username",'')
+    if "@" in username:
+      raise forms.ValidationError("The @ character is not allowed in your username")
+    return username
+  def clean(self,*args,**kwargs):
+    "Check for duplicate emails. This isn't actually used since users are sent to the password reset page before this."
+    super(SignUpForm,self).clean(*args,**kwargs)
+    if not verify_unique_email(self.cleaned_data.get('email')):
+      e = u'Another account is already using this email address.<br/> Please email us if you believe this is in error.'
+      raise forms.ValidationError(e)
+    return self.cleaned_data
+  class Meta:
+    model = get_user_model()
+    fields = ("email","password","first_name","last_name")
 
 class RegistrationForm(RegistrationForm):
   first_name = forms.CharField(max_length=30,label="First Name")
