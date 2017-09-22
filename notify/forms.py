@@ -9,6 +9,9 @@ class NotificationSettingsForm(RequestModelForm):
   new_comments = forms.ChoiceField(choices=METHOD_CHOICES,widget=forms.widgets.RadioSelect)
   my_classes = forms.ChoiceField(choices=METHOD_CHOICES,widget=forms.widgets.RadioSelect)
   new_sessions = forms.ChoiceField(choices=METHOD_CHOICES,widget=forms.widgets.RadioSelect)
+  @classmethod
+  def user_is_allowed(clss,self):
+    return True
   def clean(self):
     try:
       has_number = self.request.user.smsnumber.verified
