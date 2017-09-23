@@ -29,16 +29,16 @@ lq = "Questions or comments"
 kwargs = dict(widget=forms.Textarea,required=False)
 
 class SignUpForm(RequestModelForm):
-  link = '<a href="/auth/password_reset/">reset your password</a>'
+  reset_link = '<a href="/auth/password_reset/">reset your password</a>'
   email = forms.EmailField(max_length=200,error_messages={
-    'unique': 'An account with this email already exists.<br /> Enter another or {}.'.format(link)
+    'unique': 'An account with this email already exists.<br /> Enter another or {}.'.format(reset_link)
   })
   _ht = "If different than the email above.\n This is necessary to record when you register for a class."
   paypal_email = forms.EmailField(required=False,label="PayPal Email - Optional",help_text=_ht)
   #! TODO this is currently set in the auth modal
   # form_title = "Create an account at %s"%settings.SITE_NAME
   password = forms.CharField(label="Password",strip=False,widget=forms.PasswordInput)
-  html_errors = ["non_field_error","email"]
+  html_errors = ["non_field_error","email","paypal_email"]
   @classmethod
   def user_is_allowed(clss,request):
     if request.user.is_authenticated():
@@ -55,11 +55,12 @@ class SignUpForm(RequestModelForm):
     if len(password) < 8:
       raise forms.ValidationError("Password must be at least 8 characters.")
     return password
-  def clean_username(self,*args,**kwargs):
-    username = self.cleaned_data.get("username",'')
-    if "@" in username:
-      raise forms.ValidationError("The @ character is not allowed in your username")
-    return username
+  def clean_paypal_email(self,*args,**kwargs):
+    paypal_email = self.cleaned_data.get("paypal_email",'')
+    if not verify_unique_email(self.cleaned_data.get('paypal_email')):
+      e = "An account with this paypal_email already exists.<br/> Enter another or {}.".format(self.reset_link)
+      raise forms.ValidationError(e)
+    return paypal_email
   def clean(self,*args,**kwargs):
     "Check for duplicate emails. This isn't actually used since users are sent to the password reset page before this."
     super(SignUpForm,self).clean(*args,**kwargs)
@@ -84,6 +85,8 @@ class SignUpForm(RequestModelForm):
       first_name=cleaned_data['first_name'],
       last_name=cleaned_data['last_name'],
     )
+    new_user.paypal_email = cleaned_data.get("paypal_email",None)
+    new_user.save()
     signals.user_registered.send(sender=self.__class__,user=new_user,request=self.request)
     new_user.backend = 'django.contrib.auth.backends.ModelBackend'
     login(self.request,new_user)
