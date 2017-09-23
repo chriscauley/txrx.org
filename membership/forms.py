@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login
+from django.contrib import messages
 from django.contrib.sites.requests import RequestSite
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
@@ -12,7 +14,6 @@ from lablackey.forms import RequestModelForm
 from lablackey.db.forms import PlaceholderModelForm, PlaceholderForm, placeholder_fields
 
 from lablackey.registration import signals
-from lablackey.registration.forms import RegistrationForm
 from lablackey.registration.models import RegistrationProfile
 
 s = "What do you to hope accomplish at the hackerspace? What classes do you want to take? What classes are no offered that you'd like to see offered?"
@@ -28,8 +29,16 @@ lq = "Questions or comments"
 kwargs = dict(widget=forms.Textarea,required=False)
 
 class SignUpForm(RequestModelForm):
-  form_title = "Create an account at %s"%settings.SITE_NAME
+  link = '<a href="/auth/password_reset/">reset your password</a>'
+  email = forms.EmailField(max_length=200,error_messages={
+    'unique': 'An account with this email already exists.<br /> Enter another or {}.'.format(link)
+  })
+  _ht = "If different than the email above.\n This is necessary to record when you register for a class."
+  paypal_email = forms.EmailField(required=False,label="PayPal Email - Optional",help_text=_ht)
+  #! TODO this is currently set in the auth modal
+  # form_title = "Create an account at %s"%settings.SITE_NAME
   password = forms.CharField(label="Password",strip=False,widget=forms.PasswordInput)
+  html_errors = ["non_field_error","email"]
   @classmethod
   def user_is_allowed(clss,request):
     if request.user.is_authenticated():
@@ -41,6 +50,11 @@ class SignUpForm(RequestModelForm):
       page=page,
       results=[],
     )
+  def clean_password(self,*args,**kwargs):
+    password = self.cleaned_data.get("password",'')
+    if len(password) < 8:
+      raise forms.ValidationError("Password must be at least 8 characters.")
+    return password
   def clean_username(self,*args,**kwargs):
     username = self.cleaned_data.get("username",'')
     if "@" in username:
@@ -50,54 +64,34 @@ class SignUpForm(RequestModelForm):
     "Check for duplicate emails. This isn't actually used since users are sent to the password reset page before this."
     super(SignUpForm,self).clean(*args,**kwargs)
     if not verify_unique_email(self.cleaned_data.get('email')):
-      e = u'Another account is already using this email address.<br/> Please email us if you believe this is in error.'
-      raise forms.ValidationError(e)
-    return self.cleaned_data
-  class Meta:
-    model = get_user_model()
-    fields = ("email","password","first_name","last_name")
-
-class RegistrationForm(RegistrationForm):
-  first_name = forms.CharField(max_length=30,label="First Name")
-  last_name = forms.CharField(max_length=30,label="Last Name")
-  _ht = "If different than the email above.\n This is necessary to record when you register for a class."
-  paypal_email = forms.EmailField(required=False,label="PayPal Email - Optional",help_text=_ht)
-  form_title = "Create an account at %s"%settings.SITE_NAME
-  @classmethod
-  def user_is_allowed(clss,request):
-    return True
-  def __init__(self,*args,**kwargs):
-    super(RegistrationForm, self).__init__(*args,**kwargs)
-    placeholder_fields(self)
-  def clean_username(self,*args,**kwargs):
-    username = self.cleaned_data.get("username",'')
-    if "@" in username:
-      raise forms.ValidationError("The @ character is not allowed in your username")
-    return username
-  def clean(self,*args,**kwargs):
-    "Check for duplicate emails. This isn't actually used since users are sent to the password reset page before this."
-    super(RegistrationForm,self).clean(*args,**kwargs)
-    if not verify_unique_email(self.cleaned_data.get('email')):
-      e = u'Another account is already using this email address. Please email us if you believe this is in error.'
-      raise forms.ValidationError(e)
-    if not verify_unique_email(self.cleaned_data.get('username')):
-      e = u'Another account is already using this username. Please email us if you believe this is in error.'
+      e = u'Another account is already using this email address. <br/ >'
+      e+= u'Enter another or <a href="/auth/password_reset/">reset your password</a>.'
       raise forms.ValidationError(e)
     return self.cleaned_data
   def save(self):
     cleaned_data = self.cleaned_data
-    username, email, password = cleaned_data['username'], cleaned_data['email'], cleaned_data['password']
-    if Site._meta.installed:
-      site = Site.objects.get_current()
-    else:
-      site = RequestSite(self.request)
-    new_user = RegistrationProfile.objects.create_inactive_user(username, email, password, site)
-    new_user.first_name = cleaned_data['first_name']
-    new_user.last_name = cleaned_data['last_name']
-    new_user.save()
+    email, password = cleaned_data['email'], cleaned_data['password']
+    username = email.split("@")[0]
+    extra = ""
+    while get_user_model().objects.filter(username=username+extra):
+      extra = str(random.randint(1000,10000))
+    username = username + extra
+    site = Site.objects.get_current() if Site._meta.installed else RequestSite(self.request)
+    new_user = get_user_model().objects.create_user(
+      username,
+      email,
+      password,
+      first_name=cleaned_data['first_name'],
+      last_name=cleaned_data['last_name'],
+    )
     signals.user_registered.send(sender=self.__class__,user=new_user,request=self.request)
-    self.success_url = reverse('registration_complete')
+    new_user.backend = 'django.contrib.auth.backends.ModelBackend'
+    login(self.request,new_user)
+    messages.success(self.request,"You are now registered and have been logged in.")
     return new_user
+  class Meta:
+    model = get_user_model()
+    fields = ("email","password","first_name","last_name","paypal_email")
 
 class UserMembershipForm(PlaceholderModelForm):
   #! TODO: this technically is a vulnerability (someone could try to steal in very weird circumstances)

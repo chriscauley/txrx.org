@@ -110,7 +110,7 @@ if (!document.body.classList.contains("kiosk")) { // bootstrap
     cart_item: "well",
     message_list: "card",
     success_class: "alert alert-success card-content green white-text",
-    error_class: "alert alert-danger card-content red white-text",
+    error_class: "alert alert-danger card-content red white-text error",
     modal: {
       outer: "modal-content",
       header: "modal-header",
@@ -119,7 +119,7 @@ if (!document.body.classList.contains("kiosk")) { // bootstrap
     },
   }
 }
-uR.theme.error_class = "alert alert-danger";
+uR.theme.error_class = "error";
 uR.theme.list = "list-group";
 uR.theme.list_item = "list-group-item";
 uR.theme.list_item_danger = "list-group-item list-group-item-danger";
@@ -154,5 +154,5 @@ uR.config.text_validators['signature'] = function(value,tag) {
 
 uR.auth_enabled = true;
 
-uR.urls.api.register = uR.schema.auth.register = "/api/schema/membership.RegistrationForm/"
+uR.urls.api.register = uR.schema.auth.register = "/api/schema/membership.SignUpForm/"
 uR.urls.auth.password_reset = "/auth/password_reset/";

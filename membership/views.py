@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
 from .models import Level, Group, MeetingMinutes, Officer, UserMembership, Subscription, Flag, Container
-from .forms import UserForm, UserMembershipForm, RegistrationForm
+from .forms import UserForm, UserMembershipForm
 from .utils import limited_login_required, verify_unique_email
 
 from course.models import Course
@@ -92,7 +92,7 @@ def minutes_index(request):
   return TemplateResponse(request,'membership/minutes_index.html',values)
 
 def register(request,*args,**kwargs):
-  return HttpResponseRedirect("/#/form/membership.RegistrationForm/")
+  return HttpResponseRedirect("/#/auth/register/")
 
 def roland_email(request,y=2012,m=1,d=1):
   if not request.user.is_superuser:
