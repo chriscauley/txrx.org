@@ -14,22 +14,11 @@
     {% include "_styles.html" %}
     {% endif %}
     {% endblock %}
-    <script>var uR = { _ready: [], ready: function(f) { uR._ready.push(f) } }</script>
-    <script type="text/javascript">
+    <script>
+      var uR = { _ready: [], ready: function(f) { uR._ready.push(f) } }
       var TXRX = TXRX || {};
-      // AFAIK this is only used in simplecart which will be removed 12/16
-      var SHOP = {
-        {% if settings.DEBUG %}
-        base_url: "http://dev.txrxlabs.org:8025",
-        email: 'chris@lablackey.com'
-        {% else %}
-        base_url: "https://txrxlabs.org",
-        email: 'txrxlabs@gmail.com'
-        {% endif %}
-      }
       {% if settings.DEBUG %}TXRX.DEBUG = true;{% endif %}
-      SHOP.notify_url = SHOP.base_url + "/tx/rx/ipn/handler/";
-      // used in mptt_comments and in simplecart
+      // used in mptt_comments
       var _USER_NUMBER = {{ request.user.pk|default_if_none:"undefined" }};
       {% if request.user.is_superuser %}
       var _418 = true;
