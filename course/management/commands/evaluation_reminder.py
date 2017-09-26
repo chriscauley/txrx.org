@@ -12,7 +12,7 @@ import datetime
 class Command (BaseCommand):
   @mail_on_fail
   def handle(self, *args, **options):
-    yesterday = datetime.datetime.now()-datetime.timedelta(1)
+    yesterday = datetime.datetime.now()-datetime.timedelta(7)
     pe = Enrollment.objects.pending_evaluation()
     pe = pe.filter(evaluation_date__gte=yesterday)
     if pe.count() and options.get("verbosity") > 0:
@@ -20,7 +20,6 @@ class Command (BaseCommand):
     for enrollment in pe:
       if not enrollment.user.email:
         continue
-        """
       _dict = {
         'evaluation': enrollment,
         'la_key': LimitedAccessKey.new(enrollment.user),
@@ -36,9 +35,5 @@ class Command (BaseCommand):
         settings.DEFAULT_FROM_EMAIL,
         [enrollment.user.email]
       )
-      """
       enrollment.emailed=True
       enrollment.save()
-
-      if options.get("verbosity") > 0:
-        print "DID NOT EMAIL %s about %s"%(enrollment.user.email,enrollment.session)

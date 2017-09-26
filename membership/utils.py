@@ -44,8 +44,8 @@ def temp_user_required(function):
     return JsonResponse({'errors': {'non_field_error': 'Unable to find user. Contact the staff'}},
                         status=401)
 
-  wrap.__doc__=function.__doc__
-  wrap.__name__=function.__name__
+  wrap.__doc__ = function.__doc__
+  wrap.__name__ = function.__name__
   return wrap
 
 def limited_login_required(function):
@@ -56,9 +56,14 @@ def limited_login_required(function):
     if request.user.is_authenticated():
       request.limited_user = request.user
       return function(request, *args, **kwargs)
+    LA_KEY = None
     if 'LA_KEY' in request.GET:
+      LA_KEY = request.session['LA_KEY'] = request.GET['LA_KEY']
+    elif 'LA_KEY' in request.session:
+      LA_KEY = request.session['LA_KEY']
+    if LA_KEY:
       try:
-        key = LimitedAccessKey.objects.get(key=request.GET['LA_KEY'])
+        key = LimitedAccessKey.objects.get(key=LA_KEY)
         if key.expires > datetime.date.today():
           # key is good, send it through
           request.limited_user = key.user
@@ -68,8 +73,8 @@ def limited_login_required(function):
         pass
     return HttpResponseRedirect(settings.LOGIN_URL+"?next=%s"%request.path)
 
-  wrap.__doc__=function.__doc__
-  wrap.__name__=function.__name__
+  wrap.__doc__ = function.__doc__
+  wrap.__name__ = function.__name__
   return wrap
 
 def user_from_email(email):
