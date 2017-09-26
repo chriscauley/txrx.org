@@ -16,6 +16,8 @@ from lablackey.db.forms import PlaceholderModelForm, PlaceholderForm, placeholde
 from lablackey.registration import signals
 from lablackey.registration.models import RegistrationProfile
 
+import random
+
 s = "What do you to hope accomplish at the hackerspace? What classes do you want to take? What classes are no offered that you'd like to see offered?"
 e = "List any helpful skills or areas of expertise that might be relevent to the Lab. Also note if you would be interested in teaching classes in these areas."
 q = "Please let us know about any questions or comment you may have about the lab, its procedures, or goals."
