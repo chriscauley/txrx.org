@@ -15,29 +15,6 @@ from lablackey.utils import get_or_none
 from lablackey.mail import send_template_email
 import json
 
-#! TODO Possibly depracated 12/2016
-def document_detail(request,document_pk,slug=None): #ze slug does notzing!
-  document = get_object_or_404(Document,pk=document_pk)
-  if document.login_required and not request.user.is_authenticated():
-    return login_required(document_detail)(request,document_pk)
-  signature = None
-  if request.user.is_authenticated() and document.editable:
-    signature = get_or_none(Signature,document_id=document_pk,user=request.user)
-  form = SignatureForm(request.POST or None,request.FILES or None,document=document,instance=signature)
-  if form.is_valid():
-    signature = form.save(commit=False)
-    if request.user.is_authenticated():
-      signature.user = request.user
-    signature.save()
-    messages.success(request,"%s signed by %s"%(document,signature.user))
-    return HttpResponseRedirect(request.POST.get('next',""))
-  values = {
-    'form': form,
-    'document': document,
-    'signature': signature
-  }
-  return TemplateResponse(request,"redtape/document.html",values)
-
 @temp_user_required
 def document_json(request,document_pk):
   #! TODO do we want to allow annonymous documents?
