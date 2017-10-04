@@ -102,7 +102,7 @@ def ics(request,module,model_str,pk,fname):
   model = apps.get_model(module,model_str)
   event = get_object_or_404(model,pk=pk)
   try:
-    occurrences = event.all_occurrences.filter(start__gte=timezone.now()-datetime.timedelta(30))
+    occurrences = event.all_occurrences.filter(start__gte=timezone.now()-datetime.timedelta(60))
   except AttributeError: # single occurrence
     occurrences = [event]
 
@@ -111,7 +111,7 @@ def ics(request,module,model_str,pk,fname):
 
 @cache_page(12*60*60)
 def all_ics(request,fname):
-  occurrences = EventOccurrence.objects.filter(start__gte=timezone.now()-datetime.timedelta(30),event__hidden=False)
+  occurrences = EventOccurrence.objects.filter(start__gte=timezone.now()-datetime.timedelta(60),event__hidden=False)
   calendar_object = make_ics(occurrences,title="%s Events"%settings.SITE_NAME)
   return ics2response(calendar_object,fname=fname)
 
@@ -147,7 +147,7 @@ def detail_json(request,event_pk):
   fields = ['id','name','total_rsvp','start','end','rsvp_cutoff','past']
   if request.user.is_superuser:
     fields.append("total_rsvp")
-  os = event.upcoming_occurrences.filter(start__lte=timezone.now()+timezone.timedelta(14))
+  os = event.upcoming_occurrences.filter(start__lte=timezone.now()+timezone.timedelta(60))
   out['upcoming_occurrences'] = [{key: getattr(o,key) for key in fields} for o in os]
   return JsonResponse(out)
 
