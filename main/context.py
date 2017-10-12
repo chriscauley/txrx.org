@@ -35,7 +35,7 @@ def get_upcoming_events():
 def get_calendar_sublinks(request):
   one_week = datetime.date.today()+datetime.timedelta(21)
   occurrences = EventOccurrence.objects.filter(event__eventowner__user=request.user,start__lte=one_week)
-  occurrences = occurrences.filter(start__gte=datetime.datetime.today())
+  occurrences = occurrences.filter(start__gte=datetime.datetime.today()-datetime.timedelta(3))
   out = [{
     'name': "<b>%s</b> %s"%(o.verbose_start,o.event.get_short_name()),
     'url': o.get_checkout_url(),

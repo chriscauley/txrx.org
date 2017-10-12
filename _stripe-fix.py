@@ -34,9 +34,18 @@ rec2([
   'https://dashboard.stripe.com/payments/ch_19zD0jHqBalEWa81Qw0Vw3fR',
   'https://dashboard.stripe.com/payments/ch_19z7yCHqBalEWa81QzxoYUk7',
   'https://dashboard.stripe.com/payments/ch_19yXvpHqBalEWa81r4HA3eKc',
-  '',
-  ],'po_19zjEkHqBalEWa81fJ7jdMAZ')
-
+],'po_19zjEkHqBalEWa81fJ7jdMAZ')
+rec2(["ch_1AsEGkHqBalEWa81hQKF3e2g"],"po_1AtAhUHqBalEWa810xxx4z6F")
+rec2(["ch_1ArxtsHqBalEWa81KTfKoGiA"],"po_1Aso0WHqBalEWa81yPCVYFT0")
+rec2([
+  'https://dashboard.stripe.com/payments/ch_1Ayn0cHqBalEWa818uMwqJej',
+  'https://dashboard.stripe.com/payments/ch_1AyqAIHqBalEWa81PARwPyjz',
+  'https://dashboard.stripe.com/payments/ch_1Aylf8HqBalEWa819ADoMamT',
+  'https://dashboard.stripe.com/payments/ch_1AyUsbHqBalEWa81WnN9tkkl',
+  'https://dashboard.stripe.com/payments/ch_1AyNyvHqBalEWa81d8gLUqkG',
+  'https://dashboard.stripe.com/payments/ch_1AxnS5HqBalEWa8119SLiwvt',
+  'https://dashboard.stripe.com/payments/ch_1Axk1QHqBalEWa81tQXqPBCy',
+],"po_1Ayz3sHqBalEWa817kHCr8sB")
 fakes = {
   "po_19zjEkHqBalEWa81fJ7jdMAZ": decimal.Decimal(8739+12623)*-1,
   "tr_19IZTJHqBalEWa81X4pt3dYF": decimal.Decimal("0.38"),
@@ -64,10 +73,12 @@ fakes = {
   "po_1AlWcXHqBalEWa81vyscB449": decimal.Decimal("-193.00"),
   "po_1Ao4OFHqBalEWa810mvQKQ9z": decimal.Decimal("-12.62"),
   "po_1AqycIHqBalEWa81H9XIjCyJ": decimal.Decimal("-174.78"),
-  "": decimal.Decimal("0"),
-  "": decimal.Decimal("0"),
-  "": decimal.Decimal("0"),
-  "": decimal.Decimal("0"),
+  "po_1Ayz3sHqBalEWa817kHCr8sB": decimal.Decimal("-770.43"),
+  "po_1B0nEUHqBalEWa81AD87jsUs": decimal.Decimal("-96.80"),
+  "po_1B1sboHqBalEWa81tro9gK7V": decimal.Decimal("-77.08"),
+  "po_1B43ZIHqBalEWa812icLW2iD": decimal.Decimal("-140.19"),
+  "po_1B8mX7HqBalEWa81kdqpVgkk": decimal.Decimal("-218.17"),
+  "po_1B98MdHqBalEWa81nPgosXmg": decimal.Decimal("-53.10"),
   "": decimal.Decimal("0"),
 }
 
