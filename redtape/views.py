@@ -12,7 +12,8 @@ from membership.utils import temp_user_required
 
 from collections import defaultdict
 from lablackey.utils import get_or_none
-from lablackey.mail import send_template_email
+from lablackey.mail import send_template_email, render_template
+from freshdesk.api import API
 import json
 
 @temp_user_required
@@ -44,8 +45,17 @@ def post_document(request,pk):
   if request.user.is_authenticated():
     signature.user = request.user
   signature.save()
-  if document.pk == 5: #this will probably need to be abstracted at some point
-    send_template_email("email/work_request",['work@txrxlabs.org'],context={'signature':signature})
+  if document.pk == 5: #! TODO this will probably need to be abstracted at some point
+    a = API("txrxlabs.freshdesk.com",settings.FRESHDESK_API_KEY,version=2)
+    error = None
+    try:
+      print a.tickets.create_ticket('New work request for %s'%signature.data['name'],
+                              email=signature.data['email'],
+                              description=render_template("email/work_request",{'signature':signature})[1],
+                              tags=['work'])
+    except Exception,e:
+      error = e
+    send_template_email("email/work_request",['chris@lablackey.com'],context={'signature':signature,"error":error})
   return JsonResponse({"ur_alert_success": "%s has been saved."%document.name})
 
 @login_required

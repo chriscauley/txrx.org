@@ -139,11 +139,11 @@ class Service(models.Model):
   __unicode__ = lambda self: self.name
   def get_display_name(self):
     if not self.price:
-      return self.name
+      return self.name + " (cost varies)"
     return "%s ($%s/hr)"%(self.name,self.price)
   def get_member_display_name(self):
     if not self.member_price:
-      return self.name
+      return self.name + " (cost varies)"
     return "%s ($%s/hr)"%(self.name,self.member_price)
   class Meta:
     ordering = ('order',)
