@@ -3,7 +3,7 @@
   function fromTemplate(template_name,data) {
     template_name = template_name.match(/[^\/].+[^\/]/)[0].replace(/\//g,"-");
     riot.compile(
-      "/static/templates/"+template_name+".html",
+      uR.static("templates/"+template_name+".html"),
       function(html) { uR.mountElement(template_name,data); }
     );
   }

@@ -20,30 +20,7 @@ shopping-cart .modal-content { width: 500px; }
 
 shopping-cart .item {
   border-bottom: @borderGray 1px solid;
-  display: flex;
-  justify-content: space-between;
   padding: 5px 8px;
   position: relative;
   &:last-child { border-bottom: 0; }
-}
-
-shopping-cart .price-box {
-  padding-left: 20px;
-  text-align: right;
-  .edit { display: block; }
-  @media (max-width: @screen-xs-max) {
-    align-items: center;
-    display: flex;
-    justify-content: flex-end;
-    padding: 0;
-    position: relative;
-    width: 100%;
-    .change {
-      order: 1;
-      font-size: 18px;
-      .fa { padding-right: 8px; }
-    }
-    .fa-times, .unit-price, .quantity { order: 2; }
-    .edit { bottom: 100%; position: absolute; right: 0; }
-  }
 }
