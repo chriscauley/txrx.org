@@ -58,3 +58,4 @@ django-jsignature
 twilio==5.7.0
 httpagentparser==1.7.8
 django-classy-tags==0.8.0 # from drop
+python-freshdesk # used in the /work/ page
