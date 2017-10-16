@@ -46,6 +46,7 @@ rec2([
   'https://dashboard.stripe.com/payments/ch_1AxnS5HqBalEWa8119SLiwvt',
   'https://dashboard.stripe.com/payments/ch_1Axk1QHqBalEWa81tQXqPBCy',
 ],"po_1Ayz3sHqBalEWa817kHCr8sB")
+
 fakes = {
   "po_19zjEkHqBalEWa81fJ7jdMAZ": decimal.Decimal(8739+12623)*-1,
   "tr_19IZTJHqBalEWa81X4pt3dYF": decimal.Decimal("0.38"),
@@ -97,6 +98,7 @@ for transfer in Transfer.objects.order_by("stripe_timestamp"):
     #print "%s - %s = %s"%(total,transfer.amount,total-transfer.amount)
     total += charge.amount-charge.fee
     charges.append(charge)
+    print total,'\t',transfer.amount
     if total == transfer.amount:
       transfer.metadata['charges'] = [c.id for c in charges]
       transfer.metadata['stripe_charges'] = [c.stripe_id for c in charges]
