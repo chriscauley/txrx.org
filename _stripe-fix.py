@@ -34,6 +34,7 @@ rec2([
   'https://dashboard.stripe.com/payments/ch_19zD0jHqBalEWa81Qw0Vw3fR',
   'https://dashboard.stripe.com/payments/ch_19z7yCHqBalEWa81QzxoYUk7',
   'https://dashboard.stripe.com/payments/ch_19yXvpHqBalEWa81r4HA3eKc',
+<<<<<<< Updated upstream
 ],'po_19zjEkHqBalEWa81fJ7jdMAZ')
 rec2(["ch_1AsEGkHqBalEWa81hQKF3e2g"],"po_1AtAhUHqBalEWa810xxx4z6F")
 rec2(["ch_1ArxtsHqBalEWa81KTfKoGiA"],"po_1Aso0WHqBalEWa81yPCVYFT0")
@@ -46,6 +47,11 @@ rec2([
   'https://dashboard.stripe.com/payments/ch_1AxnS5HqBalEWa8119SLiwvt',
   'https://dashboard.stripe.com/payments/ch_1Axk1QHqBalEWa81tQXqPBCy',
 ],"po_1Ayz3sHqBalEWa817kHCr8sB")
+=======
+  '',
+  ],'po_19zjEkHqBalEWa81fJ7jdMAZ')
+rec2(["ch_1AsEGkHqBalEWa81hQKF3e2g"],"po_1AtAhUHqBalEWa810xxx4z6F")
+>>>>>>> Stashed changes
 
 fakes = {
   "po_19zjEkHqBalEWa81fJ7jdMAZ": decimal.Decimal(8739+12623)*-1,
