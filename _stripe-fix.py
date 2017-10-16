@@ -50,8 +50,6 @@ rec2([
   '',
   ],'po_19zjEkHqBalEWa81fJ7jdMAZ')
 rec2(["ch_1AsEGkHqBalEWa81hQKF3e2g"],"po_1AtAhUHqBalEWa810xxx4z6F")
-<<<<<<< Updated upstream
-"""
 
 fakes = {
   "po_19zjEkHqBalEWa81fJ7jdMAZ": decimal.Decimal(8739+12623)*-1,
