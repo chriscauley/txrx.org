@@ -7,8 +7,8 @@
       .changeValue("#id_username","monkey")
       .changeValue("#id_password","butler")
       .click("#submit_button")
-      .wait("auth-modal .alert-danger")
-      //.checkResults("auth-modal .alert-danger")
+      .wait("auth-modal .non_field_error")
+      .checkResults()
       .done("Failed at logging in.")
   }
 
@@ -29,9 +29,11 @@
 
   function addToCart() {
     this.do("Add item to cart")
-      .setPath("/classes/225/woodworking-ii-milling-dimensioning/")
+      .setPath("/classes/338/healthy-eating-introduction-to-juicing/")
+      .wait(function cartLoaded() { return uR && uR.drop && uR.drop.cart && uR.drop.cart.all_items } )
       .then(uR.drop.emptyCart)
-      .click("#s1594 add-to-cart button")
+      .wait("#s1715 add-to-cart button")
+      .click()
       .wait("shopping-cart a.decrement")
       .click()
       .done("Item in cart");
@@ -60,5 +62,5 @@
       .wait("#"+matched_comment_id+" comment-form textarea")
   }
 
-  konsole.addCommands(badLogin) //,addToCart,makeComment);
+  konsole.addCommands(badLogin, addToCart) //,addToCart,makeComment);
 })();

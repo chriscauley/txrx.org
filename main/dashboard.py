@@ -36,10 +36,24 @@ def totals_json(request,format):
   if metric in ['line_total','quantity']:
     y = []
     x = []
+    roland_ids = []
+    noroland_ids = []
     for i in range(time_period):
       day = start_date + datetime.timedelta(i)
       _items = order_items.filter(order__created__gte=day,order__created__lt=day+datetime.timedelta(1))
       y.append(sum(_items.values_list(metric,flat=True)))
+      roland = 0
+      for i in _items:
+        if i.product_id in roland_ids:
+          roland += i.line_total
+        elif i.product_id in noroland_ids:
+          pass
+        elif hasattr(i.product,'session') and i.product.session.user_id == 3:
+          roland_ids.append(i.product_id)
+          roland += i.line_total
+        else:
+          noroland_ids.append(i.product_id)
+      y2.append(roland)
       x.append(day.strftime("%Y-%m-%d"))
   elif metric in ['new_students','new_members']:
     x = [start_date + datetime.timedelta(i) for i in range(time_period)]
@@ -88,8 +102,8 @@ def totals_json(request,format):
         _items = order_items.filter(order__created__gte=day,order__created__lt=day+datetime.timedelta(1))
         y[-1] += sum(_items.values_list('line_total',flat=True))
   _x = []
-  _y2 = []
   _y = []
+  _y2 = []
   if metric != 'classes_per_student':
     if resolution == 'month':
       month = None
@@ -130,7 +144,7 @@ def totals_json(request,format):
       rows = zip(x,y,y2)
     else:
       rows = zip(x,y)
-    for row in zip(x,y):
+    for row in rows:
       writer.writerow(row)
     return response
   return JsonResponse({
