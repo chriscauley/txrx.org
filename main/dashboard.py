@@ -53,7 +53,7 @@ def totals_json(request,format):
           roland += i.line_total
         else:
           noroland_ids.append(i.product_id)
-      y2.append(roland)
+      #y2.append(roland)
       x.append(day.strftime("%Y-%m-%d"))
   elif metric in ['new_students','new_members']:
     x = [start_date + datetime.timedelta(i) for i in range(time_period)]
