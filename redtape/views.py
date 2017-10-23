@@ -49,9 +49,9 @@ def post_document(request,pk):
     a = API("txrxlabs.freshdesk.com",settings.FRESHDESK_API_KEY,version=2)
     error = None
     try:
-      print a.tickets.create_ticket('New work request for %s'%signature.data['name'],
+      a.tickets.create_ticket('New work request for %s'%signature.data['name'],
                               email=signature.data['email'],
-                              description=render_template("email/work_request",{'signature':signature})[1],
+                              description=render_template("email/work_request",{'signature':signature})[0],
                               tags=['work'])
     except Exception,e:
       error = e
