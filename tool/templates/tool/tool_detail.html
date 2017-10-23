@@ -80,6 +80,7 @@
     </div>
     <hr />
     {% endif %}
+    {% comment %}
     {% if tool.consumable_ids %}
     <h3 class="block_title">Related Store Products</h3>
     <product-list></product-list>
@@ -87,6 +88,7 @@
     <h3 class="block_title">Material{{ tool.materials.all|pluralize:"s" }} used</h3>
     {{ tool.materials.all|join:", " }}
     {% endif %}
+    {% endcomment %}
   </div>
   <div class="col-xs-12 col-sm-8 col-md-9">
     <comment-list object_pk="{{ tool.pk }}" content_type="tool.tool"></comment-list>
