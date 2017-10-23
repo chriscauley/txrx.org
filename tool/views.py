@@ -106,7 +106,9 @@ def master(request,app_name,model_name):
       events[obj.content_object] = []
     events[obj.content_object].append(obj.as_json)
   events = [{
-    'name': unicode(event),
+    'name': event.name,
+    'start': event.start,
+    'end': event.end,
     'objects': objects,
   } for event,objects in events.items()]
   values = {

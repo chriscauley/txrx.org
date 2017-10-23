@@ -28,6 +28,7 @@
   <checkouts-box>
     <div each={ events }>
       <h2>{ name }</h2>
+      <h3>{ start.hdate() } @ { startend.htimerange() }</h3>
       <div class="alert alert-{ status_class }" each={ objects }>
         <div class="img"><img src={ headshot_url } if={ headshot_url }></div>
         <div class="right">
@@ -70,6 +71,9 @@
 <script>
 uR.auth.ready(function() {
   uR._events = {{ events|safe }};
+  uR.forEach(uR._events,function(event) {
+    event.startend = event.start+"||"+event.end;
+  });
   var _s = "MMMM Do YYYY, h:mm:ss a"
 
   uR._updateRSVP = function(rsvp) {

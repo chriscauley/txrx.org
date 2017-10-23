@@ -99,7 +99,7 @@ def coursecheckout_ajax(request,id):
   for event in coursecheckout.events.all():
     studio_hours += list(event.upcoming_occurrences.filter(start__lte=timezone.now()+timezone.timedelta(21)))
   studio_hours.sort(key=lambda s: s.start)
-  choices = [(occ.id,date(occ.start,r"l, F jS \a\t P")) for occ in studio_hours]
+  choices = [(occ.id,date(occ.start,r"l, F jS: P - ")+date(occ.end_time,"P")) for occ in studio_hours]
   return JsonResponse({
     'schema': [
       {'name': 'eventoccurrence_id', 'label': "Studio Hours", 'choices': choices,'type': 'select'}
