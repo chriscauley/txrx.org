@@ -28,7 +28,7 @@
   <checkouts-box>
     <div each={ events }>
       <h2>{ name }</h2>
-      <h3>{ start.hdate() } @ { startend.htimerange() }</h3>
+      <h3 if={ start }>{ start.hdate() } @ { startend.htimerange() }</h3>
       <div class="alert alert-{ status_class }" each={ objects }>
         <div class="img"><img src={ headshot_url } if={ headshot_url }></div>
         <div class="right">

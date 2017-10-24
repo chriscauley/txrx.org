@@ -107,8 +107,8 @@ def master(request,app_name,model_name):
     events[obj.content_object].append(obj.as_json)
   events = [{
     'name': event.name,
-    'start': event.start,
-    'end': event.end,
+    'start': event.start if hasattr(event,'start') else "",
+    'end': event.end if hasattr(event,'start') else '',
     'objects': objects,
   } for event,objects in events.items()]
   values = {
