@@ -24,19 +24,23 @@
 <user-checkin>
   <membership-status></membership-status>
   <div class="row">
+    <div if={ uR.auth.user } class="col m8 s12 offset-m2">
+      <div class="card">
+        <div class="card-content">
+          <div class="card-title">
+            <b if={ uR.auth.user.id == opts.checkin.user_id }>Logged in as:</b>
+            <b if={ uR.auth.user.id != opts.checkin.user_id }>Checkin Card for:</b>
+          </div>
+          { opts.checkin.user_display_name } ({ opts.checkin.username })
+          <br/>
+          { opts.checkin.email }
+        </div>
+      </div>
+    </div>
     <div class="col m8 s12 offset-m2" if={ documents_done }>
       <div class="card green white-text">
         <div class="card-content">
           <b>{ documents_done } document{ "s": documents.length != 1 } signed. Thank you!</b>
-        </div>
-      </div>
-    </div>
-    <div if={ uR.auth.user } class="col m8 s12 offset-m2">
-      <div class="card">
-        <div class="card-content">
-          <div class="card-title"><b>Logged in as</b></div>
-          { uR.auth.user.first_name } { uR.auth.user.last_name } ({ uR.auth.user.username })
-          { uR.auth.user.email }
         </div>
       </div>
     </div>

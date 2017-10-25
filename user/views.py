@@ -51,6 +51,8 @@ def checkin_json(user):
     'permission_ids': [p.pk for p in Permission.objects.all() if p.check_for_user(user)],
     'user_id': user.id,
     'user_display_name': user.get_full_name(),
+    'username': user.username,
+    'email': user.email,
     'title': title,
     'subscriptions': [s.as_json for s in _s],
     'documents': documents,
