@@ -4,7 +4,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export PROJECT_ROOT=$DIR/../
 
 cd $PROJECT_ROOT
-python manage.py migrate >/dev/null
+#python manage.py migrate >/dev/null
 gulp > /dev/null
 
 #removing pullall and gulps
