@@ -4,6 +4,7 @@
 *~
 \.\#*
 \#*
+*.swp
 .DS_Store
 
 #site generated content
@@ -37,4 +38,4 @@ scripts/anon.db
 scripts/backup.json
 
 todo.org
-node_modules/
+node_modules
