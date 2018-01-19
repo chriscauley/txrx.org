@@ -49,6 +49,7 @@ def post_document(request,pk):
     a = API("txrxlabs.freshdesk.com",settings.FRESHDESK_API_KEY,version=2)
     error = None
     try:
+      send_template_email("email/work_request",['roland.von.k@txrxlabs.org'],context={'signature':signature,"error":error})
       a.tickets.create_ticket('New work request for %s'%signature.data['name'],
                               email=signature.data['email'],
                               description=render_template("email/work_request",{'signature':signature})[0],
