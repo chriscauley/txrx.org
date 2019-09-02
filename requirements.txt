@@ -26,6 +26,11 @@ django-mptt==0.8.6
 django-emoji==2.2.0
 Markdown
 
+
+-e git+https://github.com/chriscauley/django-drop.git#egg=drop
+-e git+https://github.com/chriscauley/djstripe.git#egg=dj-stripe
+-e git+https://github.com/chriscauley/django-unrest-media.git#egg=media
+
 django-memcache-status
 django-redis-cache
 django-timezones==0.2
@@ -42,7 +47,6 @@ python-social-auth==0.2.21
 social-auth-app-django
 social-auth-core
 
-#-e git+https://github.com/chriscauley/django-shop.git#egg=django-shop
 -e git+https://github.com/chriscauley/django-wmd-editor.git#egg=django_wmd_editor
 django-annoying
 django_paypal==0.3.2

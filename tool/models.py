@@ -74,10 +74,11 @@ class Tool(PhotosMixin,OrderedModel):
     groups = []
     if self.permission:
       for criterion in self.permission.criteria.all():
-        if criterion.courses.count() == 1:
-          singles.append(criterion.courses.all()[0])
-        elif criterion.courses.all():
-          groups.append(criterion.courses.all())
+        courses = (criterion.courses.all() or criterion.events.all())
+        if courses.count() == 1:
+          singles.append(courses[0])
+        elif courses:
+          groups.append(courses)
     return singles,groups
   single_courses = property(lambda self: self.ordered_courses[0])
   group_courses = property(lambda self: self.ordered_courses[1])
@@ -213,7 +214,6 @@ class CriterionModel(models.Model):
         try:
           u,new = UserCriterion.active_objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
         except UserCriterion.MultipleObjectsReturned:
-          print 'deleting for ',self
           UserCriterion.active_objects.filter(user=self.user,criterion=criterion).delete()
           u,new = UserCriterion.active_objects.get_or_create(user=self.user,criterion=criterion,defaults=defaults)
         u.content_object = self

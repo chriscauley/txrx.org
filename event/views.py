@@ -123,7 +123,7 @@ def rsvp(request):
     return JsonResponse({'error': "Only member's are allowed to RSVP for this event"})
   if event.get_user_rsvps(request.user,status="completed"):
     return JsonResponse({'error': "You have been approved by the TXRX tech to work unattended in this area. There is no need to RSVP. You may come in and work during your regular membership times."})
-  if event.orientation_required and not request.user.has_criterion(settings.ORIENTATION_CRITERION_ID):
+  if not settings.DEBUG and event.orientation_required and not request.user.has_criterion(settings.ORIENTATION_CRITERION_ID):
     orientation_url = Event.objects.get(id=settings.ORIENTATION_EVENT_ID).get_absolute_url()
     a = "<a href='%s'>%s</a>"%(orientation_url,'Click here to RSVP for an orientation.')
     return JsonResponse({'error': "You must attend an orientation before attending this event. %s"%a})

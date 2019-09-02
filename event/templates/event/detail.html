@@ -21,6 +21,11 @@
     </div>
   </div>
   <div class="col-sm-4">
+    {% if event.coursecheckout_set.all %}
+    <div class="alert alert-success">
+      If you purchase a <a href="/shop/">{{ event.coursecheckout_set.all.0.name }} checkout</a> then you must schedule it during this event.
+    </div>
+    {% endif %}
     <div class="description">{{ event.description|explosivo }}</div>
     {% if event.rsvp_cutoff %}
     <div class="alert alert-warning">{{ event.verbose_rsvp_cutoff }}</div>

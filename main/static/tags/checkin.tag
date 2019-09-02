@@ -22,7 +22,6 @@
 </membership-status>
 
 <user-checkin>
-  <membership-status></membership-status>
   <div class="row">
     <div if={ uR.auth.user } class="col m8 s12 offset-m2">
       <div class="card">
@@ -36,6 +35,9 @@
           { opts.checkin.email }
         </div>
       </div>
+    </div>
+    <div class="col m8 s12 offset-m2">
+      <membership-status></membership-status>
     </div>
     <div class="col m8 s12 offset-m2" if={ documents_done }>
       <div class="card green white-text">
