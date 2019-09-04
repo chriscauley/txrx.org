@@ -5,11 +5,10 @@
   <socket>127.0.0.1:3033</socket>
   <app mountpoint="/">
     <script>django_uwsgi</script>
-    </app>
-  <plugin>python</plugin>
+  </app>
   <harakiri>180</harakiri>
   <socket-timeout>180</socket-timeout>
-  <pidfile>/tmp/uwsgi.pid</pidfile>
+  <pidfile>/tmp/txrx.pid</pidfile>
   <module>django_uwsgi:application</module>
   <logto>/home/django/uwsgi.log</logto>
 </uwsgi>

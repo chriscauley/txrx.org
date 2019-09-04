@@ -5,14 +5,14 @@ then
     export PROCESSES=1
 fi
 
-if cat /tmp/uwsgi.pid
+if cat /tmp/txrx.pid 2> /dev/null
 then
-    kill -HUP `cat /tmp/uwsgi.pid`
+    kill -HUP `cat /tmp/txrx.pid`
     echo "uwsgi reset"
 else
-    /usr/bin/uwsgi-core -M -x $DIR/../uwsgi.xml --plugin python -p $PROCESSES &&
-    ps aux|grep uwsgi
-    echo "uwsgi wasn't running, but it is now!"
+    source .venv/bin/activate
+    echo "uwsgi wasn't running, starting it now"
+    uwsgi -M -x $DIR/../uwsgi.xml &&
 fi
 
 exit 0
