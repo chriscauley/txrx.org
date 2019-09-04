@@ -1,0 +1,78 @@
+shopping-cart,checkout-modal{
+  display: block;
+  background: pink;
+  /* some browsers don't support variables yet */
+  a { cursor: pointer; color: #049cdb; color: var(--link-color); }
+  .item {
+    border-bottom: 1px solid var(--border-color);
+    min-height: 65px;
+    position: relative;
+    .left {
+      padding-right:80px;
+      .name { min-height: 2.4em; }
+    }
+    .extra_price_field { border-top: 1px solid var(--border-color); }
+    .price-box {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      .change {
+        text-align: center;
+        font-size: 18px;
+        .fa { padding-right: 0 4px; }
+      }
+    }
+  }
+  .valign-wrapper {
+    justify-content: space-between;
+    /* this class isn't in bootstrap so I need these, they can be removed when TXRX goes materialize */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    a {
+      display: block;
+      line-height: 1em;
+      margin-top: 1rem;
+      text-align: center;
+      width: 100%;
+    }
+  }
+  .totals-box { text-align: right; }
+  .extra_price_field {
+    display: flex;
+    flex-basis: 100%;
+    justify-content: space-between;
+    .amount { white-space: pre; }
+  }
+}
+
+payment-buttons, .payment-buttons {
+  display: block;
+  text-align: center;
+  width: 100%;
+  a { margin-right: 0 !important; }
+  a,b { display: block; }
+  button { margin: 10px; }
+  .fa {
+    font-size: 2em;
+    line-height: 1;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  @media (max-width: 600px) {
+    button { display: block; margin: 10px auto !important; }
+  }
+}
+
+shopping-cart {
+  .quantity, .unit-price { font-size: 1.4em; }
+}
+ur-form { display: block; }
+cart-button { float: right; }
+add-to-cart {
+  display: block;
+  .pre-sale { color: red; text-decoration: line-through; }
+  .hidden { display: none; }
+}
+
+giftcard-checkout .modal-content { max-width: 400px; }

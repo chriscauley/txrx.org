@@ -141,8 +141,8 @@ STATICFILES_FINDERS = (
 )
 
 COMPRESS_PRECOMPILERS = (
-  ('text/less', 'lessc {infile} |autoprefixer-cli > {outfile}'),
-  ('riot/tag', 'riot {infile} {outfile}'),
+  ('text/less', 'yarn lessc {infile} {outfile}'),
+  ('riot/tag', 'yarn riot {infile} {outfile}'),
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7

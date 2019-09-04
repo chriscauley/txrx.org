@@ -1,0 +1,298 @@
+/* materialize has some parts that are messed that I"m overridding here instead of changing the original file */
+.horizontal .card-image {
+  min-width: 25%;
+}
+.horizontal .card-image .thumbnail,
+.horizontal .card-image img {
+  min-width: 130px;
+}
+.horizontal .card-image + .card-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+.horizontal .card-image .thumbnail,
+.collection .collection-item .thumbnail {
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.horizontal .card-image .thumbnail:before,
+.collection .collection-item .thumbnail:before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+.card.card-content {
+  padding: 10px;
+}
+.card > .card-title {
+  padding: 20px 20px 10px;
+}
+.card > .card-title h3 {
+  padding: 0;
+}
+.card > .card-title + .card-content {
+  padding-top: 0;
+}
+.card .card-content .card-title {
+  line-height: 1.5em;
+}
+.card-content > .card-action {
+  padding: 20px 0 0;
+}
+shopping-cart .card {
+  max-width: 600px;
+}
+/* materialize does input + label.active... I hate that so I'm doing input.active + label */
+.input-field.active label {
+  font-size: 0.8rem;
+  top: -0.8rem;
+}
+.input-field.active select-input + label,
+.input-field.active radio-input + label,
+.input-field.active checkbox-input + label {
+  font-size: 0.8rem;
+  top: -1.1rem;
+}
+.input-field.active.textarea label {
+  font-size: 0.8rem;
+  top: -1.1rem;
+}
+/* not a fan of materialize bottom margins, makes help_text and errors complicated */
+.input-field {
+  margin: 2rem 0 20px;
+}
+.input-field input:not([type]),
+.input-field input[type=text],
+.input-field input[type=password],
+.input-field input[type=email],
+.input-field input[type=url],
+.input-field input[type=time],
+.input-field input[type=date],
+.input-field input[type=datetime],
+.input-field input[type=datetime-local],
+.input-field input[type=tel],
+.input-field input[type=number],
+.input-field input[type=search],
+.input-field textarea.materialize-textarea,
+.input-field textarea,
+.input-field select {
+  margin-bottom: 0;
+}
+.input-field input:not([type]),
+.input-field input[type=text],
+.input-field input[type=password],
+.input-field input[type=email],
+.input-field input[type=url],
+.input-field input[type=time],
+.input-field input[type=date],
+.input-field input[type=datetime],
+.input-field input[type=datetime-local],
+.input-field input[type=tel],
+.input-field input[type=number],
+.input-field input[type=search],
+.input-field select {
+  height: 2.5rem;
+}
+.input-field textarea {
+  border: 1px solid #9e9e9e;
+  box-sizing: border-box;
+  height: 8rem;
+  padding: 0.8rem;
+  resize: vertical;
+}
+.input-field textarea + label {
+  font-size: 0.8rem;
+  top: -1.1rem !important;
+}
+.input-field select {
+  border-color: #9e9e9e;
+}
+.input-field .help_text {
+  font-size: 0.8em;
+}
+.input-field [type=file] {
+  margin-top: 15px;
+}
+.input-field [type=file] ~ .help_text {
+  margin-top: 5px;
+}
+.input-field checkbox-input .choice label,
+.input-field radio-input .choice label {
+  top: 0;
+}
+.switch label {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  position: static;
+  width: 100%;
+}
+.switch label .lever {
+  margin: 0;
+}
+.flex-tabs,
+.scroll-tabs,
+.truncate-tabs {
+  --tab-height: 53px;
+  display: flex;
+  min-width: 100%;
+}
+.flex-tabs .tab,
+.scroll-tabs .tab,
+.truncate-tabs .tab {
+  cursor: pointer;
+  height: var(--tab-height);
+  line-height: var(--tab-height);
+  padding: 0 16px;
+}
+.flex-tabs.blue-tabs,
+.scroll-tabs.blue-tabs,
+.truncate-tabs.blue-tabs {
+  color: white;
+  height: 63px;
+  text-align: center;
+  width: calc(100% + 5px);
+}
+.flex-tabs.blue-tabs .tab,
+.scroll-tabs.blue-tabs .tab,
+.truncate-tabs.blue-tabs .tab {
+  background: var(--blue);
+  border-right: 5px white solid;
+  flex-grow: 1;
+  margin-bottom: 10px;
+}
+.flex-tabs.blue-tabs .tab.selected,
+.scroll-tabs.blue-tabs .tab.selected,
+.truncate-tabs.blue-tabs .tab.selected {
+  background: var(--green);
+}
+.flex-tabs {
+  flex-flow: row wrap;
+}
+.scroll-tabs {
+  white-space: nowrap;
+  overflow-x: auto;
+}
+.truncate-tabs {
+  flex-flow: row wrap;
+  justify-content: space-around;
+  overflow: hidden;
+  height: var(--tab-height);
+}
+.truncate-tabs.portraits {
+  height: 140px;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+.truncate-tabs.portraits .character {
+  height: 130px;
+  margin-bottom: 20px;
+  width: 110px;
+}
+.truncate-tabs.open {
+  height: auto;
+}
+body {
+  /* from materialize */
+  --body-text-color: #333;
+  --red: #F44336;
+  --pink: #e91e63;
+  --purple: #9c27b0;
+  --deep-purple: #673ab7;
+  --indigo: #3f51b5;
+  --blue: #2196F3;
+  --blue-darken-2: #1976D2;
+  --light-blue: #03a9f4;
+  --cyan: #00bcd4;
+  --teal: #009688;
+  --green: #4CAF50;
+  --light-green: #8bc34a;
+  --lime: #cddc39;
+  --yellow: #ffeb3b;
+  --amber: #ffc107;
+  --orange: #ff9800;
+  --deep-orange: #ff5722;
+  --brown: #795548;
+  --blue-grey: #607d8b;
+  --grey: #9e9e9e;
+  /* chris colors */
+  --body-disabled-color: #eee;
+  /* materialize @grey-lighten-3 */
+  --border-color: rgba(160, 160, 160, 0.2);
+  /* _card.scss - hard coded */
+  --header-bg: var(--body-bg-color);
+  /* brands */
+  --brand-google: #dd4b39;
+  --brand-twitter: #55acee;
+  --brand-facebook: #3b5998;
+}
+.btn-google:hover,
+.btn-google-plus:hover,
+.btn-google,
+.btn-google-plus {
+  background-color: var(--brand-google);
+}
+.btn-twitter:hover,
+.btn-twitter {
+  background-color: var(--brand-twitter);
+}
+.btn-facebook:hover,
+.btn-facebook {
+  background-color: var(--brand-facebook);
+}
+.btn-google:hover,
+.btn-google-plus:hover,
+.btn-twitter:hover,
+.btn-facebook:hover {
+  color: white;
+  filter: contrast(1.2);
+}
+tfoot {
+  /* in materialize thead has border, but tfoot doesn't */
+  border-top: 1px solid #d0d0d0;
+}
+.card .card-content p {
+  margin-bottom: 1rem;
+}
+.card .card-content p:last-child {
+  margin-bottom: 0;
+}
+/* header */
+header {
+  position: relative;
+}
+/* otherwise breadcrumbs cover box-shadow */
+nav .nav-wrapper {
+  background: var(--header-bg);
+}
+nav .nav-wrapper img {
+  display: block;
+}
+nav .nav-wrapper i {
+  height: auto;
+  line-height: inherit;
+}
+nav .nav-wrapper ul.right > li > a {
+  text-transform: uppercase;
+}
+nav .nav-wrapper li,
+nav .nav-wrapper a {
+  color: inherit;
+}
+nav .nav-wrapper ul li {
+  position: relative;
+}
+nav .nav-wrapper ul li:hover .dropdown-content {
+  background: var(--header-bg);
+  display: block;
+  position: absolute;
+  right: 0;
+  opacity: 1;
+  top: 100%;
+  z-index: 10;
+}
+nav .nav-wrapper ul li:hover .dropdown-content a {
+  white-space: nowrap;
+}

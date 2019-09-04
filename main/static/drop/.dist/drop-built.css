@@ -1,0 +1,198 @@
+shopping-cart,
+checkout-modal {
+  display: block;
+  background: pink;
+  /* some browsers don't support variables yet */
+}
+shopping-cart a,
+checkout-modal a {
+  cursor: pointer;
+  color: #049cdb;
+  color: var(--link-color);
+}
+shopping-cart .item,
+checkout-modal .item {
+  border-bottom: 1px solid var(--border-color);
+  min-height: 65px;
+  position: relative;
+}
+shopping-cart .item .left,
+checkout-modal .item .left {
+  padding-right: 80px;
+}
+shopping-cart .item .left .name,
+checkout-modal .item .left .name {
+  min-height: 2.4em;
+}
+shopping-cart .item .extra_price_field,
+checkout-modal .item .extra_price_field {
+  border-top: 1px solid var(--border-color);
+}
+shopping-cart .item .price-box,
+checkout-modal .item .price-box {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+shopping-cart .item .price-box .change,
+checkout-modal .item .price-box .change {
+  text-align: center;
+  font-size: 18px;
+}
+shopping-cart .item .price-box .change .fa,
+checkout-modal .item .price-box .change .fa {
+  padding-right: 0 4px;
+}
+shopping-cart .valign-wrapper,
+checkout-modal .valign-wrapper {
+  justify-content: space-between;
+  /* this class isn't in bootstrap so I need these, they can be removed when TXRX goes materialize */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+shopping-cart .valign-wrapper a,
+checkout-modal .valign-wrapper a {
+  display: block;
+  line-height: 1em;
+  margin-top: 1rem;
+  text-align: center;
+  width: 100%;
+}
+shopping-cart .totals-box,
+checkout-modal .totals-box {
+  text-align: right;
+}
+shopping-cart .extra_price_field,
+checkout-modal .extra_price_field {
+  display: flex;
+  flex-basis: 100%;
+  justify-content: space-between;
+}
+shopping-cart .extra_price_field .amount,
+checkout-modal .extra_price_field .amount {
+  white-space: pre;
+}
+payment-buttons,
+.payment-buttons {
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+payment-buttons a,
+.payment-buttons a {
+  margin-right: 0 !important;
+}
+payment-buttons a,
+.payment-buttons a,
+payment-buttons b,
+.payment-buttons b {
+  display: block;
+}
+payment-buttons button,
+.payment-buttons button {
+  margin: 10px;
+}
+payment-buttons .fa,
+.payment-buttons .fa {
+  font-size: 2em;
+  line-height: 1;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+@media (max-width: 600px) {
+  payment-buttons button,
+  .payment-buttons button {
+    display: block;
+    margin: 10px auto !important;
+  }
+}
+shopping-cart .quantity,
+shopping-cart .unit-price {
+  font-size: 1.4em;
+}
+ur-form {
+  display: block;
+}
+cart-button {
+  float: right;
+}
+add-to-cart {
+  display: block;
+}
+add-to-cart .pre-sale {
+  color: red;
+  text-decoration: line-through;
+}
+add-to-cart .hidden {
+  display: none;
+}
+giftcard-checkout .modal-content {
+  max-width: 400px;
+}
+#checkout-thank_you td,
+#checkout-thank_you th {
+  text-align: center;
+}
+#checkout-thank_you .name {
+  max-width: 500px;
+  text-align: left;
+}
+@media (max-width: 500px) {
+  #checkout-thank_you .line_subtotal,
+  #checkout-thank_you tfoot th:first-child {
+    display: none;
+  }
+}
+stripe-checkout {
+  box-sizing: border-box;
+}
+stripe-checkout .card,
+stripe-checkout .modal-content {
+  min-width: 320px;
+  max-width: 420px;
+}
+stripe-checkout a {
+  cursor: pointer;
+}
+stripe-checkout ur-form {
+  display: block;
+}
+stripe-checkout ur-form form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+stripe-checkout ur-form form .ur-input {
+  flex-grow: 1;
+}
+stripe-checkout ur-form form .ur-input.expiry {
+  flex-basis: 60%;
+  padding-right: 5%;
+}
+stripe-checkout ur-form form .ur-input.cvc {
+  flex-basis: 40%;
+}
+stripe-checkout ur-form .button_div {
+  background: url(/static/drop/powered_by_stripe2x.png) no-repeat left center;
+  background-size: auto 26px;
+  margin-bottom: 10px;
+  min-height: 0;
+  overflow: hidden;
+  padding-left: 130px;
+  width: 100%;
+}
+stripe-checkout ur-form .button_div .btn {
+  float: right;
+  margin-bottom: 0;
+}
+@media (max-width: 400px) {
+  stripe-checkout ur-form .button_div {
+    background-size: auto 20px;
+    padding-left: 105px;
+  }
+  stripe-checkout ur-form .button_div .btn {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}

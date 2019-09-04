@@ -18,10 +18,7 @@ log/*
 scripts/backups
 
 #virtual environments
-env/*
-environ/*
-.environ/*
-.e/*
+.venv/
 src/*
 .pydev
 .pydevproject

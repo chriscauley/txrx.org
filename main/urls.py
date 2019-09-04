@@ -126,7 +126,6 @@ urlpatterns += [
   url(r'',_include('rfid.urls')),
   url(r'',include(lablackey.urls)),
   url(r'^notify/',include(notify.urls)),
-  #url(r'^api-token-auth/', 'rest_framework_jwt.views.obtain_jwt_token'),
 ]
 
 if hasattr(settings,"STAFF_URL"):

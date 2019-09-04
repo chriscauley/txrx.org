@@ -1,0 +1,1418 @@
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+(function () {
+  function ajax(options) {
+    options.url = uR.drop.prefix + options.url;
+    var _success = options.success || function () {};
+    options.success = function (data, request) {
+      _success(data, request);
+      uR.drop.updateTags();
+    };
+    uR.ajax(options);
+  }
+  function updateProducts() {
+    uR.drop.ajax({
+      url: '/products.js',
+      success: function success(data) {
+        uR.drop.products_list = data.products;
+        uR.drop.products = {};
+        uR.forEach(data.products, function (product) {
+          uR.drop.products[product.id] = product;
+          product.price = product.sale_price = parseFloat(product.unit_price);
+        });
+        uR.drop.discounts = data.discounts || [];
+        uR.forEach(uR.drop.discounts, function (discount) {
+          uR.forEach(discount.product_ids, function (product_id) {
+            var product = uR.drop.products[product_id];
+            var discount_price = product.price * (1 - discount.percentage / 100);
+            if (product.sale_price > discount_price) {
+              product.discount = discount;
+              product.sale_price = discount_price;
+            }
+          });
+        });
+        uR.drop.ready("Products loaded");
+      }
+    });
+  }
+  function updateCart() {
+    uR.drop.ajax({
+      url: '/cart.js',
+      success: function success(data) {
+        uR.drop.cart = data;
+        uR.drop.ready("Cart loaded");
+      },
+      error: function error() {}
+    });
+  }
+  function saveCartItem(product_id, quantity, riot_tag, options) {
+    options = options || {};
+    options.id = product_id;
+    options.quantity = quantity;
+    uR.drop.ajax({
+      url: "/ajax/edit/",
+      tag: riot_tag,
+      data: options,
+      success: function success(data) {
+        uR.drop.cart = data.cart;
+        riot_tag && riot_tag.update();
+        riot_tag && riot_tag.add_successful && riot_tag.add_successful();
+        !options.no_cart && uR.drop.cart.all_items.length && uR.drop.openCart();
+        riot.update(uR.drop.store_tags);
+      },
+      error: function error(data) {
+        console.log(data);
+      },
+      method: "POST"
+    });
+  }
+  function openCart(data) {
+    if (document.querySelector(uR.drop.cart_tag)) {
+      return;
+    } // cart is already open!
+    uR.alertElement(uR.drop.cart_tag, data);
+  }
+  function updateTags() {
+    if (!uR.drop.products_list || !uR.drop.cart) {
+      return;
+    }
+    uR.drop.checkoutReady = true;
+    uR.forEach(uR.drop.cart.all_items, function (item) {
+      var product = uR.drop.products[item.product_id];
+      uR.drop.requires_shipping = uR.drop.requires_shipping || product.requires_shipping;
+    });
+    if (uR.drop.requires_shipping && !uR.drop.shipping_address) {
+      uR.drop.checkoutReady = false;
+    }
+
+    uR.forEach(uR.drop.products_list, function (p) {
+      p.quantity = 0;
+    });
+    uR.forEach(uR.drop.cart.all_items, function (item) {
+      if (uR.drop.products[item.product_id]) {
+        uR.drop.products[item.product_id].quantity = item.quantity;
+      }
+    });
+    if (!uR.drop._mounted) {
+      riot.mount(uR.drop.store_tags);
+      uR.drop._mounted = true;
+    } else {
+      riot.update(uR.drop.store_tags);
+    }
+  }
+  function emptyCart() {
+    uR.forEach(uR.drop.cart.all_items, function (item) {
+      uR.drop.saveCartItem(item.product_id, 0);
+    });
+  }
+  uR.drop = {
+    saveCartItem: saveCartItem,
+    updateProducts: updateProducts,
+    updateCart: updateCart,
+    updateTags: uR.debounce(updateTags, 100),
+    emptyCart: emptyCart,
+    store_tags: "cart-button,add-to-cart",
+    openCart: openCart,
+    modal_cart: true,
+    ajax: ajax,
+    cart_tag: 'shopping-cart',
+    prefix: "",
+    ready: new uR.Ready(function dropReady() {
+      return uR.drop.products && uR.drop.cart;
+    }),
+    login_required: true,
+    payment_backends: [],
+    $: function $(amount) {
+      var start = "$";
+      if (amount < 0) {
+        start = "- " + start;
+        amount = Math.abs(amount);
+      }
+      amount = amount == Math.floor(amount) ? Math.floor(amount) : parseFloat(amount).toFixed(2);
+      return start + Math.abs(amount);
+    },
+    addRoutes: function addRoutes(_routes) {
+      var out = {};
+      for (var key in _routes) {
+        out[uR.drop.prefix + key] = _routes[key];
+      }
+      uR.addRoutes(out);
+    }
+  };
+  uR.schema.fields.no_email = {
+    name: 'email', type: 'email', label: 'Email Address',
+    help_text: "Since you are not logged in, we'll look up or create an account using this email address. We promise to only use this for comminication about your purchase."
+  };
+  uR.theme.checkout_button = uR.config.btn_primary;
+  uR.ready(uR.drop.updateProducts, uR.drop.updateCart);
+})();
+
+// Generated by CoffeeScript 1.7.1
+(function () {
+  var $,
+      cardFromNumber,
+      cardFromType,
+      cards,
+      defaultFormat,
+      formatBackCardNumber,
+      formatBackExpiry,
+      formatCardNumber,
+      formatExpiry,
+      formatForwardExpiry,
+      formatForwardSlashAndSpace,
+      hasTextSelected,
+      luhnCheck,
+      reFormatCVC,
+      reFormatCardNumber,
+      reFormatExpiry,
+      reFormatNumeric,
+      replaceFullWidthChars,
+      restrictCVC,
+      restrictCardNumber,
+      restrictExpiry,
+      restrictNumeric,
+      safeVal,
+      setCardType,
+      __slice = [].slice,
+      __indexOf = [].indexOf || function (item) {
+    for (var i = 0, l = this.length; i < l; i++) {
+      if (i in this && this[i] === item) return i;
+    }return -1;
+  };
+
+  $ = window.jQuery || window.Zepto || window.$;
+
+  $.payment = {};
+
+  $.payment.fn = {};
+
+  $.fn.payment = function () {
+    var args, method;
+    method = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    return $.payment.fn[method].apply(this, args);
+  };
+
+  defaultFormat = /(\d{1,4})/g;
+
+  $.payment.cards = cards = [{
+    type: 'maestro',
+    patterns: [5018, 502, 503, 506, 56, 58, 639, 6220, 67],
+    format: defaultFormat,
+    length: [12, 13, 14, 15, 16, 17, 18, 19],
+    cvcLength: [3],
+    luhn: true
+  }, {
+    type: 'forbrugsforeningen',
+    patterns: [600],
+    format: defaultFormat,
+    length: [16],
+    cvcLength: [3],
+    luhn: true
+  }, {
+    type: 'dankort',
+    patterns: [5019],
+    format: defaultFormat,
+    length: [16],
+    cvcLength: [3],
+    luhn: true
+  }, {
+    type: 'visa',
+    patterns: [4],
+    format: defaultFormat,
+    length: [13, 16],
+    cvcLength: [3],
+    luhn: true
+  }, {
+    type: 'mastercard',
+    patterns: [51, 52, 53, 54, 55, 22, 23, 24, 25, 26, 27],
+    format: defaultFormat,
+    length: [16],
+    cvcLength: [3],
+    luhn: true
+  }, {
+    type: 'amex',
+    patterns: [34, 37],
+    format: /(\d{1,4})(\d{1,6})?(\d{1,5})?/,
+    length: [15],
+    cvcLength: [3, 4],
+    luhn: true
+  }, {
+    type: 'dinersclub',
+    patterns: [30, 36, 38, 39],
+    format: /(\d{1,4})(\d{1,6})?(\d{1,4})?/,
+    length: [14],
+    cvcLength: [3],
+    luhn: true
+  }, {
+    type: 'discover',
+    patterns: [60, 64, 65, 622],
+    format: defaultFormat,
+    length: [16],
+    cvcLength: [3],
+    luhn: true
+  }, {
+    type: 'unionpay',
+    patterns: [62, 88],
+    format: defaultFormat,
+    length: [16, 17, 18, 19],
+    cvcLength: [3],
+    luhn: false
+  }, {
+    type: 'jcb',
+    patterns: [35],
+    format: defaultFormat,
+    length: [16],
+    cvcLength: [3],
+    luhn: true
+  }];
+
+  cardFromNumber = function cardFromNumber(num) {
+    var card, p, pattern, _i, _j, _len, _len1, _ref;
+    num = (num + '').replace(/\D/g, '');
+    for (_i = 0, _len = cards.length; _i < _len; _i++) {
+      card = cards[_i];
+      _ref = card.patterns;
+      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+        pattern = _ref[_j];
+        p = pattern + '';
+        if (num.substr(0, p.length) === p) {
+          return card;
+        }
+      }
+    }
+  };
+
+  cardFromType = function cardFromType(type) {
+    var card, _i, _len;
+    for (_i = 0, _len = cards.length; _i < _len; _i++) {
+      card = cards[_i];
+      if (card.type === type) {
+        return card;
+      }
+    }
+  };
+
+  luhnCheck = function luhnCheck(num) {
+    var digit, digits, odd, sum, _i, _len;
+    odd = true;
+    sum = 0;
+    digits = (num + '').split('').reverse();
+    for (_i = 0, _len = digits.length; _i < _len; _i++) {
+      digit = digits[_i];
+      digit = parseInt(digit, 10);
+      if (odd = !odd) {
+        digit *= 2;
+      }
+      if (digit > 9) {
+        digit -= 9;
+      }
+      sum += digit;
+    }
+    return sum % 10 === 0;
+  };
+
+  hasTextSelected = function hasTextSelected($target) {
+    var _ref;
+    if ($target.prop('selectionStart') != null && $target.prop('selectionStart') !== $target.prop('selectionEnd')) {
+      return true;
+    }
+    if ((typeof document !== "undefined" && document !== null ? (_ref = document.selection) != null ? _ref.createRange : void 0 : void 0) != null) {
+      if (document.selection.createRange().text) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  safeVal = function safeVal(value, $target) {
+    var currPair, cursor, digit, error, last, prevPair;
+    try {
+      cursor = $target.prop('selectionStart');
+    } catch (_error) {
+      error = _error;
+      cursor = null;
+    }
+    last = $target.val();
+    $target.val(value);
+    if (cursor !== null && $target.is(":focus")) {
+      if (cursor === last.length) {
+        cursor = value.length;
+      }
+      if (last !== value) {
+        prevPair = last.slice(cursor - 1, +cursor + 1 || 9e9);
+        currPair = value.slice(cursor - 1, +cursor + 1 || 9e9);
+        digit = value[cursor];
+        if (/\d/.test(digit) && prevPair === "" + digit + " " && currPair === " " + digit) {
+          cursor = cursor + 1;
+        }
+      }
+      $target.prop('selectionStart', cursor);
+      return $target.prop('selectionEnd', cursor);
+    }
+  };
+
+  replaceFullWidthChars = function replaceFullWidthChars(str) {
+    var chars, chr, fullWidth, halfWidth, idx, value, _i, _len;
+    if (str == null) {
+      str = '';
+    }
+    fullWidth = '\uFF10\uFF11\uFF12\uFF13\uFF14\uFF15\uFF16\uFF17\uFF18\uFF19';
+    halfWidth = '0123456789';
+    value = '';
+    chars = str.split('');
+    for (_i = 0, _len = chars.length; _i < _len; _i++) {
+      chr = chars[_i];
+      idx = fullWidth.indexOf(chr);
+      if (idx > -1) {
+        chr = halfWidth[idx];
+      }
+      value += chr;
+    }
+    return value;
+  };
+
+  reFormatNumeric = function reFormatNumeric(e) {
+    var $target;
+    $target = $(e.currentTarget);
+    return setTimeout(function () {
+      var value;
+      value = $target.val();
+      value = replaceFullWidthChars(value);
+      value = value.replace(/\D/g, '');
+      return safeVal(value, $target);
+    });
+  };
+
+  reFormatCardNumber = function reFormatCardNumber(e) {
+    var $target;
+    $target = $(e.currentTarget);
+    return setTimeout(function () {
+      var value;
+      value = $target.val();
+      value = replaceFullWidthChars(value);
+      value = $.payment.formatCardNumber(value);
+      return safeVal(value, $target);
+    });
+  };
+
+  formatCardNumber = function formatCardNumber(e) {
+    var $target, card, digit, length, re, upperLength, value;
+    digit = String.fromCharCode(e.which);
+    if (!/^\d+$/.test(digit)) {
+      return;
+    }
+    $target = $(e.currentTarget);
+    value = $target.val();
+    card = cardFromNumber(value + digit);
+    length = (value.replace(/\D/g, '') + digit).length;
+    upperLength = 16;
+    if (card) {
+      upperLength = card.length[card.length.length - 1];
+    }
+    if (length >= upperLength) {
+      return;
+    }
+    if ($target.prop('selectionStart') != null && $target.prop('selectionStart') !== value.length) {
+      return;
+    }
+    if (card && card.type === 'amex') {
+      re = /^(\d{4}|\d{4}\s\d{6})$/;
+    } else {
+      re = /(?:^|\s)(\d{4})$/;
+    }
+    if (re.test(value)) {
+      e.preventDefault();
+      return setTimeout(function () {
+        return $target.val(value + ' ' + digit);
+      });
+    } else if (re.test(value + digit)) {
+      e.preventDefault();
+      return setTimeout(function () {
+        return $target.val(value + digit + ' ');
+      });
+    }
+  };
+
+  formatBackCardNumber = function formatBackCardNumber(e) {
+    var $target, value;
+    $target = $(e.currentTarget);
+    value = $target.val();
+    if (e.which !== 8) {
+      return;
+    }
+    if ($target.prop('selectionStart') != null && $target.prop('selectionStart') !== value.length) {
+      return;
+    }
+    if (/\d\s$/.test(value)) {
+      e.preventDefault();
+      return setTimeout(function () {
+        return $target.val(value.replace(/\d\s$/, ''));
+      });
+    } else if (/\s\d?$/.test(value)) {
+      e.preventDefault();
+      return setTimeout(function () {
+        return $target.val(value.replace(/\d$/, ''));
+      });
+    }
+  };
+
+  reFormatExpiry = function reFormatExpiry(e) {
+    var $target;
+    $target = $(e.currentTarget);
+    return setTimeout(function () {
+      var value;
+      value = $target.val();
+      value = replaceFullWidthChars(value);
+      value = $.payment.formatExpiry(value);
+      return safeVal(value, $target);
+    });
+  };
+
+  formatExpiry = function formatExpiry(e) {
+    var $target, digit, val;
+    digit = String.fromCharCode(e.which);
+    if (!/^\d+$/.test(digit)) {
+      return;
+    }
+    $target = $(e.currentTarget);
+    val = $target.val() + digit;
+    if (/^\d$/.test(val) && val !== '0' && val !== '1') {
+      e.preventDefault();
+      return setTimeout(function () {
+        return $target.val("0" + val + " / ");
+      });
+    } else if (/^\d\d$/.test(val)) {
+      e.preventDefault();
+      return setTimeout(function () {
+        var m1, m2;
+        m1 = parseInt(val[0], 10);
+        m2 = parseInt(val[1], 10);
+        if (m2 > 2 && m1 !== 0) {
+          return $target.val("0" + m1 + " / " + m2);
+        } else {
+          return $target.val("" + val + " / ");
+        }
+      });
+    }
+  };
+
+  formatForwardExpiry = function formatForwardExpiry(e) {
+    var $target, digit, val;
+    digit = String.fromCharCode(e.which);
+    if (!/^\d+$/.test(digit)) {
+      return;
+    }
+    $target = $(e.currentTarget);
+    val = $target.val();
+    if (/^\d\d$/.test(val)) {
+      return $target.val("" + val + " / ");
+    }
+  };
+
+  formatForwardSlashAndSpace = function formatForwardSlashAndSpace(e) {
+    var $target, val, which;
+    which = String.fromCharCode(e.which);
+    if (!(which === '/' || which === ' ')) {
+      return;
+    }
+    $target = $(e.currentTarget);
+    val = $target.val();
+    if (/^\d$/.test(val) && val !== '0') {
+      return $target.val("0" + val + " / ");
+    }
+  };
+
+  formatBackExpiry = function formatBackExpiry(e) {
+    var $target, value;
+    $target = $(e.currentTarget);
+    value = $target.val();
+    if (e.which !== 8) {
+      return;
+    }
+    if ($target.prop('selectionStart') != null && $target.prop('selectionStart') !== value.length) {
+      return;
+    }
+    if (/\d\s\/\s$/.test(value)) {
+      e.preventDefault();
+      return setTimeout(function () {
+        return $target.val(value.replace(/\d\s\/\s$/, ''));
+      });
+    }
+  };
+
+  reFormatCVC = function reFormatCVC(e) {
+    var $target;
+    $target = $(e.currentTarget);
+    return setTimeout(function () {
+      var value;
+      value = $target.val();
+      value = replaceFullWidthChars(value);
+      value = value.replace(/\D/g, '').slice(0, 4);
+      return safeVal(value, $target);
+    });
+  };
+
+  restrictNumeric = function restrictNumeric(e) {
+    var input;
+    if (e.metaKey || e.ctrlKey) {
+      return true;
+    }
+    if (e.which === 32) {
+      return false;
+    }
+    if (e.which === 0) {
+      return true;
+    }
+    if (e.which < 33) {
+      return true;
+    }
+    input = String.fromCharCode(e.which);
+    return !!/[\d\s]/.test(input);
+  };
+
+  restrictCardNumber = function restrictCardNumber(e) {
+    var $target, card, digit, value;
+    $target = $(e.currentTarget);
+    digit = String.fromCharCode(e.which);
+    if (!/^\d+$/.test(digit)) {
+      return;
+    }
+    if (hasTextSelected($target)) {
+      return;
+    }
+    value = ($target.val() + digit).replace(/\D/g, '');
+    card = cardFromNumber(value);
+    if (card) {
+      return value.length <= card.length[card.length.length - 1];
+    } else {
+      return value.length <= 16;
+    }
+  };
+
+  restrictExpiry = function restrictExpiry(e) {
+    var $target, digit, value;
+    $target = $(e.currentTarget);
+    digit = String.fromCharCode(e.which);
+    if (!/^\d+$/.test(digit)) {
+      return;
+    }
+    if (hasTextSelected($target)) {
+      return;
+    }
+    value = $target.val() + digit;
+    value = value.replace(/\D/g, '');
+    if (value.length > 6) {
+      return false;
+    }
+  };
+
+  restrictCVC = function restrictCVC(e) {
+    var $target, digit, val;
+    $target = $(e.currentTarget);
+    digit = String.fromCharCode(e.which);
+    if (!/^\d+$/.test(digit)) {
+      return;
+    }
+    if (hasTextSelected($target)) {
+      return;
+    }
+    val = $target.val() + digit;
+    return val.length <= 4;
+  };
+
+  setCardType = function setCardType(e) {
+    var $target, allTypes, card, cardType, val;
+    $target = $(e.currentTarget);
+    val = $target.val();
+    cardType = $.payment.cardType(val) || 'unknown';
+    if (!$target.hasClass(cardType)) {
+      allTypes = function () {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = cards.length; _i < _len; _i++) {
+          card = cards[_i];
+          _results.push(card.type);
+        }
+        return _results;
+      }();
+      $target.removeClass('unknown');
+      $target.removeClass(allTypes.join(' '));
+      $target.addClass(cardType);
+      $target.toggleClass('identified', cardType !== 'unknown');
+      return $target.trigger('payment.cardType', cardType);
+    }
+  };
+
+  $.payment.fn.formatCardCVC = function () {
+    this.on('keypress', restrictNumeric);
+    this.on('keypress', restrictCVC);
+    this.on('paste', reFormatCVC);
+    this.on('change', reFormatCVC);
+    this.on('input', reFormatCVC);
+    return this;
+  };
+
+  $.payment.fn.formatCardExpiry = function () {
+    this.on('keypress', restrictNumeric);
+    this.on('keypress', restrictExpiry);
+    this.on('keypress', formatExpiry);
+    this.on('keypress', formatForwardSlashAndSpace);
+    this.on('keypress', formatForwardExpiry);
+    this.on('keydown', formatBackExpiry);
+    this.on('change', reFormatExpiry);
+    this.on('input', reFormatExpiry);
+    return this;
+  };
+
+  $.payment.fn.formatCardNumber = function () {
+    this.on('keypress', restrictNumeric);
+    this.on('keypress', restrictCardNumber);
+    this.on('keypress', formatCardNumber);
+    this.on('keydown', formatBackCardNumber);
+    this.on('keyup', setCardType);
+    this.on('paste', reFormatCardNumber);
+    this.on('change', reFormatCardNumber);
+    this.on('input', reFormatCardNumber);
+    this.on('input', setCardType);
+    return this;
+  };
+
+  $.payment.fn.restrictNumeric = function () {
+    this.on('keypress', restrictNumeric);
+    this.on('paste', reFormatNumeric);
+    this.on('change', reFormatNumeric);
+    this.on('input', reFormatNumeric);
+    return this;
+  };
+
+  $.payment.fn.cardExpiryVal = function () {
+    return $.payment.cardExpiryVal($(this).val());
+  };
+
+  $.payment.cardExpiryVal = function (value) {
+    var month, prefix, year, _ref;
+    _ref = value.split(/[\s\/]+/, 2), month = _ref[0], year = _ref[1];
+    if ((year != null ? year.length : void 0) === 2 && /^\d+$/.test(year)) {
+      prefix = new Date().getFullYear();
+      prefix = prefix.toString().slice(0, 2);
+      year = prefix + year;
+    }
+    month = parseInt(month, 10);
+    year = parseInt(year, 10);
+    return {
+      month: month,
+      year: year
+    };
+  };
+
+  $.payment.validateCardNumber = function (num) {
+    var card, _ref;
+    num = (num + '').replace(/\s+|-/g, '');
+    if (!/^\d+$/.test(num)) {
+      return false;
+    }
+    card = cardFromNumber(num);
+    if (!card) {
+      return false;
+    }
+    return (_ref = num.length, __indexOf.call(card.length, _ref) >= 0) && (card.luhn === false || luhnCheck(num));
+  };
+
+  $.payment.validateCardExpiry = function (month, year) {
+    var currentTime, expiry, _ref;
+    if ((typeof month === 'undefined' ? 'undefined' : _typeof(month)) === 'object' && 'month' in month) {
+      _ref = month, month = _ref.month, year = _ref.year;
+    }
+    if (!(month && year)) {
+      return false;
+    }
+    month = $.trim(month);
+    year = $.trim(year);
+    if (!/^\d+$/.test(month)) {
+      return false;
+    }
+    if (!/^\d+$/.test(year)) {
+      return false;
+    }
+    if (!(1 <= month && month <= 12)) {
+      return false;
+    }
+    if (year.length === 2) {
+      if (year < 70) {
+        year = "20" + year;
+      } else {
+        year = "19" + year;
+      }
+    }
+    if (year.length !== 4) {
+      return false;
+    }
+    expiry = new Date(year, month);
+    currentTime = new Date();
+    expiry.setMonth(expiry.getMonth() - 1);
+    expiry.setMonth(expiry.getMonth() + 1, 1);
+    return expiry > currentTime;
+  };
+
+  $.payment.validateCardCVC = function (cvc, type) {
+    var card, _ref;
+    cvc = $.trim(cvc);
+    if (!/^\d+$/.test(cvc)) {
+      return false;
+    }
+    card = cardFromType(type);
+    if (card != null) {
+      return _ref = cvc.length, __indexOf.call(card.cvcLength, _ref) >= 0;
+    } else {
+      return cvc.length >= 3 && cvc.length <= 4;
+    }
+  };
+
+  $.payment.cardType = function (num) {
+    var _ref;
+    if (!num) {
+      return null;
+    }
+    return ((_ref = cardFromNumber(num)) != null ? _ref.type : void 0) || null;
+  };
+
+  $.payment.formatCardNumber = function (num) {
+    var card, groups, upperLength, _ref;
+    num = num.replace(/\D/g, '');
+    card = cardFromNumber(num);
+    if (!card) {
+      return num;
+    }
+    upperLength = card.length[card.length.length - 1];
+    num = num.slice(0, upperLength);
+    if (card.format.global) {
+      return (_ref = num.match(card.format)) != null ? _ref.join(' ') : void 0;
+    } else {
+      groups = card.format.exec(num);
+      if (groups == null) {
+        return;
+      }
+      groups.shift();
+      groups = $.grep(groups, function (n) {
+        return n;
+      });
+      return groups.join(' ');
+    }
+  };
+
+  $.payment.formatExpiry = function (expiry) {
+    var mon, parts, sep, year;
+    parts = expiry.match(/^\D*(\d{1,2})(\D+)?(\d{1,4})?/);
+    if (!parts) {
+      return '';
+    }
+    mon = parts[1] || '';
+    sep = parts[2] || '';
+    year = parts[3] || '';
+    if (year.length > 0) {
+      sep = ' / ';
+    } else if (sep === ' /') {
+      mon = mon.substring(0, 1);
+      sep = '';
+    } else if (mon.length === 2 || sep.length > 0) {
+      sep = ' / ';
+    } else if (mon.length === 1 && mon !== '0' && mon !== '1') {
+      mon = "0" + mon;
+      sep = ' / ';
+    }
+    return mon + sep + year;
+  };
+}).call(undefined);
+
+(function () {
+  uR.addRoutes({
+    "/select-address/": uR.auth.loginRequired("select-address")
+  });
+})();
+
+riot.tag2('select-address', '<div class="{theme.outer}"> <div class="{theme.header}"> <h3>Select Address</h3> </div> <div class="{theme.content}"> <div each="{addresses}" onclick="{selectAddress}"> {name}<br> {address}<br> <div if="{address2}">{address2}</div> {city}, {state} {zip_code}<br> {country.name}<br> </div> <ur-form schema="/api/schema/address.Address/" action="/address/add/" method="POST"></ur-form> </div> </div>', '', '', function (opts) {
+
+  var self = this;
+  this.on("mount", function () {
+    var query = '\n    query {\n      myAddresses {\n        id,\n        name,\n        address,\n        address2,\n        city,\n        state,\n        country,\n        zipCode,\n      }\n    }';
+    uR.ajax({
+      url: "/graphql",
+      data: { query: query },
+      success: function success(data) {
+        self.addresses = data.data.myAddresses;
+      },
+      that: this,
+      target: this.root
+    });
+  });
+  this.ajax_success = function (data, request) {
+    if (self.opts.post_to) {
+      uR.ajax({
+        url: self.opts.post_to,
+        method: "POST",
+        data: data
+      });
+    }
+    if (self.opts.success) {
+      self.opts.success({ selected_address: data });
+    }
+  };
+  this.selectAddress = function (e) {
+    this.ajax_success(e.item);
+  }.bind(this);
+});
+
+(function () {
+  uR.drop._addToCart = {};
+})();
+
+riot.tag2('add-to-cart', '<div if="{!opts.hide_price}"> <div class="pre-sale" if="{product.sale_price != product.price}">${product.price.toFixed(2)}</div> <div class="price">${product.sale_price.toFixed(2)}</div> </div> <button class="{btn_class}" onclick="{addToCart}" if="{!in_cart}">{add_text}</button> <button class="{btn_class}" onclick="{uR.drop.openCart}" if="{in_cart}">{show_text}</button>', '', '', function (opts) {
+
+  var self = this;
+  this.ajax_target = this.root;
+  this.on("mount", function () {
+    this.add_text = this.opts.add_text || "Add to Cart";
+    this.show_text = this.opts.show_text || "View in Cart";
+    this.product = uR.drop.products[this.opts.product_id];
+    if (!this.product) {
+      return this.unmount();
+    }
+    this.btn_class = this.opts.btn_class || uR.config.btn_primary;
+    if (this.opts.root_class) {
+      this.root.classList.add(this.opts.root_class);
+    }
+    this.update();
+  });
+  this.on("update", function () {
+    this.in_cart = false;
+    if (!(uR.drop.cart && uR.drop.cart.all_items)) {
+      return;
+    }
+    uR.forEach(uR.drop.cart.all_items, function (item) {
+      if (self.opts.product_id == item.product_id) {
+        self.in_cart = true;
+      }
+    });
+  });
+  this.addToCart = function () {
+    var widget = uR.drop._addToCart[this.product.model_slug] || uR.drop._addToCart[this.product.id];
+    if (widget) {
+      widget({ product: this.product });
+    } else {
+      uR.drop.saveCartItem(this.opts.product_id, this.opts.quantity || 1, this);
+    }
+  }.bind(this);
+});
+
+riot.tag2('cart-button', '<button class="{uR.config.btn_primary}" onclick="{uR.drop.openCart}"> <i class="fa fa-shopping-cart"></i> {uR.drop.cart.all_items.length} items ${total_price.toFixed(2)} </button>', '', '', function (opts) {
+
+  this.on("update", function () {
+    this.total_price = parseFloat(uR.drop && uR.drop.cart && uR.drop.cart.total_price);
+    if (!this.total_price) {
+      this.root.style.display = "none";
+    } else {
+      this.root.style.display = "block";
+    }
+  });
+});
+
+riot.tag2('cart-quantity', '<div class="{theme.outer}"> <div class="{theme.header}"><h3>{product.display_name}</h3></div> <div class="{theme.content}"> <ur-form submit="{updateAndClose}" initial="{initial}" cancel_function="{cancelFunction}"><ur-form> </div> </div>', '', '', function (opts) {
+
+  this.on("mount", function () {
+    this.product = this.opts.product;
+    this.initial = opts.initial || {};
+    this.initial.quantity = this.initial.quantity || 1;
+    this.update();
+  });
+
+  this.cancelFunction = function () {
+    if (this.opts.product.quantity) {
+      uR.drop.saveCartItem(this.product.id, 0, this);
+    } else {
+      this.unmount();
+    }
+  }.bind(this);
+
+  this.updateAndClose = function (e) {
+    uR.drop.saveCartItem(this.product.id, this.root.querySelector("input").value, this);
+  }.bind(this);
+});
+
+riot.tag2('shopping-cart', '<div class="{theme.outer}" name="ajax_target"> <div class="{theme.header}"> <h3>Shopping Cart</h3> </div> <div class="{theme.content}"> <div if="{!uR.drop.cart.all_items.length}"> Your cart is empty. Please close me. Thank you. </div> <div if="{uR.drop.cart.all_items.length}"> <div class="{uR.theme.cart_items}"> <div class="item {uR.theme.cart_item}" each="{uR.drop.cart.all_items}"> <div class="left"> <div class="name"><b>{display_name}</b> {after}</div> <div if="{extra.display}">{extra.display}</div> <a class="remove" onclick="{parent.remove}">Remove</a> </div> <div class="price-box has_quantity" if="{has_quantity && !widget}"> <span class="quantity">{quantity}</span> <i class="fa fa-times"></i> <span class="unit-price"> {uR.drop.$(unit_price)}</span> <div class="change"> <a class="fa fa-plus-circle increment" onclick="{parent.plusOne}"></a> <a class="fa fa-minus-circle decrement" onclick="{parent.minusOne}"></a> </div> </div> <div if="{!has_quantity || widget}" class="price-box"> <span class="unit-price">{uR.drop.$(line_subtotal)}</span> <a onclick="{parent.editCartItem}" if="{widget && !extra.no_edit}" class="edit"> <i class="fa fa-edit"></i> edit</a> </div> <div class="extra_price_field" each="{field in extra_price_fields}"> <div class="description">{field[0]}</div> <div class="amount">{uR.drop.$(field[1])}</div> </div> </div> <div class="extra_price_field item" each="{field in uR.drop.cart.extra_price_fields}"> <div class="description"><b>{field[0]}</b></div> <div class="amount">{uR.drop.$(field[1])}</div> </div> </div> <div class="totals-box"> <div class="subtotals"></div> Order Total: <b>{uR.drop.$(uR.drop.cart.total_price)}</b> </div> <div class="{uR.theme.error_class}" style="margin:10px 0 0" each="{n,i in errors}">{n}</div> </div> </div> <div class="{theme.footer} valign-wrapper" if="{!uR.drop.cart.all_items.length}"> <button class="{uR.config.btn_cancel}" onclick="{close}">Close</button> </div> <div class="{theme.footer} valign-wrapper" if="{uR.drop.cart.all_items.length}"> <div class="shipping_choice" if="{requires_shipping}"> <div if="{!shipping_address}"> <button class="{uR.config.btn_primary}" onclick="{selectShipping}">Checkout</button> </div> <div if="{shipping_address}"> <div> <h5>Ship to:</h5> {shipping_address.name}<br> {shipping_address.address}<br> {shipping_address.city} </div> <div> <button class="{uR.config.btn_primary}" onclick="{selectShipping}">Change Shipping Address</button> </div> </div> </div> <payment-buttons></payment-buttons> <a onclick="{close}">&laquo; Keep Shopping</a> </div> </div>', '', '', function (opts) {
+
+  var self = this;
+  uR.drop.payment_backends.sort(function (a, b) {
+    return (a.order || 0) > (b.order || 0);
+  });
+
+  this.close = function (e) {
+    this.unmount();
+  }.bind(this);
+  this.saveCart = function (e) {
+    uR.drop.saveCartItem(e.item.product_id, e.item.quantity, this);
+  }.bind(this);
+  this.plusOne = function (e) {
+    e.item.quantity++;
+    this.saveCart(e);
+  }.bind(this);
+  this.minusOne = function (e) {
+    e.item.quantity--;
+    this.saveCart(e);
+  }.bind(this);
+  this.remove = function (e) {
+    e.item.quantity = 0;
+    this.saveCart(e);
+  }.bind(this);
+  this.selectShipping = function (e) {
+    uR.alertElement('select-address', { success: uR.drop.openCart });
+  }.bind(this);
+  if (uR.drop.login_required) {
+    this.checkout = uR.auth.loginRequired(this.checkout);
+    this.selectShipping = uR.auth.loginRequired(this.selectShipping);
+  }
+  this.editCartItem = function (e) {
+    e.item.widget({ product: uR.drop.products[e.item.product_id], initial: e.item.extra });
+  }.bind(this);
+  this.on("update", function () {
+    uR.forEach(uR.drop.cart.all_items, function (item) {
+      var product = uR.drop.products[item.product_id];
+      item.display_name = product.display_name;
+      item.unit_price = product.unit_price;
+      item.has_quantity = product.has_quantity;
+      item.widget = uR.drop._addToCart[product.model_slug] || uR.drop._addToCart[item.product_id];
+      item.model_slug = product.model_slug;
+    }.bind(this));
+    uR.drop.shipping_address = this.opts.selected_address;
+    riot.update("cart-button");
+  });
+});
+
+riot.tag2('payment-buttons', '<div class="payment_buttons" if="{uR.drop.checkoutReady}"> <b if="{backends.length != 1}">Select Payment Method</b> <b if="{backends.length == 1}">Checkout</b> <button each="{backends}" onclick="{parent.checkout}" class="{className}" alt="{copy}"> <i class="{icon}"></i> {copy}</button> </div>', '', '', function (opts) {
+
+  this.on("mount", function () {
+    this.backends = [];
+    uR.forEach(uR.drop.payment_backends, function (backend) {
+      if (uR.drop.allowed_backends && uR.drop.allowed_backends.indexOf(backend.name) == -1) {
+        return;
+      }
+      if (backend.test && !backend.test()) {
+        return;
+      }
+      if (backend.get_copy) {
+        backend.copy = backend.get_copy();
+      }
+      this.backends.push(backend);
+      backend.className += " button_" + backend.name;
+    }.bind(this));
+    this.update();
+  });
+  this.checkout = function (e) {
+    this.errors = undefined;
+    function success(data) {
+      uR.alertElement(e.item.tagname, data);
+    };
+    if (e.item.skip_checkout) {
+      return success();
+    }
+    uR.drop.ajax({
+      url: "/ajax/start_checkout/",
+      success: success,
+      error: function error(data) {
+        this.parent.errors = data.errors || ["An unknown error has occurred"];
+        this.parent.update();
+      },
+      tag: this
+    });
+  }.bind(this);
+});
+
+uR.ready(function () {
+  uR.schema.fields.amount = { type: 'number', extra_attrs: { step: 1 }, label: "Amount (USD)" };
+  var code_to_check = uR.getQueryParameter("giftcode") || (uR.storage.get("giftcard") || {}).code;
+  if (code_to_check) {
+    var has_giftcard = uR.storage.get("giftcard");
+    uR.drop.ajax({
+      url: "/giftcard/validate/",
+      data: { code: code_to_check },
+      success: function success(data) {
+        if (!data.giftcard || !parseFloat(data.giftcard.remaining)) {
+          uR.storage.set("giftcard", null);
+          uR.storage.set("giftcode", null);
+        } else {
+          uR.storage.set("giftcard", data.giftcard);
+          if (!has_giftcard) {
+            uR.alert("You have activated a gift card worth $" + data.giftcard.remaining + ". You can apply this towards the purchase of any item on the site at checkout.");
+          }
+        }
+      },
+      error: function error(data) {
+        uR.storage.set("giftcard", null);
+        uR.storage.set("giftcode", null);
+      }
+    });
+  }
+  uR.drop._addToCart['giftcard.giftcardproduct'] = function (data) {
+    uR.alertElement('purchase-giftcard', data);
+  };
+  uR.drop.payment_backends.push({
+    tagname: 'giftcard-checkout',
+    copy: 'Pay With A Gift Card',
+    className: uR.config.btn_primary,
+    icon: 'fa fa-gift', order: 3,
+    name: 'giftcard'
+  });
+  var prefix = uR.drop.prefix + "/giftcard";
+  var _routes = {};
+  _routes[prefix + "/redeem/"] = function (path, data) {
+    uR.alertElement("giftcard-redeem", data);
+  };
+  uR.addRoutes(_routes);
+});
+
+riot.tag2('purchase-giftcard', '<div class="{theme.outer}"> <div class="{theme.header}"><h3>Purchase a gift card</h3></div> <div class="{theme.content}"> <ur-form schema="{product.extra_fields}" success_text="Add to Cart" initial="{initial}"></ur-form> </div> </div>', '', '', function (opts) {
+
+  var self = this;
+  this.product = this.opts.product;
+  this.initial = {};
+  if (uR.drop.product_on_page) {
+    this.initial.amount = parseInt(uR.drop.product_on_page.unit_price);
+  }
+  if (this.opts.initial) {
+    this.initial = this.opts.initial;
+  }
+  this.submit = function (ur_form) {
+    var data = ur_form.getData();
+    uR.drop.saveCartItem(self.product.id, data.amount, self, data);
+  };
+  this.add_successful = function () {
+    self.unmount();
+    uR.drop.openCart();
+  };
+});
+
+riot.tag2('giftcard-redeem', '<div class="{theme.outer}"> <div class="{theme.header}"><h3>Redeem a Gift Card</h3></div> <div class="{theme.content}"> <ur-form action="{post_url}" method="POST" cancel_function="{close}" initial="{initial}" ajax_success="{ajax_success}" if="{!success_message}"></ur-form> <div if="{success_message}"> <p class="{uR.config.alert_success}">{success_message}</p> <button class="{uR.config.btn_primary}" onclick="{close}">{close_text}</button> </div> </div> </div>', '', '', function (opts) {
+
+  var self = this;
+  this.schema = [{ name: "code", label: "Redemption Code" }];
+  this.initial = { code: uR.storage.get("giftcode") };
+  this.post_url = uR.drop.prefix + "/giftcard/redeem_ajax/";
+  var has_cart = uR.drop.cart && uR.drop.cart.all_items && uR.drop.cart.all_items.length;
+  this.close_text = has_cart ? "Back to Cart" : "Close";
+  this.ajax_success = function (data) {
+    uR.storage.set("giftcard", data.giftcard);
+    if (self.opts.in_checkout) {
+      uR.alertElement("giftcard-checkout");
+    } else {
+      self.success_message = "You giftcard is worth $" + data.giftcard.remaining + ". You can apply this value to your purchase at checkout.";
+      self.update();
+    }
+  };
+  this.close = function (e) {
+    has_cart && uR.drop.openCart();
+    this.unmount();
+  }.bind(this);
+});
+
+riot.tag2('giftcard-checkout', '<div class="{theme.outer}"> <div class="{theme.header}"><h3>Pay with Gift Card</h3></div> <div class="{theme.content}"> <ul> <li><b>Gift Card Balance:</b> ${giftcard.remaining}</li> <li><b>Cart Total:</b> ${uR.drop.cart.total_price}</li> </ul> <ur-form action="{post_url}" method="POST" initial="{initial}" success_text="Use Gift Card Balance" cancel_text="Back to Cart" cancel_function="{uR.drop.openCart}"></ur-form> </div> </div>', '', '', function (opts) {
+
+  this.schema = [{ name: "total", label: "Amount to apply", max: this.giftcard && this.giftcard.remaining }, { name: "code", type: "hidden" }];
+  if (!uR.auth.user) {
+    this.schema.push(uR.schema.fields.no_email);
+  }
+  if (!uR.storage.get("giftcard")) {
+    uR.alertElement("giftcard-redeem", { in_checkout: true });
+  } else {
+    this.giftcard = uR.storage.get("giftcard");
+    this.post_url = uR.drop.prefix + "/giftcard/payment/";
+    this.initial = {
+      total: Math.min(this.giftcard.remaining, parseFloat(uR.drop.cart.total_price)),
+      code: this.giftcard.code,
+      email: this.giftcard.extra.recipient_email
+    };
+  }
+  this.ajax_success = function (data) {
+    if (data.next) {
+      window.location = data.next;
+    } else {
+      uR.drop.cart = data;
+      uR.drop.openCart();
+    }
+  }.bind(this);
+});
+
+uR.ready(function () {
+  var o = {
+    tagname: 'paypal-checkout',
+    copy: " Paypal",
+    className: uR.config.btn_primary,
+    icon: "fa fa-cc-paypal",
+    name: 'paypal'
+  };
+  uR.drop.payment_backends.push(o);
+  uR.drop.base_url = uR.drop.base_url || window.location.origin;
+});
+
+riot.tag2('paypal-checkout', '<div class="target {theme.outer}"> <form action="https://www.paypal.com/cgi-bin/webscr" method="POST"> <input name="business" type="hidden" riot-value="{uR.drop.paypal_email}"> <span each="{n,i in uR.drop.cart.all_items}"> <input name="item_name_{i+1}" type="hidden" riot-value="{n.display_name}"> <input name="item_number_{i+1}" type="hidden" riot-value="{n.product_id}"> <input name="quantity_{i+1}" type="hidden" riot-value="{n.quantity}"> <input name="amount_{i+1}" type="hidden" riot-value="{n.line_unit_price}"> </span> <input name="notify_url" type="hidden" riot-value="{uR.drop.base_url}/tx/rx/ipn/handler/"> <input name="cancel_return" type="hidden" riot-value="{uR.drop.base_url}/shop/"> <input name="return" type="hidden" riot-value="{uR.drop.base_url}/shop/"> <input name="invoice" type="hidden" riot-value="{opts.order_id}"> <input name="cmd" type="hidden" value="_cart"> <input type="hidden" name="upload" value="1"> <input type="hidden" name="tax_cart" value="0"> <input name="charset" type="hidden" value="utf-8"> <input name="currency_code" type="hidden" value="USD"> <input name="no_shipping" type="hidden" value="1"> </form> <div class="{theme.content}"> Redirecting to PayPal to complete transaction. </div> </div>', '', '', function (opts) {
+
+  this.on("mount", function () {
+    this.update();
+    this.root.querySelector(".target").setAttribute("data-loading", uR.config.loading_attribute);
+    this.root.querySelector("form").submit();
+  });
+});
+
+uR.drop.ready(function initPromocode() {
+  var code_to_check = uR.getQueryParameter("p");
+  if (code_to_check) {
+    var has_promocode = uR.drop.cart.extra.promocode;
+    uR.drop.ajax({
+      url: "/promocode/redeem_ajax/",
+      data: { code: code_to_check },
+      success: function success(data) {
+        uR.drop.cart = data.cart;
+        !has_promocode && uR.drop.notifyPromocode();
+      }
+    });
+  }
+  uR.drop.notifyPromocode = function () {
+    var p = uR.drop.cart.extra.promocode;
+    var opts = {
+      close_text: "<< Continue Shopping"
+    };
+    if (uR.drop.cart.all_items && uR.drop.cart.all_items.length) {
+      opts.buttons = [{
+        onclick: function onclick() {
+          uR.drop.openCart();
+        },
+        text: "Checkout",
+        className: uR.config.btn_success
+      }];
+    }
+    p && uR.alert("The following promocode will be applied at checkout:<br/><b>" + p.name + "</b>", opts);
+  };
+  uR.drop.payment_backends.push({
+    tagname: 'promocode-redeem',
+    get_copy: function get_copy() {
+      return uR.drop.promocode ? "Change Promocode" : 'Enter a Promocode';
+    },
+    className: uR.config.btn_primary,
+    icon: 'fa fa-tags',
+    name: 'promocode',
+    order: 4,
+    skip_checkout: true
+  });
+  var prefix = uR.drop.prefix + "/promocode";
+  var _routes = {};
+  _routes[prefix + "/redeem/"] = function (path, data) {
+    uR.alertElement("promocode-redeem", data);
+  };
+  uR.addRoutes(_routes);
+});
+
+riot.tag2('promocode-redeem', '<div class="{theme.outer}"> <div class="{theme.header}"><h3>Enter a Promocode</h3></div> <div class="{theme.content}"> <ur-form action="{url}" method="GET" cancel_function="{close}" initial="{initial}" ajax_success="{ajax_success}" if="{!success_message}"></ur-form> <div if="{success_message}"> <p class="{uR.config.alert_success}">{success_message}</p> <button class="{uR.config.btn_primary}" onclick="{close}">{close_text}</button> </div> </div> </div>', '', '', function (opts) {
+  var self = this;
+  this.schema = [{ name: "code", label: "Promoode" }];
+  this.initial = { code: uR.storage.get("promocode") };
+  this.url = uR.drop.prefix + "/promocode/redeem_ajax/";
+  var has_cart = uR.drop.cart && uR.drop.cart.all_items && uR.drop.cart.all_items.length;
+  this.ajax_success = function (data) {
+    uR.drop.cart = data.cart;
+    uR.drop.notifyPromocode();
+    self.update();
+  };
+  this.close = function (e) {
+    has_cart && uR.drop.openCart();
+    this.unmount();
+  }.bind(this);
+});
+
+uR.ready(function () {
+  uR.addRoutes({
+    "/categories/": uR.router.routeElement("category-list"),
+    "/products/": uR.router.routeElement("product-list")
+  });
+});
+
+riot.tag2('category-list', '<button class="btn btn-default btn-block {active:!uR.drop.active_category}" onclick="{reset}"> Any Category</button> <button class="btn btn-default btn-block {active:uR.drop.active_category==category.pk}" onclick="{parent.click}" each="{category,i in categories}"> {category.name}</button>', '', '', function (opts) {
+
+  this.categories = window.PRODUCTS.categories;
+  this.active_category = undefined;
+  this.click = function (e) {
+    uR.drop.active_category = e.item.category.pk;
+    window.PRODUCTS.visible = 18;
+    resetProductList();
+  }.bind(this);
+  this.reset = function (e) {
+    uR.drop.active_category = undefined;
+    window.PRODUCTS.visible = 18;
+    resetProductList();
+  }.bind(this);
+});
+
+riot.tag2('product-list', '<div class="row"> <product each="{product,i in products}" product="{product}" class="col-sm-6 col-md-4"></product> <product-admin each="{product,i in admin_products}" product="{product}" class="col-sm-6 col-md-4"></product-admin> </div> <button class="btn btn-warning btn-block" onclick="{more}" if="{window.PRODUCTS.visible<this.max_products}"> Load More</button>', '', '', function (opts) {
+
+  var self = this;
+  window.PRODUCTS.visible = 18;
+  this.on("mount", function () {
+    this.ajax({
+      url: '/drop/products.js',
+      success: function success(data) {
+        self.all_products = data.products;
+      }
+    });
+    window.PRODUCT_LIST = this;
+  });
+  this.on("update", function () {
+    this.products = window.PRODUCTS.list;
+    if (uR.drop.active_category) {
+      this.products = this.products.filter(function (p) {
+        return p.categories.indexOf(uR.drop.active_category) > -1;
+      });
+    }
+    this.max_products = this.products.length;
+    this.products = this.products.slice(0, window.PRODUCTS.visible);
+    if (window.PRODUCTS.extra) {
+      this.admin_products = this.products;
+      this.products = [];
+    }
+  });
+  this.more = function (e) {
+    window.PRODUCTS.visible += 12;
+    resetProductList();
+  }.bind(this);
+});
+
+riot.tag2('product', '<div class="well {incart:product.quantity,out-of-stock:product.in_stock==0,hidden:data.categories.indexOf(uR.drop.active_category)==-1}"> <div class="img"> <img riot-src="{product.img.url}"> </div> <div class="name">{product.name}</div> <div class="row"> <div class="col-xs-{(product.quantity!=0)?12:6} price"> ${product.price} <span if="{product.quantity}">x {product.quantity}</span> </div> <div class="col-xs-6" if="{!product.quantity}"> <button class="btn btn-success btn-block" onclick="{plusOne}">Add to Cart</button> </div> </div> <div class="row cart-buttons"> <div if="{has_buttons}"> <div class="col-xs-6"> <button class="btn btn-success btn-block" onclick="{plusOne}">+1</button> </div> <div class="col-xs-6"> <button class="btn btn-danger btn-block" onclick="{minusOne}">-1</button> </div> <div class="col-xs-12 bottom"> <button class="btn btn-primary btn-block" onclick="{openCart}">Checkout</button> </div> </div> </div> </div>', '', '', function (opts) {
+
+  var update_timeout;
+  var that = this;
+  that.product = opts.product;
+  this.has_buttons = false;
+  this.on("update", function () {
+    if (that.product.quantity) {
+      this.has_buttons = true;
+    }
+    updateCartButton();
+  });
+  function updateCart() {
+    clearTimeout(update_timeout);
+    update_timeout = setTimeout(_updateCart, 250);
+  }
+  function _updateCart() {
+    $.post('/shop/edit/', { pk: that.product.pk, quantity: that.product.quantity });
+  }
+  this.plusOne = function (e) {
+    that.product.quantity++;
+    updateCart();
+  }.bind(this);
+  this.minusOne = function (e) {
+    that.product.quantity--;
+    updateCart();
+  }.bind(this);
+  this.openCart = function (e) {
+    $("body").append("<cart>");
+    riot.mount("cart");
+  }.bind(this);
+});
+
+riot.tag2('product-admin', '<div class="well"> <div class="img {out-of-stock:product.in_stock==0}"> <img riot-src="{product.img.url}"> </div> <div class="name">{product.name}</div> <div class="price"> ${product.price} <span class="pull-right">In Stock: {product.in_stock||⁗null⁗}</span> </div> <div class="row"> <div class="col-xs-6"> <a href="/admin/store/consumable/{product.pk}/" class="fa fa-pencil-square btn btn-primary btn-block"> Edit</a> </div> <div class="col-xs-6"> <a href="{product.purchase_url}" class="btn btn-info btn-block {hidden:!product.purchase_url}"> <i class="fa fa-shopping-cart"></i> {product.purchase_domain}</a> </div> </div> <div class="row bottom"> <div class="col-xs-6"> <button onclick="{add}" class="btn btn-success btn-block"> +{product.purchase_quantity}</button> </div> <div class="col-xs-6"> <button onclick="{subtract}" class="btn btn-danger btn-block"> -{product.purchase_quantity}</button> </div> </div> </div>', '', '', function (opts) {
+
+  var that = this;
+  that.product = this.opts.product;
+  function modify(sign) {
+    $.post('/shop/admin/add/', { quantity: that.product.purchase_quantity * sign, pk: that.product.pk }, function (data) {
+      that.product.in_stock = data;
+      that.update();
+    });
+  }
+  this.add = function (e) {
+    modify(1);
+  }.bind(this);
+  this.subtract = function (e) {
+    modify(-1);
+  }.bind(this);
+});
+
+uR.ready(function () {
+  var o = {
+    tagname: 'stripe-checkout',
+    copy: "Credit Card",
+    className: uR.config.btn_primary,
+    icon: "fa fa-cc-stripe",
+    name: 'stripe'
+  };
+  uR.drop.payment_backends.push(o);
+});
+
+riot.tag2('stripe-checkout', '<div class="{theme.outer}"> <div class="{theme.header}"> <h3>Checkout with Stripe</h3> </div> <div class="{theme.content}"> <ur-form schema="{schema}" initial="{initial}" success_text="Pay ${uR.drop.cart.total_price}"></ur-form> <center> <a onclick="{uR.drop.openCart}">&laquo; Back to cart</a> </center> </div> </div>', '', '', function (opts) {
+
+  var self = this;
+  this.schema = [{
+    name: 'number', label: "Credit Card Number", type: "tel",
+    onMount: function onMount() {
+      $("stripe-checkout [name=number]").payment("formatCardNumber");
+    }
+  }, { name: 'expiry', label: "Expiration Date", max_length: 2,
+    onMount: function onMount() {
+      $("stripe-checkout [name=expiry]").payment("formatCardExpiry");
+    }
+  }, {
+    name: 'cvc', label: "CVC Code",
+    onMount: function onMount() {
+      $("stripe-checkout [name=cvc]").payment("formatCardCVC");
+    }
+  }];
+  if (!uR.auth.user) {
+
+    this.schema.push(uR.schema.fields.no_email);
+  }
+  if (uR.DEBUG && window.location.search.indexOf("cheat") != -1) {
+    this.initial = { number: "4111 1111 1111 1111", cvc: '123', exp_month: "01", exp_year: "2019" };
+  }
+  this.submit = function (ur_form) {
+    self.ajax_target = self.root.querySelector("." + self.theme.outer);
+    self.error = undefined;
+    self.ajax_target.setAttribute("data-loading", "fade");
+    var data = ur_form.getData();
+    var expiry = data.expiry.replace(/ /g, "").split("/");
+    data.exp_month = expiry[0];
+    data.exp_year = expiry[1];
+    self.email = data.email;
+    delete data.email;delete data.expiry;
+    Stripe.card.createToken(data, this.stripeResponseHandler);
+  }.bind(this);
+  this.setError = function (error) {
+    var ur_form = self.tags['ur-form'];
+    ur_form.non_field_error = "An error occurred while processing your payment";
+    if (error) {
+      ur_form.non_field_error += ": " + error;
+    }
+    ur_form.update();
+  }.bind(this);
+  this.stripeResponseHandler = function (status, response) {
+    if (response.error) {
+      self.ajax_target.removeAttribute('data-loading');
+      self.setError(response.error.message);
+      return;
+    }
+    uR.drop.ajax({
+      method: "POST",
+      url: "/stripe/payment/",
+      data: { token: response.id, total: uR.drop.cart.total_price, email: self.email },
+      target: self.ajax_target,
+      success: function success(data) {
+        self.ajax_target.setAttribute("data-loading", "fade");
+        window.location = data.next;
+      },
+      error: function error(data) {
+        self.setError(data.error);
+      }
+    });
+  };
+  this.close = function (e) {
+    this.unmount();
+  }.bind(this);
+});
+//# sourceMappingURL=drop-built.js.map
