@@ -64,7 +64,6 @@ INSTALLED_APPS = [
   'notify',
   'redtape',
   'schedule_poll',
-  'airbrake',
   'lablackey.sms',
   'lablackey.blog',
 ]
@@ -84,9 +83,6 @@ VERSION = "0.1 Alpha"
 INSTAGRAM_TAG = "txrx"
 INSTAGRAM_EMAIL = ['chris@lablackey.com']
 INSTAGRAM_TOKEN = "3794301.f59def8.e08bcd8b10614074882b2d1b787e2b6f"
-
-THUMBNAIL_DUMMY = THUMBNAIL_DEBUG = True
-THUMBNAIL_DUMMY_RATIO = "1.5"
 
 RECAPTCHA_PUBLIC_KEY = '6Lc53egSAAAAAFuu4PgoRVw_2ONjTTCfwkfDCFxF'
 RECAPTCHA_PRIVATE_KEY = '6Lc53egSAAAAACCvXuucwYu_M3mn-ZQsOlc4Ly_0'

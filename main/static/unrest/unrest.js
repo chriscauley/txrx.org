@@ -19,7 +19,6 @@ var uR = (function() {
     }
     var ready = function ready() {
       uR.forEach(arguments || [],function(f) {
-        window.airbrake && f.name && window.airbrake.log("ready: " + f.name);
         if (typeof f == "function") { _ready.push(f); log('in queue',f.name); }
         else { log(f); }
       });
@@ -32,7 +31,6 @@ var uR = (function() {
     }
     ready._name = isReady.name;
     ready.start = function() {
-      window.airbrake && window.airbrake.log("unrest starting");
       isReady = function() { return true };
       ready();
     }
@@ -114,7 +112,6 @@ var uR = (function() {
     var data = opts.data;
     var target = opts.target || opts.form;  // default to body?
     var url = opts.url || form.action || '.';
-    window.airbrake && window.airbrake.log("AJAX: "+url);
     var that = opts.that;
     if (that) {
       console.warn('"that" has been depracated in favor of "tag".');
