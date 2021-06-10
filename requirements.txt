@@ -1,4 +1,4 @@
-django==1.9.13
+django==2.2.24
 -e git+https://github.com/dcramer/django-devserver.git#egg=django-devserver
 django_compressor==2.1
 django-localflavor==1.3
