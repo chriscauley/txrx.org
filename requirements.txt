@@ -11,7 +11,7 @@ django-mailer==1.2.1
 django-model-utils==2.6
 ezdxf
 python-memcached==1.59
-arrow==0.14.6
+arrow==0.15.1
 django-braces==1.9.0
 tqdm==4.10.0
 
