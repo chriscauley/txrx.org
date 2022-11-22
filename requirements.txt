@@ -18,7 +18,7 @@ tqdm==4.10.0
 #image stuff
 -e git+https://github.com/chriscauley/sorl-thumbnail.git#egg=sorl-thumbnail
 -e git+https://github.com/chriscauley/Django-Crop-Override-Field.git#egg=crop-override
-pillow==2.1.0
+pillow==9.3.0
 
 # unrest commets packages
 -e git+https://github.com/chriscauley/django-unrest-comments.git#egg=django-unrest-comments.git
