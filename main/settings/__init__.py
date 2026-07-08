@@ -3,6 +3,16 @@ SPATH = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0,os.path.normpath(SPATH))
 sys.path.insert(0,os.path.normpath(os.path.join(SPATH,'..'))) # this is to use txrx.org/media not .dev/media
 
+# Load secrets from a gitignored .env at the project root into os.environ.
+# Real environment variables win over .env (setdefault). See .env.example.
+_ENV_PATH = os.path.join(SPATH, '..', '.env')
+if os.path.exists(_ENV_PATH):
+  for _line in open(_ENV_PATH):
+    _line = _line.strip()
+    if _line and not _line.startswith('#') and '=' in _line:
+      _k, _v = _line.split('=', 1)
+      os.environ.setdefault(_k.strip(), _v)
+
 DEBUG = True
 DEBUG_EMAIL = True
 TESTING = sys.argv[1:2] == ['test']
@@ -66,8 +76,8 @@ LOGOUT_URL = "/accounts/logout/"
 LOGIN_REDIRECT_URL = "/"
 USER_JSON_VIEW = "user.views.user_json"
 
-SECRET_KEY = '^f_fn6)^e5^)+p-rjcrcdf(7iwz4@5z9thx92%^=e_)$jly7mc'
-MAPS_API_KEY = 'ABQIAAAAeppD1h9lB7H61ozR18SeZRS_YqHDtehKcRTrrAGjc25rDMjatxT8nvoX4-jJXcRPaT4I-RdMYv3fJA'
+SECRET_KEY = os.environ.get('SECRET_KEY')
+MAPS_API_KEY = os.environ.get('MAPS_API_KEY', '')
 #TEST_RUNNER = 'main.runner.Runner'
 
 MIDDLEWARE = [

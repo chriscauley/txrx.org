@@ -2,10 +2,8 @@
 # Uploads live at s3://skade/txrx/uploads/... and are public-read.
 # Requires DIGITAL_OCEAN_SPACES_KEY/SECRET from local.py; falls back to
 # local filesystem storage when they aren't defined (fresh dev machines).
-try:
-  DIGITAL_OCEAN_SPACES_KEY
-except NameError:
-  DIGITAL_OCEAN_SPACES_KEY = DIGITAL_OCEAN_SPACES_SECRET = None
+DIGITAL_OCEAN_SPACES_KEY = os.environ.get("DIGITAL_OCEAN_SPACES_KEY")
+DIGITAL_OCEAN_SPACES_SECRET = os.environ.get("DIGITAL_OCEAN_SPACES_SECRET")
 
 if DIGITAL_OCEAN_SPACES_KEY:
   STORAGES = {

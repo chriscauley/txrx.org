@@ -28,6 +28,8 @@ node/*
 .dev/*
 
 #relevant to development
+.env
+!.env.example
 main/local.db
 main/settings/local.py
 *.sql
