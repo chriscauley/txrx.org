@@ -1,6 +1,6 @@
 from django.contrib.syndication.views import Feed
-from django.core.urlresolvers import reverse
-from .models EventOccurrence
+from django.urls import reverse
+from .models import EventOccurrence
 
 class LatestEntriesFeed(Feed):
   title = "Chicagocrime.org site news"

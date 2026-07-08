@@ -17,12 +17,12 @@ class NotificationSettingsForm(RequestModelForm):
       has_number = self.request.user.smsnumber.verified
     except SMSNumber.DoesNotExist:
       has_number = None
-    for key,value in self.cleaned_data.items():
+    for key,value in list(self.cleaned_data.items()):
       if value == "sms" and not has_number:
         raise forms.ValidationError({key: "You must have a validated phone number to be notified by SMS"})
   @classmethod
   def get_instance(clss,request,id=None): # id is not used
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
       return clss.Meta.model.objects.get_or_create(user=request.user)[0]
   class Meta:
     model = NotifySettings

@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail, mail_admins
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import timezone
 from django.db.models.signals import post_save
 

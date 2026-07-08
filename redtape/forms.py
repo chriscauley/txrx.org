@@ -11,7 +11,7 @@ class SignatureForm(RequestModelForm):
   def __init__(self, request, *args, **kwargs):
     self.document = kwargs.pop('document')
     kwargs['initial'] = { 'document': self.document }
-    super(SignatureForm, self).__init__(request, *args, **kwargs)
+    super().__init__(request, *args, **kwargs)
     # generate extra fields
     self.extra_fields = []
     self.rendered_content = self.document.rendered_content
@@ -32,7 +32,7 @@ class SignatureForm(RequestModelForm):
   def save(self,*args,**kwargs):
     commit = kwargs.pop("commit",True)
     kwargs['commit'] = False
-    instance = super(SignatureForm,self).save(*args,**kwargs)
+    instance = super().save(*args,**kwargs)
     instance.document = self.document
     instance.data = {f:self.cleaned_data.get(f,None) for f in self.extra_fields}
     if commit:

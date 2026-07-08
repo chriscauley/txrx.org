@@ -1,14 +1,14 @@
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 import string, random, datetime
 from six import text_type
-from six.moves.urllib.parse import urlencode
+from urllib.parse import urlencode
 
 
 def paypal_post(self,params):
   CHARSET = "windows-1252"
-  cond_encode = lambda v: v.encode(CHARSET) if isinstance(v, text_type) else v
-  byte_params = {cond_encode(k): cond_encode(v) for k, v in params.items()}
+  cond_encode = lambda v: v.encode(CHARSET) if isinstance(v, str) else v
+  byte_params = {cond_encode(k): cond_encode(v) for k, v in list(params.items())}
   post_data = urlencode(byte_params)
   ipn_url = reverse("paypal-ipn")
   return self.client.post(ipn_url, post_data, content_type='application/x-www-form-urlencoded')
@@ -64,8 +64,8 @@ def get_membership_query(**kwargs):
   kwargs['subscr_id'] = kwargs.get('subscr_id',None) or "I-"+randstring(12)
   kwargs['mc_gross'] = kwargs.get('mc_gross',None) or product.unit_price
   kwargs['payment_gross'] = kwargs['mc_gross']
-  kwargs['item_name'] = kwargs['transaction_subject'] = unicode(product)
-  kwargs['option_name1'] = unicode(product.level)
+  kwargs['item_name'] = kwargs['transaction_subject'] = str(product)
+  kwargs['option_name1'] = str(product.level)
   return get_paypal_query(**kwargs)
 
 def get_course_query(**kwargs):

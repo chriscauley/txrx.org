@@ -5,7 +5,7 @@ from store.models import Consumable, Category
 import django
 django.setup()
 
-f = open('TX-RX_STOCK_PRICE_LIST_-_Sheet1.csv','r')
+f = open('TX-RX_STOCK_PRICE_LIST_-_Sheet1.csv')
 lines = [l.split(',') for l in f.readlines()]
 f.close()
 

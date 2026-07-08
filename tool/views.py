@@ -68,7 +68,7 @@ def toggle_criterion(request):
 
 def checkout_items(request):
   room_items = [(r,r.checkoutitem_set.all()) for r in Room.objects.all()]
-  values = {'room_items': filter(lambda i:i[1],room_items)}
+  values = {'room_items': [i for i in room_items if i[1]]}
   return TemplateResponse(request,"tool/checkout_items.html",values)
 
 @user_passes_test(is_toolmaster)
@@ -110,7 +110,7 @@ def master(request,app_name,model_name):
     'start': event.start if hasattr(event,'start') else "",
     'end': event.end if hasattr(event,'start') else '',
     'objects': objects,
-  } for event,objects in events.items()]
+  } for event,objects in list(events.items())]
   values = {
     'events': json.dumps(events,cls=DjangoJSONEncoder),
     'model_slug': "%s.%s"%(app_name,model_name),

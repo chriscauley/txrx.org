@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.urls import path, re_path
 from django.contrib.auth.decorators import user_passes_test
 import lablackey.views
 
@@ -28,7 +28,7 @@ def transfers(request):
         if isinstance(item.product,classes):
           totals[item.product.__class__] += item_ratio*charge_total
         else:
-          print item.product.__class__,transfer.stripe_id
+          print((item.product.__class__,transfer.stripe_id))
     _totals = [totals[c] for c in classes]
     transfers.append((transfer,_totals,transfer.amount-sum(_totals)))
   sums = [0,0,0,0]
@@ -58,17 +58,17 @@ def user_zip(request):
   for s in Signature.objects.filter(document_id=3):
     aggregates[s.data['zip']] += 1
   values = {
-    'zip_table': sorted(aggregates.items(),key=lambda i: -i[1]),
+    'zip_table': sorted(list(aggregates.items()),key=lambda i: -i[1]),
   }
   return TemplateResponse(request,'txrx/user_zip.html',values)
 
 urlpatterns = [
-  url(r'^work/$',lablackey.views.single_page_app),
-  url(r'^txrx/transfers/$',transfers),
-  url(r'^txrx/complete_transfer/([_\w\d]+)/$',complete_transfer),
-  url(r'^support/$',lablackey.views.render_template,kwargs={'template': 'flatpages/support.html'}),
-  url(r'^crafters-for-good/$',lablackey.views.render_template,kwargs={'template': 'crafters/index.html'}),
-  url(r'^crafters-for-good/makeathons/$',lablackey.views.render_template,kwargs={'template': 'crafters/makeathons.html'}),
-  url(r'^crafters-for-good/seminars/$',lablackey.views.render_template,kwargs={'template': 'crafters/seminars.html'}),
-  url(r'^user_zip/$',user_zip),
+  path('work/',lablackey.views.single_page_app),
+  path('txrx/transfers/',transfers),
+  re_path(r'^txrx/complete_transfer/([_\w\d]+)/$',complete_transfer),
+  path('support/',lablackey.views.render_template,kwargs={'template': 'flatpages/support.html'}),
+  path('crafters-for-good/',lablackey.views.render_template,kwargs={'template': 'crafters/index.html'}),
+  path('crafters-for-good/makeathons/',lablackey.views.render_template,kwargs={'template': 'crafters/makeathons.html'}),
+  path('crafters-for-good/seminars/',lablackey.views.render_template,kwargs={'template': 'crafters/seminars.html'}),
+  path('user_zip/',user_zip),
 ]

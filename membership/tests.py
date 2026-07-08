@@ -6,10 +6,10 @@ from .models import Product, Level, Group, add_months, Subscription, Flag
 from .paypal_utils import get_membership_query, paypal_post, get_flag_query
 from paypal.standard.ipn.models import PayPalIPN
 from six import text_type
-from six.moves.urllib.parse import urlencode
+from urllib.parse import urlencode
 from main.test_utils import TXRXTestCase
 
-import datetime, urllib, os
+import datetime, urllib.request, urllib.parse, urllib.error, os
 
 import warnings
 warnings.showwarning = lambda *x: None
@@ -81,7 +81,7 @@ class MembershipTestCase(TXRXTestCase):
         data = get_membership_query(product=product,payer_email=new_email)
         paypal_post(self,data)
         validate(new_email,product)
-        self.check_subjects([u'New account information', u'TXRX Member Application Status for %s'%new_email.split("@")[0]])
+        self.check_subjects(['New account information', 'TXRX Member Application Status for %s'%new_email.split("@")[0]])
         self.check_recipients([[new_email],[new_email]])
         mail.outbox = []
 

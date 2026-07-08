@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
-class EmailOrUsernameModelBackend(object):
+class EmailOrUsernameModelBackend:
   def authenticate(self, username=None, password=None):
     user = get_user_model().objects.get_from_anything(username)
     if user and user.check_password(password):

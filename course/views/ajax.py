@@ -25,7 +25,7 @@ def needed_json(request):
     Session.objects.filter(id=request.GET["incomplete"]).update(needed_completed=None)
   sessions = get_needed_sessions()
   sessions_jsons = [{
-    'course': unicode(s.course),
+    'course': str(s.course),
     'user': s.user.get_full_name(),
     'first_date': s.first_date.strftime("%m/%d/%Y"),
     'needed': s.needed,

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.template.loader import render_to_string
 
@@ -28,7 +28,7 @@ class BaseProduct(PhotosMixin,Product):
 
 class CourseCheckout(BaseProduct):
   json_fields = BaseProduct.json_fields + ['course_id']
-  course = models.ForeignKey("course.Course")
+  course = models.ForeignKey("course.Course", on_delete=models.CASCADE)
   _ht = "Select the studio hours that can be picked for this checkout."
   _lct = { 'access_id': 4 }
   events = models.ManyToManyField("event.Event",limit_choices_to=_lct,help_text=_ht)
@@ -77,6 +77,6 @@ class ToolConsumableGroup(models.Model):
   name = models.CharField(max_length=64)
   tools = models.ManyToManyField("tool.Tool")
   consumables = models.ManyToManyField(Consumable)
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
   class Meta:
     ordering = ('name',)

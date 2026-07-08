@@ -11,5 +11,5 @@ class Command(BaseCommand):
     for s in ss:
       s.recalculate()
     if options.get("verbosity") > 0:
-      print "Calculating %s subscriptions"%old_count
-      print "%s subscriptions remain"%ss.count()
+      print("Calculating %s subscriptions"%old_count)
+      print("%s subscriptions remain"%ss.count())

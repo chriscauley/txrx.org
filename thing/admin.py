@@ -5,6 +5,7 @@ from lablackey.db.admin import NamedTreeModelAdmin, RawMixin
 from media.admin import TaggedPhotoAdmin, TaggedFileInline
 from tool.admin import TaggedToolInline
 
+@admin.register(Thing)
 class ThingAdmin(RawMixin,TaggedPhotoAdmin):
   inlines = [TaggedToolInline, TaggedFileInline]
   raw_id_fields = ('user','parent','session')
@@ -19,5 +20,4 @@ class ThingAdmin(RawMixin,TaggedPhotoAdmin):
       out += 'materials'
     return out
 
-admin.site.register(Thing,ThingAdmin)
 admin.site.register(Material,NamedTreeModelAdmin)

@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
@@ -25,7 +25,7 @@ def rand32():
 class Group(models.Model):
   name = models.CharField(max_length=64)
   order = models.IntegerField(default=0)
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
   active_levels = lambda self: self.level_set.filter(product__isnull=False).distinct()
   class Meta:
     ordering = ("order",)
@@ -50,8 +50,8 @@ PAST_DUE_GRACE_PERIOD = datetime.timedelta(getattr(settings,"PAST_DUE_GRACE_PERI
 
 class Container(models.Model):
   number = models.IntegerField()
-  room = models.ForeignKey('geo.Room')
-  subscription = models.OneToOneField("Subscription",null=True,blank=True)
+  room = models.ForeignKey('geo.Room', on_delete=models.CASCADE)
+  subscription = models.OneToOneField("Subscription", on_delete=models.CASCADE,null=True,blank=True)
   _ht = "Automatically set when changes are made to subscription or container via admin."
   status = models.CharField(max_length=16,choices=CONTAINER_STATUS_CHOICES,default="used",help_text=_ht)
   kind = models.CharField(max_length=64,choices=KIND_CHOICES,default='bay')
@@ -62,7 +62,7 @@ class Container(models.Model):
       return self.subscription.canceled + PAST_DUE_GRACE_PERIOD
     return datetime.datetime.now()
 
-  __unicode__ = lambda self: "%s %s #%s"%(self.room,self.get_kind_display(),self.number)
+  __str__ = lambda self: "%s %s #%s"%(self.room,self.get_kind_display(),self.number)
   def get_user_display(self):
     return "Empty" if not self.subscription else self.subscription.user
   def update_status(self):
@@ -79,7 +79,7 @@ class Container(models.Model):
       self.status = "maintenance"
   def save(self,*args,**kwargs):
     self.update_status()
-    super(Container,self).save()
+    super().save()
   class Meta:
     ordering = ('room','number',)
 
@@ -90,7 +90,7 @@ class Level(models.Model):
   monthly_product = property(lambda self: self.products.filter(months=1)[0])
   yearly_product = property(lambda self: self.products.filter(months=12)[0])
   discount_percentage = models.IntegerField(default=0)
-  group = models.ForeignKey(Group,null=True,blank=True)
+  group = models.ForeignKey(Group, on_delete=models.CASCADE,null=True,blank=True)
   features = cached_property(lambda self:[a.feature for a in self.membershipfeature_set.all()],
                              name="features")
   permission_description = models.TextField(blank=True,default="")
@@ -103,8 +103,8 @@ class Level(models.Model):
   custom_training_max = models.DecimalField(max_digits=30, decimal_places=2, default=0)
 
   # access schedule defaults
-  tool_schedule = models.ForeignKey("tool.Schedule",null=True,blank=True,related_name="+")
-  door_schedule = models.ForeignKey("tool.Schedule",null=True,blank=True,related_name="+")
+  tool_schedule = models.ForeignKey("tool.Schedule", on_delete=models.CASCADE,null=True,blank=True,related_name="+")
+  door_schedule = models.ForeignKey("tool.Schedule", on_delete=models.CASCADE,null=True,blank=True,related_name="+")
   holiday_access = models.BooleanField(default=False)
 
   def get_schedule_id(self,obj):
@@ -147,13 +147,13 @@ class Level(models.Model):
   class Meta:
     verbose_name = "Membership Level"
     ordering = ("order",)
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
 
 class LevelDoorGroupSchedule(models.Model):
-  level = models.ForeignKey(Level)
-  doorgroup = models.ForeignKey("tool.DoorGroup")
-  schedule = models.ForeignKey("tool.Schedule")
-  __unicode__ = lambda self: "%s can access %s during %s"%(self.level,self.doorgroup,self.schedule)
+  level = models.ForeignKey(Level, on_delete=models.CASCADE)
+  doorgroup = models.ForeignKey("tool.DoorGroup", on_delete=models.CASCADE)
+  schedule = models.ForeignKey("tool.Schedule", on_delete=models.CASCADE)
+  __str__ = lambda self: "%s can access %s during %s"%(self.level,self.doorgroup,self.schedule)
   class Meta:
     ordering = ('level',)
     unique_together = ('level','doorgroup')
@@ -166,34 +166,34 @@ MONTHS_CHOICES = (
 )
 
 class Product(Product):
-  level = models.ForeignKey(Level)
+  level = models.ForeignKey(Level, on_delete=models.CASCADE)
   months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
-  __unicode__ = lambda self: "%s %s"%(self.get_months_display(),self.level)
+  __str__ = lambda self: "%s %s"%(self.get_months_display(),self.level)
   class Meta:
     ordering = ("order",)
 
 class Subscription(models.Model):
-  user = models.ForeignKey(settings.AUTH_USER_MODEL)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
   _ht = "Only used with PayPal subscriptions. Do not touch."
   subscr_id = models.CharField(max_length=20,null=True,blank=True,help_text=_ht)
   created = models.DateTimeField(default=datetime.datetime.now)
   canceled = models.DateTimeField(null=True,blank=True)
   paid_until = models.DateTimeField(null=True,blank=True)
-  level = models.ForeignKey(Level,null=True,blank=True)
+  level = models.ForeignKey(Level, on_delete=models.CASCADE,null=True,blank=True)
   months = models.IntegerField(default=1,choices=MONTHS_CHOICES)
   # self.amount should match the prdouct it was generated from, but can be used as an override
   _ht = "If zero, this membership will always be active until deleted."
   amount = models.DecimalField(max_digits=30, decimal_places=2, default=0,help_text=_ht)
   owed = models.DecimalField(max_digits=30, decimal_places=2, default=0)
   last_status = property(lambda self: (self.status_set.all().order_by('-datetime') or [None])[0])
-  __unicode__ = lambda self: "%s for %s %s"%(self.user,self.get_months_display(),self.level)
+  __str__ = lambda self: "%s for %s %s"%(self.user,self.get_months_display(),self.level)
   json_fields = ['id','user_id','created','canceled','verbose_status','month_str','level_str','card_class']
   level_str = property(lambda self: str(self.level))
   @property
   def as_json(self):
     return {k: getattr(self,k) for k in self.json_fields}
   def save(self,*args,**kwargs):
-    super(Subscription,self).save(*args,**kwargs)
+    super().save(*args,**kwargs)
     try:
       container = Container.objects.get(subscription=self)
       container.save() # Triggers update_status
@@ -264,14 +264,14 @@ class Subscription(models.Model):
     ordering = ('-created',)
 
 class SubscriptionBuddy(models.Model):
-  subscription = models.ForeignKey(Subscription)
-  user = models.ForeignKey(settings.AUTH_USER_MODEL)
+  subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
   paid_until = models.DateTimeField(null=True,blank=True)
-  level_override = models.ForeignKey("Level",null=True,blank=True)
+  level_override = models.ForeignKey("Level", on_delete=models.CASCADE,null=True,blank=True)
   level = property(lambda self: self.level_override or self.subscription.level)
   def save(self,*args,**kwargs):
     self.paid_until = self.subscription.paid_until
-    super(SubscriptionBuddy,self).save(*args,**kwargs)
+    super().save(*args,**kwargs)
     if self.level.id != self.user.level_id:
       self.user.reset_level()
 
@@ -288,13 +288,13 @@ class Status(models.Model):
   payment_method = models.CharField(max_length=16,choices=PAYMENT_METHOD_CHOICES,default="cash")
   notes = models.CharField(max_length=128,null=True,blank=True)
   datetime = models.DateTimeField(default=datetime.datetime.now)
-  subscription = models.ForeignKey(Subscription)
-  paypalipn = models.ForeignKey("ipn.PayPalIPN",null=True,blank=True)
+  subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE)
+  paypalipn = models.ForeignKey("ipn.PayPalIPN", on_delete=models.CASCADE,null=True,blank=True)
   transaction_id = models.CharField(max_length=32,null=True,blank=True)
   def save(self,*args,**kwargs):
     if self.paypalipn:
       self.transaction_id = self.paypalipn.txn_id
-    super(Status,self).save(*args,**kwargs)
+    super().save(*args,**kwargs)
     self.subscription.recalculate()
 
   class Meta:
@@ -305,13 +305,13 @@ class Role(models.Model):
 
 class Feature(models.Model):
   text = models.CharField(max_length=128)
-  __unicode__ = lambda self: self.text
+  __str__ = lambda self: self.text
   class Meta:
     ordering = ('text',)
 
 class MembershipFeature(models.Model):
-  feature = models.ForeignKey(Feature)
-  level = models.ForeignKey(Level)
+  feature = models.ForeignKey(Feature, on_delete=models.CASCADE)
+  level = models.ForeignKey(Level, on_delete=models.CASCADE)
   order = models.IntegerField(default=0)
   class Meta:
     ordering = ("order",)
@@ -319,7 +319,7 @@ class MembershipFeature(models.Model):
 class UserMembershipManager(models.Manager):
   def list_instructors(self,**kwargs):
     from course.models import Session
-    return set([s.user.usermembership for s in Session.objects.filter(**kwargs)])
+    return {s.user.usermembership for s in Session.objects.filter(**kwargs)}
 
 def add_months(d,months):
   month = d.month - 1 + months
@@ -329,11 +329,11 @@ def add_months(d,months):
   return d.replace(year=year,month=month,day=day)
 
 class UserMembership(models.Model):
-  user = AutoOneToOneField(settings.AUTH_USER_MODEL)
+  user = AutoOneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
   voting_rights = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
 
-  photo = models.ForeignKey(Photo,null=True,blank=True)
+  photo = models.ForeignKey(Photo, on_delete=models.CASCADE,null=True,blank=True)
   bio = MarkDownField(null=True,blank=True)
   api_key = models.CharField(max_length=32,default=rand32)
   _h = "A short description of what you do for the lab."
@@ -351,7 +351,7 @@ class UserMembership(models.Model):
   _h = "If checked, you will be emailed new class offerings (twice a month)."
   notify_sessions = models.BooleanField("New Course Email",default=True,help_text=_h)
 
-  __unicode__ = lambda self: "%s's Membership"%self.user
+  __str__ = lambda self: "%s's Membership"%self.user
   objects = UserMembershipManager()
   @property
   def all_subscriptions(self):
@@ -379,7 +379,7 @@ class Officer(UserModel):
   end = models.DateField(null=True,blank=True)
   order = models.IntegerField(default=999)
   objects = OfficerManager()
-  __unicode__ = lambda self: "%s as %s"%(self.user,self.position)
+  __str__ = lambda self: "%s as %s"%(self.user,self.position)
   class Meta:
     ordering = ('order','end')
 
@@ -393,7 +393,7 @@ class LimitedAccessKey(UserModel):
 
   def save(self,*args,**kwargs):
     self.expires = datetime.datetime.now()+datetime.timedelta(7)
-    return super(LimitedAccessKey,self).save(*args,**kwargs)
+    return super().save(*args,**kwargs)
 
   @classmethod
   def new(clss,user):
@@ -410,7 +410,7 @@ class MeetingMinutes(models.Model):
   content = MarkDownField()
   _ht = "Used only when an exact list of members is unavailable (eg legacy minutes)"
   member_count = models.IntegerField(default=0,help_text=_ht)
-  __unicode__ = lambda self: "Minutes: %s"%self.date
+  __str__ = lambda self: "Minutes: %s"%self.date
   get_absolute_url = lambda self: reverse('meeting_minutes',args=[str(self.date)])
   def get_member_count(self):
     attrs = ['voters_present','inactive_present']
@@ -421,10 +421,10 @@ class MeetingMinutes(models.Model):
 class Proposal(UserModel):
   order = models.IntegerField(default=0)
   title = models.CharField(max_length=256,null=True,blank=True)
-  meeting_minutes = models.ForeignKey(MeetingMinutes)
+  meeting_minutes = models.ForeignKey(MeetingMinutes, on_delete=models.CASCADE)
   original = MarkDownField()
   ammended = MarkDownField(null=True,blank=True)
-  __unicode__ = lambda self: "Proposal #%s: %s"%(self.order,self.title or "(UNNAMED)")
+  __str__ = lambda self: "Proposal #%s: %s"%(self.order,self.title or "(UNNAMED)")
   final_text = property(lambda self: self.ammended or self.original)
   class Meta:
     ordering = ('order',)
@@ -472,14 +472,14 @@ class FlagManager(models.Manager):
     return self.filter(*args,**kwargs)
 
 class Flag(models.Model):
-  subscription = models.ForeignKey(Subscription)
+  subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE)
   reason = models.CharField(max_length=64,choices=REASON_CHOICES)
   status = models.CharField(max_length=32,default='new',choices=FLAG_STATUS_CHOICES)
   datetime = models.DateTimeField(auto_now_add=True)
   emailed = models.DateTimeField(null=True,blank=True)
   objects = FlagManager()
   user_id = lambda self: self.subscription.user_id
-  __unicode__ = lambda self: "%s flagged for %s"%(self.subscription.user,self.reason)
+  __str__ = lambda self: "%s flagged for %s"%(self.subscription.user,self.reason)
   PAYMENT_ACTIONS = {
     # current_status: [future_status, verbose_description, days_since_flag]
     'new': ['first_warning','Send First Warning',1],
@@ -508,9 +508,9 @@ class Flag(models.Model):
       if mail:
         send_membership_email('email/flags/%s'%new_status,self.subscription.user.email,context=context)
     except TemplateDoesNotExist:
-      print "template not found %s"%new_status
+      print("template not found %s"%new_status)
     self.status = new_status
     self.emailed = datetime.datetime.now()
     self.save()
 
-from listeners import *
+from .listeners import *

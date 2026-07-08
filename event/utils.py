@@ -120,8 +120,8 @@ def get_person_conflicts(target_user_id=None,base_occurrence=None):
         user_occurrences[user_id][_block].append(occ)
         _block += datetime.timedelta(0,block_size) # move to next block
   conflicts = []
-  for user_id,block_dict in user_occurrences.items():
-    block_events = sorted({ k:v for k,v in block_dict.items() if len(v) > 1 }.items())
+  for user_id,block_dict in list(user_occurrences.items()):
+    block_events = sorted({ k:v for k,v in list(block_dict.items()) if len(v) > 1 }.items())
     for events,group in groupby(block_events,lambda k:sorted(k[1])):
       times = [g[0] for g in group]
       conflicts.append((get_user_model().objects.get(id=user_id),min(times),max(times),events))
@@ -162,22 +162,22 @@ def get_room_conflicts(base_occurrence=None):
 
   # remove all slots with only one for fewer events in a given room
   room_conflicts = {}
-  for room,event_slots in schedule.items():
-    room_conflicts[room] = [(dt,events) for dt,events in event_slots.items() if events and len(events)>1]
+  for room,event_slots in list(schedule.items()):
+    room_conflicts[room] = [(dt,events) for dt,events in list(event_slots.items()) if events and len(events)>1]
 
   # re-group the 30 minute chunks by consecutive slots in a given room
-  room_conflicts = [r for r in room_conflicts.items() if r[1]]
+  room_conflicts = [r for r in list(room_conflicts.items()) if r[1]]
   out = []
   for room,conflicts in room_conflicts:
     has_base_occurrence = not base_occurrence
     reshuffled_conflicts = []
     room_conflicts = []
     conflicts.sort(key=lambda i:i[0])
-    func = lambda (i,(dt,events)): dt-datetime.timedelta(0,i*60*30)
+    func = lambda i_dt_events: i_dt_events[1][0]-datetime.timedelta(0,i_dt_events[0]*60*30)
     for k,g in groupby(enumerate(conflicts),key=func):
-      reshuffled_conflicts.append(map(itemgetter(1), g))
+      reshuffled_conflicts.append(list(map(itemgetter(1), g)))
     for conflict_spots in reshuffled_conflicts:
-      times,_event_mess = zip(*conflict_spots)
+      times,_event_mess = list(zip(*conflict_spots))
       times = [times[0], times[-1]]
       if (times[-1] - times[0]).total_seconds() < 30*60:
         continue

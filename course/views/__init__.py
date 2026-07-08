@@ -26,13 +26,13 @@ def debug_parsing(request, id):
 def paypal_return(request):
   data = request.GET or request.POST
   User = get_user_model()
-  session_ids = [v for k,v in data.items() if k.startswith('item_number')]
+  session_ids = [v for k,v in list(data.items()) if k.startswith('item_number')]
   if not ('payer_email' in data) or not session_ids:
     raise Http404
   email = data['payer_email']
   sessions = Session.objects.filter(pk__in=session_ids)
   matched_user = None
-  if not request.user.is_authenticated():
+  if not request.user.is_authenticated:
     matched_user = User.objects.get_from_anything(email)
   values = {
     'email': email,

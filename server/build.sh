@@ -1,28 +1,16 @@
 #!/bin/bash
+# Rebuild static assets and reload the app. Safe to re-run.
+# Frontend less/riot compilation now happens through django-compressor
+# (COMPRESS_PRECOMPILERS in settings), so the old gulp / .dev steps are gone.
+set -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-export PROJECT_ROOT=$DIR/../
+PROJECT_ROOT="$( cd "$DIR/.." && pwd )"
+PY="$PROJECT_ROOT/.venv/bin/python"
 
-cd $PROJECT_ROOT
-#python manage.py migrate >/dev/null # manually migrate txrx for now
-gulp > /dev/null
+cd "$PROJECT_ROOT"
 
-MIGRATIONS="$(bash server/pullall.sh|grep migrations/00)"
+"$PY" manage.py collectstatic --noinput > /dev/null
+"$PY" manage.py compress > /dev/null
 
-# manually migrate external packages for now
-# if [[ ! -z $MIGRATIONS ]];
-#     then
-#     echo "migrating because of git pull output:"
-#     echo $MIGRATIONS
-#     cd $PROJECT_ROOT
-#     python manage.py migrate >/dev/null
-# fi
-
-# cd $PROJECT_ROOT/.dev/unrest/; gulp>/dev/null
-cd $PROJECT_ROOT/.dev/drop/; gulp>/dev/null
-cd $PROJECT_ROOT; gulp>/dev/null
-
-python $PROJECT_ROOT/manage.py collectstatic --noinput>/dev/null
-python $PROJECT_ROOT/manage.py compress>/dev/null
-
-bash $PROJECT_ROOT/server/uwsgi.sh
+bash "$DIR/uwsgi.sh"

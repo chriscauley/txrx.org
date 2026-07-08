@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.forms import ValidationError
 from django.template.defaultfilters import slugify
@@ -21,7 +21,7 @@ class Document(models.Model,JsonMixin):
   _ht = "After submitting the document can the creator edit it?" \
         "If false a new document will be created everytime they submit the document."
   editable = models.BooleanField(default=True,help_text=_ht)
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
   get_absolute_url = lambda self: reverse('signed_document',args=[self.id,slugify(self.name)])
   fields_json = property(lambda self: [f.as_json for f in self.documentfield_set.all()])
   data_fields = property(lambda self: [f.get_name for f in self.documentfield_set.all()])
@@ -51,13 +51,13 @@ def signature_validator(value):
     raise ValidationError("Signature must start with /s/")
 
 class Signature(CriterionModel):
-  user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
-  document = models.ForeignKey(Document)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True,blank=True)
+  document = models.ForeignKey(Document, on_delete=models.CASCADE)
   automatic = True
   _ht = 'You signature must start with a /s/. For example enter "/s/John Hancock" without the quotes.'
   data = jsonfield.JSONField(default=dict)
   get_criteria = lambda self: self.document.criterion_set.all()
-  __unicode__ = lambda self: "%s: %s"%(self.document,self.user)
+  __str__ = lambda self: "%s: %s"%(self.document,self.user)
   def get_files(self):
     files = self.data.get("files",None)
     if not files:
@@ -72,7 +72,7 @@ class Signature(CriterionModel):
   def as_json(self):
     return {
       'id': self.id,
-      'document_name': unicode(self.document),
+      'document_name': str(self.document),
       'completed': self.status == "completed",
     }
 
@@ -100,7 +100,7 @@ INPUT_HELP_TEXT = {
 }
 
 class DocumentField(models.Model):
-  document = models.ForeignKey(Document)
+  document = models.ForeignKey(Document, on_delete=models.CASCADE)
   label = models.CharField(max_length=64)
   name = models.CharField(max_length=64,help_text="For fields with the same label",null=True,blank=True)
   order = models.IntegerField(default=999)
@@ -108,7 +108,7 @@ class DocumentField(models.Model):
   _ht = "Json object for field generation. Will overwrite any other database entry (name, label, etc.)"
   data = jsonfield.JSONField(default=dict,blank=True,help_text=_ht)
   required = models.BooleanField(default=False)
-  __unicode__ = lambda self: "%s for %s"%(self.label,self.document)
+  __str__ = lambda self: "%s for %s"%(self.label,self.document)
   get_name = lambda self: self.name or slugify(self.label)
   @property
   def as_json(self):
@@ -136,7 +136,7 @@ class Service(models.Model):
   price = models.IntegerField(default=0)
   member_price = models.IntegerField(default=0)
   order = models.IntegerField(default=0)
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
   def get_display_name(self):
     if not self.price:
       return self.name + " (cost varies)"

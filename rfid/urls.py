@@ -1,9 +1,9 @@
-from django.conf.urls import url
+from django.urls import path
 
-import views
+from . import views
 
 urlpatterns = [
-  url(r'^rfid_access.json$',views.door_access,name='door_access_json'),
-  url(r'^rfid_permission_table/$',views.permission_table),
-  url(r'^api/rfid_log/$',views.rfid_log,name='rfid_log'),
+  path('rfid_access.json',views.door_access,name='door_access_json'),
+  path('rfid_permission_table/',views.permission_table),
+  path('api/rfid_log/',views.rfid_log,name='rfid_log'),
 ]

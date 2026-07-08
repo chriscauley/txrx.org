@@ -135,9 +135,9 @@ class NotifyTest(TXRXTestCase):
     self.call_command("course_reminder")
     self.call_command("notify_course")
     subjects = [
-      u'Class tomorrow!', # student1
-      u'2 classes tomorrow!', # student2
-      u"You're teaching tomorrow at 1 p.m." # teacher
+      'Class tomorrow!', # student1
+      '2 classes tomorrow!', # student2
+      "You're teaching tomorrow at 1 p.m." # teacher
     ]
     recipients = [[u.email,'chris@lablackey.com'] for u in [self.student1, self.student2, self.teacher]]
     self.check_subjects(subjects)

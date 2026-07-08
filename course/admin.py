@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib import admin
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django import forms
 from lablackey.db.forms import StaffMemberForm
 from lablackey.db.admin import NamedTreeModelAdmin, RawMixin
@@ -30,7 +30,6 @@ class CourseAdmin(TaggedPhotoAdmin):
     url = reverse("course:clone_session",args=[obj.pk])
     return """<a class="btn btn-success" href="%s">
                 <i class="icon-plus" title="Clone Last Session"></i> Clone</a>"""%url
-  clone.allow_tags = True
   def tool_count(self,obj):
     return len(obj.get_tools())
   def photo_count(self,obj):
@@ -43,10 +42,9 @@ class CourseAdmin(TaggedPhotoAdmin):
     for notify in Follow.objects.filter(content_type=get_contenttype(obj),object_id=obj.id):
       out += "<div style='display: none;'>%s</div>"%notify.user.email
     return out
-  _follow.allow_tags = True
   # duplicated from models.py because of how the admin handles M2M
   def save_related(self, request, form, formsets, change):
-    super(CourseAdmin, self).save_related(request, form, formsets, change)
+    super().save_related(request, form, formsets, change)
     subjects = form.instance.subjects.all()
     for subject in subjects:
       if subject.parent and not (subject.parent in subjects):
@@ -79,7 +77,7 @@ class SessionAdmin(TaggedPhotoAdmin):
   ordering = ('-first_date',)
   raw_id_fields = ('course','user')
   readonly_fields = ('_first_date','_last_date','get_room')
-  list_display = ("__unicode__","first_date","active")
+  list_display = ("__str__","first_date","active")
   list_filter = ("publish_dt",'active')
   _first_date = lambda self,obj: getattr(obj,'first_date','Will be set on save')
   _first_date.short_description = 'first classtime'

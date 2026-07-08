@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .forms import UserChangeForm, CustomUserCreationForm
 from .models import User, UserNote, UserCheckin
@@ -47,8 +47,7 @@ class UserAdmin(UserAdmin):
   add_form = CustomUserCreationForm
   list_display = ('username', 'get_full_name', 'is_staff','_enrollments')
   def _enrollments(self,obj):
-    return "<br/>".join(unicode(e.session) for e in obj.enrollment_set.all())
-  _enrollments.allow_tags = True
+    return "<br/>".join(str(e.session) for e in obj.enrollment_set.all())
   search_fields = ('username', 'email', 'first_name', 'last_name','paypal_email')
   ordering = ('username',)
   readonly_fields = ('last_login','date_joined', 'level')

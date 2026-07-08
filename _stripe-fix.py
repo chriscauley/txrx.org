@@ -98,7 +98,7 @@ for transfer in Transfer.objects.order_by("stripe_timestamp"):
     #print "%s - %s = %s"%(total,transfer.amount,total-transfer.amount)
     total += charge.amount-charge.fee
     charges.append(charge)
-    print total,'\t',transfer.amount
+    print((total,'\t',transfer.amount))
     if total == transfer.amount:
       transfer.metadata['charges'] = [c.id for c in charges]
       transfer.metadata['stripe_charges'] = [c.stripe_id for c in charges]
@@ -107,15 +107,15 @@ for transfer in Transfer.objects.order_by("stripe_timestamp"):
       for c in charges:
         c.transfer = transfer
         c.save()
-      print "yay: %s"%transfer
+      print("yay: %s"%transfer)
       break
     if total > transfer.amount:
-      print "fail"
-      print transfer
-      print total
+      print("fail")
+      print(transfer)
+      print(total)
       charges = charges[::-1]
       for i in range(len(charges)):
         s = sum([c.amount-c.fee for c in charges][:i+1])+fakes.get(transfer.stripe_id,0)
         c = charges[i]
-        print c.amount-c.fee,'\t',s,'\t',s-transfer.amount,'\t',c.stripe_id,'\t',c.customer.subscriber.email,'\t',c.stripe_timestamp
+        print((c.amount-c.fee,'\t',s,'\t',s-transfer.amount,'\t',c.stripe_id,'\t',c.customer.subscriber.email,'\t',c.stripe_timestamp))
       exit()

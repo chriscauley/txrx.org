@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
@@ -22,7 +22,7 @@ from paypal.standard.ipn.models import *
 import datetime, json
 
 def get_course_values(user):
-  if not user.is_authenticated():
+  if not user.is_authenticated:
     return { 'term': Term.objects.all()[0] }
   user_sessions = Session.objects.filter(enrollment__user=user.id)
   return {
@@ -54,7 +54,7 @@ def detail(request,pk,slug):
   course = get_object_or_404(Course,pk=pk)
   enrollment = None
   follow = None
-  if request.user.is_authenticated():
+  if request.user.is_authenticated:
     _e = Enrollment.objects.filter(session__course=course,user=request.user)
     enrollment = (_e or [None])[0]
     follow = get_or_none(Follow,user=request.user,content_type=get_contenttype(course),object_id=course.id)
@@ -123,7 +123,7 @@ def rsvp(request,session_pk):
   session = get_object_or_404(Session,pk=session_pk)
   if session.course.fee > 0:
     raise ValueError("Some one tried to rsvp for a class that costs money!")
-  if not request.user.is_authenticated():
+  if not request.user.is_authenticated:
     m = "You must be logged in to rsvp. Click the icon at the top right of the page to login or register"
     return HttpResponse(json.dumps([0,m,session.full]))
   enrollment,new = Enrollment.objects.get_or_create(user=request.user,session=session)

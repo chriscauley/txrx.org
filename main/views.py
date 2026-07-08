@@ -53,4 +53,4 @@ def intentional_500(request):
   arst
 
 def to_template(request,name=None):
-  return TemplateResponse(request,["flatpages/{}.html".format(name),"{}.html".format(name)],{})
+  return TemplateResponse(request,[f"flatpages/{name}.html",f"{name}.html"],{})

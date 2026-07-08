@@ -1,19 +1,16 @@
+#!/bin/bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-export PROCESSES=3
-if [ -a $DIR/staging ]
-then
-    export PROCESSES=1
-fi
+INI="$DIR/uwsgi.ini"
+UWSGI="$DIR/../.venv/bin/uwsgi"
 
 PID=`cat /tmp/txrx.pid 2>/dev/null`
 
-if kill -HUP $PID
+if kill -HUP "$PID" 2>/dev/null
 then
-    echo "uwsgi reset"
+    echo "uwsgi reset (HUP $PID)"
 else
-    source .venv/bin/activate
     echo "uwsgi wasn't running, starting it now"
-    uwsgi -M -x $DIR/../uwsgi.xml &
+    "$UWSGI" --ini "$INI" &
 fi
 
 exit 0

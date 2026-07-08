@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.mail import mail_admins
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.validators import MaxLengthValidator
 from django.template.defaultfilters import slugify, truncatewords, striptags
 from django.template.loader import render_to_string
@@ -40,7 +40,7 @@ class Subject(NamedTreeModel):
     return to_base32(self.name)
   def save(self,*args,**kwargs):
     self.order = self.get_order()
-    super(Subject,self).save(*args,**kwargs)
+    super().save(*args,**kwargs)
   @property
   def as_json(self):
     return {
@@ -52,7 +52,7 @@ class Subject(NamedTreeModel):
       'inactive_courses': 0
     }
 
-  def __unicode__(self):
+  def __str__(self):
     if self.parent:
       return "(%s) %s"%(self.parent,self.name)
     return self.name
@@ -63,7 +63,7 @@ class Term(models.Model):
   name = models.CharField(max_length=32)
   start = models.DateField()
   end = models.DateField()
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
   _s = lambda d: d.strftime("%Y%m%d")
   value = lambda self: self._s(self.start)+"|"+self._s(self.end)
   get_absolute_url = lambda self: "/classes/term/%s/%s"%(self.id,slugify(self.name))
@@ -104,7 +104,10 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
   last_date = property(lambda self: self.active_sessions[-1].last_date)
   @property
   def as_json(self):
-    image = get_thumbnail(get_override(self.first_photo,'landscape_crop'),"298x199",crop="center")
+    try:
+      image = get_thumbnail(get_override(self.first_photo,'landscape_crop'),"298x199",crop="center")
+    except OSError:
+      image = get_thumbnail(get_override(self.first_photo,'landscape_crop'),"298x199",crop="center", format="PNG")
     out = {
       'id': self.pk,
       'name': self.name,
@@ -137,7 +140,7 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
   short_description = models.TextField(null=True,blank=True)
   get_short_description = lambda self: self.short_description or truncatewords(striptags(self.description),40)
   safety = models.BooleanField(default=False)
-  room = models.ForeignKey(Room)
+  room = models.ForeignKey(Room, on_delete=models.CASCADE)
   def get_location_string(self):
     if self.first_room != self.room:
       s = "This class meets in the %s and then moves to the %s after a half hour lecture."
@@ -148,7 +151,7 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
   max_students = models.IntegerField(default=16)
 
   objects = CourseManager()
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
   get_absolute_url = lambda self: reverse("course:detail",args=[self.pk,self.slug])
   get_admin_url = lambda self: "/admin/course/course/%s/"%self.id
 
@@ -177,7 +180,7 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
   sessions = cached_property(sessions,name="sessions")
   last_session = lambda self: (list(self.sessions) or [None])[-1]
   def save(self,*args,**kwargs):
-    super(Course,self).save(*args,**kwargs)
+    super().save(*args,**kwargs)
     #this has to be repeated in the admin because of how that works
     subjects = self.subjects.all()
     for subject in subjects:
@@ -203,7 +206,7 @@ class Course(PhotosMixin,ToolsMixin,FilesMixin,models.Model):
     return notes
   @property
   def list_users(self):
-    return list(set([s.user for s in self.active_sessions]))
+    return list({s.user for s in self.active_sessions})
   class Meta:
     ordering = ("name",)
 
@@ -216,14 +219,14 @@ DAY_CHOICES = [
   (5, "Day 5"),
 ]
 
-class SessionRoomTime(object):
-  __unicode__ = lambda self: "%s in %s from %s to %s"%(self.session.course,self.room,self.start,self.end)
-  __repr__ = lambda self: unicode(self)
+class SessionRoomTime:
+  __str__ = lambda self: "%s in %s from %s to %s"%(self.session.course,self.room,self.start,self.end)
+  __repr__ = lambda self: str(self)
   get_absolute_url = lambda self: self.session.get_absolute_url()
   get_admin_url = lambda self: self.session.get_admin_url()
   get_room = lambda self: self.room
   def __init__(self,**kwargs):
-    for k,v in kwargs.items():
+    for k,v in list(kwargs.items()):
       setattr(self,k,v)
     self.end = self.start.replace(hour=self.end_time.hour,minute=self.end_time.minute)
     self.short_name = self.session.course
@@ -232,12 +235,12 @@ class SessionRoomTime(object):
     return h
 
 class CourseRoomTime(models.Model):
-  course = models.ForeignKey(Course)
-  room = models.ForeignKey(Room)
+  course = models.ForeignKey(Course, on_delete=models.CASCADE)
+  room = models.ForeignKey(Room, on_delete=models.CASCADE)
   hours_at = models.FloatField(default=0,help_text="Number of hours at location. 0 = Until class ends.")
   day = models.IntegerField(default=0,choices=DAY_CHOICES)
   order = models.IntegerField(default=999)
-  __unicode__ = lambda self: "%s in %s for %s hours"%(self.get_day_display(),self.room,self.hours_at)
+  __str__ = lambda self: "%s in %s for %s hours"%(self.get_day_display(),self.room,self.hours_at)
   seconds_at = property(lambda self: self.hours_at * 3600)
   class Meta:
     ordering = ('day','order')
@@ -247,11 +250,11 @@ class Branding(models.Model):
   image = models.ImageField(upload_to="course_branding/%Y-%m")
   small_image_override = models.ImageField(upload_to="course_branding/%Y-%m",null=True,blank=True)
   get_small_image = lambda self: self.small_image_override or self.image
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
 
 class Session(UserModel,PhotosMixin,models.Model):
   def __init__(self,*args,**kwargs):
-    super(Session,self).__init__(*args,**kwargs)
+    super().__init__(*args,**kwargs)
     if self.pk:
       # this sets self.first_date to the first ClassTime.start if they aren't equal
       # also sets self.last_date to the last ClassTime.end
@@ -266,7 +269,7 @@ class Session(UserModel,PhotosMixin,models.Model):
         self.last_date = _a[-1].end
         self.save()
   get_ics_url = lambda self: reverse_ics(self)
-  course = models.ForeignKey(Course)
+  course = models.ForeignKey(Course, on_delete=models.CASCADE)
   cancelled = models.BooleanField(default=False)
   active = models.BooleanField(default=True)
   _ht = "This session will not appear as overbooked if it is less than X seats overbooked."
@@ -280,14 +283,14 @@ class Session(UserModel,PhotosMixin,models.Model):
   first_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
   last_date = models.DateTimeField(default=datetime.datetime.now,help_text=_ht) # for filtering
   # depracated?
-  branding = models.ForeignKey(Branding,null=True,blank=True)
+  branding = models.ForeignKey(Branding, on_delete=models.CASCADE,null=True,blank=True)
 
   _ht = "Date the instructor marked students in the class as completed"
   instructor_completed = models.DateField(null=True,blank=True)
   needed = models.TextField("What is needed?",blank=True,default="")
   needed_completed = models.DateField(null=True,blank=True)
 
-  __unicode__ = lambda self: latin1_to_ascii("%s (%s - %s)"%(self.course, self.user,self.first_date.date()))
+  __str__ = lambda self: latin1_to_ascii("%s (%s - %s)"%(self.course, self.user,self.first_date.date()))
   title = property(lambda self: "%s (%s)"%(self.course.name,self.first_date.date()))
 
   in_progress = property(lambda self: self.first_date<datetime.datetime.now()<self.last_date)
@@ -330,7 +333,7 @@ class Session(UserModel,PhotosMixin,models.Model):
   description = property(lambda self: self.course.description)
   @cached_property
   def first_photo(self):
-    return (self.get_photos() or [super(Session,self).first_photo])[0]
+    return (self.get_photos() or [super().first_photo])[0]
   @cached_method
   def get_photos(self):
     return self._get_photos() or self.course.get_photos()
@@ -374,7 +377,7 @@ class Session(UserModel,PhotosMixin,models.Model):
     if self.active and not self.publish_dt:
       publish_dt = datetime.datetime.now()
 
-    super(Session,self).save(*args,**kwargs)
+    super().save(*args,**kwargs)
     SessionProduct.objects.get_or_create(session=self)[0].update()
     if self.active and self.classtime_set.all() and not self.notified:
       follows = Follow.objects.filter(content_type=get_contenttype("course.course"),object_id=self.course_id).distinct()
@@ -386,7 +389,7 @@ class Session(UserModel,PhotosMixin,models.Model):
           url=self.get_absolute_url()
         ).id
       self.notified = timezone.now()
-      super(Session,self).save(*args,**kwargs)
+      super().save(*args,**kwargs)
 
   @cached_method
   def get_absolute_url(self):
@@ -418,7 +421,7 @@ class Session(UserModel,PhotosMixin,models.Model):
 
 class SessionProduct(Product):
   is_session_product = True
-  session = models.OneToOneField(Session)
+  session = models.OneToOneField(Session, on_delete=models.CASCADE)
   json_fields = Product.json_fields + ['session_id']
   in_stock = property(lambda self: self.session.course.max_students + self.session.overbook - self.session.total_students)
   def purchase(self,order_item):
@@ -462,7 +465,7 @@ class SessionProduct(Product):
     app_label = "course"
 
 class ClassTime(OccurrenceModel):
-  session = models.ForeignKey(Session)
+  session = models.ForeignKey(Session, on_delete=models.CASCADE)
   emailed = models.DateTimeField(null=True,blank=True)
   def short_name(self):
     times = list(self.session.classtime_set.all())
@@ -539,17 +542,17 @@ class CourseEnrollmentManager(models.Manager):
     return self.filter(course__session__user=user,*args,**kwargs)
 
 class CourseEnrollment(CriterionModel):
-  user = models.ForeignKey(settings.AUTH_USER_MODEL)
-  course = models.ForeignKey(Course)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+  course = models.ForeignKey(Course, on_delete=models.CASCADE)
   quantity = models.IntegerField(default=1)
-  eventoccurrence = models.ForeignKey('event.EventOccurrence',null=True,blank=True);
+  eventoccurrence = models.ForeignKey('event.EventOccurrence', on_delete=models.CASCADE,null=True,blank=True);
   get_criteria = lambda self: self.course.criterion_set.all()
   as_json = property(lambda self: {a:getattr(self,a) for a in self.json_fields})
   objects = CourseEnrollmentManager()
   content_object = property(lambda self: self.course)
   def has_completed_permission(self,user):
     return user.is_superuser or user.is_toolmaster or [user.id in self.course.session_set.values('user_id',flat=True)]
-  __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.course)
+  __str__ = lambda self: "%s enrolled in %s"%(self.user,self.course)
 
 class EnrollmentManager(models.Manager):
   def pending_evaluation(self,*args,**kwargs):
@@ -560,8 +563,8 @@ class EnrollmentManager(models.Manager):
     return self.filter(*args,**kwargs)
 
 class Enrollment(CriterionModel):
-  user = models.ForeignKey(settings.AUTH_USER_MODEL)
-  session = models.ForeignKey(Session)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+  session = models.ForeignKey(Session, on_delete=models.CASCADE)
   quantity = models.IntegerField(default=0)
 
   evaluated = models.BooleanField(default=False)
@@ -579,11 +582,11 @@ class Enrollment(CriterionModel):
     return {
       'id': self.id,
       'session': self.session.as_json,
-      'session_name': unicode(self.session),
+      'session_name': str(self.session),
       'completed': self.status == "completed",
     }
 
-  __unicode__ = lambda self: "%s enrolled in %s"%(self.user,self.session)
+  __str__ = lambda self: "%s enrolled in %s"%(self.user,self.session)
   def save(self,*args,**kwargs):
     if not self.pk:
       Follow.objects.filter(
@@ -593,7 +596,7 @@ class Enrollment(CriterionModel):
       ).delete()
     if not self.evaluation_date:
       self.evaluation_date = list(self.session.all_occurrences)[-1].start
-    super(Enrollment,self).save(*args,**kwargs)
+    super().save(*args,**kwargs)
   class Meta:
     ordering = ('-datetime',)
 
@@ -609,7 +612,7 @@ class Evaluation(UserModel):
   private = True
   _kwargs = dict(validators=[MaxLengthValidator(512)],max_length=512,null=True,blank=True)
 
-  enrollment = models.OneToOneField(Enrollment)
+  enrollment = models.OneToOneField(Enrollment, on_delete=models.CASCADE)
   datetime = models.DateTimeField(auto_now_add=True)
 
   p_ht = "Rate the instructor on subject knowledge, pace of the course and communication skills"
@@ -634,7 +637,7 @@ class Evaluation(UserModel):
   def get_user(self):
     return "Anonymous" if self.anonymous else str(self.user.email)
 
-  __unicode__ = lambda self: "%s Evaluation for %s"%(self.get_user(),self.enrollment.session)
+  __str__ = lambda self: "%s Evaluation for %s"%(self.get_user(),self.enrollment.session)
   number_fields = ["presentation","content","visuals"]
   def get_number_tuples(self):
     return [(f,getattr(self,f),getattr(self,f+"_comments")) for f in self.number_fields]
@@ -645,7 +648,7 @@ class Evaluation(UserModel):
     return [t for t in _t if t[1]] #filter out unanswered quesions
 
   def save(self,*args,**kwargs):
-    super(Evaluation,self).save(*args,**kwargs)
+    super().save(*args,**kwargs)
     e = self.enrollment
     e.evaluated = True
     e.save()

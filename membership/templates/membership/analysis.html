@@ -6,7 +6,7 @@
     <label>Order By:
       <select name="order">
         {% for value,verbose in orders %}
-        <option value="{{ value }}"{% if value = order %} selected="selected"{% endif %}>{{ verbose }}</option>
+        <option value="{{ value }}"{% if value == order %} selected="selected"{% endif %}>{{ verbose }}</option>
         {% endfor %}
       </select>
       <button>Reorder</button>

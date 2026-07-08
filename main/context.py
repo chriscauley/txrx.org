@@ -53,7 +53,7 @@ def nav(request):
   ]
   about_links = []
   is_superuser = request.user.is_superuser
-  if request.user.is_authenticated():
+  if request.user.is_authenticated:
     about_links = [
       {'name': 'About TXRX', 'url': '/about-us/'},
       {'name': 'Bylaws', 'url': '/bylaws/'},
@@ -74,7 +74,7 @@ def nav(request):
     {'name': 'instagram','url': 'https://instagram.com/txrxlabs/' },
   ]
   tool_sublinks = []
-  # if request.user.is_authenticated():
+  # if request.user.is_authenticated:
   #   tool_sublinks = [
   #     {'name': 'Tools','url': '/tools/'},
   #     {'name': 'Checkout Items', 'url': '/tools/checkout-items/'},
@@ -90,17 +90,17 @@ def nav(request):
       {'name': 'Bays + Tables', 'url': '/admin/membership/container/?needs+Staff=yes&o=2', 'reddot': _containers},
       {'name': "Un-oriented", 'url': "/event/no-orientation/"},
     ]
-  if request.user.is_authenticated() and (request.user.is_staff or request.user.is_volunteer):
+  if request.user.is_authenticated and (request.user.is_staff or request.user.is_volunteer):
     tool_sublinks.append({"name": "Today's Checkins",'url': '/todays-checkins'})
   if getattr(request.user,'is_gatekeeper',False) or is_superuser:
     tool_sublinks.append({'name': 'RFID Table','url': '/rfid_permission_table/'})
-  if request.user.is_authenticated() and request.user.subscription_set.filter(canceled__isnull=True):
+  if request.user.is_authenticated and request.user.subscription_set.filter(canceled__isnull=True):
     _l = 'https://docs.google.com/document/d/1Cb-83FJ_8n_ModIIRMGesTOTfefoeVA2V--s-5XWa_M/edit?usp=sharing'
     about_links.append({'name': 'Orientation Notes','url': _l})
   _nav = [
     {"name": "About",
      "url": "/about-us/",
-     "sublinks": about_links if request.user.is_authenticated() else [],
+     "sublinks": about_links if request.user.is_authenticated else [],
      },
     {"name": "Classes",
      "url": "/classes/",
@@ -158,7 +158,7 @@ def nav(request):
 
   my_classes_ics = None
   documents_needed = 0
-  if request.user.is_authenticated():
+  if request.user.is_authenticated:
     my_classes_ics = "%s/classes/ics/%s/%s/my-classes.ics"
     my_classes_ics = my_classes_ics%(settings.SITE_DOMAIN,request.user.id,request.user.usermembership.api_key)
     if settings.DEBUG:

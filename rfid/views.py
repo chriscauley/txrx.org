@@ -41,7 +41,7 @@ def rfid_log(request):
 
 def door_access(request):
   valid = valid_ip_or_api_key(request)
-  if not valid and not request.user.is_authenticated():
+  if not valid and not request.user.is_authenticated:
     return FAIL
   valid = valid or request.user.is_superuser
 

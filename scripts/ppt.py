@@ -1,6 +1,6 @@
 # a script for importing old paypal objects.
 
-import requests, urlparse, datetime, django, os, random
+import requests, urllib.parse, datetime, django, os, random
 from functools import wraps
 os.environ['DJANGO_SETTINGS_MODULE'] = 'main.settings'
 django.setup()
@@ -22,12 +22,12 @@ def cache_output(file_name):
     @wraps(method)
     def wrapper(*args,**kwargs):
       if os.path.exists(file_name):
-        with open(file_name,'r') as f:
+        with open(file_name) as f:
           return eval(f.read())
       output = method(*args,**kwargs)
       with open(file_name,'w') as f:
         f.write(repr(output))
-        print "wrote ",file_name
+        print(("wrote ",file_name))
       return output
     return wrapper
   return decorator
@@ -42,14 +42,14 @@ def get_txn_ids_for_day(day):
   ends = (day+datetime.timedelta(1)).strftime("%Y-%m-%dT00:00:00Z")
   Q = "&METHOD=TransactionSearch&STARTDATE=%s&ENDDATE=%s"%(starts,ends)
   r = requests.get(BASE_URL+Q)
-  raw_d = urlparse.parse_qs(r.text)
-  return [v[0] for k,v in raw_d.items() if k.startswith("L_TRANSACTIONID")]
+  raw_d = urllib.parse.parse_qs(r.text)
+  return [v[0] for k,v in list(raw_d.items()) if k.startswith("L_TRANSACTIONID")]
 
 def get_subscription_info(subscr_id):
   Q = "&METHOD=GetRecurringPaymentsProfileDetails&PROFILEID=%s"%subscr_id
   r = requests.get(BASE_URL+Q)
   raw_d = r.text
-  print r.text
+  print(r.text)
 
 num_years = 5
 
@@ -66,7 +66,7 @@ def get_txn(txn_id):
   ipn = PayPalIPN.objects.filter(txn_id=txn_id)
   Q = "&METHOD=GetTransactionDetails&TRANSACTIONID=%s"%txn_id
   r = requests.get(BASE_URL+Q)
-  raw_d = urlparse.parse_qs(r.text)
+  raw_d = urllib.parse.parse_qs(r.text)
   return raw_d
 
 def get_cart_item(d,key,i):
@@ -85,7 +85,7 @@ def process_cart(d,user,txn_id=None,**kwargs):
       continue
     session = Session.objects.get(pk=number)
     if not session.course.name in name:
-      print "name mismatch:\n%s\n%s\n"%(session.course.name,name)
+      print("name mismatch:\n%s\n%s\n"%(session.course.name,name))
 
 opt_names = {}
 amts = {}
@@ -157,7 +157,7 @@ def process_subscrpayment(d,user,txn_id=None,subscr_id=None,**kwargs):
     try:
       level = Level.objects.get(name=level_name)
     except Level.DoesNotExist:
-      print '"%s" membership not found: $%s %s - %s'%(level_name,amt,d['EMAIL'][0],ordertime)
+      print('"%s" membership not found: $%s %s - %s'%(level_name,amt,d['EMAIL'][0],ordertime))
       break
     _d = monthly
     amt = int(float(amt))
@@ -174,7 +174,7 @@ def process_subscrpayment(d,user,txn_id=None,subscr_id=None,**kwargs):
     try:
       product = Product.objects.filter(level__name=level_name,months=months)[0]
     except IndexError:
-      print "Cannot find %s @ %s"%(level_name,months)
+      print("Cannot find %s @ %s"%(level_name,months))
       return
     defaults = {'product': product, 'created': ordertime,'user': user, 'amount': amt}
     subscription, new = Subscription.objects.get_or_create(subscr_id=subscr_id,defaults=defaults)
@@ -182,7 +182,7 @@ def process_subscrpayment(d,user,txn_id=None,subscr_id=None,**kwargs):
       subscription.created = ordertime
       subscription.save()
     if new:
-      print "%s created subscription %s"%(subscr_id,ordertime)
+      print("%s created subscription %s"%(subscr_id,ordertime))
     Status.objects.get_or_create(
       subscription=subscription,
       amount=amt,
@@ -223,7 +223,7 @@ if __name__ == "__main__":
     txn_id = d.get("TRANSACTIONID",[None])[0]
     email = d.get("EMAIL",[None])[0]
     if txn_type == 'subscrpayment' and not d['PAYMENTSTATUS'][0] in status_processors:
-      print "bad status: ",d['PAYMENTSTATUS'][0]
+      print(("bad status: ",d['PAYMENTSTATUS'][0]))
       continue
     if PayPalIPN.objects.filter(txn_id=txn_id):
       continue
@@ -231,18 +231,18 @@ if __name__ == "__main__":
       raise ValueError("get_or_create_student has changed and the following line needs to be updated to match that")
     user,new = get_or_create_student(email,subscr_id=subscr_id,send_mail=False)
     if new:
-      print '\t'.join([str(s) for s in [txn_type[:6],subscr_id,email,user]])
+      print('\t'.join([str(s) for s in [txn_type[:6],subscr_id,email,user]]))
     if not txn_type in processors:
       continue
     processors[txn_type](d,user,txn_id=txn_id,subscr_id=subscr_id)
   #for k,v in types.items():
   #  print k,':  ',v
   for k in sorted(opt_names.keys()):
-    print k,':  ',opt_names[k],' ',sorted(amts[k])
-  print "Monthly"
+    print((k,':  ',opt_names[k],' ',sorted(amts[k])))
+  print("Monthly")
   for k,v in sorted(monthly.items()):
-    print k,':  ',v
-  print "Yearly"
+    print((k,':  ',v))
+  print("Yearly")
   for k,v in sorted(yearly.items()):
-    print k,':  ',v
+    print((k,':  ',v))
   

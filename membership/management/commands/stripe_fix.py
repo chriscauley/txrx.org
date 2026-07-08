@@ -12,11 +12,11 @@ class Command(BaseCommand):
   def handle(self,*args,**kwargs):
     for transfer in Transfer.objects.order_by("stripe_timestamp"):
       po = stripe.BalanceTransaction.all(payout=transfer.stripe_id)
-      print transfer.stripe_id
-      print po.keys()
-      print len(po['data'])
+      print(transfer.stripe_id)
+      print(list(po.keys()))
+      print(len(po['data']))
       for d in po['data'][:2]:
-        print d
+        print(d)
       return
       charges = []
       total = fakes.get(transfer.stripe_id,0)

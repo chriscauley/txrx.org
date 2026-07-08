@@ -34,11 +34,11 @@ class InstagramUser(FollowableModel):
   full_name = models.CharField(max_length=128,null=True,blank=True)
   bio = models.TextField(null=True,blank=True)
   website = models.URLField(null=True,blank=True)
-  user = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True,blank=True)
 
   feed_url = "https://api.instagram.com/v1/users/search?q=%s&access_token=%s"
   feed_param = property(lambda self: self.iid)
-  __unicode__ = lambda self: self.username
+  __str__ = lambda self: self.username
   objects = InstagramUserManager()
 
   def update_and_save(self):
@@ -55,7 +55,7 @@ class InstagramTag(FollowableModel):
 
   feed_url = "https://api.instagram.com/v1/tags/%s/media/recent?access_token=%s"
   feed_param = property(lambda self: self.name)
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
 
 class InstagramLocationManager(models.Manager):
   def get_from_json(self,d):
@@ -64,7 +64,7 @@ class InstagramLocationManager(models.Manager):
     if 'id' in d:
       location,new = InstagramLocation.objects.get_or_create(iid=d.pop('id'),defaults=d)
       if new:
-        print "New Location: %s"%location
+        print("New Location: %s"%location)
       return location
 
     # search instagram for any APPROVED locations nearby that are already in the database
@@ -86,15 +86,15 @@ class InstagramLocation(FollowableModel):
   feed_param = lambda self: self.iid
   search_url = "https://api.instagram.com/v1/locations/search?lat=%s&lng=%s&access_token=%s"
   objects = InstagramLocationManager()
-  __unicode__ = lambda self: "Instagram Location: %s"%self.name
+  __str__ = lambda self: "Instagram Location: %s"%self.name
 
 class InstagramPhoto(models.Model):
   thumbnail = models.ImageField(upload_to=photofile_path,null=True,blank=True)
   low_resolution = models.ImageField(upload_to=photofile_path,null=True,blank=True)
   standard_resolution = models.ImageField(upload_to=photofile_path,null=True,blank=True)
 
-  instagram_user = models.ForeignKey(InstagramUser,null=True,blank=True)
-  instagram_location = models.ForeignKey(InstagramLocation,null=True,blank=True)
+  instagram_user = models.ForeignKey(InstagramUser, on_delete=models.CASCADE,null=True,blank=True)
+  instagram_location = models.ForeignKey(InstagramLocation, on_delete=models.CASCADE,null=True,blank=True)
   instagram_tags = models.ManyToManyField(InstagramTag,blank=True)
 
   caption = models.CharField(max_length=255,null=True,blank=True)
@@ -103,12 +103,12 @@ class InstagramPhoto(models.Model):
   approved = models.BooleanField(default=False)
   rejected = models.BooleanField(default=False)
 
-  __unicode__ = lambda self: "Instagram Photo by %s"%(self.instagram_user or None)
+  __str__ = lambda self: "Instagram Photo by %s"%(self.instagram_user or None)
   thumbnail_ = lambda self: '<img src="%s" height="75" />'%self.thumbnail.url
   thumbnail_.allow_tags=True
   @property
   def name(self):
-    return self.__unicode__()
+    return self.__str__()
   @property
   def datetime(self):
     return datetime.datetime.utcfromtimestamp(float(self.created_time))
@@ -132,7 +132,7 @@ def save_photos(response,approved=False,username=""):
       defaults['instagram_user'] = user
     i,new = InstagramPhoto.objects.get_or_create(iid=item['id'],defaults=defaults)
     if new: # save photos
-      tags = re.findall('#([\w\d]+)',i.caption or '')
+      tags = re.findall(r'#([\w\d]+)',i.caption or '')
       for tag_name in tags:
         tag, new = InstagramTag.objects.get_or_create(name=tag_name)
         i.instagram_tags.add(tag)

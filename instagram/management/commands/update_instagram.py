@@ -19,7 +19,7 @@ class Command (BaseCommand):
     if new>0:
       mailto = getattr(settings,"INSTAGRAM_EMAIL",settings.ADMINS)
       if options.get("verbosity") > 0:
-        print "emailing %s to %s"%(new,mailto)
+        print("emailing %s to %s"%(new,mailto))
       send_mail(
         "New Instagram Photos",
         "There are %s new instagram photos. Pleas visit the admin to approve them."%new,

@@ -10,7 +10,7 @@ from PIL import Image
 
 def contact(request):
   initial = {}
-  if request.user.is_authenticated():
+  if request.user.is_authenticated:
     initial['from_email'] = request.user.email
     initial['from_name'] = request.user.get_full_name()
   try:
@@ -19,7 +19,7 @@ def contact(request):
     pass
   form = MessageForm(request.POST or None,initial=initial)
   if form.is_valid():
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
       form.instance.user = request.user
     form.save()
     messages.success(request,"Your message has been sent. We will respond to you as soon as possible.")
@@ -36,7 +36,7 @@ def tracking_pixel(request,app,model,pk,datetime):
     message = Message.objects.get(pk=pk,datetime=datetime)
     message.read_count += 1
     message.save()
-  except Exception,e:
+  except Exception as e:
     mail_admins("Bad Tracking Pixel","\n".join([app,model,pk,datetime,str(e)]))
   response = HttpResponse(content_type="image/png")
   Image.new('RGBA', (1, 1), (255,80,0,0)).save(response,"PNG")

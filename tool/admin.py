@@ -20,7 +20,7 @@ class ToolCheckoutItemGroupAdmin(admin.ModelAdmin):
 
 @admin.register(CheckoutItem)
 class CheckoutItemAdmin(admin.ModelAdmin):
-  list_display = ("__unicode__","room")
+  list_display = ("__str__","room")
 
 @admin.register(DoorGroup)
 class DoorGroupAdmin(admin.ModelAdmin):
@@ -39,11 +39,11 @@ class ScheduleAdmin(admin.ModelAdmin):
   def get_readonly_fields(self,request,obj=None):
     if obj and obj.pk:
       return []
-    return super(ScheduleAdmin,self).get_readonly_fields(request,obj)
+    return super().get_readonly_fields(request,obj)
   def get_inline_instances(self, request, obj=None):
     if not obj or not obj.pk:
       return []
-    return super(ScheduleAdmin,self).get_inline_instances(request,obj)
+    return super().get_inline_instances(request,obj)
   def instructions(self,obj=None):
     if not obj or not obj.pk:
       return "Save and continue editing and a template will be made off with every day set at 10am-10pm."
@@ -57,7 +57,7 @@ class HolidayAdmin(admin.ModelAdmin):
 
 @admin.register(Lab)
 class LabAdmin(OrderedModelAdmin):
-  list_display = ("__unicode__","description","order")
+  list_display = ("__str__","description","order")
   inlines = (TaggedPhotoInline,)
   raw_id_fields = ('photo',)
 
@@ -69,7 +69,7 @@ class ToolLinkInline(admin.TabularInline):
 @admin.register(Tool)
 class ToolAdmin(OrderedModelAdmin):
   inlines = (ToolLinkInline,TaggedPhotoInline)
-  list_display = ('__unicode__','has_links','has_description','_materials',"room","lab",'order','permission')
+  list_display = ('__str__','has_links','has_description','_materials',"room","lab",'order','permission')
   list_filter = ('lab','functional')
   filter_horizontal = ('materials',)
   list_editable = ('permission',)
@@ -77,19 +77,22 @@ class ToolAdmin(OrderedModelAdmin):
   def formfield_for_foreignkey(self, db_field, request, **kwargs):
     if db_field.name == "permission":
       kwargs["queryset"] = Permission.objects.all().order_by("name")
-    return super(ToolAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+    return super().formfield_for_foreignkey(db_field, request, **kwargs)
+  @admin.display(
+      boolean=True
+  )
   def has_links(self,obj):
     return bool(obj.links())
-  has_links.boolean = True
+  @admin.display(
+      boolean=True
+  )
   def has_description(self,obj):
     return bool(obj.description)
-  has_description.boolean = True
   def _materials(self,obj):
     m = obj.materials
     if not m.count():
       return'<img src="/static/admin/img/icon-no.gif" alt="False">'
     return "%s (%s)"%(m.filter(parent__isnull=True).count(),m.filter(parent__isnull=False).count())
-  _materials.allow_tags = True
 
 #See note above corresponding model
 class TaggedToolInline(GenericTabularInline):
@@ -99,7 +102,7 @@ class TaggedToolInline(GenericTabularInline):
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-  list_display = ('__unicode__','row','column','color')
+  list_display = ('__str__','row','column','color')
   list_editable = ('row','column','color')
 
 class PermissionScheduleInline(admin.TabularInline):
@@ -110,18 +113,16 @@ class PermissionScheduleInline(admin.TabularInline):
 class PermissionAdmin(admin.ModelAdmin):
   filter_horizontal = ('criteria',)
   list_editable = ('group',"order",)
-  list_display = ('__unicode__','abbreviation','group','order','_criteria')
+  list_display = ('__str__','abbreviation','group','order','_criteria')
   fields = (('name','abbreviation'),('group','room'),'criteria','_schedule_helptext')
   readonly_fields = ('_schedule_helptext',)
-  _criteria = lambda self,obj: '<br/>'.join([unicode(criteria) for criteria in obj.criteria.all()])
-  _criteria.allow_tags = True
+  _criteria = lambda self,obj: '<br/>'.join([str(criteria) for criteria in obj.criteria.all()])
   _criteria.short_description = "Required Criteria"
   inlines = [PermissionScheduleInline]
   def _schedule_helptext(request,obj):
     _s = 'Tool access will default to buisness hours for hackers and above and weekends only for tinkerers '\
          ' if no schedules specified below.'
     return '<p class="lead">%s</p>'%_s
-  _schedule_helptext.allow_tags = True
 
 @admin.register(Criterion)
 class CriterionAdmin(admin.ModelAdmin):

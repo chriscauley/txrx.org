@@ -1,12 +1,12 @@
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models import Q
 from django.template.defaultfilters import date
 from django import forms
 
-from models import (Group, Level, Feature, MembershipFeature, UserMembership, Product, Flag, SubscriptionBuddy,
+from .models import (Group, Level, Feature, MembershipFeature, UserMembership, Product, Flag, SubscriptionBuddy,
                     Subscription, Status, MeetingMinutes, Proposal, Officer, Container, LevelDoorGroupSchedule)
 
 from lablackey.db.admin import RawMixin
@@ -19,7 +19,7 @@ admin.site.register(Group)
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-  list_display = ('name','__unicode__')
+  list_display = ('name','__str__')
 
 class ContainerInline(admin.TabularInline):
   raw_id_fields = ('subscription',)
@@ -31,7 +31,7 @@ class ContainerInline(admin.TabularInline):
 class FlagAdmin(admin.ModelAdmin):
   raw_id_fields = ('subscription',)
   readonly_fields = ('action','datetime')
-  list_display = ('__unicode__','status')
+  list_display = ('__str__','status')
   def action(self,obj):
     if not obj or not obj.pk or not obj.status in obj.PAYMENT_ACTIONS:
       return "No action to be taken"
@@ -51,7 +51,6 @@ class FlagAdmin(admin.ModelAdmin):
     url = reverse('update_flag_status',args=[obj.pk,next_status])
     html = "<div class='alert alert-%s'>%s<br/><a href='%s' class='btn btn-%s'>%s</a></div>"
     return html%(cls,msg,url,cls,verbose)
-  action.allow_tags = True
 
 class FlagInline(admin.TabularInline):
   model = Flag
@@ -69,7 +68,7 @@ class StaffContainerFilter(admin.SimpleListFilter):
 
 @admin.register(Container)
 class ContainerAdmin(admin.ModelAdmin):
-  list_display = ("__unicode__","status","subscription","notes")
+  list_display = ("__str__","status","subscription","notes")
   raw_id_fields = ("subscription",)
   list_filter = [StaffContainerFilter]
   readonly_fields = ['action','links']
@@ -87,7 +86,6 @@ class ContainerAdmin(admin.ModelAdmin):
     sub = obj.subscription
     out = link%("User",'user/user',sub.user.pk,sub.user)+"<br/>"
     return out + link%("Subscription",'membership/subscription',sub.pk,sub)
-  links.allow_tags = True
   def action(self,obj=None):
     link = '<a href="%s?action=%s">%s</a>'
     if obj.status == "used":
@@ -102,7 +100,6 @@ class ContainerAdmin(admin.ModelAdmin):
         "This %s will be marked canceled on %s."%(obj.kind,date(canceled_datetime,("l F jS, Y")))
     if obj.status == "staff":
       return "This drawer is marked as 'staff'. See notes to see what it is used for."
-  action.allow_tags = True
 
 class MembershipFeatureInline(RawMixin,admin.TabularInline):
   extra = 0
@@ -171,7 +168,7 @@ class SubscriptionBuddyInline(admin.TabularInline):
 class SubscriptionAdmin(admin.ModelAdmin):
   inlines = [StatusInline,SubscriptionBuddyInline,FlagInline]
   search_fields = getattr(settings,"USER_SEARCH_FIELDS",[])
-  list_display = ("__unicode__","canceled")
+  list_display = ("__str__","canceled")
   list_filter = [CanceledBooleanFilter]
   fields = (
     ('user','edit_user'),
@@ -188,7 +185,9 @@ class SubscriptionAdmin(admin.ModelAdmin):
       return '<a href="/admin/membership/container/%s/">%s</a> %s'%(obj.container.pk,obj.container,obj.container.status)
     except:
       pass
-  _container.allow_tags = True
+  @admin.display(
+      description=""
+  )
   def _action(self,obj):
     if not (obj and obj.pk):
       return "Save before creating actions."
@@ -196,15 +195,14 @@ class SubscriptionAdmin(admin.ModelAdmin):
     if obj and obj.pk and not obj.canceled:
       return "<a href='%s'>%s</a>"%(url,"Force Cancel")
     return "<a href='%s&undo'>%s</a>"%(url,"Undo Cancel")
-  _action.allow_tags = True
-  _action.short_description = ""
+  @admin.display(
+      description=""
+  )
   def edit_user(self,obj):
     if obj and obj.user:
       return '<a class="change-related" href="/admin/user/user/%s/"></a>'%obj.user.pk
-  edit_user.allow_tags = True
-  edit_user.short_description = ""
   def save_model(self,request,obj,form,change):
-    super(SubscriptionAdmin,self).save_model(request,obj,form,change)
+    super().save_model(request,obj,form,change)
     obj.recalculate()
 
 class SubscriptionInline(admin.TabularInline):
@@ -215,7 +213,7 @@ class SubscriptionInline(admin.TabularInline):
   has_add_permission = lambda self,obj: False
 
 class UserMembershipInline(admin.StackedInline):
-  list_display = ("__unicode__",'photo')
+  list_display = ("__str__",'photo')
   list_editable = ('photo',)
   list_filter = ('user__is_staff',)
   raw_id_fields = ('photo',)

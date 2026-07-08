@@ -55,7 +55,7 @@ def get_data(**kwargs):
     return data
 
 def get_order_total(start,data,metric=None):
-  if isinstance(start,six.string_types):
+  if isinstance(start,str):
     start = datetime.datetime.strptime(start,'%Y-%m-%d').date()
   end = start + datetime.timedelta(data['resolution'])
   order_items = OrderItem.objects.filter(product__polymorphic_ctype_id=data['product_types'])
@@ -68,7 +68,7 @@ def get_order_total(start,data,metric=None):
 
 def get_all_payments(start,data):
   total = get_order_total(start,data,metric="line_total")
-  if isinstance(start,six.string_types):
+  if isinstance(start,str):
     start = datetime.datetime.strptime(start,'%Y-%m-%d').date()
   end = start + datetime.timedelta(data['resolution'])
   total += sum(Status.objects.filter(datetime__gte=start,datetime__lt=end).values_list("amount",flat=True))
@@ -93,7 +93,7 @@ class DashboardTest(ClientTestCase):
         for i,day_string in enumerate(results['x']):
           if i%5: #we're just going to skip 4/5 days to make this not take < 10s.
             continue
-          print get_order_total(day_string,data), decimal.Decimal(results['y'][i])
+          print((get_order_total(day_string,data), decimal.Decimal(results['y'][i])))
           self.assertEqual(
             get_order_total(day_string,data),
             decimal.Decimal(results['y'][i])

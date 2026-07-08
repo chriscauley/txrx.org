@@ -1,6 +1,6 @@
-from django.conf.urls import url, patterns
+from django.urls import path
 
 urlpatterns = patterns(
   'instagram.views',
-  url(r'^$','index',name="index"),
+  path('','index',name="index"),
 )

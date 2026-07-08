@@ -1,6 +1,6 @@
 from django import template
 from django.forms import CheckboxInput, Select
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 register = template.Library()
@@ -34,7 +34,7 @@ def format_session_classtimes(session):
 @register.filter
 def get_admin_link(obj):
   try:
-    url = reverse("admin:%s_%s_change" % (obj._meta.app_label, obj._meta.model_name), args=(obj.id,))
+    url = reverse("admin:{}_{}_change".format(obj._meta.app_label, obj._meta.model_name), args=(obj.id,))
     return mark_safe('<a class="fa fa-pencil edit" href="%s"></a>'%url)
   except:
     return ""

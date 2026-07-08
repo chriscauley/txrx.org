@@ -36,10 +36,10 @@ class Command(BaseCommand):
       needs_mail = []
       sign_up_date = add_months(next_safety.first_date,-2)
       if options.get("verbosity") > 0:
-        print sign_up_date
+        print(sign_up_date)
       for criterion in temporary_criteria.filter(created__lte=sign_up_date):
         if options.get("verbosity") > 0:
-          print 'next',next_safety
+          print(('next',next_safety))
         defaults = {'status': 'new_safety'}
         flag, new = Flag.objects.get_or_create(
           subscription=criterion.content_object,

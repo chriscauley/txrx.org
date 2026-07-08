@@ -79,4 +79,4 @@ class Command (BaseCommand):
 
         notifications.update(emailed=datetime.datetime.now())
       if options.get("verbosity") > 0:
-        print "%s: Notified %s users of %s notifications"%(relationship,users_count,count)
+        print("%s: Notified %s users of %s notifications"%(relationship,users_count,count))

@@ -1,12 +1,13 @@
-from django.conf.urls import url, patterns
+from django.urls import path, re_path
 
-import views, lablackey.views
+from . import views
+import lablackey.views
 
 urlpatterns = [
-  url(r'^(\d+)/(.*)/$', lablackey.views.single_page_app,name='signed_document'),
-  url(r'^save/(\d+)/$', views.document_json,name='document_json'),
-  url(r'^required/$', views.index,name='redtape_index'),
-  url(r'^documents.json$', views.documents_json),
-  url(r'^document/add/(\d+)/$', views.post_document),
-  url(r'^aggregate/(\d+)/$', views.aggregate,name='redtape'),
+  re_path(r'^(\d+)/(.*)/$', lablackey.views.single_page_app,name='signed_document'),
+  re_path(r'^save/(\d+)/$', views.document_json,name='document_json'),
+  path('required/', views.index,name='redtape_index'),
+  path('documents.json', views.documents_json),
+  re_path(r'^document/add/(\d+)/$', views.post_document),
+  re_path(r'^aggregate/(\d+)/$', views.aggregate,name='redtape'),
 ]

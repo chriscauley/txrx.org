@@ -35,7 +35,7 @@ def index(request,daystring=None):
     start = datetime.datetime.strptime(daystring,'%Y-%m-%d').date()
     dt = start - datetime.date.today()
     if dt.days < -770 or dt.days > 365:
-      print "DDoS: %s || %s"%(request.META['HTTP_USER_AGENT'],request.META['REMOTE_ADDR'])
+      print("DDoS: %s || %s"%(request.headers['user-agent'],request.META['REMOTE_ADDR']))
       raise Http404("You have selected a date too far in the future or past.")
   end = start+datetime.timedelta(7)
   year = start.year
@@ -63,7 +63,7 @@ def index(request,daystring=None):
       weeks.append(week)
       week = []
   non_member = True
-  if request.user.is_authenticated():
+  if request.user.is_authenticated:
     non_member = request.user.level_id == settings.DEFAULT_MEMBERSHIP_LEVEL
   values = {
     'weeks': weeks,
@@ -87,7 +87,7 @@ def detail(request,event_id,slug=None):
   # NOTE: ze slug does notzing!
   event = get_object_or_404(Event,id=event_id)
   user_rsvps = None
-  if request.user.is_authenticated():
+  if request.user.is_authenticated:
     user_rsvps = event.get_user_rsvps(request.user)
   values = {
     'event': event,

@@ -16,7 +16,7 @@ class Command (BaseCommand):
     pe = Enrollment.objects.pending_evaluation()
     pe = pe.filter(evaluation_date__gte=yesterday)
     if pe.count() and options.get("verbosity") > 0:
-      print "sending %s evaluation emails"%pe.count()
+      print("sending %s evaluation emails"%pe.count())
     for enrollment in pe:
       if not enrollment.user.email:
         continue

@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.mail import mail_admins
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -13,15 +13,15 @@ from lablackey.decorators import cached_property, cached_method
 from media.models import Photo, PhotosMixin
 from wmd.models import MarkDownField
 
-from colorful.fields import RGBColorField
+from main.fields import RGBColorField
 import json, os, datetime, string, random
 
 class Lab(PhotosMixin,OrderedModel):
   name = models.CharField(max_length=128)
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
   get_admin_url = lambda self: "/admin/tool/lab/%s/"%self.id
   slug = property(lambda self: slugify(self.name))
-  photo = models.ForeignKey(Photo,null=True,blank=True)
+  photo = models.ForeignKey(Photo, on_delete=models.CASCADE,null=True,blank=True)
   description = MarkDownField(null=True,blank=True)
   url = lambda self: reverse("lab_detail",args=[self.slug,self.id])
   class Meta:
@@ -31,22 +31,22 @@ _help = "Will default to %s photo if blank"
 
 class Tool(PhotosMixin,OrderedModel):
   name = models.CharField(max_length=128)
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
   get_admin_url = lambda self: "/admin/tool/tool/%s/"%self.id
   value = property(lambda self: self.pk)
   slug = property(lambda self: slugify(self.name))
-  lab = models.ForeignKey(Lab)
+  lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
   make = models.CharField(max_length=64,null=True,blank=True)
   model = models.CharField(max_length=32,null=True,blank=True)
   description = MarkDownField(blank=True,null=True)
   est_price = models.FloatField(null=True,blank=True)
   links = lambda self: self.toollink_set.all()
   materials = models.ManyToManyField("thing.Material",blank=True)
-  room = models.ForeignKey('geo.Room',null=True,blank=True)
+  room = models.ForeignKey('geo.Room', on_delete=models.CASCADE,null=True,blank=True)
   get_absolute_url = lambda self: reverse("tool_detail",args=[self.slug,self.id])
   functional = models.BooleanField(default=True)
   repair_date = models.DateField(null=True,blank=True)
-  permission = models.ForeignKey("Permission",null=True,blank=True)
+  permission = models.ForeignKey("Permission", on_delete=models.CASCADE,null=True,blank=True)
   get_status = lambda self: "Functional" if self.functional else "Non-functional"
   @cached_property
   def consumable_ids(self):
@@ -94,22 +94,22 @@ class Tool(PhotosMixin,OrderedModel):
     return {field:getattr(self,field) for field in fields}
 
 class ToolLink(OrderedModel):
-  tool = models.ForeignKey(Tool)
+  tool = models.ForeignKey(Tool, on_delete=models.CASCADE)
   title = models.CharField(max_length=64)
   url = models.URLField()
-  __unicode__ = lambda self: self.title
+  __str__ = lambda self: self.title
   class Meta:
     ordering = ("order",)
 
 # This and ToolsMixin could probably be combined into some sort of generic foreign key factory
 class TaggedTool(models.Model):
-  tool = models.ForeignKey(Tool)
-  content_type = models.ForeignKey("contenttypes.ContentType")
+  tool = models.ForeignKey(Tool, on_delete=models.CASCADE)
+  content_type = models.ForeignKey("contenttypes.ContentType", on_delete=models.CASCADE)
   object_id = models.IntegerField()
   content_object = GenericForeignKey('content_type', 'object_id')
   order = models.IntegerField(default=9999)
 
-class ToolsMixin(object):
+class ToolsMixin:
   @cached_property
   def first_tool(self):
     return self.get_tools()[0]
@@ -137,7 +137,7 @@ class Criterion(models.Model):
   events = models.ManyToManyField('event.Event',blank=True,limit_choices_to={ "allow_rsvp":True },help_text=_ht)
   _ht = "Completing any of these documents will grant this criteria to the user."
   documents = models.ManyToManyField('redtape.Document',blank=True)
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
   def user_can_grant(self,user):
     if user.is_toolmaster:
       return True
@@ -160,14 +160,14 @@ class Criterion(models.Model):
 class ActiveUserCriterionManager(models.Manager):
   def get_queryset(self):
     _q = models.Q(expires__isnull=True)|models.Q(expires__gt=datetime.datetime.now())
-    return super(ActiveUserCriterionManager,self).get_queryset().filter(_q)
+    return super().get_queryset().filter(_q)
 
 class UserCriterion(models.Model):
-  user = models.ForeignKey(settings.AUTH_USER_MODEL)
-  criterion = models.ForeignKey(Criterion)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+  criterion = models.ForeignKey(Criterion, on_delete=models.CASCADE)
   created = models.DateTimeField(auto_now_add=True)
   expires = models.DateTimeField(null=True,blank=True)
-  content_type = models.ForeignKey("contenttypes.ContentType")
+  content_type = models.ForeignKey("contenttypes.ContentType", on_delete=models.CASCADE)
   object_id = models.IntegerField()
   content_object = GenericForeignKey('content_type', 'object_id')
   objects = models.Manager()
@@ -177,7 +177,7 @@ class UserCriterion(models.Model):
     #! eg, if the content object is a signature, the signature could have an expiration
     #! for now this just kills expiration
     self.expires = None
-  __unicode__ = lambda self: "%s for %s"%(self.user,self.criterion)
+  __str__ = lambda self: "%s for %s"%(self.user,self.criterion)
 
 CRITERION_STATUS_CHOICES = [
   ("new","New"),
@@ -196,7 +196,7 @@ class CriterionModel(models.Model):
   json_fields = ['headshot_url','datetime','user_id','display_name','id','status','status_changed','user_info']
   headshot_url = property(lambda self: self.user.headshot_url)
   username = property(lambda self: self.user.username)
-  display_name = property(lambda self: unicode(self))
+  display_name = property(lambda self: str(self))
   _user_fields = ['full_name','username','email']
   user_info = property(lambda self: {f:getattr(self.user,f) for f in self._user_fields})
   def change_status(self,new_status):
@@ -207,7 +207,7 @@ class CriterionModel(models.Model):
   def save(self,*args,**kwargs):
     if self.automatic:
       self.change_status("completed")
-    super(CriterionModel,self).save(*args,**kwargs)
+    super().save(*args,**kwargs)
     if self.user and self.status == "completed":
       for criterion in self.get_criteria():
         defaults = {'content_object':self}
@@ -237,7 +237,7 @@ class Group(models.Model):
   @property
   def as_json(self):
     return {key:getattr(self,key) for key in ['id','name','color','row','column']}
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
   class Meta:
     ordering = ('name',)
 
@@ -245,19 +245,19 @@ class DoorGroup(models.Model):
   name = models.CharField(max_length=32)
   _ht = "List all the doors this can open."
   description = models.TextField(help_text=_ht)
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
   class Meta:
     ordering = ('id',)
 
 class Permission(models.Model):
   name = models.CharField(max_length=32)
   abbreviation = models.CharField(max_length=16,help_text="For badge.")
-  room = models.ForeignKey('geo.Room')
-  group = models.ForeignKey(Group,null=True,blank=True)
+  room = models.ForeignKey('geo.Room', on_delete=models.CASCADE)
+  group = models.ForeignKey(Group, on_delete=models.CASCADE,null=True,blank=True)
   _ht = "Requires all these criteria to access these tools."
   criteria = models.ManyToManyField(Criterion,blank=True,help_text=_ht)
   order = models.IntegerField(default=999)
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
   tools_json = property(lambda self: [t.as_json for t in self.tool_set.all()])
   criteria_json = property(lambda self: [c.as_json for c in self.criteria.all()])
   @property
@@ -288,34 +288,34 @@ class Permission(models.Model):
 class Holiday(models.Model):
   name = models.CharField(blank=True,max_length=32)
   date = models.DateField()
-  __unicode__ = lambda self: "%s (%s)"%(self.name or "unnamed",self.date)
+  __str__ = lambda self: "%s (%s)"%(self.name or "unnamed",self.date)
   class Meta:
     ordering = ("-date",)
 
 class Schedule(models.Model):
   name = models.CharField(max_length=32)
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
   as_json = property(lambda self: {d.dow: [d.start,d.end] for d in self.scheduleday_set.all()})
   def save(self,*args,**kwargs):
-    super(Schedule,self).save(*args,**kwargs)
+    super().save(*args,**kwargs)
     if not self.scheduleday_set.count():
       for i,d in DOW_CHOICES:
         ScheduleDay.objects.create(schedule=self,dow=i)
 
-DOW_CHOICES = zip(range(7),['Su','Mo','Tu','We','Th','Fr','Sa'])
+DOW_CHOICES = list(zip(list(range(7)),['Su','Mo','Tu','We','Th','Fr','Sa']))
 
 class ScheduleDay(models.Model):
-  schedule = models.ForeignKey(Schedule)
+  schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
   dow = models.IntegerField(choices=DOW_CHOICES)
   start = models.CharField(max_length=4,default="1000")
   end = models.CharField(max_length=4,default="2200")
-  __unicode__ = lambda self: "%s: %s-%s"%(self.get_dow_display(),self.start,self.end)
+  __str__ = lambda self: "%s: %s-%s"%(self.get_dow_display(),self.start,self.end)
   class Meta:
     ordering = ('dow',)
 
 class PermissionSchedule(models.Model):
-  permission = models.ForeignKey(Permission)
-  schedule = models.ForeignKey(Schedule)
+  permission = models.ForeignKey(Permission, on_delete=models.CASCADE)
+  schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
   levels = models.ManyToManyField('membership.Level')
 
 def reset_tools_json(context="no context provided"):
@@ -337,13 +337,13 @@ def new_key():
 
 class APIKey(models.Model):
   key = models.CharField(max_length=30,default=new_key)
-  __unicode__ = lambda self: self.key
+  __str__ = lambda self: self.key
 
 class CheckoutItem(models.Model):
   name = models.CharField(max_length=64)
   _ht = 'Only rooms marked "has checkoutitems" appear here'
-  room = models.ForeignKey("geo.Room",limit_choices_to={'has_checkoutitems': True},help_text=_ht)
-  __unicode__ = lambda self: self.name
+  room = models.ForeignKey("geo.Room", on_delete=models.CASCADE,limit_choices_to={'has_checkoutitems': True},help_text=_ht)
+  __str__ = lambda self: self.name
   class Meta:
     ordering = ('name',)
 
@@ -351,6 +351,6 @@ class ToolCheckoutItemGroup(models.Model):
   name = models.CharField(max_length=64)
   tools = models.ManyToManyField(Tool)
   checkoutitems = models.ManyToManyField(CheckoutItem)
-  __unicode__ = lambda self: self.name
+  __str__ = lambda self: self.name
   class Meta:
     ordering = ('name',)

@@ -23,7 +23,7 @@ class TXRXTestCase(DropTestCase):
     self.tomorrow = timezone.now().replace(hour=13,minute=0,second=0,microsecond=0)+datetime.timedelta(1)
     self.next_day = self.tomorrow+datetime.timedelta(1)
     self.end = "14:00"
-    super(TXRXTestCase,self).setUp(*args,**kwargs)
+    super().setUp(*args,**kwargs)
     self._setup_membership()
     self._setup_course()
     self._setup_event()

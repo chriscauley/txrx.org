@@ -70,12 +70,12 @@ def totals_json(request,format):
       for d in cancels:
         if d.date() in y2:
           y2[d.date()] += 1
-      x, y2 = zip(*sorted(y2.items()))
+      x, y2 = list(zip(*sorted(y2.items())))
     y = {d:0 for d in x}
     for d in firsts:
       if d in y:
         y[d] += 1
-    x, y = zip(*sorted(y.items()))
+    x, y = list(zip(*sorted(y.items())))
     x = [d.strftime("%Y-%m-%d") for d in x]
   elif metric == "classes_per_student":
     students = {}
@@ -84,7 +84,7 @@ def totals_json(request,format):
       if not user_id:
         continue
       students[user_id] = students.get(user_id,0) + quantity
-    x,y = zip(*sorted(students.items()))
+    x,y = list(zip(*sorted(students.items())))
   elif metric in ['member_payments','all_payments']:
     x = []
     y2 = []
@@ -141,9 +141,9 @@ def totals_json(request,format):
     response['Content-Disposition'] = 'attachment; filename="%s_%s-%s.csv"'%(metric,start_date,end_date)
     writer = csv.writer(response)
     if y2:
-      rows = zip(x,y,y2)
+      rows = list(zip(x,y,y2))
     else:
-      rows = zip(x,y)
+      rows = list(zip(x,y))
     for row in rows:
       writer.writerow(row)
     return response
@@ -151,5 +151,5 @@ def totals_json(request,format):
     'x': x,
     'y': y,
     'y2': y2,
-    'zipt': zip(x,y,y2)
+    'zipt': list(zip(x,y,y2))
   })

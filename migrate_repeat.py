@@ -22,7 +22,7 @@ if Event.objects.filter(id=124): # event to be deleted
   )
   old.upcoming_occurrences.update(eventrepeat=old_repeat)
   old.eventoccurrence_set.all().update(event=new)
-  print "deleting: ",old
+  print(("deleting: ",old))
   old.delete()
 
 orientations = Event.objects.get(id=105)
@@ -64,7 +64,7 @@ EventRepeat.objects.all()[0].generate(start_datetime=timezone.now())
 
 tinkertime = Event.objects.get(id=15)
 if not tinkertime.eventrepeat_set.all():
-  print "in tinker time!"
+  print("in tinker time!")
   friday,_new = tinkertime.eventrepeat_set.get_or_create(
     first_date='2017-02-17',
     start_time='10:00',
@@ -91,7 +91,7 @@ for event in Event.objects.filter(repeat__isnull=False):
   elif event.repeat == 'weekly':
     flavor = 'weekly'
   else:
-    print "not repeating %s"%event.repeat
+    print("not repeating %s"%event.repeat)
     continue
   eventrepeat,_new = event.eventrepeat_set.get_or_create(
     first_date=event.upcoming_occurrences[0].start.date(),
@@ -100,7 +100,7 @@ for event in Event.objects.filter(repeat__isnull=False):
     repeat_flavor=flavor,
   )
   if _new:
-    print "Created EventRepeat: %s"%eventrepeat
+    print("Created EventRepeat: %s"%eventrepeat)
   event.upcoming_occurrences.update(eventrepeat=eventrepeat)
 
 #for event in Event.objects.filter(repeat='weekly'):

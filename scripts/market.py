@@ -28,4 +28,4 @@ for year in range(2012,2017):
     row += cash
     rows.append(row)
 
-print "\n".join([','.join(r) for r in rows])
+print("\n".join([','.join(r) for r in rows]))

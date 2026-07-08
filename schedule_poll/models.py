@@ -6,7 +6,7 @@ class Question(models.Model):
   data = models.TextField()
 
 class UserAnswer(models.Model):
-  user = models.ForeignKey(settings.AUTH_USER_MODEL)
-  question = models.ForeignKey(Question)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+  question = models.ForeignKey(Question, on_delete=models.CASCADE)
   data = models.TextField()
-  __unicode__ = lambda self: "%s answers %s"%(self.user,self.question)
+  __str__ = lambda self: "%s answers %s"%(self.user,self.question)

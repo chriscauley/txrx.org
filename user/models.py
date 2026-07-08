@@ -6,15 +6,16 @@ from django.core import validators
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail, mail_admins
 from django.db import models
+from jsonfield import JSONField
 from django.utils import timezone
-from django.utils.http import urlquote
-from django.utils.translation import ugettext_lazy as _
+from urllib.parse import quote
+from django.utils.translation import gettext_lazy as _
 
 from tool.models import UserCriterion, Criterion
 from lablackey.sms.models import SMSNumber
 from store.models import CourseCheckout
 
-from jsonfield import JSONField
+
 from lablackey.decorators import cached_property
 import datetime, os
 
@@ -109,7 +110,7 @@ class User(AbstractBaseUser, PermissionsMixin):
   objects = UserManager()
 
   #txrx fields
-  level = models.ForeignKey('membership.Level',default=settings.DEFAULT_MEMBERSHIP_LEVEL)
+  level = models.ForeignKey('membership.Level', on_delete=models.CASCADE,default=settings.DEFAULT_MEMBERSHIP_LEVEL)
 
   def reset_level(self):
     levels = []
@@ -177,15 +178,15 @@ class User(AbstractBaseUser, PermissionsMixin):
   def get_admin_url(self):
     return "/admin/user/user/%s/"%self.id
   def get_absolute_url(self):
-    return "/users/%s/" % urlquote(self.email)
+    return "/users/%s/" % quote(self.email)
 
   def get_full_name(self):
-    full_name = '%s %s' % (self.first_name, self.last_name)
+    full_name = '{} {}'.format(self.first_name, self.last_name)
     return full_name.strip() or self.username
   full_name = property(get_full_name)
   
   def get_short_name(self):
-    short_name = '%s %s' % (self.first_name, self.last_name[:1])
+    short_name = '{} {}'.format(self.first_name, self.last_name[:1])
     return short_name.strip() or self.username
 
   def email_user(self, subject, message, from_email=None):
@@ -222,7 +223,7 @@ class User(AbstractBaseUser, PermissionsMixin):
       mail_admins("bad sms","cannot send %s the following message due to lack of number\n\n%s"%(self,body))
 
 class UserNote(models.Model):
-  user = models.ForeignKey(User)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
   note = models.CharField(max_length=256)
   added = models.DateTimeField(auto_now_add=True)
 
@@ -238,18 +239,18 @@ class UserCheckinManager(models.Manager):
       return self.filter(time_in__gte=datetime.date.today(),*args,**kwargs)[0], False
 
 class UserCheckin(models.Model):
-  user = models.ForeignKey(User)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
   time_in = models.DateTimeField(auto_now_add=True)
   time_out = models.DateTimeField(null=True,blank=True)
-  content_type = models.ForeignKey("contenttypes.ContentType")
+  content_type = models.ForeignKey("contenttypes.ContentType", on_delete=models.CASCADE)
   object_id = models.IntegerField()
   content_object = GenericForeignKey('content_type', 'object_id')
   objects = UserCheckinManager()
 
-is_superuser = lambda user: user.is_authenticated() and user.is_superuser
-is_staff = lambda user: user.is_authenticated() and (user.is_staff or user.is_superuser)
-is_shopkeeper = lambda user: user.is_authenticated() and (user.is_shopkeeper or user.is_superuser)
-is_gatekeeper = lambda user: user.is_authenticated() and (user.is_gatekeeper or user.is_superuser)
-is_toolmaster = lambda user: user.is_authenticated() and (user.is_toolmaster or user.is_superuser)
+is_superuser = lambda user: user.is_authenticated and user.is_superuser
+is_staff = lambda user: user.is_authenticated and (user.is_staff or user.is_superuser)
+is_shopkeeper = lambda user: user.is_authenticated and (user.is_shopkeeper or user.is_superuser)
+is_gatekeeper = lambda user: user.is_authenticated and (user.is_gatekeeper or user.is_superuser)
+is_toolmaster = lambda user: user.is_authenticated and (user.is_toolmaster or user.is_superuser)
 
 from .listeners import *

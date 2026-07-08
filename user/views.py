@@ -113,7 +113,7 @@ def checkin_register(request):
   return JsonResponse({ "checkin": checkin_json(user), "badge": True })
 
 def user_json(request):
-  if not request.user.is_authenticated():
+  if not request.user.is_authenticated:
     return JsonResponse({})
   completed_enrollments = Enrollment.objects.filter(user=request.user,status="completed")
   usercriteria = UserCriterion.active_objects.filter(user=request.user)

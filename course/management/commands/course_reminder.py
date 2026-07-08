@@ -21,8 +21,8 @@ class Command(BaseCommand):
     if not classtimes:
       return
     if options.get("verbosity") > 0:
-      print "showing classes from %s to %s"%(tomorrow,next_day)
-      print "reminding %s class times"%len(classtimes)
+      print("showing classes from %s to %s"%(tomorrow,next_day))
+      print("reminding %s class times"%len(classtimes))
     instructor_count = 0
     student_count = 0
     sent = []
@@ -57,4 +57,4 @@ class Command(BaseCommand):
       classtime.emailed = timezone.now()
       classtime.save()
     if options.get("verbosity") > 0:
-      print "\n\n\nemailed %s instructors and %s students"%(instructor_count,student_count)
+      print("\n\n\nemailed %s instructors and %s students"%(instructor_count,student_count))

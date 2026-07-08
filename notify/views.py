@@ -34,7 +34,7 @@ def unfollow(request,follow_id):
   if follow.user_id != request.limited_user.id:
     return FORBIDDEN
   obj = follow.content_object
-  messages.success(request,"You are no longer following: {follow.content_object}".format(follow=follow))
+  messages.success(request,f"You are no longer following: {follow.content_object}")
   follow.delete()
   return HttpResponseRedirect(request.GET.get("next",obj.get_absolute_url()))
 
@@ -42,5 +42,5 @@ def unfollow(request,follow_id):
 def follow(request,contenttype,id):
   contenttype = get_contenttype(contenttype)
   follow, new = Follow.objects.get_or_create(user=request.user,content_type=contenttype,object_id=id)
-  messages.success(request,"You are now following: {follow.content_object}".format(follow=follow))
+  messages.success(request,f"You are now following: {follow.content_object}")
   return HttpResponseRedirect(request.GET.get("next",follow.content_object.get_absolute_url()))

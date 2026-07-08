@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core import mail
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import timezone
 
 from course.models import Course, Session, Room, Enrollment
@@ -24,7 +24,7 @@ def new_session(course,teacher):
 
 class NotificationTestCase(TXRXTestCase):
     def setUp(self):
-        super(NotificationTestCase,self).setUp()
+        super().setUp()
         # clear any backlog made by the above super
         self.call_command("notify_course")
         mail.outbox = []

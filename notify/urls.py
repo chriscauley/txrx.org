@@ -1,11 +1,11 @@
-from django.conf.urls import url
+from django.urls import path, re_path
 
-import views
+from . import views
 
 urlpatterns = [
-  url(r'^follow/([^/]+)/(\d+)/',views.follow,name='notify_follow'),
-  url(r'^unfollow/(\d+)/',views.unfollow,name='notify_unfollow'),
-  url(r'^unsubscribe/(notify_course|global|comments|classes|sessions)/(\d+)/$',
+  re_path(r'^follow/([^/]+)/(\d+)/',views.follow,name='notify_follow'),
+  re_path(r'^unfollow/(\d+)/',views.unfollow,name='notify_unfollow'),
+  re_path(r'^unsubscribe/(notify_course|global|comments|classes|sessions)/(\d+)/$',
       views.unsubscribe, name='unsubscribe'),
-  url(r'^settings/$',views.settings,name='notify_settings'),
+  path('settings/',views.settings,name='notify_settings'),
 ]

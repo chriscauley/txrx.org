@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 
@@ -24,11 +24,11 @@ class Thing(PhotosMixin,ToolsMixin,FilesMixin,UserModel):
   featured = models.BooleanField(default=False)
   active = models.BooleanField(default=False)
   parent_link = models.URLField(null=True,blank=True)
-  parent = models.ForeignKey("self",null=True,blank=True)
+  parent = models.ForeignKey("self", on_delete=models.CASCADE,null=True,blank=True)
   materials = models.ManyToManyField(Material,blank=True)
-  session = models.ForeignKey('course.Session',null=True,blank=True)
+  session = models.ForeignKey('course.Session', on_delete=models.CASCADE,null=True,blank=True)
 
-  __unicode__ = lambda self: self.title
+  __str__ = lambda self: self.title
   get_absolute_url = lambda self: reverse('thing_detail',args=[self.id,slugify(self.title)])
   get_short_description = lambda self: self.description
   related_by_user = lambda self: Thing.objects.filter(user=self.user).exclude(pk=self.pk)

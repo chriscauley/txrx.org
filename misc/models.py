@@ -7,10 +7,10 @@ class BulkEmail(models.Model):
   subject = models.CharField(max_length=128)
   body = models.TextField()
   send_on_save = models.BooleanField(default=False)
-  __unicode__ = lambda self: self.subject
+  __str__ = lambda self: self.subject
 
 class BulkEmailRecipient(models.Model):
-  bulkemail = models.ForeignKey(BulkEmail)
+  bulkemail = models.ForeignKey(BulkEmail, on_delete=models.CASCADE)
   email = models.EmailField()
   name = models.CharField(max_length=64)
   file1 = models.FileField(null=True,blank=True,upload_to="bulkemail")

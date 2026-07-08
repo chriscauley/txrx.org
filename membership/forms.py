@@ -5,7 +5,7 @@ from django.contrib.auth import login
 from django.contrib import messages
 from django.contrib.sites.requests import RequestSite
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 
 from .models import UserMembership
@@ -33,7 +33,7 @@ kwargs = dict(widget=forms.Textarea,required=False)
 class SignUpForm(RequestModelForm):
   reset_link = '<a href="/auth/password_reset/">reset your password</a>'
   email = forms.EmailField(max_length=200,error_messages={
-    'unique': 'An account with this email already exists.<br /> Enter another or {}.'.format(reset_link)
+    'unique': f'An account with this email already exists.<br /> Enter another or {reset_link}.'
   })
   _ht = "If different than the email above.\n This is necessary to record when you register for a class."
   paypal_email = forms.EmailField(required=False,label="PayPal Email - Optional",help_text=_ht)
@@ -43,7 +43,7 @@ class SignUpForm(RequestModelForm):
   html_errors = ["non_field_error","email","paypal_email"]
   @classmethod
   def user_is_allowed(clss,request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
       raise NotImplementedError()
     return True
   @classmethod
@@ -60,15 +60,15 @@ class SignUpForm(RequestModelForm):
   def clean_paypal_email(self,*args,**kwargs):
     paypal_email = self.cleaned_data.get("paypal_email",'')
     if not verify_unique_email(self.cleaned_data.get('paypal_email')):
-      e = "An account with this paypal_email already exists.<br/> Enter another or {}.".format(self.reset_link)
+      e = f"An account with this paypal_email already exists.<br/> Enter another or {self.reset_link}."
       raise forms.ValidationError(e)
     return paypal_email
   def clean(self,*args,**kwargs):
     "Check for duplicate emails. This isn't actually used since users are sent to the password reset page before this."
-    super(SignUpForm,self).clean(*args,**kwargs)
+    super().clean(*args,**kwargs)
     if not verify_unique_email(self.cleaned_data.get('email')):
-      e = u'Another account is already using this email address. <br/ >'
-      e+= u'Enter another or <a href="/auth/password_reset/">reset your password</a>.'
+      e = 'Another account is already using this email address. <br/ >'
+      e+= 'Enter another or <a href="/auth/password_reset/">reset your password</a>.'
       raise forms.ValidationError(e)
     return self.cleaned_data
   def save(self):
@@ -104,7 +104,7 @@ class UserMembershipForm(PlaceholderModelForm):
   def clean_paypal_email(self,*args,**kwargs):
     user = self.instance.user
     if not verify_unique_email(self.cleaned_data.get('paypal_email'),user=user):
-      e = u'Another account is already using this paypal address. Please email us if you believe this is in error.'
+      e = 'Another account is already using this paypal address. Please email us if you believe this is in error.'
       raise forms.ValidationError(e)
     return self.cleaned_data.get('paypal_email')
   class Meta:
@@ -116,20 +116,20 @@ class UserForm(PlaceholderModelForm):
   def user_is_allowed(clss,request):
     return True
   def __init__(self,*args,**kwargs):
-    super(UserForm,self).__init__(*args,**kwargs)
+    super().__init__(*args,**kwargs)
     self.fields['first_name'].required = False
     self.fields['last_name'].required = False
     self.fields['email'].required = True
   def clean_username(self,*args,**kwargs):
     username = self.cleaned_data['username']
     if not verify_unique_email(username,user=self.instance):
-      e = u'Another account is already using this email address. Please email us if you believe this is in error.'
+      e = 'Another account is already using this email address. Please email us if you believe this is in error.'
       raise forms.ValidationError(e)
     return username
   def clean_email(self,*args,**kwargs):
     email = self.cleaned_data['email']
     if not verify_unique_email(email,user=self.instance):
-      e = u'Another account is already using this username. Please email us if you believe this is in error.'
+      e = 'Another account is already using this username. Please email us if you believe this is in error.'
       raise forms.ValidationError(e)
     return email
   class Meta:
@@ -141,7 +141,7 @@ class AuthenticationForm(AuthenticationForm):
   def user_is_allowed(clss,request):
     return True
   def __init__(self,*args,**kwargs):
-    super(AuthenticationForm, self).__init__(*args,**kwargs)
+    super().__init__(*args,**kwargs)
     placeholder_fields(self)
   def clean(self):
     username = self.cleaned_data.get('username')

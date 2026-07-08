@@ -13,7 +13,7 @@ class NotificationInline(admin.TabularInline):
 
 @admin.register(Follow)
 class FollowAdmin(RawMixin,admin.ModelAdmin):
-  list_display = ("__unicode__",'content_type','notification_count')
+  list_display = ("__str__",'content_type','notification_count')
   list_filter = ("content_type",)
   raw_id_fields = ('user','content_type')
   inlines = [NotificationInline]
@@ -30,7 +30,7 @@ def mark_emailed(model_admin,request,queryset):
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
   raw_id_fields = ('user','follow')
-  list_display = ("__unicode__","target_type","emailed","read","user_settings")
+  list_display = ("__str__","target_type","emailed","read","user_settings")
   actions = [mark_emailed]
   list_filter = ("target_type",)
   def user_settings(self,obj):

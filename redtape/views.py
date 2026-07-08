@@ -26,7 +26,7 @@ def document_json(request,document_pk):
   form = SignatureForm(request,document=document,instance=signature)
   if form.is_valid():
     signature = form.save(commit=False)
-    if request.temp_user.is_authenticated():
+    if request.temp_user.is_authenticated:
       signature.user = request.temp_user
     signature.save()
     m = "%s signed by %s"%(document,signature.user)
@@ -34,7 +34,7 @@ def document_json(request,document_pk):
     #signature.delete() #! TODO this is only to help debugging!
     return JsonResponse({"messages":[{"level": 'success','body': m}], 'document': document_json})
   out = "Please correct the following error(s):"
-  for i in form.errors.items():
+  for i in list(form.errors.items()):
     out += "<br/>%s: %s"%i
   return JsonResponse({'errors': {'non_field_error': out}})
 
@@ -42,7 +42,7 @@ def post_document(request,pk):
   document = get_object_or_404(Document,pk=pk)
   signature = Signature(document=document)
   signature.data = { f.get_name(): request.POST.get(f.get_name(),None) for f in document.documentfield_set.all() }
-  if request.user.is_authenticated():
+  if request.user.is_authenticated:
     signature.user = request.user
   signature.save()
   if document.pk == 5: #! TODO this will probably need to be abstracted at some point
@@ -54,7 +54,7 @@ def post_document(request,pk):
                               email=signature.data['email'],
                               description=render_template("email/work_request",{'signature':signature})[0],
                               tags=['work'])
-    except Exception,e:
+    except Exception as e:
       error = e
     send_template_email("email/work_request",['chris@lablackey.com'],context={'signature':signature,"error":error})
   return JsonResponse({"ur_alert_success": "%s has been saved."%document.name})
@@ -76,8 +76,8 @@ def documents_json(request):
 @staff_member_required
 def aggregate(request,document_pk):
   document = get_object_or_404(Document,pk=document_pk)
-  others = defaultdict(lambda: [])
-  results = defaultdict(lambda:0)
+  others = defaultdict(list)
+  results = defaultdict(int)
   for s in document.signature_set.all():
     key = s.data['how-did-you-hear-about-us']
     if not key:
@@ -87,7 +87,7 @@ def aggregate(request,document_pk):
       others[key].append(s.data['other'].title())
 
   values = {
-    'results': sorted(results.items(),key=lambda t:t[1],reverse=True),
+    'results': sorted(list(results.items()),key=lambda t:t[1],reverse=True),
     'others': [(key,sorted(rs)) for key,rs in sorted(others.items())]
   }
   return TemplateResponse(request,"redtape/aggregate.html",values)

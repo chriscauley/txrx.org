@@ -2,9 +2,9 @@ from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.forms.models import BaseInlineFormSet
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .models import Event, EventRepeat, EventOccurrence, RSVP, CheckIn, CheckInPoint, Access, EventOwner
 from event.utils import get_room_conflicts, get_person_conflicts
@@ -57,18 +57,18 @@ def mark_conflicts(request,obj):
 
 class OccurrenceModelFormSet(BaseInlineFormSet):
   def save_existing(self, form, obj, commit=True):
-    obj = super(OccurrenceModelFormSet,self).save_existing(form,obj,commit=commit)
+    obj = super().save_existing(form,obj,commit=commit)
     mark_conflicts(self.request,obj)
     return obj
   def save_new(self, form, commit=True):
-    obj = super(OccurrenceModelFormSet,self).save_new(form,commit=commit)
+    obj = super().save_new(form,commit=commit)
     mark_conflicts(self.request,obj)
     return obj
 
 class OccurrenceModelInline(admin.TabularInline):
   formset = OccurrenceModelFormSet
   def get_formset(self, request, obj=None, **kwargs):
-    form_class = super(OccurrenceModelInline, self).get_formset(request, obj, **kwargs)
+    form_class = super().get_formset(request, obj, **kwargs)
     form_class.request = request
     return form_class
 
@@ -94,7 +94,7 @@ class EventOccurrenceInline(OccurrenceModelInline):
     if obj.eventrepeat:
       return obj.eventrepeat.verbose
   def get_queryset(self,request):
-    qs = super(EventOccurrenceInline,self).get_queryset(request)
+    qs = super().get_queryset(request)
     return qs.filter(start__gte=datetime.datetime.now())
   extra = 0
 
@@ -106,7 +106,6 @@ class EventRepeatInline(admin.TabularInline):
     if obj.repeat_flavor == "custom":
       return "<a href='/event/bulk/?eventrepeat_id=%s' class='fa fa-edit'></a>"%obj.id
     return obj.verbose
-  _verbose.allow_tags = True
 
 class EventOwnerInline(admin.TabularInline):
   raw_id_fields = ['user']
@@ -115,19 +114,17 @@ class EventOwnerInline(admin.TabularInline):
 
 @admin.register(Event)
 class EventAdmin(TaggedPhotoAdmin):
-  list_display = ("__unicode__","upcoming_count","organizers","get_repeat_verbose","access","allow_rsvp","rsvp_cutoff")
+  list_display = ("__str__","upcoming_count","organizers","get_repeat_verbose","access","allow_rsvp","rsvp_cutoff")
   list_editable = ("access","allow_rsvp","rsvp_cutoff")
   list_filter = ("allow_rsvp","access")
   inlines = [EventRepeatInline,EventOwnerInline,EventOccurrenceInline]
   search_fields = ['name']
   def organizers(self,obj):
     return "<br />".join(["%s"%eo.user for eo in obj.eventowner_set.all()])
-  organizers.allow_tags = True
   def upcoming_count(self,obj):
     return obj.upcoming_occurrences.count()
   def get_repeat_verbose(self,obj):
     return "<br/>".join([er.verbose for er in obj.eventrepeat_set.all()])
-  get_repeat_verbose.allow_tags = True
 
 @admin.register(EventOccurrence)
 class EventOccurrenceAdmin(TaggedPhotoAdmin):
@@ -136,7 +133,7 @@ class EventOccurrenceAdmin(TaggedPhotoAdmin):
   list_filter = (FuturePastListFilter,)
   readonly_fields = ['_rsvps','eventrepeat']
   def save_model(self,request,obj,form,change):
-    super(EventOccurrenceAdmin,self).save_model(request,obj,form,change)
+    super().save_model(request,obj,form,change)
     mark_conflicts(request,obj)
   def _rsvps(self,obj):
     rsvps = RSVP.objects.filter(
@@ -146,17 +143,15 @@ class EventOccurrenceAdmin(TaggedPhotoAdmin):
     )
     s = '<a href="/admin/event/rsvp/{r.id}">{r}</a>'
     return '<br/>'.join([s.format(**{'r': r}) for r in rsvps])
-  _rsvps.allow_tags = True
 
 @admin.register(RSVP)
 class RSVPAdmin(admin.ModelAdmin):
-  list_display = ['__unicode__','user_link']
+  list_display = ['__str__','user_link']
   raw_id_fields = ['user']
   def user_link(self,obj):
     u = obj.user
     html = '<a href="/admin/user/user/{}/" class="fa fa-user"> {} {} ({})</a>'
     return html.format(u.id,u.first_name, u.last_name, u.username)
-  user_link.allow_tags = True
 
 @admin.register(Access)
 class AccessAdmin(admin.ModelAdmin):

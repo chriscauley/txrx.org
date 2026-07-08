@@ -33,7 +33,7 @@ for enrollment in Enrollment.objects.exclude(transaction_ids__isnull=True):
         backend='paypal',
         description='backfilled paypal payment',
       )]
-      for s in [s for s in params.keys() if s.startswith("item_name")]:
+      for s in [s for s in list(params.keys()) if s.startswith("item_name")]:
         session = enrollment.session
         sessionproduct = session.sessionproduct
         number = s[-1]
@@ -47,4 +47,4 @@ for enrollment in Enrollment.objects.exclude(transaction_ids__isnull=True):
           line_subtotal=total,
           line_total=total
         )
-        print "Order created: ",order,'  ',order.created
+        print(("Order created: ",order,'  ',order.created))

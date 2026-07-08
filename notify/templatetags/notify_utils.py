@@ -1,5 +1,5 @@
 from django import template
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from course.models import Evaluation, Enrollment
 
@@ -9,7 +9,7 @@ register = template.Library()
 
 @register.filter
 def get_notifications(request):
-  if not request.user.is_authenticated():
+  if not request.user.is_authenticated:
     return []
   out = []
   evaluations = Evaluation.objects.filter(enrollment__session__user=request.user)

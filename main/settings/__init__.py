@@ -1,6 +1,5 @@
 import os, sys, datetime
 SPATH = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0,os.path.normpath(os.path.join(SPATH,'../.dev/')))
 sys.path.insert(0,os.path.normpath(SPATH))
 sys.path.insert(0,os.path.normpath(os.path.join(SPATH,'..'))) # this is to use txrx.org/media not .dev/media
 
@@ -30,15 +29,8 @@ DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': os.path.join(SPATH,'txrx.db'),
-    'USER': '',
-    'PASSWORD': '',
-    'HOST': '',
-    'PORT': '',
   }
 }
-
-DEVSERVER_DEFAULT_ADDR = "0.0.0.0"
-DEVSERVER_DEFAULT_PORT = 8025
 
 # Site specific settings for handling membership
 ALL_HOURS_ID = 2 # which schedule is 24/7?
@@ -55,7 +47,9 @@ TIME_ZONE = 'America/Chicago'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
 USE_I18N = True
-USE_L10N = True
+# legacy schema/code: naive local datetimes and integer pks throughout
+USE_TZ = False
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 MEDIA_ROOT = os.path.join(SPATH, '../.media')
 MEDIA_URL = '/media/'
@@ -76,44 +70,39 @@ SECRET_KEY = '^f_fn6)^e5^)+p-rjcrcdf(7iwz4@5z9thx92%^=e_)$jly7mc'
 MAPS_API_KEY = 'ABQIAAAAeppD1h9lB7H61ozR18SeZRS_YqHDtehKcRTrrAGjc25rDMjatxT8nvoX4-jJXcRPaT4I-RdMYv3fJA'
 #TEST_RUNNER = 'main.runner.Runner'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
+  'django.middleware.security.SecurityMiddleware',
   'django.middleware.common.CommonMiddleware',
   'django.contrib.sessions.middleware.SessionMiddleware',
   'django.middleware.csrf.CsrfViewMiddleware',
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+]
 
 AUTH_USER_MODEL = 'user.User'
 USER_SEARCH_FIELDS = ("user__username","user__email","user__paypal_email","user__first_name","user__last_name")
 REGISTRATION_IGNORE_DOTS = True
 
 AUTHENTICATION_BACKENDS = (
-  #'social.backends.open_id.OpenIdAuth',
-  #'social.backends.google.GoogleOpenId',
-  'social.backends.google.GoogleOAuth2',
-  'social.backends.facebook.FacebookOAuth2',
-  'social.backends.github.GithubOAuth2',
-  #'social.backends.google.GoogleOAuth',
-  #'social.backends.twitter.TwitterOAuth',
-  #'social.backends.yahoo.YahooOpenId',
+  'social_core.backends.google.GoogleOAuth2',
+  'social_core.backends.facebook.FacebookOAuth2',
+  'social_core.backends.github.GithubOAuth2',
   'main.backends.EmailOrUsernameModelBackend',
   'django.contrib.auth.backends.ModelBackend'
 )
 
-PIPELINE = (
-  'social.pipeline.social_auth.social_details',
-  'social.pipeline.social_auth.social_uid',
-  'social.pipeline.social_auth.auth_allowed',
-  'social.pipeline.social_auth.social_user',
-  'social.pipeline.user.get_username',
-  # 'social.pipeline.mail.mail_validation',
-  'social.pipeline.social_auth.associate_by_email',
-  'social.pipeline.user.create_user',
-  'social.pipeline.social_auth.associate_user',
-  'social.pipeline.social_auth.load_extra_data',
-  'social.pipeline.user.user_details'
+SOCIAL_AUTH_PIPELINE = (
+  'social_core.pipeline.social_auth.social_details',
+  'social_core.pipeline.social_auth.social_uid',
+  'social_core.pipeline.social_auth.auth_allowed',
+  'social_core.pipeline.social_auth.social_user',
+  'social_core.pipeline.user.get_username',
+  'social_core.pipeline.social_auth.associate_by_email',
+  'social_core.pipeline.user.create_user',
+  'social_core.pipeline.social_auth.associate_user',
+  'social_core.pipeline.social_auth.load_extra_data',
+  'social_core.pipeline.user.user_details'
 )
 
 REST_FRAMEWORK = {
@@ -158,7 +147,7 @@ PUBLIC_SETTINGS = ["DEBUG","SITE_NAME","SITE_DOMAIN","SITE_URL", "MEMBERSHIP_EMA
 
 CACHES = { # only using this for ics, should be enough for now
   'default': {
-    'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+    'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
     'LOCATION': '127.0.0.1:11211',
   }
 }
@@ -179,41 +168,41 @@ PURCHASING_EMAIL = "membership@txrxlabs.org"
 PER_PAGE = 10
 NEW_STUDENT_PASSWORD = "I am a new student, reset my passwrod asap"
 
-for s_file in ['apps','local','txrx_labs']:
+_SETTINGS_DIR = os.path.dirname(__file__)
+for s_file in ['apps','local','spaces','txrx_labs']:
   try:
-    f = 'main/settings/%s.py'%s_file
-    exec(compile(open(os.path.abspath(f)).read(), f, 'exec'), globals(), locals())
-  except IOError:
-    print "Setting file missing. We looked here: %s"%f
+    f = os.path.join(_SETTINGS_DIR,'%s.py'%s_file)
+    exec(compile(open(f).read(), f, 'exec'), globals(), locals())
+  except OSError:
+    print("Setting file missing. We looked here: %s"%f)
 
 
 
 EMAIL_BACKEND = "mailer.backend.DbBackend"
-_TEMPLATE_LOADERS = (
+_TEMPLATE_LOADERS = [
   ('django.template.loaders.cached.Loader', (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
     'lablackey.tloader.Loader',
   )),
-)
+]
 
 if DEBUG_EMAIL:
   EMAIL_BACKEND = "lablackey.mail.DebugBackend"
 
 if DEBUG:
-  _TEMPLATE_LOADERS = (
+  _TEMPLATE_LOADERS = [
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
     'lablackey.tloader.Loader',
-  )
-  MIDDLEWARE_CLASSES += ('lablackey.middleware.LoggingMiddleware',)
+  ]
+  MIDDLEWARE += ['lablackey.middleware.LoggingMiddleware']
 
 TEMPLATES = [
   {
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
     'DIRS': [
       os.path.join(SPATH,"templates"),
-      os.path.join(SPATH,"../lablackey/templates"),
     ],
     'OPTIONS': {
       'context_processors': [
@@ -221,13 +210,12 @@ TEMPLATES = [
         'django.template.context_processors.request',
         'django.template.context_processors.media',
         'django.template.context_processors.static',
-        "django.core.context_processors.i18n",
+        'django.template.context_processors.i18n',
         'django.contrib.auth.context_processors.auth',
-        'django.template.context_processors.request',
         'django.template.context_processors.tz',
         'django.contrib.messages.context_processors.messages',
-        'social.apps.django_app.context_processors.backends',
-        'social.apps.django_app.context_processors.login_redirect',
+        'social_django.context_processors.backends',
+        'social_django.context_processors.login_redirect',
         'main.context.nav',
         'main.context.motd',
         'lablackey.blog.context.process',

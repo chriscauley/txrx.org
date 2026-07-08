@@ -1,17 +1,17 @@
-from django.conf.urls import url, patterns, include
+from django.urls import include, path, re_path
 
-import views
+from . import views
 import drop.urls
 
 urlpatterns = [
-  url(r'^$',views.index,name='product_list'),
-  url(r'^categories.js$',views.categories_json,name='categories_json'),
-  url(r'^coursecheckout/(\d+).json$',views.coursecheckout_ajax),
-  url(r'^start_checkout/$',views.start_checkout,name='start_checkout'),
+  path('',views.index,name='product_list'),
+  path('categories.js',views.categories_json,name='categories_json'),
+  re_path(r'^coursecheckout/(\d+).json$',views.coursecheckout_ajax),
+  path('start_checkout/',views.start_checkout,name='start_checkout'),
 
-  url(r'^receipts/$',views.receipts,name='receipts'),
-  url(r'^admin/$',views.admin_page,name='admin_page'),
-  url(r'^admin/add/$',views.admin_add,name='admin_add'),
-  url(r'^admin/products.json',views.admin_products_json,name='admin_products_json'),
-  url(r'', include(drop.urls)),
+  path('receipts/',views.receipts,name='receipts'),
+  path('admin/',views.admin_page,name='admin_page'),
+  path('admin/add/',views.admin_add,name='admin_add'),
+  re_path(r'^admin/products.json',views.admin_products_json,name='admin_products_json'),
+  path('', include(drop.urls)),
 ]

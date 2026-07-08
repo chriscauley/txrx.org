@@ -21,7 +21,7 @@ def temp_user_required(function):
   """
   def wrap(request,*args,**kwargs):
     expiration_time = 5*60
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
       request.temp_user = request.user
       return function(request,*args,**kwargs)
 
@@ -53,7 +53,7 @@ def limited_login_required(function):
   Like login required, but can use a LimitedAccessKey in place of an actual login.
   """
   def wrap(request, *args, **kwargs):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
       request.limited_user = request.user
       return function(request, *args, **kwargs)
     LA_KEY = None

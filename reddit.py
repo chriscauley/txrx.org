@@ -32,4 +32,4 @@ class Post:
 posts = [Post(i) for i in range(100)]
 reddit_sorted = sorted(posts,key=lambda p:p.hot)
 for post in reddit_sorted:
-  print post.id,'\t',post.hot,post.ups
+  print((post.id,'\t',post.hot,post.ups))

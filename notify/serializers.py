@@ -9,7 +9,7 @@ class FeedSizzler(BaseSizzler):
   @classmethod
   def get_queryset(class_,request):
     qs = class_.Meta.model.objects
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
       return qs.none()
     return qs.filter(user=request.user)
   #def __delete__(self):
@@ -22,7 +22,7 @@ class FollowSizzler(BaseSizzler):
   @classmethod
   def get_queryset(class_,request):
     qs = class_.Meta.model.objects
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
       return qs.none()
     return qs.filter(user=request.user)
   class Meta:

@@ -1,6 +1,5 @@
 INSTALLED_APPS = [
   'lablackey',
-  'suit',
   'lablackey.registration',
   'lablackey.geo',
   'lablackey.api',
@@ -25,12 +24,11 @@ INSTALLED_APPS = [
   'compressor',
   'tagging',
   'crop_override',
-  'social.apps.django_app.default',
+  'social_django',
   'rest_framework',
   'jsignature',
   'mailer',
 
-  'memcache_status',
 
   #store
   'drop',

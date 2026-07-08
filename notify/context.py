@@ -4,7 +4,7 @@ from django.utils import timezone
 import datetime
 
 def process(request):
-  if not request.user.is_authenticated():
+  if not request.user.is_authenticated:
     return {}
   request.user.notification_set.filter(read__isnull=True,url=request.path).update(read=timezone.now())
   return {}

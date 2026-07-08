@@ -6,10 +6,11 @@ from .models import BulkEmail, BulkEmailRecipient
 class BulkEmailRecipientInline(admin.TabularInline):
   model = BulkEmailRecipient
 
+@admin.register(BulkEmail)
 class BulkEmailAdmin(admin.ModelAdmin):
   inlines = [BulkEmailRecipientInline]
   def save_model(self, request, obj, form, change):
-    super(BulkEmailAdmin,self).save_model(request, obj, form, change)
+    super().save_model(request, obj, form, change)
     if obj.send_on_save:
       sent_count = 0
       for ber in obj.bulkemailrecipient_set.all():
@@ -22,4 +23,3 @@ class BulkEmailAdmin(admin.ModelAdmin):
         messages.warning(request,"No Messages sent. Try removing 'sent on' value and resave twice.")
       ber.save()
 
-admin.site.register(BulkEmail,BulkEmailAdmin)

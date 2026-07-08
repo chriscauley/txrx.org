@@ -10,7 +10,7 @@ class EmailInstructorForm(RequestModelForm):
   subject = forms.TextInput()
   body = forms.Textarea()
   def __init__(self,session,*args,**kwargs):
-    super(EmailInstructorForm,self).__init__(*args,**kwargs)
+    super().__init__(*args,**kwargs)
     self.session = session
   def send(self,mail_admins=True):
     """Sends email. At this point it is assumed that the form is clean and valid."""
@@ -30,7 +30,7 @@ class EmailInstructorForm(RequestModelForm):
 class EvaluationForm(PlaceholderModelForm):
   def __init__(self,*args,**kwargs):
     self.enrollment = kwargs.pop('enrollment')
-    super(EvaluationForm,self).__init__(*args,**kwargs)
+    super().__init__(*args,**kwargs)
     course = self.enrollment.session.course
     for name in ['presentation','content','visuals']:
       if not getattr(course,name):
