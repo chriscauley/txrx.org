@@ -50,6 +50,29 @@ python manage.py migrate
 
 This will create an empty database and you will be prompetd to create a superuser.
 
+Legacy changes
+==============
+
+This is a legacy app kept running for archival purposes. Notes on changes made
+during/after the Python 3 / Django 5 migration and the move off the original
+hosting:
+
+- **Hosting moved to `txrx.unrest.io`.** The app is no longer served at
+  `txrxlabs.org` (that domain now belongs to the hackerspace and no longer runs
+  this code). `server/nginx.conf` serves `txrx.unrest.io` and proxies to the
+  uwsgi process on `127.0.0.1:3033`.
+- **Media moved to DigitalOcean Spaces** (`skade` bucket, `txrx/` prefix, served
+  via the `skade.nyc3.cdn.digitaloceanspaces.com` CDN). See
+  `main/settings/spaces.py`. sorl-thumbnail caches generated thumbnails through
+  this same storage.
+- **`reset_classes` Python 3 fix.** `manage.py reset_classes` regenerates the
+  pre-rendered static blobs (`classes.json`, tools JSON, `products.js`) that the
+  `/classes` page and others load directly. The `products.js` step wrote an
+  `HttpResponse.content` (now `bytes` on Py3) to a text-mode file and crashed;
+  the file is now opened in binary mode (`'wb'`). Note these static blobs only
+  refresh on model saves or when this command is run — after bulk data or media
+  changes, run `manage.py reset_classes` to rebuild them.
+
 Author
 ======
 Chris Cauley

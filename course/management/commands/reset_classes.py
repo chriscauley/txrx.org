@@ -12,6 +12,7 @@ class Command (BaseCommand):
     reset_classes_json("management command")
     reset_tools_json("management_command")
     products = products_json(None)
-    f = open(os.path.join(settings.STATIC_ROOT,"products.js"),'w')
+    # HttpResponse.content is bytes on Python 3, so write in binary mode
+    f = open(os.path.join(settings.STATIC_ROOT,"products.js"),'wb')
     f.write(products.content)
     f.close()
