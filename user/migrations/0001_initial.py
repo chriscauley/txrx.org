@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
                 ('paypal_email', models.EmailField(blank=True, max_length=255, null=True)),
                 ('extra', jsonfield.fields.JSONField(blank=True, default=dict)),
                 ('id_photo_date', models.DateTimeField(blank=True, null=True)),
-                ('headshot', models.FileField(blank=True, max_length=200, null=True, storage=django.core.files.storage.FileSystemStorage(base_url='/staff_only/', location='/home/django/projects/txrx.org/main/../.staff'), upload_to='%Y%m', verbose_name='Head Shot')),
+                ('headshot', models.FileField(blank=True, max_length=200, null=True, storage=django.core.files.storage.FileSystemStorage(base_url='/staff_only/', location='/home/clepsy/projects/txrx.org/main/../.staff'), upload_to='%Y%m', verbose_name='Head Shot')),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
                 ('level', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='membership.level')),
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
